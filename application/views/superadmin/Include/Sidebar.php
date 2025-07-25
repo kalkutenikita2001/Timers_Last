@@ -48,10 +48,16 @@
     bottom: 0;
     left: 0;
     z-index: 1000;
-    overflow-y: auto;
     height: 100vh;
     padding-top: 10px;
     transition: width 0.3s ease-in-out;
+    overflow-y: scroll; /* Enable scrolling */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
   }
 
   .sidebar.minimized {

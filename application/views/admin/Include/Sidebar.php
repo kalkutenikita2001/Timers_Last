@@ -1,4 +1,3 @@
-<!-- Sidebar Component -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <div class="sidebar" id="sidebar">
     <div class="logo">
@@ -29,10 +28,16 @@
         left: 0;
         z-index: 1000;
         overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
         transition: width 0.3s ease-in-out;
         height: 100vh;
         padding-top: 10px;
         font-family: 'Montserrat', serif;
+    }
+
+    .sidebar::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, and other Webkit browsers */
     }
 
     .sidebar.minimized {
