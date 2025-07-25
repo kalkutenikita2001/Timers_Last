@@ -135,10 +135,10 @@
       }
       .content-wrapper {
         margin-left: 0 !important;
-        padding: 15px !important;
+        /* padding: 15px !important; */
       }
       .row.justify-content-center {
-        flex-direction: column;
+        /* flex-direction: column; */
         align-items: center;
       }
       .col-12.col-sm-6.col-md-4.col-lg-3 {

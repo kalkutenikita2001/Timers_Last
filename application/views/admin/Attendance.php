@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-             background-color: #e9ecef !important;
+            background-color: #e9ecef !important;
             color: #fff;
             min-height: 100vh;
             margin: 0;
@@ -65,9 +65,9 @@
         /* Main Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 0;
+            border-radius: 15px; /* Increased border radius for a softer look */
             overflow: hidden;
-            box-shadow: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
             margin-bottom: 20px;
             overflow-x: auto;
         }
@@ -82,7 +82,7 @@
             background: #e0e0e0;
             color: #000;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px; /* Rounded filter button */
             padding: 5px 10px;
             font-size: 14px;
             cursor: pointer;
@@ -94,7 +94,8 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate; /* Allows border-radius on cells */
+            border-spacing: 0;
             background: #fff;
         }
 
@@ -103,16 +104,27 @@
             color: #000;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 10px;
+            padding: 12px 15px; /* Increased padding for better spacing */
             text-align: center;
+            border-top-left-radius: 15px; /* Rounded top-left corner */
+            border-top-right-radius: 15px; /* Rounded top-right corner */
         }
 
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            padding: 10px;
+            padding: 12px 15px; /* Increased padding for better spacing */
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Ensure the first and last td in the last row have rounded corners */
+        .table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 15px;
+        }
+
+        .table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 15px;
         }
 
         .action-cell {
@@ -126,7 +138,7 @@
             width: 30px;
             height: 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50%; /* Circular buttons for a modern look */
             cursor: pointer;
             background: none;
             color: #007bff;
@@ -134,10 +146,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.2s ease; /* Smooth hover effect */
         }
 
         .action-btn:hover {
             color: #0056b3;
+            transform: scale(1.1); /* Slight scale on hover for interactivity */
         }
 
         /* Add Button */
@@ -151,7 +165,7 @@
             background: linear-gradient(to right, #ff4040, #470000);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px; /* Increased border radius for a softer look */
             padding: 6px 10px;
             font-size: 12px;
             width: 200px;
@@ -259,7 +273,7 @@
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 8px; /* Rounded inputs for consistency */
             font-size: 14px;
             background: white;
             color: #333;
@@ -466,9 +480,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
+                        <td>John Smith</td>
+                        <td>B2</td>
+                        <td>Beginner</td>
+                        <td>Individual</td>
+                        <td class="action-cell">
+                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Alice Johnson</td>
+                        <td>B3</td>
+                        <td>Advanced</td>
                         <td>Corporate</td>
                         <td class="action-cell">
                             <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
@@ -476,20 +500,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
+                        <td>Bob Wilson</td>
+                        <td>B4</td>
                         <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
+                        <td>Individual</td>
                         <td class="action-cell">
                             <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
                             <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
@@ -506,52 +520,13 @@
                     <tr>
                         <th>Name</th>
                         <th>Batch</th>
-                        <th>Level</th>
-                        <th>Category</th>
+                        <th>Total Days</th>
+                        <th>Percentage</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="totalTableBody">
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'total')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'total')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'total')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'total')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'total')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'total')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'total')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'total')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
+                    <!-- Initial empty, will be populated dynamically -->
                 </tbody>
             </table>
         </div>
@@ -609,12 +584,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <script>
-        // Tab functionality
+        // Tab functionality with dynamic data for Total Attendance
         function showTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.table-container').forEach(tab => tab.style.display = 'none');
             document.getElementById(tabName + 'Tab').style.display = 'block';
             document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+
+            if (tabName === 'total') {
+                populateTotalAttendance();
+            }
+        }
+
+        // Populate Total Attendance table with different data
+        function populateTotalAttendance() {
+            const totalTableBody = document.getElementById('totalTableBody');
+            totalTableBody.innerHTML = ''; // Clear existing rows
+
+            const totalData = [
+                { name: 'Jane Doe', batch: 'B1', totalDays: 20, percentage: '90%', id: 1 },
+                { name: 'John Smith', batch: 'B2', totalDays: 18, percentage: '85%', id: 2 },
+                { name: 'Alice Johnson', batch: 'B3', totalDays: 22, percentage: '95%', id: 3 },
+                { name: 'Bob Wilson', batch: 'B4', totalDays: 15, percentage: '75%', id: 4 }
+            ];
+
+            totalData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.batch}</td>
+                    <td>${data.totalDays}</td>
+                    <td>${data.percentage}</td>
+                    <td class="action-cell">
+                        <button class="action-btn view-btn" onclick="viewAttendance(this, 'total', ${data.id})"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" onclick="editAttendance(this, 'total', ${data.id})"><i class="fas fa-edit"></i></button>
+                    </td>
+                `;
+                totalTableBody.appendChild(row);
+            });
         }
 
         // Modal functionality
@@ -733,31 +740,45 @@
         // Update existing row
         function updateRow(row, data) {
             const cells = row.querySelectorAll('td');
-            cells[0].textContent = data.name;
-            cells[1].textContent = data.batch;
-            cells[2].textContent = data.level;
-            cells[3].textContent = data.category;
+            if (currentTab === 'daily') {
+                cells[0].textContent = data.name;
+                cells[1].textContent = data.batch;
+                cells[2].textContent = data.level;
+                cells[3].textContent = data.category;
+            } else if (currentTab === 'total') {
+                cells[0].textContent = data.name;
+                cells[1].textContent = data.batch;
+                // Note: Total tab has different columns (totalDays, percentage), so editing might need adjustment
+                // For now, we'll update only name and batch; consider adding totalDays/percentage fields if needed
+            }
         }
 
         // View attendance
-        function viewAttendance(button, tab) {
+        function viewAttendance(button, tab, id) {
             currentTab = tab;
             const row = button.closest('tr');
             const cells = row.querySelectorAll('td');
-            alert(`Name: ${cells[0].textContent}\nBatch: ${cells[1].textContent}\nLevel: ${cells[2].textContent}\nCategory: ${cells[3].textContent}`);
+            let message = `Name: ${cells[0].textContent}\nBatch: ${cells[1].textContent}`;
+            if (tab === 'total') {
+                message += `\nTotal Days: ${cells[2].textContent}\nPercentage: ${cells[3].textContent}`;
+            } else {
+                message += `\nLevel: ${cells[2].textContent}\nCategory: ${cells[3].textContent}`;
+            }
+            alert(message);
         }
 
         // Edit attendance
-        function editAttendance(button, tab) {
+        function editAttendance(button, tab, id) {
             currentTab = tab;
             editingRow = button.closest('tr');
             const cells = editingRow.querySelectorAll('td');
             
             document.getElementById('name').value = cells[0].textContent;
             document.getElementById('batch').value = cells[1].textContent;
-            document.getElementById('level').value = cells[2].textContent;
-            document.getElementById('category').value = cells[3].textContent;
-            
+            if (tab === 'daily') {
+                document.getElementById('level').value = cells[2].textContent;
+                document.getElementById('category').value = cells[3].textContent;
+            }
             document.querySelector('.modal-title').textContent = 'Edit Attendance';
             openModal();
         }

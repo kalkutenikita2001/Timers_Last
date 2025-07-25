@@ -1,5 +1,5 @@
 <!-- Sidebar Component -->
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <div class="sidebar" id="sidebar">
     <div class="logo">
         <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
@@ -121,3 +121,30 @@
         }
     }
 </style>
+
+<script>
+    // Save and restore scroll position
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const navLinks = sidebar.querySelectorAll('.nav-link');
+
+        // Save scroll position before navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.href) { // Ensure it's not the logout or report link
+                    const scrollPosition = sidebar.scrollTop;
+                    sessionStorage.setItem('sidebarScrollPosition', scrollPosition);
+                }
+            });
+        });
+
+        // Restore scroll position on page load
+        const savedScrollPosition = sessionStorage.getItem('sidebarScrollPosition');
+        if (savedScrollPosition !== null) {
+            sidebar.scrollTop = parseInt(savedScrollPosition, 10);
+        }
+
+        // Sidebar toggle functionality (assuming it exists elsewhere)
+        // This part is left unchanged as per your request
+    });
+</script>

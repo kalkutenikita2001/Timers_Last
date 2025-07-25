@@ -41,9 +41,9 @@
         /* Main Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 0; /* Removed radius to match Admission.php */
+            border-radius: 15px; /* Added rounded corners */
             overflow: hidden;
-            box-shadow: none; /* Removed shadow to match Admission.php */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
             margin-bottom: 20px;
             overflow-x: auto; /* Ensure horizontal scroll for small devices */
         }
@@ -71,7 +71,8 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate; /* Allows border-radius on cells */
+            border-spacing: 0;
             background: #fff;
         }
 
@@ -80,16 +81,32 @@
             color: #000;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 10px;
+            padding: 12px 15px; /* Increased padding for better spacing */
             text-align: center; /* Centered headers like Admission.php */
+            border-top-left-radius: 15px; /* Rounded top-left corner */
+            border-top-right-radius: 15px; /* Rounded top-right corner */
         }
 
         .table td, .table th {
             vertical-align: middle;
             text-align: center; /* Centered data like Admission.php */
-            padding: 10px;
+            padding: 12px 15px; /* Increased padding for better spacing */
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6; /* Matches Admission.php border */
+        }
+
+        /* Ensure the first and last td in the last row have rounded corners */
+        .table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 15px;
+        }
+
+        .table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 15px;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Subtle hover effect */
+            transition: background-color 0.3s ease;
         }
 
         .action-cell {
@@ -110,6 +127,7 @@
             justify-content: center;
             font-size: 12px;
             background: none; /* Matches Admission.php action buttons */
+            transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
         }
 
         .view-btn {
@@ -122,10 +140,12 @@
 
         .view-btn:hover {
             color: #0056b3; /* Matches Admission.php hover color */
+            transform: scale(1.1); /* Slight scale on hover */
         }
 
         .edit-btn:hover {
             color: #0056b3; /* Matches Admission.php hover color */
+            transform: scale(1.1); /* Slight scale on hover */
         }
 
         /* Add Button */

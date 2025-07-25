@@ -79,3 +79,6 @@ $route['Profile'] = 'admin/Profile';
 $route['Dashboard'] = 'admin/Dashboard';
 $route['Finance'] = 'admin/Finance';
 
+
+// base module
+$route['login'] = 'base/login';

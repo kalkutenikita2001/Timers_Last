@@ -34,19 +34,47 @@
       margin-top: 60px;
     }
 
+    .table {
+      width: 100%;
+      border-collapse: separate; /* Allows border-radius on cells */
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 15px; /* Rounded corners for the entire table */
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+    }
+
     .table thead th {
       background-color: #f8f9fa;
       color: #000;
       border-bottom: 2px solid #dee2e6;
       white-space: nowrap;
-      padding: 10px;
+      padding: 12px 15px; /* Increased padding for better spacing */
+      text-align: center;
+      border-top-left-radius: 15px; /* Rounded top-left corner */
+      border-top-right-radius: 15px; /* Rounded top-right corner */
     }
 
     .table td, .table th {
       vertical-align: middle;
       text-align: center;
-      padding: 10px;
+      padding: 12px 15px; /* Increased padding for better spacing */
       white-space: nowrap;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Ensure the first and last td in the last row have rounded corners */
+    .table tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 15px;
+    }
+
+    .table tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 15px;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f1f1f1; /* Subtle hover effect */
+      transition: background-color 0.3s ease;
     }
 
     .action-btn {
@@ -55,10 +83,12 @@
       font-size: 16px;
       margin: 0 5px;
       color: #007bff;
+      transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
     }
 
     .action-btn:hover {
       color: #0056b3;
+      transform: scale(1.1); /* Slight scale on hover for interactivity */
     }
 
     .new-admission-btn {
@@ -489,7 +519,7 @@
       <h3 id="cancelLabel">Cancel Admission</h3>
       <form id="cancelForm" novalidate>
         <div class="form-row">
-          <div class="form-group col-md-12>
+          <div class="form-group col-md-12">
             <label for="cancelReason">Reason for Cancellation :</label>
             <textarea id="cancelReason" name="cancelReason" class="form-control" required></textarea>
             <div class="invalid-feedback">Please provide a reason for cancellation.</div>

@@ -1,5 +1,4 @@
 <!-- Sidebar Component -->
-<!-- Sidebar Component -->
 <div class="sidebar" id="sidebar">
   <div class="logo">
     <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
@@ -38,7 +37,6 @@
     <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
   </nav>
 </div>
-
 
 <style>
   .sidebar {
@@ -140,3 +138,30 @@
     }
   }
 </style>
+
+<script>
+  // Save and restore scroll position
+  document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.getElementById('sidebar');
+    const navLinks = sidebar.querySelectorAll('.nav-link');
+
+    // Save scroll position before navigation
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (link.href) { // Ensure it's not the logout link or an anchor
+          const scrollPosition = sidebar.scrollTop;
+          sessionStorage.setItem('sidebarScrollPosition', scrollPosition);
+        }
+      });
+    });
+
+    // Restore scroll position on page load
+    const savedScrollPosition = sessionStorage.getItem('sidebarScrollPosition');
+    if (savedScrollPosition !== null) {
+      sidebar.scrollTop = parseInt(savedScrollPosition, 10);
+    }
+
+    // Sidebar toggle functionality (assuming it exists elsewhere)
+    // This part is left unchanged as per your request
+  });
+</script>
