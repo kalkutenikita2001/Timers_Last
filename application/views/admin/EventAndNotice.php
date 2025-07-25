@@ -13,18 +13,44 @@
   <style>
     body {
       background-color: #e9ecef !important;
-      margin: 0; /* Remove default margin */
+      margin: 0;
       font-family: 'Montserrat', serif !important;
+      overflow-x: hidden;
     }
 
     .content-wrapper {
-      margin-left: 250px; /* Default margin matching sidebar width */
+      margin-left: 250px;
       padding: 20px;
       transition: all 0.3s ease-in-out;
+      position: relative;
+      min-height: 100vh;
     }
 
     .content-wrapper.minimized {
-      margin-left: 60px; /* Margin when sidebar is minimized */
+      margin-left: 60px;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .participate-btn {
+      background: linear-gradient(90deg, #ff4040, #470000);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 15px;
+      font-size: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .participate-btn:hover {
+      background: linear-gradient(90deg, #ff3030, #360000);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .center-card {
@@ -40,7 +66,7 @@
       text-align: left;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      height: 250px; /* Adjusted height to accommodate more content */
+      height: 250px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -106,26 +132,6 @@
       background-color: rgba(255, 255, 255, 0.4);
       color: #333;
       transform: translateY(-2px);
-    }
-
-    .participate-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 15px;
-      width: 180px;
-      font-size: 15px;
-      margin: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-      float: right;
-    }
-
-    .participate-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .add-center-btn {
@@ -211,43 +217,82 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding-left: 0;
-      }
+    /* Responsive Design */
+    @media (max-width: 576px) {
       .content-wrapper {
-        margin-left: 0 !important;
-        padding: 15px !important;
+        margin-left: 0;
+        padding: 10px;
+      }
+      .center-card {
+        max-width: 100%;
+        height: auto;
+        min-height: 220px;
+      }
+      .participate-btn {
+        width: 120px;
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+      .modal-content {
+        max-width: 90%;
+        padding: 15px;
+      }
+      .form-control {
+        height: 40px;
+        font-size: 13px;
+      }
+      .submit-btn {
+        width: 120px;
+        padding: 10px;
+      }
+    }
+
+    @media (min-width: 577px) and (max-width: 768px) {
+      .content-wrapper {
+        margin-left: 0;
+        padding: 15px;
+      }
+      .content-wrapper.minimized {
+        margin-left: 0;
+      }
+      .center-card {
+        max-width: 180px;
+        height: 240px;
+      }
+      .participate-btn {
+        width: 140px;
+        font-size: 13px;
       }
       .modal-content {
         max-width: 95%;
         padding: 20px;
       }
-      .center-card {
-        max-width: 180px;
-        height: 241px; /* Adjusted for mobile */
-      }
-      .participate-btn {
-        width: 120px;
-        font-size: 12px;
-        margin: 5px;
-        float: none;
-        display: block;
-        margin-left: auto;
-        margin-right: 10px;
-      }
     }
 
-    @media (min-width: 769px) and (max-width: 1024px) {
+    @media (min-width: 769px) and (max-width: 991px) {
       .content-wrapper {
         margin-left: 200px;
+        padding: 15px;
       }
       .content-wrapper.minimized {
         margin-left: 60px;
       }
+      .center-card {
+        max-width: 200px;
+      }
       .participate-btn {
         width: 150px;
         font-size: 14px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .center-card {
+        max-width: 220px;
+      }
+      .participate-btn {
+        width: 180px;
+        font-size: 15px;
       }
     }
   </style>
@@ -265,46 +310,52 @@
   <div class="content">
     <div class="container-fluid">
       <!-- Participate Button -->
-      <button class="participate-btn" data-toggle="modal" data-target="#participateModal">Participate</button>
+      <div class="header-container">
+        <button class="participate-btn" data-toggle="modal" data-target="#participateModal">Participate</button>
+      </div>
       <div class="row justify-content-start">
         <!-- Event & Notice Cards -->
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-          <div class="center-card" id="card-1">
-            <i class="fas fa-calendar-alt card-icon"></i>
-            <div class="card-details">
-              <p>Title: <span>Independence day</span></p>
-              <p>Center: <span>ABC</span></p>
-              <p>Date: <span>15/08/2025</span></p>
-              <p>Time: <span>6 to 7 AM</span></p>
-              <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+        <div class="col-12">
+          <div class="row justify-content-start">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+              <div class="center-card" id="card-1">
+                <i class="fas fa-calendar-alt card-icon"></i>
+                <div class="card-details">
+                  <p>Title: <span>Independence day</span></p>
+                  <p>Center: <span>ABC</span></p>
+                  <p>Date: <span>15/08/2025</span></p>
+                  <p>Time: <span>6 to 7 AM</span></p>
+                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                </div>
+                <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
+              </div>
             </div>
-            <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-          <div class="center-card" id="card-2">
-            <i class="fas fa-calendar-alt card-icon"></i>
-            <div class="card-details">
-              <p>Title: <span>Independence day</span></p>
-              <p>Center: <span>ABC</span></p>
-              <p>Date: <span>15/08/2025</span></p>
-              <p>Time: <span>6 to 7 AM</span></p>
-              <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+              <div class="center-card" id="card-2">
+                <i class="fas fa-calendar-alt card-icon"></i>
+                <div class="card-details">
+                  <p>Title: <span>Independence day</span></p>
+                  <p>Center: <span>ABC</span></p>
+                  <p>Date: <span>15/08/2025</span></p>
+                  <p>Time: <span>6 to 7 AM</span></p>
+                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                </div>
+                <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
+              </div>
             </div>
-            <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-          <div class="center-card" id="card-3">
-            <i class="fas fa-calendar-alt card-icon"></i>
-            <div class="card-details">
-              <p>Title: <span>Independence day</span></p>
-              <p>Center: <span>ABC</span></p>
-              <p>Date: <span>15/08/2025</span></p>
-              <p>Time: <span>6 to 7 AM</span></p>
-              <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+              <div class="center-card" id="card-3">
+                <i class="fas fa-calendar-alt card-icon"></i>
+                <div class="card-details">
+                  <p>Title: <span>Independence day</span></p>
+                  <p>Center: <span>ABC</span></p>
+                  <p>Date: <span>15/08/2025</span></p>
+                  <p>Time: <span>6 to 7 AM</span></p>
+                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                </div>
+                <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
+              </div>
             </div>
-            <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
           </div>
         </div>
       </div>
@@ -494,7 +545,7 @@
       `;
 
       // Append new card to the row
-      const row = document.querySelector('.row.justify-content-start');
+      const row = document.querySelector('.row.justify-content-start .row');
       if (row) {
         row.insertAdjacentHTML('beforeend', newCard);
         // Update event dropdown in participate modal
@@ -552,14 +603,14 @@
     });
 
     // Handle view button clicks
-    document.querySelectorAll('.view-btn:not(.participate-btn)').forEach(button => {
-      button.addEventListener('click', function () {
-        document.getElementById('viewTitle').textContent = this.getAttribute('data-title');
-        document.getElementById('viewCenter').textContent = this.getAttribute('data-center');
-        document.getElementById('viewDate').textContent = this.getAttribute('data-date');
-        document.getElementById('viewTime').textContent = this.getAttribute('data-time');
-        document.getElementById('viewDescription').textContent = this.getAttribute('data-description');
-      });
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('view-btn')) {
+        document.getElementById('viewTitle').textContent = e.target.getAttribute('data-title');
+        document.getElementById('viewCenter').textContent = e.target.getAttribute('data-center');
+        document.getElementById('viewDate').textContent = e.target.getAttribute('data-date');
+        document.getElementById('viewTime').textContent = e.target.getAttribute('data-time');
+        document.getElementById('viewDescription').textContent = e.target.getAttribute('data-description');
+      }
     });
 
     // Sidebar toggle functionality
@@ -571,7 +622,7 @@
 
       if (sidebarToggle) {
         sidebarToggle.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
+          if (window.innerWidth <= 576) {
             // Mobile behavior
             if (sidebar) {
               sidebar.classList.toggle('active');
