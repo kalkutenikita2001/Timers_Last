@@ -607,45 +607,45 @@
   <div class="dashboard-wrapper" id="dashboardWrapper">
     <div class="container-fluid">
       
-      <!-- Top Stats Row -->
-      <div class="top-stats-row">
-        <div class="card-stat" onclick="handleStatClick('totalStudents')">
-          <div class="d-flex justify-content-between align-items-center px-2">
-            <div class="text-start">
-              <h4>2450</h4>
-              <span>Total Students</span>
-            </div>
-            <i class="bi bi-person-lines-fill fs-3 opacity-50"></i>
-          </div>
-        </div>
-        <div class="card-stat" onclick="handleStatClick('totalBranches')">
-          <div class="d-flex justify-content-between align-items-center px-2">
-            <div class="text-start">
-              <h4>25</h4>
-              <span>Total Branches</span>
-            </div>
-            <i class="bi bi-building fs-3 opacity-50"></i>
-          </div>
-        </div>
-        <div class="card-stat" onclick="handleStatClick('totalRevenue')">
-          <div class="d-flex justify-content-between align-items-center px-2">
-            <div class="text-start">
-              <h4>Rs.50000</h4>
-              <span>Total Revenue</span>
-            </div>
-            <i class="bi bi-currency-rupee fs-3 opacity-50"></i>
-          </div>
-        </div>
-        <div class="card-stat" onclick="handleStatClick('totalExpense')">
-          <div class="d-flex justify-content-between align-items-center px-2">
-            <div class="text-start">
-              <h4>Rs.3000</h4>
-              <span>Total Expense</span>
-            </div>
-            <i class="bi bi-graph-down fs-3 opacity-50"></i>
-          </div>
-        </div>
+    <!-- Top Stats Row -->
+<div class="top-stats-row">
+  <div class="card-stat" onclick="handleStatClick('totalStudents')" style="position: relative;">
+    <div class="d-flex justify-content-between align-items-center px-2">
+      <div class="text-start">
+        <h4>2450</h4>
+        <span>Total Students</span>
       </div>
+    </div>
+    <i class="bi bi-person-lines-fill fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+  </div>
+  <div class="card-stat" onclick="handleStatClick('totalBranches')" style="position: relative;">
+    <div class="d-flex justify-content-between align-items-center px-2">
+      <div class="text-start">
+        <h4>25</h4>
+        <span>Total Branches</span>
+      </div>
+    </div>
+    <i class="bi bi-building fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+  </div>
+  <div class="card-stat" onclick="handleStatClick('totalRevenue')" style="position: relative;">
+    <div class="d-flex justify-content-between align-items-center px-2">
+      <div class="text-start">
+        <h4>Rs.50000</h4>
+        <span>Total Revenue</span>
+      </div>
+    </div>
+    <i class="bi bi-currency-rupee fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+  </div>
+  <div class="card-stat" onclick="handleStatClick('totalExpense')" style="position: relative;">
+    <div class="d-flex justify-content-between align-items-center px-2">
+      <div class="text-start">
+        <h4>Rs.3000</h4>
+        <span>Total Expense</span>
+      </div>
+    </div>
+    <i class="bi bi-graph-down fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+  </div>
+</div>
 
       <!-- Export Buttons -->
       <div class="d-flex justify-content-center gap-3 my-4">

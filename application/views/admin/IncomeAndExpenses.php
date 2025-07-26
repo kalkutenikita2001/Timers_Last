@@ -156,14 +156,16 @@
         }
 
         .add-btn {
-            background: linear-gradient(to right, #ff4040, #470000);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 6px 10px;
-            font-size: 12px;
-            width: 200px; /* Matches new-admission-btn width */
-            cursor: pointer;
+            background: linear-gradient(90deg, #ff4040, #470000);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+    width: 200px;
+    font-size: 15px;
+    margin: 25px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .add-btn:hover {

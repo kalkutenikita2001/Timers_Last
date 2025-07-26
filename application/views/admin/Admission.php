@@ -13,11 +13,12 @@
     body {
       background-color: #e9ecef !important;
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .content-wrapper {
       margin-left: 250px;
-      padding: 20px;
+      padding: 25px;
       transition: all 0.3s ease-in-out;
     }
 
@@ -36,12 +37,12 @@
 
     .table {
       width: 100%;
-      border-collapse: separate; /* Allows border-radius on cells */
+      border-collapse: separate;
       border-spacing: 0;
       background: #fff;
-      border-radius: 15px; /* Rounded corners for the entire table */
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .table thead th {
@@ -49,21 +50,22 @@
       color: #000;
       border-bottom: 2px solid #dee2e6;
       white-space: nowrap;
-      padding: 12px 15px; /* Increased padding for better spacing */
+      padding: 15px 20px;
       text-align: center;
-      border-top-left-radius: 15px; /* Rounded top-left corner */
-      border-top-right-radius: 15px; /* Rounded top-right corner */
+      font-weight: 600;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
     }
 
     .table td, .table th {
       vertical-align: middle;
       text-align: center;
-      padding: 12px 15px; /* Increased padding for better spacing */
+      padding: 15px 20px;
       white-space: nowrap;
       border-bottom: 1px solid #dee2e6;
+      font-size: 14px;
     }
 
-    /* Ensure the first and last td in the last row have rounded corners */
     .table tbody tr:last-child td:first-child {
       border-bottom-left-radius: 15px;
     }
@@ -73,22 +75,27 @@
     }
 
     .table tbody tr:hover {
-      background-color: #f1f1f1; /* Subtle hover effect */
+      background-color: #f1f1f1;
       transition: background-color 0.3s ease;
+    }
+
+    .table .horizontal-line td {
+      border: none;
+      background-color: #dee2e6;
+      height: 2px;
+      padding: 0;
     }
 
     .action-btn {
       background: none;
       border: none;
-      font-size: 16px;
-      margin: 0 5px;
-      color: #007bff;
-      transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+      font-size: 18px;
+      margin: 0 8px;
+      transition: transform 0.2s ease;
     }
 
     .action-btn:hover {
-      color: #0056b3;
-      transform: scale(1.1); /* Slight scale on hover for interactivity */
+      transform: scale(1.15);
     }
 
     .new-admission-btn {
@@ -96,13 +103,15 @@
       color: white;
       border: none;
       border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
-      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 15px;
+      margin-top: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
     }
 
     .new-admission-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .filter-btn {
@@ -110,30 +119,34 @@
       color: white;
       border: none;
       border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
+      padding: 10px 20px;
+      font-size: 15px;
       float: right;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       margin-right: 40px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
     }
 
     .filter-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .modal-content {
       background-color: #f0ebeb;
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 25px;
       margin: auto;
       border: 2px solid #007bff;
-      margin-top: 71px !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      margin-top: 80px !important;
     }
 
     .modal-content h3 {
       text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      font-size: 20px;
     }
 
     .modal-backdrop.show {
@@ -141,14 +154,16 @@
     }
 
     .form-group label {
-      font-weight: bold;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 5px;
     }
 
     .form-control {
-      height: 40px;
-      border-radius: 6px;
+      height: 45px;
+      border-radius: 8px;
       font-size: 14px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
     .submit-btn, .next-btn {
@@ -156,24 +171,31 @@
       border: none;
       color: white;
       border-radius: 8px;
-      padding: 10px;
-      width: 140px;
-      font-weight: bold;
+      padding: 12px;
+      width: 150px;
+      font-weight: 600;
       display: block;
-      margin: 20px auto 0;
+      margin: 25px auto 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .submit-btn:hover, .next-btn:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .step-nav {
       display: flex;
       justify-content: space-between;
-      padding: 10px;
+      padding: 12px;
       background-color: #d3d3d3;
       border-radius: 5px 5px 0 0;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
     }
 
     .step-nav span {
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .step-active {
@@ -183,9 +205,15 @@
     .receipt-card {
       background-color: #f0ebeb;
       border: 2px solid #007bff;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 10px 0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .receipt-card p {
+      margin: 5px 0;
+      font-size: 14px;
     }
 
     @media (max-width: 768px) {
@@ -194,7 +222,7 @@
       }
       .content-wrapper {
         margin-left: 0 !important;
-        padding: 10px !important;
+        padding: 15px !important;
       }
       .table {
         font-size: 12px;
@@ -202,9 +230,13 @@
       .new-admission-btn, .filter-btn {
         margin-bottom: 10px;
         position: static;
+        width: 100%;
+        margin-right: 0;
       }
       .modal-content {
         max-width: 95%;
+        padding: 15px;
+        margin-top: 50px !important;
       }
     }
 
@@ -254,14 +286,15 @@
               <td>B1</td>
               <td>Corporate</td>
               <td>
-                <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
-                <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-forward"></i></button>
-                <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-backward"></i></button>
+                <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen"></i></button>
+                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-file-invoice"></i></button>
+                <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-calendar-plus"></i></button>
+                <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-calendar-minus"></i></button>
                 <button class="action-btn cancel-btn" data-toggle="modal" data-target="#cancelModal"><i class="fas fa-ban"></i></button>
               </td>
             </tr>
+            <tr class="horizontal-line"><td colspan="6"></td></tr>
             <tr>
               <td>John Smith</td>
               <td>987654321</td>
@@ -269,14 +302,15 @@
               <td>B2</td>
               <td>Individual</td>
               <td>
-                <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
-                <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-forward"></i></button>
-                <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-backward"></i></button>
+                <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen"></i></button>
+                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-file-invoice"></i></button>
+                <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-calendar-plus"></i></button>
+                <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-calendar-minus"></i></button>
                 <button class="action-btn cancel-btn" data-toggle="modal" data-target="#cancelModal"><i class="fas fa-ban"></i></button>
               </td>
             </tr>
+            <tr class="horizontal-line"><td colspan="6"></td></tr>
           </tbody>
         </table>
       </div>
@@ -312,7 +346,6 @@
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="parentName">Parent Name :</label>
@@ -325,7 +358,6 @@
             <div class="invalid-feedback">Please enter a valid 10-digit emergency contact number.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="email">Email :</label>
@@ -338,7 +370,6 @@
             <div class="invalid-feedback">Please enter an address.</div>
           </div>
         </div>
-
         <button type="submit" class="next-btn">Next</button>
       </form>
     </div>
@@ -368,7 +399,6 @@
             <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="category">Category :</label>
@@ -389,7 +419,6 @@
             <div class="invalid-feedback">Please select a coach.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="duration">Duration :</label>
@@ -401,7 +430,6 @@
             <div class="invalid-feedback">Please select a duration.</div>
           </div>
         </div>
-
         <button type="submit" class="next-btn">Next</button>
       </form>
     </div>
@@ -431,7 +459,6 @@
             <div class="invalid-feedback">Please enter a valid amount paid.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="remainingAmount">Remaining Amount :</label>
@@ -453,7 +480,6 @@
             <div class="invalid-feedback">Please select a payment method.</div>
           </div>
         </div>
-
         <button type="submit" class="submit-btn">Generate Receipt</button>
       </form>
     </div>
@@ -549,7 +575,6 @@
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="filterCenter">Center :</label>
@@ -562,7 +587,6 @@
             <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-12">
             <label for="filterCategory">Category :</label>
@@ -573,7 +597,6 @@
             </select>
           </div>
         </div>
-
         <button type="submit" class="submit-btn">Apply Filter</button>
       </form>
     </div>
@@ -598,7 +621,6 @@
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="editCenter">Center :</label>
@@ -611,7 +633,6 @@
             <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group col-md-12">
             <label for="editCategory">Category :</label>
@@ -623,7 +644,6 @@
             <div class="invalid-feedback">Please select a category.</div>
           </div>
         </div>
-
         <button type="submit" class="submit-btn">Save Changes</button>
       </form>
     </div>
@@ -662,7 +682,7 @@
             <p>Payment Mode : <span id="receiptPaymentMethod"></span></p>
           </div>
         </div>
-        <p><strong>Date :</strong> 17-07-2025 09:48 PM IST</p>
+        <p><strong>Date :</strong> 12:09 PM IST, July 26, 2025</p>
       </div>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     </div>
@@ -727,11 +747,11 @@
           <td>${batch}</td>
           <td>${category}</td>
           <td>
-            <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-            <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
-            <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-forward"></i></button>
-            <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-backward"></i></button>
+            <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-pen"></i></button>
+            <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+            <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-file-invoice"></i></button>
+            <button class="action-btn postpone-btn" data-toggle="modal" data-target="#postponeModal"><i class="fas fa-calendar-plus"></i></button>
+            <button class="action-btn prepone-btn" data-toggle="modal" data-target="#preponeModal"><i class="fas fa-calendar-minus"></i></button>
             <button class="action-btn cancel-btn" data-toggle="modal" data-target="#cancelModal"><i class="fas fa-ban"></i></button>
           </td>
         `;
@@ -809,7 +829,6 @@
           if (this.checkValidity()) {
             event.preventDefault();
             const newDate = document.getElementById('postponeDate').value;
-            // Update batch date in the system (for now, just log the change)
             console.log(`Postponed admission for ${row.cells[0].textContent} to ${newDate}`);
             $('#postponeModal').modal('hide');
             this.reset();
@@ -828,7 +847,6 @@
           if (this.checkValidity()) {
             event.preventDefault();
             const newDate = document.getElementById('preponeDate').value;
-            // Update batch date in the system (for now, just log the change)
             console.log(`Preponed admission for ${row.cells[0].textContent} to ${newDate}`);
             $('#preponeModal').modal('hide');
             this.reset();
@@ -846,7 +864,6 @@
         document.getElementById('cancelForm').onsubmit = function (event) {
           if (this.checkValidity()) {
             event.preventDefault();
-            // Remove the row from the table
             row.remove();
             console.log(`Cancelled admission for ${row.cells[0].textContent}`);
             $('#cancelModal').modal('hide');

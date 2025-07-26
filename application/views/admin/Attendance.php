@@ -163,13 +163,12 @@
 
         .add-btn {
             background: linear-gradient(to right, #ff4040, #470000);
-            color: white;
-            border: none;
-            border-radius: 10px; /* Increased border radius for a softer look */
-            padding: 6px 10px;
-            font-size: 12px;
-            width: 200px;
-            cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-top: 10px;
         }
 
         .add-btn:hover {
