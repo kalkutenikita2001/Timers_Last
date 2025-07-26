@@ -123,7 +123,7 @@
             border-radius: 5px;
             cursor: pointer;
             background: none;
-            color: #007bff;
+            color: black;
             font-size: 12px;
             display: flex;
             align-items: center;

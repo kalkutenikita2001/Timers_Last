@@ -33,7 +33,7 @@
       border-radius: 12px;
       padding: 15px;
       margin: 10px;
-      width: 100%;
+      width: 77%;
       max-width: 220px;
       font-size: 13px;
       position: relative;
@@ -138,6 +138,7 @@
       margin: auto;
       border: 2px solid #007bff;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          margin-top: 73px;
     }
 
     .modal-content h3 {
@@ -203,7 +204,7 @@
       }
       .center-card {
         max-width: 180px;
-        height: 220px;
+        height: 237px;
       }
     }
 

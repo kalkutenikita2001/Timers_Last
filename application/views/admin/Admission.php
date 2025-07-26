@@ -89,7 +89,7 @@
     .action-btn {
       background: none;
       border: none;
-      font-size: 18px;
+      font-size: 14px;
       margin: 0 8px;
       transition: transform 0.2s ease;
     }
@@ -230,7 +230,7 @@
       .new-admission-btn, .filter-btn {
         margin-bottom: 10px;
         position: static;
-        width: 100%;
+        /* width: 100%; */
         margin-right: 0;
       }
       .modal-content {
@@ -682,7 +682,7 @@
             <p>Payment Mode : <span id="receiptPaymentMethod"></span></p>
           </div>
         </div>
-        <p><strong>Date :</strong> 12:09 PM IST, July 26, 2025</p>
+        <p><strong>Date :</strong> 12:28 PM IST, July 26, 2025</p>
       </div>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     </div>
@@ -757,6 +757,9 @@
         `;
         tableBody.appendChild(newRow);
 
+        // Re-attach event listeners to new buttons
+        attachEventListeners();
+
         // Update receipt modal with new data
         document.getElementById('receiptName').textContent = name;
         document.getElementById('receiptContact').textContent = contact;
@@ -781,111 +784,117 @@
       this.classList.add('was-validated');
     });
 
-    // Edit functionality
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('editName').value = row.cells[0].textContent;
-        document.getElementById('editContact').value = row.cells[1].textContent;
-        document.getElementById('editCenter').value = row.cells[2].textContent;
-        document.getElementById('editBatch').value = row.cells[3].textContent;
-        document.getElementById('editCategory').value = row.cells[4].textContent;
+    // Function to attach event listeners to all action buttons
+    function attachEventListeners() {
+      // Edit functionality
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          document.getElementById('editName').value = row.cells[0].textContent;
+          document.getElementById('editContact').value = row.cells[1].textContent;
+          document.getElementById('editCenter').value = row.cells[2].textContent;
+          document.getElementById('editBatch').value = row.cells[3].textContent;
+          document.getElementById('editCategory').value = row.cells[4].textContent;
 
-        document.getElementById('editForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            row.cells[0].textContent = document.getElementById('editName').value;
-            row.cells[1].textContent = document.getElementById('editContact').value;
-            row.cells[2].textContent = document.getElementById('editCenter').value;
-            row.cells[3].textContent = document.getElementById('editBatch').value;
-            row.cells[4].textContent = document.getElementById('editCategory').value;
-            button.setAttribute('data-name', document.getElementById('editName').value);
-            button.setAttribute('data-contact', document.getElementById('editContact').value);
-            button.setAttribute('data-center', document.getElementById('editCenter').value);
-            button.setAttribute('data-batch', document.getElementById('editBatch').value);
-            button.setAttribute('data-category', document.getElementById('editCategory').value);
-            $('#editModal').modal('hide');
-            this.classList.remove('was-validated');
+          document.getElementById('editForm').onsubmit = function (event) {
+            if (this.checkValidity()) {
+              event.preventDefault();
+              row.cells[0].textContent = document.getElementById('editName').value;
+              row.cells[1].textContent = document.getElementById('editContact').value;
+              row.cells[2].textContent = document.getElementById('editCenter').value;
+              row.cells[3].textContent = document.getElementById('editBatch').value;
+              row.cells[4].textContent = document.getElementById('editCategory').value;
+              button.setAttribute('data-name', document.getElementById('editName').value);
+              button.setAttribute('data-contact', document.getElementById('editContact').value);
+              button.setAttribute('data-center', document.getElementById('editCenter').value);
+              button.setAttribute('data-batch', document.getElementById('editBatch').value);
+              button.setAttribute('data-category', document.getElementById('editCategory').value);
+              $('#editModal').modal('hide');
+              this.classList.remove('was-validated');
+            }
+            this.classList.add('was-validated');
+          };
+        });
+      });
+
+      // Delete functionality
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          if (confirm('Are you sure you want to delete this record?')) {
+            this.closest('tr').remove();
           }
-          this.classList.add('was-validated');
-        };
+        });
       });
-    });
 
-    // Delete functionality
-    document.querySelectorAll('.delete-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        if (confirm('Are you sure you want to delete this record?')) {
-          this.closest('tr').remove();
-        }
+      // Postpone functionality
+      document.querySelectorAll('.postpone-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          document.getElementById('postponeForm').onsubmit = function (event) {
+            if (this.checkValidity()) {
+              event.preventDefault();
+              const newDate = document.getElementById('postponeDate').value;
+              console.log(`Postponed admission for ${row.cells[0].textContent} to ${newDate}`);
+              $('#postponeModal').modal('hide');
+              this.reset();
+              this.classList.remove('was-validated');
+            }
+            this.classList.add('was-validated');
+          };
+        });
       });
-    });
 
-    // Postpone functionality
-    document.querySelectorAll('.postpone-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('postponeForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            const newDate = document.getElementById('postponeDate').value;
-            console.log(`Postponed admission for ${row.cells[0].textContent} to ${newDate}`);
-            $('#postponeModal').modal('hide');
-            this.reset();
-            this.classList.remove('was-validated');
-          }
-          this.classList.add('was-validated');
-        };
+      // Prepone functionality
+      document.querySelectorAll('.prepone-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          document.getElementById('preponeForm').onsubmit = function (event) {
+            if (this.checkValidity()) {
+              event.preventDefault();
+              const newDate = document.getElementById('preponeDate').value;
+              console.log(`Preponed admission for ${row.cells[0].textContent} to ${newDate}`);
+              $('#preponeModal').modal('hide');
+              this.reset();
+              this.classList.remove('was-validated');
+            }
+            this.classList.add('was-validated');
+          };
+        });
       });
-    });
 
-    // Prepone functionality
-    document.querySelectorAll('.prepone-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('preponeForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            const newDate = document.getElementById('preponeDate').value;
-            console.log(`Preponed admission for ${row.cells[0].textContent} to ${newDate}`);
-            $('#preponeModal').modal('hide');
-            this.reset();
-            this.classList.remove('was-validated');
-          }
-          this.classList.add('was-validated');
-        };
+      // Cancel functionality
+      document.querySelectorAll('.cancel-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          document.getElementById('cancelForm').onsubmit = function (event) {
+            if (this.checkValidity()) {
+              event.preventDefault();
+              row.remove();
+              console.log(`Cancelled admission for ${row.cells[0].textContent}`);
+              $('#cancelModal').modal('hide');
+              this.reset();
+              this.classList.remove('was-validated');
+            }
+            this.classList.add('was-validated');
+          };
+        });
       });
-    });
 
-    // Cancel functionality
-    document.querySelectorAll('.cancel-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('cancelForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            row.remove();
-            console.log(`Cancelled admission for ${row.cells[0].textContent}`);
-            $('#cancelModal').modal('hide');
-            this.reset();
-            this.classList.remove('was-validated');
-          }
-          this.classList.add('was-validated');
-        };
+      // Handle receipt view
+      document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          document.getElementById('receiptName').textContent = row.cells[0].textContent;
+          document.getElementById('receiptContact').textContent = row.cells[1].textContent;
+          document.getElementById('receiptCenter').textContent = row.cells[2].textContent;
+          document.getElementById('receiptBatch').textContent = row.cells[3].textContent;
+          document.getElementById('receiptCategory').textContent = row.cells[4].textContent;
+        });
       });
-    });
+    }
 
-    // Handle receipt view
-    document.querySelectorAll('.view-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('receiptName').textContent = row.cells[0].textContent;
-        document.getElementById('receiptContact').textContent = row.cells[1].textContent;
-        document.getElementById('receiptCenter').textContent = row.cells[2].textContent;
-        document.getElementById('receiptBatch').textContent = row.cells[3].textContent;
-        document.getElementById('receiptCategory').textContent = row.cells[4].textContent;
-      });
-    });
+    // Initial attachment of event listeners
+    attachEventListeners();
 
     // Sidebar toggle functionality
     document.addEventListener('DOMContentLoaded', () => {

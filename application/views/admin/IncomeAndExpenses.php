@@ -131,11 +131,11 @@
         }
 
         .view-btn {
-            color: #007bff; /* Matches edit icon color in Admission.php */
+            color: black; /* Matches edit icon color in Admission.php */
         }
 
         .edit-btn {
-            color: #007bff; /* Matches edit icon color in Admission.php */
+            color: black; /* Matches edit icon color in Admission.php */
         }
 
         .view-btn:hover {
