@@ -100,7 +100,7 @@
 
   .sidebar .nav-link.active {
     background-color: #e9ecef;
-    font-weight: 700;
+    /* font-weight: 700; */
   }
 
   .sidebar .nav-link i {
