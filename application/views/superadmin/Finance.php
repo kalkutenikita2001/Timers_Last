@@ -4,38 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Management</title>
-    <!-- Bootstrap CSS (required for table classes) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e9ecef !important;
-            color: #fff;
-            min-height: 100vh;
+            background-color: #f8f9fa !important;
             margin: 0;
-            padding: 0;
+            font-family: 'Montserrat', serif !important;
+            overflow-x: hidden;
         }
 
         .content-wrapper {
             margin-left: 250px;
-            padding: 10px;
+            padding: 20px;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            min-height: 100vh;
         }
 
         .content-wrapper.minimized {
             margin-left: 60px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 70px auto 0;
-            width: 100%;
+        .content {
+            margin-top: 60px;
         }
 
         /* Option Buttons Styles */
@@ -69,7 +65,145 @@
             color: #fff;
         }
 
-        /* Add Button and Filter */
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: #fff;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: center;
+            padding: 0.75rem;
+            white-space: nowrap;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table .horizontal-line td {
+            border: none;
+            background-color: #dee2e6;
+            height: 1px;
+            padding: 0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            margin: 0 0.25rem;
+            transition: transform 0.2s ease;
+            color: #6c757d;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.2);
+            color: #007bff;
+        }
+
+        /* Button Styles */
+        .btn-custom {
+            background:#6c757d;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            margin-top: 65px;
+        }
+
+        .modal-content h3 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #343a40;
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        .form-control {
+            height: calc(2.25rem + 2px);
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .invalid-feedback {
+            font-size: 0.875rem;
+            color: #dc3545;
+        }
+
+        .was-validated .form-control:invalid, .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .was-validated .form-control:valid, .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        .modal-backdrop.show {
+            backdrop-filter: blur(6px);
+        }
+
         .add-btn-container {
             display: flex;
             justify-content: flex-end;
@@ -78,363 +212,49 @@
             align-items: center;
         }
 
-        .add-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .add-btn:hover {
-            background: #c82333;
-        }
-
-        .filter-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover {
-            background: #5a6268;
-        }
-
-        /* Table Styles */
-        .table-container {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            margin: 0;
-        }
-
-        .table thead th {
-            background-color: #333;
-            color: #fff;
-            border-bottom: 2px solid #ddd;
-            white-space: nowrap;
-            padding: 15px 10px;
+        .form-note {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
             text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background-color: #f5f5f5;
-        }
-
-        .table tbody tr:hover {
-            background-color: #e0e0e0;
-        }
-
-        .table td {
-            vertical-align: middle;
-            text-align: center;
-            padding: 15px 10px;
-            color: #000;
-            border-bottom: 1px solid #ddd;
-            font-size: 14px;
-        }
-
-        .action-cell {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-btn {
-            width: 30px;
-            height: 30px;
-            border: 2px dashed #666;
-            border-radius: 50%;
-            cursor: pointer;
-            background: none;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            border-color: #000;
-        }
-
-        .action-btn.thumbs-up::before {
-            content: "👍";
-        }
-
-        .action-btn.cross::before {
-            content: "✖";
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: #f5f5f5;
-            margin: 8% auto;
-            padding: 0;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            text-align: center;
-            padding: 25px 25px 20px;
-            border-bottom: none;
-            position: relative;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #333;
-            margin: 0;
-        }
-
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            color: #666;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .close:hover {
-            color: #000;
-            background: #e0e0e0;
-        }
-
-        .modal-body {
-            padding: 20px 40px 40px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            flex: 1;
-        }
-
-        .form-group.full-width {
-            flex: 100%;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .form-group label .required {
-            color: #dc3545;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-            color: #333;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #dc3545;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .date-input {
-            position: relative;
-        }
-
-        .date-input input[type="date"] {
-            position: relative;
-            padding-right: 40px;
-        }
-
-        .date-input::after {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-size: 16px;
-        }
-
-        .error {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-group.invalid input,
-        .form-group.invalid textarea,
-        .form-group.invalid select {
-            border-color: #dc3545;
-            background: #ffeaea;
-        }
-
-        .form-group.invalid .error {
-            display: block;
-        }
-
-        .save-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
-            margin: 30px auto 0;
-            transition: all 0.3s ease;
-        }
-
-        .save-btn:hover {
-            background: #c82333;
-        }
-
-        .save-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* Filter Modal Styles */
-        #filterModal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        #filterModal .modal-content {
-            max-width: 400px;
-        }
-
-        #filterModal .close {
-            top: 15px;
-            right: 15px;
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 576px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 5px !important;
+                padding: 1rem !important;
             }
 
-            .container {
-                margin-top: 60px;
+            .table {
+                font-size: 0.8rem;
             }
 
-            .table-container {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 800px;
-            }
-
-            th, td {
-                padding: 10px 8px;
-                font-size: 12px;
+            .action-btn {
+                margin: 0.1rem;
+                font-size: 0.8rem;
             }
 
             .modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-
-            .modal-body {
-                padding: 15px 20px 30px;
+                padding: 1rem;
+                max-width: 95%;
             }
 
             .form-row {
-                flex-direction: column;
-                gap: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                margin-right: -5px;
+                margin-left: -5px;
             }
 
-            .add-btn-container {
-                justify-content: center;
-                flex-direction: column;
-                gap: 10px;
+            .form-group {
+                padding-right: 5px;
+                padding-left: 5px;
+            }
+
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
             }
 
             .option-buttons {
@@ -444,619 +264,721 @@
 
             .option-buttons button {
                 width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .modal-content {
-                width: 98%;
-                margin: 5% auto;
-            }
-
-            .modal-body {
-                padding: 12px 15px 25px;
-            }
-
-            .form-group label {
                 font-size: 12px;
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 10px 12px;
-                font-size: 12px;
-            }
-
-            .option-buttons button {
                 padding: 8px 20px;
-                font-size: 12px;
+            }
+
+            .add-btn-container {
+                justify-content: center;
+                /* flex-direction: column; */
+                gap: 10px;
+            }
+
+            .btn-custom {
+                width: 120px;
+                font-size: 0.875rem;
+                padding: 0.375rem 0.75rem;
             }
         }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media (min-width: 577px) and (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 1rem !important;
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 0;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .modal-content {
+                /* max-width: 90%; */
+                padding: 1.25rem;
+            }
+
+            .add-btn-container {
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .option-buttons {
+                gap: 8px;
+            }
+
+            .btn-custom {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 991px) {
             .content-wrapper {
                 margin-left: 200px;
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 60px;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                max-width: 80%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .modal-content {
+                max-width: 600px;
+            }
+        }
+
+        /* Touch device hover fix */
+        @media (hover: none) {
+            .action-btn:hover,
+            .btn-custom:hover,
+            .option-buttons button:hover {
+                background-color: inherit;
+                transform: none;
+                box-shadow: none;
             }
         }
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-        <!-- Option Buttons -->
-        <div class="option-buttons">
-            <button class="active" onclick="switchOption('centerwise')">Centerwise Expenses</button>
-            <button onclick="switchOption('totalrevenue')">Total Revenue</button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <!-- Option Buttons -->
+                <div class="option-buttons">
+                    <button class="active" data-option="centerwise">Centerwise Expenses</button>
+                    <button data-option="totalrevenue">Total Revenue</button>
+                </div>
 
-        <!-- Add Button and Filter -->
-        <div class="add-btn-container">
-            <button class="filter-btn" onclick="openFilterModal()">Filter</button>
-            <button class="add-btn" onclick="openModal()">Add Revenue</button>
-        </div>
+                <!-- Add Button and Filter -->
+                <div class="add-btn-container">
+                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+                        <i class="fas fa-filter mr-1"></i> Filter
+                    </button>
+                    <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
+                        <i class="fas fa-plus mr-1"></i> Add Revenue
+                    </button>
+                </div>
 
-        <!-- Revenue Table -->
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Daily Revenue(₹)</th>
-                        <th>Weekly Revenue(₹)</th>
-                        <th>Monthly Revenue(₹)</th>
-                        <th>Yearly Revenue(₹)</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="expenseTableBody">
-                    <tr>
-                        <td>Rent</td>
-                        <td>Rs.500</td>
-                        <td>Rs.3500</td>
-                        <td>Rs.15000</td>
-                        <td>Rs.180000</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Food</td>
-                        <td>Rs.300</td>
-                        <td>Rs.2100</td>
-                        <td>Rs.9000</td>
-                        <td>Rs.108000</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Rent</td>
-                        <td>Rs.500</td>
-                        <td>Rs.3500</td>
-                        <td>Rs.15000</td>
-                        <td>Rs.180000</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <!-- Revenue Table -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover" id="expenseTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Title</th>
+                                <th>Daily Revenue(₹)</th>
+                                <th>Weekly Revenue(₹)</th>
+                                <th>Monthly Revenue(₹)</th>
+                                <th>Yearly Revenue(₹)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                            <tr>
+                                <td>Rent</td>
+                                <td>500</td>
+                                <td>3500</td>
+                                <td>15000</td>
+                                <td>180000</td>
+                                <td>
+                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
+                                            data-title="Rent" data-date="2025-07-30" data-daily="500" data-weekly="3500" 
+                                            data-monthly="15000" data-yearly="180000" data-notes="N/A">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
+                                    <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="horizontal-line"><td colspan="6"></td></tr>
+                            <tr>
+                                <td>Food</td>
+                                <td>300</td>
+                                <td>2100</td>
+                                <td>9000</td>
+                                <td>108000</td>
+                                <td>
+                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
+                                            data-title="Food" data-date="2025-07-30" data-daily="300" data-weekly="2100" 
+                                            data-monthly="9000" data-yearly="108000" data-notes="N/A">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn thumbs-up" data-title="Food"><i class="fas fa-check"></i></button>
+                                    <button class="action-btn cross" data-title="Food"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="horizontal-line"><td colspan="6"></td></tr>
+                            <tr>
+                                <td>Rent</td>
+                                <td>500</td>
+                                <td>3500</td>
+                                <td>15000</td>
+                                <td>180000</td>
+                                <td>
+                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
+                                            data-title="Rent" data-date="2025-07-30" data-daily="500" data-weekly="3500" 
+                                            data-monthly="15000" data-yearly="180000" data-notes="N/A">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
+                                    <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="horizontal-line"><td colspan="6"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
 
-    <!-- Revenue Modal -->
-    <div id="expenseModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal()">×</span>
-                <h2 class="modal-title">Add Revenue</h2>
-            </div>
-            <div class="modal-body">
-                <form id="expenseForm">
+    <!-- Add Revenue Modal -->
+    <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="expenseLabel" class="modal-title w-100 text-center">Add Revenue</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="expenseForm" novalidate>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="title">Title <span class="required">*</span></label>
-                            <input type="text" id="title" name="title" maxlength="50" required>
-                            <div class="error">Title is required and must be less than 50 characters</div>
+                        <div class="form-group col-md-6">
+                            <label for="title">Title <span class="text-danger">*</span></label>
+                            <input type="text" id="title" name="title" class="form-control" required
+                                   pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
+                            <div class="invalid-feedback">Title is required, max 50 characters (letters and spaces only).</div>
                         </div>
-                        <div class="form-group date-input">
-                            <label for="date">Date <span class="required">*</span></label>
-                            <input type="date" id="date" name="date" required>
-                            <div class="error">Date is required and must not be a future date</div>
+                        <div class="form-group col-md-6">
+                            <label for="date">Date <span class="text-danger">*</span></label>
+                            <input type="date" id="date" name="date" class="form-control" required
+                                   max="<?php echo date('Y-m-d'); ?>">
+                            <div class="invalid-feedback">Date is required and must not be a future date.</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="dailyRevenue">Daily Revenue(₹) <span class="required">*</span></label>
-                            <input type="number" id="dailyRevenue" name="dailyRevenue" step="0.01" min="1" required>
-                            <div class="error">Daily Revenue is required and must be greater than 0</div>
+                        <div class="form-group col-md-6">
+                            <label for="dailyRevenue">Daily Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="dailyRevenue" name="dailyRevenue" class="form-control" required
+                                   min="1" step="0.01" title="Daily Revenue must be greater than 0">
+                            <div class="invalid-feedback">Daily Revenue is required and must be greater than 0.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="weeklyRevenue">Weekly Revenue(₹) <span class="required">*</span></label>
-                            <input type="number" id="weeklyRevenue" name="weeklyRevenue" step="0.01" min="1" required>
-                            <div class="error">Weekly Revenue is required and must be greater than 0</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="monthlyRevenue">Monthly Revenue(₹) <span class="required">*</span></label>
-                            <input type="number" id="monthlyRevenue" name="monthlyRevenue" step="0.01" min="1" required>
-                            <div class="error">Monthly Revenue is required and must be greater than 0</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="yearlyRevenue">Yearly Revenue(₹) <span class="required">*</span></label>
-                            <input type="number" id="yearlyRevenue" name="yearlyRevenue" step="0.01" min="1" required>
-                            <div class="error">Yearly Revenue is required and must be greater than 0</div>
+                        <div class="form-group col-md-6">
+                            <label for="weeklyRevenue">Weekly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="weeklyRevenue" name="weeklyRevenue" class="form-control" required
+                                   min="1" step="0.01" title="Weekly Revenue must be greater than 0">
+                            <div class="invalid-feedback">Weekly Revenue is required and must be greater than 0.</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group full-width">
+                        <div class="form-group col-md-6">
+                            <label for="monthlyRevenue">Monthly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="monthlyRevenue" name="monthlyRevenue" class="form-control" required
+                                   min="1" step="0.01" title="Monthly Revenue must be greater than 0">
+                            <div class="invalid-feedback">Monthly Revenue is required and must be greater than 0.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="yearlyRevenue">Yearly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="yearlyRevenue" name="yearlyRevenue" class="form-control" required
+                                   min="1" step="0.01" title="Yearly Revenue must be greater than 0">
+                            <div class="invalid-feedback">Yearly Revenue is required and must be greater than 0.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
                             <label for="notes">Notes</label>
-                            <textarea id="notes" name="notes" maxlength="200"></textarea>
-                            <div class="error">Notes must be less than 200 characters</div>
+                            <textarea id="notes" name="notes" class="form-control" rows="3" maxlength="200"></textarea>
+                            <div class="invalid-feedback">Notes must be less than 200 characters.</div>
                         </div>
                     </div>
-                    <button type="submit" class="save-btn">Save</button>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-custom">Save</button>
+                    </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Revenue Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="viewLabel" class="modal-title w-100 text-center">Revenue Details</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="receipt-card">
+                        <p><strong>Title:</strong> <span id="viewTitle"></span></p>
+                        <p><strong>Date:</strong> <span id="viewDate"></span></p>
+                        <p><strong>Daily Revenue:</strong> ₹<span id="viewDailyRevenue"></span></p>
+                        <p><strong>Weekly Revenue:</strong> ₹<span id="viewWeeklyRevenue"></span></p>
+                        <p><strong>Monthly Revenue:</strong> ₹<span id="viewMonthlyRevenue"></span></p>
+                        <p><strong>Yearly Revenue:</strong> ₹<span id="viewYearlyRevenue"></span></p>
+                        <p><strong>Notes:</strong> <span id="viewNotes"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Filter Modal -->
-    <div id="filterModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeFilterModal()">×</span>
-                <h2 class="modal-title">Filter Revenue</h2>
-            </div>
-            <div class="modal-body">
-                <form id="filterForm">
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="filterLabel" class="modal-title w-100 text-center">Filter Revenue</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="filterForm" novalidate>
+                    <div class="form-note">Fill at least one field to apply a filter.</div>
                     <div class="form-row">
-                        <div class="form-group date-input">
-                            <label for="startDate">Start Date :</label>
-                            <input type="date" id="startDate" name="startDate">
+                        <div class="form-group col-md-6">
+                            <label for="filterTitle">Title <span class="text-danger">*</span></label>
+                            <input type="text" id="filterTitle" name="filterTitle" class="form-control"
+                                   pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
+                            <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
-                        <div class="form-group date-input">
-                            <label for="endDate">End Date :</label>
-                            <input type="date" id="endDate" name="endDate">
+                        <div class="form-group col-md-6">
+                            <label for="startDate">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required
+                                   max="<?php echo date('Y-m-d'); ?>">
+                            <div class="invalid-feedback">Start Date is required and must not be a future date.</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="minDailyRevenue">Min Daily Revenue(₹) :</label>
-                            <input type="number" id="minDailyRevenue" name="minDailyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="endDate">End Date <span class="text-danger">*</span></label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required
+                                   max="<?php echo date('Y-m-d'); ?>">
+                            <div class="invalid-feedback">End Date is required and must not be before Start Date or a future date.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="maxDailyRevenue">Max Daily Revenue(₹) :</label>
-                            <input type="number" id="maxDailyRevenue" name="maxDailyRevenue" min="0" step="0.01">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="minWeeklyRevenue">Min Weekly Revenue(₹) :</label>
-                            <input type="number" id="minWeeklyRevenue" name="minWeeklyRevenue" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="maxWeeklyRevenue">Max Weekly Revenue(₹) :</label>
-                            <input type="number" id="maxWeeklyRevenue" name="maxWeeklyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="minDailyRevenue">Min Daily Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="minDailyRevenue" name="minDailyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Min Daily Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Min Daily Revenue is required and must be 0 or greater.</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="minMonthlyRevenue">Min Monthly Revenue(₹) :</label>
-                            <input type="number" id="minMonthlyRevenue" name="minMonthlyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="maxDailyRevenue">Max Daily Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="maxDailyRevenue" name="maxDailyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Max Daily Revenue must be 0 or greater and not less than Min Daily Revenue">
+                            <div class="invalid-feedback">Max Daily Revenue is required and must be 0 or greater and not less than Min Daily Revenue.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="maxMonthlyRevenue">Max Monthly Revenue(₹) :</label>
-                            <input type="number" id="maxMonthlyRevenue" name="maxMonthlyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="minWeeklyRevenue">Min Weekly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="minWeeklyRevenue" name="minWeeklyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Min Weekly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Min Weekly Revenue is required and must be 0 or greater.</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="minYearlyRevenue">Min Yearly Revenue(₹) :</label>
-                            <input type="number" id="minYearlyRevenue" name="minYearlyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="maxWeeklyRevenue">Max Weekly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="maxWeeklyRevenue" name="maxWeeklyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Max Weekly Revenue must be 0 or greater and not less than Min Weekly Revenue">
+                            <div class="invalid-feedback">Max Weekly Revenue is required and must be 0 or greater and not less than Min Weekly Revenue.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="maxYearlyRevenue">Max Yearly Revenue(₹) :</label>
-                            <input type="number" id="maxYearlyRevenue" name="maxYearlyRevenue" min="0" step="0.01">
+                        <div class="form-group col-md-6">
+                            <label for="minMonthlyRevenue">Min Monthly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="minMonthlyRevenue" name="minMonthlyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Min Monthly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Min Monthly Revenue is required and must be 0 or greater.</div>
                         </div>
                     </div>
-                    <button type="submit" class="save-btn">Apply Filter</button>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="maxMonthlyRevenue">Max Monthly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="maxMonthlyRevenue" name="maxMonthlyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Max Monthly Revenue must be 0 or greater and not less than Min Monthly Revenue">
+                            <div class="invalid-feedback">Max Monthly Revenue is required and must be 0 or greater and not less than Min Monthly Revenue.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="minYearlyRevenue">Min Yearly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="minYearlyRevenue" name="minYearlyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Min Yearly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Min Yearly Revenue is required and must be 0 or greater.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="maxYearlyRevenue">Max Yearly Revenue(₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="maxYearlyRevenue" name="maxYearlyRevenue" class="form-control" required
+                                   min="0" step="0.01" title="Max Yearly Revenue must be 0 or greater and not less than Min Yearly Revenue">
+                            <div class="invalid-feedback">Max Yearly Revenue is required and must be 0 or greater and not less than Min Yearly Revenue.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Clear</button>
+                        <button type="submit" class="btn btn-custom">Apply Filter</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap + Font Awesome + jQuery -->
+    <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <script>
-        // Modal functionality
-        const expenseModal = document.getElementById('expenseModal');
-        const filterModal = document.getElementById('filterModal');
-        const expenseForm = document.getElementById('expenseForm');
-        const filterForm = document.getElementById('filterForm');
-        let editingRow = null;
+        $(document).ready(function() {
+            let editingRow = null;
+            const initialRows = Array.from(document.querySelectorAll('#expenseTableBody tr:not(.horizontal-line)'))
+                .map(row => row.outerHTML);
 
-        function openModal() {
-            expenseModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            resetForm();
-        }
+            // Form validation function
+            function validateForm(formId) {
+                const form = document.getElementById(formId);
+                form.addEventListener('submit', function(event) {
+                    let isValid = form.checkValidity();
+                    let atLeastOneFilled = false;
 
-        function closeModal() {
-            expenseModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            resetForm();
-            editingRow = null;
-        }
+                    // Custom validation for filterForm
+                    if (formId === 'filterForm') {
+                        const inputs = form.querySelectorAll('input');
+                        inputs.forEach(input => {
+                            if (input.value.trim() !== '') {
+                                atLeastOneFilled = true;
+                            }
+                        });
 
-        function openFilterModal() {
-            filterModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            filterForm.reset();
-        }
-
-        function closeFilterModal() {
-            filterModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function resetForm() {
-            expenseForm.reset();
-            clearValidationErrors();
-        }
-
-        function clearValidationErrors() {
-            const formGroups = document.querySelectorAll('.form-group');
-            formGroups.forEach(group => {
-                group.classList.remove('invalid');
-            });
-        }
-
-        // Form validation
-        function validateForm() {
-            const title = document.getElementById('title');
-            const date = document.getElementById('date');
-            const dailyRevenue = document.getElementById('dailyRevenue');
-            const weeklyRevenue = document.getElementById('weeklyRevenue');
-            const monthlyRevenue = document.getElementById('monthlyRevenue');
-            const yearlyRevenue = document.getElementById('yearlyRevenue');
-            const notes = document.getElementById('notes');
-            const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0); // Set to midnight for comparison
-
-            let isValid = true;
-
-            // Clear previous errors
-            clearValidationErrors();
-
-            if (!title.value.trim() || title.value.length > 50) {
-                title.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!date.value || new Date(date.value) > currentDate) {
-                date.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!dailyRevenue.value || isNaN(dailyRevenue.value) || dailyRevenue.value <= 0) {
-                dailyRevenue.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!weeklyRevenue.value || isNaN(weeklyRevenue.value) || weeklyRevenue.value <= 0) {
-                weeklyRevenue.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!monthlyRevenue.value || isNaN(monthlyRevenue.value) || monthlyRevenue.value <= 0) {
-                monthlyRevenue.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!yearlyRevenue.value || isNaN(yearlyRevenue.value) || yearlyRevenue.value <= 0) {
-                yearlyRevenue.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (notes.value && notes.value.length > 200) {
-                notes.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        // Form submission
-        expenseForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (validateForm()) {
-                const formData = new FormData(expenseForm);
-                const data = {
-                    title: formData.get('title'),
-                    date: formData.get('date'),
-                    dailyRevenue: `Rs.${parseFloat(formData.get('dailyRevenue')).toFixed(0)}`,
-                    weeklyRevenue: `Rs.${parseFloat(formData.get('weeklyRevenue')).toFixed(0)}`,
-                    monthlyRevenue: `Rs.${parseFloat(formData.get('monthlyRevenue')).toFixed(0)}`,
-                    yearlyRevenue: `Rs.${parseFloat(formData.get('yearlyRevenue')).toFixed(0)}`,
-                    notes: formData.get('notes') || 'N/A'
-                };
-
-                const tableBody = document.getElementById('expenseTableBody');
-                if (editingRow) {
-                    updateRow(editingRow, data);
-                } else {
-                    addNewRow(data);
-                }
-
-                closeModal();
-            }
-        });
-
-        // Add new row to table
-        function addNewRow(data) {
-            const tableBody = document.getElementById('expenseTableBody');
-            const row = document.createElement('tr');
-            const currentOption = document.querySelector('.option-buttons .active').textContent.toLowerCase();
-            if (currentOption === 'total revenue') {
-                row.innerHTML = `
-                    <td>${data.title}</td>
-                    <td>${data.dailyRevenue}</td>
-                    <td>${data.weeklyRevenue}</td>
-                    <td>${data.monthlyRevenue}</td>
-                    <td>${data.yearlyRevenue}</td>
-                    <td class="action-cell">
-                        <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                        <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                    </td>
-                `;
-            } else {
-                row.innerHTML = `
-                    <td>${data.title}</td>
-                    <td>${data.dailyRevenue}</td>
-                    <td>${data.weeklyRevenue}</td>
-                    <td>${data.monthlyRevenue}</td>
-                    <td>${data.yearlyRevenue}</td>
-                    <td class="action-cell">
-                        <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                        <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                    </td>
-                `;
-            }
-            tableBody.appendChild(row);
-        }
-
-        // Update existing row
-        function updateRow(row, data) {
-            const cells = row.querySelectorAll('td');
-            cells[0].textContent = data.title;
-            cells[1].textContent = data.dailyRevenue;
-            cells[2].textContent = data.weeklyRevenue;
-            cells[3].textContent = data.monthlyRevenue;
-            cells[4].textContent = data.yearlyRevenue;
-        }
-
-        // Real-time validation
-        document.getElementById('title').addEventListener('input', function() {
-            if (this.value.trim() && this.value.length <= 50) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('date').addEventListener('change', function() {
-            const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0);
-            if (this.value && new Date(this.value) <= currentDate) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('dailyRevenue').addEventListener('input', function() {
-            if (this.value && !isNaN(this.value) && this.value > 0) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('weeklyRevenue').addEventListener('input', function() {
-            if (this.value && !isNaN(this.value) && this.value > 0) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('monthlyRevenue').addEventListener('input', function() {
-            if (this.value && !isNaN(this.value) && this.value > 0) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('yearlyRevenue').addEventListener('input', function() {
-            if (this.value && !isNaN(this.value) && this.value > 0) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('notes').addEventListener('input', function() {
-            if (!this.value || this.value.length <= 200) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        if (sidebar) {
-                            sidebar.classList.toggle('active');
-                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                        // Date range validation
+                        const startDate = form.querySelector('#startDate').value;
+                        const endDate = form.querySelector('#endDate').value;
+                        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+                            form.querySelector('#endDate').setCustomValidity('End Date must not be before Start Date.');
+                            isValid = false;
+                        } else {
+                            form.querySelector('#endDate').setCustomValidity('');
                         }
-                    } else {
-                        if (sidebar && contentWrapper) {
-                            const isMinimized = sidebar.classList.toggle('minimized');
-                            navbar.classList.toggle('sidebar-minimized', isMinimized);
-                            contentWrapper.classList.toggle('minimized', isMinimized);
+
+                        // Revenue range validation
+                        const revenueFields = [
+                            { min: 'minDailyRevenue', max: 'maxDailyRevenue' },
+                            { min: 'minWeeklyRevenue', max: 'maxWeeklyRevenue' },
+                            { min: 'minMonthlyRevenue', max: 'maxMonthlyRevenue' },
+                            { min: 'minYearlyRevenue', max: 'maxYearlyRevenue' }
+                        ];
+
+                        revenueFields.forEach(field => {
+                            const minInput = form.querySelector(`#${field.min}`);
+                            const maxInput = form.querySelector(`#${field.max}`);
+                            const minValue = parseFloat(minInput.value) || 0;
+                            const maxValue = parseFloat(maxInput.value) || 0;
+                            if (minInput.value && maxInput.value && maxValue < minValue) {
+                                maxInput.setCustomValidity(`${field.max.replace(/([A-Z])/g, ' $1')} must not be less than ${field.min.replace(/([A-Z])/g, ' $1')}.`);
+                                isValid = false;
+                            } else {
+                                maxInput.setCustomValidity('');
+                            }
+                        });
+
+                        if (!atLeastOneFilled) {
+                            form.querySelector('#filterTitle').setCustomValidity('At least one filter field must be filled.');
+                            isValid = false;
+                        } else {
+                            form.querySelector('#filterTitle').setCustomValidity('');
                         }
                     }
-                });
-            }
-        });
 
-        // Option switching functionality
-        function switchOption(option) {
-            const buttons = document.querySelectorAll('.option-buttons button');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if ((btn.textContent === 'Centerwise Expenses' && option === 'centerwise') || 
-                    (btn.textContent === 'Total Revenue' && option === 'totalrevenue')) {
-                    btn.classList.add('active');
+                    if (!isValid) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+
+                // Real-time validation for date and revenue fields
+                if (formId === 'filterForm') {
+                    const startDateInput = form.querySelector('#startDate');
+                    const endDateInput = form.querySelector('#endDate');
+                    const revenueFields = [
+                        'minDailyRevenue', 'maxDailyRevenue',
+                        'minWeeklyRevenue', 'maxWeeklyRevenue',
+                        'minMonthlyRevenue', 'maxMonthlyRevenue',
+                        'minYearlyRevenue', 'maxYearlyRevenue'
+                    ];
+
+                    startDateInput.addEventListener('input', validateDates);
+                    endDateInput.addEventListener('input', validateDates);
+
+                    revenueFields.forEach(field => {
+                        form.querySelector(`#${field}`).addEventListener('input', () => validateRevenue(field));
+                    });
+
+                    function validateDates() {
+                        if (startDateInput.value && endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
+                            endDateInput.setCustomValidity('End Date must not be before Start Date.');
+                            endDateInput.classList.add('is-invalid');
+                        } else {
+                            endDateInput.setCustomValidity('');
+                            endDateInput.classList.remove('is-invalid');
+                        }
+                    }
+
+                    function validateRevenue(fieldId) {
+                        const field = form.querySelector(`#${fieldId}`);
+                        const pairId = fieldId.startsWith('min') 
+                            ? fieldId.replace('min', 'max') 
+                            : fieldId.replace('max', 'min');
+                        const pair = form.querySelector(`#${pairId}`);
+                        const fieldValue = parseFloat(field.value) || 0;
+                        const pairValue = parseFloat(pair.value) || 0;
+
+                        if (fieldId.startsWith('max') && field.value && pair.value && fieldValue < pairValue) {
+                            field.setCustomValidity(`${fieldId.replace(/([A-Z])/g, ' $1')} must not be less than ${pairId.replace(/([A-Z])/g, ' $1')}.`);
+                            field.classList.add('is-invalid');
+                        } else {
+                            field.setCustomValidity('');
+                            field.classList.remove('is-invalid');
+                        }
+                    }
+                }
+            }
+
+            // Validate forms
+            ['expenseForm', 'filterForm'].forEach(validateForm);
+
+            // Clear filter form on modal close
+            $('#filterModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('filterForm');
+                form.reset();
+                form.classList.remove('was-validated');
+                form.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+            });
+
+            // Expense form submission
+            $('#expenseForm').on('submit', function(event) {
+                if (this.checkValidity()) {
+                    event.preventDefault();
+
+                    const formData = new FormData(this);
+                    const data = {
+                        title: formData.get('title'),
+                        date: formData.get('date'),
+                        dailyRevenue: parseFloat(formData.get('dailyRevenue')).toFixed(0),
+                        weeklyRevenue: parseFloat(formData.get('weeklyRevenue')).toFixed(0),
+                        monthlyRevenue: parseFloat(formData.get('monthlyRevenue')).toFixed(0),
+                        yearlyRevenue: parseFloat(formData.get('yearlyRevenue')).toFixed(0),
+                        notes: formData.get('notes') || 'N/A'
+                    };
+
+                    const tableBody = document.getElementById('expenseTableBody');
+                    if (editingRow) {
+                        updateRow(editingRow, data);
+                    } else {
+                        addNewRow(data);
+                        initialRows.push(tableBody.lastElementChild.outerHTML); // Add to initialRows for filtering
+                    }
+
+                    $('#expenseModal').modal('hide');
+                    this.reset();
+                    this.classList.remove('was-validated');
+                    editingRow = null;
                 }
             });
 
-            const tableBody = document.getElementById('expenseTableBody');
-            tableBody.innerHTML = '';
-            if (option === 'totalrevenue') {
-                const totalRevenue = [
-                    { title: 'Center A', dailyRevenue: 'Rs.500', weeklyRevenue: 'Rs.3500', monthlyRevenue: 'Rs.15000', yearlyRevenue: 'Rs.180000' },
-                    { title: 'Center B', dailyRevenue: 'Rs.300', weeklyRevenue: 'Rs.2100', monthlyRevenue: 'Rs.9000', yearlyRevenue: 'Rs.108000' },
-                    { title: 'Center C', dailyRevenue: 'Rs.400', weeklyRevenue: 'Rs.2800', monthlyRevenue: 'Rs.12000', yearlyRevenue: 'Rs.144000' }
-                ];
-                totalRevenue.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+            // Add new row to table
+            function addNewRow(data) {
+                const tableBody = document.getElementById('expenseTableBody');
+                const row = `
+                    <tr>
                         <td>${data.title}</td>
                         <td>${data.dailyRevenue}</td>
                         <td>${data.weeklyRevenue}</td>
                         <td>${data.monthlyRevenue}</td>
                         <td>${data.yearlyRevenue}</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
+                        <td>
+                            <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
+                                    data-title="${data.title}" data-date="${data.date}" data-daily="${data.dailyRevenue}" 
+                                    data-weekly="${data.weeklyRevenue}" data-monthly="${data.monthlyRevenue}" 
+                                    data-yearly="${data.yearlyRevenue}" data-notes="${data.notes}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
+                            <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
                         </td>
-                    `;
-                    tableBody.appendChild(row);
+                    </tr>
+                    <tr class="horizontal-line"><td colspan="6"></td></tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            }
+
+            // Update existing row
+            function updateRow(row, data) {
+                const cells = row.querySelectorAll('td');
+                cells[0].textContent = data.title;
+                cells[1].textContent = data.dailyRevenue;
+                cells[2].textContent = data.weeklyRevenue;
+                cells[3].textContent = data.monthlyRevenue;
+                cells[4].textContent = data.yearlyRevenue;
+                const viewBtn = cells[5].querySelector('.view-btn');
+                viewBtn.setAttribute('data-title', data.title);
+                viewBtn.setAttribute('data-date', data.date);
+                viewBtn.setAttribute('data-daily', data.dailyRevenue);
+                viewBtn.setAttribute('data-weekly', data.weeklyRevenue);
+                viewBtn.setAttribute('data-monthly', data.monthlyRevenue);
+                viewBtn.setAttribute('data-yearly', data.yearlyRevenue);
+                viewBtn.setAttribute('data-notes', data.notes);
+                cells[5].querySelector('.thumbs-up').setAttribute('data-title', data.title);
+                cells[5].querySelector('.cross').setAttribute('data-title', data.title);
+            }
+
+            // View modal population
+            $('#viewModal').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                const title = button.data('title');
+                const date = button.data('date');
+                const daily = button.data('daily');
+                const weekly = button.data('weekly');
+                const monthly = button.data('monthly');
+                const yearly = button.data('yearly');
+                const notes = button.data('notes');
+
+                const modal = $(this);
+                modal.find('#viewLabel').text(`Revenue Details - ${title}`);
+                modal.find('#viewTitle').text(title);
+                modal.find('#viewDate').text(date);
+                modal.find('#viewDailyRevenue').text(daily);
+                modal.find('#viewWeeklyRevenue').text(weekly);
+                modal.find('#viewMonthlyRevenue').text(monthly);
+                modal.find('#viewYearlyRevenue').text(yearly);
+                modal.find('#viewNotes').text(notes);
+            });
+
+            // Filter form submission
+            $('#filterForm').on('submit', function(event) {
+                event.preventDefault();
+                if (!this.checkValidity()) return;
+
+                const filterTitle = $('#filterTitle').val().trim().toLowerCase();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+                const minDailyRevenue = parseFloat($('#minDailyRevenue').val()) || 0;
+                const maxDailyRevenue = parseFloat($('#maxDailyRevenue').val()) || Infinity;
+                const minWeeklyRevenue = parseFloat($('#minWeeklyRevenue').val()) || 0;
+                const maxWeeklyRevenue = parseFloat($('#maxWeeklyRevenue').val()) || Infinity;
+                const minMonthlyRevenue = parseFloat($('#minMonthlyRevenue').val()) || 0;
+                const maxMonthlyRevenue = parseFloat($('#maxMonthlyRevenue').val()) || Infinity;
+                const minYearlyRevenue = parseFloat($('#minYearlyRevenue').val()) || 0;
+                const maxYearlyRevenue = parseFloat($('#maxYearlyRevenue').val()) || Infinity;
+
+                const filteredRows = initialRows.filter(row => {
+                    const rowElement = document.createElement('div');
+                    rowElement.innerHTML = row;
+                    const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                    const dailyRevenue = parseFloat(rowElement.querySelector('td:nth-child(2)').textContent);
+                    const weeklyRevenue = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent);
+                    const monthlyRevenue = parseFloat(rowElement.querySelector('td:nth-child(4)').textContent);
+                    const yearlyRevenue = parseFloat(rowElement.querySelector('td:nth-child(5)').textContent);
+                    const date = rowElement.querySelector('.view-btn').getAttribute('data-date');
+
+                    return (!filterTitle || title.includes(filterTitle)) &&
+                           (!startDate || new Date(date) >= new Date(startDate)) &&
+                           (!endDate || new Date(date) <= new Date(endDate)) &&
+                           (dailyRevenue >= minDailyRevenue && dailyRevenue <= maxDailyRevenue) &&
+                           (weeklyRevenue >= minWeeklyRevenue && weeklyRevenue <= maxWeeklyRevenue) &&
+                           (monthlyRevenue >= minMonthlyRevenue && monthlyRevenue <= maxMonthlyRevenue) &&
+                           (yearlyRevenue >= minYearlyRevenue && yearlyRevenue <= maxYearlyRevenue);
                 });
-            } else {
-                const centerwiseExpenses = [
-                    { title: 'Rent', dailyRevenue: 'Rs.500', weeklyRevenue: 'Rs.3500', monthlyRevenue: 'Rs.15000', yearlyRevenue: 'Rs.180000' },
-                    { title: 'Food', dailyRevenue: 'Rs.300', weeklyRevenue: 'Rs.2100', monthlyRevenue: 'Rs.9000', yearlyRevenue: 'Rs.108000' },
-                    { title: 'Rent', dailyRevenue: 'Rs.500', weeklyRevenue: 'Rs.3500', monthlyRevenue: 'Rs.15000', yearlyRevenue: 'Rs.180000' }
-                ];
-                centerwiseExpenses.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.title}</td>
-                        <td>${data.dailyRevenue}</td>
-                        <td>${data.weeklyRevenue}</td>
-                        <td>${data.monthlyRevenue}</td>
-                        <td>${data.yearlyRevenue}</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-        }
 
-        // Approve and Reject functionality
-        function approveExpense(button) {
-            const row = button.closest('tr');
-            row.style.backgroundColor = '#d4edda';
-            alert(`Revenue approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-        }
+                const tableBody = document.getElementById('expenseTableBody');
+                tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="6"></td></tr>') : '<tr><td colspan="6" class="text-center">No records match the filter criteria.</td></tr>';
 
-        function rejectExpense(button) {
-            const row = button.closest('tr');
-            row.style.backgroundColor = '#f8d7da';
-            alert(`Revenue rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-        }
+                $('#filterModal').modal('hide');
+                this.reset();
+                this.classList.remove('was-validated');
+                this.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+            });
 
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === expenseModal) {
-                closeModal();
-            }
-            if (event.target === filterModal) {
-                closeFilterModal();
-            }
-        });
+            // Approve and Reject functionality
+            $(document).on('click', '.thumbs-up', function() {
+                const row = $(this).closest('tr');
+                const title = $(this).data('title');
+                row.css('backgroundColor', '#d4edda');
+                alert(`Revenue "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            });
 
-        // Filter functionality
-        filterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const minDailyRevenue = document.getElementById('minDailyRevenue').value;
-            const maxDailyRevenue = document.getElementById('maxDailyRevenue').value;
-            const minWeeklyRevenue = document.getElementById('minWeeklyRevenue').value;
-            const maxWeeklyRevenue = document.getElementById('maxWeeklyRevenue').value;
-            const minMonthlyRevenue = document.getElementById('minMonthlyRevenue').value;
-            const maxMonthlyRevenue = document.getElementById('maxMonthlyRevenue').value;
-            const minYearlyRevenue = document.getElementById('minYearlyRevenue').value;
-            const maxYearlyRevenue = document.getElementById('maxYearlyRevenue').value;
+            $(document).on('click', '.cross', function() {
+                const row = $(this).closest('tr');
+                const title = $(this).data('title');
+                row.css('backgroundColor', '#f8d7da');
+                alert(`Revenue "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            });
 
-            const tableBody = document.getElementById('expenseTableBody');
-            const rows = tableBody.getElementsByTagName('tr');
+            // Option switching functionality
+            $('.option-buttons button').on('click', function() {
+                const option = $(this).data('option');
+                $('.option-buttons button').removeClass('active');
+                $(this).addClass('active');
 
-            for (let row of rows) {
-                const dateCell = row.cells[1].textContent; // Assuming date is not directly in table, using first revenue column for filter context
-                const dailyRevenue = row.cells[1].textContent.replace('Rs.', '');
-                const weeklyRevenue = row.cells[2].textContent.replace('Rs.', '');
-                const monthlyRevenue = row.cells[3].textContent.replace('Rs.', '');
-                const yearlyRevenue = row.cells[4].textContent.replace('Rs.', '');
-                let showRow = true;
+                const tableBody = document.getElementById('expenseTableBody');
+                tableBody.innerHTML = '';
 
-                if (startDate && new Date(dateCell) < new Date(startDate)) showRow = false;
-                if (endDate && new Date(dateCell) > new Date(endDate)) showRow = false;
-                if (minDailyRevenue && parseFloat(dailyRevenue) < parseFloat(minDailyRevenue)) showRow = false;
-                if (maxDailyRevenue && parseFloat(dailyRevenue) > parseFloat(maxDailyRevenue)) showRow = false;
-                if (minWeeklyRevenue && parseFloat(weeklyRevenue) < parseFloat(minWeeklyRevenue)) showRow = false;
-                if (maxWeeklyRevenue && parseFloat(weeklyRevenue) > parseFloat(maxWeeklyRevenue)) showRow = false;
-                if (minMonthlyRevenue && parseFloat(monthlyRevenue) < parseFloat(minMonthlyRevenue)) showRow = false;
-                if (maxMonthlyRevenue && parseFloat(monthlyRevenue) > parseFloat(maxMonthlyRevenue)) showRow = false;
-                if (minYearlyRevenue && parseFloat(yearlyRevenue) < parseFloat(minYearlyRevenue)) showRow = false;
-                if (maxYearlyRevenue && parseFloat(yearlyRevenue) > parseFloat(maxYearlyRevenue)) showRow = false;
+                if (option === 'totalrevenue') {
+                    const totalRevenue = [
+                        { title: 'Center A', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' },
+                        { title: 'Center B', date: '2025-07-30', dailyRevenue: '300', weeklyRevenue: '2100', monthlyRevenue: '9000', yearlyRevenue: '108000', notes: 'N/A' },
+                        { title: 'Center C', date: '2025-07-30', dailyRevenue: '400', weeklyRevenue: '2800', monthlyRevenue: '12000', yearlyRevenue: '144000', notes: 'N/A' }
+                    ];
+                    totalRevenue.forEach(data => addNewRow(data));
+                } else {
+                    const centerwiseExpenses = [
+                        { title: 'Rent', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' },
+                        { title: 'Food', date: '2025-07-30', dailyRevenue: '300', weeklyRevenue: '2100', monthlyRevenue: '9000', yearlyRevenue: '108000', notes: 'N/A' },
+                        { title: 'Rent', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' }
+                    ];
+                    centerwiseExpenses.forEach(data => addNewRow(data));
+                }
+            });
 
-                row.style.display = showRow ? '' : 'none';
-            }
+            // Sidebar toggle functionality
+            $('#sidebarToggle').on('click', function() {
+                if ($(window).width() <= 576) {
+                    $('#sidebar').toggleClass('active');
+                    $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+                } else {
+                    const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+                    $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+                    $('#contentWrapper').toggleClass('minimized', isMinimized);
+                }
+            });
 
-            closeFilterModal();
+            // Handle window resize
+            $(window).on('resize', function() {
+                if ($(window).width() <= 576) {
+                    $('#sidebar').removeClass('minimized');
+                    $('.navbar').removeClass('sidebar-minimized');
+                    $('#contentWrapper').removeClass('minimized');
+                }
+            });
         });
     </script>
 </body>

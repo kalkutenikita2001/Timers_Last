@@ -11,11 +11,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <style>
     body {
       background-color: #e9ecef !important;
       color: #fff;
-      font-family: 'Montserrat', sans-serif; /* Corrected to sans-serif as per font import */
+      font-family: 'Montserrat', sans-serif;
       overflow-x: hidden;
     }
     .dashboard-wrapper {
@@ -31,7 +33,6 @@
       max-width: calc(100vw - 60px);
     }
     
-    /* Additional sidebar states */
     .dashboard-wrapper.sidebar-minimized {
       margin-left: 60px;
       max-width: calc(100vw - 60px);
@@ -42,7 +43,6 @@
       max-width: calc(100vw - 60px);
     }
 
-    /* Container Fluid */
     .container-fluid {
       max-width: 100%;
       margin: 0 auto;
@@ -50,7 +50,6 @@
       padding: 0 15px;
     }
 
-    /* Top Stats Cards */
     .top-stats-row {
       border-radius: 15px;
       padding: 20px;
@@ -72,10 +71,11 @@
       justify-content: center;
       font-size: 14px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card-stat:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .card-stat h4 {
       margin: 0;
@@ -86,7 +86,6 @@
       font-size: 13px;
     }
 
-    /* Export Buttons */
     .export-section {
       text-align: center;
       margin: 20px 0;
@@ -104,15 +103,36 @@
       transition: all 0.2s ease;
       font-size: 14px;
       min-width: 140px;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-custom:hover {
       background-color: #333;
       color: white;
       transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    /* Main Content Grid */
+    .btn-custom::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .btn-custom:active::after {
+      width: 200px;
+      height: 200px;
+      opacity: 0;
+    }
+
     .main-content {
       display: grid;
       grid-template-columns: 1fr;
@@ -122,9 +142,7 @@
       max-width: 100%;
     }
 
-    /* Recently Added Students Table */
     .students-table-container {
-      /* background: #1a1a1a; */
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -154,20 +172,41 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      position: relative;
+      overflow: hidden;
     }
 
     .filter-btn:hover, .add-btn:hover {
       background: #444;
+      transform: translateY(-1px);
     }
 
     .add-btn {
       background: #ff4040;
-      color: white;
       border-color: #ff4040;
     }
 
     .add-btn:hover {
       background: #cc3333;
+    }
+
+    .filter-btn::after, .add-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .filter-btn:active::after, .add-btn:active::after {
+      width: 150px;
+      height: 150px;
+      opacity: 0;
     }
 
     .table-responsive {
@@ -184,8 +223,8 @@
       font-size: 12px;
       border-collapse: collapse;
       table-layout: fixed;
-      background-color: #fff; /* Changed to white background */
-      color: #000; /* Changed text color to black for readability */
+      background-color: #fff;
+      color: #000;
     }
 
     .students-table th {
@@ -198,7 +237,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      color: #fff; /* Header text remains white */
+      color: #fff;
     }
 
     .students-table th:nth-child(1) { width: 15%; }
@@ -211,7 +250,7 @@
 
     .students-table td {
       padding: 10px 8px;
-      border-bottom: 1px solid #ddd; /* Lighter border for white background */
+      border-bottom: 1px solid #ddd;
       font-size: 11px;
       white-space: nowrap;
       overflow: hidden;
@@ -219,7 +258,7 @@
     }
 
     .students-table tr:hover {
-      background: #f5f5f5; /* Light gray hover for white table */
+      background: #f5f5f5;
     }
 
     .action-icons {
@@ -228,31 +267,42 @@
       justify-content: flex-start;
     }
 
-    .action-icons i {
+    .action-btn {
+      background: none;
+      border: none;
       cursor: pointer;
-      padding: 4px;
+      padding: 4px 8px;
       border-radius: 3px;
       transition: all 0.2s ease;
       font-size: 12px;
       color: black;
+      position: relative;
+      overflow: hidden;
+      min-width: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .action-icons .bi-eye:hover {
+    .action-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .action-btn.view-btn:hover {
       background: #007bff;
       color: white;
     }
 
-    .action-icons .bi-pencil:hover {
+    .action-btn.edit-btn:hover {
       background: #28a745;
       color: white;
     }
 
-    .action-icons .bi-trash:hover {
+    .action-btn.delete-btn:hover {
       background: #dc3545;
       color: white;
     }
 
-    /* Bottom Grid Layout */
     .bottom-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -261,9 +311,7 @@
       max-width: 100%;
     }
 
-    /* Student Attendance & Staff Sections */
     .attendance-container, .staff-container {
-      /* background: #1a1a1a; */
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -289,8 +337,8 @@
       font-size: 11px;
       border-collapse: collapse;
       table-layout: fixed;
-      background-color: #fff; /* Changed to white background */
-      color: #000; /* Changed text color to black for readability */
+      background-color: #fff;
+      color: #000;
     }
 
     .attendance-table th, .staff-table th {
@@ -301,7 +349,7 @@
       font-weight: 600;
       white-space: nowrap;
       font-size: 10px;
-      color: #fff; /* Header text remains white */
+      color: #fff;
     }
 
     .attendance-table th:nth-child(1) { width: 25%; }
@@ -317,7 +365,7 @@
 
     .attendance-table td, .staff-table td {
       padding: 8px 6px;
-      border-bottom: 1px solid #ddd; /* Lighter border for white background */
+      border-bottom: 1px solid #ddd;
       font-size: 10px;
       white-space: nowrap;
       overflow: hidden;
@@ -325,12 +373,10 @@
     }
 
     .attendance-table tr:hover, .staff-table tr:hover {
-      background: #f5f5f5; /* Light gray hover for white table */
+      background: #f5f5f5;
     }
 
-    /* Total Students Donut Chart */
     .chart-container {
-      /* background: #1a1a1a; */
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -380,7 +426,6 @@
       flex-shrink: 0;
     }
 
-    /* Filter Modal */
     .filter-modal {
       display: none;
       position: fixed;
@@ -406,13 +451,19 @@
       padding: 10px;
       cursor: pointer;
       border-bottom: 1px solid #444;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
     }
 
     .filter-option:hover {
       background: #222;
     }
 
-    /* Overlay for modal */
+    .filter-option input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
     .modal-overlay {
       display: none;
       position: fixed;
@@ -428,7 +479,6 @@
       display: block;
     }
 
-    /* Status badges */
     .status-badge {
       padding: 2px 6px;
       border-radius: 10px;
@@ -447,7 +497,21 @@
       color: #856404;
     }
 
-    /* Responsive Design */
+    .status-pending {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-present {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-absent {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
     @media (max-width: 1400px) {
       .card-stat {
         flex: 1 1 25%;
@@ -578,7 +642,7 @@
         padding: 12px;
       }
       
-      .action-icons i {
+      .action-btn {
         font-size: 11px;
         padding: 3px;
       }
@@ -592,7 +656,7 @@
         width: 250px;
       }
     }
-    .btn1{
+    .btn1 {
       background: black;
       color: white;
     }
@@ -689,52 +753,8 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Jane Doe</td>
-                  <td>9876543210</td>
-                  <td>ABC</td>
-                  <td>B1</td>
-                  <td>Intermediate</td>
-                  <td><span class="status-badge status-complete">Complete</span></td>
-                  <td>
-                    <div class="action-icons">
-                      <i class="bi bi-eye" onclick="viewStudent('jane')"></i>
-                      <i class="bi bi-pencil" onclick="editStudent('jane')"></i>
-                      <i class="bi bi-trash" onclick="deleteStudent('jane')"></i>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Smith</td>
-                  <td>9876543211</td>
-                  <td>XYZ</td>
-                  <td>B2</td>
-                  <td>Advanced</td>
-                  <td><span class="status-badge status-intermediate">Pending</span></td>
-                  <td>
-                    <div class="action-icons">
-                      <i class="bi bi-eye" onclick="viewStudent('john')"></i>
-                      <i class="bi bi-pencil" onclick="editStudent('john')"></i>
-                      <i class="bi bi-trash" onclick="deleteStudent('john')"></i>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Sarah Wilson</td>
-                  <td>9876543212</td>
-                  <td>PQR</td>
-                  <td>B3</td>
-                  <td>Beginner</td>
-                  <td><span class="status-badge status-complete">Complete</span></td>
-                  <td>
-                    <div class="action-icons">
-                      <i class="bi bi-eye" onclick="viewStudent('sarah')"></i>
-                      <i class="bi bi-pencil" onclick="editStudent('sarah')"></i>
-                      <i class="bi bi-trash" onclick="deleteStudent('sarah')"></i>
-                    </div>
-                  </td>
-                </tr>
+              <tbody id="studentsTableBody">
+                <!-- Dynamic content will be populated here -->
               </tbody>
             </table>
           </div>
@@ -762,28 +782,8 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Jane Doe</td>
-                  <td>B1</td>
-                  <td>Basic</td>
-                  <td><span class="status-badge status-complete">Present</span></td>
-                  <td><i class="bi bi-eye" onclick="viewAttendance('jane')"></i></td>
-                </tr>
-                <tr>
-                  <td>John Smith</td>
-                  <td>B2</td>
-                  <td>Advanced</td>
-                  <td><span class="status-badge status-intermediate">Absent</span></td>
-                  <td><i class="bi bi-eye" onclick="viewAttendance('john')"></i></td>
-                </tr>
-                <tr>
-                  <td>Sarah Wilson</td>
-                  <td>B3</td>
-                  <td>Intermediate</td>
-                  <td><span class="status-badge status-complete">Present</span></td>
-                  <td><i class="bi bi-eye" onclick="viewAttendance('sarah')"></i></td>
-                </tr>
+              <tbody id="attendanceTableBody">
+                <!-- Dynamic content will be populated here -->
               </tbody>
             </table>
           </div>
@@ -807,25 +807,8 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Alice Johnson</td>
-                  <td>9876543213</td>
-                  <td>Coordinator</td>
-                  <td><i class="bi bi-eye" onclick="viewStaff('alice')"></i></td>
-                </tr>
-                <tr>
-                  <td>Bob Brown</td>
-                  <td>9876543214</td>
-                  <td>Admin</td>
-                  <td><i class="bi bi-eye" onclick="viewStaff('bob')"></i></td>
-                </tr>
-                <tr>
-                  <td>Carol Davis</td>
-                  <td>9876543215</td>
-                  <td>Coach</td>
-                  <td><i class="bi bi-eye" onclick="viewStaff('carol')"></i></td>
-                </tr>
+              <tbody id="staffTableBody">
+                <!-- Dynamic content will be populated here -->
               </tbody>
             </table>
           </div>
@@ -857,20 +840,141 @@
   <div class="modal-overlay" id="modalOverlay" onclick="closeFilterModal()"></div>
   <div class="filter-modal" id="filterModal">
     <h6>Filter By</h6>
-    <div class="filter-option" onclick="applyFilter('Name')">Name</div>
-    <div class="filter-option" onclick="applyFilter('Contact')">Contact</div>
-    <div class="filter-option" onclick="applyFilter('Center')">Center</div>
-    <div class="filter-option" onclick="applyFilter('Batch')">Batch</div>
-    <div class="filter-option" onclick="applyFilter('Level')">Level</div>
-    <div class="filter-option" onclick="applyFilter('Category')">Category</div>
-    <div class="filter-option" onclick="applyFilter('Action')">Action</div>
+    <div class="filter-options">
+      <div class="filter-option"><input type="checkbox" name="filter" value="Name"> Name</div>
+      <div class="filter-option"><input type="checkbox" name="filter" value="Contact"> Contact</div>
+      <div class="filter-option"><input type="checkbox" name="filter" value="Center"> Center</div>
+      <div class="filter-option"><input type="checkbox" name="filter" value="Batch"> Batch</div>
+      <div class="filter-option"><input type="checkbox" name="filter" value="Level"> Level</div>
+      <div class="filter-option"><input type="checkbox" name="filter" value="Category"> Category</div>
+      <button class="btn btn-sm btn-custom mt-3" onclick="applyMultiFilter()">Apply Filters</button>
+    </div>
   </div>
 
   <script>
+    // Dummy data
+    const studentData = {
+      jane: { name: 'Jane Doe', contact: '9876543210', center: 'ABC', batch: 'B1', level: 'Intermediate', category: 'Complete' },
+      john: { name: 'John Smith', contact: '9876543211', center: 'XYZ', batch: 'B2', level: 'Advanced', category: 'Pending' },
+      sarah: { name: 'Sarah Wilson', contact: '9876543212', center: 'PQR', batch: 'B3', level: 'Beginner', category: 'Complete' },
+      emma: { name: 'Emma Brown', contact: '9876543213', center: 'DEF', batch: 'B4', level: 'Intermediate', category: 'Pending' },
+      michael: { name: 'Michael Lee', contact: '9876543214', center: 'GHI', batch: 'B5', level: 'Advanced', category: 'Complete' }
+    };
+
+    const attendanceData = {
+      jane: { name: 'Jane Doe', batch: 'B1', level: 'Basic', category: 'Present' },
+      john: { name: 'John Smith', batch: 'B2', level: 'Advanced', category: 'Absent' },
+      sarah: { name: 'Sarah Wilson', batch: 'B3', level: 'Intermediate', category: 'Present' },
+      emma: { name: 'Emma Brown', batch: 'B4', level: 'Intermediate', category: 'Present' },
+      michael: { name: 'Michael Lee', batch: 'B5', level: 'Advanced', category: 'Absent' }
+    };
+
+    const staffData = {
+      alice: { name: 'Alice Johnson', contact: '9876543213', category: 'Coordinator' },
+      bob: { name: 'Bob Brown', contact: '9876543214', category: 'Admin' },
+      carol: { name: 'Carol Davis', contact: '9876543215', category: 'Coach' },
+      david: { name: 'David Wilson', contact: '9876543216', category: 'Trainer' },
+      eve: { name: 'Eve Taylor', contact: '9876543217', category: 'Manager' }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       initializeCharts();
       setupSidebarToggle();
+      renderTables();
     });
+
+    function renderTables(filters = {}) {
+      renderStudentsTable(filters.students || {});
+      renderAttendanceTable(filters.attendance || {});
+      renderStaffTable(filters.staff || {});
+    }
+
+    function renderStudentsTable(filter = {}) {
+      const tbody = document.getElementById('studentsTableBody');
+      tbody.innerHTML = '';
+      let data = Object.entries(studentData);
+      if (Object.keys(filter).length > 0) {
+        data = data.filter(([id, student]) => {
+          return Object.entries(filter).every(([key, value]) => student[key.toLowerCase()] === value);
+        });
+      }
+      data.forEach(([id, student]) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${student.name}</td>
+          <td>${student.contact}</td>
+          <td>${student.center}</td>
+          <td>${student.batch}</td>
+          <td>${student.level}</td>
+          <td><span class="status-badge status-${student.category.toLowerCase()}">${student.category}</span></td>
+          <td>
+            <div class="action-icons">
+              <button class="action-btn view-btn" onclick="viewStudent('${id}')" title="View Student">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="action-btn edit-btn" onclick="editStudent('${id}')" title="Edit Student">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="action-btn delete-btn" onclick="deleteStudent('${id}')" title="Delete Student">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderAttendanceTable(filter = {}) {
+      const tbody = document.getElementById('attendanceTableBody');
+      tbody.innerHTML = '';
+      let data = Object.entries(attendanceData);
+      if (Object.keys(filter).length > 0) {
+        data = data.filter(([id, record]) => {
+          return Object.entries(filter).every(([key, value]) => record[key.toLowerCase()] === value);
+        });
+      }
+      data.forEach(([id, record]) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${record.name}</td>
+          <td>${record.batch}</td>
+          <td>${record.level}</td>
+          <td><span class="status-badge status-${record.category.toLowerCase()}">${record.category}</span></td>
+          <td>
+            <button class="action-btn view-btn" onclick="viewAttendance('${id}')" title="View Attendance">
+              <i class="bi bi-eye"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderStaffTable(filter = {}) {
+      const tbody = document.getElementById('staffTableBody');
+      tbody.innerHTML = '';
+      let data = Object.entries(staffData);
+      if (Object.keys(filter).length > 0) {
+        data = data.filter(([id, staff]) => {
+          return Object.entries(filter).every(([key, value]) => staff[key.toLowerCase()] === value);
+        });
+      }
+      data.forEach(([id, staff]) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${staff.name}</td>
+          <td>${staff.contact}</td>
+          <td>${staff.category}</td>
+          <td>
+            <button class="action-btn view-btn" onclick="viewStaff('${id}')" title="View Staff">
+              <i class="bi bi-eye"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
 
     function setupSidebarToggle() {
       const toggleBtn = document.querySelector('.sidebar-toggle');
@@ -910,7 +1014,7 @@
             labels: ["Beginner", "Intermediate", "Advanced"],
             datasets: [{
               data: [30, 40, 30],
-              backgroundColor: ["#ff6b6b", "#ff6b6b", "#4ecdc4"],
+              backgroundColor: ["#ff6b6b", "yellow", "#4ecdc4"],
               borderWidth: 0,
               cutout: "75%"
             }]
@@ -934,79 +1038,206 @@
     }
 
     function handleStatClick(statType) {
-      console.log(`Clicked on ${statType}`);
+      alert(`Clicked on ${statType.replace(/([A-Z])/g, ' $1').trim()}`);
     }
 
     function exportToExcel() {
-      console.log('Exporting to Excel...');
-      alert('Excel export functionality would be implemented here');
+      const students = Object.values(studentData).map(s => ({
+        Name: s.name,
+        Contact: s.contact,
+        Center: s.center,
+        Batch: s.batch,
+        Level: s.level,
+        Category: s.category
+      }));
+      const worksheet = XLSX.utils.json_to_sheet(students);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+      XLSX.writeFile(workbook, "students_data.xlsx");
     }
 
     function exportToPDF() {
-      console.log('Exporting to PDF...');
-      alert('PDF export functionality would be implemented here');
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Students Data", 14, 20);
+      const students = Object.values(studentData).map(s => [
+        s.name,
+        s.contact,
+        s.center,
+        s.batch,
+        s.level,
+        s.category
+      ]);
+      doc.autoTable({
+        head: [['Name', 'Contact', 'Center', 'Batch', 'Level', 'Category']],
+        body: students,
+        startY: 30,
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] }
+      });
+      doc.save('students_data.pdf');
     }
 
+    // Student Action Functions
     function addStudent() {
-      console.log('Adding new student...');
+      const name = prompt('Enter Student Name:');
+      if (!name) return;
+      
+      const contact = prompt('Enter Student Contact:');
+      if (!contact) return;
+      
+      const center = prompt('Enter Student Center:');
+      if (!center) return;
+      
+      const batch = prompt('Enter Student Batch:');
+      if (!batch) return;
+      
+      const level = prompt('Enter Student Level (Beginner/Intermediate/Advanced):');
+      if (!level) return;
+      
+      const category = prompt('Enter Student Category (Complete/Pending):');
+      if (!category) return;
+      
+      const id = name.toLowerCase().replace(/\s+/g, '');
+      studentData[id] = { name, contact, center, batch, level, category };
+      attendanceData[id] = { name, batch, level, category: category === 'Complete' ? 'Present' : 'Absent' };
+      
+      renderTables();
+      alert('Student added successfully!');
     }
 
     function viewStudent(id) {
-      const studentData = {
-        jane: { name: 'Jane Doe', contact: '9876543210', center: 'ABC', batch: 'B1', level: 'Intermediate', category: 'Complete' },
-        john: { name: 'John Smith', contact: '9876543211', center: 'XYZ', batch: 'B2', level: 'Advanced', category: 'Pending' },
-        sarah: { name: 'Sarah Wilson', contact: '9876543212', center: 'PQR', batch: 'B3', level: 'Beginner', category: 'Complete' }
-      };
-      
       const student = studentData[id];
       if (student) {
-        alert(`Student Details:\nName: ${student.name}\nContact: ${student.contact}\nCenter: ${student.center}\nBatch: ${student.batch}\nLevel: ${student.level}\nCategory: ${student.category}`);
+        const details = `
+Student Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name: ${student.name}
+Contact: ${student.contact}
+Center: ${student.center}
+Batch: ${student.batch}
+Level: ${student.level}
+Category: ${student.category}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        alert(details);
+      } else {
+        alert('Student not found!');
       }
     }
 
     function editStudent(id) {
-      const studentData = {
-        jane: { name: 'Jane Doe', contact: '9876543210', center: 'ABC', batch: 'B1', level: 'Intermediate', category: 'Complete' },
-        john: { name: 'John Smith', contact: '9876543211', center: 'XYZ', batch: 'B2', level: 'Advanced', category: 'Pending' },
-        sarah: { name: 'Sarah Wilson', contact: '9876543212', center: 'PQR', batch: 'B3', level: 'Beginner', category: 'Complete' }
+      const student = studentData[id];
+      if (!student) {
+        alert('Student not found!');
+        return;
+      }
+      
+      const newName = prompt('Edit Student Name:', student.name);
+      if (newName === null) return;
+      
+      const newContact = prompt('Edit Student Contact:', student.contact);
+      if (newContact === null) return;
+      
+      const newCenter = prompt('Edit Student Center:', student.center);
+      if (newCenter === null) return;
+      
+      const newBatch = prompt('Edit Student Batch:', student.batch);
+      if (newBatch === null) return;
+      
+      const newLevel = prompt('Edit Student Level:', student.level);
+      if (newLevel === null) return;
+      
+      const newCategory = prompt('Edit Student Category:', student.category);
+      if (newCategory === null) return;
+      
+      // Update student data
+      studentData[id] = { 
+        name: newName, 
+        contact: newContact, 
+        center: newCenter, 
+        batch: newBatch, 
+        level: newLevel, 
+        category: newCategory 
       };
       
-      const student = studentData[id];
-      if (student) {
-        const newName = prompt(`Edit Student Name:`, student.name);
-        const newContact = prompt(`Edit Student Contact:`, student.contact);
-        const newCenter = prompt(`Edit Student Center:`, student.center);
-        const newBatch = prompt(`Edit Student Batch:`, student.batch);
-        const newLevel = prompt(`Edit Student Level:`, student.level);
-        
-        if (newName && newContact && newCenter && newBatch && newLevel) {
-          alert(`Student Updated Successfully!\nName: ${newName}\nContact: ${newContact}\nCenter: ${newCenter}\nBatch: ${newBatch}\nLevel: ${newLevel}`);
-        }
+      // Update attendance data if exists
+      if (attendanceData[id]) {
+        attendanceData[id] = { 
+          name: newName, 
+          batch: newBatch, 
+          level: newLevel, 
+          category: newCategory === 'Complete' ? 'Present' : 'Absent' 
+        };
       }
+      
+      renderTables();
+      alert('Student updated successfully!');
     }
 
     function deleteStudent(id) {
-      if (confirm(`Are you sure you want to delete ${id}?`)) {
-        console.log(`Deleted student: ${id}`);
+      const student = studentData[id];
+      if (!student) {
+        alert('Student not found!');
+        return;
+      }
+      
+      const confirmation = confirm(`Are you sure you want to delete student "${student.name}"?\n\nThis action cannot be undone.`);
+      if (confirmation) {
+        delete studentData[id];
+        delete attendanceData[id];
+        renderTables();
+        alert('Student deleted successfully!');
       }
     }
 
+    // Attendance Action Functions
     function viewAttendance(id) {
-      console.log(`Viewing attendance: ${id}`);
+      const record = attendanceData[id];
+      if (record) {
+        const details = `
+Attendance Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name: ${record.name}
+Batch: ${record.batch}
+Level: ${record.level}
+Status: ${record.category}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        alert(details);
+      } else {
+        alert('Attendance record not found!');
+      }
     }
 
+    // Staff Action Functions
     function viewStaff(id) {
-      console.log(`Viewing staff: ${id}`);
+      const staff = staffData[id];
+      if (staff) {
+        const details = `
+Staff Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name: ${staff.name}
+Contact: ${staff.contact}
+Category: ${staff.category}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        alert(details);
+      } else {
+        alert('Staff member not found!');
+      }
     }
 
+    // Filter Modal Functions
     function toggleFilterModal(section) {
       const modal = document.getElementById('filterModal');
       const overlay = document.getElementById('modalOverlay');
       modal.classList.add('active');
       overlay.classList.add('active');
-
-      // Store the section for filter application
       modal.dataset.section = section;
+
+      // Reset checkboxes
+      modal.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
     }
 
     function closeFilterModal() {
@@ -1016,12 +1247,29 @@
       overlay.classList.remove('active');
     }
 
-    function applyFilter(field) {
+    function applyMultiFilter() {
       const section = document.getElementById('filterModal').dataset.section;
-      console.log(`Applying filter on ${section} by ${field}`);
+      const checkboxes = document.querySelectorAll('#filterModal input[type="checkbox"]:checked');
+      if (checkboxes.length === 0) {
+        alert('Please select at least one filter to apply.');
+        return;
+      }
+
+      const filters = {};
+      checkboxes.forEach(checkbox => {
+        const value = prompt(`Enter value for ${checkbox.value}:`);
+        if (value) {
+          filters[checkbox.value.toLowerCase()] = value;
+        }
+      });
+
+      if (Object.keys(filters).length > 0) {
+        const allFilters = {};
+        allFilters[section.toLowerCase()] = filters;
+        renderTables(allFilters);
+        alert(`Applied multi-filter on ${section} with: ${JSON.stringify(filters)}`);
+      }
       closeFilterModal();
-      // Here you would typically implement filtering logic based on the field
-      alert(`Filter applied on ${section} by ${field}. (Implement backend logic here)`);
     }
 
     window.toggleDashboard = function() {

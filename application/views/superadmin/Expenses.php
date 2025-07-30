@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Expenses Management</title>
-    <!-- Bootstrap CSS (required for table classes) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+    <!-- Segoe UI Fallback -->
     <style>
         * {
             margin: 0;
@@ -15,26 +18,28 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-             background-color: #e9ecef !important;
-            color: #fff;
+            background-color: #e9ecef !important;
+            color: #333;
             min-height: 100vh;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
         .content-wrapper {
-            margin-left: 250px;
-            padding: 10px;
+            margin-left: 15rem;
+            padding: 1.5rem;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            min-height: 100vh;
         }
 
         .content-wrapper.minimized {
-            margin-left: 60px;
+            margin-left: 4rem;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 70px auto 0;
+            max-width: calc(1200px + 2vw);
+            margin: 4rem auto 0;
             width: 100%;
         }
 
@@ -42,20 +47,22 @@
         .option-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .option-buttons button {
             background: #fff;
             color: #000;
             border: 1px solid #ddd;
-            border-radius: 25px;
-            padding: 10px 30px;
+            border-radius: 1.5rem;
+            padding: 0.75rem 2rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            touch-action: manipulation;
         }
 
         .option-buttons button.active {
@@ -73,118 +80,116 @@
         .add-btn-container {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
-            gap: 10px;
+            margin-bottom: 1.5rem;
+            gap: 0.75rem;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .add-btn {
             background: #dc3545;
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 8px 20px;
-            font-size: 14px;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
         }
 
         .add-btn:hover {
             background: #c82333;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
 
-        .filter-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            font-size: 14px;
+        .btn-filter {
+            background: #ffffff;
+            /* color: #ffffff; */
+            border: 1px solid #000;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
         }
 
-        .filter-btn:hover {
-            background: #5a6268;
+        .btn-filter:hover {
+            background: #e0e0e0;
+            color: #000;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
 
         /* Table Styles */
         .table-container {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
             overflow-x: auto;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
 
-        table {
+        .table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             background: #fff;
-            margin: 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
         }
 
         .table thead th {
-            background-color: #333;
+            background-color: #343a40;
             color: #fff;
-            border-bottom: 2px solid #ddd;
+            border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 15px 10px;
+            padding: 1rem;
             text-align: center;
             font-weight: 600;
-            font-size: 14px;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background-color: #f5f5f5;
-        }
-
-        .table tbody tr:hover {
-            background-color: #e0e0e0;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
         }
 
         .table td {
             vertical-align: middle;
             text-align: center;
-            padding: 15px 10px;
+            padding: 0.75rem;
+            border-bottom: 1px solid #dee2e6;
+            font-size: clamp(0.7rem, 1.8vw, 0.85rem);
             color: #000;
-            border-bottom: 1px solid #ddd;
-            font-size: 14px;
         }
 
-        .action-cell {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
+        .table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table .horizontal-line td {
+            border: none;
+            background-color: #dee2e6;
+            height: 1px;
+            padding: 0;
         }
 
         .action-btn {
-            width: 30px;
-            height: 30px;
-            border: 2px dashed #666;
-            border-radius: 50%;
-            cursor: pointer;
             background: none;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            border: none;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            margin: 0 0.25rem;
+            transition: transform 0.2s ease;
+            color: #6c757d;
+            padding: 0.5rem;
         }
 
         .action-btn:hover {
-            border-color: #000;
-        }
-
-        .action-btn.thumbs-up::before {
-            content: "👍";
-        }
-
-        .action-btn.cross::before {
-            content: "✖";
+            transform: scale(1.2);
+            color: #007bff;
         }
 
         /* Modal Styles */
@@ -208,11 +213,11 @@
         .modal-content {
             background: #f5f5f5;
             margin: 8% auto;
-            padding: 0;
-            border-radius: 15px;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            border-radius: 0.5rem;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: calc(500px + 2vw);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease;
         }
 
@@ -223,28 +228,29 @@
 
         .modal-header {
             text-align: center;
-            padding: 25px 25px 20px;
+            padding: 0;
             border-bottom: none;
             position: relative;
         }
 
         .modal-title {
-            font-size: 22px;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: 600;
             color: #333;
             margin: 0;
+            padding: 1.5rem 1rem 1rem;
         }
 
         .close {
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 1rem;
+            top: 1rem;
             color: #666;
-            font-size: 28px;
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 2rem;
+            height: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -258,82 +264,62 @@
         }
 
         .modal-body {
-            padding: 20px 40px 40px;
+            padding: 1rem 2rem 2rem;
         }
 
         .form-row {
             display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .form-group {
             flex: 1;
+            min-width: 0;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 0.75rem;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 0.25rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             background: white;
             color: #333;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group textarea:focus {
             outline: none;
             border-color: #dc3545;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
-        }
-
-        .date-input {
-            position: relative;
-        }
-
-        .date-input input[type="date"] {
-            position: relative;
-            padding-right: 40px;
-        }
-
-        .date-input::after {
-           
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-size: 16px;
+            min-height: 6rem;
         }
 
         .error {
             color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: clamp(0.7rem, 1.8vw, 0.875rem);
+            margin-top: 0.25rem;
             display: none;
         }
 
         .form-group.invalid input,
-        .form-group.invalid textarea,
-        .form-group.invalid select {
+        .form-group.invalid textarea {
             border-color: #dc3545;
             background: #ffeaea;
         }
@@ -346,202 +332,383 @@
             background: #dc3545;
             color: white;
             border: none;
-            padding: 12px 40px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 0.75rem 2rem;
+            border-radius: 0.25rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
             font-weight: 600;
             cursor: pointer;
             display: block;
-            margin: 30px auto 0;
+            margin: 1.5rem auto 0;
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
         }
 
         .save-btn:hover {
             background: #c82333;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
 
         .save-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
+            transform: none;
         }
 
         /* Filter Modal Styles */
-        #filterModal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
         #filterModal .modal-content {
-            max-width: 400px;
+            max-width: calc(400px + 2vw);
         }
 
         #filterModal .close {
-            top: 15px;
-            right: 15px;
+            top: 0.75rem;
+            right: 0.75rem;
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 320px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 5px !important;
+                padding: 0.5rem !important;
             }
 
             .container {
-                margin-top: 60px;
+                margin-top: 3rem;
             }
 
-            .table-container {
-                overflow-x: auto;
+            .table {
+                font-size: 0.7rem;
             }
 
-            table {
-                min-width: 800px;
+            .table th:nth-child(3), .table td:nth-child(3),
+            .table th:nth-child(4), .table td:nth-child(4) {
+                display: none;
             }
 
-            th, td {
-                padding: 10px 8px;
-                font-size: 12px;
+            .action-btn {
+                font-size: 0.7rem;
+                padding: 0.3rem;
             }
 
             .modal-content {
-                width: 95%;
-                margin: 10% auto;
+                width: 98%;
+                margin: 5% auto;
+                padding: 0.5rem;
             }
 
             .modal-body {
-                padding: 15px 20px 30px;
+                padding: 0.75rem 1rem 1.5rem;
             }
 
             .form-row {
                 flex-direction: column;
-                gap: 15px;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-group {
+                padding: 0;
+            }
+
+            .option-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .option-buttons button {
+                width: 100%;
+                font-size: 0.7rem;
+                padding: 0.5rem 1rem;
             }
 
             .add-btn-container {
                 justify-content: center;
                 flex-direction: column;
-                gap: 10px;
+                gap: 0.5rem;
+            }
+
+            .add-btn, .btn-filter {
+                width: 100%;
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .save-btn {
+                font-size: 0.75rem;
+                padding: 0.5rem 1.5rem;
+            }
+        }
+
+        @media (min-width: 321px) and (max-width: 576px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 1rem !important;
+            }
+
+            .container {
+                margin-top: 3.5rem;
+            }
+
+            .table {
+                font-size: 0.8rem;
+            }
+
+            .table th:nth-child(4), .table td:nth-child(4) {
+                display: none;
+            }
+
+            .action-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 8% auto;
+                padding: 1rem;
+            }
+
+            .modal-body {
+                padding: 1rem 1.5rem 1.5rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .form-group {
+                padding: 0;
             }
 
             .option-buttons {
                 flex-direction: column;
-                gap: 10px;
+                gap: 0.75rem;
             }
 
             .option-buttons button {
                 width: 100%;
+                font-size: 0.75rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            .add-btn-container {
+                justify-content: center;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .add-btn, .btn-filter {
+                width: 100%;
+                font-size: 0.875rem;
+                padding: 0.375rem 0.75rem;
+            }
+
+            .save-btn {
+                font-size: 0.875rem;
+                padding: 0.6rem 1.5rem;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 577px) and (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 1.25rem !important;
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 0;
+            }
+
+            .container {
+                margin-top: 4rem;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
             .modal-content {
-                width: 98%;
-                margin: 5% auto;
+                width: 90%;
+                margin: 10% auto;
             }
 
             .modal-body {
-                padding: 12px 15px 25px;
+                padding: 1.25rem 1.75rem;
             }
 
-            .form-group label {
-                font-size: 12px;
+            .form-row {
+                flex-direction: row;
+                gap: 1rem;
             }
 
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 10px 12px;
-                font-size: 12px;
+            .option-buttons {
+                flex-direction: row;
+                gap: 0.75rem;
             }
 
-            .option-buttons button {
-                padding: 8px 20px;
-                font-size: 12px;
+            .add-btn-container {
+                justify-content: center;
+                gap: 0.75rem;
+            }
+
+            .add-btn, .btn-filter {
+                font-size: 0.9rem;
             }
         }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media (min-width: 769px) and (max-width: 991px) {
             .content-wrapper {
-                margin-left: 200px;
+                margin-left: 12rem;
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 4rem;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                max-width: calc(450px + 2vw);
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .content-wrapper {
+                margin-left: 14rem;
+            }
+
+            .modal-content {
+                max-width: calc(480px + 2vw);
+            }
+        }
+
+        @media (min-width: 1201px) {
+            .content-wrapper {
+                margin-left: 15rem;
+            }
+
+            .modal-content {
+                max-width: calc(500px + 2vw);
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .content-wrapper {
+                margin-left: 16rem;
+            }
+
+            .modal-content {
+                max-width: calc(520px + 2vw);
+            }
+
+            .table {
+                font-size: 1rem;
+            }
+
+            .option-buttons button {
+                font-size: 1rem;
+                padding: 0.75rem 2.5rem;
+            }
+
+            .add-btn, .btn-filter {
+                font-size: 1.1rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            .save-btn {
+                font-size: 1.1rem;
+                padding: 0.75rem 2rem;
+            }
+        }
+
+        /* Touch device hover fix */
+        @media (hover: none) {
+            .action-btn:hover,
+            .add-btn:hover,
+            .btn-filter:hover,
+            .option-buttons button:hover,
+            .save-btn:hover {
+                background-color: inherit;
+                transform: none;
+                box-shadow: none;
             }
         }
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-        <!-- Option Buttons -->
-        <div class="option-buttons">
-            <button class="active" onclick="switchOption('centerwise')">Centerwise Expenses</button>
-            <button onclick="switchOption('own')">Own Expenses</button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container">
+            <!-- Option Buttons -->
+            <div class="option-buttons">
+                <button class="active" onclick="switchOption('centerwise')">Centerwise Expenses</button>
+                <button onclick="switchOption('own')">Own Expenses</button>
+            </div>
 
-        <!-- Add Button and Filter -->
-        <div class="add-btn-container">
-            <button class="filter-btn" onclick="openFilterModal()">Filter</button>
-            <button class="add-btn" onclick="openModal()">Add Expenses</button>
-        </div>
+            <!-- Add Button and Filter -->
+            <div class="add-btn-container">
+                <button class="btn-filter" onclick="openFilterModal()">Filter</button>
+                <button class="add-btn" onclick="openModal()">Add Expenses</button>
+            </div>
 
-        <!-- Expenses Table -->
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="expenseTableBody">
-                    <tr>
-                        <td>Rent</td>
-                        <td>01/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Food</td>
-                        <td>15/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Rent</td>
-                        <td>15/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Expenses Table -->
+            <div class="table-container">
+                <table class="table table-bordered table-hover" id="expenseTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseTableBody">
+                        <tr>
+                            <td>Rent</td>
+                            <td>01/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
+                            <td>
+                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <tr>
+                            <td>Food</td>
+                            <td>15/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
+                            <td>
+                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <tr>
+                            <td>Rent</td>
+                            <td>15/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
+                            <td>
+                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-  </div>
 
     <!-- Expense Modal -->
     <div id="expenseModal" class="modal">
@@ -551,29 +718,29 @@
                 <h2 class="modal-title">Add Income / Expenses</h2>
             </div>
             <div class="modal-body">
-                <form id="expenseForm">
+                <form id="expenseForm" novalidate>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="title">Title :</label>
-                            <input type="text" id="title" name="title" required>
-                            <div class="error">Title is required</div>
+                            <label for="title">Title <span class="text-danger">*</span></label>
+                            <input type="text" id="title" name="title" required pattern="[A-Za-z\s]+" maxlength="50">
+                            <div class="error">Title is required, letters and spaces only, max 50 characters.</div>
                         </div>
                         <div class="form-group date-input">
-                            <label for="date">Date :</label>
-                            <input type="date" id="date" name="date" required>
-                            <div class="error">Date is required</div>
+                            <label for="date">Date <span class="text-danger">*</span></label>
+                            <input type="date" id="date" name="date" required max="<?php echo date('Y-m-d'); ?>">
+                            <div class="error">Date is required and must not be a future date.</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="amount">Amount :</label>
+                            <label for="amount">Amount (₹) <span class="text-danger">*</span></label>
                             <input type="number" id="amount" name="amount" step="0.01" min="1" required>
-                            <div class="error">Amount is required and must be greater than 0</div>
+                            <div class="error">Amount is required and must be greater than 0.</div>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description :</label>
-                            <textarea id="description" name="description" required></textarea>
-                            <div class="error">Description is required</div>
+                            <label for="description">Description <span class="text-danger">*</span></label>
+                            <textarea id="description" name="description" required maxlength="200"></textarea>
+                            <div class="error">Description is required, max 200 characters.</div>
                         </div>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
@@ -590,25 +757,37 @@
                 <h2 class="modal-title">Filter Expenses</h2>
             </div>
             <div class="modal-body">
-                <form id="filterForm">
+                <form id="filterForm" novalidate>
+                    <div class="form-note">Fill at least one field to apply a filter.</div>
                     <div class="form-row">
-                        <div class="form-group date-input">
-                            <label for="startDate">Start Date :</label>
-                            <input type="date" id="startDate" name="startDate">
+                        <div class="form-group">
+                            <label for="filterTitle">Title <span class="text-danger">*</span></label>
+                            <input type="text" id="filterTitle" name="filterTitle" pattern="[A-Za-z\s]+" maxlength="50">
+                            <div class="error">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
                         <div class="form-group date-input">
-                            <label for="endDate">End Date :</label>
-                            <input type="date" id="endDate" name="endDate">
+                            <label for="startDate">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" id="startDate" name="startDate" max="<?php echo date('Y-m-d'); ?>">
+                            <div class="error">Start Date must not be a future date.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group date-input">
+                            <label for="endDate">End Date <span class="text-danger">*</span></label>
+                            <input type="date" id="endDate" name="endDate" max="<?php echo date('Y-m-d'); ?>">
+                            <div class="error">End Date must not be before Start Date or a future date.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="minAmount">Min Amount (₹) <span class="text-danger">*</span></label>
+                            <input type="number" id="minAmount" name="minAmount" min="0" step="0.01">
+                            <div class="error">Min Amount must be 0 or greater.</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="minAmount">Min Amount :</label>
-                            <input type="number" id="minAmount" name="minAmount" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="maxAmount">Max Amount :</label>
+                            <label for="maxAmount">Max Amount (₹) <span class="text-danger">*</span></label>
                             <input type="number" id="maxAmount" name="maxAmount" min="0" step="0.01">
+                            <div class="error">Max Amount must be 0 or greater and not less than Min Amount.</div>
                         </div>
                     </div>
                     <button type="submit" class="save-btn">Apply Filter</button>
@@ -617,11 +796,9 @@
         </div>
     </div>
 
-    <!-- Bootstrap + Font Awesome + jQuery -->
+    <!-- Bootstrap + jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <script>
         // Modal functionality
@@ -630,6 +807,8 @@
         const expenseForm = document.getElementById('expenseForm');
         const filterForm = document.getElementById('filterForm');
         let editingRow = null;
+        const initialRows = Array.from(document.querySelectorAll('#expenseTableBody tr:not(.horizontal-line)'))
+            .map(row => row.outerHTML);
 
         function openModal() {
             expenseModal.style.display = 'block';
@@ -648,15 +827,21 @@
             filterModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             filterForm.reset();
+            filterForm.classList.remove('was-validated');
+            filterForm.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
         }
 
         function closeFilterModal() {
             filterModal.style.display = 'none';
             document.body.style.overflow = 'auto';
+            filterForm.reset();
+            filterForm.classList.remove('was-validated');
+            filterForm.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
         }
 
         function resetForm() {
             expenseForm.reset();
+            expenseForm.classList.remove('was-validated');
             clearValidationErrors();
         }
 
@@ -667,24 +852,24 @@
             });
         }
 
-        // Form validation
-        function validateForm() {
-            const title = document.getElementById('title');
-            const date = document.getElementById('date');
-            const amount = document.getElementById('amount');
-            const description = document.getElementById('description');
-            
+        // Expense Form validation
+        function validateExpenseForm() {
+            const form = expenseForm;
             let isValid = true;
 
-            // Clear previous errors
             clearValidationErrors();
 
-            if (!title.value.trim()) {
+            const title = form.querySelector('#title');
+            const date = form.querySelector('#date');
+            const amount = form.querySelector('#amount');
+            const description = form.querySelector('#description');
+
+            if (!title.value.trim() || !/^[A-Za-z\s]+$/.test(title.value) || title.value.length > 50) {
                 title.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            if (!date.value) {
+            if (!date.value || new Date(date.value) > new Date('<?php echo date('Y-m-d'); ?>')) {
                 date.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
@@ -694,7 +879,7 @@
                 isValid = false;
             }
 
-            if (!description.value.trim()) {
+            if (!description.value.trim() || description.value.length > 200) {
                 description.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
@@ -702,11 +887,149 @@
             return isValid;
         }
 
-        // Form submission
+        // Filter Form validation
+        function validateFilterForm() {
+            const form = filterForm;
+            let isValid = true;
+            let atLeastOneFilled = false;
+
+            clearValidationErrors();
+
+            const filterTitle = form.querySelector('#filterTitle');
+            const startDate = form.querySelector('#startDate');
+            const endDate = form.querySelector('#endDate');
+            const minAmount = form.querySelector('#minAmount');
+            const maxAmount = form.querySelector('#maxAmount');
+
+            if (filterTitle.value.trim()) {
+                if (!/^[A-Za-z\s]+$/.test(filterTitle.value) || filterTitle.value.length > 50) {
+                    filterTitle.setCustomValidity('Invalid title');
+                    filterTitle.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    filterTitle.setCustomValidity('');
+                    atLeastOneFilled = true;
+                }
+            } else {
+                filterTitle.setCustomValidity('');
+            }
+
+            if (startDate.value) {
+                if (new Date(startDate.value) > new Date('<?php echo date('Y-m-d'); ?>')) {
+                    startDate.setCustomValidity('Start Date must not be a future date.');
+                    startDate.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    startDate.setCustomValidity('');
+                    atLeastOneFilled = true;
+                }
+            }
+
+            if (endDate.value) {
+                if (new Date(endDate.value) > new Date('<?php echo date('Y-m-d'); ?>') || 
+                    (startDate.value && new Date(endDate.value) < new Date(startDate.value))) {
+                    endDate.setCustomValidity('End Date must not be before Start Date or a future date.');
+                    endDate.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    endDate.setCustomValidity('');
+                    atLeastOneFilled = true;
+                }
+            }
+
+            if (minAmount.value) {
+                if (isNaN(minAmount.value) || minAmount.value < 0) {
+                    minAmount.setCustomValidity('Min Amount must be 0 or greater.');
+                    minAmount.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    minAmount.setCustomValidity('');
+                    atLeastOneFilled = true;
+                }
+            }
+
+            if (maxAmount.value) {
+                if (isNaN(maxAmount.value) || maxAmount.value < 0 || 
+                    (minAmount.value && parseFloat(maxAmount.value) < parseFloat(minAmount.value))) {
+                    maxAmount.setCustomValidity('Max Amount must be 0 or greater and not less than Min Amount.');
+                    maxAmount.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    maxAmount.setCustomValidity('');
+                    atLeastOneFilled = true;
+                }
+            }
+
+            if (!atLeastOneFilled) {
+                filterTitle.setCustomValidity('At least one filter field must be filled.');
+                filterTitle.closest('.form-group').classList.add('invalid');
+                isValid = false;
+            } else {
+                filterTitle.setCustomValidity('');
+            }
+
+            return isValid;
+        }
+
+        // Real-time validation for Expense Form
+        expenseForm.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.id === 'title' && input.value.trim() && /^[A-Za-z\s]+$/.test(input.value) && input.value.length <= 50) {
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+                if (input.id === 'date' && input.value && new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>')) {
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+                if (input.id === 'amount' && input.value && !isNaN(input.value) && input.value > 0) {
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+                if (input.id === 'description' && input.value.trim() && input.value.length <= 200) {
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+            });
+        });
+
+        // Real-time validation for Filter Form
+        filterForm.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                const startDate = filterForm.querySelector('#startDate');
+                const endDate = filterForm.querySelector('#endDate');
+                const minAmount = filterForm.querySelector('#minAmount');
+                const maxAmount = filterForm.querySelector('#maxAmount');
+
+                if (input.id === 'filterTitle' && (!input.value.trim() || (/^[A-Za-z\s]+$/.test(input.value) && input.value.length <= 50))) {
+                    input.setCustomValidity('');
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+
+                if (input.id === 'startDate' && (!input.value || new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>'))) {
+                    input.setCustomValidity('');
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+
+                if (input.id === 'endDate' && (!input.value || (new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>') && 
+                    (!startDate.value || new Date(input.value) >= new Date(startDate.value))))) {
+                    input.setCustomValidity('');
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+
+                if (input.id === 'minAmount' && (!input.value || (!isNaN(input.value) && input.value >= 0))) {
+                    input.setCustomValidity('');
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+
+                if (input.id === 'maxAmount' && (!input.value || (!isNaN(input.value) && input.value >= 0 && 
+                    (!minAmount.value || parseFloat(input.value) >= parseFloat(minAmount.value))))) {
+                    input.setCustomValidity('');
+                    input.closest('.form-group').classList.remove('invalid');
+                }
+            });
+        });
+
+        // Expense Form submission
         expenseForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            if (validateForm()) {
+            if (validateExpenseForm()) {
                 const formData = new FormData(expenseForm);
                 const data = {
                     title: formData.get('title'),
@@ -718,43 +1041,74 @@
                 const tableBody = document.getElementById('expenseTableBody');
                 if (editingRow) {
                     updateRow(editingRow, data);
+                    initialRows[Array.from(tableBody.querySelectorAll('tr:not(.horizontal-line)')).indexOf(editingRow)] = editingRow.outerHTML;
                 } else {
                     addNewRow(data);
+                    initialRows.push(tableBody.querySelector('tr:not(.horizontal-line):last-child').outerHTML);
                 }
 
                 closeModal();
             }
+            expenseForm.classList.add('was-validated');
+        });
+
+        // Filter Form submission
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateFilterForm()) {
+                const filterTitle = document.getElementById('filterTitle').value.trim().toLowerCase();
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const minAmount = parseFloat(document.getElementById('minAmount').value) || 0;
+                const maxAmount = parseFloat(document.getElementById('maxAmount').value) || Infinity;
+
+                const tableBody = document.getElementById('expenseTableBody');
+                tableBody.innerHTML = '';
+
+                const filteredRows = initialRows.filter(row => {
+                    const rowElement = document.createElement('div');
+                    rowElement.innerHTML = row;
+                    const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                    const dateText = rowElement.querySelector('td:nth-child(2)').textContent;
+                    const amount = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent.replace('Rs.', ''));
+
+                    // Convert table date format (dd/mm/yyyy) to Date object
+                    const [day, month, year] = dateText.split('/');
+                    const date = new Date(`${year}-${month}-${day}`);
+
+                    return (!filterTitle || title.includes(filterTitle)) &&
+                           (!startDate || date >= new Date(startDate)) &&
+                           (!endDate || date <= new Date(endDate)) &&
+                           (amount >= minAmount && amount <= maxAmount);
+                });
+
+                tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="5"></td></tr>') : 
+                    '<tr><td colspan="5" class="text-center">No records match the filter criteria.</td></tr>';
+
+                closeFilterModal();
+            }
+            filterForm.classList.add('was-validated');
         });
 
         // Add new row to table
         function addNewRow(data) {
             const tableBody = document.getElementById('expenseTableBody');
             const row = document.createElement('tr');
-            const currentOption = document.querySelector('.option-buttons .active').textContent.toLowerCase();
-            if (currentOption === 'own expenses') {
-                row.innerHTML = `
-                    <td>${data.title}</td>
-                    <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                    <td>${data.amount}</td>
-                    <td>${data.description}</td>
-                    <td class="action-cell">
-                        <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                        <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                    </td>
-                `;
-            } else {
-                row.innerHTML = `
-                    <td>${data.title}</td>
-                    <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                    <td>${data.amount}</td>
-                    <td>${data.description}</td>
-                    <td class="action-cell">
-                        <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                        <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                    </td>
-                `;
-            }
+            row.innerHTML = `
+                <td>${data.title}</td>
+                <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
+                <td>${data.amount}</td>
+                <td>${data.description}</td>
+                <td>
+                    <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
+                    <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                </td>
+            `;
             tableBody.appendChild(row);
+            const separator = document.createElement('tr');
+            separator.className = 'horizontal-line';
+            separator.innerHTML = '<td colspan="5"></td>';
+            tableBody.appendChild(separator);
         }
 
         // Update existing row
@@ -764,120 +1118,6 @@
             cells[1].textContent = new Date(data.date).toLocaleDateString('en-GB');
             cells[2].textContent = data.amount;
             cells[3].textContent = data.description;
-        }
-
-        // Real-time validation
-        document.getElementById('title').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('date').addEventListener('change', function() {
-            if (this.value) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('amount').addEventListener('input', function() {
-            if (this.value && !isNaN(this.value) && this.value > 0) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('description').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        if (sidebar) {
-                            sidebar.classList.toggle('active');
-                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-                        }
-                    } else {
-                        if (sidebar && contentWrapper) {
-                            const isMinimized = sidebar.classList.toggle('minimized');
-                            navbar.classList.toggle('sidebar-minimized', isMinimized);
-                            contentWrapper.classList.toggle('minimized', isMinimized);
-                        }
-                    }
-                });
-            }
-        });
-
-        // Option switching functionality
-        function switchOption(option) {
-            const buttons = document.querySelectorAll('.option-buttons button');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if ((btn.textContent === 'Centerwise Expenses' && option === 'centerwise') || 
-                    (btn.textContent === 'Own Expenses' && option === 'own')) {
-                    btn.classList.add('active');
-                }
-            });
-
-            const tableBody = document.getElementById('expenseTableBody');
-            tableBody.innerHTML = '';
-            if (option === 'own') {
-                const ownExpenses = [
-                    { title: 'Groceries', date: '01/07/2025', amount: 'Rs.2500', description: 'Weekly shopping', category: 'Personal' },
-                    { title: 'Utilities', date: '05/07/2025', amount: 'Rs.1200', description: 'Electricity bill', category: 'Household' },
-                    { title: 'Fuel', date: '10/07/2025', amount: 'Rs.3000', description: 'Car refill', category: 'Travel' }
-                ];
-                ownExpenses.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.title}</td>
-                        <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                        <td>${data.amount}</td>
-                        <td>${data.description}</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            } else {
-                const centerwiseExpenses = [
-                    { title: 'Rent', date: '01/07/2025', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
-                    { title: 'Food', date: '15/07/2025', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
-                    { title: 'Rent', date: '15/07/2025', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' }
-                ];
-                centerwiseExpenses.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.title}</td>
-                        <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                        <td>${data.amount}</td>
-                        <td>${data.description}</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveExpense(this)"></button>
-                            <button class="action-btn cross" onclick="rejectExpense(this)"></button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
         }
 
         // Approve and Reject functionality
@@ -893,6 +1133,71 @@
             alert(`Expense rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
         }
 
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const contentWrapper = document.getElementById('contentWrapper');
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (window.innerWidth <= 576) {
+                        if (sidebar) {
+                            sidebar.classList.toggle('active');
+                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                        }
+                    } else {
+                        if (sidebar && contentWrapper) {
+                            const isMinimized = sidebar.classList.toggle('minimized');
+                            navbar.classList.toggle('sidebar-minimized', isMinimized);
+                            contentWrapper.classList.toggle('minimized', isMinimized);
+                        }
+                    }
+                });
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 576) {
+                    sidebar.classList.remove('minimized');
+                    navbar.classList.remove('sidebar-minimized');
+                    contentWrapper.classList.remove('minimized');
+                }
+            });
+        });
+
+        // Option switching functionality
+        function switchOption(option) {
+            const buttons = document.querySelectorAll('.option-buttons button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if ((btn.textContent === 'Centerwise Expenses' && option === 'centerwise') || 
+                    (btn.textContent === 'Own Expenses' && option === 'own')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            const tableBody = document.getElementById('expenseTableBody');
+            tableBody.innerHTML = '';
+
+            if (option === 'own') {
+                const ownExpenses = [
+                    { title: 'Groceries', date: '2025-07-01', amount: 'Rs.2500', description: 'Weekly shopping', category: 'Personal' },
+                    { title: 'Utilities', date: '2025-07-05', amount: 'Rs.1200', description: 'Electricity bill', category: 'Household' },
+                    { title: 'Fuel', date: '2025-07-10', amount: 'Rs.3000', description: 'Car refill', category: 'Travel' }
+                ];
+                ownExpenses.forEach(data => addNewRow(data));
+            } else {
+                const centerwiseExpenses = [
+                    { title: 'Rent', date: '2025-07-01', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
+                    { title: 'Food', date: '2025-07-15', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
+                    { title: 'Rent', date: '2025-07-15', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' }
+                ];
+                centerwiseExpenses.forEach(data => addNewRow(data));
+            }
+        }
+
         // Close modal when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === expenseModal) {
@@ -901,33 +1206,6 @@
             if (event.target === filterModal) {
                 closeFilterModal();
             }
-        });
-
-        // Filter functionality
-        filterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const minAmount = document.getElementById('minAmount').value;
-            const maxAmount = document.getElementById('maxAmount').value;
-
-            const tableBody = document.getElementById('expenseTableBody');
-            const rows = tableBody.getElementsByTagName('tr');
-
-            for (let row of rows) {
-                const dateCell = row.cells[1].textContent;
-                const amountCell = row.cells[2].textContent.replace('Rs.', '');
-                let showRow = true;
-
-                if (startDate && new Date(dateCell) < new Date(startDate)) showRow = false;
-                if (endDate && new Date(dateCell) > new Date(endDate)) showRow = false;
-                if (minAmount && parseFloat(amountCell) < parseFloat(minAmount)) showRow = false;
-                if (maxAmount && parseFloat(amountCell) > parseFloat(maxAmount)) showRow = false;
-
-                row.style.display = showRow ? '' : 'none';
-            }
-
-            closeFilterModal();
         });
     </script>
 </body>

@@ -15,11 +15,12 @@
       background-color: #e9ecef !important;
       margin: 0;
       font-family: 'Montserrat', serif;
+      overflow-x: hidden;
     }
 
     .content-wrapper {
       margin-left: 250px;
-      padding: 20px;
+      padding: 1.25rem;
       transition: all 0.3s ease-in-out;
     }
 
@@ -28,101 +29,87 @@
     }
 
     .center-card {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px;
+      background-color: #ffffff;
+      border-radius: 1.25rem;
+      padding: 1.25rem;
       width: 100%;
-      max-width: 220px;
-      font-size: 13px;
+      max-width: 18.75rem;
+      border-left: 2px solid #ff4040; /* Added red border on left side */
       position: relative;
+      margin: 0.625rem;
+      color: #333;
+      font-size: 0.9375rem;
       text-align: left;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      height: 240px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    }
-
-    .center-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      height: auto;
     }
 
     .card-icon {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.8);
-      transition: color 0.3s ease;
-    }
-
-    .center-card:hover .card-icon {
-      color: white;
+      top: 0.9375rem;
+      right: 0.9375rem;
+      font-size: 1.25rem;
+      color: #333;
     }
 
     .card-details {
-      padding-top: 5px;
+      padding-top: 0.3125rem;
     }
 
     .card-details p {
-      margin: 5px 0;
-      font-weight: 500;
-      line-height: 1.4;
+      margin: 0.5rem 0;
+      line-height: 1.5;
+      color: #333;
     }
 
     .card-details p:first-child {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
     }
 
     .card-details p span {
-      font-weight: 400;
+      font-weight: 500;
+      color: #444;
     }
 
     .view-btn {
-      background-color: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      border-radius: 6px;
-      padding: 5px 12px;
-      width: 70px;
-      font-size: 12px;
-      margin-top: 10px;
-      text-align: center;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      margin-top: 0.9375rem;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      background-color: #eee;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .view-btn:hover {
-      background-color: rgba(255, 255, 255, 0.4);
-      color: #333;
-      transform: translateY(-2px);
+      background-color: #ddd;
+      transform: translateY(-0.125rem);
     }
 
     .add-center-btn {
       background: linear-gradient(90deg, #ff4040, #470000);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 8px 15px;
-      width: 140px;
-      font-size: 15px;
-      margin: 25px auto;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.9375rem;
+      width: 8.75rem;
+      font-size: 0.9375rem;
+      margin: 1.5625rem auto;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .add-center-btn:hover {
       background: linear-gradient(90deg, #ff3030, #360000);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: translateY(-0.125rem);
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
     }
 
     .button-container {
@@ -130,69 +117,112 @@
       justify-content: center;
     }
 
+    .filter-btn {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: linear-gradient(90deg, #ff4040, #470000);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.9375rem;
+      font-size: 0.9375rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: linear-gradient(90deg, #ff3030, #360000);
+      transform: translateY(-0.125rem);
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+    }
+
     .modal-content {
       background-color: #ffffff;
-      border-radius: 15px;
-      padding: 30px;
-      max-width: 650px;
+      border-radius: 0.9375rem;
+      padding: 1.875rem;
+      max-width: 40.625rem;
       margin: auto;
-      border: 2px solid #007bff;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      margin-top: 73px;
+      border: 0.125rem solid #007bff;
+      box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+      margin-top: 4.5625rem;
     }
 
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 30px;
+      margin-bottom: 1.875rem;
       color: #333;
     }
 
     .modal-backdrop.show {
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(0.375rem);
     }
 
     .form-group label {
       font-weight: 500;
-      font-size: 15px;
+      font-size: 0.9375rem;
       color: #444;
     }
 
     .form-control {
-      height: 45px;
-      border-radius: 8px;
-      font-size: 14px;
-      border: 1px solid #ced4da;
+      height: 2.8125rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      border: 0.0625rem solid #ced4da;
       transition: border-color 0.3s ease;
     }
 
     .form-control:focus {
       border-color: #ff4040;
-      box-shadow: 0 0 5px rgba(255, 64, 64, 0.3);
+      box-shadow: 0 0 0.3125rem rgba(255, 64, 64, 0.3);
     }
 
     .submit-btn {
       background: linear-gradient(to top, #990000, #ff0000);
       border: none;
       color: white;
-      border-radius: 10px;
-      padding: 12px;
-      width: 150px;
+      border-radius: 0.625rem;
+      padding: 0.75rem;
+      width: 9.375rem;
       font-weight: 600;
       display: block;
-      margin: 25px auto 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 1.5625rem auto 0;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: translateY(-0.125rem);
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
     }
 
     .invalid-feedback {
       color: #dc3545;
-      font-size: 12px;
+      font-size: 0.75rem;
+    }
+
+    .view-modal-content {
+      background-color: #ffffff;
+      border-radius: 0.9375rem;
+      padding: 1.875rem;
+      max-width: 31.25rem;
+      margin: auto;
+      border: 0.125rem solid #007bff;
+      box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+    }
+
+    .view-modal-content h3 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: #333;
+    }
+
+    .view-modal-content p {
+      margin: 0.625rem 0;
+      font-size: 0.9375rem;
+      color: #444;
     }
 
     @media (max-width: 768px) {
@@ -201,36 +231,102 @@
       }
       .content-wrapper {
         margin-left: 0 !important;
-        padding: 15px !important;
-      }
-      .modal-content {
-        max-width: 95%;
-        padding: 20px;
+        padding: 0.9375rem !important;
       }
       .center-card {
-        max-width: 180px;
-        height: 237px;
+        padding: 0.9375rem;
+        max-width: 100%;
+        margin: 0.3125rem;
       }
-      .row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+      .card-details p:first-child {
+        font-size: 1rem;
+      }
+      .view-btn {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.9375rem;
+      }
+      .add-center-btn {
+        width: 100%;
+        max-width: 12.5rem;
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+      .filter-btn {
+        top: 0.9375rem;
+        right: 0.9375rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      .modal-content {
+        max-width: 90%;
+        padding: 1.25rem;
+        margin-top: 2.5rem;
+      }
+      .view-modal-content {
+        max-width: 90%;
+        padding: 1.25rem;
+      }
+      .form-control {
+        font-size: 0.8125rem;
       }
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
       .content-wrapper {
-        margin-left: 200px;
+        margin-left: 12.5rem;
       }
       .content-wrapper.minimized {
-        margin-left: 60px;
+        margin-left: 3.75rem;
+      }
+      .center-card {
+        max-width: 15.625rem;
+        margin: 0.5rem;
+      }
+      .add-center-btn {
+        max-width: 15.625rem;
+      }
+      .filter-btn {
+        top: 1.25rem;
+        right: 1.25rem;
+      }
+      .modal-content {
+        max-width: 35rem;
+      }
+      .view-modal-content {
+        max-width: 28.125rem;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .content-wrapper {
+        padding: 2.5rem;
+      }
+      .center-card {
+        max-width: 18.75rem;
+        margin: 0.9375rem;
+      }
+      .modal-content {
+        max-width: 40.625rem;
+      }
+      .view-modal-content {
+        max-width: 31.25rem;
+      }
+    }
+
+    /* Touch device hover fix */
+    @media (hover: none) {
+      .view-btn:hover,
+      .add-center-btn:hover,
+      .filter-btn:hover {
+        background-color: inherit;
+        transform: none;
+        box-shadow: none;
       }
     }
   </style>
 </head>
 
 <body>
-
 <!-- Sidebar -->
 <?php $this->load->view('admin/Include/Sidebar') ?>
 <!-- Navbar -->
@@ -240,67 +336,67 @@
 <div class="content-wrapper" id="contentWrapper">
   <div class="content">
     <div class="container-fluid">
+      <button class="filter-btn" data-toggle="modal" data-target="#filterModal">Filter</button>
       <div class="row justify-content-center">
         <!-- Batch Cards -->
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
           <div class="center-card" id="card-1">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Batch: <span>B1</span></p>
-              <p>Date: <span>15/07/2025</span></p>
-              <p>Time: <span>6 to 7 AM</span></p>
-              <p>Category: <span>Coach</span></p>
-              <p>Group Size: <span>6</span></p>
-              <p>Coach: <span>John Doe</span></p>
-              <p>Admissions: <span>4</span></p>
+              <p><span>Batch:</span> B1</p>
+              <p><span>Date:</span> 15/07/2025</p>
+              <p><span>Time:</span> 6 to 7 AM</p>
+              <p><span>Category:</span> Coach</p>
+              <p><span>Group Size:</span> 6</p>
+              <p><span>Coach:</span> John Doe</p>
+              <p><span>Admissions:</span> 4</p>
             </div>
-            <button class="view-btn">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewModal" data-card-id="card-1">View</button>
           </div>
         </div>
-        <!-- Additional cards -->
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
           <div class="center-card" id="card-2">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Batch: <span>B2</span></p>
-              <p>Date: <span>16/07/2025</span></p>
-              <p>Time: <span>7 to 8 AM</span></p>
-              <p>Category: <span>Coach</span></p>
-              <p>Group Size: <span>6</span></p>
-              <p>Coach: <span>Jane Smith</span></p>
-              <p>Admissions: <span>3</span></p>
+              <p><span>Batch:</span> B2</p>
+              <p><span>Date:</span> 16/07/2025</p>
+              <p><span>Time:</span> 7 to 8 AM</p>
+              <p><span>Category:</span> Coach</p>
+              <p><span>Group Size:</span> 6</p>
+              <p><span>Coach:</span> Jane Smith</p>
+              <p><span>Admissions:</span> 3</p>
             </div>
-            <button class="view-btn">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewModal" data-card-id="card-2">View</button>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
           <div class="center-card" id="card-3">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Batch: <span>B3</span></p>
-              <p>Date: <span>17/07/2025</span></p>
-              <p>Time: <span>8 to 9 AM</span></p>
-              <p>Category: <span>Coach</span></p>
-              <p>Group Size: <span>6</span></p>
-              <p>Coach: <span>Mike Johnson</span></p>
-              <p>Admissions: <span>5</span></p>
+              <p><span>Batch:</span> B3</p>
+              <p><span>Date:</span> 17/07/2025</p>
+              <p><span>Time:</span> 8 to 9 AM</p>
+              <p><span>Category:</span> Coach</p>
+              <p><span>Group Size:</span> 6</p>
+              <p><span>Coach:</span> Mike Johnson</p>
+              <p><span>Admissions:</span> 5</p>
             </div>
-            <button class="view-btn">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewModal" data-card-id="card-3">View</button>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
           <div class="center-card" id="card-4">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Batch: <span>B4</span></p>
-              <p>Date: <span>18/07/2025</span></p>
-              <p>Time: <span>9 to 10 AM</span></p>
-              <p>Category: <span>Coach</span></p>
-              <p>Group Size: <span>6</span></p>
-              <p>Coach: <span>Sarah Brown</span></p>
-              <p>Admissions: <span>2</span></p>
+              <p><span>Batch:</span> B4</p>
+              <p><span>Date:</span> 18/07/2025</p>
+              <p><span>Time:</span> 9 to 10 AM</p>
+              <p><span>Category:</span> Coach</p>
+              <p><span>Group Size:</span> 6</p>
+              <p><span>Coach:</span> Sarah Brown</p>
+              <p><span>Admissions:</span> 2</p>
             </div>
-            <button class="view-btn">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewModal" data-card-id="card-4">View</button>
           </div>
         </div>
       </div>
@@ -320,12 +416,12 @@
       <h3 id="addBatchLabel">Add Batch</h3>
       <form id="batchForm" novalidate>
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="batch">Batch <span class="text-danger">*</span>:</label>
             <input type="text" id="batch" name="batch" class="form-control" required />
             <div class="invalid-feedback">Please enter a batch name.</div>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="date">Date <span class="text-danger">*</span>:</label>
             <input type="date" id="date" name="date" class="form-control" required />
             <div class="invalid-feedback">Please select a date.</div>
@@ -333,12 +429,12 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="time">Time <span class="text-danger">*</span>:</label>
             <input type="time" id="time" name="time" class="form-control" required />
             <div class="invalid-feedback">Please select a time.</div>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="category">Category <span class="text-danger">*</span>:</label>
             <select id="category" name="category" class="form-control" required>
               <option value="">Select</option>
@@ -350,12 +446,12 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="groupSize">Group Size <span class="text-danger">*</span>:</label>
             <input type="number" id="groupSize" name="groupSize" class="form-control" max="6" min="1" value="6" required />
             <div class="invalid-feedback">Please enter a valid group size (1-6).</div>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="coach">Assigned Coach <span class="text-danger">*</span>:</label>
             <select id="coach" name="coach" class="form-control" required>
               <option value="">Select</option>
@@ -369,7 +465,7 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-12 col-md-6">
             <label for="admissions">Admissions <span class="text-danger">*</span>:</label>
             <input type="number" id="admissions" name="admissions" class="form-control" min="0" max="6" value="0" required />
             <div class="invalid-feedback">Please enter valid admissions (0-6).</div>
@@ -378,6 +474,24 @@
 
         <button type="submit" class="submit-btn btn btn-primary">Submit</button>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="view-modal-content">
+      <h3 id="viewModalLabel">Batch Details</h3>
+      <p><strong>Batch:</strong> B1</p>
+      <p><strong>Date:</strong> 15/07/2025</p>
+      <p><strong>Time:</strong> 6 to 7 AM</p>
+      <p><strong>Category:</strong> Coach</p>
+      <p><strong>Group Size:</strong> 6</p>
+      <p><strong>Coach:</strong> John Doe</p>
+      <p><strong>Admissions:</strong> 4</p>
+      <p><strong>Attendance:</strong> 80%</p>
+      <p><strong>Notes:</strong> Session went well, all attendees participated actively.</p>
     </div>
   </div>
 </div>
@@ -433,15 +547,15 @@
           <div class="center-card" id="card-${cardCounter}">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Batch: <span>${batch}</span></p>
-              <p>Date: <span>${date}</span></p>
-              <p>Time: <span>${time}</span></p>
-              <p>Category: <span>${category}</span></p>
-              <p>Group Size: <span>${groupSize}</span></p>
-              <p>Coach: <span>${coach}</span></p>
-              <p>Admissions: <span>${admissions}</span></p>
+              <p><span>Batch:</span> ${batch}</p>
+              <p><span>Date:</span> ${date}</p>
+              <p><span>Time:</span> ${time}</p>
+              <p><span>Category:</span> ${category}</p>
+              <p><span>Group Size:</span> ${groupSize}</p>
+              <p><span>Coach:</span> ${coach}</p>
+              <p><span>Admissions:</span> ${admissions}</p>
             </div>
-            <button class="view-btn">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewModal" data-card-id="card-${cardCounter}">View</button>
           </div>
         </div>
       `;
@@ -465,6 +579,44 @@
       if (form.checkValidity()) {
         form.classList.remove('was-validated');
       }
+    });
+
+    // Populate View Modal with dummy data based on card clicked
+    $('#viewModal').on('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const cardId = button.getAttribute('data-card-id');
+      const card = document.getElementById(cardId);
+      const details = card.querySelector('.card-details').getElementsByTagName('p');
+
+      let batch = '', date = '', time = '', category = '', groupSize = '', coach = '', admissions = '';
+      for (let p of details) {
+        const span = p.querySelector('span');
+        if (span) {
+          const key = p.textContent.replace(': ' + span.textContent, '').trim();
+          const value = span.textContent;
+          switch (key) {
+            case 'Batch': batch = value; break;
+            case 'Date': date = value; break;
+            case 'Time': time = value; break;
+            case 'Category': category = value; break;
+            case 'Group Size': groupSize = value; break;
+            case 'Coach': coach = value; break;
+            case 'Admissions': admissions = value; break;
+          }
+        }
+      }
+
+      const modal = $(this);
+      modal.find('#viewModalLabel').text(`Batch Details - ${batch}`);
+      modal.find('p:nth-child(2)').text(`Batch: ${batch}`);
+      modal.find('p:nth-child(3)').text(`Date: ${date}`);
+      modal.find('p:nth-child(4)').text(`Time: ${time}`);
+      modal.find('p:nth-child(5)').text(`Category: ${category}`);
+      modal.find('p:nth-child(6)').text(`Group Size: ${groupSize}`);
+      modal.find('p:nth-child(7)').text(`Coach: ${coach}`);
+      modal.find('p:nth-child(8)').text(`Admissions: ${admissions}`);
+      modal.find('p:nth-child(9)').text(`Attendance: ${Math.floor(Math.random() * 101)}%`);
+      modal.find('p:nth-child(10)').text(`Notes: Session went well, ${Math.floor(Math.random() * 6)} attendees participated actively.`);
     });
   })();
 

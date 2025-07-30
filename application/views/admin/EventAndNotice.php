@@ -54,84 +54,68 @@
     }
 
     .center-card {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px;
+      background-color: #ffffff;
+      border-radius: 1.25rem;
+      padding: 1.25rem;
       width: 100%;
-      max-width: 220px;
-      font-size: 13px;
+      max-width: 18.75rem;
+      border-left: 2px solid #ff4040; /* Added red border on left side */
       position: relative;
+      margin: 0.625rem;
+      color: #333;
+      font-size: 0.9375rem;
       text-align: left;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      height: 250px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    }
-
-    .center-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      height: auto;
     }
 
     .card-icon {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.8);
-      transition: color 0.3s ease;
-    }
-
-    .center-card:hover .card-icon {
-      color: white;
+      top: 0.9375rem;
+      right: 0.9375rem;
+      font-size: 1.25rem;
+      color: #333;
     }
 
     .card-details {
-      padding-top: 5px;
-      overflow: hidden;
+      padding-top: 0.3125rem;
     }
 
     .card-details p {
-      margin: 5px 0;
-      font-weight: 500;
-      line-height: 1.4;
-      word-wrap: break-word;
+      margin: 0.5rem 0;
+      line-height: 1.5;
+      color: #333;
     }
 
     .card-details p:first-child {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
     }
 
     .card-details p span {
-      font-weight: 400;
+      font-weight: 500;
+      color: #444;
     }
 
     .view-btn {
-      background-color: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      border-radius: 6px;
-      padding: 5px 12px;
-      width: 70px;
-      font-size: 12px;
-      margin-top: 10px;
-      text-align: center;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      margin-top: 0.9375rem;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      background-color: #eee;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .view-btn:hover {
-      background-color: rgba(255, 255, 255, 0.4);
-      color: #333;
-      transform: translateY(-2px);
+      background-color: #ddd;
+      transform: translateY(-0.125rem);
     }
 
     .add-center-btn {
@@ -162,7 +146,7 @@
       background-color: #ffffff;
       border-radius: 15px;
       padding: 30px;
-      max-width: 650px;
+      max-width: 500px;
       margin: auto;
       border: 2px solid #007bff;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -171,7 +155,7 @@
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       color: #333;
     }
 
@@ -217,6 +201,12 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
+    .close-btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      width: 80px;
+    }
+
     .invalid-feedback {
       color: #dc3545;
       font-size: 12px;
@@ -229,9 +219,16 @@
         padding: 10px;
       }
       .center-card {
+        padding: 0.9375rem;
         max-width: 100%;
-        height: auto;
-        min-height: 220px;
+        margin: 0.3125rem;
+      }
+      .card-details p:first-child {
+        font-size: 1rem;
+      }
+      .view-btn {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.9375rem;
       }
       .participate-btn {
         width: 120px;
@@ -250,6 +247,11 @@
         width: 120px;
         padding: 10px;
       }
+      .close-btn {
+        width: 60px;
+        font-size: 12px;
+        padding: 3px 8px;
+      }
     }
 
     @media (min-width: 577px) and (max-width: 768px) {
@@ -261,16 +263,21 @@
         margin-left: 0;
       }
       .center-card {
-        max-width: 180px;
-        height: 240px;
+        max-width: 15.625rem;
+        margin: 0.5rem;
       }
       .participate-btn {
         width: 140px;
         font-size: 13px;
       }
       .modal-content {
-        max-width: 95%;
+        max-width: 90%;
         padding: 20px;
+      }
+      .close-btn {
+        width: 70px;
+        font-size: 13px;
+        padding: 4px 10px;
       }
     }
 
@@ -283,21 +290,40 @@
         margin-left: 60px;
       }
       .center-card {
-        max-width: 200px;
+        max-width: 15.625rem;
+        margin: 0.5rem;
       }
       .participate-btn {
         width: 150px;
         font-size: 14px;
       }
+      .modal-content {
+        max-width: 450px;
+      }
     }
 
     @media (min-width: 992px) {
       .center-card {
-        max-width: 220px;
+        max-width: 18.75rem;
+        margin: 0.9375rem;
       }
       .participate-btn {
         width: 180px;
         font-size: 15px;
+      }
+      .modal-content {
+        max-width: 500px;
+      }
+    }
+
+    /* Touch device hover fix */
+    @media (hover: none) {
+      .view-btn:hover,
+      .add-center-btn:hover,
+      .participate-btn:hover {
+        background-color: inherit;
+        transform: none;
+        box-shadow: none;
       }
     }
   </style>
@@ -326,11 +352,11 @@
               <div class="center-card" id="card-1">
                 <i class="fas fa-calendar-alt card-icon"></i>
                 <div class="card-details">
-                  <p>Title: <span>Independence day</span></p>
-                  <p>Center: <span>ABC</span></p>
-                  <p>Date: <span>15/08/2025</span></p>
-                  <p>Time: <span>6 to 7 AM</span></p>
-                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                  <p><span>Title:</span> Independence day</p>
+                  <p><span>Center:</span> ABC</p>
+                  <p><span>Date:</span> 15/08/2025</p>
+                  <p><span>Time:</span> 6 to 7 AM</p>
+                  <p><span>Description:</span> Shantinagar, Nashik, Maharashtra - 456789</p>
                 </div>
                 <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
               </div>
@@ -339,11 +365,11 @@
               <div class="center-card" id="card-2">
                 <i class="fas fa-calendar-alt card-icon"></i>
                 <div class="card-details">
-                  <p>Title: <span>Independence day</span></p>
-                  <p>Center: <span>ABC</span></p>
-                  <p>Date: <span>15/08/2025</span></p>
-                  <p>Time: <span>6 to 7 AM</span></p>
-                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                  <p><span>Title:</span> Independence day</p>
+                  <p><span>Center:</span> ABC</p>
+                  <p><span>Date:</span> 15/08/2025</p>
+                  <p><span>Time:</span> 6 to 7 AM</p>
+                  <p><span>Description:</span> Shantinagar, Nashik, Maharashtra - 456789</p>
                 </div>
                 <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
               </div>
@@ -352,11 +378,11 @@
               <div class="center-card" id="card-3">
                 <i class="fas fa-calendar-alt card-icon"></i>
                 <div class="card-details">
-                  <p>Title: <span>Independence day</span></p>
-                  <p>Center: <span>ABC</span></p>
-                  <p>Date: <span>15/08/2025</span></p>
-                  <p>Time: <span>6 to 7 AM</span></p>
-                  <p>Description: <span>Shantinagar, Nashik, Maharashtra - 456789</span></p>
+                  <p><span>Title:</span> Independence day</p>
+                  <p><span>Center:</span> ABC</p>
+                  <p><span>Date:</span> 15/08/2025</p>
+                  <p><span>Time:</span> 6 to 7 AM</p>
+                  <p><span>Description:</span> Shantinagar, Nashik, Maharashtra - 456789</p>
                 </div>
                 <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="Independence day" data-center="ABC" data-date="15/08/2025" data-time="6 to 7 AM" data-description="Shantinagar, Nashik, Maharashtra - 456789">View</button>
               </div>
@@ -421,7 +447,7 @@
 
 <!-- View Event Modal -->
 <div class="modal fade" id="viewEventModal" tabindex="-1" aria-labelledby="viewEventLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <h3 id="viewEventLabel">Event/Notice Details</h3>
       <div class="card-details">
@@ -431,7 +457,7 @@
         <p>Time: <span id="viewTime"></span></p>
         <p>Description: <span id="viewDescription"></span></p>
       </div>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
     </div>
   </div>
 </div>
@@ -538,11 +564,11 @@
           <div class="center-card" id="card-${cardCounter}">
             <i class="fas fa-calendar-alt card-icon"></i>
             <div class="card-details">
-              <p>Title: <span>${title}</span></p>
-              <p>Center: <span>${center}</span></p>
-              <p>Date: <span>${date}</span></p>
-              <p>Time: <span>${time}</span></p>
-              <p>Description: <span>${description}</span></p>
+              <p><span>Title:</span> ${title}</p>
+              <p><span>Center:</span> ${center}</p>
+              <p><span>Date:</span> ${date}</p>
+              <p><span>Time:</span> ${time}</p>
+              <p><span>Description:</span> ${description}</p>
             </div>
             <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="${title}" data-center="${center}" data-date="${date}" data-time="${time}" data-description="${description}">View</button>
           </div>
@@ -607,15 +633,22 @@
       }
     });
 
-    // Handle view button clicks
-    document.addEventListener('click', function (e) {
-      if (e.target.classList.contains('view-btn')) {
-        document.getElementById('viewTitle').textContent = e.target.getAttribute('data-title');
-        document.getElementById('viewCenter').textContent = e.target.getAttribute('data-center');
-        document.getElementById('viewDate').textContent = e.target.getAttribute('data-date');
-        document.getElementById('viewTime').textContent = e.target.getAttribute('data-time');
-        document.getElementById('viewDescription').textContent = e.target.getAttribute('data-description');
-      }
+    // Handle view button clicks with jQuery modal event
+    $('#viewEventModal').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget);
+      const title = button.data('title');
+      const center = button.data('center');
+      const date = button.data('date');
+      const time = button.data('time');
+      const description = button.data('description');
+
+      const modal = $(this);
+      modal.find('#viewEventLabel').text(`Event/Notice Details - ${title}`);
+      modal.find('#viewTitle').text(title);
+      modal.find('#viewCenter').text(center);
+      modal.find('#viewDate').text(date);
+      modal.find('#viewTime').text(time);
+      modal.find('#viewDescription').text(description);
     });
 
     // Sidebar toggle functionality
