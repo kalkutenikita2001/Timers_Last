@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leave Management</title>
-    <!-- Bootstrap CSS (required for table classes) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         * {
@@ -15,35 +15,35 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-             background-color: #e9ecef !important;
-            color: #fff;
+            background-color: #e9ecef !important;
+            color: #333;
             min-height: 100vh;
             margin: 0;
             padding: 0;
         }
 
         .content-wrapper {
-            margin-left: 250px; /* Default margin matching sidebar width */
+            margin-left: 250px;
             padding: 10px;
             transition: all 0.3s ease-in-out;
         }
 
         .content-wrapper.minimized {
-            margin-left: 60px; /* Margin when sidebar is minimized */
+            margin-left: 60px;
         }
 
         .container {
             max-width: 1200px;
-            margin: 70px auto 0; /* Adjusted for navbar height */
+            margin: 70px auto 0;
             width: 100%;
         }
 
         /* Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 15px; /* Added rounded corners */
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             overflow-x: auto;
         }
@@ -52,7 +52,6 @@
             display: flex;
             justify-content: flex-end;
             margin-bottom: 10px;
-            
         }
 
         .filter-btn {
@@ -71,7 +70,7 @@
 
         table {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
+            border-collapse: separate;
             border-spacing: 0;
             background: #fff;
         }
@@ -81,21 +80,20 @@
             color: #000;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 12px 15px; /* Increased padding for better spacing */
+            padding: 12px 15px;
             text-align: center;
-            border-top-left-radius: 15px; /* Rounded top-left corner */
-            border-top-right-radius: 15px; /* Rounded top-right corner */
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            padding: 12px 15px; /* Increased padding for better spacing */
+            padding: 12px 15px;
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
         }
 
-        /* Ensure the first and last td in the last row have rounded corners */
         .table tbody tr:last-child td:first-child {
             border-bottom-left-radius: 15px;
         }
@@ -105,7 +103,7 @@
         }
 
         .table tbody tr:hover {
-            background-color: #f1f1f1; /* Subtle hover effect */
+            background-color: #f1f1f1;
             transition: background-color 0.3s ease;
         }
 
@@ -128,12 +126,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+            transition: color 0.3s ease, transform 0.2s ease;
         }
 
         .action-btn:hover {
             color: #0056b3;
-            transform: scale(1.1); /* Slight scale on hover */
+            transform: scale(1.1);
         }
 
         /* Add Button */
@@ -144,16 +142,16 @@
         }
 
         .add-btn {
-          background: linear-gradient(90deg, #ff4040, #470000);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 15px;
-    width: 140px;
-    font-size: 15px;
-    margin: 25px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            background: linear-gradient(90deg, #ff4040, #470000);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 140px;
+            font-size: 15px;
+            margin: 25px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .add-btn:hover {
@@ -412,82 +410,81 @@
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('admin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('admin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('admin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('admin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-         <!-- Filter Button -->
-        <div class="filter-wrapper">
-            <button class="filter-btn">
-                <i class="bi bi-funnel me-1"></i> Filter
-            </button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container">
+            <!-- Filter Button -->
+            <div class="filter-wrapper">
+                <button class="filter-btn">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+            </div>
 
-        <!-- Leave Table -->
-        <div class="table-container">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Batch</th>
-                        <th>Level</th>
-                        <th>Date</th>
-                        <th>Reason</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="leaveTableBody">
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Leave Table -->
+            <div class="table-container">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Batch</th>
+                            <th>Level</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveTableBody">
+                        <tr>
+                            <td>Jane Doe</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>15/07/2025</td>
+                            <td>sdfghj</td>
+                            <td>sdfghjertyuiopasdfghj</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Doe</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>15/07/2025</td>
+                            <td>sdfghj</td>
+                            <td>sdfghjertyuiopasdfghj</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Doe</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>15/07/2025</td>
+                            <td>sdfghj</td>
+                            <td>sdfghjertyuiopasdfghj</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-       
-        <!-- Add Button -->
-        <div class="add-btn-container">
-            <button class="add-btn" onclick="openModal()">Add Leave</button>
+            <!-- Add Button -->
+            <div class="add-btn-container">
+                <button class="add-btn btn btn-danger" onclick="openModal()">Add Leave</button>
+            </div>
         </div>
     </div>
-  </div>
 
     <!-- Modal -->
     <div id="leaveModal" class="modal">
@@ -500,39 +497,39 @@
                 <form id="leaveForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Name :</label>
-                            <input type="text" id="name" name="name" required>
+                            <label for="name">Name <span class="text-danger">*</span>:</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
                             <div class="error">Name is required</div>
                         </div>
                         <div class="form-group">
-                            <label for="batch">Batch :</label>
-                            <input type="text" id="batch" name="batch" required>
+                            <label for="batch">Batch <span class="text-danger">*</span>:</label>
+                            <input type="text" id="batch" name="batch" class="form-control" required>
                             <div class="error">Batch is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="level">Level :</label>
-                            <input type="text" id="level" name="level" required>
+                            <label for="level">Level <span class="text-danger">*</span>:</label>
+                            <input type="text" id="level" name="level" class="form-control" required>
                             <div class="error">Level is required</div>
                         </div>
                         <div class="form-group date-input">
-                            <label for="date">Date :</label>
-                            <input type="date" id="date" name="date" required>
+                            <label for="date">Date <span class="text-danger">*</span>:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
                             <div class="error">Date is required</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="reason">Reason :</label>
-                        <input type="text" id="reason" name="reason" required>
+                        <label for="reason">Reason <span class="text-danger">*</span>:</label>
+                        <input type="text" id="reason" name="reason" class="form-control" required>
                         <div class="error">Reason is required</div>
                     </div>
                     <div class="form-group">
-                        <label for="description">Description :</label>
-                        <textarea id="description" name="description" required></textarea>
+                        <label for="description">Description <span class="text-danger">*</span>:</label>
+                        <textarea id="description" name="description" class="form-control" required></textarea>
                         <div class="error">Description is required</div>
                     </div>
-                    <button type="submit" class="save-btn">Save</button>
+                    <button type="submit" class="save-btn btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
@@ -583,7 +580,7 @@
             const date = document.getElementById('date');
             const reason = document.getElementById('reason');
             const description = document.getElementById('description');
-            
+
             let isValid = true;
 
             // Clear previous errors
@@ -631,7 +628,7 @@
         // Form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             if (validateForm()) {
                 const formData = new FormData(form);
                 const data = {
@@ -643,7 +640,6 @@
                     description: formData.get('description')
                 };
 
-                const tableBody = document.getElementById('leaveTableBody');
                 if (editingRow) {
                     updateRow(editingRow, data);
                 } else {
@@ -658,7 +654,7 @@
         function addNewRow(data) {
             const tableBody = document.getElementById('leaveTableBody');
             const row = document.createElement('tr');
-            
+
             row.innerHTML = `
                 <td>${data.name}</td>
                 <td>${data.batch}</td>
@@ -667,11 +663,11 @@
                 <td>${data.reason}</td>
                 <td>${data.description}</td>
                 <td class="action-cell">
-                    <button class="action-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                    <button class="action-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
                 </td>
             `;
-            
+
             tableBody.appendChild(row);
         }
 
@@ -697,14 +693,14 @@
         function editLeave(button) {
             editingRow = button.closest('tr');
             const cells = editingRow.querySelectorAll('td');
-            
+
             document.getElementById('name').value = cells[0].textContent;
             document.getElementById('batch').value = cells[1].textContent;
             document.getElementById('level').value = cells[2].textContent;
             document.getElementById('date').value = cells[3].textContent.split('/').reverse().join('-');
             document.getElementById('reason').value = cells[4].textContent;
             document.getElementById('description').value = cells[5].textContent;
-            
+
             document.querySelector('.modal-title').textContent = 'Edit Leave';
             openModal();
         }

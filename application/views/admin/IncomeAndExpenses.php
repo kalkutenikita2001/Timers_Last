@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income and Expenses</title>
-    <!-- Bootstrap CSS (required for table classes) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         * {
@@ -15,37 +15,27 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-             background-color: #e9ecef !important;
-            color: #fff;
+            background-color: #e9ecef !important;
+            color: #333;
             min-height: 100vh;
             margin: 0;
             padding: 0;
         }
 
         .content-wrapper {
-            margin-left: 250px; /* Default margin matching sidebar width */
+            margin-left: 250px;
             padding: 10px;
             transition: all 0.3s ease-in-out;
         }
 
         .content-wrapper.minimized {
-            margin-left: 60px; /* Margin when sidebar is minimized */
+            margin-left: 60px;
         }
 
         .container {
             max-width: 1200px;
-            margin: 70px auto 0; /* Adjusted for navbar height */
+            margin: 70px auto 0;
             width: 100%;
-        }
-
-        /* Main Table Styles */
-        .table-container {
-            background: #fff;
-            border-radius: 15px; /* Added rounded corners */
-            overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
-            margin-bottom: 20px;
-            overflow-x: auto; /* Ensure horizontal scroll for small devices */
         }
 
         .filter-wrapper {
@@ -69,9 +59,18 @@
             background: linear-gradient(to right, #ff3030, #360000);
         }
 
+        .table-container {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
+            border-collapse: separate;
             border-spacing: 0;
             background: #fff;
         }
@@ -81,21 +80,20 @@
             color: #000;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 12px 15px; /* Increased padding for better spacing */
-            text-align: center; /* Centered headers like Admission.php */
-            border-top-left-radius: 15px; /* Rounded top-left corner */
-            border-top-right-radius: 15px; /* Rounded top-right corner */
+            padding: 12px 15px;
+            text-align: center;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .table td, .table th {
             vertical-align: middle;
-            text-align: center; /* Centered data like Admission.php */
-            padding: 12px 15px; /* Increased padding for better spacing */
+            text-align: center;
+            padding: 12px 15px;
             white-space: nowrap;
-            border-bottom: 1px solid #dee2e6; /* Matches Admission.php border */
+            border-bottom: 1px solid #dee2e6;
         }
 
-        /* Ensure the first and last td in the last row have rounded corners */
         .table tbody tr:last-child td:first-child {
             border-bottom-left-radius: 15px;
         }
@@ -105,7 +103,7 @@
         }
 
         .table tbody tr:hover {
-            background-color: #f1f1f1; /* Subtle hover effect */
+            background-color: #f1f1f1;
             transition: background-color 0.3s ease;
         }
 
@@ -113,7 +111,7 @@
             display: flex;
             gap: 10px;
             align-items: center;
-            justify-content: center; /* Centered actions like Admission.php */
+            justify-content: center;
         }
 
         .action-btn {
@@ -126,29 +124,28 @@
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            background: none; /* Matches Admission.php action buttons */
-            transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+            background: none;
+            transition: color 0.3s ease, transform 0.2s ease;
         }
 
         .view-btn {
-            color: black; /* Matches edit icon color in Admission.php */
+            color: black;
         }
 
         .edit-btn {
-            color: black; /* Matches edit icon color in Admission.php */
+            color: black;
         }
 
         .view-btn:hover {
-            color: #0056b3; /* Matches Admission.php hover color */
-            transform: scale(1.1); /* Slight scale on hover */
+            color: #0056b3;
+            transform: scale(1.1);
         }
 
         .edit-btn:hover {
-            color: #0056b3; /* Matches Admission.php hover color */
-            transform: scale(1.1); /* Slight scale on hover */
+            color: #0056b3;
+            transform: scale(1.1);
         }
 
-        /* Add Button */
         .add-btn-container {
             display: flex;
             justify-content: center;
@@ -157,22 +154,21 @@
 
         .add-btn {
             background: linear-gradient(90deg, #ff4040, #470000);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 15px;
-    width: 200px;
-    font-size: 15px;
-    margin: 25px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 200px;
+            font-size: 15px;
+            margin: 25px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .add-btn:hover {
-            background: linear-gradient(to right, #ff3030, #360000); /* Darker gradient on hover, no transform or shadow */
+            background: linear-gradient(to right, #ff3030, #360000);
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -351,7 +347,6 @@
             box-shadow: none;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .content-wrapper {
                 margin-left: 0 !important;
@@ -363,11 +358,11 @@
             }
 
             .table-container {
-                overflow-x: auto; /* Horizontal scroll for small devices */
+                overflow-x: auto;
             }
 
             table {
-                min-width: 800px; /* Increased min-width for better mobile scroll */
+                min-width: 800px;
             }
 
             th, td {
@@ -424,79 +419,79 @@
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('admin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('admin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('admin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('admin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-        <!-- Filter Button (moved outside table) -->
-        <div class="filter-wrapper">
-            <button class="filter-btn">
-                <i class="bi bi-funnel me-1"></i> Filter
-            </button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container">
+            <!-- Filter Button -->
+            <div class="filter-wrapper">
+                <button class="filter-btn">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+            </div>
 
-        <!-- Main Table -->
-        <div class="table-container">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="expenseTableBody">
-                    <tr>
-                        <td>Rent</td>
-                        <td>15/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdfghjkl;ertyuiouygfdsfghj</td>
-                        <td>
-                            <div class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Fees</td>
-                        <td>15/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdfghjkl;ertyuiouygfdsfghj</td>
-                        <td>
-                            <div class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Rent</td>
-                        <td>15/07/2025</td>
-                        <td>Rs.5674</td>
-                        <td>sdfghjkl;ertyuiouygfdsfghj</td>
-                        <td>
-                            <div class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Main Table -->
+            <div class="table-container">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseTableBody">
+                        <tr>
+                            <td>Rent</td>
+                            <td>15/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdfghjkl;ertyuiouygfdsfghj</td>
+                            <td>
+                                <div class="action-cell">
+                                    <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fees</td>
+                            <td>15/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdfghjkl;ertyuiouygfdsfghj</td>
+                            <td>
+                                <div class="action-cell">
+                                    <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Rent</td>
+                            <td>15/07/2025</td>
+                            <td>Rs.5674</td>
+                            <td>sdfghjkl;ertyuiouygfdsfghj</td>
+                            <td>
+                                <div class="action-cell">
+                                    <button class="action-btn view-btn" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit-btn" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Add Button -->
-        <div class="add-btn-container">
-            <button class="add-btn" onclick="openModal()">Add Income/Expences</button>
+            <!-- Add Button -->
+            <div class="add-btn-container">
+                <button class="add-btn" onclick="openModal()">Add Income/Expences</button>
+            </div>
         </div>
     </div>
-  </div>
 
     <!-- Modal -->
     <div id="expenseModal" class="modal">
@@ -509,31 +504,31 @@
                 <form id="expenseForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="title">Title :</label>
-                            <input type="text" id="title" name="title" required>
+                            <label for="title">Title <span class="text-danger">*</span>:</label>
+                            <input type="text" id="title" name="title" class="form-control" required>
                             <div class="error">Title is required</div>
                         </div>
                         <div class="form-group">
-                            <label for="date">Date :</label>
+                            <label for="date">Date <span class="text-danger">*</span>:</label>
                             <div class="date-input">
-                                <input type="date" id="date" name="date" required>
+                                <input type="date" id="date" name="date" class="form-control" required>
                             </div>
                             <div class="error">Date is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="amount">Amount :</label>
-                            <input type="number" id="amount" name="amount" step="0.01" required min="0.01">
+                            <label for="amount">Amount <span class="text-danger">*</span>:</label>
+                            <input type="number" id="amount" name="amount" step="0.01" class="form-control" required min="0.01">
                             <div class="error">Amount must be greater than 0</div>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description :</label>
-                            <textarea id="description" name="description" placeholder="Enter description..."></textarea>
+                            <label for="description">Description <span class="text-danger">*</span>:</label>
+                            <textarea id="description" name="description" class="form-control" placeholder="Enter description..." required></textarea>
                             <div class="error">Description is required</div>
                         </div>
                     </div>
-                    <button type="submit" class="save-btn">Save</button>
+                    <button type="submit" class="save-btn btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
@@ -582,7 +577,7 @@
             const date = document.getElementById('date');
             const amount = document.getElementById('amount');
             const description = document.getElementById('description');
-            
+
             let isValid = true;
 
             // Clear previous errors
@@ -619,7 +614,7 @@
         // Form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             if (validateForm()) {
                 const formData = new FormData(form);
                 const data = {
@@ -652,7 +647,7 @@
         function addNewRow(data) {
             const tableBody = document.getElementById('expenseTableBody');
             const row = document.createElement('tr');
-            
+
             row.innerHTML = `
                 <td>${data.title}</td>
                 <td>${data.date}</td>
@@ -665,7 +660,7 @@
                     </div>
                 </td>
             `;
-            
+
             tableBody.appendChild(row);
         }
 
@@ -682,7 +677,7 @@
         function viewExpense(button) {
             const row = button.closest('tr');
             const cells = row.querySelectorAll('td');
-            
+
             alert(`Title: ${cells[0].textContent}\nDate: ${cells[1].textContent}\nAmount: ${cells[2].textContent}\nDescription: ${cells[3].textContent}`);
         }
 
@@ -690,21 +685,21 @@
         function editExpense(button) {
             editingRow = button.closest('tr');
             const cells = editingRow.querySelectorAll('td');
-            
+
             // Convert date back to YYYY-MM-DD format
             const dateStr = cells[1].textContent;
             const [day, month, year] = dateStr.split('/');
             const formattedDate = `${year}-${month}-${day}`;
-            
+
             // Fill form with existing data
             document.getElementById('title').value = cells[0].textContent;
             document.getElementById('date').value = formattedDate;
             document.getElementById('amount').value = cells[2].textContent.replace('Rs.', '');
             document.getElementById('description').value = cells[3].textContent;
-            
+
             // Change modal title
             document.querySelector('.modal-title').textContent = 'Edit Income / Expences';
-            
+
             openModal();
         }
 

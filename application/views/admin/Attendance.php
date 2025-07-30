@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
-    <!-- Bootstrap CSS (required for table classes) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         * {
@@ -16,25 +16,25 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #e9ecef !important;
-            color: #fff;
+            color: #333;
             min-height: 100vh;
             margin: 0;
             padding: 0;
         }
 
         .content-wrapper {
-            margin-left: 250px; /* Default margin matching sidebar width */
+            margin-left: 250px;
             padding: 10px;
             transition: all 0.3s ease-in-out;
         }
 
         .content-wrapper.minimized {
-            margin-left: 60px; /* Margin when sidebar is minimized */
+            margin-left: 60px;
         }
 
         .container {
             max-width: 1200px;
-            margin: 70px auto 0; /* Adjusted for navbar height */
+            margin: 70px auto 0;
             width: 100%;
         }
 
@@ -65,9 +65,9 @@
         /* Main Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 15px; /* Increased border radius for a softer look */
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             overflow-x: auto;
         }
@@ -82,7 +82,7 @@
             background: #e0e0e0;
             color: #000;
             border: 1px solid #ccc;
-            border-radius: 8px; /* Rounded filter button */
+            border-radius: 8px;
             padding: 5px 10px;
             font-size: 14px;
             cursor: pointer;
@@ -94,7 +94,7 @@
 
         table {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
+            border-collapse: separate;
             border-spacing: 0;
             background: #fff;
         }
@@ -104,21 +104,20 @@
             color: #000;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 12px 15px; /* Increased padding for better spacing */
+            padding: 12px 15px;
             text-align: center;
-            border-top-left-radius: 15px; /* Rounded top-left corner */
-            border-top-right-radius: 15px; /* Rounded top-right corner */
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            padding: 12px 15px; /* Increased padding for better spacing */
+            padding: 12px 15px;
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
         }
 
-        /* Ensure the first and last td in the last row have rounded corners */
         .table tbody tr:last-child td:first-child {
             border-bottom-left-radius: 15px;
         }
@@ -138,7 +137,7 @@
             width: 30px;
             height: 30px;
             border: none;
-            border-radius: 50%; /* Circular buttons for a modern look */
+            border-radius: 50%;
             cursor: pointer;
             background: none;
             color: black;
@@ -146,12 +145,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease; /* Smooth hover effect */
+            transition: transform 0.2s ease;
         }
 
         .action-btn:hover {
             color: #0056b3;
-            transform: scale(1.1); /* Slight scale on hover for interactivity */
+            transform: scale(1.1);
         }
 
         /* Add Button */
@@ -163,12 +162,12 @@
 
         .add-btn {
             background: linear-gradient(to right, #ff4040, #470000);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px;
-    font-size: 14px;
-    margin-top: 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-top: 10px;
         }
 
         .add-btn:hover {
@@ -272,7 +271,7 @@
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #ddd;
-            border-radius: 8px; /* Rounded inputs for consistency */
+            border-radius: 8px;
             font-size: 14px;
             background: white;
             color: #333;
@@ -289,25 +288,6 @@
         .form-group textarea {
             resize: vertical;
             min-height: 80px;
-        }
-
-        .date-input {
-            position: relative;
-        }
-
-        .date-input input[type="date"] {
-            position: relative;
-            padding-right: 40px;
-        }
-
-        .date-input::after {
-            content: "📅";
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-size: 16px;
         }
 
         .error {
@@ -435,107 +415,107 @@
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('admin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('admin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('admin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('admin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-        <!-- Tab Buttons -->
-        <div class="tab-buttons">
-            <button class="tab-btn active" onclick="showTab('daily')">Daily Attendance</button>
-            <button class="tab-btn" onclick="showTab('total')">Total Attendance</button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container">
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('daily')">Daily Attendance</button>
+                <button class="tab-btn" onclick="showTab('total')">Total Attendance</button>
+            </div>
 
-        <!-- Filter Button -->
-        <div class="filter-wrapper">
-            <button class="filter-btn">
-                <i class="bi bi-funnel me-1"></i> Filter
-            </button>
-        </div>
+            <!-- Filter Button -->
+            <div class="filter-wrapper">
+                <button class="filter-btn">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+            </div>
 
-        <!-- Daily Attendance Table -->
-        <div id="dailyTab" class="table-container">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Batch</th>
-                        <th>Level</th>
-                        <th>Category</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="dailyTableBody">
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>John Smith</td>
-                        <td>B2</td>
-                        <td>Beginner</td>
-                        <td>Individual</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Alice Johnson</td>
-                        <td>B3</td>
-                        <td>Advanced</td>
-                        <td>Corporate</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Bob Wilson</td>
-                        <td>B4</td>
-                        <td>Intermediate</td>
-                        <td>Individual</td>
-                        <td class="action-cell">
-                            <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Daily Attendance Table -->
+            <div id="dailyTab" class="table-container">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Batch</th>
+                            <th>Level</th>
+                            <th>Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyTableBody">
+                        <tr>
+                            <td>Jane Doe</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>Corporate</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>John Smith</td>
+                            <td>B2</td>
+                            <td>Beginner</td>
+                            <td>Individual</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Alice Johnson</td>
+                            <td>B3</td>
+                            <td>Advanced</td>
+                            <td>Corporate</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bob Wilson</td>
+                            <td>B4</td>
+                            <td>Intermediate</td>
+                            <td>Individual</td>
+                            <td class="action-cell">
+                                <button class="action-btn view-btn" onclick="viewAttendance(this, 'daily')"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn edit-btn" onclick="editAttendance(this, 'daily')"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Total Attendance Table -->
-        <div id="totalTab" class="table-container" style="display: none;">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Batch</th>
-                        <th>Total Days</th>
-                        <th>Percentage</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="totalTableBody">
-                    <!-- Initial empty, will be populated dynamically -->
-                </tbody>
-            </table>
-        </div>
+            <!-- Total Attendance Table -->
+            <div id="totalTab" class="table-container" style="display: none;">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Batch</th>
+                            <th>Total Days</th>
+                            <th>Percentage</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="totalTableBody">
+                        <!-- Initial empty, will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Add Button -->
-        <div class="add-btn-container">
-            <button class="add-btn" onclick="openModal()">Add Attendance</button>
+            <!-- Add Button -->
+            <div class="add-btn-container">
+                <button class="add-btn btn btn-danger" onclick="openModal()">Add Attendance</button>
+            </div>
         </div>
     </div>
-  </div>
 
     <!-- Modal -->
     <div id="attendanceModal" class="modal">
@@ -548,29 +528,29 @@
                 <form id="attendanceForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Name :</label>
-                            <input type="text" id="name" name="name" required>
+                            <label for="name">Name <span class="text-danger">*</span>:</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
                             <div class="error">Name is required</div>
                         </div>
                         <div class="form-group">
-                            <label for="batch">Batch :</label>
-                            <input type="text" id="batch" name="batch" required>
+                            <label for="batch">Batch <span class="text-danger">*</span>:</label>
+                            <input type="text" id="batch" name="batch" class="form-control" required>
                             <div class="error">Batch is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="level">Level :</label>
-                            <input type="text" id="level" name="level" required>
+                            <label for="level">Level <span class="text-danger">*</span>:</label>
+                            <input type="text" id="level" name="level" class="form-control" required>
                             <div class="error">Level is required</div>
                         </div>
                         <div class="form-group">
-                            <label for="category">Category :</label>
-                            <input type="text" id="category" name="category" required>
+                            <label for="category">Category <span class="text-danger">*</span>:</label>
+                            <input type="text" id="category" name="category" class="form-control" required>
                             <div class="error">Category is required</div>
                         </div>
                     </div>
-                    <button type="submit" class="save-btn">Save</button>
+                    <button type="submit" class="save-btn btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
@@ -660,7 +640,7 @@
             const batch = document.getElementById('batch');
             const level = document.getElementById('level');
             const category = document.getElementById('category');
-            
+
             let isValid = true;
 
             // Clear previous errors
@@ -696,7 +676,7 @@
         // Form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             if (validateForm()) {
                 const formData = new FormData(form);
                 const data = {
@@ -721,18 +701,31 @@
         function addNewRow(data, tab) {
             const tableBody = document.getElementById(tab + 'TableBody');
             const row = document.createElement('tr');
-            
-            row.innerHTML = `
-                <td>${data.name}</td>
-                <td>${data.batch}</td>
-                <td>${data.level}</td>
-                <td>${data.category}</td>
-                <td class="action-cell">
-                    <button class="action-btn view-btn" onclick="viewAttendance(this, '${tab}')"><i class="fas fa-eye"></i></button>
-                    <button class="action-btn edit-btn" onclick="editAttendance(this, '${tab}')"><i class="fas fa-edit"></i></button>
-                </td>
-            `;
-            
+
+            if (tab === 'daily') {
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.batch}</td>
+                    <td>${data.level}</td>
+                    <td>${data.category}</td>
+                    <td class="action-cell">
+                        <button class="action-btn view-btn" onclick="viewAttendance(this, '${tab}')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" onclick="editAttendance(this, '${tab}')"><i class="fas fa-edit"></i></button>
+                    </td>
+                `;
+            } else if (tab === 'total') {
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.batch}</td>
+                    <td>${data.totalDays || 'N/A'}</td>
+                    <td>${data.percentage || 'N/A'}</td>
+                    <td class="action-cell">
+                        <button class="action-btn view-btn" onclick="viewAttendance(this, '${tab}')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" onclick="editAttendance(this, '${tab}')"><i class="fas fa-edit"></i></button>
+                    </td>
+                `;
+            }
+
             tableBody.appendChild(row);
         }
 
@@ -771,7 +764,7 @@
             currentTab = tab;
             editingRow = button.closest('tr');
             const cells = editingRow.querySelectorAll('td');
-            
+
             document.getElementById('name').value = cells[0].textContent;
             document.getElementById('batch').value = cells[1].textContent;
             if (tab === 'daily') {

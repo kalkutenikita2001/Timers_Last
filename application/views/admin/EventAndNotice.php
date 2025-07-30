@@ -217,6 +217,11 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 12px;
+    }
+
     /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
@@ -311,7 +316,7 @@
     <div class="container-fluid">
       <!-- Participate Button -->
       <div class="header-container">
-        <button class="participate-btn" data-toggle="modal" data-target="#participateModal">Participate</button>
+        <button class="participate-btn btn btn-danger" data-toggle="modal" data-target="#participateModal">Participate</button>
       </div>
       <div class="row justify-content-start">
         <!-- Event & Notice Cards -->
@@ -362,7 +367,7 @@
 
       <!-- Add Button -->
       <div class="button-container">
-        <button class="add-center-btn" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
+        <button class="add-center-btn btn btn-danger" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
       </div>
     </div>
   </div>
@@ -376,12 +381,12 @@
       <form id="eventForm" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="title">Title :</label>
+            <label for="title">Title <span class="text-danger">*</span>:</label>
             <input type="text" id="title" name="title" class="form-control" required />
             <div class="invalid-feedback">Please enter a title.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="center">Center :</label>
+            <label for="center">Center <span class="text-danger">*</span>:</label>
             <input type="text" id="center" name="center" class="form-control" required />
             <div class="invalid-feedback">Please enter a center.</div>
           </div>
@@ -389,12 +394,12 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="date">Date :</label>
+            <label for="date">Date <span class="text-danger">*</span>:</label>
             <input type="date" id="date" name="date" class="form-control" required />
             <div class="invalid-feedback">Please select a date.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="time">Time :</label>
+            <label for="time">Time <span class="text-danger">*</span>:</label>
             <input type="time" id="time" name="time" class="form-control" required />
             <div class="invalid-feedback">Please select a time.</div>
           </div>
@@ -402,13 +407,13 @@
 
         <div class="form-row">
           <div class="form-group col-md-12">
-            <label for="description">Description :</label>
+            <label for="description">Description <span class="text-danger">*</span>:</label>
             <textarea id="description" name="description" class="form-control" required></textarea>
             <div class="invalid-feedback">Please enter a description.</div>
           </div>
         </div>
 
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="submit-btn btn btn-primary">Submit</button>
       </form>
     </div>
   </div>
@@ -439,7 +444,7 @@
       <form id="participateForm" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="studentName">Student Name :</label>
+            <label for="studentName">Student Name <span class="text-danger">*</span>:</label>
             <select id="studentName" name="studentName" class="form-control" required>
               <option value="">Select Student</option>
               <option>Jane Doe</option>
@@ -448,7 +453,7 @@
             <div class="invalid-feedback">Please select a student.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="eventTitle">Event Title :</label>
+            <label for="eventTitle">Event Title <span class="text-danger">*</span>:</label>
             <select id="eventTitle" name="eventTitle" class="form-control" required>
               <option value="">Select Event</option>
               <option>Independence day</option>
@@ -458,7 +463,7 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="paymentMode">Payment Mode :</label>
+            <label for="paymentMode">Payment Mode <span class="text-danger">*</span>:</label>
             <div>
               <div class="form-check">
                 <input type="radio" id="cash" name="paymentMode" class="form-check-input" value="Cash" required>
@@ -472,7 +477,7 @@
             <div class="invalid-feedback">Please select a payment mode.</div>
           </div>
         </div>
-        <button type="submit" class="submit-btn">Confirm Participation</button>
+        <button type="submit" class="submit-btn btn btn-primary">Confirm Participation</button>
       </form>
     </div>
   </div>

@@ -33,7 +33,7 @@
       border-radius: 12px;
       padding: 15px;
       margin: 10px;
-      width: 77%;
+      width: 100%;
       max-width: 220px;
       font-size: 13px;
       position: relative;
@@ -127,7 +127,7 @@
 
     .button-container {
       display: flex;
-      justify-content: start;
+      justify-content: center;
     }
 
     .modal-content {
@@ -138,7 +138,7 @@
       margin: auto;
       border: 2px solid #007bff;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-          margin-top: 73px;
+      margin-top: 73px;
     }
 
     .modal-content h3 {
@@ -190,6 +190,11 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 12px;
+    }
+
     @media (max-width: 768px) {
       body {
         padding-left: 0;
@@ -205,6 +210,11 @@
       .center-card {
         max-width: 180px;
         height: 237px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
 
@@ -297,7 +307,7 @@
 
       <!-- Add Button -->
       <div class="button-container">
-        <button class="add-center-btn" data-toggle="modal" data-target="#addBatchModal">Add Batch</button>
+        <button class="add-center-btn btn btn-danger" data-toggle="modal" data-target="#addBatchModal">Add Batch</button>
       </div>
     </div>
   </div>
@@ -311,12 +321,12 @@
       <form id="batchForm" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="batch">Batch :</label>
+            <label for="batch">Batch <span class="text-danger">*</span>:</label>
             <input type="text" id="batch" name="batch" class="form-control" required />
             <div class="invalid-feedback">Please enter a batch name.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="date">Date :</label>
+            <label for="date">Date <span class="text-danger">*</span>:</label>
             <input type="date" id="date" name="date" class="form-control" required />
             <div class="invalid-feedback">Please select a date.</div>
           </div>
@@ -324,12 +334,12 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="time">Time :</label>
+            <label for="time">Time <span class="text-danger">*</span>:</label>
             <input type="time" id="time" name="time" class="form-control" required />
             <div class="invalid-feedback">Please select a time.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="category">Category :</label>
+            <label for="category">Category <span class="text-danger">*</span>:</label>
             <select id="category" name="category" class="form-control" required>
               <option value="">Select</option>
               <option>Coach</option>
@@ -341,12 +351,12 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="groupSize">Group Size :</label>
+            <label for="groupSize">Group Size <span class="text-danger">*</span>:</label>
             <input type="number" id="groupSize" name="groupSize" class="form-control" max="6" min="1" value="6" required />
             <div class="invalid-feedback">Please enter a valid group size (1-6).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="coach">Assigned Coach :</label>
+            <label for="coach">Assigned Coach <span class="text-danger">*</span>:</label>
             <select id="coach" name="coach" class="form-control" required>
               <option value="">Select</option>
               <option>John Doe</option>
@@ -360,13 +370,13 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="admissions">Admissions :</label>
+            <label for="admissions">Admissions <span class="text-danger">*</span>:</label>
             <input type="number" id="admissions" name="admissions" class="form-control" min="0" max="6" value="0" required />
             <div class="invalid-feedback">Please enter valid admissions (0-6).</div>
           </div>
         </div>
 
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="submit-btn btn btn-primary">Submit</button>
       </form>
     </div>
   </div>
