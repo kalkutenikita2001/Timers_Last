@@ -8,17 +8,23 @@
   <!-- Bootstrap & Font Awesome -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+  <!-- Montserrat Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
   <style>
     body {
-       background-color: #e9ecef !important;
+      background-color: #f8f9fa !important;
       margin: 0;
+      font-family: 'Montserrat', serif !important;
+      overflow-x: hidden;
     }
 
     .content-wrapper {
       margin-left: 250px;
       padding: 20px;
       transition: all 0.3s ease-in-out;
+      position: relative;
+      min-height: 100vh;
     }
 
     .content-wrapper.minimized {
@@ -26,140 +32,197 @@
     }
 
     .content {
-      margin-left: 0;
-    }
-
-    .table-container {
-      overflow-x: auto;
       margin-top: 60px;
     }
 
+    /* Table Styles */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
     .table thead th {
-      background-color: #f8f9fa;
-      color: #000;
+      background-color: #343a40;
+      color: #fff;
       border-bottom: 2px solid #dee2e6;
       white-space: nowrap;
-      padding: 10px;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
     }
 
     .table td, .table th {
       vertical-align: middle;
       text-align: center;
-      padding: 10px;
+      padding: 0.75rem;
       white-space: nowrap;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 0.9rem;
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .table .horizontal-line td {
+      border: none;
+      background-color: #dee2e6;
+      height: 1px;
+      padding: 0;
     }
 
     .action-btn {
       background: none;
       border: none;
-      font-size: 16px;
-      margin: 0 5px;
-      color: #007bff;
+      font-size: 1rem;
+      margin: 0 0.25rem;
+      transition: transform 0.2s ease;
+      color: #6c757d;
     }
 
     .action-btn:hover {
-      color: #0056b3;
+      transform: scale(1.2);
+      color: #007bff;
     }
 
-    .new-admission-btn, .renew-btn {
-      background: linear-gradient(to right, #ff4040, #470000);
+    /* Button Styles */
+    .btn-custom {
+      background: #6c757d;
       color: white;
       border: none;
-      border-radius: 5px;
-      font-size: 14px;
-      margin-top: 10px;
-      padding: 6px 12px;
+      border-radius: 0.25rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .new-admission-btn:hover, .renew-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
+    .btn-custom:hover {
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+      transform: translateY(-1px);
     }
 
-    .filter-btn {
-      background: linear-gradient(to right, #ff4040, #470000);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
-      float: right;
-      margin-bottom: 10px;
-      margin-right: 40px;
-    }
-
-    .filter-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
-    }
-
+    /* Modal Styles */
     .modal-content {
-      background-color: #f0ebeb;
-      border-radius: 10px;
-      padding: 15px;
-      margin: auto;
-      border: 2px solid #007bff;
-      margin-top: 71px !important;
-      max-width: 600px;
+      background-color: #fff;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      border: none;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      margin-top: 65px;
+      max-width: 800px; /* Increased width */
       max-height: 80vh;
       overflow-y: auto;
     }
 
     .modal-content h3 {
       text-align: center;
-      font-weight: bold;
-      margin-bottom: 15px;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #343a40;
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: #495057;
+    }
+
+    .form-control {
+      height: calc(2.25rem + 2px);
+      border-radius: 0.25rem;
+      font-size: 0.9rem;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      border: 1px solid #ced4da;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus {
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .invalid-feedback {
+      font-size: 0.875rem;
+      color: #dc3545;
+    }
+
+    .was-validated .form-control:invalid, .form-control.is-invalid {
+      border-color: #dc3545;
+    }
+
+    .was-validated .form-control:valid, .form-control.is-valid {
+      border-color: #28a745;
     }
 
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
     }
 
-    .form-group label {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .form-control {
-      height: 38px;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .submit-btn, .next-btn {
-      background: linear-gradient(to top, #990000, #ff0000);
-      border: none;
-      color: white;
-      border-radius: 8px;
-      padding: 8px;
-      width: 120px;
-      font-weight: bold;
-      display: block;
-      margin: 15px auto 0;
-    }
-
-    .step-nav {
+    .add-btn-container {
       display: flex;
-      justify-content: space-between;
-      padding: 8px;
-      background-color: #d3d3d3;
-      border-radius: 5px 5px 0 0;
-      margin-bottom: 10px;
-    }
-
-    .step-nav span {
-      font-weight: bold;
-      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+      gap: 10px;
       align-items: center;
     }
 
+    /* Step Navigation Styles */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      /* padding: 12px; */
+      background-color: #e9ecef;
+      border-radius: 5px 5px 0 0;
+      margin-bottom: 15px;
+      gap: 40px;
+    }
+
+    .step-nav span {
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      color: #495057;
+      /* padding: 8px 15px; */
+      position: relative;
+    }
+
     .step-nav span i {
-      margin-left: 5px;
+      margin-left: 15px;
+      font-size: 2.5rem; /* Increased arrow size */
+      color: #007bff;
+      transition: color 0.3s ease;
+    }
+
+    .step-nav span.step-active {
+      /* border-bottom: 4px solid #007bff; */
       color: #007bff;
     }
 
-    .step-active {
-      border-bottom: 2px solid blue;
+    .step-nav span.step-active i {
+      color: #0056b3;
     }
 
+    /* Receipt Styles */
     .receipt-header {
       text-align: center;
       margin-bottom: 15px;
@@ -192,34 +255,163 @@
       font-weight: bold;
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
+    /* Responsive Design */
+    @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0 !important;
-        padding: 10px !important;
+        padding: 1rem !important;
       }
+
       .table {
-        font-size: 12px;
+        font-size: 0.8rem;
       }
-      .new-admission-btn, .filter-btn, .renew-btn {
-        /* width: 100%; */
-        margin-bottom: 10px;
-        position: static;
+
+      .action-btn {
+        margin: 0.1rem;
+        font-size: 0.8rem;
       }
+
       .modal-content {
-        max-width: 90%;
+        padding: 1rem;
+        max-width: 95%;
+      }
+
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -5px;
+        margin-left: -5px;
+      }
+
+      .form-group {
+        padding-right: 5px;
+        padding-left: 5px;
+      }
+
+      .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+
+      .add-btn-container {
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-custom {
+        width: 120px;
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .step-nav {
+        flex-direction: column;
+        gap: 15px;
         padding: 10px;
+      }
+
+      .step-nav span {
+        font-size: 0.9rem;
+        padding: 5px;
+      }
+
+      .step-nav span i {
+        font-size: 2rem;
+        margin-left: 10px;
       }
     }
 
-    @media (min-width: 769px) and (max-width: 1024px) {
+    @media (min-width: 577px) and (max-width: 768px) {
+      .content-wrapper {
+        margin-left: 0 !important;
+        padding: 1rem !important;
+      }
+
+      .content-wrapper.minimized {
+        margin-left: 0;
+      }
+
+      .table {
+        font-size: 0.85rem;
+      }
+
+      .modal-content {
+        padding: 1.25rem;
+        max-width: 90%;
+      }
+
+      .add-btn-container {
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-custom {
+        font-size: 0.9rem;
+      }
+
+      .step-nav {
+        gap: 25px;
+      }
+
+      .step-nav span {
+        padding: 5px 10px;
+      }
+
+      .step-nav span i {
+        font-size: 2.2rem;
+        margin-left: 10px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 991px) {
       .content-wrapper {
         margin-left: 200px;
       }
+
       .content-wrapper.minimized {
         margin-left: 60px;
+      }
+
+      .table {
+        font-size: 0.9rem;
+      }
+
+      .modal-content {
+        max-width: 700px;
+      }
+
+      .step-nav {
+        gap: 30px;
+      }
+
+      .step-nav span i {
+        font-size: 2.4rem;
+        margin-left: 12px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .modal-content {
+        max-width: 800px;
+      }
+
+      .step-nav {
+        gap: 40px;
+      }
+
+      .step-nav span i {
+        font-size: 2.5rem;
+        margin-left: 15px;
+      }
+    }
+
+    /* Touch device hover fix */
+    @media (hover: none) {
+      .action-btn:hover,
+      .btn-custom:hover {
+        background-color: inherit;
+        transform: none;
+        box-shadow: none;
       }
     }
   </style>
@@ -234,10 +426,19 @@
 <div class="content-wrapper" id="contentWrapper">
   <div class="content">
     <div class="container-fluid">
+      <!-- Add Button and Filter -->
+      <div class="add-btn-container">
+        <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+          <i class="fas fa-filter mr-1"></i> Filter
+        </button>
+        <button class="btn btn-custom" data-toggle="modal" data-target="#newAdmissionModal">
+          <i class="fas fa-plus mr-1"></i> Add Student
+        </button>
+      </div>
 
       <div class="table-container">
         <table class="table table-bordered table-hover" id="studentTable">
-          <thead>
+          <thead class="thead-dark">
             <tr>
               <th>Center</th>
               <th>Name</th>
@@ -248,7 +449,7 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="studentTableBody">
             <tr>
               <td>Center 1</td>
               <td>Jane Doe</td>
@@ -263,6 +464,7 @@
                 <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-sync"></i></button>
               </td>
             </tr>
+            <tr class="horizontal-line"><td colspan="7"></td></tr>
             <tr>
               <td>Center 2</td>
               <td>John Smith</td>
@@ -277,13 +479,9 @@
                 <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-sync"></i></button>
               </td>
             </tr>
+            <tr class="horizontal-line"><td colspan="7"></td></tr>
           </tbody>
         </table>
-      </div>
-
-      <!-- New Admission Button -->
-      <div class="text-right">
-        <button class="new-admission-btn" data-toggle="modal" data-target="#newAdmissionModal">Add Student</button>
       </div>
     </div>
   </div>
@@ -291,52 +489,60 @@
 
 <!-- New Admission Modal (Step 1: Personal Details) -->
 <div class="modal fade" id="newAdmissionModal" tabindex="-1" aria-labelledby="newAdmissionLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md">
+  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Changed to modal-lg for wider form -->
     <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="newAdmissionLabel" class="modal-title w-100 text-center">Student Admission Form</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="step-nav">
         <span class="step-active">1. Personal Details <i class="fas fa-arrow-right"></i></span>
         <span>2. Batch Details <i class="fas fa-arrow-right"></i></span>
         <span>3. Fees Details <i class="fas fa-arrow-right"></i></span>
       </div>
-      <h3 id="newAdmissionLabel">Student Admission Form</h3>
       <form id="admissionForm1" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="name">Name :</label>
-            <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces"/>
-            <div class="invalid-feedback">Please enter a valid name (letters and spaces only).</div>
+            <label for="name">Name <span class="text-danger">*</span></label>
+            <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+            <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="contact">Contact :</label>
-            <input type="tel" id="contact" name="contact" class="form-control" required pattern="[0-9]{10}" title="Contact should be a 10-digit number"/>
+            <label for="contact">Contact <span class="text-danger">*</span></label>
+            <input type="tel" id="contact" name="contact" class="form-control" required pattern="[0-9]{10}" title="Contact must be exactly 10 digits"/>
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="parentName">Parent Name :</label>
-            <input type="text" id="parentName" name="parentName" class="form-control" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces"/>
-            <div class="invalid-feedback">Please enter a valid parent name (letters and spaces only).</div>
+            <label for="parentName">Parent Name <span class="text-danger">*</span></label>
+            <input type="text" id="parentName" name="parentName" class="form-control" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces" minlength="2" maxlength="50"/>
+            <div class="invalid-feedback">Please enter a valid parent name (2-50 letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="emergencyContact">Emergency Contact :</label>
-            <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" required pattern="[0-9]{10}" title="Emergency contact should be a 10-digit number"/>
+            <label for="emergencyContact">Emergency Contact <span class="text-danger">*</span></label>
+            <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" required pattern="[0-9]{10}" title="Emergency contact must be exactly 10 digits"/>
             <div class="invalid-feedback">Please enter a valid 10-digit emergency contact number.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address"/>
+            <label for="email">Email <span class="text-danger">*</span></label>
+            <input type="email" id="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" maxlength="100"/>
             <div class="invalid-feedback">Please enter a valid email address.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="address">Address :</label>
-            <input type="text" id="address" name="address" class="form-control" required/>
-            <div class="invalid-feedback">Please enter an address.</div>
+            <label for="address">Address <span class="text-danger">*</span></label>
+            <input type="text" id="address" name="address" class="form-control" required minlength="5" maxlength="200"/>
+            <div class="invalid-feedback">Please enter a valid address (5-200 characters).</div>
           </div>
         </div>
-        <button type="submit" class="next-btn">Next</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-custom">Next</button>
+        </div>
       </form>
     </div>
   </div>
@@ -344,30 +550,35 @@
 
 <!-- New Admission Modal (Step 2: Batch Details) -->
 <div class="modal fade" id="batchDetailsModal" tabindex="-1" aria-labelledby="batchDetailsLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="batchDetailsLabel" class="modal-title w-100 text-center">Student Admission Form</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="step-nav">
         <span>1. Personal Details <i class="fas fa-arrow-right"></i></span>
         <span class="step-active">2. Batch Details <i class="fas fa-arrow-right"></i></span>
         <span>3. Fees Details <i class="fas fa-arrow-right"></i></span>
       </div>
-      <h3 id="batchDetailsLabel">Student Admission Form</h3>
       <form id="admissionForm2" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="center">Center :</label>
-            <input type="text" id="center" name="center" class="form-control" required pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces"/>
-            <div class="invalid-feedback">Please enter a valid center name (letters and spaces only).</div>
+            <label for="center">Center <span class="text-danger">*</span></label>
+            <input type="text" id="center" name="center" class="form-control" required pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
+            <div class="invalid-feedback">Please enter a valid center name (2-50 letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="batch">Batch :</label>
-            <input type="text" id="batch" name="batch" class="form-control" required pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only"/>
-            <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
+            <label for="batch">Batch <span class="text-danger">*</span></label>
+            <input type="text" id="batch" name="batch" class="form-control" required pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="10"/>
+            <div class="invalid-feedback">Please enter a valid batch (1-10 letters/numbers only).</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="category">Category :</label>
+            <label for="category">Category <span class="text-danger">*</span></label>
             <select id="category" name="category" class="form-control" required>
               <option value="">Select</option>
               <option>Coach</option>
@@ -378,7 +589,7 @@
             <div class="invalid-feedback">Please select a category.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="coach">Coach :</label>
+            <label for="coach">Coach <span class="text-danger">*</span></label>
             <select id="coach" name="coach" class="form-control" required>
               <option value="">Select</option>
               <option>GHJK</option>
@@ -389,12 +600,12 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="coordinator">Coordinator :</label>
-            <input type="text" id="coordinator" name="coordinator" class="form-control" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces"/>
-            <div class="invalid-feedback">Please enter a valid coordinator name (letters and spaces only).</div>
+            <label for="coordinator">Coordinator <span class="text-danger">*</span></label>
+            <input type="text" id="coordinator" name="coordinator" class="form-control" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces" minlength="2" maxlength="50"/>
+            <div class="invalid-feedback">Please enter a valid coordinator name (2-50 letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="duration">Duration :</label>
+            <label for="duration">Duration <span class="text-danger">*</span></label>
             <select id="duration" name="duration" class="form-control" required>
               <option value="">Select</option>
               <option>1 month</option>
@@ -403,7 +614,10 @@
             <div class="invalid-feedback">Please select a duration.</div>
           </div>
         </div>
-        <button type="submit" class="next-btn">Next</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-custom">Next</button>
+        </div>
       </form>
     </div>
   </div>
@@ -411,35 +625,40 @@
 
 <!-- New Admission Modal (Step 3: Fees Details) -->
 <div class="modal fade" id="feesDetailsModal" tabindex="-1" aria-labelledby="feesDetailsLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="feesDetailsLabel" class="modal-title w-100 text-center">Student Admission Form</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="step-nav">
         <span>1. Personal Details <i class="fas fa-arrow-right"></i></span>
         <span>2. Batch Details <i class="fas fa-arrow-right"></i></span>
         <span class="step-active">3. Fees Details <i class="fas fa-arrow-right"></i></span>
       </div>
-      <h3 id="feesDetailsLabel">Student Admission Form</h3>
       <form id="admissionForm3" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="totalFees">Total Fees :</label>
-            <input type="number" id="totalFees" name="totalFees" class="form-control" required min="0" title="Total fees must be a positive number"/>
-            <div class="invalid-feedback">Please enter a valid total fees amount.</div>
+            <label for="totalFees">Total Fees <span class="text-danger">*</span></label>
+            <input type="number" id="totalFees" name="totalFees" class="form-control" required min="1" title="Total fees must be a positive number"/>
+            <div class="invalid-feedback">Please enter a valid total fees amount greater than 0.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="amountPaid">Amount Paid :</label>
-            <input type="number" id="amountPaid" name="amountPaid" class="form-control" required min="0" title="Amount paid must be a positive number"/>
+            <label for="amountPaid">Amount Paid <span class="text-danger">*</span></label>
+            <input type="number" id="amountPaid" name="amountPaid" class="form-control" required min="0" title="Amount paid must be a positive number or zero"/>
             <div class="invalid-feedback">Please enter a valid amount paid.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="remainingAmount">Remaining Amount :</label>
+            <label for="remainingAmount">Remaining Amount <span class="text-danger">*</span></label>
             <input type="number" id="remainingAmount" name="remainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly/>
-            <div class="invalid-feedback">Please enter a valid remaining amount.</div>
+            <div class="invalid-feedback">Please ensure remaining amount is valid.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="paymentMethod">Payment Method :</label>
+            <label for="paymentMethod">Payment Method <span class="text-danger">*</span></label>
             <div>
               <div class="form-check">
                 <input type="radio" id="cash" name="paymentMethod" class="form-check-input" value="Cash" required>
@@ -453,7 +672,10 @@
             <div class="invalid-feedback">Please select a payment method.</div>
           </div>
         </div>
-        <button type="submit" class="submit-btn">Generate Receipt</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-custom">Generate Receipt</button>
+        </div>
       </form>
     </div>
   </div>
@@ -463,35 +685,40 @@
 <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
-      <h3 id="filterLabel">Filter</h3>
+      <div class="modal-header">
+        <h3 id="filterLabel" class="modal-title w-100 text-center">Filter Students</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <form id="filterForm" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="filterName">Name :</label>
+            <label for="filterName">Name</label>
             <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces"/>
             <div class="invalid-feedback">Please enter a valid name (letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="filterContact">Contact :</label>
+            <label for="filterContact">Contact</label>
             <input type="tel" id="filterContact" name="filterContact" class="form-control" pattern="[0-9]{10}" title="Contact should be a 10-digit number"/>
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="filterCenter">Center :</label>
+            <label for="filterCenter">Center</label>
             <input type="text" id="filterCenter" name="filterCenter" class="form-control" pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces"/>
             <div class="invalid-feedback">Please enter a valid center name (letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="filterBatch">Batch :</label>
+            <label for="filterBatch">Batch</label>
             <input type="text" id="filterBatch" name="filterBatch" class="form-control" pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only"/>
             <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <label for="filterCategory">Category :</label>
+            <label for="filterCategory">Category</label>
             <select id="filterCategory" name="filterCategory" class="form-control">
               <option value="">All</option>
               <option>Corporate</option>
@@ -501,7 +728,10 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="submit-btn">Apply Filter</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Clear</button>
+          <button type="submit" class="btn btn-custom">Apply Filter</button>
+        </div>
       </form>
     </div>
   </div>
@@ -511,35 +741,40 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
-      <h3 id="editLabel">Edit Student</h3>
+      <div class="modal-header">
+        <h3 id="editLabel" class="modal-title w-100 text-center">Edit Student</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <form id="editForm" novalidate>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="editName">Name :</label>
+            <label for="editName">Name <span class="text-danger">*</span></label>
             <input type="text" id="editName" name="editName" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces"/>
             <div class="invalid-feedback">Please enter a valid name (letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="editContact">Contact :</label>
+            <label for="editContact">Contact <span class="text-danger">*</span></label>
             <input type="tel" id="editContact" name="editContact" class="form-control" required pattern="[0-9]{10}" title="Contact should be a 10-digit number"/>
             <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="editCenter">Center :</label>
+            <label for="editCenter">Center <span class="text-danger">*</span></label>
             <input type="text" id="editCenter" name="editCenter" class="form-control" required pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces"/>
             <div class="invalid-feedback">Please enter a valid center name (letters and spaces only).</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="editBatch">Batch :</label>
+            <label for="editBatch">Batch <span class="text-danger">*</span></label>
             <input type="text" id="editBatch" name="editBatch" class="form-control" required pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only"/>
             <div class="invalid-feedback">Please enter a valid batch (letters and numbers only).</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <label for="editCategory">Category :</label>
+            <label for="editCategory">Category <span class="text-danger">*</span></label>
             <select id="editCategory" name="editCategory" class="form-control" required>
               <option value="">Select</option>
               <option>Corporate</option>
@@ -550,7 +785,10 @@
             <div class="invalid-feedback">Please select a category.</div>
           </div>
         </div>
-        <button type="submit" class="submit-btn">Save Changes</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-custom">Save Changes</button>
+        </div>
       </form>
     </div>
   </div>
@@ -560,61 +798,28 @@
 <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
-      <div class="receipt-header">
-        <img src="https://via.placeholder.com/150" alt="Company Logo" />
-        <h3>Admission Receipt</h3>
-        <p>Date: 21-07-2025 03:28 PM IST</p> <!-- Updated to current time -->
+      <div class="modal-header">
+        <h3 id="receiptLabel" class="modal-title w-100 text-center">Admission Receipt</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <table class="receipt-table">
-        <thead>
-          <tr>
-            <th>Section</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Student Name</td>
-            <td><span id="receiptName"></span></td>
-          </tr>
-          <tr>
-            <td>Contact</td>
-            <td><span id="receiptContact"></span></td>
-          </tr>
-          <tr>
-            <td>Center</td>
-            <td><span id="receiptCenter"></span></td>
-          </tr>
-          <tr>
-            <td>Batch</td>
-            <td><span id="receiptBatch"></span></td>
-          </tr>
-          <tr>
-            <td>Category</td>
-            <td><span id="receiptCategory"></span></td>
-          </tr>
-          <tr>
-            <td>Total Fees</td>
-            <td>Rs. <span id="receiptTotalFees"></span></td>
-          </tr>
-          <tr>
-            <td>Amount Paid</td>
-            <td>Rs. <span id="receiptAmountPaid"></span></td>
-          </tr>
-          <tr>
-            <td>Remaining Amount</td>
-            <td>Rs. <span id="receiptRemainingAmount"></span></td>
-          </tr>
-          <tr>
-            <td>Payment Method</td>
-            <td><span id="receiptPaymentMethod"></span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="receipt-footer">
-        <p>Thank you for your payment!</p>
+      <div class="modal-body">
+        <div class="receipt-card">
+          <p><strong>Student Name:</strong> <span id="receiptName"></span></p>
+          <p><strong>Contact:</strong> <span id="receiptContact"></span></p>
+          <p><strong>Center:</strong> <span id="receiptCenter"></span></p>
+          <p><strong>Batch:</strong> <span id="receiptBatch"></span></p>
+          <p><strong>Category:</strong> <span id="receiptCategory"></span></p>
+          <p><strong>Total Fees:</strong> Rs. <span id="receiptTotalFees"></span></p>
+          <p><strong>Amount Paid:</strong> Rs. <span id="receiptAmountPaid"></span></p>
+          <p><strong>Remaining Amount:</strong> Rs. <span id="receiptRemainingAmount"></span></p>
+          <p><strong>Payment Method:</strong> <span id="receiptPaymentMethod"></span></p>
+        </div>
       </div>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -623,10 +828,15 @@
 <div class="modal fade" id="renewModal" tabindex="-1" aria-labelledby="renewLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="renewLabel" class="modal-title w-100 text-center">Renew Admission</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="step-nav">
         <span class="step-active">1. Renew Fees <i class="fas fa-arrow-right"></i></span>
       </div>
-      <h3 id="renewLabel">Renew Admission</h3>
       <form id="renewForm" novalidate>
         <input type="hidden" id="renewName" name="renewName">
         <input type="hidden" id="renewContact" name="renewContact">
@@ -635,24 +845,24 @@
         <input type="hidden" id="renewCategory" name="renewCategory">
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="renewTotalFees">Total Fees :</label>
+            <label for="renewTotalFees">Total Fees <span class="text-danger">*</span></label>
             <input type="number" id="renewTotalFees" name="renewTotalFees" class="form-control" required min="0" title="Total fees must be a positive number"/>
             <div class="invalid-feedback">Please enter a valid total fees amount.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="renewAmountPaid">Amount Paid :</label>
+            <label for="renewAmountPaid">Amount Paid <span class="text-danger">*</span></label>
             <input type="number" id="renewAmountPaid" name="renewAmountPaid" class="form-control" required min="0" title="Amount paid must be a positive number"/>
             <div class="invalid-feedback">Please enter a valid amount paid.</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="renewRemainingAmount">Remaining Amount :</label>
+            <label for="renewRemainingAmount">Remaining Amount <span class="text-danger">*</span></label>
             <input type="number" id="renewRemainingAmount" name="renewRemainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly/>
             <div class="invalid-feedback">Please enter a valid remaining amount.</div>
           </div>
           <div class="form-group col-md-6">
-            <label for="renewPaymentMethod">Payment Method :</label>
+            <label for="renewPaymentMethod">Payment Method <span class="text-danger">*</span></label>
             <div>
               <div class="form-check">
                 <input type="radio" id="renewCash" name="renewPaymentMethod" class="form-check-input" value="Cash" required>
@@ -666,7 +876,10 @@
             <div class="invalid-feedback">Please select a payment method.</div>
           </div>
         </div>
-        <button type="submit" class="submit-btn">Renew Admission</button>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-custom">Renew Admission</button>
+        </div>
       </form>
     </div>
   </div>
@@ -678,14 +891,28 @@
 
 <!-- Form Validation, Navigation, and Table Management -->
 <script>
-  (function () {
-    'use strict';
+  $(document).ready(function () {
     const forms = ['admissionForm1', 'admissionForm2', 'admissionForm3', 'filterForm', 'editForm', 'renewForm'].map(id => document.getElementById(id));
-    const tableBody = document.querySelector('#studentTable tbody');
+    const tableBody = document.querySelector('#studentTableBody');
+    let initialRows = Array.from(document.querySelectorAll('#studentTableBody tr:not(.horizontal-line)')).map(row => row.outerHTML);
 
+    // Form validation
     forms.forEach(form => {
       form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
+        let isValid = form.checkValidity();
+        if (form.id === 'filterForm') {
+          let atLeastOneFilled = false;
+          form.querySelectorAll('input, select').forEach(input => {
+            if (input.value.trim() !== '') atLeastOneFilled = true;
+          });
+          if (!atLeastOneFilled) {
+            form.querySelector('#filterName').setCustomValidity('At least one filter field must be filled.');
+            isValid = false;
+          } else {
+            form.querySelector('#filterName').setCustomValidity('');
+          }
+        }
+        if (!isValid) {
           event.preventDefault();
           event.stopPropagation();
         }
@@ -694,7 +921,7 @@
     });
 
     // Navigation between steps
-    document.getElementById('admissionForm1').addEventListener('submit', function (event) {
+    $('#admissionForm1').on('submit', function (event) {
       if (this.checkValidity()) {
         event.preventDefault();
         $('#newAdmissionModal').modal('hide');
@@ -703,7 +930,7 @@
       this.classList.add('was-validated');
     });
 
-    document.getElementById('admissionForm2').addEventListener('submit', function (event) {
+    $('#admissionForm2').on('submit', function (event) {
       if (this.checkValidity()) {
         event.preventDefault();
         $('#batchDetailsModal').modal('hide');
@@ -722,47 +949,50 @@
     });
 
     // Add new student to table
-    document.getElementById('admissionForm3').addEventListener('submit', function (event) {
+    $('#admissionForm3').on('submit', function (event) {
       if (this.checkValidity()) {
         event.preventDefault();
-        const name = document.getElementById('name').value;
-        const contact = document.getElementById('contact').value;
-        const center = document.getElementById('center').value;
-        const batch = document.getElementById('batch').value;
-        const category = document.getElementById('category').value;
-        const duration = document.getElementById('duration').value;
+        const name = $('#name').val();
+        const contact = $('#contact').val();
+        const center = $('#center').val();
+        const batch = $('#batch').val();
+        const category = $('#category').val();
+        const duration = $('#duration').val();
         const expiryDate = new Date();
         if (duration === '1 month') expiryDate.setMonth(expiryDate.getMonth() + 1);
         else if (duration === '2 months') expiryDate.setMonth(expiryDate.getMonth() + 2);
         const expiry = expiryDate.toISOString().split('T')[0];
 
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-          <td>${center}</td>
-          <td>${name}</td>
-          <td>${contact}</td>
-          <td>${batch}</td>
-          <td>${category}</td>
-          <td>${expiry}</td>
-          <td>
-            <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-            <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}" data-totalfees="${document.getElementById('totalFees').value}" data-amountpaid="${document.getElementById('amountPaid').value}" data-remaining="${document.getElementById('remainingAmount').value}" data-paymentmethod="${document.querySelector('input[name="paymentMethod"]:checked') ? document.querySelector('input[name="paymentMethod"]:checked').value : ''}"><i class="fas fa-eye"></i></button>
-            <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-sync"></i></button>
-          </td>
+        const newRow = `
+          <tr>
+            <td>${center}</td>
+            <td>${name}</td>
+            <td>${contact}</td>
+            <td>${batch}</td>
+            <td>${category}</td>
+            <td>${expiry}</td>
+            <td>
+              <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+              <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}" data-totalfees="${$('#totalFees').val()}" data-amountpaid="${$('#amountPaid').val()}" data-remaining="${$('#remainingAmount').val()}" data-paymentmethod="${$('input[name="paymentMethod"]:checked').val() || ''}"><i class="fas fa-eye"></i></button>
+              <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="${name}" data-contact="${contact}" data-center="${center}" data-batch="${batch}" data-category="${category}"><i class="fas fa-sync"></i></button>
+            </td>
+          </tr>
+          <tr class="horizontal-line"><td colspan="7"></td></tr>
         `;
-        tableBody.appendChild(newRow);
+        tableBody.insertAdjacentHTML('beforeend', newRow);
+        initialRows.push(newRow);
 
         // Update receipt modal with new data
-        document.getElementById('receiptName').textContent = name;
-        document.getElementById('receiptContact').textContent = contact;
-        document.getElementById('receiptCenter').textContent = center;
-        document.getElementById('receiptBatch').textContent = batch;
-        document.getElementById('receiptCategory').textContent = category;
-        document.getElementById('receiptTotalFees').textContent = document.getElementById('totalFees').value;
-        document.getElementById('receiptAmountPaid').textContent = document.getElementById('amountPaid').value;
-        document.getElementById('receiptRemainingAmount').textContent = document.getElementById('remainingAmount').value;
-        document.getElementById('receiptPaymentMethod').textContent = document.querySelector('input[name="paymentMethod"]:checked') ? document.querySelector('input[name="paymentMethod"]:checked').value : '';
+        $('#receiptName').text(name);
+        $('#receiptContact').text(contact);
+        $('#receiptCenter').text(center);
+        $('#receiptBatch').text(batch);
+        $('#receiptCategory').text(category);
+        $('#receiptTotalFees').text($('#totalFees').val());
+        $('#receiptAmountPaid').text($('#amountPaid').val());
+        $('#receiptRemainingAmount').text($('#remainingAmount').val());
+        $('#receiptPaymentMethod').text($('input[name="paymentMethod"]:checked').val() || '');
 
         $('#feesDetailsModal').modal('hide');
         forms.forEach(f => f.reset());
@@ -772,111 +1002,164 @@
     });
 
     // Edit functionality
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('editName').value = this.getAttribute('data-name');
-        document.getElementById('editContact').value = this.getAttribute('data-contact');
-        document.getElementById('editCenter').value = row.cells[0].textContent;
-        document.getElementById('editBatch').value = this.getAttribute('data-batch');
-        document.getElementById('editCategory').value = this.getAttribute('data-category');
+    $(document).on('click', '.edit-btn', function () {
+      const row = $(this).closest('tr');
+      $('#editName').val($(this).data('name'));
+      $('#editContact').val($(this).data('contact'));
+      $('#editCenter').val($(this).data('center'));
+      $('#editBatch').val($(this).data('batch'));
+      $('#editCategory').val($(this).data('category'));
 
-        document.getElementById('editForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            row.cells[1].textContent = document.getElementById('editName').value;
-            row.cells[2].textContent = document.getElementById('editContact').value;
-            row.cells[0].textContent = document.getElementById('editCenter').value;
-            row.cells[3].textContent = document.getElementById('editBatch').value;
-            row.cells[4].textContent = document.getElementById('editCategory').value;
-            button.setAttribute('data-name', document.getElementById('editName').value);
-            button.setAttribute('data-contact', document.getElementById('editContact').value);
-            button.setAttribute('data-center', document.getElementById('editCenter').value);
-            button.setAttribute('data-batch', document.getElementById('editBatch').value);
-            button.setAttribute('data-category', document.getElementById('editCategory').value);
-            $('#editModal').modal('hide');
-            this.classList.remove('was-validated');
-          }
-          this.classList.add('was-validated');
-        };
+      $('#editForm').on('submit', function (event) {
+        if (this.checkValidity()) {
+          event.preventDefault();
+          const name = $('#editName').val();
+          const contact = $('#editContact').val();
+          const center = $('#editCenter').val();
+          const batch = $('#editBatch').val();
+          const category = $('#editCategory').val();
+          row.find('td').eq(0).text(center);
+          row.find('td').eq(1).text(name);
+          row.find('td').eq(2).text(contact);
+          row.find('td').eq(3).text(batch);
+          row.find('td').eq(4).text(category);
+          row.find('.edit-btn').data('name', name);
+          row.find('.edit-btn').data('contact', contact);
+          row.find('.edit-btn').data('center', center);
+          row.find('.edit-btn').data('batch', batch);
+          row.find('.edit-btn').data('category', category);
+          row.find('.view-btn').data('name', name);
+          row.find('.view-btn').data('contact', contact);
+          row.find('.view-btn').data('center', center);
+          row.find('.view-btn').data('batch', batch);
+          row.find('.view-btn').data('category', category);
+          row.find('.renew-btn').data('name', name);
+          row.find('.renew-btn').data('contact', contact);
+          row.find('.renew-btn').data('center', center);
+          row.find('.renew-btn').data('batch', batch);
+          row.find('.renew-btn').data('category', category);
+          $('#editModal').modal('hide');
+          this.classList.remove('was-validated');
+          initialRows = Array.from(document.querySelectorAll('#studentTableBody tr:not(.horizontal-line)')).map(row => row.outerHTML);
+        }
+        this.classList.add('was-validated');
       });
     });
 
     // Delete functionality
-    document.querySelectorAll('.delete-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        if (confirm('Are you sure you want to delete this record?')) {
-          this.closest('tr').remove();
-        }
-      });
+    $(document).on('click', '.delete-btn', function () {
+      if (confirm('Are you sure you want to delete this record?')) {
+        const row = $(this).closest('tr');
+        const nextLine = row.next('tr.horizontal-line');
+        if (nextLine.length) nextLine.remove();
+        row.remove();
+        initialRows = Array.from(document.querySelectorAll('#studentTableBody tr:not(.horizontal-line)')).map(row => row.outerHTML);
+      }
     });
 
     // Handle receipt view
-    document.querySelectorAll('.view-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const row = this.closest('tr');
-        document.getElementById('receiptName').textContent = this.getAttribute('data-name');
-        document.getElementById('receiptContact').textContent = this.getAttribute('data-contact');
-        document.getElementById('receiptCenter').textContent = this.getAttribute('data-center');
-        document.getElementById('receiptBatch').textContent = this.getAttribute('data-batch');
-        document.getElementById('receiptCategory').textContent = this.getAttribute('data-category');
-        document.getElementById('receiptTotalFees').textContent = this.getAttribute('data-totalfees');
-        document.getElementById('receiptAmountPaid').textContent = this.getAttribute('data-amountpaid');
-        document.getElementById('receiptRemainingAmount').textContent = this.getAttribute('data-remaining');
-        document.getElementById('receiptPaymentMethod').textContent = this.getAttribute('data-paymentmethod');
-      });
+    $(document).on('click', '.view-btn', function () {
+      $('#receiptName').text($(this).data('name'));
+      $('#receiptContact').text($(this).data('contact'));
+      $('#receiptCenter').text($(this).data('center'));
+      $('#receiptBatch').text($(this).data('batch'));
+      $('#receiptCategory').text($(this).data('category'));
+      $('#receiptTotalFees').text($(this).data('totalfees') || '');
+      $('#receiptAmountPaid').text($(this).data('amountpaid') || '');
+      $('#receiptRemainingAmount').text($(this).data('remaining') || '');
+      $('#receiptPaymentMethod').text($(this).data('paymentmethod') || '');
     });
 
     // Handle renew view
-    document.querySelectorAll('.renew-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        document.getElementById('renewName').value = this.getAttribute('data-name');
-        document.getElementById('renewContact').value = this.getAttribute('data-contact');
-        document.getElementById('renewCenter').value = this.getAttribute('data-center');
-        document.getElementById('renewBatch').value = this.getAttribute('data-batch');
-        document.getElementById('renewCategory').value = this.getAttribute('data-category');
+    $(document).on('click', '.renew-btn', function () {
+      $('#renewName').val($(this).data('name'));
+      $('#renewContact').val($(this).data('contact'));
+      $('#renewCenter').val($(this).data('center'));
+      $('#renewBatch').val($(this).data('batch'));
+      $('#renewCategory').val($(this).data('category'));
 
-        document.getElementById('renewForm').onsubmit = function (event) {
-          if (this.checkValidity()) {
-            event.preventDefault();
-            const row = button.closest('tr');
-            const expiryDate = new Date();
-            const duration = document.getElementById('duration').value || '1 month';
-            if (duration === '1 month') expiryDate.setMonth(expiryDate.getMonth() + 1);
-            else if (duration === '2 months') expiryDate.setMonth(expiryDate.getMonth() + 2);
-            const newExpiry = expiryDate.toISOString().split('T')[0];
-            row.cells[5].textContent = newExpiry;
-
-            $('#renewModal').modal('hide');
-            this.classList.remove('was-validated');
-            alert('Admission renewed successfully!');
-          }
-          this.classList.add('was-validated');
-        };
+      $('#renewForm').on('submit', function (event) {
+        if (this.checkValidity()) {
+          event.preventDefault();
+          const duration = $('#duration').val() || '1 month';
+          const expiryDate = new Date();
+          if (duration === '1 month') expiryDate.setMonth(expiryDate.getMonth() + 1);
+          else if (duration === '2 months') expiryDate.setMonth(expiryDate.getMonth() + 2);
+          const newExpiry = expiryDate.toISOString().split('T')[0];
+          $(this).closest('tr').find('td').eq(5).text(newExpiry);
+          $('#renewModal').modal('hide');
+          this.classList.remove('was-validated');
+          alert('Admission renewed successfully!');
+          initialRows = Array.from(document.querySelectorAll('#studentTableBody tr:not(.horizontal-line)')).map(row => row.outerHTML);
+        }
+        this.classList.add('was-validated');
       });
     });
 
-    // Sidebar toggle functionality
-    document.addEventListener('DOMContentLoaded', () => {
-      const sidebarToggle = document.getElementById('sidebarToggle');
-      const sidebar = document.getElementById('sidebar');
-      const navbar = document.querySelector('.navbar');
-      const contentWrapper = document.getElementById('contentWrapper');
+    // Filter form submission
+    $('#filterForm').on('submit', function (event) {
+      event.preventDefault();
+      if (!this.checkValidity()) return;
 
-      if (sidebarToggle && sidebar && navbar && contentWrapper) {
-        sidebarToggle.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
-            sidebar.classList.toggle('active');
-            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-          } else {
-            const isMinimized = sidebar.classList.toggle('minimized');
-            navbar.classList.toggle('sidebar-minimized', isMinimized);
-            contentWrapper.classList.toggle('minimized', isMinimized);
-          }
-        });
+      const filterName = $('#filterName').val().trim().toLowerCase();
+      const filterContact = $('#filterContact').val().trim();
+      const filterCenter = $('#filterCenter').val().trim().toLowerCase();
+      const filterBatch = $('#filterBatch').val().trim().toLowerCase();
+      const filterCategory = $('#filterCategory').val().trim().toLowerCase();
+
+      const filteredRows = initialRows.filter(row => {
+        const rowElement = document.createElement('div');
+        rowElement.innerHTML = row;
+        const name = rowElement.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const contact = rowElement.querySelector('td:nth-child(3)').textContent;
+        const center = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        const batch = rowElement.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        const category = rowElement.querySelector('td:nth-child(5)').textContent.toLowerCase();
+
+        return (!filterName || name.includes(filterName)) &&
+               (!filterContact || contact.includes(filterContact)) &&
+               (!filterCenter || center.includes(filterCenter)) &&
+               (!filterBatch || batch.includes(filterBatch)) &&
+               (!filterCategory || category.includes(filterCategory));
+      });
+
+      tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="7"></td></tr>') : '<tr><td colspan="7" class="text-center">No records match the filter criteria.</td></tr>';
+
+      $('#filterModal').modal('hide');
+      this.reset();
+      this.classList.remove('was-validated');
+      this.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+    });
+
+    // Clear filter form on modal close
+    $('#filterModal').on('hidden.bs.modal', function () {
+      const form = document.getElementById('filterForm');
+      form.reset();
+      form.classList.remove('was-validated');
+      form.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+    });
+
+    // Sidebar toggle functionality
+    $('#sidebarToggle').on('click', function () {
+      if ($(window).width() <= 576) {
+        $('#sidebar').toggleClass('active');
+        $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+      } else {
+        const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+        $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+        $('#contentWrapper').toggleClass('minimized', isMinimized);
       }
     });
-  })();
+
+    // Handle window resize
+    $(window).on('resize', function () {
+      if ($(window).width() <= 576) {
+        $('#sidebar').removeClass('minimized');
+        $('.navbar').removeClass('sidebar-minimized');
+        $('#contentWrapper').removeClass('minimized');
+      }
+    });
+  });
 </script>
 </body>
 </html>
