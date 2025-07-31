@@ -76,7 +76,7 @@
             }
 
             .login__img img{
-                width: 310px;
+                width: 199px;
                 margin-top: 1.5rem;
             }
 
@@ -155,7 +155,7 @@
             }
 
             .login__button{
-                display: block;
+                /* display: block; */
                 padding: 1rem;
                 margin: 2rem 0;
                 background-color: var(--first-color);
@@ -273,7 +273,7 @@
         <div class="login">
             <div class="login__content">
                 <div class="login__img">
-                    <img src="<?php echo base_url('assets/images/img-login.svg'); ?>" alt="Logo">
+                    <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
                 </div>
 
                 <div class="login__forms">

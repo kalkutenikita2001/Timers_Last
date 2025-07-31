@@ -76,7 +76,7 @@
             }
 
             .login__img img{
-                width: 310px;
+                width: 199px;
                 margin-top: 1.5rem;
             }
 
@@ -155,7 +155,7 @@
             }
 
             .login__button{
-                display: block;
+                /* display: block; */
                 padding: 1rem;
                 margin: 2rem 0;
                 background-color: var(--first-color);
@@ -273,11 +273,11 @@
         <div class="login">
             <div class="login__content">
                 <div class="login__img">
-                    <img src="<?php echo base_url('assets/images/img-login.svg'); ?>" alt="Logo">
+                    <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
                 </div>
 
                 <div class="login__forms">
-                    <form action="<?php echo base_url('auth/superadmin_login'); ?>" class="login__registre block" id="login-in">
+                    <form action="<?php echo base_url('auth/superadminlogin'); ?>" class="login__registre block" id="login-in">
                         <h1 class="login__title">Super Admin Sign In</h1>
                         <div class="login__box">
                             <i class='bx bx-user login__icon'></i>
@@ -289,7 +289,7 @@
                             <input type="password" name="password" placeholder="Password" class="login__input" required>
                             <div class="error-message" id="login-password-error"></div>
                         </div>
-                        <a href="#" class="login__forgot" id="forgot-password">Forgot password?</a>
+                        <a href="" class="login__forgot" id="forgot-password">Forgot password?</a>
                         <button type="submit" class="login__button">Sign In</button>
                         <div>
                             <span class="login__account">Don't have an Account ?</span>
