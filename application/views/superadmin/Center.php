@@ -51,7 +51,7 @@
       padding: 1.25rem;
       width: 100%;
       max-width: 18.75rem;
-      border-left: 2px solid #ff4040; /* Added red border on left side */
+      border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
@@ -61,6 +61,11 @@
       flex-direction: column;
       justify-content: space-between;
       height: auto;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .center-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     .card-icon {
       position: absolute;
@@ -96,11 +101,12 @@
       font-weight: bold;
       cursor: pointer;
       width: 100%;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
     .view-btn:hover {
       background-color: #ddd;
-      transform: translateY(-0.125rem);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .add-center-btn {
       background: linear-gradient(90deg, #ff4040, #470000);
@@ -124,64 +130,133 @@
       justify-content: center;
     }
     .modal-content {
-      background-color: #ffffff;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
       border-radius: 15px;
       padding: 30px;
-      max-width: 500px;
+      max-width: 600px;
       margin: auto;
       border: 2px solid #007bff;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      animation: fadeInScale 0.3s ease-in-out;
+    }
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
     }
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 20px;
-      color: #333;
+      margin-bottom: 25px;
+      color: #222;
+      font-size: 1.5rem;
     }
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
     }
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
     .form-group label {
       font-weight: 500;
       font-size: 15px;
-      color: #444;
+      color: #333;
+      margin-bottom: 8px;
+      display: block;
+      transition: color 0.3s ease;
     }
-    .form-control {
-      height: 45px;
-      border-radius: 8px;
+    .form-group label::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 0;
+      background: #ff4040;
+      transition: width 0.3s ease;
+    }
+    .form-group:focus-within label::after {
+      width: 100%;
+    }
+    .form-control, .form-control select {
+      height: 48px;
+      border-radius: 10px;
       font-size: 14px;
       border: 1px solid #ced4da;
-      transition: border-color 0.3s ease;
+      background-color: #f9f9f9;
+      padding: 10px 15px;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
     }
-    .form-control:focus {
+    .form-control:focus, .form-control select:focus {
       border-color: #ff4040;
-      box-shadow: 0 0 5px rgba(255, 64, 64, 0.3);
+      box-shadow: 0 0 8px rgba(255, 64, 64, 0.3);
+      background-color: #fff;
+      transform: translateY(-2px);
     }
-    .submit-btn {
-      background: linear-gradient(to top, #990000, #ff0000);
-      border: none;
-      color: white;
+    .form-control::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+    .form-group select.form-control {
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+    }
+    .submit-btn, .update-btn, .delete-btn {
       border-radius: 10px;
       padding: 12px;
-      width: 150px;
       font-weight: 600;
-      display: block;
-      margin: 25px auto 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 140px;
+      margin: 10px 5px;
+      border: none;
+      color: white;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .submit-btn {
+      background: linear-gradient(90deg, #ff4040, #470000);
     }
     .submit-btn:hover {
+      background: linear-gradient(90deg, #ff3030, #360000);
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    .update-btn {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+    }
+    .update-btn:hover {
+      background: linear-gradient(90deg, #0056b3, #003d82);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    .delete-btn {
+      background: linear-gradient(90deg, #dc3545, #a71d2a);
+    }
+    .delete-btn:hover {
+      background: linear-gradient(90deg, #a71d2a, #7a1a20);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
     .close-btn {
-      padding: 5px 10px;
+      background: linear-gradient(90deg, #6c757d, #5a6268);
+      color: white;
+      padding: 8px 15px;
       font-size: 14px;
-      width: 80px;
+      width: 100px;
+      border-radius: 10px;
+      margin: 10px 5px;
+      transition: all 0.3s ease;
+    }
+    .close-btn:hover {
+      background: linear-gradient(90deg, #5a6268, #4b5156);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
     .invalid-feedback {
       color: #dc3545;
       font-size: 12px;
+      margin-top: 5px;
     }
     .sidebar {
       position: fixed;
@@ -208,6 +283,7 @@
     }
     .blur {
       filter: blur(5px);
+      transition: filter 0.3s ease;
     }
     /* Responsive Design */
     @media (max-width: 576px) {
@@ -234,20 +310,19 @@
       }
       .modal-content {
         max-width: 90%;
-        padding: 15px;
+        padding: 20px;
       }
-      .form-control {
+      .form-control, .form-control select {
         height: 40px;
         font-size: 13px;
       }
-      .submit-btn {
-        width: 120px;
-        padding: 10px;
+      .submit-btn, .update-btn, .delete-btn, .close-btn {
+        width: 100px;
+        padding: 8px;
+        font-size: 13px;
       }
-      .close-btn {
-        width: 60px;
-        font-size: 12px;
-        padding: 3px 8px;
+      .modal-content h3 {
+        font-size: 1.25rem;
       }
     }
     @media (min-width: 577px) and (max-width: 768px) {
@@ -268,12 +343,11 @@
       }
       .modal-content {
         max-width: 90%;
-        padding: 20px;
+        padding: 25px;
       }
-      .close-btn {
-        width: 70px;
+      .submit-btn, .update-btn, .delete-btn, .close-btn {
+        width: 120px;
         font-size: 13px;
-        padding: 4px 10px;
       }
       .navbar {
         left: 0;
@@ -301,7 +375,7 @@
         font-size: 14px;
       }
       .modal-content {
-        max-width: 450px;
+        max-width: 500px;
       }
       .navbar {
         left: 200px;
@@ -322,14 +396,18 @@
         font-size: 15px;
       }
       .modal-content {
-        max-width: 500px;
+        max-width: 600px;
       }
     }
     /* Touch device hover fix */
     @media (hover: none) {
       .view-btn:hover,
       .add-center-btn:hover,
-      .filter-btn:hover {
+      .filter-btn:hover,
+      .submit-btn:hover,
+      .update-btn:hover,
+      .delete-btn:hover,
+      .close-btn:hover {
         background-color: inherit;
         transform: none;
         box-shadow: none;
@@ -362,7 +440,7 @@
                 <p><span>Coach:</span> John Deo</p>
                 <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
               </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
+              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-1" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
@@ -375,7 +453,7 @@
                 <p><span>Coach:</span> John Deo</p>
                 <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
               </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
+              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-2" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
@@ -388,7 +466,7 @@
                 <p><span>Coach:</span> John Deo</p>
                 <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
               </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
+              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-3" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
@@ -401,7 +479,7 @@
                 <p><span>Coach:</span> John Deo</p>
                 <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
               </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
+              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-4" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
             </div>
           </div>
         </div>
@@ -422,40 +500,43 @@
         <form id="centerForm" novalidate>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="centerName">Center Name <span class="text-danger">*</span>:</label>
-              <input type="text" id="centerName" name="centerName" class="form-control" required />
+              <label for="centerName">Center Name <span class="text-danger">*</span></label>
+              <input type="text" id="centerName" name="centerName" class="form-control" placeholder="Enter center name" required />
               <div class="invalid-feedback">Please enter center name.</div>
             </div>
             <div class="form-group col-md-6">
-              <label for="coordinator">Coordinator <span class="text-danger">*</span>:</label>
+              <label for="coordinator">Coordinator <span class="text-danger">*</span></label>
               <select id="coordinator" name="coordinator" class="form-control" required>
-                <option value="">-- Select --</option>
+                <option value="">-- Select Coordinator --</option>
                 <option value="John">John</option>
                 <option value="Smith">Smith</option>
               </select>
               <div class="invalid-feedback">Please select a coordinator.</div>
             </div>
             <div class="form-group col-md-6">
-              <label for="admin">Admin <span class="text-danger">*</span>:</label>
-              <input type="text" id="admin" name="admin" class="form-control" required />
+              <label for="admin">Admin <span class="text-danger">*</span></label>
+              <input type="text" id="admin" name="admin" class="form-control" placeholder="Enter admin name" required />
               <div class="invalid-feedback">Please enter admin name.</div>
             </div>
             <div class="form-group col-md-6">
-              <label for="coach">Coach <span class="text-danger">*</span>:</label>
+              <label for="coach">Coach <span class="text-danger">*</span></label>
               <select id="coach" name="coach" class="form-control" required>
-                <option value="">-- Select --</option>
+                <option value="">-- Select Coach --</option>
                 <option value="Coach A">Coach A</option>
                 <option value="Coach B">Coach B</option>
               </select>
               <div class="invalid-feedback">Please select a coach.</div>
             </div>
             <div class="form-group col-md-12">
-              <label for="address">Address <span class="text-danger">*</span>:</label>
-              <input type="text" id="address" name="address" class="form-control" required />
+              <label for="address">Address <span class="text-danger">*</span></label>
+              <input type="text" id="address" name="address" class="form-control" placeholder="Enter address" required />
               <div class="invalid-feedback">Please enter address.</div>
             </div>
           </div>
-          <button type="submit" class="submit-btn btn btn-primary">Submit</button>
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="submit-btn btn">Submit</button>
+            <button type="button" class="close-btn btn" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -463,17 +544,51 @@
 
   <!-- View Center Modal -->
   <div class="modal fade" id="viewCenterModal" tabindex="-1" aria-labelledby="viewCenterLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <h3 id="viewCenterLabel">Center Details</h3>
-        <div class="card-details">
-          <p>Center Name: <span id="viewCenterName"></span></p>
-          <p>Admin: <span id="viewAdmin"></span></p>
-          <p>Coordinator: <span id="viewCoordinator"></span></p>
-          <p>Coach: <span id="viewCoach"></span></p>
-          <p>Address: <span id="viewAddress"></span></p>
-        </div>
-        <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
+        <form id="viewCenterForm" novalidate>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
+              <input type="text" id="viewCenterName" name="centerName" class="form-control" placeholder="Enter center name" required />
+              <div class="invalid-feedback">Please enter center name.</div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="viewCoordinator">Coordinator <span class="text-danger">*</span></label>
+              <select id="viewCoordinator" name="coordinator" class="form-control" required>
+                <option value="">-- Select Coordinator --</option>
+                <option value="John">John</option>
+                <option value="Smith">Smith</option>
+              </select>
+              <div class="invalid-feedback">Please select a coordinator.</div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="viewAdmin">Admin <span class="text-danger">*</span></label>
+              <input type="text" id="viewAdmin" name="admin" class="form-control" placeholder="Enter admin name" required />
+              <div class="invalid-feedback">Please enter admin name.</div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="viewCoach">Coach <span class="text-danger">*</span></label>
+              <select id="viewCoach" name="coach" class="form-control" required>
+                <option value="">-- Select Coach --</option>
+                <option value="Coach A">Coach A</option>
+                <option value="Coach B">Coach B</option>
+              </select>
+              <div class="invalid-feedback">Please select a coach.</div>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="viewAddress">Address <span class="text-danger">*</span></label>
+              <input type="text" id="viewAddress" name="address" class="form-control" placeholder="Enter address" required />
+              <div class="invalid-feedback">Please enter address.</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="update-btn btn">Update</button>
+            <button type="button" class="delete-btn btn">Delete</button>
+            <button type="button" class="close-btn btn" data-dismiss="modal">Close</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -486,31 +601,34 @@
         <form id="filterForm" novalidate>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="filterCenterName">Center Name:</label>
-              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" />
+              <label for="filterCenterName">Center Name</label>
+              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
             </div>
             <div class="form-group col-md-6">
-              <label for="filterAdmin">Admin:</label>
-              <input type="text" id="filterAdmin" name="filterAdmin" class="form-control" />
+              <label for="filterAdmin">Admin</label>
+              <input type="text" id="filterAdmin" name="filterAdmin" class="form-control" placeholder="Enter admin name" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="filterCoordinator">Coordinator:</label>
-              <input type="text" id="filterCoordinator" name="filterCoordinator" class="form-control" />
+              <label for="filterCoordinator">Coordinator</label>
+              <input type="text" id="filterCoordinator" name="filterCoordinator" class="form-control" placeholder="Enter coordinator name" />
             </div>
             <div class="form-group col-md-6">
-              <label for="filterCoach">Coach:</label>
-              <input type="text" id="filterCoach" name="filterCoach" class="form-control" />
+              <label for="filterCoach">Coach</label>
+              <input type="text" id="filterCoach" name="filterCoach" class="form-control" placeholder="Enter coach name" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-12">
-              <label for="filterAddress">Address:</label>
-              <input type="text" id="filterAddress" name="filterAddress" class="form-control" />
+              <label for="filterAddress">Address</label>
+              <input type="text" id="filterAddress" name="filterAddress" class="form-control" placeholder="Enter address" />
             </div>
           </div>
-          <button type="submit" class="submit-btn btn btn-primary">Apply Filter</button>
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="submit-btn btn">Apply Filter</button>
+            <button type="button" class="close-btn btn" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -520,12 +638,13 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Form Submission, View Modal, and Filter Handling -->
+  <!-- Form Submission, View Modal, Update, Delete, and Filter Handling -->
   <script>
     (function () {
       'use strict';
       const form = document.getElementById('centerForm');
       const filterForm = document.getElementById('filterForm');
+      const viewForm = document.getElementById('viewCenterForm');
       if (!form) {
         console.error('Center form not found!');
         return;
@@ -534,9 +653,13 @@
         console.error('Filter form not found!');
         return;
       }
+      if (!viewForm) {
+        console.error('View form not found!');
+        return;
+      }
 
       // Store initial cards for filtering
-      const initialCards = Array.from(document.querySelectorAll('#centerCards .col-12')).map(card => card.outerHTML);
+      let initialCards = Array.from(document.querySelectorAll('#centerCards .col-12')).map(card => card.outerHTML);
 
       // Form submission for adding centers
       form.addEventListener('submit', function (e) {
@@ -568,7 +691,7 @@
                 <p><span>Coach:</span> ${coach}</p>
                 <p><span>Address:</span> ${address}</p>
               </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-name="${centerName}" data-admin="${admin}" data-coordinator="${coordinator}" data-coach="${coach}" data-address="${address}">View</button>
+              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-${cardCounter}" data-center-name="${centerName}" data-admin="${admin}" data-coordinator="${coordinator}" data-coach="${coach}" data-address="${address}">View</button>
             </div>
           </div>
         `;
@@ -611,11 +734,11 @@
         const filteredCards = initialCards.filter(card => {
           const cardElement = document.createElement('div');
           cardElement.innerHTML = card;
-          const centerName = cardElement.querySelector('p:nth-child(1) span').textContent.toLowerCase();
-          const admin = cardElement.querySelector('p:nth-child(2) span').textContent.toLowerCase();
-          const coordinator = cardElement.querySelector('p:nth-child(3) span').textContent.toLowerCase();
-          const coach = cardElement.querySelector('p:nth-child(4) span').textContent.toLowerCase();
-          const address = cardElement.querySelector('p:nth-child(5) span').textContent.toLowerCase();
+          const centerName = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
+          const admin = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
+          const coordinator = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
+          const coach = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
+          const address = cardElement.querySelector('p:nth-child(5) span').nextSibling.textContent.trim().toLowerCase();
 
           return (!filterCenterName || centerName.includes(filterCenterName)) &&
                  (!filterAdmin || admin.includes(filterAdmin)) &&
@@ -635,6 +758,7 @@
       // Handle view button clicks
       $('#viewCenterModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
+        const centerId = button.data('center-id');
         const centerName = button.data('center-name');
         const admin = button.data('admin');
         const coordinator = button.data('coordinator');
@@ -643,11 +767,76 @@
 
         const modal = $(this);
         modal.find('#viewCenterLabel').text(`Center Details - ${centerName}`);
-        modal.find('#viewCenterName').text(centerName);
-        modal.find('#viewAdmin').text(admin);
-        modal.find('#viewCoordinator').text(coordinator);
-        modal.find('#viewCoach').text(coach);
-        modal.find('#viewAddress').text(address);
+        modal.find('#viewCenterName').val(centerName);
+        modal.find('#viewAdmin').val(admin);
+        modal.find('#viewCoordinator').val(coordinator);
+        modal.find('#viewCoach').val(coach);
+        modal.find('#viewAddress').val(address);
+        modal.find('.update-btn').data('center-id', centerId);
+        modal.find('.delete-btn').data('center-id', centerId);
+      });
+
+      // Handle update form submission
+      viewForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!viewForm.checkValidity()) {
+          viewForm.classList.add('was-validated');
+          return;
+        }
+
+        const centerId = $(viewForm).find('.update-btn').data('center-id');
+        const centerName = document.getElementById('viewCenterName').value.trim();
+        const admin = document.getElementById('viewAdmin').value.trim();
+        const coordinator = document.getElementById('viewCoordinator').value;
+        const coach = document.getElementById('viewCoach').value;
+        const address = document.getElementById('viewAddress').value.trim();
+
+        // Update the card
+        const card = document.getElementById(centerId);
+        if (card) {
+          card.querySelector('p:nth-child(1) span').nextSibling.textContent = ` ${centerName}`;
+          card.querySelector('p:nth-child(2) span').nextSibling.textContent = ` ${admin}`;
+          card.querySelector('p:nth-child(3) span').nextSibling.textContent = ` ${coordinator}`;
+          card.querySelector('p:nth-child(4) span').nextSibling.textContent = ` ${coach}`;
+          card.querySelector('p:nth-child(5) span').nextSibling.textContent = ` ${address}`;
+          card.querySelector('.view-btn').setAttribute('data-center-name', centerName);
+          card.querySelector('.view-btn').setAttribute('data-admin', admin);
+          card.querySelector('.view-btn').setAttribute('data-coordinator', coordinator);
+          card.querySelector('.view-btn').setAttribute('data-coach', coach);
+          card.querySelector('.view-btn').setAttribute('data-address', address);
+
+          // Update initialCards
+          const cardIndex = initialCards.findIndex(c => c.includes(`id="${centerId}"`));
+          if (cardIndex !== -1) {
+            initialCards[cardIndex] = card.parentElement.outerHTML;
+          }
+        }
+
+        // Reset form and close modal
+        viewForm.classList.remove('was-validated');
+        $('#viewCenterModal').modal('hide');
+      });
+
+      // Ensure validation feedback on input for view form
+      viewForm.addEventListener('input', function () {
+        if (viewForm.checkValidity()) {
+          viewForm.classList.remove('was-validated');
+        }
+      });
+
+      // Handle delete button click
+      viewForm.querySelector('.delete-btn').addEventListener('click', function () {
+        const centerId = $(this).data('center-id');
+        const card = document.getElementById(centerId);
+        if (card) {
+          const cardContainer = card.parentElement;
+          cardContainer.remove();
+          // Update initialCards
+          initialCards = initialCards.filter(c => !c.includes(`id="${centerId}"`));
+          $('#viewCenterModal').modal('hide');
+        }
       });
 
       // Sidebar toggle functionality
@@ -678,11 +867,11 @@
       });
 
       // Modal blur effect
-      $('#addCenterModal, #filterModal').on('show.bs.modal', function () {
+      $('#addCenterModal, #filterModal, #viewCenterModal').on('show.bs.modal', function () {
         document.getElementById('mainContent').classList.add('blur');
       });
 
-      $('#addCenterModal, #filterModal').on('hidden.bs.modal', function () {
+      $('#addCenterModal, #filterModal, #viewCenterModal').on('hidden.bs.modal', function () {
         document.getElementById('mainContent').classList.remove('blur');
       });
     })();
