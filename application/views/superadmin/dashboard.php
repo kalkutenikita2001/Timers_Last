@@ -4,16 +4,14 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-       background-color: #e9ecef !important;
+      background-color: #e9ecef !important;
       color: #000;
       font-family: 'Montserrat', serif;
       overflow-x: hidden;
@@ -26,39 +24,54 @@
     .dashboard-wrapper.minimized {
       margin-left: 60px;
     }
-    
+
     /* Additional sidebar states */
     .dashboard-wrapper.sidebar-minimized {
       margin-left: 60px;
     }
-    
+
     .dashboard-wrapper.sidebar-collapsed {
       margin-left: 60px;
     }
+
     .card-stat {
       background: linear-gradient(to right, #ff4040, #470000);
       color: white;
       border-radius: 10px;
-      text-align: center;
+      text-align: left;
       height: 120px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       font-size: 14px;
       cursor: pointer;
       transition: transform 0.2s ease;
+      position: relative;
+      padding: 15px;
     }
+
     .card-stat:hover {
       transform: translateY(-2px);
     }
+
     .card-stat h4 {
-      margin: 0;
+      margin: 10px 0 0;
       font-size: 24px;
       font-weight: 700;
     }
+
     .card-stat span {
       font-size: 13px;
     }
+
+    .card-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      opacity: 0.5;
+    }
+
     .btn-custom {
       font-size: 14px;
       background-color: #D9D9D9;
@@ -72,24 +85,28 @@
       transition: all 0.2s ease;
       min-width: 140px;
     }
+
     .btn-custom:hover {
       background-color: #ff4040;
       color: white;
       transform: translateY(-1px);
     }
+
     .chart-container {
       background: white;
       border-radius: 10px;
-      padding: 37px;
+      padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
     .center-box {
       background: white;
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
     .add-center-btn {
       background: linear-gradient(to right, #ff4040, #470000);
       color: white;
@@ -103,10 +120,12 @@
       transition: all 0.2s ease;
       font-weight: 600;
     }
+
     .add-center-btn:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
     }
+
     .center-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -117,22 +136,26 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .center-btn:hover {
       background: #e9ecef;
       transform: translateX(5px);
     }
+
     .legend-item {
       display: flex;
       align-items: center;
       font-size: 12px;
       margin-top: 8px;
     }
+
     .legend-color {
       width: 12px;
       height: 12px;
       border-radius: 50%;
       margin-right: 8px;
     }
+
     .filter-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -143,10 +166,11 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .filter-btn:hover {
       background: #e9ecef;
     }
-    
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .dashboard-wrapper {
@@ -171,7 +195,7 @@
         padding: 15px;
       }
     }
-    
+
     @media (max-width: 576px) {
       .btn-custom {
         font-size: 11px;
@@ -189,7 +213,7 @@
         font-size: 11px;
       }
     }
-    
+
     @media (min-width: 769px) and (max-width: 1024px) {
       .dashboard-wrapper {
         margin-left: 200px;
@@ -198,18 +222,17 @@
         margin-left: 60px;
       }
     }
-    h6{
+
+    h6 {
       font-weight: 1000 !important;
     }
   </style>
 </head>
 <body>
-
   <!-- Sidebar -->
   <?php $this->load->view('superadmin/Include/Sidebar') ?>
   <!-- Navbar -->
   <?php $this->load->view('superadmin/Include/Navbar') ?>
-
   <!-- Dashboard Content -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
     <div class="container-fluid px-3">
@@ -217,66 +240,53 @@
       <div class="row g-3 mb-4 text-center">
         <div class="col-6 col-md-3">
           <div class="card-stat" onclick="handleStatClick('activeStudents')">
-            <div class="d-flex justify-content-between align-items-center px-2">
-              <div class="text-start">
-                <h4>2450</h4>
-                <span>Active Students</span>
-              </div>
-              <i class="bi bi-person-lines-fill fs-3 opacity-50"></i>
+            <i class="bi bi-person-lines-fill card-icon"></i>
+            <div class="d-flex flex-column">
+              <h4>2450</h4>
+              <span>Active Students</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="card-stat" onclick="handleStatClick('attendanceRate')">
-            <div class="d-flex justify-content-between align-items-center px-2">
-              <div class="text-start">
-                <h4>85%</h4>
-                <span>Attendance Rate</span>
-              </div>
-              <i class="bi bi-person-check-fill fs-3 opacity-50"></i>
+            <i class="bi bi-person-check-fill card-icon"></i>
+            <div class="d-flex flex-column">
+              <h4>85%</h4>
+              <span>Attendance Rate</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="card-stat" onclick="handleStatClick('feeDefaulters')">
-            <div class="d-flex justify-content-between align-items-center px-2">
-              <div class="text-start">
-                <h4>2450</h4>
-                <span>Fee Defaulters</span>
-              </div>
-              <i class="bi bi-currency-rupee fs-3 opacity-50"></i>
+            <i class="bi bi-currency-rupee card-icon"></i>
+            <div class="d-flex flex-column">
+              <h4>2450</h4>
+              <span>Fee Defaulters</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="card-stat" onclick="handleStatClick('monthlyProfits')">
-            <div class="d-flex justify-content-between align-items-center px-2">
-              <div class="text-start">
-                <h4>Rs.42450</h4>
-                <span>Monthly profits</span>
-              </div>
-              <i class="bi bi-bar-chart-line-fill fs-3 opacity-50"></i>
+            <i class="bi bi-bar-chart-line-fill card-icon"></i>
+            <div class="d-flex flex-column">
+              <h4>Rs.42450</h4>
+              <span>Monthly profits</span>
             </div>
           </div>
         </div>
       </div>
-
-  <div class="d-flex justify-content-center gap-3 my-4">
-  <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
-    <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
-      <i class="bi bi-download me-1"></i> Export Excel
-    </button>
-  </div>
-  <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
-    <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
-      <i class="bi bi-download me-1"></i> Export PDF
-    </button>
-  </div>
-</div>
-
-
-
-
+      <div class="d-flex justify-content-center gap-3 my-4">
+        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
+          <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
+            <i class="bi bi-download me-1"></i> Export Excel
+          </button>
+        </div>
+        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
+          <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
+            <i class="bi bi-download me-1"></i> Export PDF
+          </button>
+        </div>
+      </div>
       <!-- Charts & Side Panel -->
       <div class="row">
         <div class="col-lg-9">
@@ -288,14 +298,12 @@
             </div>
             <canvas id="attendanceChart" height="100"></canvas>
           </div>
-
           <!-- Revenue Overview -->
           <div class="chart-container">
             <h6>Revenue Overview</h6>
             <canvas id="revenueChart" height="100"></canvas>
           </div>
         </div>
-
         <!-- Right Sidebar Panels -->
         <div class="col-lg-3">
           <!-- Center List -->
@@ -315,11 +323,10 @@
                 <i class="bi bi-diagram-3-fill me-2"></i> Center 4
               </button>
             </div>
-            <button class="add-center-btn mt-4" onclick="addNewCenter()">
+            <button class="add-center-btn mt-4" data-bs-toggle="modal" data-bs-target="#addCenterModal">
               <i class="bi bi-plus-circle me-2"></i> Add Center
             </button>
           </div>
-
           <!-- Student Distribution -->
           <div class="center-box">
             <h6>Student Distribution</h6>
@@ -335,6 +342,38 @@
     </div>
   </div>
 
+  <!-- Add Center Modal -->
+  <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCenterModalLabel">Add New Center</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addCenterForm">
+            <div class="mb-3">
+              <label for="centerName" class="form-label">Center Name</label>
+              <input type="text" class="form-control" id="centerName" required>
+            </div>
+            <div class="mb-3">
+              <label for="centerLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="centerLocation" required>
+            </div>
+            <div class="mb-3">
+              <label for="centerCapacity" class="form-label">Capacity</label>
+              <input type="number" class="form-control" id="centerCapacity" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitCenterForm()">Save Center</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       initializeCharts();
@@ -342,19 +381,15 @@
     });
 
     function setupSidebarToggle() {
-      // Listen for sidebar toggle events
       const toggleBtn = document.querySelector('.sidebar-toggle');
       const dashboardWrapper = document.getElementById('dashboardWrapper');
-      
-      // Check if elements exist
+
       if (toggleBtn && dashboardWrapper) {
         toggleBtn.addEventListener('click', function() {
-          // Toggle dashboard wrapper class
           dashboardWrapper.classList.toggle('minimized');
         });
       }
-      
-      // Alternative: Listen for custom events if your sidebar uses them
+
       document.addEventListener('sidebarToggle', function(e) {
         const dashboardWrapper = document.getElementById('dashboardWrapper');
         if (dashboardWrapper) {
@@ -365,17 +400,15 @@
           }
         }
       });
-      
-      // Alternative: Monitor sidebar state changes
+
       const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'class') {
             const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
             const dashboardWrapper = document.getElementById('dashboardWrapper');
-            
+
             if (sidebar && dashboardWrapper) {
-              // Check if sidebar has minimized/collapsed class
-              if (sidebar.classList.contains('minimized') || 
+              if (sidebar.classList.contains('minimized') ||
                   sidebar.classList.contains('collapsed') ||
                   sidebar.classList.contains('sidebar-collapse')) {
                 dashboardWrapper.classList.add('minimized');
@@ -386,8 +419,7 @@
           }
         });
       });
-      
-      // Start observing sidebar for class changes
+
       const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
       if (sidebar) {
         observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
@@ -395,7 +427,6 @@
     }
 
     function initializeCharts() {
-      // Weekly Attendance Chart
       const ctx = document.getElementById("attendanceChart").getContext("2d");
       const gradient = ctx.createLinearGradient(0, 0, 0, 200);
       gradient.addColorStop(0, "#D9D9D9");
@@ -438,7 +469,6 @@
         }
       });
 
-      // Revenue Chart
       new Chart(document.getElementById("revenueChart"), {
         type: "line",
         data: {
@@ -448,17 +478,27 @@
             data: [20000, 25000, 30000, 40000, 37000, 42000, 38000, 35000],
             borderColor: "#ff4040",
             tension: 0.3,
-            fill: false
+            fill: false,
+            borderWidth: 2
           }]
         },
         options: {
           responsive: true,
           plugins: { legend: { display: false }},
-          scales: { y: { beginAtZero: true } }
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: "#f0f0f0" },
+              ticks: { font: { size: 12 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 12 } }
+            }
+          }
         }
       });
 
-      // Student Distribution Chart
       new Chart(document.getElementById("studentChart"), {
         type: "doughnut",
         data: {
@@ -488,7 +528,6 @@
       });
     }
 
-    // Click handlers
     function handleStatClick(statType) {
       console.log(`Clicked on ${statType}`);
       alert(`You clicked on ${statType.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
@@ -514,18 +553,29 @@
       alert(`You selected ${centerId}`);
     }
 
-    // Manual toggle function (call this from your sidebar toggle button)
+    function submitCenterForm() {
+      const centerName = document.getElementById('centerName').value;
+      const centerLocation = document.getElementById('centerLocation').value;
+      const centerCapacity = document.getElementById('centerCapacity').value;
+
+      if (centerName && centerLocation && centerCapacity) {
+        alert(`Center "${centerName}" added successfully!`);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addCenterModal'));
+        modal.hide();
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+
     function toggleDashboard() {
       const dashboardWrapper = document.getElementById('dashboardWrapper');
       if (dashboardWrapper) {
         dashboardWrapper.classList.toggle('minimized');
       }
     }
-    
-    // Expose function globally so it can be called from sidebar
+
     window.toggleDashboard = toggleDashboard;
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
