@@ -10,185 +10,251 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
 
   <style>
+  body {
+    background-color: #e9ecef !important;
+    margin: 0;
+  }
+
+  .content-wrapper {
+    margin-left: 250px;
+    padding: 20px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .content-wrapper.minimized {
+    margin-left: 60px;
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-top: 60px;
+    min-width: 700px; /* Ensure table is scrollable on small screens */
+  }
+
+  .table thead th {
+    background-color: #f8f9fa;
+    color: #000;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+    padding: 10px;
+  }
+
+  .table td, .table th {
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px;
+    white-space: nowrap;
+  }
+
+  .action-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin: 0 5px;
+    color: #007bff;
+  }
+
+  .action-btn:hover {
+    color: #0056b3;
+  }
+
+  .new-admission-btn {
+    background: linear-gradient(to right, #ff4040, #470000);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .new-admission-btn:hover {
+    background: linear-gradient(to right, #ff3030, #360000);
+  }
+
+  .filter-btn {
+    background: linear-gradient(to right, #ff4040, #470000);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin: 20px 40px 10px 0; /* Added margin-top */
+    float: right;
+  }
+
+  .filter-btn:hover {
+    background: linear-gradient(to right, #ff3030, #360000);
+  }
+
+  .modal-content {
+    background-color: #f0ebeb;
+    border-radius: 10px;
+    padding: 20px;
+    margin: auto;
+    border: 2px solid #007bff;
+    margin-top: 71px !important;
+  }
+
+  .modal-content h3 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .modal-backdrop.show {
+    backdrop-filter: blur(6px);
+  }
+
+  .form-group label {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .form-control {
+    height: 40px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn, .next-btn {
+    background: linear-gradient(to top, #990000, #ff0000);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    width: 140px;
+    font-weight: bold;
+    display: block;
+    margin: 20px auto 0;
+  }
+
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #d3d3d3;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 10px;
+  }
+
+  .step-nav span {
+    font-weight: bold;
+  }
+
+  .step-active {
+    border-bottom: 2px solid blue;
+  }
+
+  .receipt-card {
+    background-color: #f0ebeb;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  @media (max-width: 576px) {
     body {
-       background-color: #e9ecef !important;
-      margin: 0; /* Remove default margin */
-      
+      padding: 5px;
     }
-
     .content-wrapper {
-      margin-left: 250px; /* Default margin matching sidebar width */
-      padding: 20px;
-      transition: all 0.3s ease-in-out;
+      margin-left: 0 !important;
+      padding: 5px !important;
     }
-
-    .content-wrapper.minimized {
-      margin-left: 60px; /* Margin when sidebar is minimized */
-    }
-
-    .content {
-      margin-left: 0;
-    }
-
     .table-container {
-      overflow-x: auto;
-      margin-top: 60px; /* Adjusted for filter button */
+      margin-top: 80px; /* Adjusted for filter button */
     }
-
-    .table thead th {
-      background-color: #f8f9fa;
-      color: #000;
-      border-bottom: 2px solid #dee2e6;
-      white-space: nowrap;
-      padding: 10px;
+    .table {
+      font-size: 10px;
     }
-
     .table td, .table th {
-      vertical-align: middle;
-      text-align: center;
-      padding: 10px;
-      white-space: nowrap;
+      padding: 6px;
     }
-
-    .action-btn {
-      background: none;
-      border: none;
-      font-size: 16px;
-      margin: 0 5px;
-      color: #007bff;
+    .new-admission-btn, .filter-btn {
+      width: auto;
+      margin: 20px 10px 10px 10px;
+      font-size: 12px;
+      padding: 6px 12px;
     }
-
-    .action-btn:hover {
-      color: #0056b3;
-    }
-
-    .new-admission-btn {
-      background: linear-gradient(to right, #ff4040, #470000);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    .new-admission-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
-    }
-
-    .filter-btn {
-      background: linear-gradient(to right, #ff4040, #470000);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
-      float: right;
-      margin-bottom: 10px;
-      margin-right: 40px;
-    }
-
-    .filter-btn:hover {
-      background: linear-gradient(to right, #ff3030, #360000);
-    }
-
     .modal-content {
-      background-color: #f0ebeb;
-      border-radius: 10px;
-      padding: 20px;
-      margin: auto;
-      border: 2px solid #007bff;
-      margin-top: 71px !important;
+      max-width: 90%;
+      padding: 10px;
     }
-
-    .modal-content h3 {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .modal-backdrop.show {
-      backdrop-filter: blur(6px);
-    }
-
-    .form-group label {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
     .form-control {
-      height: 40px;
-      border-radius: 6px;
+      font-size: 12px;
+      height: 36px;
+    }
+    .step-nav {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
+
+  @media (min-width: 577px) and (max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+    .content-wrapper {
+      margin-left: 0 !important;
+      padding: 10px !important;
+    }
+    .table-container {
+      margin-top: 80px;
+    }
+    .table {
+      font-size: 11px;
+    }
+    .table td, .table th {
+      padding: 8px;
+    }
+    .new-admission-btn, .filter-btn {
+      width: auto;
+      margin: 20px 15px 10px 15px;
+      font-size: 13px;
+    }
+    .modal-content {
+      max-width: 90%;
+      padding: 15px;
+    }
+    .form-control {
+      font-size: 13px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 991px) {
+    .content-wrapper {
+      margin-left: 180px;
+      padding: 15px;
+    }
+    .content-wrapper.minimized {
+      margin-left: 60px;
+    }
+    .table-container {
+      margin-top: 80px;
+    }
+    .new-admission-btn, .filter-btn {
+      font-size: 13px;
+    }
+    .modal-content {
+      max-width: 80%;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .new-admission-btn, .filter-btn {
       font-size: 14px;
     }
-
-    .submit-btn, .next-btn {
-      background: linear-gradient(to top, #990000, #ff0000);
-      border: none;
-      color: white;
-      border-radius: 8px;
-      padding: 10px;
-      width: 140px;
-      font-weight: bold;
-      display: block;
-      margin: 20px auto 0;
+    .modal-content {
+      max-width: 700px;
     }
-
-    .step-nav {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      background-color: #d3d3d3;
-      border-radius: 5px 5px 0 0;
-      margin-bottom: 10px;
-    }
-
-    .step-nav span {
-      font-weight: bold;
-    }
-
-    .step-active {
-      border-bottom: 2px solid blue;
-    }
-
-    .receipt-card {
-      background-color: #f0ebeb;
-      border: 2px solid #007bff;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 10px 0;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      .content-wrapper {
-        margin-left: 0 !important;
-        padding: 10px !important;
-      }
-      .table {
-        font-size: 12px;
-      }
-      .new-admission-btn, .filter-btn {
-        width: 100%;
-        margin-bottom: 10px;
-        position: static;
-      }
-      .modal-content {
-        max-width: 95%;
-      }
-    }
-
-    @media (min-width: 769px) and (max-width: 1024px) {
-      .content-wrapper {
-        margin-left: 200px;
-      }
-      .content-wrapper.minimized {
-        margin-left: 60px;
-      }
-    }
-  </style>
+  }
+</style>
+  
 </head>
 
 <body>
@@ -198,14 +264,15 @@
 <!-- Navbar -->
 <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-<button class="filter-btn" data-toggle="modal" data-target="#filterModal">
-  <i class="bi bi-funnel me-1"></i> Filter
-</button>
+
 
 <!-- Main Content -->
 <div class="content-wrapper" id="contentWrapper">
   <div class="content">
     <div class="container-fluid">
+      <button class="filter-btn" data-toggle="modal" data-target="#filterModal">
+  <i class="bi bi-funnel me-1"></i> Filter
+</button>
       <div class="table-container">
         <table class="table table-bordered table-hover" id="admissionTable">
           <thead>

@@ -32,7 +32,7 @@
         -ms-overflow-style: none; /* IE and Edge */
         transition: width 0.3s ease-in-out;
         height: 100vh;
-        padding-top: 10px;
+        padding-top: 28px;
         font-family: 'Montserrat', serif;
     }
 

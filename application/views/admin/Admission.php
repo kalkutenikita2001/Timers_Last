@@ -90,7 +90,7 @@
     }
 
     .btn-custom {
-      background: linear-gradient(to right, #ff4040, #990000);
+      /* background: linear-gradient(to right, #ff4040, #990000); */
       color: white;
       border: none;
       border-radius: 0.25rem;

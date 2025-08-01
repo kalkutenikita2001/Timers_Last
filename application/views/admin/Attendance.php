@@ -36,30 +36,39 @@
         /* Tab Styles */
         .tab-buttons {
             display: flex;
-            background: #e0e0e0;
-            border-radius: 5px 5px 0 0;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-radius: 12px 12px 0 0;
             overflow: hidden;
             margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .tab-btn {
             flex: 1;
-            padding: 10px;
-            background: #d3d3d3;
+            padding: 12px;
+            background: #e9ecef;
             border: none;
             cursor: pointer;
-            color: #000;
-            font-weight: 600;
+            color: #333;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 15px 5px;
+            transition: all 0.3s ease;
         }
         .tab-btn.active {
-            background: #fff;
+            background: linear-gradient(90deg, #ff4040, #b71c1c);
+            color: #fff;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .tab-btn:hover {
+            background: #d0d0d0;
             color: #000;
         }
         /* Main Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 0.5rem;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             overflow-x: auto;
         }
@@ -69,16 +78,20 @@
             margin-bottom: 10px;
         }
         .filter-btn {
-            background: #e0e0e0;
-            color: #000;
-            border: 1px solid #ccc;
+            background: linear-gradient(90deg, #ff4040, #470000);
+            color: #fff;
+            border: none;
             border-radius: 8px;
-            padding: 5px 10px;
+            padding: 8px 15px;
             font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
         .filter-btn:hover {
-            background: #d0d0d0;
+            background: linear-gradient(90deg, #ff3030, #360000);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
         table {
             width: 100%;
@@ -87,13 +100,14 @@
             background: #fff;
         }
         .table thead th {
-            background-color: #343a40;
-            color: #fff;
+            /* background-color: #2c2f33; */
+            color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 12px 15px;
+            padding: 14px 15px;
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 15px;
         }
         .table td, .table th {
             vertical-align: middle;
@@ -103,7 +117,7 @@
             border-bottom: 1px solid #dee2e6;
         }
         .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgba(255, 64, 64, 0.05);
         }
         .action-cell {
             display: flex;
@@ -114,14 +128,15 @@
         .action-btn {
             background: none;
             border: none;
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin: 0 0.25rem;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
             color: #6c757d;
         }
         .action-btn:hover {
-            transform: scale(1.2);
-            color: #007bff;
+            transform: scale(1.3);
+            color: #ff4040;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         /* Add Button */
         .add-btn-container {
@@ -133,15 +148,17 @@
             background: linear-gradient(90deg, #ff4040, #470000);
             color: white;
             border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
         }
         .add-btn:hover {
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-            transform: translateY(-1px);
+            background: linear-gradient(90deg, #ff3030, #360000);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
         /* Modal Styles */
         .modal {
@@ -156,15 +173,17 @@
             animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
         .modal-content {
             background-color: #fff;
-            border-radius: 0.5rem;
+            border-radius: 10px;
             padding: 1.5rem;
             border: none;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 10% auto;
         }
         .modal-header {
             border-bottom: none;
@@ -174,8 +193,8 @@
             text-align: center;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            color: #343a40;
+            font-size: 1.6rem;
+            color: #2c2f33;
         }
         .close {
             position: absolute;
@@ -194,8 +213,9 @@
             transition: all 0.3s ease;
         }
         .close:hover {
-            color: #000;
-            background: #e0e0e0;
+            color: #ff4040;
+            background: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .modal-body {
             padding: 20px 25px;
@@ -212,7 +232,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
+            color: #2c2f33;
             font-size: 14px;
         }
         .form-group input,
@@ -222,15 +242,16 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
-            background: white;
+            background: #f8f9fa;
             color: #333;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #ff4040;
+            box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
+            background: #fff;
         }
         .form-group textarea {
             resize: vertical;
@@ -251,10 +272,10 @@
             display: block;
         }
         .save-btn {
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            background: linear-gradient(135deg, #ff4040, #b71c1c);
             color: white;
             border: none;
-            padding: 10px 35px;
+            padding: 12px 40px;
             border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
@@ -265,6 +286,7 @@
             transition: all 0.3s ease;
         }
         .save-btn:hover {
+            background: linear-gradient(135deg, #ff3030, #9a0000);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
         }
@@ -275,53 +297,59 @@
             box-shadow: none;
         }
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 576px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 1rem !important;
+                padding: 10px !important;
             }
             .container {
-                margin-top: 60px;
+                margin-top: 80px;
             }
             .table-container {
                 overflow-x: auto;
+                border-radius: 8px;
             }
             table {
-                min-width: 800px;
+                min-width: 700px;
             }
             th, td {
                 padding: 8px 6px;
-                font-size: 12px;
+                font-size: 11px;
             }
             .tab-buttons {
                 flex-direction: column;
+                border-radius: 8px;
             }
             .tab-btn {
                 width: 100%;
+                font-size: 14px;
+                padding: 10px;
+                border-radius: 10px 3px;
+            }
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .add-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+                border-radius: 10px;
             }
             .modal-content {
                 width: 95%;
-                margin: 10% auto;
+                margin: 15% auto;
+                padding: 1rem;
+                border-radius: 8px;
+            }
+            .modal-header h2 {
+                font-size: 1.4rem;
             }
             .modal-body {
-                padding: 15px;
+                padding: 12px;
             }
             .form-row {
                 flex-direction: column;
                 gap: 10px;
-            }
-            .add-btn {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-        }
-        @media (max-width: 480px) {
-            .modal-content {
-                width: 98%;
-                margin: 5% auto;
-            }
-            .modal-body {
-                padding: 12px;
             }
             .form-group label {
                 font-size: 12px;
@@ -330,11 +358,71 @@
             .form-group textarea {
                 padding: 8px 10px;
                 font-size: 12px;
+                border-radius: 6px;
+            }
+            .save-btn {
+                padding: 10px 30px;
+                font-size: 14px;
+                border-radius: 20px;
             }
         }
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media (min-width: 577px) and (max-width: 768px) {
             .content-wrapper {
-                margin-left: 200px;
+                margin-left: 0 !important;
+                padding: 12px !important;
+            }
+            .container {
+                margin-top: 80px;
+            }
+            .table-container {
+                border-radius: 8px;
+            }
+            table {
+                min-width: 750px;
+            }
+            th, td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            .tab-btn {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .filter-btn {
+                padding: 7px 13px;
+                font-size: 13px;
+            }
+            .add-btn {
+                padding: 9px 18px;
+                font-size: 15px;
+            }
+            .modal-content {
+                width: 90%;
+                margin: 12% auto;
+            }
+            .modal-body {
+                padding: 15px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+        @media (min-width: 769px) and (max-width: 991px) {
+            .content-wrapper {
+                margin-left: 180px;
+                padding: 15px;
+            }
+            .container {
+                margin-top: 75px;
+            }
+            .modal-content {
+                max-width: 550px;
+            }
+        }
+        @media (min-width: 992px) {
+            .modal-content {
+                max-width: 600px;
             }
         }
     </style>
