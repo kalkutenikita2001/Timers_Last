@@ -9,6 +9,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
   <style>
     body {
       background-color: #e9ecef !important;
@@ -24,16 +27,13 @@
     .dashboard-wrapper.minimized {
       margin-left: 60px;
     }
-
     /* Additional sidebar states */
     .dashboard-wrapper.sidebar-minimized {
       margin-left: 60px;
     }
-
     .dashboard-wrapper.sidebar-collapsed {
       margin-left: 60px;
     }
-
     .card-stat {
       background: linear-gradient(to right, #ff4040, #470000);
       color: white;
@@ -49,21 +49,17 @@
       position: relative;
       padding: 15px;
     }
-
     .card-stat:hover {
       transform: translateY(-2px);
     }
-
     .card-stat h4 {
       margin: 10px 0 0;
       font-size: 24px;
       font-weight: 700;
     }
-
     .card-stat span {
       font-size: 13px;
     }
-
     .card-icon {
       position: absolute;
       top: 10px;
@@ -71,7 +67,6 @@
       font-size: 24px;
       opacity: 0.5;
     }
-
     .btn-custom {
       font-size: 14px;
       background-color: #D9D9D9;
@@ -85,13 +80,11 @@
       transition: all 0.2s ease;
       min-width: 140px;
     }
-
     .btn-custom:hover {
       background-color: #ff4040;
       color: white;
       transform: translateY(-1px);
     }
-
     .chart-container {
       background: white;
       border-radius: 10px;
@@ -99,14 +92,12 @@
       margin-bottom: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     .center-box {
       background: white;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     .add-center-btn {
       background: linear-gradient(to right, #ff4040, #470000);
       color: white;
@@ -120,12 +111,10 @@
       transition: all 0.2s ease;
       font-weight: 600;
     }
-
     .add-center-btn:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
     }
-
     .center-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -136,26 +125,22 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-
     .center-btn:hover {
       background: #e9ecef;
       transform: translateX(5px);
     }
-
     .legend-item {
       display: flex;
       align-items: center;
       font-size: 12px;
       margin-top: 8px;
     }
-
     .legend-color {
       width: 12px;
       height: 12px;
       border-radius: 50%;
       margin-right: 8px;
     }
-
     .filter-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -166,11 +151,9 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-
     .filter-btn:hover {
       background: #e9ecef;
     }
-
     /* Responsive Design */
     @media (max-width: 768px) {
       .dashboard-wrapper {
@@ -195,7 +178,6 @@
         padding: 15px;
       }
     }
-
     @media (max-width: 576px) {
       .btn-custom {
         font-size: 11px;
@@ -213,7 +195,6 @@
         font-size: 11px;
       }
     }
-
     @media (min-width: 769px) and (max-width: 1024px) {
       .dashboard-wrapper {
         margin-left: 200px;
@@ -222,7 +203,6 @@
         margin-left: 60px;
       }
     }
-
     h6 {
       font-weight: 1000 !important;
     }
@@ -383,7 +363,6 @@
     function setupSidebarToggle() {
       const toggleBtn = document.querySelector('.sidebar-toggle');
       const dashboardWrapper = document.getElementById('dashboardWrapper');
-
       if (toggleBtn && dashboardWrapper) {
         toggleBtn.addEventListener('click', function() {
           dashboardWrapper.classList.toggle('minimized');
@@ -406,7 +385,6 @@
           if (mutation.type === 'class') {
             const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
             const dashboardWrapper = document.getElementById('dashboardWrapper');
-
             if (sidebar && dashboardWrapper) {
               if (sidebar.classList.contains('minimized') ||
                   sidebar.classList.contains('collapsed') ||
@@ -432,7 +410,6 @@
       gradient.addColorStop(0, "#D9D9D9");
       gradient.addColorStop(0.5, "#ff4040");
       gradient.addColorStop(1, "#470000");
-
       new Chart(ctx, {
         type: "bar",
         data: {
@@ -534,13 +511,41 @@
     }
 
     function exportToExcel() {
-      console.log('Exporting to Excel...');
-      alert('Excel export functionality would be implemented here');
+      const data = [
+        ["Name", "Contact", "Center", "Batch", "Level", "Category"],
+        ["Jane Doe", "9876543210", "ABC", "B1", "Intermediate", "Complete"],
+        ["John Smith", "9876543211", "XYZ", "B2", "Advanced", "Pending"],
+        ["Sarah Wilson", "9876543212", "PQR", "B3", "Beginner", "Complete"],
+        ["Emma Brown", "9876543213", "DEF", "B4", "Intermediate", "Pending"],
+        ["Michael Lee", "9876543214", "GHI", "B5", "Advanced", "Complete"]
+      ];
+
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Students Data");
+      XLSX.writeFile(wb, "Students_Data_Export.xlsx");
     }
 
     function exportToPDF() {
-      console.log('Exporting to PDF...');
-      alert('PDF export functionality would be implemented here');
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text("Students Data", 14, 15);
+
+      doc.autoTable({
+        head: [["Name", "Contact", "Center", "Batch", "Level", "Category"]],
+        body: [
+          ["Jane Doe", "9876543210", "ABC", "B1", "Intermediate", "Complete"],
+          ["John Smith", "9876543211", "XYZ", "B2", "Advanced", "Pending"],
+          ["Sarah Wilson", "9876543212", "PQR", "B3", "Beginner", "Complete"],
+          ["Emma Brown", "9876543213", "DEF", "B4", "Intermediate", "Pending"],
+          ["Michael Lee", "9876543214", "GHI", "B5", "Advanced", "Complete"]
+        ],
+        startY: 25
+      });
+
+      doc.save("Students_Data_Export.pdf");
     }
 
     function filterAttendance() {
