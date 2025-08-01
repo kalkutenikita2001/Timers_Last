@@ -194,6 +194,7 @@
       margin: 25px auto 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 199px;
     }
 
     .submit-btn:hover {
