@@ -652,11 +652,15 @@
                 <button onclick="switchOption('own')">Own Expenses</button>
             </div>
 
-            <!-- Add Button and Filter -->
-            <div class="add-btn-container">
-                <button class="btn-filter" onclick="openFilterModal()">Filter</button>
-                <button class="add-btn" onclick="openModal()">Add Expenses</button>
-            </div>
+             <!-- Add Button and Filter -->
+                <div class="add-btn-container">
+                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+                        <i class="fas fa-filter mr-1"></i> Filter
+                    </button>
+                    <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
+                        <i class="fas fa-plus mr-1"></i> Add Revenue
+                    </button>
+                </div>
 
             <!-- Expenses Table -->
             <div class="table-container">
