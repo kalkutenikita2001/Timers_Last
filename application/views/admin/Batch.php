@@ -34,7 +34,7 @@
       padding: 1.25rem;
       width: 100%;
       max-width: 18.75rem;
-      border-left: 2px solid #ff4040; /* Added red border on left side */
+      border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
@@ -137,7 +137,7 @@
       box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
     }
 
-    .modal-content {
+    .modal-content, .view-modal-content {
       background-color: #ffffff;
       border-radius: 0.9375rem;
       padding: 1.875rem;
@@ -146,13 +146,31 @@
       border: 0.125rem solid #007bff;
       box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
       margin-top: 4.5625rem;
+      position: relative;
     }
 
-    .modal-content h3 {
+    .modal-content h3, .view-modal-content h3 {
       text-align: center;
       font-weight: 600;
       margin-bottom: 1.875rem;
       color: #333;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
 
     .modal-backdrop.show {
@@ -203,20 +221,7 @@
     }
 
     .view-modal-content {
-      background-color: #ffffff;
-      border-radius: 0.9375rem;
-      padding: 1.875rem;
       max-width: 31.25rem;
-      margin: auto;
-      border: 0.125rem solid #007bff;
-      box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
-    }
-
-    .view-modal-content h3 {
-      text-align: center;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      color: #333;
     }
 
     .view-modal-content p {
@@ -257,14 +262,10 @@
         padding: 0.375rem 0.75rem;
         font-size: 0.875rem;
       }
-      .modal-content {
+      .modal-content, .view-modal-content {
         max-width: 90%;
         padding: 1.25rem;
         margin-top: 2.5rem;
-      }
-      .view-modal-content {
-        max-width: 90%;
-        padding: 1.25rem;
       }
       .form-control {
         font-size: 0.8125rem;
@@ -313,7 +314,6 @@
       }
     }
 
-    /* Touch device hover fix */
     @media (hover: none) {
       .view-btn:hover,
       .add-center-btn:hover,
@@ -413,6 +413,9 @@
 <div class="modal fade" id="addBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
       <h3 id="addBatchLabel">Add Batch</h3>
       <form id="batchForm" novalidate>
         <div class="form-row">
@@ -482,6 +485,9 @@
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="view-modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
       <h3 id="viewModalLabel">Batch Details</h3>
       <p><strong>Batch:</strong> B1</p>
       <p><strong>Date:</strong> 15/07/2025</p>
@@ -496,6 +502,57 @@
   </div>
 </div>
 
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 id="filterLabel">Filter Batches</h3>
+      <form id="filterForm" novalidate>
+        <div class="form-row">
+          <div class="form-group col-12 col-md-6">
+            <label for="filterBatch">Batch:</label>
+            <input type="text" id="filterBatch" name="filterBatch" class="form-control" />
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="filterDate">Date:</label>
+            <input type="text" id="filterDate" name="filterDate" class="form-control" placeholder="DD/MM/YYYY" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-12 col-md-6">
+            <label for="filterTime">Time:</label>
+            <input type="text" id="filterTime" name="filterTime" class="form-control" placeholder="H to H AM/PM" />
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="filterCategory">Category:</label>
+            <input type="text" id="filterCategory" name="filterCategory" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-12 col-md-6">
+            <label for="filterGroupSize">Group Size:</label>
+            <input type="number" id="filterGroupSize" name="filterGroupSize" class="form-control" />
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="filterCoach">Coach:</label>
+            <input type="text" id="filterCoach" name="filterCoach" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-12 col-md-6">
+            <label for="filterAdmissions">Admissions:</label>
+            <input type="number" id="filterAdmissions" name="filterAdmissions" class="form-control" />
+          </div>
+        </div>
+        <button type="submit" class="submit-btn btn btn-primary">Apply Filter</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Bootstrap + jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -505,10 +562,18 @@
   (function () {
     'use strict';
     const form = document.getElementById('batchForm');
+    const filterForm = document.getElementById('filterForm');
     if (!form) {
       console.error('Batch form not found!');
       return;
     }
+    if (!filterForm) {
+      console.error('Filter form not found!');
+      return;
+    }
+
+    // Store initial cards for filtering
+    const initialCards = Array.from(document.querySelectorAll('.row.justify-content-center .col-12')).map(card => card.outerHTML);
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -564,6 +629,7 @@
       const row = document.querySelector('.row.justify-content-center');
       if (row) {
         row.insertAdjacentHTML('beforeend', newCard);
+        initialCards.push(newCard); // Add to initial cards for filtering
       } else {
         console.error('Row element not found!');
       }
@@ -579,6 +645,49 @@
       if (form.checkValidity()) {
         form.classList.remove('was-validated');
       }
+    });
+
+    // Filter form submission
+    filterForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Get filter values
+      const filterBatch = document.getElementById('filterBatch').value.trim().toLowerCase();
+      const filterDate = document.getElementById('filterDate').value.trim().toLowerCase();
+      const filterTime = document.getElementById('filterTime').value.trim().toLowerCase();
+      const filterCategory = document.getElementById('filterCategory').value.trim().toLowerCase();
+      const filterGroupSize = document.getElementById('filterGroupSize').value.trim();
+      const filterCoach = document.getElementById('filterCoach').value.trim().toLowerCase();
+      const filterAdmissions = document.getElementById('filterAdmissions').value.trim();
+
+      // Filter cards
+      const filteredCards = initialCards.filter(card => {
+        const cardElement = document.createElement('div');
+        cardElement.innerHTML = card;
+        const batch = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
+        const date = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
+        const time = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
+        const category = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
+        const groupSize = cardElement.querySelector('p:nth-child(5) span').nextSibling.textContent.trim();
+        const coach = cardElement.querySelector('p:nth-child(6) span').nextSibling.textContent.trim().toLowerCase();
+        const admissions = cardElement.querySelector('p:nth-child(7) span').nextSibling.textContent.trim();
+
+        return (!filterBatch || batch.includes(filterBatch)) &&
+               (!filterDate || date.includes(filterDate)) &&
+               (!filterTime || time.includes(filterTime)) &&
+               (!filterCategory || category.includes(filterCategory)) &&
+               (!filterGroupSize || groupSize === filterGroupSize) &&
+               (!filterCoach || coach.includes(filterCoach)) &&
+               (!filterAdmissions || admissions === filterAdmissions);
+      });
+
+      // Update card display
+      const row = document.querySelector('.row.justify-content-center');
+      row.innerHTML = filteredCards.length ? filteredCards.join('') : '<p class="text-center">No batches match the filter criteria.</p>';
+
+      // Close modal
+      $('#filterModal').modal('hide');
     });
 
     // Populate View Modal with dummy data based on card clicked
@@ -618,34 +727,43 @@
       modal.find('p:nth-child(9)').text(`Attendance: ${Math.floor(Math.random() * 101)}%`);
       modal.find('p:nth-child(10)').text(`Notes: Session went well, ${Math.floor(Math.random() * 6)} attendees participated actively.`);
     });
+
+    // Sidebar toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const navbar = document.querySelector('.navbar');
+      const contentWrapper = document.getElementById('contentWrapper');
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            // Mobile behavior
+            if (sidebar) {
+              sidebar.classList.toggle('active');
+              navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+            }
+          } else {
+            // Desktop behavior - minimize/maximize
+            if (sidebar && contentWrapper) {
+              const isMinimized = sidebar.classList.toggle('minimized');
+              navbar.classList.toggle('sidebar-minimized', isMinimized);
+              contentWrapper.classList.toggle('minimized', isMinimized);
+            }
+          }
+        });
+      }
+    });
+
+    // Modal blur effect
+    $('#addBatchModal, #viewModal, #filterModal').on('show.bs.modal', function () {
+      document.querySelector('.content').classList.add('blur');
+    });
+
+    $('#addBatchModal, #viewModal, #filterModal').on('hidden.bs.modal', function () {
+      document.querySelector('.content').classList.remove('blur');
+    });
   })();
-
-  // Sidebar toggle functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    const navbar = document.querySelector('.navbar');
-    const contentWrapper = document.getElementById('contentWrapper');
-
-    if (sidebarToggle) {
-      sidebarToggle.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          // Mobile behavior
-          if (sidebar) {
-            sidebar.classList.toggle('active');
-            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-          }
-        } else {
-          // Desktop behavior - minimize/maximize
-          if (sidebar && contentWrapper) {
-            const isMinimized = sidebar.classList.toggle('minimized');
-            navbar.classList.toggle('sidebar-minimized', isMinimized);
-            contentWrapper.classList.toggle('minimized', isMinimized);
-          }
-        }
-      });
-    }
-  });
 </script>
 </body>
 </html>

@@ -51,7 +51,7 @@
       padding: 1.25rem;
       width: 100%;
       max-width: 18.75rem;
-      border-left: 2px solid #ff4040; /* Added red border on left side */
+      border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
@@ -131,12 +131,28 @@
       margin: auto;
       border: 2px solid #007bff;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
       margin-bottom: 20px;
       color: #333;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
@@ -405,6 +421,9 @@
   <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="addEventLabel">Add Event/Notice</h3>
         <form id="eventForm" novalidate>
           <div class="form-row">
@@ -444,6 +463,9 @@
   <div class="modal fade" id="viewEventModal" tabindex="-1" aria-labelledby="viewEventLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="viewEventLabel">Event/Notice Details</h3>
         <div class="card-details">
           <p>Title: <span id="viewTitle"></span></p>
@@ -461,6 +483,9 @@
   <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="filterLabel">Filter Events/Notices</h3>
         <form id="filterForm" novalidate>
           <div class="form-row">
@@ -603,11 +628,11 @@
         const filteredCards = initialCards.filter(card => {
           const cardElement = document.createElement('div');
           cardElement.innerHTML = card;
-          const title = cardElement.querySelector('p:nth-child(1) span').textContent.toLowerCase();
-          const center = cardElement.querySelector('p:nth-child(2) span').textContent.toLowerCase();
-          const date = cardElement.querySelector('p:nth-child(3) span').textContent.toLowerCase();
-          const time = cardElement.querySelector('p:nth-child(4) span').textContent.toLowerCase();
-          const description = cardElement.querySelector('p:nth-child(5) span').textContent.toLowerCase();
+          const title = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
+          const center = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
+          const date = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
+          const time = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
+          const description = cardElement.querySelector('p:nth-child(5) span').nextSibling.textContent.trim().toLowerCase();
 
           return (!filterTitle || title.includes(filterTitle)) &&
                  (!filterCenter || center.includes(filterCenter)) &&
@@ -670,11 +695,11 @@
       });
 
       // Modal blur effect
-      $('#addEventModal, #filterModal').on('show.bs.modal', function () {
+      $('#addEventModal, #filterModal, #viewEventModal').on('show.bs.modal', function () {
         document.getElementById('mainContent').classList.add('blur');
       });
 
-      $('#addEventModal, #filterModal').on('hidden.bs.modal', function () {
+      $('#addEventModal, #filterModal, #viewEventModal').on('hidden.bs.modal', function () {
         document.getElementById('mainContent').classList.remove('blur');
       });
     })();

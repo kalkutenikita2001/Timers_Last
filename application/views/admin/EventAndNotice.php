@@ -59,7 +59,7 @@
       padding: 1.25rem;
       width: 100%;
       max-width: 18.75rem;
-      border-left: 2px solid #ff4040; /* Added red border on left side */
+      border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
@@ -150,6 +150,7 @@
       margin: auto;
       border: 2px solid #007bff;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
 
     .modal-content h3 {
@@ -157,6 +158,23 @@
       font-weight: 600;
       margin-bottom: 20px;
       color: #333;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
 
     .modal-backdrop.show {
@@ -213,7 +231,6 @@
       font-size: 12px;
     }
 
-    /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0;
@@ -317,7 +334,6 @@
       }
     }
 
-    /* Touch device hover fix */
     @media (hover: none) {
       .view-btn:hover,
       .add-center-btn:hover,
@@ -339,7 +355,7 @@
 
 <!-- Main Content -->
 <div class="content-wrapper" id="contentWrapper">
-  <div class="content">
+  <div class="content" id="mainContent">
     <div class="container-fluid">
       <!-- Participate Button -->
       <div class="header-container">
@@ -404,6 +420,9 @@
 <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
       <h3 id="addEventLabel">Add Event/Notice</h3>
       <form id="eventForm" novalidate>
         <div class="form-row">
@@ -450,6 +469,9 @@
 <div class="modal fade" id="viewEventModal" tabindex="-1" aria-labelledby="viewEventLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
       <h3 id="viewEventLabel">Event/Notice Details</h3>
       <div class="card-details">
         <p>Title: <span id="viewTitle"></span></p>
@@ -467,6 +489,9 @@
 <div class="modal fade" id="participateModal" tabindex="-1" aria-labelledby="participateLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
       <h3 id="participateLabel">Participate in Event</h3>
       <form id="participateForm" novalidate>
         <div class="form-row">
@@ -677,6 +702,15 @@
           }
         });
       }
+    });
+
+    // Modal blur effect
+    $('#addEventModal, #viewEventModal, #participateModal').on('show.bs.modal', function () {
+      document.getElementById('mainContent').classList.add('blur');
+    });
+
+    $('#addEventModal, #viewEventModal, #participateModal').on('hidden.bs.modal', function () {
+      document.getElementById('mainContent').classList.remove('blur');
     });
   })();
 </script>

@@ -138,6 +138,7 @@
       border: 2px solid #007bff;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       animation: fadeInScale 0.3s ease-in-out;
+      position: relative; /* Added for positioning close button */
     }
     @keyframes fadeInScale {
       0% { opacity: 0; transform: scale(0.95); }
@@ -149,6 +150,21 @@
       margin-bottom: 25px;
       color: #222;
       font-size: 1.5rem;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
@@ -407,7 +423,8 @@
       .submit-btn:hover,
       .update-btn:hover,
       .delete-btn:hover,
-      .close-btn:hover {
+      .close-btn:hover,
+      .modal-close-btn:hover {
         background-color: inherit;
         transform: none;
         box-shadow: none;
@@ -496,6 +513,9 @@
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="addCenterLabel">Add Center</h3>
         <form id="centerForm" novalidate>
           <div class="form-row">

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,130 +14,162 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
   <style>
     body {
-      background-color: #e9ecef !important;
-      color: #000;
+      background-color: #f4f6f8 !important;
+      color: #1a1a1a;
       font-family: 'Montserrat', serif;
       overflow-x: hidden;
     }
     .dashboard-wrapper {
       margin-left: 250px;
-      padding: 20px;
+      padding: 24px;
       transition: all 0.3s ease-in-out;
+      background-color: #f4f6f8;
     }
     .dashboard-wrapper.minimized {
       margin-left: 60px;
     }
-    /* Additional sidebar states */
-    .dashboard-wrapper.sidebar-minimized {
-      margin-left: 60px;
-    }
+    .dashboard-wrapper.sidebar-minimized,
     .dashboard-wrapper.sidebar-collapsed {
       margin-left: 60px;
     }
     .card-stat {
-      background: linear-gradient(to right, #ff4040, #470000);
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       color: white;
-      border-radius: 10px;
+      border-radius: 12px;
       text-align: left;
-      height: 120px;
+      height: 130px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       font-size: 14px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      padding: 15px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     .card-stat:hover {
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
     }
     .card-stat h4 {
-      margin: 10px 0 0;
-      font-size: 24px;
+      margin: 12px 0 4px;
+      font-size: 26px;
       font-weight: 700;
+      letter-spacing: 0.5px;
     }
     .card-stat span {
-      font-size: 13px;
+      font-size: 14px;
+      opacity: 0.9;
     }
     .card-icon {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 24px;
-      opacity: 0.5;
+      top: 12px;
+      right: 12px;
+      font-size: 26px;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+    .card-stat:hover .card-icon {
+      opacity: 0.8;
     }
     .btn-custom {
       font-size: 14px;
-      background-color: #D9D9D9;
+      background: linear-gradient(90deg, #e0e0e0, #d0d0d0);
       border: none;
       padding: 10px 20px;
       margin-right: 8px;
-      color: black;
+      color: #1a1a1a;
       font-weight: 600;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       min-width: 140px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .btn-custom:hover {
-      background-color: #ff4040;
+      background: linear-gradient(90deg, #ff4040, #e63939);
       color: white;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
+    }
+    .btn-custom:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
     .chart-container {
       background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .chart-container:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
     .center-box {
       background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .center-box:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
     .add-center-btn {
-      background: linear-gradient(to right, #ff4040, #470000);
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       color: white;
       border: none;
       width: 100%;
-      margin-top: 10px;
-      padding: 10px;
+      margin-top: 12px;
+      padding: 12px;
       font-size: 14px;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .add-center-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(255, 64, 64, 0.3);
+    }
+    .add-center-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
     .center-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
       color: #333;
       padding: 10px 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .center-btn:hover {
       background: #e9ecef;
-      transform: translateX(5px);
+      transform: translateX(6px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .center-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
     .legend-item {
       display: flex;
       align-items: center;
-      font-size: 12px;
-      margin-top: 8px;
+      font-size: 13px;
+      margin-top: 10px;
+      color: #333;
     }
     .legend-color {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       margin-right: 8px;
     }
@@ -145,14 +177,104 @@
       background: #f8f9fa;
       border: 1px solid #dee2e6;
       color: #333;
-      padding: 5px 15px;
-      border-radius: 5px;
+      padding: 6px 16px;
+      border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .filter-btn:hover {
       background: #e9ecef;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .filter-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
+    }
+    .modal-content {
+      border-radius: 12px;
+      padding: 24px;
+      border: 2px solid transparent;
+      background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #ff4040, #470000) border-box;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
+    }
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+    .form-control {
+      border-radius: 6px;
+      border: 1px solid #ced4da;
+      font-size: 14px;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: #ff4040;
+      box-shadow: 0 0 6px rgba(255, 64, 64, 0.3);
+      outline: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ff4040, #470000);
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #e63939, #360000);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
+    }
+    .btn-primary:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
+    }
+    .btn-secondary {
+      background: #6c757d;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .btn-secondary:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.2);
+    }
+    h6 {
+      font-weight: 700 !important;
+      color: #1a1a1a;
+      font-size: 1.1rem;
     }
     /* Responsive Design */
     @media (max-width: 768px) {
@@ -161,10 +283,13 @@
         padding: 15px !important;
       }
       .card-stat {
-        height: 100px;
+        height: 110px;
       }
       .card-stat h4 {
-        font-size: 20px;
+        font-size: 22px;
+      }
+      .card-stat span {
+        font-size: 12px;
       }
       .btn-custom {
         font-size: 12px;
@@ -177,6 +302,12 @@
       .center-box {
         padding: 15px;
       }
+      .modal-content {
+        padding: 15px;
+      }
+      .modal-title {
+        font-size: 1.3rem;
+      }
     }
     @media (max-width: 576px) {
       .btn-custom {
@@ -186,13 +317,19 @@
         margin-bottom: 5px;
       }
       .card-stat {
-        height: 90px;
+        height: 100px;
       }
       .card-stat h4 {
         font-size: 18px;
       }
       .card-stat span {
         font-size: 11px;
+      }
+      .modal-content {
+        padding: 12px;
+      }
+      .modal-title {
+        font-size: 1.2rem;
       }
     }
     @media (min-width: 769px) and (max-width: 1024px) {
@@ -203,9 +340,7 @@
         margin-left: 60px;
       }
     }
-    h6 {
-      font-weight: 1000 !important;
-    }
+    
   </style>
 </head>
 <body>
@@ -256,12 +391,12 @@
         </div>
       </div>
       <div class="d-flex justify-content-center gap-3 my-4">
-        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
+        <div class="bg-gray px-3 py-2 rounded shadow-sm d-flex align-items-center">
           <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
             <i class="bi bi-download me-1"></i> Export Excel
           </button>
         </div>
-        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
+        <div class="bg-gray px-3 py-2 rounded shadow-sm d-flex align-items-center">
           <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
             <i class="bi bi-download me-1"></i> Export PDF
           </button>
@@ -326,10 +461,10 @@
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addCenterModalLabel">Add New Center</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+        <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <h5 class="modal-title" id="addCenterModalLabel">Add New Center</h5>
         <div class="modal-body">
           <form id="addCenterForm">
             <div class="mb-3">
@@ -354,10 +489,44 @@
     </div>
   </div>
 
+  <!-- Edit Center Modal -->
+  <div class="modal fade" id="editCenterModal" tabindex="-1" aria-labelledby="editCenterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <h5 class="modal-title" id="editCenterModalLabel">Edit Center</h5>
+        <div class="modal-body">
+          <form id="editCenterForm">
+            <div class="mb-3">
+              <label for="editCenterName" class="form-label">Center Name</label>
+              <input type="text" class="form-control" id="editCenterName" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCenterLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="editCenterLocation" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCenterCapacity" class="form-label">Capacity</label>
+              <input type="number" class="form-control" id="editCenterCapacity" required>
+            </div>
+            <input type="hidden" id="editCenterId">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditCenterForm()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       initializeCharts();
       setupSidebarToggle();
+      setupModalBlur();
     });
 
     function setupSidebarToggle() {
@@ -402,6 +571,21 @@
       if (sidebar) {
         observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
       }
+    }
+
+    function setupModalBlur() {
+      const modals = ['addCenterModal', 'editCenterModal'];
+      modals.forEach(modalId => {
+        const modalEl = document.getElementById(modalId);
+        if (modalEl) {
+          modalEl.addEventListener('show.bs.modal', () => {
+            document.querySelector('.container-fluid').classList.add('blur');
+          });
+          modalEl.addEventListener('hidden.bs.modal', () => {
+            document.querySelector('.container-fluid').classList.remove('blur');
+          });
+        }
+      });
     }
 
     function initializeCharts() {
@@ -554,8 +738,22 @@
     }
 
     function selectCenter(centerId) {
-      console.log(`Selected center: ${centerId}`);
-      alert(`You selected ${centerId}`);
+      // Dummy data for demonstration (replace with actual data retrieval logic)
+      const centerData = {
+        center1: { name: "Center 1", location: "Mumbai", capacity: 100 },
+        center2: { name: "Center 2", location: "Delhi", capacity: 150 },
+        center3: { name: "Center 3", location: "Bangalore", capacity: 120 },
+        center4: { name: "Center 4", location: "Chennai", capacity: 80 }
+      };
+
+      const data = centerData[centerId] || { name: centerId, location: "Unknown", capacity: 100 };
+      document.getElementById('editCenterName').value = data.name;
+      document.getElementById('editCenterLocation').value = data.location;
+      document.getElementById('editCenterCapacity').value = data.capacity;
+      document.getElementById('editCenterId').value = centerId;
+
+      const modal = new bootstrap.Modal(document.getElementById('editCenterModal'));
+      modal.show();
     }
 
     function submitCenterForm() {
@@ -566,6 +764,21 @@
       if (centerName && centerLocation && centerCapacity) {
         alert(`Center "${centerName}" added successfully!`);
         const modal = bootstrap.Modal.getInstance(document.getElementById('addCenterModal'));
+        modal.hide();
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+
+    function submitEditCenterForm() {
+      const centerName = document.getElementById('editCenterName').value;
+      const centerLocation = document.getElementById('editCenterLocation').value;
+      const centerCapacity = document.getElementById('editCenterCapacity').value;
+      const centerId = document.getElementById('editCenterId').value;
+
+      if (centerName && centerLocation && centerCapacity) {
+        alert(`Center "${centerName}" updated successfully!`);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editCenterModal'));
         modal.hide();
       } else {
         alert('Please fill in all fields.');
