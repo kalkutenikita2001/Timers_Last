@@ -131,82 +131,63 @@
     }
     .modal-content {
       background: linear-gradient(135deg, #ffffff, #f8f9fa);
-      border-radius: 15px;
-      padding: 30px;
-      max-width: 600px;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 450px;
       margin: auto;
-      border: 2px solid #007bff;
+      border: 2px solid #ff4040;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      animation: fadeInScale 0.3s ease-in-out;
-      position: relative; /* Added for positioning close button */
-    }
-    @keyframes fadeInScale {
-      0% { opacity: 0; transform: scale(0.95); }
-      100% { opacity: 1; transform: scale(1); }
+      position: relative;
     }
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       color: #222;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
     .modal-close-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
+      top: 15px;
+      right: 15px;
+      background: #e0e0e0;
       border: none;
-      font-size: 1.5rem;
-      color: #333;
+      font-size: 1.25rem;
+      color: #666;
       cursor: pointer;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-    .modal-close-btn:hover {
-      color: #ff4040;
-      transform: scale(1.2);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
     }
     .form-group {
-      position: relative;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     .form-group label {
-      font-weight: 500;
-      font-size: 15px;
+      font-weight: 600;
+      font-size: 14px;
       color: #333;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: block;
-      transition: color 0.3s ease;
-    }
-    .form-group label::after {
-      content: '';
-      display: block;
-      height: 2px;
-      width: 0;
-      background: #ff4040;
-      transition: width 0.3s ease;
-    }
-    .form-group:focus-within label::after {
-      width: 100%;
     }
     .form-control, .form-control select {
-      height: 48px;
-      border-radius: 10px;
+      height: 40px;
+      border-radius: 8px;
       font-size: 14px;
       border: 1px solid #ced4da;
       background-color: #f9f9f9;
-      padding: 10px 15px;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      padding: 8px 12px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .form-control:focus, .form-control select:focus {
       border-color: #ff4040;
-      box-shadow: 0 0 8px rgba(255, 64, 64, 0.3);
+      box-shadow: 0 0 6px rgba(255, 64, 64, 0.3);
       background-color: #fff;
-      transform: translateY(-2px);
     }
     .form-control::placeholder {
       color: #999;
@@ -219,16 +200,16 @@
       background-position: right 10px center;
       background-size: 12px;
     }
-    .submit-btn, .update-btn, .delete-btn {
-      border-radius: 10px;
-      padding: 12px;
+    .submit-btn, .close-btn {
+      border-radius: 8px;
+      padding: 10px;
       font-weight: 600;
       width: 140px;
-      margin: 10px 5px;
+      margin: 8px 5px;
       border: none;
       color: white;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
     .submit-btn {
       background: linear-gradient(90deg, #ff4040, #470000);
@@ -238,34 +219,31 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
+    .close-btn {
+      background: #e0e0e0;
+      color: #333;
+    }
+    .close-btn:hover {
+      background: #d0d0d0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
     .update-btn {
-      background: linear-gradient(90deg, #007bff, #0056b3);
+      /* background:#d0d0d0; */
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     }
     .update-btn:hover {
-      background: linear-gradient(90deg, #0056b3, #003d82);
+      /* background: linear-gradient(90deg, #0056b3, #003d82); */
+
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
     .delete-btn {
-      background: linear-gradient(90deg, #dc3545, #a71d2a);
+      /* background: linear-gradient(90deg, #dc3545, #a71d2a); */
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     }
     .delete-btn:hover {
-      background: linear-gradient(90deg, #a71d2a, #7a1a20);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-    .close-btn {
-      background: linear-gradient(90deg, #6c757d, #5a6268);
-      color: white;
-      padding: 8px 15px;
-      font-size: 14px;
-      width: 100px;
-      border-radius: 10px;
-      margin: 10px 5px;
-      transition: all 0.3s ease;
-    }
-    .close-btn:hover {
-      background: linear-gradient(90deg, #5a6268, #4b5156);
+      /* background: linear-gradient(90deg, #a71d2a, #7a1a20); */
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -325,20 +303,27 @@
         padding: 6px 10px;
       }
       .modal-content {
-        max-width: 90%;
-        padding: 20px;
+        max-width: 95%;
+        padding: 15px;
+      }
+      .form-row {
+        flex-direction: column;
+        gap: 10px;
       }
       .form-control, .form-control select {
-        height: 40px;
+        height: 36px;
         font-size: 13px;
       }
-      .submit-btn, .update-btn, .delete-btn, .close-btn {
-        width: 100px;
+      .form-group label {
+        font-size: 14px;
+      }
+      .submit-btn, .close-btn, .update-btn, .delete-btn {
+        width: 120px;
         padding: 8px;
         font-size: 13px;
       }
       .modal-content h3 {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
       }
     }
     @media (min-width: 577px) and (max-width: 768px) {
@@ -358,10 +343,13 @@
         font-size: 13px;
       }
       .modal-content {
-        max-width: 90%;
-        padding: 25px;
+        max-width: 400px;
+        padding: 18px;
       }
-      .submit-btn, .update-btn, .delete-btn, .close-btn {
+      .form-row {
+        gap: 12px;
+      }
+      .submit-btn, .close-btn, .update-btn, .delete-btn {
         width: 120px;
         font-size: 13px;
       }
@@ -372,6 +360,10 @@
       .navbar.sidebar-minimized {
         left: 0;
         width: 100%;
+      }
+      #filterModal .form-row {
+        flex-direction: column;
+        gap: 10px;
       }
     }
     @media (min-width: 769px) and (max-width: 991px) {
@@ -391,7 +383,7 @@
         font-size: 14px;
       }
       .modal-content {
-        max-width: 500px;
+        max-width: 450px;
       }
       .navbar {
         left: 200px;
@@ -412,7 +404,7 @@
         font-size: 15px;
       }
       .modal-content {
-        max-width: 600px;
+        max-width: 450px;
       }
     }
     /* Touch device hover fix */
@@ -511,7 +503,7 @@
 
   <!-- Add Center Modal -->
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
           <i class="fas fa-times"></i>
@@ -615,31 +607,30 @@
 
   <!-- Filter Modal -->
   <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="filterLabel">Filter Centers</h3>
         <form id="filterForm" novalidate>
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <label for="filterCenterName">Center Name</label>
               <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <label for="filterAdmin">Admin</label>
               <input type="text" id="filterAdmin" name="filterAdmin" class="form-control" placeholder="Enter admin name" />
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <label for="filterCoordinator">Coordinator</label>
               <input type="text" id="filterCoordinator" name="filterCoordinator" class="form-control" placeholder="Enter coordinator name" />
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <label for="filterCoach">Coach</label>
               <input type="text" id="filterCoach" name="filterCoach" class="form-control" placeholder="Enter coach name" />
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-group col-md-12">
               <label for="filterAddress">Address</label>
               <input type="text" id="filterAddress" name="filterAddress" class="form-control" placeholder="Enter address" />

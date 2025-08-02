@@ -108,7 +108,7 @@
 
         .btn-filter {
             background: #ffffff;
-            border: 1px solid #000;
+            border: 1px solid white;
             border-radius: 0.25rem;
             padding: 0.5rem 1rem;
             font-size: clamp(0.8rem, 2vw, 1rem);
@@ -146,8 +146,8 @@
         }
 
         .table thead th {
-            background-color: #343a40;
-            color: #fff;
+            /* background-color: #343a40; */
+            color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
             padding: 1rem;
@@ -653,7 +653,7 @@
             <!-- Centerwise Expenses Table -->
             <div class="table-container" id="centerwiseTableContainer">
                 <table class="table table-bordered table-hover" id="centerwiseTable">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark1">
                         <tr>
                             <th>Title</th>
                             <th>Date</th>
@@ -703,7 +703,7 @@
             <!-- Own Expenses Table -->
             <div class="table-container" id="ownTableContainer" style="display: none;">
                 <table class="table table-bordered table-hover" id="ownTable">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark1">
                         <tr>
                             <th>Title</th>
                             <th>Date</th>

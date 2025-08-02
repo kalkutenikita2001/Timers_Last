@@ -83,8 +83,8 @@
         }
 
         .table thead th {
-            background-color: #343a40;
-            color: #fff;
+            /* background-color: #343a40; */
+            color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
             padding: 1rem;
@@ -398,7 +398,7 @@
                 <!-- Revenue Table -->
                 <div class="table-container">
                     <table class="table table-bordered table-hover" id="expenseTable">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark1">
                             <tr>
                                 <th>Title</th>
                                 <th>Daily Revenue(₹)</th>
