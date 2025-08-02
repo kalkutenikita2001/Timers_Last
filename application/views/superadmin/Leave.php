@@ -42,7 +42,7 @@
             display: flex;
             justify-content: space-around;
             background: #fff;
-            padding: 10px;
+            /* padding: 10px; */
             border-radius: 5px 5px 0 0;
             margin-bottom: 17px;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -83,8 +83,8 @@
             overflow: hidden;
         }
         .table thead th {
-            background-color: #343a40;
-            color: #fff;
+            /* background-color: #343a40; */
+            color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
             padding: 1rem;
@@ -128,8 +128,9 @@
             margin-top: 20px;
         }
         .add-btn {
-            background: linear-gradient(to right, #ff4040, #470000);
-            color: white;
+            /* background: linear-gradient(to right, #ff4040, #470000); */
+            background:white;
+            color: black;
             border: none;
             border-radius: 5px;
             padding: 6px 10px;
@@ -139,7 +140,7 @@
             transition: all 0.3s ease;
         }
         .add-btn:hover {
-            background: linear-gradient(to right, #ff3030, #360000);
+            /* background: linear-gradient(to right, #ff3030, #360000); */
         }
         /* Modal Styles */
         .modal {

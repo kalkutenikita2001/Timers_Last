@@ -108,7 +108,6 @@
 
         .btn-filter {
             background: #ffffff;
-            /* color: #ffffff; */
             border: 1px solid #000;
             border-radius: 0.25rem;
             padding: 0.5rem 1rem;
@@ -129,7 +128,7 @@
 
         /* Table Styles */
         .table-container {
-            overflow-x: auto;
+            /* overflow-x: auto; */
             margin-top: 1.5rem;
             margin-bottom: 1.5rem;
             background: #fff;
@@ -192,24 +191,13 @@
             color: #007bff;
         }
 
+        .action-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .modal-content {
             background: #f5f5f5;
             margin: 8% auto;
@@ -218,12 +206,6 @@
             width: 90%;
             max-width: calc(500px + 2vw);
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
@@ -272,11 +254,13 @@
             gap: 1rem;
             margin-bottom: 1rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .form-group {
             flex: 1;
             min-width: 0;
+            padding: 0 0.5rem;
         }
 
         .form-group label {
@@ -528,6 +512,10 @@
                 font-size: 0.85rem;
             }
 
+            .table th:nth-child(4), .table td:nth-child(4) {
+                display: none;
+            }
+
             .modal-content {
                 width: 90%;
                 margin: 10% auto;
@@ -652,19 +640,19 @@
                 <button onclick="switchOption('own')">Own Expenses</button>
             </div>
 
-             <!-- Add Button and Filter -->
-                <div class="add-btn-container">
-                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
-                        <i class="fas fa-filter mr-1"></i> Filter
-                    </button>
-                    <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
-                        <i class="fas fa-plus mr-1"></i> Add Revenue
-                    </button>
-                </div>
+            <!-- Add Button and Filter -->
+            <div class="add-btn-container">
+                <button class="btn-filter" data-toggle="modal" data-target="#filterModal">
+                    <i class="fas fa-filter mr-1"></i> Filter
+                </button>
+                <button class="add-btn" data-toggle="modal" data-target="#expenseModal">
+                    <i class="fas fa-plus mr-1"></i> Add Expense
+                </button>
+            </div>
 
-            <!-- Expenses Table -->
-            <div class="table-container">
-                <table class="table table-bordered table-hover" id="expenseTable">
+            <!-- Centerwise Expenses Table -->
+            <div class="table-container" id="centerwiseTableContainer">
+                <table class="table table-bordered table-hover" id="centerwiseTable">
                     <thead class="thead-dark">
                         <tr>
                             <th>Title</th>
@@ -674,15 +662,15 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="expenseTableBody">
+                    <tbody id="centerwiseTableBody">
                         <tr>
                             <td>Rent</td>
                             <td>01/07/2025</td>
                             <td>Rs.5674</td>
                             <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
                             <td>
-                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                                <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
                             </td>
                         </tr>
                         <tr class="horizontal-line"><td colspan="5"></td></tr>
@@ -692,8 +680,8 @@
                             <td>Rs.5674</td>
                             <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
                             <td>
-                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                                <button class="action-btn thumbs-up" data-title="Food"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Food"><i class="fas fa-times"></i></button>
                             </td>
                         </tr>
                         <tr class="horizontal-line"><td colspan="5"></td></tr>
@@ -703,8 +691,58 @@
                             <td>Rs.5674</td>
                             <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
                             <td>
-                                <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
+                                <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Own Expenses Table -->
+            <div class="table-container" id="ownTableContainer" style="display: none;">
+                <table class="table table-bordered table-hover" id="ownTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ownTableBody">
+                        <tr>
+                            <td>Groceries</td>
+                            <td>01/07/2025</td>
+                            <td>Rs.2500</td>
+                            <td>Personal</td>
+                            <td>
+                                <button class="action-btn thumbs-up" data-title="Groceries"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Groceries"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <tr>
+                            <td>Utilities</td>
+                            <td>05/07/2025</td>
+                            <td>Rs.1200</td>
+                            <td>Household</td>
+                            <td>
+                                <button class="action-btn thumbs-up" data-title="Utilities"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Utilities"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <tr>
+                            <td>Fuel</td>
+                            <td>10/07/2025</td>
+                            <td>Rs.3000</td>
+                            <td>Travel</td>
+                            <td>
+                                <button class="action-btn thumbs-up" data-title="Fuel"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" data-title="Fuel"><i class="fas fa-times"></i></button>
                             </td>
                         </tr>
                         <tr class="horizontal-line"><td colspan="5"></td></tr>
@@ -715,87 +753,86 @@
     </div>
 
     <!-- Expense Modal -->
-    <div id="expenseModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal()">×</span>
-                <h2 class="modal-title">Add Income / Expenses</h2>
-            </div>
-            <div class="modal-body">
-                <form id="expenseForm" novalidate>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="title">Title <span class="text-danger">*</span></label>
-                            <input type="text" id="title" name="title" required pattern="[A-Za-z\s]+" maxlength="50">
-                            <div class="error">Title is required, letters and spaces only, max 50 characters.</div>
+    <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100" id="expenseLabel">Add Income / Expenses</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="expenseForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="title">Title <span class="text-danger">*</span></label>
+                                <input type="text" id="title" name="title" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50">
+                                <div class="error">Title is required, letters and spaces only, max 50 characters.</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="date">Date <span class="text-danger">*</span></label>
+                                <input type="date" id="date" name="date" class="form-control" required max="<?php echo date('Y-m-d'); ?>">
+                                <div class="error">Date is required and must not be a future date.</div>
+                            </div>
                         </div>
-                        <div class="form-group date-input">
-                            <label for="date">Date <span class="text-danger">*</span></label>
-                            <input type="date" id="date" name="date" required max="<?php echo date('Y-m-d'); ?>">
-                            <div class="error">Date is required and must not be a future date.</div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="amount">Amount (₹) <span class="text-danger">*</span></label>
+                                <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="1" required>
+                                <div class="error">Amount is required and must be greater than 0.</div>
+                            </div>
+                            <div class="form-group col-md-6" id="descriptionField">
+                                <label for="description">Description <span class="text-danger">*</span></label>
+                                <textarea id="description" name="description" class="form-control" required maxlength="200"></textarea>
+                                <div class="error">Description is required, max 200 characters.</div>
+                            </div>
+                            <div class="form-group col-md-6" id="categoryField" style="display: none;">
+                                <label for="category">Category <span class="text-danger">*</span></label>
+                                <input type="text" id="category" name="category" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50">
+                                <div class="error">Category is required, letters and spaces only, max 50 characters.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="amount">Amount (₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="amount" name="amount" step="0.01" min="1" required>
-                            <div class="error">Amount is required and must be greater than 0.</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description <span class="text-danger">*</span></label>
-                            <textarea id="description" name="description" required maxlength="200"></textarea>
-                            <div class="error">Description is required, max 200 characters.</div>
-                        </div>
-                    </div>
-                    <button type="submit" class="save-btn">Save</button>
-                </form>
+                        <button type="submit" class="save-btn">Save</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Filter Modal -->
-    <div id="filterModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeFilterModal()">×</span>
-                <h2 class="modal-title">Filter Expenses</h2>
-            </div>
-            <div class="modal-body">
-                <form id="filterForm" novalidate>
-                    <div class="form-note">Fill at least one field to apply a filter.</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="filterTitle">Title <span class="text-danger">*</span></label>
-                            <input type="text" id="filterTitle" name="filterTitle" pattern="[A-Za-z\s]+" maxlength="50">
-                            <div class="error">Title must contain only letters and spaces, max 50 characters.</div>
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100" id="filterLabel">Filter Expenses</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="filterForm" novalidate>
+                        <div class="form-note">Fill at least one field to apply a filter.</div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="filterTitle">Title</label>
+                                <input type="text" id="filterTitle" name="filterTitle" class="form-control" pattern="[A-Za-z\s]+" maxlength="50">
+                                <div class="error">Title must contain only letters and spaces, max 50 characters.</div>
+                            </div>
+                            <div class="form-group col-md-6" id="filterDescriptionField">
+                                <label for="filterDescription">Description</label>
+                                <input type="text" id="filterDescription" name="filterDescription" class="form-control" maxlength="200">
+                                <div class="error">Description must be 200 characters or less.</div>
+                            </div>
+                            <div class="form-group col-md-6" id="filterCategoryField" style="display: none;">
+                                <label for="filterCategory">Category</label>
+                                <input type="text" id="filterCategory" name="filterCategory" class="form-control" pattern="[A-Za-z\s]+" maxlength="50">
+                                <div class="error">Category must contain only letters and spaces, max 50 characters.</div>
+                            </div>
                         </div>
-                        <div class="form-group date-input">
-                            <label for="startDate">Start Date <span class="text-danger">*</span></label>
-                            <input type="date" id="startDate" name="startDate" max="<?php echo date('Y-m-d'); ?>">
-                            <div class="error">Start Date must not be a future date.</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group date-input">
-                            <label for="endDate">End Date <span class="text-danger">*</span></label>
-                            <input type="date" id="endDate" name="endDate" max="<?php echo date('Y-m-d'); ?>">
-                            <div class="error">End Date must not be before Start Date or a future date.</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="minAmount">Min Amount (₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="minAmount" name="minAmount" min="0" step="0.01">
-                            <div class="error">Min Amount must be 0 or greater.</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="maxAmount">Max Amount (₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="maxAmount" name="maxAmount" min="0" step="0.01">
-                            <div class="error">Max Amount must be 0 or greater and not less than Min Amount.</div>
-                        </div>
-                    </div>
-                    <button type="submit" class="save-btn">Apply Filter</button>
-                </form>
+                        <button type="submit" class="save-btn">Apply Filter</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -805,411 +842,480 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Modal functionality
-        const expenseModal = document.getElementById('expenseModal');
-        const filterModal = document.getElementById('filterModal');
-        const expenseForm = document.getElementById('expenseForm');
-        const filterForm = document.getElementById('filterForm');
-        let editingRow = null;
-        const initialRows = Array.from(document.querySelectorAll('#expenseTableBody tr:not(.horizontal-line)'))
-            .map(row => row.outerHTML);
+        $(document).ready(function() {
+            let editingRow = null;
+            let currentOption = 'centerwise';
+            const centerwiseRows = Array.from(document.querySelectorAll('#centerwiseTableBody tr:not(.horizontal-line)'))
+                .map(row => row.outerHTML);
+            const ownRows = Array.from(document.querySelectorAll('#ownTableBody tr:not(.horizontal-line)'))
+                .map(row => row.outerHTML);
 
-        function openModal() {
-            expenseModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            resetForm();
-        }
-
-        function closeModal() {
-            expenseModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            resetForm();
-            editingRow = null;
-        }
-
-        function openFilterModal() {
-            filterModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            filterForm.reset();
-            filterForm.classList.remove('was-validated');
-            filterForm.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
-        }
-
-        function closeFilterModal() {
-            filterModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            filterForm.reset();
-            filterForm.classList.remove('was-validated');
-            filterForm.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
-        }
-
-        function resetForm() {
-            expenseForm.reset();
-            expenseForm.classList.remove('was-validated');
-            clearValidationErrors();
-        }
-
-        function clearValidationErrors() {
-            const formGroups = document.querySelectorAll('.form-group');
-            formGroups.forEach(group => {
-                group.classList.remove('invalid');
+            // Clear form on modal close
+            $('#expenseModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('expenseForm');
+                form.reset();
+                form.classList.remove('was-validated');
+                clearValidationErrors();
+                editingRow = null;
+                toggleFormFields('centerwise');
             });
-        }
 
-        // Expense Form validation
-        function validateExpenseForm() {
-            const form = expenseForm;
-            let isValid = true;
+            $('#filterModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('filterForm');
+                form.reset();
+                form.classList.remove('was-validated');
+                form.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+                toggleFilterFields('centerwise');
+            });
 
-            clearValidationErrors();
-
-            const title = form.querySelector('#title');
-            const date = form.querySelector('#date');
-            const amount = form.querySelector('#amount');
-            const description = form.querySelector('#description');
-
-            if (!title.value.trim() || !/^[A-Za-z\s]+$/.test(title.value) || title.value.length > 50) {
-                title.closest('.form-group').classList.add('invalid');
-                isValid = false;
+            function clearValidationErrors() {
+                const formGroups = document.querySelectorAll('.form-group');
+                formGroups.forEach(group => {
+                    group.classList.remove('invalid');
+                });
             }
 
-            if (!date.value || new Date(date.value) > new Date('<?php echo date('Y-m-d'); ?>')) {
-                date.closest('.form-group').classList.add('invalid');
-                isValid = false;
+            // Toggle form fields based on option
+            function toggleFormFields(option) {
+                const descriptionField = document.getElementById('descriptionField');
+                const categoryField = document.getElementById('categoryField');
+                if (option === 'own') {
+                    descriptionField.style.display = 'none';
+                    categoryField.style.display = 'block';
+                } else {
+                    descriptionField.style.display = 'block';
+                    categoryField.style.display = 'none';
+                }
             }
 
-            if (!amount.value || isNaN(amount.value) || amount.value <= 0) {
-                amount.closest('.form-group').classList.add('invalid');
-                isValid = false;
+            // Toggle filter fields based on option
+            function toggleFilterFields(option) {
+                const descriptionField = document.getElementById('filterDescriptionField');
+                const categoryField = document.getElementById('filterCategoryField');
+                if (option === 'own') {
+                    descriptionField.style.display = 'none';
+                    categoryField.style.display = 'block';
+                } else {
+                    descriptionField.style.display = 'block';
+                    categoryField.style.display = 'none';
+                }
             }
 
-            if (!description.value.trim() || description.value.length > 200) {
-                description.closest('.form-group').classList.add('invalid');
-                isValid = false;
+            // Expense Form validation
+            function validateExpenseForm() {
+                const form = document.getElementById('expenseForm');
+                let isValid = true;
+
+                clearValidationErrors();
+
+                const title = form.querySelector('#title');
+                const date = form.querySelector('#date');
+                const amount = form.querySelector('#amount');
+                const description = form.querySelector('#description');
+                const category = form.querySelector('#category');
+
+                if (!title.value.trim()) {
+                    title.setCustomValidity('Title is required.');
+                    title.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else if (!/^[A-Za-z\s]+$/.test(title.value)) {
+                    title.setCustomValidity('Title must contain only letters and spaces.');
+                    title.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else if (title.value.length > 50) {
+                    title.setCustomValidity('Title must be 50 characters or less.');
+                    title.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    title.setCustomValidity('');
+                }
+
+                const today = new Date().toISOString().split('T')[0];
+                if (!date.value) {
+                    date.setCustomValidity('Date is required.');
+                    date.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else if (date.value > today) {
+                    date.setCustomValidity('Date must not be a future date.');
+                    date.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    date.setCustomValidity('');
+                }
+
+                if (!amount.value || isNaN(amount.value) || amount.value <= 0) {
+                    amount.setCustomValidity('Amount must be greater than 0.');
+                    amount.closest('.form-group').classList.add('invalid');
+                    isValid = false;
+                } else {
+                    amount.setCustomValidity('');
+                }
+
+                if (currentOption === 'centerwise') {
+                    if (!description.value.trim()) {
+                        description.setCustomValidity('Description is required.');
+                        description.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else if (description.value.length > 200) {
+                        description.setCustomValidity('Description must be 200 characters or less.');
+                        description.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else {
+                        description.setCustomValidity('');
+                    }
+                } else {
+                    if (!category.value.trim()) {
+                        category.setCustomValidity('Category is required.');
+                        category.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else if (!/^[A-Za-z\s]+$/.test(category.value)) {
+                        category.setCustomValidity('Category must contain only letters and spaces.');
+                        category.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else if (category.value.length > 50) {
+                        category.setCustomValidity('Category must be 50 characters or less.');
+                        category.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else {
+                        category.setCustomValidity('');
+                    }
+                }
+
+                return isValid;
             }
 
-            return isValid;
-        }
+            // Filter Form validation
+            function validateFilterForm() {
+                const form = document.getElementById('filterForm');
+                let isValid = true;
+                let atLeastOneFilled = false;
 
-        // Filter Form validation
-        function validateFilterForm() {
-            const form = filterForm;
-            let isValid = true;
-            let atLeastOneFilled = false;
+                clearValidationErrors();
 
-            clearValidationErrors();
+                const filterTitle = form.querySelector('#filterTitle');
+                const filterDescription = form.querySelector('#filterDescription');
+                const filterCategory = form.querySelector('#filterCategory');
 
-            const filterTitle = form.querySelector('#filterTitle');
-            const startDate = form.querySelector('#startDate');
-            const endDate = form.querySelector('#endDate');
-            const minAmount = form.querySelector('#minAmount');
-            const maxAmount = form.querySelector('#maxAmount');
+                if (filterTitle.value.trim()) {
+                    atLeastOneFilled = true;
+                    if (!/^[A-Za-z\s]+$/.test(filterTitle.value)) {
+                        filterTitle.setCustomValidity('Title must contain only letters and spaces.');
+                        filterTitle.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else if (filterTitle.value.length > 50) {
+                        filterTitle.setCustomValidity('Title must be 50 characters or less.');
+                        filterTitle.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else {
+                        filterTitle.setCustomValidity('');
+                    }
+                } else {
+                    filterTitle.setCustomValidity('');
+                }
 
-            if (filterTitle.value.trim()) {
-                if (!/^[A-Za-z\s]+$/.test(filterTitle.value) || filterTitle.value.length > 50) {
-                    filterTitle.setCustomValidity('Invalid title');
+                if (currentOption === 'centerwise' && filterDescription.value.trim()) {
+                    atLeastOneFilled = true;
+                    if (filterDescription.value.length > 200) {
+                        filterDescription.setCustomValidity('Description must be 200 characters or less.');
+                        filterDescription.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else {
+                        filterDescription.setCustomValidity('');
+                    }
+                } else if (currentOption === 'own' && filterCategory.value.trim()) {
+                    atLeastOneFilled = true;
+                    if (!/^[A-Za-z\s]+$/.test(filterCategory.value)) {
+                        filterCategory.setCustomValidity('Category must contain only letters and spaces.');
+                        filterCategory.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else if (filterCategory.value.length > 50) {
+                        filterCategory.setCustomValidity('Category must be 50 characters or less.');
+                        filterCategory.closest('.form-group').classList.add('invalid');
+                        isValid = false;
+                    } else {
+                        filterCategory.setCustomValidity('');
+                    }
+                }
+
+                if (!atLeastOneFilled) {
+                    filterTitle.setCustomValidity('At least one filter field must be filled.');
                     filterTitle.closest('.form-group').classList.add('invalid');
                     isValid = false;
                 } else {
                     filterTitle.setCustomValidity('');
-                    atLeastOneFilled = true;
                 }
-            } else {
-                filterTitle.setCustomValidity('');
+
+                return isValid;
             }
 
-            if (startDate.value) {
-                if (new Date(startDate.value) > new Date('<?php echo date('Y-m-d'); ?>')) {
-                    startDate.setCustomValidity('Start Date must not be a future date.');
-                    startDate.closest('.form-group').classList.add('invalid');
-                    isValid = false;
-                } else {
-                    startDate.setCustomValidity('');
-                    atLeastOneFilled = true;
-                }
-            }
-
-            if (endDate.value) {
-                if (new Date(endDate.value) > new Date('<?php echo date('Y-m-d'); ?>') || 
-                    (startDate.value && new Date(endDate.value) < new Date(startDate.value))) {
-                    endDate.setCustomValidity('End Date must not be before Start Date or a future date.');
-                    endDate.closest('.form-group').classList.add('invalid');
-                    isValid = false;
-                } else {
-                    endDate.setCustomValidity('');
-                    atLeastOneFilled = true;
-                }
-            }
-
-            if (minAmount.value) {
-                if (isNaN(minAmount.value) || minAmount.value < 0) {
-                    minAmount.setCustomValidity('Min Amount must be 0 or greater.');
-                    minAmount.closest('.form-group').classList.add('invalid');
-                    isValid = false;
-                } else {
-                    minAmount.setCustomValidity('');
-                    atLeastOneFilled = true;
-                }
-            }
-
-            if (maxAmount.value) {
-                if (isNaN(maxAmount.value) || maxAmount.value < 0 || 
-                    (minAmount.value && parseFloat(maxAmount.value) < parseFloat(minAmount.value))) {
-                    maxAmount.setCustomValidity('Max Amount must be 0 or greater and not less than Min Amount.');
-                    maxAmount.closest('.form-group').classList.add('invalid');
-                    isValid = false;
-                } else {
-                    maxAmount.setCustomValidity('');
-                    atLeastOneFilled = true;
-                }
-            }
-
-            if (!atLeastOneFilled) {
-                filterTitle.setCustomValidity('At least one filter field must be filled.');
-                filterTitle.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            } else {
-                filterTitle.setCustomValidity('');
-            }
-
-            return isValid;
-        }
-
-        // Real-time validation for Expense Form
-        expenseForm.querySelectorAll('input, textarea').forEach(input => {
-            input.addEventListener('input', () => {
-                if (input.id === 'title' && input.value.trim() && /^[A-Za-z\s]+$/.test(input.value) && input.value.length <= 50) {
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-                if (input.id === 'date' && input.value && new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>')) {
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-                if (input.id === 'amount' && input.value && !isNaN(input.value) && input.value > 0) {
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-                if (input.id === 'description' && input.value.trim() && input.value.length <= 200) {
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-            });
-        });
-
-        // Real-time validation for Filter Form
-        filterForm.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', () => {
-                const startDate = filterForm.querySelector('#startDate');
-                const endDate = filterForm.querySelector('#endDate');
-                const minAmount = filterForm.querySelector('#minAmount');
-                const maxAmount = filterForm.querySelector('#maxAmount');
-
-                if (input.id === 'filterTitle' && (!input.value.trim() || (/^[A-Za-z\s]+$/.test(input.value) && input.value.length <= 50))) {
-                    input.setCustomValidity('');
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-
-                if (input.id === 'startDate' && (!input.value || new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>'))) {
-                    input.setCustomValidity('');
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-
-                if (input.id === 'endDate' && (!input.value || (new Date(input.value) <= new Date('<?php echo date('Y-m-d'); ?>') && 
-                    (!startDate.value || new Date(input.value) >= new Date(startDate.value))))) {
-                    input.setCustomValidity('');
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-
-                if (input.id === 'minAmount' && (!input.value || (!isNaN(input.value) && input.value >= 0))) {
-                    input.setCustomValidity('');
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-
-                if (input.id === 'maxAmount' && (!input.value || (!isNaN(input.value) && input.value >= 0 && 
-                    (!minAmount.value || parseFloat(input.value) >= parseFloat(minAmount.value))))) {
-                    input.setCustomValidity('');
-                    input.closest('.form-group').classList.remove('invalid');
-                }
-            });
-        });
-
-        // Expense Form submission
-        expenseForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateExpenseForm()) {
-                const formData = new FormData(expenseForm);
-                const data = {
-                    title: formData.get('title'),
-                    date: formData.get('date'),
-                    amount: `Rs.${parseFloat(formData.get('amount')).toFixed(0)}`,
-                    description: formData.get('description')
-                };
-
-                const tableBody = document.getElementById('expenseTableBody');
-                if (editingRow) {
-                    updateRow(editingRow, data);
-                    initialRows[Array.from(tableBody.querySelectorAll('tr:not(.horizontal-line)')).indexOf(editingRow)] = editingRow.outerHTML;
-                } else {
-                    addNewRow(data);
-                    initialRows.push(tableBody.querySelector('tr:not(.horizontal-line):last-child').outerHTML);
-                }
-
-                closeModal();
-            }
-            expenseForm.classList.add('was-validated');
-        });
-
-        // Filter Form submission
-        filterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateFilterForm()) {
-                const filterTitle = document.getElementById('filterTitle').value.trim().toLowerCase();
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
-                const minAmount = parseFloat(document.getElementById('minAmount').value) || 0;
-                const maxAmount = parseFloat(document.getElementById('maxAmount').value) || Infinity;
-
-                const tableBody = document.getElementById('expenseTableBody');
-                tableBody.innerHTML = '';
-
-                const filteredRows = initialRows.filter(row => {
-                    const rowElement = document.createElement('div');
-                    rowElement.innerHTML = row;
-                    const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                    const dateText = rowElement.querySelector('td:nth-child(2)').textContent;
-                    const amount = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent.replace('Rs.', ''));
-
-                    // Convert table date format (dd/mm/yyyy) to Date object
-                    const [day, month, year] = dateText.split('/');
-                    const date = new Date(`${year}-${month}-${day}`);
-
-                    return (!filterTitle || title.includes(filterTitle)) &&
-                           (!startDate || date >= new Date(startDate)) &&
-                           (!endDate || date <= new Date(endDate)) &&
-                           (amount >= minAmount && amount <= maxAmount);
-                });
-
-                tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="5"></td></tr>') : 
-                    '<tr><td colspan="5" class="text-center">No records match the filter criteria.</td></tr>';
-
-                closeFilterModal();
-            }
-            filterForm.classList.add('was-validated');
-        });
-
-        // Add new row to table
-        function addNewRow(data) {
-            const tableBody = document.getElementById('expenseTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${data.title}</td>
-                <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                <td>${data.amount}</td>
-                <td>${data.description}</td>
-                <td>
-                    <button class="action-btn thumbs-up" onclick="approveExpense(this)"><i class="fas fa-check"></i></button>
-                    <button class="action-btn cross" onclick="rejectExpense(this)"><i class="fas fa-times"></i></button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-            const separator = document.createElement('tr');
-            separator.className = 'horizontal-line';
-            separator.innerHTML = '<td colspan="5"></td>';
-            tableBody.appendChild(separator);
-        }
-
-        // Update existing row
-        function updateRow(row, data) {
-            const cells = row.querySelectorAll('td');
-            cells[0].textContent = data.title;
-            cells[1].textContent = new Date(data.date).toLocaleDateString('en-GB');
-            cells[2].textContent = data.amount;
-            cells[3].textContent = data.description;
-        }
-
-        // Approve and Reject functionality
-        function approveExpense(button) {
-            const row = button.closest('tr');
-            row.style.backgroundColor = '#d4edda';
-            alert(`Expense approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-        }
-
-        function rejectExpense(button) {
-            const row = button.closest('tr');
-            row.style.backgroundColor = '#f8d7da';
-            alert(`Expense rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-        }
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 576) {
-                        if (sidebar) {
-                            sidebar.classList.toggle('active');
-                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-                        }
+            // Real-time validation for Expense Form
+            $('#expenseForm').find('input, textarea').on('input', function() {
+                const input = this;
+                if (input.id === 'title') {
+                    if (!input.value.trim()) {
+                        input.setCustomValidity('Title is required.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (!/^[A-Za-z\s]+$/.test(input.value)) {
+                        input.setCustomValidity('Title must contain only letters and spaces.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (input.value.length > 50) {
+                        input.setCustomValidity('Title must be 50 characters or less.');
+                        input.closest('.form-group').classList.add('invalid');
                     } else {
-                        if (sidebar && contentWrapper) {
-                            const isMinimized = sidebar.classList.toggle('minimized');
-                            navbar.classList.toggle('sidebar-minimized', isMinimized);
-                            contentWrapper.classList.toggle('minimized', isMinimized);
-                        }
+                        input.setCustomValidity('');
+                        input.closest('.form-group').classList.remove('invalid');
                     }
-                });
+                } else if (input.id === 'date') {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (!input.value) {
+                        input.setCustomValidity('Date is required.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (input.value > today) {
+                        input.setCustomValidity('Date must not be a future date.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else {
+                        input.setCustomValidity('');
+                        input.closest('.form-group').classList.remove('invalid');
+                    }
+                } else if (input.id === 'amount') {
+                    if (!input.value || isNaN(input.value) || input.value <= 0) {
+                        input.setCustomValidity('Amount must be greater than 0.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else {
+                        input.setCustomValidity('');
+                        input.closest('.form-group').classList.remove('invalid');
+                    }
+                } else if (input.id === 'description' && currentOption === 'centerwise') {
+                    if (!input.value.trim()) {
+                        input.setCustomValidity('Description is required.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (input.value.length > 200) {
+                        input.setCustomValidity('Description must be 200 characters or less.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else {
+                        input.setCustomValidity('');
+                        input.closest('.form-group').classList.remove('invalid');
+                    }
+                } else if (input.id === 'category' && currentOption === 'own') {
+                    if (!input.value.trim()) {
+                        input.setCustomValidity('Category is required.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (!/^[A-Za-z\s]+$/.test(input.value)) {
+                        input.setCustomValidity('Category must contain only letters and spaces.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else if (input.value.length > 50) {
+                        input.setCustomValidity('Category must be 50 characters or less.');
+                        input.closest('.form-group').classList.add('invalid');
+                    } else {
+                        input.setCustomValidity('');
+                        input.closest('.form-group').classList.remove('invalid');
+                    }
+                }
+            });
+
+            // Real-time validation for Filter Form
+            $('#filterForm').find('input').on('input', function() {
+                const form = document.getElementById('filterForm');
+                const filterTitle = form.querySelector('#filterTitle');
+                const filterDescription = form.querySelector('#filterDescription');
+                const filterCategory = form.querySelector('#filterCategory');
+
+                if (this.id === 'filterTitle') {
+                    if (!this.value.trim() || (/^[A-Za-z\s]+$/.test(this.value) && this.value.length <= 50)) {
+                        this.setCustomValidity('');
+                        this.closest('.form-group').classList.remove('invalid');
+                    } else {
+                        this.setCustomValidity('Title must contain only letters and spaces.');
+                        this.closest('.form-group').classList.add('invalid');
+                    }
+                } else if (this.id === 'filterDescription' && currentOption === 'centerwise') {
+                    if (!this.value.trim() || this.value.length <= 200) {
+                        this.setCustomValidity('');
+                        this.closest('.form-group').classList.remove('invalid');
+                    } else {
+                        this.setCustomValidity('Description must be 200 characters or less.');
+                        this.closest('.form-group').classList.add('invalid');
+                    }
+                } else if (this.id === 'filterCategory' && currentOption === 'own') {
+                    if (!this.value.trim() || (/^[A-Za-z\s]+$/.test(this.value) && this.value.length <= 50)) {
+                        this.setCustomValidity('');
+                        this.closest('.form-group').classList.remove('invalid');
+                    } else {
+                        this.setCustomValidity('Category must contain only letters and spaces.');
+                        this.closest('.form-group').classList.add('invalid');
+                    }
+                }
+            });
+
+            // Expense Form submission
+            $('#expenseForm').on('submit', function(e) {
+                e.preventDefault();
+                if (validateExpenseForm()) {
+                    const formData = new FormData(this);
+                    const data = {
+                        title: formData.get('title'),
+                        date: formData.get('date'),
+                        amount: `Rs.${parseFloat(formData.get('amount')).toFixed(0)}`,
+                        description: currentOption === 'centerwise' ? formData.get('description') : formData.get('category')
+                    };
+
+                    const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
+                    const rowArray = currentOption === 'centerwise' ? centerwiseRows : ownRows;
+
+                    if (editingRow) {
+                        updateRow(editingRow, data);
+                        rowArray[Array.from(tableBody.querySelectorAll('tr:not(.horizontal-line)')).indexOf(editingRow)] = editingRow.outerHTML;
+                    } else {
+                        addNewRow(data);
+                        rowArray.push(tableBody.querySelector('tr:not(.horizontal-line):last-child').outerHTML);
+                    }
+
+                    $('#expenseModal').modal('hide');
+                }
+                this.classList.add('was-validated');
+            });
+
+            // Filter Form submission
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                if (validateFilterForm()) {
+                    const filterTitle = $('#filterTitle').val().trim().toLowerCase();
+                    const filterDescription = $('#filterDescription').val().trim().toLowerCase();
+                    const filterCategory = $('#filterCategory').val().trim().toLowerCase();
+
+                    const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
+                    const rowArray = currentOption === 'centerwise' ? centerwiseRows : ownRows;
+                    tableBody.innerHTML = '';
+
+                    const filteredRows = rowArray.filter(row => {
+                        const rowElement = document.createElement('div');
+                        rowElement.innerHTML = row;
+                        const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                        const dateText = rowElement.querySelector('td:nth-child(2)').textContent;
+                        const amount = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent.replace('Rs.', ''));
+                        const detail = rowElement.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+                        return (!filterTitle || title.includes(filterTitle)) &&
+                               (currentOption === 'centerwise' ? (!filterDescription || detail.includes(filterDescription)) : (!filterCategory || detail.includes(filterCategory)));
+                    });
+
+                    tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="5"></td></tr>') : 
+                        '<tr><td colspan="5" class="text-center">No records match the filter criteria.</td></tr>';
+
+                    $('#filterModal').modal('hide');
+                }
+                this.classList.add('was-validated');
+            });
+
+            // Add new row to table
+            function addNewRow(data) {
+                const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.title}</td>
+                    <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
+                    <td>${data.amount}</td>
+                    <td>${data.description}</td>
+                    <td>
+                        <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
+                        <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+                const separator = document.createElement('tr');
+                separator.className = 'horizontal-line';
+                separator.innerHTML = '<td colspan="5"></td>';
+                tableBody.appendChild(separator);
             }
+
+            // Update existing row
+            function updateRow(row, data) {
+                const cells = row.querySelectorAll('td');
+                cells[0].textContent = data.title;
+                cells[1].textContent = new Date(data.date).toLocaleDateString('en-GB');
+                cells[2].textContent = data.amount;
+                cells[3].textContent = data.description;
+                cells[4].innerHTML = `
+                    <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
+                    <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
+                `;
+            }
+
+            // Approve and Reject functionality
+            $(document).on('click', '.thumbs-up', function() {
+                const row = $(this).closest('tr');
+                const title = $(this).data('title');
+                if (row.hasClass('approved') || row.hasClass('rejected')) {
+                    alert(`Expense "${title}" has already been processed.`);
+                    return;
+                }
+                row.addClass('approved').css('backgroundColor', '#d4edda');
+                $(this).prop('disabled', true).css('color', '#28a745');
+                row.find('.cross').prop('disabled', true).css('color', '#ccc');
+                alert(`Expense "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            });
+
+            $(document).on('click', '.cross', function() {
+                const row = $(this).closest('tr');
+                const title = $(this).data('title');
+                if (row.hasClass('approved') || row.hasClass('rejected')) {
+                    alert(`Expense "${title}" has already been processed.`);
+                    return;
+                }
+                row.addClass('rejected').css('backgroundColor', '#f8d7da');
+                $(this).prop('disabled', true).css('color', '#dc3545');
+                row.find('.thumbs-up').prop('disabled', true).css('color', '#ccc');
+                alert(`Expense "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            });
+
+            // Option switching functionality
+            window.switchOption = function(option) {
+                currentOption = option;
+                $('.option-buttons button').removeClass('active');
+                $(`.option-buttons button:contains("${option === 'centerwise' ? 'Centerwise Expenses' : 'Own Expenses'}")`).addClass('active');
+
+                document.getElementById('centerwiseTableContainer').style.display = option === 'centerwise' ? 'block' : 'none';
+                document.getElementById('ownTableContainer').style.display = option === 'own' ? 'block' : 'none';
+
+                toggleFormFields(option);
+                toggleFilterFields(option);
+            };
+
+            // Open expense modal with appropriate fields
+            $('.add-btn').on('click', function() {
+                toggleFormFields(currentOption);
+            });
+
+            // Open filter modal with appropriate fields
+            $('.btn-filter').on('click', function() {
+                toggleFilterFields(currentOption);
+            });
+
+            // Sidebar toggle functionality
+            $('#sidebarToggle').on('click', function() {
+                if (window.innerWidth <= 576) {
+                    $('#sidebar').toggleClass('active');
+                    $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+                } else {
+                    const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+                    $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+                    $('#contentWrapper').toggleClass('minimized', isMinimized);
+                }
+            });
 
             // Handle window resize
-            window.addEventListener('resize', () => {
+            $(window).on('resize', function() {
                 if (window.innerWidth <= 576) {
-                    sidebar.classList.remove('minimized');
-                    navbar.classList.remove('sidebar-minimized');
-                    contentWrapper.classList.remove('minimized');
-                }
-            });
-        });
-
-        // Option switching functionality
-        function switchOption(option) {
-            const buttons = document.querySelectorAll('.option-buttons button');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if ((btn.textContent === 'Centerwise Expenses' && option === 'centerwise') || 
-                    (btn.textContent === 'Own Expenses' && option === 'own')) {
-                    btn.classList.add('active');
+                    $('#sidebar').removeClass('minimized');
+                    $('.navbar').removeClass('sidebar-minimized');
+                    $('#contentWrapper').removeClass('minimized');
                 }
             });
 
-            const tableBody = document.getElementById('expenseTableBody');
-            tableBody.innerHTML = '';
-
-            if (option === 'own') {
-                const ownExpenses = [
-                    { title: 'Groceries', date: '2025-07-01', amount: 'Rs.2500', description: 'Weekly shopping', category: 'Personal' },
-                    { title: 'Utilities', date: '2025-07-05', amount: 'Rs.1200', description: 'Electricity bill', category: 'Household' },
-                    { title: 'Fuel', date: '2025-07-10', amount: 'Rs.3000', description: 'Car refill', category: 'Travel' }
-                ];
-                ownExpenses.forEach(data => addNewRow(data));
-            } else {
-                const centerwiseExpenses = [
-                    { title: 'Rent', date: '2025-07-01', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
-                    { title: 'Food', date: '2025-07-15', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' },
-                    { title: 'Rent', date: '2025-07-15', amount: 'Rs.5674', description: 'sdhjkhfv bnmvhfgtdvjhgjjhg' }
-                ];
-                centerwiseExpenses.forEach(data => addNewRow(data));
-            }
-        }
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === expenseModal) {
-                closeModal();
-            }
-            if (event.target === filterModal) {
-                closeFilterModal();
-            }
+            // Clear focus on modal buttons to prevent navbar highlight
+            $('.add-btn, .btn-filter').on('click', function() {
+                $(this).blur();
+            });
         });
     </script>
 </body>

@@ -126,6 +126,12 @@
             color: #007bff;
         }
 
+        .action-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Button Styles */
         .btn-custom {
             background:#6c757d;
@@ -219,6 +225,20 @@
             text-align: center;
         }
 
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -5px;
+            margin-left: -5px;
+            align-items: center;
+        }
+
+        .form-group {
+            padding-right: 5px;
+            padding-left: 5px;
+            margin-bottom: 1rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 576px) {
             .content-wrapper {
@@ -237,7 +257,7 @@
 
             .modal-content {
                 padding: 1rem;
-                max-width: 95%;
+                /* max-width: 95%; */
             }
 
             .form-row {
@@ -458,12 +478,12 @@
                     </button>
                 </div>
                 <form id="expenseForm" novalidate>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="title">Title <span class="text-danger">*</span></label>
                             <input type="text" id="title" name="title" class="form-control" required
                                    pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
-                            <div class="invalid-feedback">Title is required, max 50 characters (letters and spaces only).</div>
+                            <div class="invalid-feedback">Title is required, letters and spaces only, max 50 characters.</div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="date">Date <span class="text-danger">*</span></label>
@@ -472,7 +492,7 @@
                             <div class="invalid-feedback">Date is required and must not be a future date.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="dailyRevenue">Daily Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="dailyRevenue" name="dailyRevenue" class="form-control" required
@@ -486,7 +506,7 @@
                             <div class="invalid-feedback">Weekly Revenue is required and must be greater than 0.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="monthlyRevenue">Monthly Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="monthlyRevenue" name="monthlyRevenue" class="form-control" required
@@ -500,7 +520,7 @@
                             <div class="invalid-feedback">Yearly Revenue is required and must be greater than 0.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-12">
                             <label for="notes">Notes</label>
                             <textarea id="notes" name="notes" class="form-control" rows="3" maxlength="200"></textarea>
@@ -544,7 +564,7 @@
         </div>
     </div>
 
-    <!-- Filter Modal -->
+    <!-- Filter Revenue Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -556,82 +576,82 @@
                 </div>
                 <form id="filterForm" novalidate>
                     <div class="form-note">Fill at least one field to apply a filter.</div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="filterTitle">Title <span class="text-danger">*</span></label>
+                            <label for="filterTitle">Title</label>
                             <input type="text" id="filterTitle" name="filterTitle" class="form-control"
                                    pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
                             <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="startDate">Start Date <span class="text-danger">*</span></label>
-                            <input type="date" id="startDate" name="startDate" class="form-control" required
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control"
                                    max="<?php echo date('Y-m-d'); ?>">
-                            <div class="invalid-feedback">Start Date is required and must not be a future date.</div>
+                            <div class="invalid-feedback">Start Date must not be a future date.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="endDate">End Date <span class="text-danger">*</span></label>
-                            <input type="date" id="endDate" name="endDate" class="form-control" required
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control"
                                    max="<?php echo date('Y-m-d'); ?>">
-                            <div class="invalid-feedback">End Date is required and must not be before Start Date or a future date.</div>
+                            <div class="invalid-feedback">End Date must not be before Start Date or a future date.</div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="minDailyRevenue">Min Daily Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="minDailyRevenue" name="minDailyRevenue" class="form-control" required
+                            <label for="minDailyRevenue">Min Daily Revenue(₹)</label>
+                            <input type="number" id="minDailyRevenue" name="minDailyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Daily Revenue must be 0 or greater">
-                            <div class="invalid-feedback">Min Daily Revenue is required and must be 0 or greater.</div>
+                            <div class="invalid-feedback">Min Daily Revenue must be 0 or greater.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="maxDailyRevenue">Max Daily Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="maxDailyRevenue" name="maxDailyRevenue" class="form-control" required
-                                   min="0" step="0.01" title="Max Daily Revenue must be 0 or greater and not less than Min Daily Revenue">
-                            <div class="invalid-feedback">Max Daily Revenue is required and must be 0 or greater and not less than Min Daily Revenue.</div>
+                            <label for="maxDailyRevenue">Max Daily Revenue(₹)</label>
+                            <input type="number" id="maxDailyRevenue" name="maxDailyRevenue" class="form-control"
+                                   min="0" step="0.01" title="Max Daily Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Max Daily Revenue must be 0 or greater and not less than Min Daily Revenue.</div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="minWeeklyRevenue">Min Weekly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="minWeeklyRevenue" name="minWeeklyRevenue" class="form-control" required
+                            <label for="minWeeklyRevenue">Min Weekly Revenue(₹)</label>
+                            <input type="number" id="minWeeklyRevenue" name="minWeeklyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Weekly Revenue must be 0 or greater">
-                            <div class="invalid-feedback">Min Weekly Revenue is required and must be 0 or greater.</div>
+                            <div class="invalid-feedback">Min Weekly Revenue must be 0 or greater.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="maxWeeklyRevenue">Max Weekly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="maxWeeklyRevenue" name="maxWeeklyRevenue" class="form-control" required
-                                   min="0" step="0.01" title="Max Weekly Revenue must be 0 or greater and not less than Min Weekly Revenue">
-                            <div class="invalid-feedback">Max Weekly Revenue is required and must be 0 or greater and not less than Min Weekly Revenue.</div>
+                            <label for="maxWeeklyRevenue">Max Weekly Revenue(₹)</label>
+                            <input type="number" id="maxWeeklyRevenue" name="maxWeeklyRevenue" class="form-control"
+                                   min="0" step="0.01" title="Max Weekly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Max Weekly Revenue must be 0 or greater and not less than Min Weekly Revenue.</div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="minMonthlyRevenue">Min Monthly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="minMonthlyRevenue" name="minMonthlyRevenue" class="form-control" required
+                            <label for="minMonthlyRevenue">Min Monthly Revenue(₹)</label>
+                            <input type="number" id="minMonthlyRevenue" name="minMonthlyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Monthly Revenue must be 0 or greater">
-                            <div class="invalid-feedback">Min Monthly Revenue is required and must be 0 or greater.</div>
+                            <div class="invalid-feedback">Min Monthly Revenue must be 0 or greater.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="maxMonthlyRevenue">Max Monthly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="maxMonthlyRevenue" name="maxMonthlyRevenue" class="form-control" required
-                                   min="0" step="0.01" title="Max Monthly Revenue must be 0 or greater and not less than Min Monthly Revenue">
-                            <div class="invalid-feedback">Max Monthly Revenue is required and must be 0 or greater and not less than Min Monthly Revenue.</div>
+                            <label for="maxMonthlyRevenue">Max Monthly Revenue(₹)</label>
+                            <input type="number" id="maxMonthlyRevenue" name="maxMonthlyRevenue" class="form-control"
+                                   min="0" step="0.01" title="Max Monthly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Max Monthly Revenue must be 0 or greater and not less than Min Monthly Revenue.</div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="minYearlyRevenue">Min Yearly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="minYearlyRevenue" name="minYearlyRevenue" class="form-control" required
+                            <label for="minYearlyRevenue">Min Yearly Revenue(₹)</label>
+                            <input type="number" id="minYearlyRevenue" name="minYearlyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Yearly Revenue must be 0 or greater">
-                            <div class="invalid-feedback">Min Yearly Revenue is required and must be 0 or greater.</div>
+                            <div class="invalid-feedback">Min Yearly Revenue must be 0 or greater.</div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
-                            <label for="maxYearlyRevenue">Max Yearly Revenue(₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="maxYearlyRevenue" name="maxYearlyRevenue" class="form-control" required
-                                   min="0" step="0.01" title="Max Yearly Revenue must be 0 or greater and not less than Min Yearly Revenue">
-                            <div class="invalid-feedback">Max Yearly Revenue is required and must be 0 or greater and not less than Min Yearly Revenue.</div>
+                            <label for="maxYearlyRevenue">Max Yearly Revenue(₹)</label>
+                            <input type="number" id="maxYearlyRevenue" name="maxYearlyRevenue" class="form-control"
+                                   min="0" step="0.01" title="Max Yearly Revenue must be 0 or greater">
+                            <div class="invalid-feedback">Max Yearly Revenue must be 0 or greater and not less than Min Yearly Revenue.</div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -657,8 +677,74 @@
             function validateForm(formId) {
                 const form = document.getElementById(formId);
                 form.addEventListener('submit', function(event) {
-                    let isValid = form.checkValidity();
+                    let isValid = true;
                     let atLeastOneFilled = false;
+
+                    // Custom validation for expenseForm
+                    if (formId === 'expenseForm') {
+                        const titleInput = form.querySelector('#title');
+                        const dateInput = form.querySelector('#date');
+                        const dailyRevenueInput = form.querySelector('#dailyRevenue');
+                        const weeklyRevenueInput = form.querySelector('#weeklyRevenue');
+                        const monthlyRevenueInput = form.querySelector('#monthlyRevenue');
+                        const yearlyRevenueInput = form.querySelector('#yearlyRevenue');
+                        const notesInput = form.querySelector('#notes');
+
+                        // Title validation
+                        if (!titleInput.value.trim()) {
+                            titleInput.setCustomValidity('Title is required.');
+                            isValid = false;
+                        } else if (!/^[A-Za-z\s]+$/.test(titleInput.value)) {
+                            titleInput.setCustomValidity('Title must contain only letters and spaces.');
+                            isValid = false;
+                        } else if (titleInput.value.length > 50) {
+                            titleInput.setCustomValidity('Title must be 50 characters or less.');
+                            isValid = false;
+                        } else {
+                            titleInput.setCustomValidity('');
+                        }
+
+                        // Date validation
+                        const today = new Date().toISOString().split('T')[0];
+                        if (!dateInput.value) {
+                            dateInput.setCustomValidity('Date is required.');
+                            isValid = false;
+                        } else if (dateInput.value > today) {
+                            dateInput.setCustomValidity('Date must not be a future date.');
+                            isValid = false;
+                        } else {
+                            dateInput.setCustomValidity('');
+                        }
+
+                        // Revenue validation
+                        const revenueFields = [
+                            { input: dailyRevenueInput, name: 'Daily Revenue' },
+                            { input: weeklyRevenueInput, name: 'Weekly Revenue' },
+                            { input: monthlyRevenueInput, name: 'Monthly Revenue' },
+                            { input: yearlyRevenueInput, name: 'Yearly Revenue' }
+                        ];
+
+                        revenueFields.forEach(field => {
+                            const value = parseFloat(field.input.value);
+                            if (!field.input.value || isNaN(value)) {
+                                field.input.setCustomValidity(`${field.name} is required.`);
+                                isValid = false;
+                            } else if (value <= 0) {
+                                field.input.setCustomValidity(`${field.name} must be greater than 0.`);
+                                isValid = false;
+                            } else {
+                                field.input.setCustomValidity('');
+                            }
+                        });
+
+                        // Notes validation
+                        if (notesInput.value.length > 200) {
+                            notesInput.setCustomValidity('Notes must be less than 200 characters.');
+                            isValid = false;
+                        } else {
+                            notesInput.setCustomValidity('');
+                        }
+                    }
 
                     // Custom validation for filterForm
                     if (formId === 'filterForm') {
@@ -669,22 +755,44 @@
                             }
                         });
 
-                        // Date range validation
-                        const startDate = form.querySelector('#startDate').value;
-                        const endDate = form.querySelector('#endDate').value;
-                        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
-                            form.querySelector('#endDate').setCustomValidity('End Date must not be before Start Date.');
+                        // Title validation
+                        const titleInput = form.querySelector('#filterTitle');
+                        if (titleInput.value && !/^[A-Za-z\s]+$/.test(titleInput.value)) {
+                            titleInput.setCustomValidity('Title must contain only letters and spaces.');
+                            isValid = false;
+                        } else if (titleInput.value.length > 50) {
+                            titleInput.setCustomValidity('Title must be 50 characters or less.');
                             isValid = false;
                         } else {
-                            form.querySelector('#endDate').setCustomValidity('');
+                            titleInput.setCustomValidity('');
+                        }
+
+                        // Date validation
+                        const startDateInput = form.querySelector('#startDate');
+                        const endDateInput = form.querySelector('#endDate');
+                        const today = new Date().toISOString().split('T')[0];
+                        if (startDateInput.value && startDateInput.value > today) {
+                            startDateInput.setCustomValidity('Start Date must not be a future date.');
+                            isValid = false;
+                        } else {
+                            startDateInput.setCustomValidity('');
+                        }
+                        if (endDateInput.value && endDateInput.value > today) {
+                            endDateInput.setCustomValidity('End Date must not be a future date.');
+                            isValid = false;
+                        } else if (startDateInput.value && endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
+                            endDateInput.setCustomValidity('End Date must not be before Start Date.');
+                            isValid = false;
+                        } else {
+                            endDateInput.setCustomValidity('');
                         }
 
                         // Revenue range validation
                         const revenueFields = [
-                            { min: 'minDailyRevenue', max: 'maxDailyRevenue' },
-                            { min: 'minWeeklyRevenue', max: 'maxWeeklyRevenue' },
-                            { min: 'minMonthlyRevenue', max: 'maxMonthlyRevenue' },
-                            { min: 'minYearlyRevenue', max: 'maxYearlyRevenue' }
+                            { min: 'minDailyRevenue', max: 'maxDailyRevenue', name: 'Daily Revenue' },
+                            { min: 'minWeeklyRevenue', max: 'maxWeeklyRevenue', name: 'Weekly Revenue' },
+                            { min: 'minMonthlyRevenue', max: 'maxMonthlyRevenue', name: 'Monthly Revenue' },
+                            { min: 'minYearlyRevenue', max: 'maxYearlyRevenue', name: 'Yearly Revenue' }
                         ];
 
                         revenueFields.forEach(field => {
@@ -692,8 +800,17 @@
                             const maxInput = form.querySelector(`#${field.max}`);
                             const minValue = parseFloat(minInput.value) || 0;
                             const maxValue = parseFloat(maxInput.value) || 0;
-                            if (minInput.value && maxInput.value && maxValue < minValue) {
-                                maxInput.setCustomValidity(`${field.max.replace(/([A-Z])/g, ' $1')} must not be less than ${field.min.replace(/([A-Z])/g, ' $1')}.`);
+                            if (minInput.value && minValue < 0) {
+                                minInput.setCustomValidity(`${field.name} must be 0 or greater.`);
+                                isValid = false;
+                            } else {
+                                minInput.setCustomValidity('');
+                            }
+                            if (maxInput.value && maxValue < 0) {
+                                maxInput.setCustomValidity(`${field.name} must be 0 or greater.`);
+                                isValid = false;
+                            } else if (minInput.value && maxInput.value && maxValue < minValue) {
+                                maxInput.setCustomValidity(`Max ${field.name} must not be less than Min ${field.name}.`);
                                 isValid = false;
                             } else {
                                 maxInput.setCustomValidity('');
@@ -715,7 +832,50 @@
                     form.classList.add('was-validated');
                 }, false);
 
-                // Real-time validation for date and revenue fields
+                // Real-time validation
+                if (formId === 'expenseForm') {
+                    const inputs = form.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            if (input.id === 'title') {
+                                if (!input.value.trim()) {
+                                    input.setCustomValidity('Title is required.');
+                                } else if (!/^[A-Za-z\s]+$/.test(input.value)) {
+                                    input.setCustomValidity('Title must contain only letters and spaces.');
+                                } else if (input.value.length > 50) {
+                                    input.setCustomValidity('Title must be 50 characters or less.');
+                                } else {
+                                    input.setCustomValidity('');
+                                }
+                            } else if (input.id === 'date') {
+                                const today = new Date().toISOString().split('T')[0];
+                                if (!input.value) {
+                                    input.setCustomValidity('Date is required.');
+                                } else if (input.value > today) {
+                                    input.setCustomValidity('Date must not be a future date.');
+                                } else {
+                                    input.setCustomValidity('');
+                                }
+                            } else if (['dailyRevenue', 'weeklyRevenue', 'monthlyRevenue', 'yearlyRevenue'].includes(input.id)) {
+                                const value = parseFloat(input.value);
+                                if (!input.value || isNaN(value)) {
+                                    input.setCustomValidity(`${input.id.replace(/([A-Z])/g, ' $1')} is required.`);
+                                } else if (value <= 0) {
+                                    input.setCustomValidity(`${input.id.replace(/([A-Z])/g, ' $1')} must be greater than 0.`);
+                                } else {
+                                    input.setCustomValidity('');
+                                }
+                            } else if (input.id === 'notes') {
+                                if (input.value.length > 200) {
+                                    input.setCustomValidity('Notes must be less than 200 characters.');
+                                } else {
+                                    input.setCustomValidity('');
+                                }
+                            }
+                        });
+                    });
+                }
+
                 if (formId === 'filterForm') {
                     const startDateInput = form.querySelector('#startDate');
                     const endDateInput = form.querySelector('#endDate');
@@ -725,6 +885,17 @@
                         'minMonthlyRevenue', 'maxMonthlyRevenue',
                         'minYearlyRevenue', 'maxYearlyRevenue'
                     ];
+                    const titleInput = form.querySelector('#filterTitle');
+
+                    titleInput.addEventListener('input', () => {
+                        if (titleInput.value && !/^[A-Za-z\s]+$/.test(titleInput.value)) {
+                            titleInput.setCustomValidity('Title must contain only letters and spaces.');
+                        } else if (titleInput.value.length > 50) {
+                            titleInput.setCustomValidity('Title must be 50 characters or less.');
+                        } else {
+                            titleInput.setCustomValidity('');
+                        }
+                    });
 
                     startDateInput.addEventListener('input', validateDates);
                     endDateInput.addEventListener('input', validateDates);
@@ -734,7 +905,18 @@
                     });
 
                     function validateDates() {
-                        if (startDateInput.value && endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
+                        const today = new Date().toISOString().split('T')[0];
+                        if (startDateInput.value && startDateInput.value > today) {
+                            startDateInput.setCustomValidity('Start Date must not be a future date.');
+                            startDateInput.classList.add('is-invalid');
+                        } else {
+                            startDateInput.setCustomValidity('');
+                            startDateInput.classList.remove('is-invalid');
+                        }
+                        if (endDateInput.value && endDateInput.value > today) {
+                            endDateInput.setCustomValidity('End Date must not be a future date.');
+                            endDateInput.classList.add('is-invalid');
+                        } else if (startDateInput.value && endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
                             endDateInput.setCustomValidity('End Date must not be before Start Date.');
                             endDateInput.classList.add('is-invalid');
                         } else {
@@ -752,7 +934,10 @@
                         const fieldValue = parseFloat(field.value) || 0;
                         const pairValue = parseFloat(pair.value) || 0;
 
-                        if (fieldId.startsWith('max') && field.value && pair.value && fieldValue < pairValue) {
+                        if (field.value && fieldValue < 0) {
+                            field.setCustomValidity(`${fieldId.replace(/([A-Z])/g, ' $1')} must be 0 or greater.`);
+                            field.classList.add('is-invalid');
+                        } else if (fieldId.startsWith('max') && field.value && pair.value && fieldValue < pairValue) {
                             field.setCustomValidity(`${fieldId.replace(/([A-Z])/g, ' $1')} must not be less than ${pairId.replace(/([A-Z])/g, ' $1')}.`);
                             field.classList.add('is-invalid');
                         } else {
@@ -922,14 +1107,26 @@
             $(document).on('click', '.thumbs-up', function() {
                 const row = $(this).closest('tr');
                 const title = $(this).data('title');
-                row.css('backgroundColor', '#d4edda');
+                if (row.hasClass('approved') || row.hasClass('rejected')) {
+                    alert(`Revenue "${title}" has already been processed.`);
+                    return;
+                }
+                row.addClass('approved').css('backgroundColor', '#d4edda');
+                $(this).prop('disabled', true).css('color', '#28a745');
+                row.find('.cross').prop('disabled', true).css('color', '#ccc');
                 alert(`Revenue "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
             });
 
             $(document).on('click', '.cross', function() {
                 const row = $(this).closest('tr');
                 const title = $(this).data('title');
-                row.css('backgroundColor', '#f8d7da');
+                if (row.hasClass('approved') || row.hasClass('rejected')) {
+                    alert(`Revenue "${title}" has already been processed.`);
+                    return;
+                }
+                row.addClass('rejected').css('backgroundColor', '#f8d7da');
+                $(this).prop('disabled', true).css('color', '#dc3545');
+                row.find('.thumbs-up').prop('disabled', true).css('color', '#ccc');
                 alert(`Revenue "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
             });
 
