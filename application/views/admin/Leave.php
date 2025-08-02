@@ -6,7 +6,7 @@
     <title>Leave Management</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         * {
             margin: 0;
@@ -38,7 +38,6 @@
         .table-container {
             background: #fff;
             border-radius: 0.5rem;
-            overflow: hidden;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             margin-bottom: 20px;
         }
@@ -141,31 +140,35 @@
         .modal-content {
             background-color: #fff;
             border-radius: 0.5rem;
-            padding: 1.5rem;
+            padding: 1rem;
             border: none;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 400px;
+            margin: 10% auto;
+            position: relative;
         }
         .modal-header {
             border-bottom: none;
             padding-bottom: 0;
+            text-align: center;
         }
         .modal-header h2 {
-            text-align: center;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin: 0.5rem 0 1rem;
+            font-size: 1.25rem;
             color: #343a40;
         }
         .close {
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 10px;
+            top: 10px;
             color: #666;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -177,30 +180,32 @@
             background: #e0e0e0;
         }
         .modal-body {
-            padding: 20px 25px;
+            padding: 10px 15px;
         }
         .form-row {
             display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         .form-group {
             flex: 1;
+            min-width: 100%;
         }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 12px;
         }
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 12px;
             background: white;
             color: #333;
             transition: border-color 0.3s ease;
@@ -213,28 +218,27 @@
         }
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 60px;
         }
         .date-input {
             position: relative;
         }
         .date-input input[type="date"] {
-            position: relative;
-            padding-right: 40px;
+            padding-right: 30px;
         }
         .date-input::after {
-            content: "📅";
+            /* content: "📅"; */
             position: absolute;
-            right: 12px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
-            font-size: 16px;
+            font-size: 14px;
         }
         .error {
             color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 10px;
+            margin-top: 3px;
             display: none;
         }
         .form-group.invalid input,
@@ -249,25 +253,118 @@
             background: linear-gradient(135deg, #d32f2f, #b71c1c);
             color: white;
             border: none;
-            padding: 10px 35px;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             display: block;
-            margin: 20px auto 0;
-            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+            margin: 15px auto 0;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
             transition: all 0.3s ease;
         }
         .save-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
         }
         .save-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+        /* Filter Modal Styles */
+        .filter-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+        .filter-modal-content {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 400px;
+            margin: 10% auto;
+            position: relative;
+        }
+        .filter-modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+            text-align: center;
+        }
+        .filter-modal-header h2 {
+            font-weight: 700;
+            margin: 0.5rem 0 1rem;
+            font-size: 1.25rem;
+            color: #343a40;
+        }
+        .filter-modal-body {
+            padding: 10px 15px;
+        }
+        .filter-form-group {
+            margin-bottom: 10px;
+        }
+        .filter-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 12px;
+        }
+        .filter-form-group input,
+        .filter-form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            background: white;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+        .filter-form-group input:focus,
+        .filter-form-group select:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .filter-btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .apply-filter-btn, .reset-filter-btn {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+            transition: all 0.3s ease;
+        }
+        .reset-filter-btn {
+            background: #e0e0e0;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .apply-filter-btn:hover, .reset-filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
+        }
+        .reset-filter-btn:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -288,16 +385,17 @@
                 padding: 8px 6px;
                 font-size: 12px;
             }
-            .modal-content {
+            .modal-content, .filter-modal-content {
                 width: 95%;
-                margin: 10% auto;
+                max-width: 350px;
+                margin: 15% auto;
             }
-            .modal-body {
-                padding: 15px;
+            .modal-body, .filter-modal-body {
+                padding: 10px;
             }
             .form-row {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             .add-btn {
                 padding: 8px 20px;
@@ -305,25 +403,32 @@
             }
         }
         @media (max-width: 480px) {
-            .modal-content {
+            .modal-content, .filter-modal-content {
                 width: 98%;
-                margin: 5% auto;
+                max-width: 300px;
+                margin: 10% auto;
             }
-            .modal-body {
-                padding: 12px;
+            .modal-body, .filter-modal-body {
+                padding: 8px;
             }
-            .form-group label {
-                font-size: 12px;
+            .form-group label, .filter-form-group label {
+                font-size: 11px;
             }
-            .form-group input,
-            .form-group textarea {
-                padding: 8px 10px;
+            .form-group input, .form-group textarea, .filter-form-group input, .filter-form-group select {
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+            .save-btn, .apply-filter-btn, .reset-filter-btn {
+                padding: 6px 15px;
                 font-size: 12px;
             }
         }
         @media (min-width: 769px) and (max-width: 1024px) {
             .content-wrapper {
                 margin-left: 200px;
+            }
+            .modal-content, .filter-modal-content {
+                max-width: 450px;
             }
         }
     </style>
@@ -337,7 +442,7 @@
         <div class="container">
             <!-- Filter Button -->
             <div class="filter-wrapper">
-                <button class="filter-btn">
+                <button class="filter-btn" onclick="openFilterModal()">
                     <i class="bi bi-funnel me-1"></i> Filter
                 </button>
             </div>
@@ -416,6 +521,8 @@
                             <input type="text" id="name" name="name" class="form-control" required>
                             <div class="error">Name is required</div>
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
                             <input type="text" id="batch" name="batch" class="form-control" required>
@@ -428,23 +535,62 @@
                             <input type="text" id="level" name="level" class="form-control" required>
                             <div class="error">Level is required</div>
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group date-input">
                             <label for="date">Date <span class="text-danger">*</span>:</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                             <div class="error">Date is required</div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="reason">Reason <span class="text-danger">*</span>:</label>
-                        <input type="text" id="reason" name="reason" class="form-control" required>
-                        <div class="error">Reason is required</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reason">Reason <span class="text-danger">*</span>:</label>
+                            <input type="text" id="reason" name="reason" class="form-control" required>
+                            <div class="error">Reason is required</div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description <span class="text-danger">*</span>:</label>
-                        <textarea id="description" name="description" class="form-control" required></textarea>
-                        <div class="error">Description is required</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="description">Description <span class="text-danger">*</span>:</label>
+                            <textarea id="description" name="description" class="form-control" required></textarea>
+                            <div class="error">Description is required</div>
+                        </div>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Filter Modal -->
+    <div id="filterModal" class="filter-modal">
+        <div class="filter-modal-content">
+            <div class="filter-modal-header">
+                <span class="close" onclick="closeFilterModal()">×</span>
+                <h2>Filter Leaves</h2>
+            </div>
+            <div class="filter-modal-body">
+                <form id="filterForm">
+                    <div class="filter-form-group">
+                        <label for="filterName">Name:</label>
+                        <input type="text" id="filterName" name="filterName" class="form-control">
+                    </div>
+                    <div class="filter-form-group">
+                        <label for="filterBatch">Batch:</label>
+                        <input type="text" id="filterBatch" name="filterBatch" class="form-control">
+                    </div>
+                    <div class="filter-form-group">
+                        <label for="filterLevel">Level:</label>
+                        <input type="text" id="filterLevel" name="filterLevel" class="form-control">
+                    </div>
+                    <div class="filter-form-group">
+                        <label for="filterDate">Date:</label>
+                        <input type="date" id="filterDate" name="filterDate" class="form-control">
+                    </div>
+                    <div class="filter-btn-container">
+                        <button type="button" class="reset-filter-btn" onclick="resetFilter()">Reset</button>
+                        <button type="submit" class="apply-filter-btn">Apply</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -476,6 +622,7 @@
         function resetForm() {
             form.reset();
             clearValidationErrors();
+            document.querySelector('.modal-title').textContent = 'Add Leave';
         }
 
         function clearValidationErrors() {
@@ -597,7 +744,8 @@
             document.getElementById('name').value = cells[0].textContent;
             document.getElementById('batch').value = cells[1].textContent;
             document.getElementById('level').value = cells[2].textContent;
-            document.getElementById('date').value = cells[3].textContent.split('/').reverse().join('-');
+            const [day, month, year] = cells[3].textContent.split('/');
+            document.getElementById('date').value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
             document.getElementById('reason').value = cells[4].textContent;
             document.getElementById('description').value = cells[5].textContent;
             document.querySelector('.modal-title').textContent = 'Edit Leave';
@@ -651,6 +799,71 @@
             } else {
                 this.closest('.form-group').classList.add('invalid');
             }
+        });
+
+        // Filter Modal functionality
+        const filterModal = document.getElementById('filterModal');
+        const filterForm = document.getElementById('filterForm');
+        let originalRows = [];
+
+        function openFilterModal() {
+            filterModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            // Store original table rows if not already stored
+            if (!originalRows.length) {
+                const tableBody = document.getElementById('leaveTableBody');
+                originalRows = Array.from(tableBody.querySelectorAll('tr')).map(row => row.outerHTML);
+            }
+            filterForm.reset();
+        }
+
+        function closeFilterModal() {
+            filterModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            filterForm.reset();
+        }
+
+        function resetFilter() {
+            filterForm.reset();
+            const tableBody = document.getElementById('leaveTableBody');
+            tableBody.innerHTML = originalRows.join('');
+            closeFilterModal();
+        }
+
+        // Filter form submission
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const filterData = {
+                name: document.getElementById('filterName').value.trim().toLowerCase(),
+                batch: document.getElementById('filterBatch').value.trim().toLowerCase(),
+                level: document.getElementById('filterLevel').value.trim().toLowerCase(),
+                date: document.getElementById('filterDate').value
+            };
+
+            const tableBody = document.getElementById('leaveTableBody');
+            tableBody.innerHTML = '';
+
+            const filteredRows = originalRows.filter(row => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = row;
+                const cells = tempDiv.querySelectorAll('td');
+                const rowData = {
+                    name: cells[0].textContent.toLowerCase(),
+                    batch: cells[1].textContent.toLowerCase(),
+                    level: cells[2].textContent.toLowerCase(),
+                    date: cells[3].textContent
+                };
+
+                return (
+                    (!filterData.name || rowData.name.includes(filterData.name)) &&
+                    (!filterData.batch || rowData.batch.includes(filterData.batch)) &&
+                    (!filterData.level || rowData.level.includes(filterData.level)) &&
+                    (!filterData.date || rowData.date === new Date(filterData.date).toLocaleDateString('en-GB'))
+                );
+            });
+
+            tableBody.innerHTML = filteredRows.join('');
+            closeFilterModal();
         });
 
         // Sidebar toggle functionality

@@ -1056,28 +1056,61 @@
       XLSX.writeFile(workbook, "students_data.xlsx");
     }
 
-    function exportToPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.setFontSize(16);
-      doc.text("Students Data", 14, 20);
-      const students = Object.values(studentData).map(s => [
-        s.name,
-        s.contact,
-        s.center,
-        s.batch,
-        s.level,
-        s.category
-      ]);
-      doc.autoTable({
-        head: [['Name', 'Contact', 'Center', 'Batch', 'Level', 'Category']],
-        body: students,
-        startY: 30,
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] }
-      });
-      doc.save('students_data.pdf');
+ function exportToPDF() {
+  try {
+    // Ensure jsPDF and autoTable are available
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert('jsPDF library is not loaded properly.');
+      return;
     }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Set document title
+    doc.setFontSize(16);
+    doc.text('Students Data', 14, 20);
+
+    // Prepare data for the table
+    const students = Object.values(studentData).map(s => [
+      s.name,
+      s.contact,
+      s.center,
+      s.batch,
+      s.level,
+      s.category
+    ]);
+
+    // Check if autoTable is available
+    if (typeof doc.autoTable !== 'function') {
+      alert('jsPDF autoTable plugin is not loaded properly.');
+      return;
+    }
+
+    // Generate table
+    doc.autoTable({
+      head: [['Name', 'Contact', 'Center', 'Batch', 'Level', 'Category']],
+      body: students,
+      startY: 30,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] },
+      columnStyles: {
+        0: { cellWidth: 40 }, // Name
+        1: { cellWidth: 30 }, // Contact
+        2: { cellWidth: 25 }, // Center
+        3: { cellWidth: 20 }, // Batch
+        4: { cellWidth: 25 }, // Level
+        5: { cellWidth: 30 }  // Category
+      }
+    });
+
+    // Save the PDF
+    doc.save('students_data.pdf');
+  } catch (error) {
+    console.error('Error exporting to PDF:', error);
+    alert('An error occurred while exporting to PDF. Please check the console for details.');
+  }
+}
 
     // Student Action Functions
     function addStudent() {
@@ -1280,8 +1313,9 @@ Category: ${staff.category}
         dashboardWrapper.classList.toggle('minimized', isMinimized);
       }
     };
+    
   </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

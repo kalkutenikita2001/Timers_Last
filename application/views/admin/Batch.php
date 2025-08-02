@@ -28,6 +28,10 @@
       margin-left: 60px;
     }
 
+    .content {
+      position: relative; /* Added to provide context for absolute positioning */
+    }
+
     .center-card {
       background-color: #ffffff;
       border-radius: 1.25rem;
@@ -117,10 +121,14 @@
       justify-content: center;
     }
 
-    .filter-btn {
+    .filter-wrapper {
       position: absolute;
       top: 1.25rem;
       right: 1.25rem;
+      z-index: 1000; /* Ensure it stays above other content */
+    }
+
+    .filter-btn {
       background: linear-gradient(90deg, #ff4040, #470000);
       color: white;
       border: none;
@@ -256,9 +264,11 @@
         font-size: 0.875rem;
         padding: 0.375rem 0.75rem;
       }
+      .filter-wrapper {
+        top: 0.625rem;
+        right: 0.625rem;
+      }
       .filter-btn {
-        top: 0.9375rem;
-        right: 0.9375rem;
         padding: 0.375rem 0.75rem;
         font-size: 0.875rem;
       }
@@ -286,9 +296,9 @@
       .add-center-btn {
         max-width: 15.625rem;
       }
-      .filter-btn {
-        top: 1.25rem;
-        right: 1.25rem;
+      .filter-wrapper {
+        top: 1rem;
+        right: 1rem;
       }
       .modal-content {
         max-width: 35rem;
@@ -336,7 +346,6 @@
 <div class="content-wrapper" id="contentWrapper">
   <div class="content">
     <div class="container-fluid">
-      <button class="filter-btn" data-toggle="modal" data-target="#filterModal">Filter</button>
       <div class="row justify-content-center">
         <!-- Batch Cards -->
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
