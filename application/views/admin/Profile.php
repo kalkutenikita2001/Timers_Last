@@ -6,6 +6,7 @@
     <title>Profile</title>
     <!-- Bootstrap CSS (required for table classes) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         * {
             margin: 0;
@@ -14,7 +15,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-family: 'Montserrat', sans-serif;
              background-color: #e9ecef !important;
             color: #fff;
             min-height: 100vh;

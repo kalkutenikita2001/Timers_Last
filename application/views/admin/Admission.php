@@ -8,12 +8,12 @@
   <!-- Bootstrap & Font Awesome -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     body {
       background-color: #f8f9fa !important;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .content-wrapper {
@@ -46,8 +46,8 @@
     }
 
     .table thead th {
-      background-color: #343a40;
-      color: #fff;
+      /* background-color: #343a40; */
+      color: black;
       border-bottom: 2px solid #dee2e6;
       white-space: nowrap;
       padding: 1rem;
@@ -91,13 +91,14 @@
 
     .btn-custom {
       /* background: linear-gradient(to right, #ff4040, #990000); */
-      color: white;
+      color: black;
       border: none;
       border-radius: 0.25rem;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
+          margin-top: 20px;
     }
 
     .btn-custom:hover {
@@ -273,7 +274,7 @@
         <div class="container-fluid">
           <div class="table-responsive table-container">
             <table class="table table-bordered table-hover" id="admissionTable">
-              <thead class="thead-dark">
+              <thead class="thead-dark1">
                 <tr>
                   <th>Name</th>
                   <th>Contact</th>
