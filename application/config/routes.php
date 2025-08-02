@@ -78,6 +78,7 @@ $route['Leave'] = 'admin/Leave';
 $route['Profile'] = 'admin/Profile';
 $route['Dashboard'] = 'admin/Dashboard';
 $route['Finance'] = 'admin/Finance';
+$route['venue'] = 'admin/venue';
 
 
 // base module

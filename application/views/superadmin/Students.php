@@ -53,7 +53,6 @@
     }
 
     .table thead th {
-      /* background-color: #343a40; */
       color: black;
       border-bottom: 2px solid #dee2e6;
       white-space: nowrap;
@@ -98,31 +97,33 @@
 
     /* Button Styles */
     .btn-custom {
-      background: #6c757d;
+      background: #007bff;
       color: white;
       border: none;
-      border-radius: 0.25rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+      border-radius: 0.375rem;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
     }
 
     .btn-custom:hover {
-      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-      transform: translateY(-1px);
+      background: #0056b3;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
     }
 
     /* Modal Styles */
     .modal-content {
       background-color: #fff;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
+      border-radius: 0.75rem;
+      padding: 2rem;
       border: none;
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
       margin-top: 65px;
-      max-width: 800px; /* Increased width */
-      max-height: 80vh;
+      max-width: 800px;
+      max-height: 85vh;
       overflow-y: auto;
     }
 
@@ -130,58 +131,95 @@
       text-align: center;
       font-weight: 700;
       margin-bottom: 1.5rem;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       color: #343a40;
+      letter-spacing: 0.5px;
     }
 
     .modal-header {
       border-bottom: none;
       padding-bottom: 0;
+      position: relative;
+    }
+
+    .modal-header .close {
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      font-size: 1.5rem;
+      color: #6c757d;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-header .close:hover {
+      opacity: 1;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
     }
 
     .form-group label {
       font-weight: 600;
       font-size: 0.95rem;
       margin-bottom: 0.5rem;
-      color: #495057;
+      color: #343a40;
+      display: block;
     }
 
-    .form-control {
-      height: calc(2.25rem + 2px);
-      border-radius: 0.25rem;
+    .form-control, .form-check-input {
+      height: calc(2.5rem + 2px);
+      border-radius: 0.375rem;
       font-size: 0.9rem;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       border: 1px solid #ced4da;
-      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      background-color: #f8f9fa;
     }
 
     .form-control:focus {
-      border-color: #80bdff;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.2);
+      background-color: #fff;
+    }
+
+    .form-check-input {
+      margin-top: 0.3rem;
+      margin-right: 0.5rem;
+    }
+
+    .form-check-label {
+      font-size: 0.9rem;
+      color: #495057;
     }
 
     .invalid-feedback {
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       color: #dc3545;
+      margin-top: 0.25rem;
     }
 
     .was-validated .form-control:invalid, .form-control.is-invalid {
       border-color: #dc3545;
+      background-image: none;
     }
 
     .was-validated .form-control:valid, .form-control.is-valid {
       border-color: #28a745;
+      background-image: none;
     }
 
     .modal-backdrop.show {
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     .add-btn-container {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 20px;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
     }
 
@@ -189,33 +227,33 @@
     .step-nav {
       display: flex;
       justify-content: space-between;
-      /* padding: 12px; */
       background-color: #e9ecef;
-      border-radius: 5px 5px 0 0;
-      margin-bottom: 15px;
-      gap: 40px;
+      border-radius: 0.5rem 0.5rem 0 0;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      gap: 30px;
     }
 
     .step-nav span {
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
-      color: #495057;
-      /* padding: 8px 15px; */
+      color: #6c757d;
       position: relative;
+      transition: color 0.3s ease;
     }
 
     .step-nav span i {
-      margin-left: 15px;
-      font-size: 2.5rem; /* Increased arrow size */
+      margin-left: 10px;
+      font-size: 1.5rem;
       color: #007bff;
       transition: color 0.3s ease;
     }
 
     .step-nav span.step-active {
-      /* border-bottom: 4px solid #007bff; */
       color: #007bff;
+      font-weight: 700;
     }
 
     .step-nav span.step-active i {
@@ -223,36 +261,45 @@
     }
 
     /* Receipt Styles */
-    .receipt-header {
-      text-align: center;
-      margin-bottom: 15px;
+    .receipt-card {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .receipt-header img {
-      max-width: 150px;
-      margin-bottom: 10px;
+    .receipt-card p {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      color: #343a40;
     }
 
-    .receipt-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
+    .receipt-card p strong {
+      color: #1a1a1a;
+      font-weight: 600;
     }
 
-    .receipt-table th, .receipt-table td {
-      border: 1px solid #dee2e6;
-      padding: 8px;
-      text-align: left;
+    /* Modal Footer */
+    .modal-footer {
+      border-top: none;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
     }
 
-    .receipt-table th {
-      background-color: #f8f9fa;
-      font-weight: bold;
+    .modal-footer .btn-secondary {
+      background-color: #6c757d;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
     }
 
-    .receipt-footer {
-      text-align: right;
-      font-weight: bold;
+    .modal-footer .btn-secondary:hover {
+      background-color: #5a6268;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     /* Responsive Design */
@@ -272,7 +319,7 @@
       }
 
       .modal-content {
-        padding: 1rem;
+        padding: 1.25rem;
         max-width: 95%;
       }
 
@@ -301,13 +348,13 @@
       .btn-custom {
         width: 120px;
         font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
+        padding: 0.5rem 1rem;
       }
 
       .step-nav {
         flex-direction: column;
         gap: 15px;
-        padding: 10px;
+        padding: 0.75rem;
       }
 
       .step-nav span {
@@ -316,8 +363,8 @@
       }
 
       .step-nav span i {
-        font-size: 2rem;
-        margin-left: 10px;
+        font-size: 1.2rem;
+        margin-left: 8px;
       }
     }
 
@@ -336,7 +383,7 @@
       }
 
       .modal-content {
-        padding: 1.25rem;
+        padding: 1.5rem;
         max-width: 90%;
       }
 
@@ -350,16 +397,17 @@
       }
 
       .step-nav {
-        gap: 25px;
+        gap: 20px;
+        padding: 0.75rem;
       }
 
       .step-nav span {
-        padding: 5px 10px;
+        font-size: 0.9rem;
       }
 
       .step-nav span i {
-        font-size: 2.2rem;
-        margin-left: 10px;
+        font-size: 1.3rem;
+        margin-left: 8px;
       }
     }
 
@@ -381,12 +429,12 @@
       }
 
       .step-nav {
-        gap: 30px;
+        gap: 25px;
       }
 
       .step-nav span i {
-        font-size: 2.4rem;
-        margin-left: 12px;
+        font-size: 1.4rem;
+        margin-left: 10px;
       }
     }
 
@@ -396,19 +444,20 @@
       }
 
       .step-nav {
-        gap: 40px;
+        gap: 30px;
       }
 
       .step-nav span i {
-        font-size: 2.5rem;
-        margin-left: 15px;
+        font-size: 1.5rem;
+        margin-left: 12px;
       }
     }
 
     /* Touch device hover fix */
     @media (hover: none) {
       .action-btn:hover,
-      .btn-custom:hover {
+      .btn-custom:hover,
+      .modal-footer .btn-secondary:hover {
         background-color: inherit;
         transform: none;
         box-shadow: none;
@@ -489,7 +538,7 @@
 
 <!-- New Admission Modal (Step 1: Personal Details) -->
 <div class="modal fade" id="newAdmissionModal" tabindex="-1" aria-labelledby="newAdmissionLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Changed to modal-lg for wider form -->
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h3 id="newAdmissionLabel" class="modal-title w-100 text-center">Student Admission Form</h3>

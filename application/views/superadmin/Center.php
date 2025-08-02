@@ -289,7 +289,7 @@
       top: 0;
       left: 250px;
       right: 0;
-      background-color: #444;
+      /* background-color: #444; */
       color: white;
       padding: 10px;
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;

@@ -16,24 +16,21 @@
     <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Batch'); ?>">
       <i class="bi bi-layers"></i><span>Batch</span>
     </a>
-    
-    <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/EventAndNotice'); ?>">
+    <a class="nav-link event-notice <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/EventAndNotice'); ?>">
       <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
     </a>
-   
-    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Finance'); ?>">
+    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Finance') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Finance'); ?>">
       <i class="bi bi-cash-stack"></i><span>Finance</span>
     </a>
-    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
+    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
       <i class="bi bi-credit-card"></i><span>Expenses</span>
     </a>
-     <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Students'); ?>">
+    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Students'); ?>">
       <i class="bi bi-person-lines-fill"></i><span>Students</span>
     </a>
-     <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">
+    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">
       <i class="bi bi-receipt-cutoff"></i><span>Leave</span>
     </a>
-
     <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
   </nav>
 </div>
@@ -100,7 +97,15 @@
 
   .sidebar .nav-link.active {
     background-color: #e9ecef;
-    /* font-weight: 700; */
+    font-weight: 700;
+  }
+
+  /* Specific styles for EventAndNotice to ensure consistency */
+  .sidebar .nav-link.event-notice:hover,
+  .sidebar .nav-link.event-notice.active {
+    background-color: #e9ecef !important;
+    border-radius: 30px;
+    font-weight: 700;
   }
 
   .sidebar .nav-link i {

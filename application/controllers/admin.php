@@ -33,4 +33,7 @@ class admin extends CI_Controller {
 	public function Dashboard(){
 		$this->load->view('admin/Dashboard');
 	}
+	public function venue(){
+		$this->load->view('admin/venue');
+	}
 }

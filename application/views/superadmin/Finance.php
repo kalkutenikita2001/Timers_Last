@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa !important;
+             background-color: #f8f9fa !important;
             margin: 0;
             font-family: 'Montserrat', serif !important;
             overflow-x: hidden;

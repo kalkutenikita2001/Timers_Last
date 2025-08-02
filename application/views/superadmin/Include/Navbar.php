@@ -12,11 +12,11 @@
             margin: 0;
             padding-top: 60px; /* Offset for fixed navbar */
            font-family: 'Montserrat', serif;
-            background-color: white;
+            /* background-color: #EFE9E9 !important; */
         }
 
         .navbar {
-            background-color: white !important;
+            /* background-color: white !important; */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px 20px;
             position: fixed;
@@ -42,7 +42,7 @@
         .navbar-toggle {
             background: none;
             border: none;
-            color: #fff;
+            color: black !important;
             font-size: 24px;
             cursor: pointer;
             padding: 0;
@@ -208,143 +208,7 @@
     </div>
 </div>
 
-<style>
-    .navbar {
-        background-color: #EFE9E9 ;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 10px 20px;
-        position: fixed;
-        top: 0;
-        z-index: 1100;
-        height: 60px;
-        width: calc(100% - 250px);
-        left: 250px;
-        overflow-x: hidden;
-        transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
-    }
 
-    .navbar.sidebar-minimized {
-        width: calc(100% - 60px);
-        left: 60px;
-    }
-
-    .navbar.sidebar-hidden {
-        width: 100%;
-        left: 0;
-    }
-
-    .navbar-toggle {
-        background: none;
-        border: none;
-        color: black;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 0;
-    }
-
-    .notification-icon {
-        font-size: 24px;
-        cursor: pointer;
-        position: relative;
-        margin-left: 15px;
-        z-index: 1101;
-    }
-
-    .notification-icon i {
-        color: #fff;
-        transition: color 0.3s ease;
-    }
-
-    .notification-icon i:hover {
-        color: #0A6DFF;
-    }
-
-    .notification-container {
-        display: none;
-        position: fixed;
-        top: 60px;
-        right: 20px;
-        background: #fff;
-        width: 320px;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1001;
-        height: auto;
-        overflow-y: hidden;
-    }
-
-    .notification-container::before {
-        content: "";
-        position: absolute;
-        top: -5px;
-        right: 20px;
-        width: 10px;
-        height: 10px;
-        background: #fff;
-        transform: rotate(45deg);
-        box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .notification-list {
-        max-height: none;
-        overflow-y: hidden;
-    }
-
-    .notification-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .notification-item strong {
-        font-size: 16px;
-    }
-
-    .notification-item p {
-        font-size: 14px;
-        color: gray;
-        margin: 0;
-    }
-
-    .notification-item .time {
-        font-size: 12px;
-        color: gray;
-    }
-
-    @media (max-width: 768px) {
-        .navbar {
-            width: 100%;
-            left: 0;
-        }
-
-        .navbar.sidebar-minimized,
-        .navbar.sidebar-hidden {
-            width: 100%;
-            left: 0;
-        }
-
-        .notification-container {
-            right: 10px;
-            width: 90%;
-            max-width: 320px;
-        }
-    }
-
-    @media (min-width: 769px) and (max-width: 1024px) {
-        .navbar {
-            width: calc(100% - 200px);
-            left: 200px;
-        }
-
-        .navbar.sidebar-minimized {
-            width: calc(100% - 60px);
-            left: 60px;
-        }
-    }
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

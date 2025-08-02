@@ -4,15 +4,33 @@
         <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
     </div>
     <nav class="nav flex-column">
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Dashboard'; ?>" aria-current="true"><i class="bi bi-house-door"></i><span>Dashboard</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Batch'; ?>" aria-current="true"><i class="bi bi-stack"></i><span>Batch</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>" aria-current="true"><i class="bi bi-calendar-event"></i><span>EventAndNotice</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Admission'; ?>" aria-current="true"><i class="bi bi-person-plus"></i><span>Admission</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/IncomeAndExpenses'; ?>" aria-current="true"><i class="bi bi-cash"></i><span>IncomeAndExpenses</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Attendance'; ?>" aria-current="true"><i class="bi bi-check-circle"></i><span>Attendance</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Leave'; ?>" aria-current="true"><i class="bi bi-calendar-x"></i><span>Leave</span></a>
-        <a class="nav-link" href="<?php echo base_url() . 'admin/Profile'; ?>" aria-current="true"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a class="nav-link" href="#"><i class="bi bi-clipboard-data"></i><span>Report</span></a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Dashboard'; ?>">
+            <i class="bi bi-house-door"></i><span>Dashboard</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
+            <i class="bi bi-stack"></i><span>Batch</span>
+        </a>
+        <a class="nav-link event-notice <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
+            <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
+            <i class="bi bi-person-plus"></i><span>Admission</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'IncomeAndExpenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/IncomeAndExpenses'; ?>">
+            <i class="bi bi-cash"></i><span>IncomeAndExpenses</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
+            <i class="bi bi-check-circle"></i><span>Attendance</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
+            <i class="bi bi-calendar-x"></i><span>Leave</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
+            <i class="bi bi-person-circle"></i><span>Profile</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Report') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Report'; ?>">
+            <i class="bi bi-clipboard-data"></i><span>Report</span>
+        </a>
         <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
     </nav>
 </div>
@@ -53,6 +71,7 @@
         text-decoration: none;
         transition: all 0.3s ease;
         margin: 5px 10px;
+        border-radius: 30px;
     }
 
     .sidebar.minimized .nav-link {
@@ -65,6 +84,15 @@
         background-color: #e9ecef;
         color: #000;
         border-radius: 30px;
+        font-weight: bold;
+    }
+
+    /* Specific styles for EventAndNotice to ensure consistency */
+    .sidebar .nav-link.event-notice:hover,
+    .sidebar .nav-link.event-notice.active {
+        background-color: #e9ecef !important;
+        border-radius: 30px;
+        font-weight: bold;
     }
 
     .sidebar .nav-link i {
@@ -91,10 +119,6 @@
     .sidebar.minimized .logo img {
         max-width: 40px;
         height: 40px;
-    }
-
-    .sidebar .nav-link.active {
-        font-weight: bold;
     }
 
     .sidebar.minimized .nav-link span {
@@ -136,7 +160,7 @@
         // Save scroll position before navigation
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                if (link.href) { // Ensure it's not the logout or report link
+                if (link.href && link.href !== '#') { // Ensure it's not the logout or report link
                     const scrollPosition = sidebar.scrollTop;
                     sessionStorage.setItem('sidebarScrollPosition', scrollPosition);
                 }
