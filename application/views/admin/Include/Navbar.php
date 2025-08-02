@@ -10,7 +10,7 @@
     <style>
         body {
             margin: 0;
-            padding-top: 60px; /* Offset for fixed navbar */
+            padding-top: 60px; 
            font-family: 'Montserrat', serif;
             /* background-color: #EFE9E9 !important; */
         }

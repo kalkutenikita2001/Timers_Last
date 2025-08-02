@@ -144,7 +144,7 @@
             border: none;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             width: 90%;
-            max-width: 400px;
+            max-width: 600px;
             margin: 10% auto;
             position: relative;
         }
@@ -161,8 +161,8 @@
         }
         .close {
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: 15px;
+            top: 15px;
             color: #666;
             font-size: 20px;
             font-weight: bold;
@@ -173,10 +173,6 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        .close:hover {
-            color: #000;
             background: #e0e0e0;
         }
         .modal-body {
@@ -190,7 +186,7 @@
         }
         .form-group {
             flex: 1;
-            min-width: 100%;
+            min-width: 0;
         }
         .form-group label {
             display: block;
@@ -397,6 +393,9 @@
                 flex-direction: column;
                 gap: 8px;
             }
+            .form-group {
+                min-width: 100%;
+            }
             .add-btn {
                 padding: 8px 20px;
                 font-size: 14px;
@@ -509,8 +508,8 @@
     <!-- Modal -->
     <div id="leaveModal" class="modal">
         <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
             <div class="modal-header">
-                <span class="close" onclick="closeModal()">×</span>
                 <h2 class="modal-title">Add Leave</h2>
             </div>
             <div class="modal-body">
@@ -521,8 +520,6 @@
                             <input type="text" id="name" name="name" class="form-control" required>
                             <div class="error">Name is required</div>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
                             <input type="text" id="batch" name="batch" class="form-control" required>
@@ -535,8 +532,6 @@
                             <input type="text" id="level" name="level" class="form-control" required>
                             <div class="error">Level is required</div>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group date-input">
                             <label for="date">Date <span class="text-danger">*</span>:</label>
                             <input type="date" id="date" name="date" class="form-control" required>
@@ -549,8 +544,6 @@
                             <input type="text" id="reason" name="reason" class="form-control" required>
                             <div class="error">Reason is required</div>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="description">Description <span class="text-danger">*</span>:</label>
                             <textarea id="description" name="description" class="form-control" required></textarea>
