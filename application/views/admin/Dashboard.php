@@ -426,57 +426,112 @@
       flex-shrink: 0;
     }
 
-    .filter-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #1a1a1a;
+    .modal-content {
+      background-color: #ffffff;
+      border-radius: 15px;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 1000;
-      color: #fff;
-      width: 300px;
-      max-height: 80vh;
-      overflow-y: auto;
+      max-width: 500px;
+      margin: auto;
+      border: 2px solid #007bff;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      color: #000;
     }
 
-    .filter-modal.active {
-      display: block;
+    .modal-content h3 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #333;
     }
 
-    .filter-option {
-      padding: 10px;
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
       cursor: pointer;
-      border-bottom: 1px solid #444;
-      transition: background 0.2s ease;
-      display: flex;
-      align-items: center;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
 
-    .filter-option:hover {
-      background: #222;
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
 
-    .filter-option input[type="checkbox"] {
-      margin-right: 10px;
+    .modal-backdrop.show {
+      backdrop-filter: blur(6px);
     }
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
+    .form-group {
+      margin-bottom: 0.75rem;
     }
 
-    .modal-overlay.active {
+    .form-group label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 4px;
       display: block;
+    }
+
+    .form-control, .form-control textarea {
+      height: 38px;
+      border-radius: 8px;
+      font-size: 13px;
+      border: 1px solid #ced4da;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus, .form-control textarea:focus {
+      border-color: #ff4040;
+      box-shadow: 0 0 5px rgba(255, 64, 64, 0.3);
+    }
+
+    .form-control::placeholder {
+      color: #999;
+    }
+
+    .submit-btn, .close-btn {
+      border-radius: 8px;
+      padding: 8px;
+      font-weight: 600;
+      width: 120px;
+      margin: 6px 5px;
+      border: none;
+      color: #000000;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .submit-btn {
+      background: #ffffff;
+    }
+
+    .submit-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .close-btn {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .close-btn:hover {
+      background: #d0d0d0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 12px;
+      margin-top: 4px;
     }
 
     .status-badge {
@@ -600,6 +655,35 @@
       .filter-btn, .add-btn {
         padding: 5px 12px;
       }
+      
+      .modal-content {
+        max-width: 90%;
+        padding: 15px;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .form-control, .form-control textarea {
+        height: 34px;
+        font-size: 12px;
+      }
+      
+      .form-group label {
+        font-size: 13px;
+      }
+      
+      .submit-btn, .close-btn {
+        width: 100px;
+        padding: 6px;
+        font-size: 12px;
+      }
+      
+      .modal-content h3 {
+        font-size: 1rem;
+      }
     }
 
     @media (max-width: 576px) {
@@ -652,8 +736,9 @@
         max-height: 100px !important;
       }
       
-      .filter-modal {
-        width: 250px;
+      .modal-content {
+        max-width: 90%;
+        padding: 12px;
       }
     }
     .btn1 {
@@ -670,46 +755,45 @@
   <!-- Dashboard Content -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
     <div class="container-fluid">
-      
-    <!-- Top Stats Row -->
-<div class="top-stats-row">
-  <div class="card-stat" onclick="handleStatClick('totalStudents')" style="position: relative;">
-    <div class="d-flex justify-content-between align-items-center px-2">
-      <div class="text-start">
-        <h4>2450</h4>
-        <span>Total Students</span>
+      <!-- Top Stats Row -->
+      <div class="top-stats-row">
+        <div class="card-stat" onclick="handleStatClick('totalStudents')" style="position: relative;">
+          <div class="d-flex justify-content-between align-items-center px-2">
+            <div class="text-start">
+              <h4>2450</h4>
+              <span>Total Students</span>
+            </div>
+          </div>
+          <i class="bi bi-person-lines-fill fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+        </div>
+        <div class="card-stat" onclick="handleStatClick('totalBranches')" style="position: relative;">
+          <div class="d-flex justify-content-between align-items-center px-2">
+            <div class="text-start">
+              <h4>25</h4>
+              <span>Total Branches</span>
+            </div>
+          </div>
+          <i class="bi bi-building fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+        </div>
+        <div class="card-stat" onclick="handleStatClick('totalRevenue')" style="position: relative;">
+          <div class="d-flex justify-content-between align-items-center px-2">
+            <div class="text-start">
+              <h4>Rs.50000</h4>
+              <span>Total Revenue</span>
+            </div>
+          </div>
+          <i class="bi bi-currency-rupee fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+        </div>
+        <div class="card-stat" onclick="handleStatClick('totalExpense')" style="position: relative;">
+          <div class="d-flex justify-content-between align-items-center px-2">
+            <div class="text-start">
+              <h4>Rs.3000</h4>
+              <span>Total Expense</span>
+            </div>
+          </div>
+          <i class="bi bi-graph-down fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
+        </div>
       </div>
-    </div>
-    <i class="bi bi-person-lines-fill fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
-  </div>
-  <div class="card-stat" onclick="handleStatClick('totalBranches')" style="position: relative;">
-    <div class="d-flex justify-content-between align-items-center px-2">
-      <div class="text-start">
-        <h4>25</h4>
-        <span>Total Branches</span>
-      </div>
-    </div>
-    <i class="bi bi-building fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
-  </div>
-  <div class="card-stat" onclick="handleStatClick('totalRevenue')" style="position: relative;">
-    <div class="d-flex justify-content-between align-items-center px-2">
-      <div class="text-start">
-        <h4>Rs.50000</h4>
-        <span>Total Revenue</span>
-      </div>
-    </div>
-    <i class="bi bi-currency-rupee fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
-  </div>
-  <div class="card-stat" onclick="handleStatClick('totalExpense')" style="position: relative;">
-    <div class="d-flex justify-content-between align-items-center px-2">
-      <div class="text-start">
-        <h4>Rs.3000</h4>
-        <span>Total Expense</span>
-      </div>
-    </div>
-    <i class="bi bi-graph-down fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
-  </div>
-</div>
 
       <!-- Export Buttons -->
       <div class="d-flex justify-content-center gap-3 my-4">
@@ -732,7 +816,7 @@
           <h6>
             Recently Added Students 
             <div>
-              <button class="filter-btn me-2" onclick="toggleFilterModal('students')">
+              <button class="filter-btn me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal">
                 <i class="bi bi-funnel"></i> Filter
               </button>
               <button class="add-btn" onclick="addStudent()">
@@ -767,7 +851,7 @@
         <div class="attendance-container">
           <h6>
             Student Attendance 
-            <button class="filter-btn" onclick="toggleFilterModal('attendance')">
+            <button class="filter-btn" data-bs-toggle="modal" data-bs-target="#attendanceFilterModal">
               <i class="bi bi-funnel"></i> Filter
             </button>
           </h6>
@@ -793,7 +877,7 @@
         <div class="staff-container">
           <h6>
             Total Staff 
-            <button class="filter-btn" onclick="toggleFilterModal('staff')">
+            <button class="filter-btn" data-bs-toggle="modal" data-bs-target="#staffFilterModal">
               <i class="bi bi-funnel"></i> Filter
             </button>
           </h6>
@@ -834,20 +918,142 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Filter Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeFilterModal()"></div>
-  <div class="filter-modal" id="filterModal">
-    <h6>Filter By</h6>
-    <div class="filter-options">
-      <div class="filter-option"><input type="checkbox" name="filter" value="Name"> Name</div>
-      <div class="filter-option"><input type="checkbox" name="filter" value="Contact"> Contact</div>
-      <div class="filter-option"><input type="checkbox" name="filter" value="Center"> Center</div>
-      <div class="filter-option"><input type="checkbox" name="filter" value="Batch"> Batch</div>
-      <div class="filter-option"><input type="checkbox" name="filter" value="Level"> Level</div>
-      <div class="filter-option"><input type="checkbox" name="filter" value="Category"> Category</div>
-      <button class="btn btn-sm btn-custom mt-3" onclick="applyMultiFilter()">Apply Filters</button>
+    <!-- Students Filter Modal -->
+    <div class="modal fade" id="studentsFilterModal" tabindex="-1" aria-labelledby="studentsFilterLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+          <h3 id="studentsFilterLabel">Filter Students</h3>
+          <form id="studentsFilterForm" novalidate>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label for="filterStudentName">Name</label>
+                <input type="text" id="filterStudentName" name="name" class="form-control" placeholder="Enter name" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStudentContact">Contact</label>
+                <input type="text" id="filterStudentContact" name="contact" class="form-control" placeholder="Enter contact" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStudentCenter">Center</label>
+                <input type="text" id="filterStudentCenter" name="center" class="form-control" placeholder="Enter center" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStudentBatch">Batch</label>
+                <input type="text" id="filterStudentBatch" name="batch" class="form-control" placeholder="Enter batch" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStudentLevel">Level</label>
+                <select id="filterStudentLevel" name="level" class="form-control">
+                  <option value="">Select</option>
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStudentCategory">Category</label>
+                <select id="filterStudentCategory" name="category" class="form-control">
+                  <option value="">Select</option>
+                  <option>Complete</option>
+                  <option>Pending</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="submit-btn btn">Apply Filter</button>
+              <button type="button" class="close-btn btn" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Filter Modal -->
+    <div class="modal fade" id="attendanceFilterModal" tabindex="-1" aria-labelledby="attendanceFilterLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+          <h3 id="attendanceFilterLabel">Filter Attendance</h3>
+          <form id="attendanceFilterForm" novalidate>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label for="filterAttendanceName">Name</label>
+                <input type="text" id="filterAttendanceName" name="name" class="form-control" placeholder="Enter name" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterAttendanceBatch">Batch</label>
+                <input type="text" id="filterAttendanceBatch" name="batch" class="form-control" placeholder="Enter batch" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterAttendanceLevel">Level</label>
+                <select id="filterAttendanceLevel" name="level" class="form-control">
+                  <option value="">Select</option>
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterAttendanceCategory">Category</label>
+                <select id="filterAttendanceCategory" name="category" class="form-control">
+                  <option value="">Select</option>
+                  <option>Present</option>
+                  <option>Absent</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="submit-btn btn">Apply Filter</button>
+              <button type="button" class="close-btn btn" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff Filter Modal -->
+    <div class="modal fade" id="staffFilterModal" tabindex="-1" aria-labelledby="staffFilterLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+          <h3 id="staffFilterLabel">Filter Staff</h3>
+          <form id="staffFilterForm" novalidate>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label for="filterStaffName">Name</label>
+                <input type="text" id="filterStaffName" name="name" class="form-control" placeholder="Enter name" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStaffContact">Contact</label>
+                <input type="text" id="filterStaffContact" name="contact" class="form-control" placeholder="Enter contact" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="filterStaffCategory">Category</label>
+                <select id="filterStaffCategory" name="category" class="form-control">
+                  <option value="">Select</option>
+                  <option>Coach</option>
+                  <option>Coordinator</option>
+                  <option>Admin</option>
+                  <option>Trainer</option>
+                  <option>Manager</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="submit-btn btn">Apply Filter</button>
+              <button type="button" class="close-btn btn" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -881,6 +1087,7 @@
       initializeCharts();
       setupSidebarToggle();
       renderTables();
+      setupFilterForms();
     });
 
     function renderTables(filters = {}) {
@@ -895,7 +1102,10 @@
       let data = Object.entries(studentData);
       if (Object.keys(filter).length > 0) {
         data = data.filter(([id, student]) => {
-          return Object.entries(filter).every(([key, value]) => student[key.toLowerCase()] === value);
+          return Object.entries(filter).every(([key, value]) => {
+            if (!value) return true;
+            return String(student[key.toLowerCase()]).toLowerCase().includes(value.toLowerCase());
+          });
         });
       }
       data.forEach(([id, student]) => {
@@ -931,7 +1141,10 @@
       let data = Object.entries(attendanceData);
       if (Object.keys(filter).length > 0) {
         data = data.filter(([id, record]) => {
-          return Object.entries(filter).every(([key, value]) => record[key.toLowerCase()] === value);
+          return Object.entries(filter).every(([key, value]) => {
+            if (!value) return true;
+            return String(record[key.toLowerCase()]).toLowerCase().includes(value.toLowerCase());
+          });
         });
       }
       data.forEach(([id, record]) => {
@@ -957,7 +1170,10 @@
       let data = Object.entries(staffData);
       if (Object.keys(filter).length > 0) {
         data = data.filter(([id, staff]) => {
-          return Object.entries(filter).every(([key, value]) => staff[key.toLowerCase()] === value);
+          return Object.entries(filter).every(([key, value]) => {
+            if (!value) return true;
+            return String(staff[key.toLowerCase()]).toLowerCase().includes(value.toLowerCase());
+          });
         });
       }
       data.forEach(([id, staff]) => {
@@ -973,6 +1189,49 @@
           </td>
         `;
         tbody.appendChild(row);
+      });
+    }
+
+    function setupFilterForms() {
+      const studentsFilterForm = document.getElementById('studentsFilterForm');
+      const attendanceFilterForm = document.getElementById('attendanceFilterForm');
+      const staffFilterForm = document.getElementById('staffFilterForm');
+
+      studentsFilterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const filter = {
+          name: document.getElementById('filterStudentName').value.trim(),
+          contact: document.getElementById('filterStudentContact').value.trim(),
+          center: document.getElementById('filterStudentCenter').value.trim(),
+          batch: document.getElementById('filterStudentBatch').value.trim(),
+          level: document.getElementById('filterStudentLevel').value,
+          category: document.getElementById('filterStudentCategory').value
+        };
+        renderTables({ students: filter });
+        bootstrap.Modal.getInstance(document.getElementById('studentsFilterModal')).hide();
+      });
+
+      attendanceFilterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const filter = {
+          name: document.getElementById('filterAttendanceName').value.trim(),
+          batch: document.getElementById('filterAttendanceBatch').value.trim(),
+          level: document.getElementById('filterAttendanceLevel').value,
+          category: document.getElementById('filterAttendanceCategory').value
+        };
+        renderTables({ attendance: filter });
+        bootstrap.Modal.getInstance(document.getElementById('attendanceFilterModal')).hide();
+      });
+
+      staffFilterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const filter = {
+          name: document.getElementById('filterStaffName').value.trim(),
+          contact: document.getElementById('filterStaffContact').value.trim(),
+          category: document.getElementById('filterStaffCategory').value
+        };
+        renderTables({ staff: filter });
+        bootstrap.Modal.getInstance(document.getElementById('staffFilterModal')).hide();
       });
     }
 
@@ -1056,63 +1315,56 @@
       XLSX.writeFile(workbook, "students_data.xlsx");
     }
 
- function exportToPDF() {
-  try {
-    // Ensure jsPDF and autoTable are available
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      alert('jsPDF library is not loaded properly.');
-      return;
-    }
+    function exportToPDF() {
+      try {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          alert('jsPDF library is not loaded properly.');
+          return;
+        }
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    // Set document title
-    doc.setFontSize(16);
-    doc.text('Students Data', 14, 20);
+        doc.setFontSize(16);
+        doc.text('Students Data', 14, 20);
 
-    // Prepare data for the table
-    const students = Object.values(studentData).map(s => [
-      s.name,
-      s.contact,
-      s.center,
-      s.batch,
-      s.level,
-      s.category
-    ]);
+        const students = Object.values(studentData).map(s => [
+          s.name,
+          s.contact,
+          s.center,
+          s.batch,
+          s.level,
+          s.category
+        ]);
 
-    // Check if autoTable is available
-    if (typeof doc.autoTable !== 'function') {
-      alert('jsPDF autoTable plugin is not loaded properly.');
-      return;
-    }
+        if (typeof doc.autoTable !== 'function') {
+          alert('jsPDF autoTable plugin is not loaded properly.');
+          return;
+        }
 
-    // Generate table
-    doc.autoTable({
-      head: [['Name', 'Contact', 'Center', 'Batch', 'Level', 'Category']],
-      body: students,
-      startY: 30,
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] },
-      columnStyles: {
-        0: { cellWidth: 40 }, // Name
-        1: { cellWidth: 30 }, // Contact
-        2: { cellWidth: 25 }, // Center
-        3: { cellWidth: 20 }, // Batch
-        4: { cellWidth: 25 }, // Level
-        5: { cellWidth: 30 }  // Category
+        doc.autoTable({
+          head: [['Name', 'Contact', 'Center', 'Batch', 'Level', 'Category']],
+          body: students,
+          startY: 30,
+          styles: { fontSize: 10 },
+          headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] },
+          columnStyles: {
+            0: { cellWidth: 40 },
+            1: { cellWidth: 30 },
+            2: { cellWidth: 25 },
+            3: { cellWidth: 20 },
+            4: { cellWidth: 25 },
+            5: { cellWidth: 30 }
+          }
+        });
+
+        doc.save('students_data.pdf');
+      } catch (error) {
+        console.error('Error exporting to PDF:', error);
+        alert('An error occurred while exporting to PDF. Please check the console for details.');
       }
-    });
+    }
 
-    // Save the PDF
-    doc.save('students_data.pdf');
-  } catch (error) {
-    console.error('Error exporting to PDF:', error);
-    alert('An error occurred while exporting to PDF. Please check the console for details.');
-  }
-}
-
-    // Student Action Functions
     function addStudent() {
       const name = prompt('Enter Student Name:');
       if (!name) return;
@@ -1184,7 +1436,6 @@ Category: ${student.category}
       const newCategory = prompt('Edit Student Category:', student.category);
       if (newCategory === null) return;
       
-      // Update student data
       studentData[id] = { 
         name: newName, 
         contact: newContact, 
@@ -1194,7 +1445,6 @@ Category: ${student.category}
         category: newCategory 
       };
       
-      // Update attendance data if exists
       if (attendanceData[id]) {
         attendanceData[id] = { 
           name: newName, 
@@ -1224,7 +1474,6 @@ Category: ${student.category}
       }
     }
 
-    // Attendance Action Functions
     function viewAttendance(id) {
       const record = attendanceData[id];
       if (record) {
@@ -1242,7 +1491,6 @@ Status: ${record.category}
       }
     }
 
-    // Staff Action Functions
     function viewStaff(id) {
       const staff = staffData[id];
       if (staff) {
@@ -1259,52 +1507,6 @@ Category: ${staff.category}
       }
     }
 
-    // Filter Modal Functions
-    function toggleFilterModal(section) {
-      const modal = document.getElementById('filterModal');
-      const overlay = document.getElementById('modalOverlay');
-      modal.classList.add('active');
-      overlay.classList.add('active');
-      modal.dataset.section = section;
-
-      // Reset checkboxes
-      modal.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-      });
-    }
-
-    function closeFilterModal() {
-      const modal = document.getElementById('filterModal');
-      const overlay = document.getElementById('modalOverlay');
-      modal.classList.remove('active');
-      overlay.classList.remove('active');
-    }
-
-    function applyMultiFilter() {
-      const section = document.getElementById('filterModal').dataset.section;
-      const checkboxes = document.querySelectorAll('#filterModal input[type="checkbox"]:checked');
-      if (checkboxes.length === 0) {
-        alert('Please select at least one filter to apply.');
-        return;
-      }
-
-      const filters = {};
-      checkboxes.forEach(checkbox => {
-        const value = prompt(`Enter value for ${checkbox.value}:`);
-        if (value) {
-          filters[checkbox.value.toLowerCase()] = value;
-        }
-      });
-
-      if (Object.keys(filters).length > 0) {
-        const allFilters = {};
-        allFilters[section.toLowerCase()] = filters;
-        renderTables(allFilters);
-        alert(`Applied multi-filter on ${section} with: ${JSON.stringify(filters)}`);
-      }
-      closeFilterModal();
-    }
-
     window.toggleDashboard = function() {
       const dashboardWrapper = document.getElementById('dashboardWrapper');
       const sidebar = document.getElementById('sidebar');
@@ -1313,9 +1515,8 @@ Category: ${staff.category}
         dashboardWrapper.classList.toggle('minimized', isMinimized);
       }
     };
-    
   </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

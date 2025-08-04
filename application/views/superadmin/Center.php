@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900&display=swap" rel="stylesheet">
   <style>
     body {
-         background-color: #f4f6f8 !important;
+      background-color: #f4f6f8 !important;
       margin: 0;
       font-family: 'Montserrat', serif !important;
       font-style: normal;
@@ -55,7 +55,6 @@
       max-width: 22rem;
       border-left: 2px solid #ff4040;
       position: relative;
-      /* margin: 0.5rem; */
       color: #333;
       font-size: 0.875rem;
       font-style: normal;
@@ -271,7 +270,7 @@
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
     .content {
-      margin-top: 60px;
+      margin-top: 20px; /* Reduced from 60px to minimize gap */
     }
     .blur {
       filter: blur(5px);
