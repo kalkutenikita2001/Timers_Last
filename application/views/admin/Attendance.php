@@ -68,10 +68,10 @@
         .table-container {
             background: #fff;
             border-radius: 10px;
-            overflow: hidden;
+            /* overflow: hidden; */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            overflow-x: auto;
+            /* overflow-x: auto; */
         }
         .filter-wrapper {
             display: flex;
@@ -79,8 +79,8 @@
             margin-bottom: 10px;
         }
         .filter-btn {
-            background: linear-gradient(90deg, #ff4040, #470000);
-            color: #fff;
+            /* background: linear-gradient(90deg, #ff4040, #470000); */
+            color: black;
             border: none;
             border-radius: 8px;
             padding: 8px 15px;
@@ -90,7 +90,7 @@
             transition: all 0.3s ease;
         }
         .filter-btn:hover {
-            background: linear-gradient(90deg, #ff3030, #360000);
+            /* background: linear-gradient(90deg, #ff3030, #360000); */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             transform: translateY(-1px);
         }
@@ -99,22 +99,27 @@
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
         .table thead th {
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 14px 15px;
+            padding: 0.75rem;
             text-align: center;
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            vertical-align: middle;
         }
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            padding: 12px 15px;
+            padding: 0.75rem;
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
+            font-size: 0.9rem;
         }
         .table tbody tr:hover {
             background-color: rgba(255, 64, 64, 0.05);
@@ -145,8 +150,8 @@
             margin-top: 20px;
         }
         .add-btn {
-            background: linear-gradient(90deg, #ff4040, #470000);
-            color: white;
+            /* background: linear-gradient(90deg, #ff4040, #470000); */
+            color: black;
             border: none;
             border-radius: 12px;
             padding: 10px 20px;
@@ -156,7 +161,7 @@
             transition: all 0.3s ease;
         }
         .add-btn:hover {
-            background: linear-gradient(90deg, #ff3030, #360000);
+            /* background: linear-gradient(90deg, #ff3030, #360000); */
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
         }
@@ -272,8 +277,8 @@
             display: block;
         }
         .save-btn, .apply-filter-btn {
-            background: linear-gradient(135deg, #ff4040, #b71c1c);
-            color: white;
+            /* background: linear-gradient(135deg, #ff4040, #b71c1c); */
+            color: BLACK;
             border: none;
             padding: 12px 40px;
             border-radius: 25px;
@@ -282,13 +287,13 @@
             cursor: pointer;
             display: block;
             margin: 20px auto 0;
-            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+            /* box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); */
             transition: all 0.3s ease;
         }
         .save-btn:hover, .apply-filter-btn:hover {
-            background: linear-gradient(135deg, #ff3030, #9a0000);
+            /* background: linear-gradient(135deg, #ff3030, #9a0000); */
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+            /* box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4); */
         }
         .save-btn:disabled, .apply-filter-btn:disabled {
             background: #ccc;
@@ -318,7 +323,7 @@
             }
             th, td {
                 padding: 8px 6px;
-                font-size: 11px;
+                font-size: 0.8rem;
             }
             .tab-buttons {
                 flex-direction: column;
@@ -385,8 +390,8 @@
                 min-width: 750px;
             }
             th, td {
-                padding: 10px 8px;
-                font-size: 12px;
+                padding: 0.75rem;
+                font-size: 0.9rem;
             }
             .tab-btn {
                 font-size: 15px;

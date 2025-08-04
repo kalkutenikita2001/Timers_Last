@@ -165,20 +165,20 @@
         }
 
         .save-btn {
-            background: linear-gradient(90deg, #ff4040, #470000);
-    color: white;
+            /* background: linear-gradient(90deg, #ff4040, #470000); */
+    color: black;
     border: none;
     border-radius: 8px;
     padding: 8px 15px;
     width: 140px;
     font-size: 15px;
     margin: 25px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .save-btn:hover {
-            background: linear-gradient(to right, #ff3030, #360000);
+            /* background: linear-gradient(to right, #ff3030, #360000); */
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }

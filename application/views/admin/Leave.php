@@ -47,8 +47,8 @@
             margin-bottom: 10px;
         }
         .filter-btn {
-            background: #e0e0e0;
-            color: #000;
+            /* background: #e0e0e0; */
+            color: black;
             border: 1px solid #ccc;
             border-radius: 8px;
             padding: 5px 10px;
@@ -56,29 +56,34 @@
             cursor: pointer;
         }
         .filter-btn:hover {
-            background: #d0d0d0;
+            /* background: #d0d0d0; */
         }
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
         .table thead th {
-          
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 12px 15px;
+            padding: 0.75rem;
             text-align: center;
             font-weight: 600;
+            font-size: 0.9rem;
+            vertical-align: middle;
         }
-        .table td, .table th {
+        .table td {
             vertical-align: middle;
             text-align: center;
-            padding: 12px 15px;
+            padding: 0.75rem;
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
+            font-size: 0.9rem;
         }
         .table tbody tr:hover {
             background-color: rgba(0, 0, 0, 0.05);
@@ -108,8 +113,8 @@
             margin-top: 20px;
         }
         .add-btn {
-            background: linear-gradient(90deg, #ff4040, #470000);
-            color: white;
+            /* background: linear-gradient(90deg, #ff4040, #470000); */
+            color: BLACK;
             border: none;
             border-radius: 0.25rem;
             padding: 0.5rem 1rem;
@@ -246,8 +251,8 @@
             display: block;
         }
         .save-btn {
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
-            color: white;
+            /* background: linear-gradient(135deg, #d32f2f, #b71c1c); */
+            color: BLACK;
             border: none;
             padding: 8px 20px;
             border-radius: 20px;
@@ -256,12 +261,12 @@
             cursor: pointer;
             display: block;
             margin: 15px auto 0;
-            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+            /* box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); */
             transition: all 0.3s ease;
         }
         .save-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
+            /* box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); */
         }
         .save-btn:disabled {
             background: #ccc;
@@ -339,25 +344,25 @@
             margin-top: 15px;
         }
         .apply-filter-btn, .reset-filter-btn {
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
-            color: white;
+            /* background: linear-gradient(135deg, #d32f2f, #b71c1c); */
+            color: black;
             border: none;
             padding: 8px 20px;
             border-radius: 20px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+            /* box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); */
             transition: all 0.3s ease;
         }
         .reset-filter-btn {
             background: #e0e0e0;
             color: #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
         }
         .apply-filter-btn:hover, .reset-filter-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
+            /* box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); */
         }
         .reset-filter-btn:hover {
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
@@ -378,8 +383,8 @@
                 min-width: 800px;
             }
             th, td {
-                padding: 8px 6px;
-                font-size: 12px;
+                padding: 0.75rem;
+                font-size: 0.8rem;
             }
             .modal-content, .filter-modal-content {
                 width: 95%;
@@ -517,36 +522,36 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Name <span class="text-danger">*</span>:</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter full name">
                             <div class="error">Name is required</div>
                         </div>
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
-                            <input type="text" id="batch" name="batch" class="form-control" required>
+                            <input type="text" id="batch" name="batch" class="form-control" required placeholder="Enter batch code (e.g., B1)">
                             <div class="error">Batch is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="level">Level <span class="text-danger">*</span>:</label>
-                            <input type="text" id="level" name="level" class="form-control" required>
+                            <input type="text" id="level" name="level" class="form-control" required placeholder="Enter level (e.g., Intermediate)">
                             <div class="error">Level is required</div>
                         </div>
                         <div class="form-group date-input">
                             <label for="date">Date <span class="text-danger">*</span>:</label>
-                            <input type="date" id="date" name="date" class="form-control" required>
+                            <input type="date" id="date" name="date" class="form-control" required placeholder="Select date">
                             <div class="error">Date is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="reason">Reason <span class="text-danger">*</span>:</label>
-                            <input type="text" id="reason" name="reason" class="form-control" required>
+                            <input type="text" id="reason" name="reason" class="form-control" required placeholder="Enter reason for leave">
                             <div class="error">Reason is required</div>
                         </div>
                         <div class="form-group">
                             <label for="description">Description <span class="text-danger">*</span>:</label>
-                            <textarea id="description" name="description" class="form-control" required></textarea>
+                            <textarea id="description" name="description" class="form-control" required placeholder="Enter detailed description"></textarea>
                             <div class="error">Description is required</div>
                         </div>
                     </div>
@@ -566,19 +571,19 @@
                 <form id="filterForm">
                     <div class="filter-form-group">
                         <label for="filterName">Name:</label>
-                        <input type="text" id="filterName" name="filterName" class="form-control">
+                        <input type="text" id="filterName" name="filterName" class="form-control" placeholder="Enter name to filter">
                     </div>
                     <div class="filter-form-group">
                         <label for="filterBatch">Batch:</label>
-                        <input type="text" id="filterBatch" name="filterBatch" class="form-control">
+                        <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter batch to filter">
                     </div>
                     <div class="filter-form-group">
                         <label for="filterLevel">Level:</label>
-                        <input type="text" id="filterLevel" name="filterLevel" class="form-control">
+                        <input type="text" id="filterLevel" name="filterLevel" class="form-control" placeholder="Enter level to filter">
                     </div>
                     <div class="filter-form-group">
                         <label for="filterDate">Date:</label>
-                        <input type="date" id="filterDate" name="filterDate" class="form-control">
+                        <input type="date" id="filterDate" name="filterDate" class="form-control" placeholder="Select date to filter">
                     </div>
                     <div class="filter-btn-container">
                         <button type="button" class="reset-filter-btn" onclick="resetFilter()">Reset</button>
