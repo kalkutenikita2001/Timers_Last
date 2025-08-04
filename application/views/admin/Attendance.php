@@ -6,7 +6,7 @@
     <title>Attendance</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         * {
             margin: 0;
@@ -14,7 +14,7 @@
             box-sizing: border-box;
         }
         body {
-              font-family: 'Montserrat', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: #f8f9fa !important;
             color: #333;
             min-height: 100vh;
@@ -101,7 +101,6 @@
             background: #fff;
         }
         .table thead th {
-            /* background-color: #2c2f33; */
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
@@ -272,7 +271,7 @@
         .form-group.invalid .error {
             display: block;
         }
-        .save-btn {
+        .save-btn, .apply-filter-btn {
             background: linear-gradient(135deg, #ff4040, #b71c1c);
             color: white;
             border: none;
@@ -286,16 +285,20 @@
             box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
             transition: all 0.3s ease;
         }
-        .save-btn:hover {
+        .save-btn:hover, .apply-filter-btn:hover {
             background: linear-gradient(135deg, #ff3030, #9a0000);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
         }
-        .save-btn:disabled {
+        .save-btn:disabled, .apply-filter-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+        /* Filter Modal Specific Styles */
+        .filter-modal-content {
+            max-width: 500px;
         }
         /* Responsive Design */
         @media (max-width: 576px) {
@@ -336,7 +339,7 @@
                 font-size: 14px;
                 border-radius: 10px;
             }
-            .modal-content {
+            .modal-content, .filter-modal-content {
                 width: 95%;
                 margin: 15% auto;
                 padding: 1rem;
@@ -361,7 +364,7 @@
                 font-size: 12px;
                 border-radius: 6px;
             }
-            .save-btn {
+            .save-btn, .apply-filter-btn {
                 padding: 10px 30px;
                 font-size: 14px;
                 border-radius: 20px;
@@ -397,7 +400,7 @@
                 padding: 9px 18px;
                 font-size: 15px;
             }
-            .modal-content {
+            .modal-content, .filter-modal-content {
                 width: 90%;
                 margin: 12% auto;
             }
@@ -417,13 +420,16 @@
             .container {
                 margin-top: 75px;
             }
-            .modal-content {
+            .modal-content, .filter-modal-content {
                 max-width: 550px;
             }
         }
         @media (min-width: 992px) {
             .modal-content {
                 max-width: 600px;
+            }
+            .filter-modal-content {
+                max-width: 500px;
             }
         }
     </style>
@@ -442,7 +448,7 @@
             </div>
             <!-- Filter Button -->
             <div class="filter-wrapper">
-                <button class="filter-btn">
+                <button class="filter-btn" onclick="openFilterModal()">
                     <i class="bi bi-funnel me-1"></i> Filter
                 </button>
             </div>
@@ -525,7 +531,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Add/Edit Attendance Modal -->
     <div id="attendanceModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -563,6 +569,40 @@
             </div>
         </div>
     </div>
+    <!-- Filter Modal -->
+    <div id="filterModal" class="modal">
+        <div class="modal-content filter-modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeFilterModal()">×</span>
+                <h2 class="modal-title">Filter Attendance</h2>
+            </div>
+            <div class="modal-body">
+                <form id="filterForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="filterName">Name:</label>
+                            <input type="text" id="filterName" name="filterName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterBatch">Batch:</label>
+                            <input type="text" id="filterBatch" name="filterBatch" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row" id="dailyFilterFields">
+                        <div class="form-group">
+                            <label for="filterLevel">Level:</label>
+                            <input type="text" id="filterLevel" name="filterLevel" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterCategory">Category:</label>
+                            <input type="text" id="filterCategory" name="filterCategory" class="form-control">
+                        </div>
+                    </div>
+                    <button type="submit" class="apply-filter-btn">Apply Filter</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap + Font Awesome + jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -575,9 +615,14 @@
             document.querySelectorAll('.table-container').forEach(tab => tab.style.display = 'none');
             document.getElementById(tabName + 'Tab').style.display = 'block';
             document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            currentTab = tabName;
             if (tabName === 'total') {
                 populateTotalAttendance();
             }
+            // Show/hide daily filter fields based on tab
+            document.getElementById('dailyFilterFields').style.display = tabName === 'daily' ? 'flex' : 'none';
+            // Reset filters when switching tabs
+            resetFilters();
         }
 
         // Populate Total Attendance table with different data
@@ -604,9 +649,10 @@
                 `;
                 totalTableBody.appendChild(row);
             });
+            applyFilters(); // Apply filters after populating
         }
 
-        // Modal functionality
+        // Modal functionality for Add/Edit
         const modal = document.getElementById('attendanceModal');
         const form = document.getElementById('attendanceForm');
         let editingRow = null;
@@ -631,13 +677,34 @@
         }
 
         function clearValidationErrors() {
-            const formGroups = document.querySelectorAll('.form-group');
+            const formGroups = document.querySelectorAll('#attendanceForm .form-group');
             formGroups.forEach(group => {
                 group.classList.remove('invalid');
             });
         }
 
-        // Form validation
+        // Filter Modal functionality
+        const filterModal = document.getElementById('filterModal');
+        const filterForm = document.getElementById('filterForm');
+
+        function openFilterModal() {
+            filterModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            // Ensure filter fields reflect current tab
+            document.getElementById('dailyFilterFields').style.display = currentTab === 'daily' ? 'flex' : 'none';
+        }
+
+        function closeFilterModal() {
+            filterModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function resetFilters() {
+            filterForm.reset();
+            applyFilters(); // Re-apply filters to refresh table
+        }
+
+        // Form validation for Add/Edit
         function validateForm() {
             const name = document.getElementById('name');
             const batch = document.getElementById('batch');
@@ -670,7 +737,7 @@
             return isValid;
         }
 
-        // Form submission
+        // Form submission for Add/Edit
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (validateForm()) {
@@ -688,8 +755,54 @@
                     addNewRow(data, currentTab);
                 }
                 closeModal();
+                applyFilters(); // Re-apply filters after adding/editing
             }
         });
+
+        // Filter form submission
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            applyFilters();
+            closeFilterModal();
+        });
+
+        // Apply filters to table
+        function applyFilters() {
+            const filterName = document.getElementById('filterName').value.toLowerCase();
+            const filterBatch = document.getElementById('filterBatch').value.toLowerCase();
+            const filterLevel = document.getElementById('filterLevel').value.toLowerCase();
+            const filterCategory = document.getElementById('filterCategory').value.toLowerCase();
+
+            const tableBody = document.getElementById(currentTab + 'TableBody');
+            const rows = tableBody.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const name = cells[0].textContent.toLowerCase();
+                const batch = cells[1].textContent.toLowerCase();
+                let matches = true;
+
+                if (filterName && !name.includes(filterName)) {
+                    matches = false;
+                }
+                if (filterBatch && !batch.includes(filterBatch)) {
+                    matches = false;
+                }
+
+                if (currentTab === 'daily') {
+                    const level = cells[2].textContent.toLowerCase();
+                    const category = cells[3].textContent.toLowerCase();
+                    if (filterLevel && !level.includes(filterLevel)) {
+                        matches = false;
+                    }
+                    if (filterCategory && !category.includes(filterCategory)) {
+                        matches = false;
+                    }
+                }
+
+                row.style.display = matches ? '' : 'none';
+            });
+        }
 
         // Add new row to table
         function addNewRow(data, tab) {
@@ -764,7 +877,7 @@
             openModal();
         }
 
-        // Real-time validation
+        // Real-time validation for Add/Edit form
         document.getElementById('name').addEventListener('input', function() {
             if (this.value.trim()) {
                 this.closest('.form-group').classList.remove('invalid');

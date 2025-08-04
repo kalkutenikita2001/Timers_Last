@@ -65,8 +65,8 @@
             background: #fff;
         }
         .table thead th {
-            background-color: #343a40;
-            color: #fff;
+          
+            color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
             padding: 12px 15px;

@@ -57,7 +57,7 @@
         .table-container {
             background: #fff;
             border-radius: 10px;
-            overflow: hidden;
+            /* overflow: hidden; */
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }

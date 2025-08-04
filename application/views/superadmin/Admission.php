@@ -769,8 +769,7 @@
         document.getElementById('receiptCenter').textContent = row.cells[2].textContent;
         document.getElementById('receiptBatch').textContent = row.cells[3].textContent;
         document.getElementById('receiptCategory').textContent = row.cells[4].textContent;
-        // Additional receipt data would need to be stored or fetched; using defaults for now
-      });
+            });
     });
 
     // Sidebar toggle functionality
