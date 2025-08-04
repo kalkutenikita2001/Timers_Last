@@ -26,10 +26,10 @@
     .content-wrapper.minimized {
       margin-left: 60px;
     }
-    .header-container {
+    .filter-wrapper {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .participate-btn {
       background: #ffffff;
@@ -55,7 +55,7 @@
       max-width: 22rem;
       border-left: 2px solid #ff4040;
       position: relative;
-      margin: 0.625rem;
+      /* margin: 0.5rem; */
       color: #333;
       font-size: 0.875rem;
       font-style: normal;
@@ -386,8 +386,10 @@
     <div class="content" id="mainContent">
       <div class="container-fluid">
         <!-- Participate Button -->
-        <div class="header-container">
-          <button class="participate-btn btn" data-toggle="modal" data-target="#participateModal">Participate</button>
+        <div class="filter-wrapper">
+          <button type="button" class="participate-btn" data-toggle="modal" data-target="#participateModal">
+            <i class="fas fa-user-plus me-2"></i> Participate
+          </button>
         </div>
         <div class="row justify-content-start">
           <div class="col-12">

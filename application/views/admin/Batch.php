@@ -55,7 +55,7 @@
       max-width: 22rem;
       border-left: 2px solid #ff4040;
       position: relative;
-      margin: 0.625rem;
+      /* margin: 0.625rem; */
       color: #333;
       font-size: 0.875rem;
       font-style: normal;
@@ -386,9 +386,14 @@
     <div class="content" id="mainContent">
       <div class="container-fluid">
         <!-- Filter Button -->
-        <div class="header-container">
-          <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">Filter</button>
-        </div>
+       <div class="container my-3">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-light text-dark border d-flex align-items-center">
+            <i class="bi bi-funnel me-2"></i> Filter
+        </button>
+    </div>
+</div>
+
         <div class="row justify-content-center" id="batchRow">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
             <div class="center-card" id="card-1">

@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e9ecef !important;
+               background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
@@ -57,7 +57,7 @@
             color: #000;
             border: 1px solid #ddd;
             border-radius: 1.5rem;
-            padding: 0.75rem 2rem;
+            padding: 10px 30px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -84,6 +84,7 @@
             gap: 0.75rem;
             align-items: center;
             flex-wrap: wrap;
+            
         }
 
         .add-btn {
@@ -117,6 +118,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
             touch-action: manipulation;
+            
+        }
+        .btn{
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn-filter:hover {
@@ -150,7 +155,7 @@
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 1rem;
+            /* padding: 1rem; */
             text-align: center;
             font-weight: 600;
             font-size: clamp(0.75rem, 2vw, 0.9rem);
@@ -640,15 +645,18 @@
                 <button onclick="switchOption('own')">Own Expenses</button>
             </div>
 
-            <!-- Add Button and Filter -->
-            <div class="add-btn-container">
-                <button class="btn-filter" data-toggle="modal" data-target="#filterModal">
-                    <i class="fas fa-filter mr-1"></i> Filter
-                </button>
-                <button class="add-btn" data-toggle="modal" data-target="#expenseModal">
-                    <i class="fas fa-plus mr-1"></i> Add Expense
-                </button>
-            </div>
+          
+<div class="add-btn-container">
+    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+        <i class="fas fa-filter mr-1"></i> Filter
+    </button>
+    <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
+        <i class="fas fa-plus mr-1"></i> Add Expense
+    </button>
+</div>
+
+
+            
 
             <!-- Centerwise Expenses Table -->
             <div class="table-container" id="centerwiseTableContainer">

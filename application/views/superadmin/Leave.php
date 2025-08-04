@@ -18,7 +18,7 @@
         }
         body {
             font-family: 'Montserrat', serif !important;
-            background-color: #e9ecef !important;
+            background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
@@ -40,31 +40,35 @@
         /* Tab Styles */
         .tab-buttons {
             display: flex;
-            justify-content: space-around;
-            background: #fff;
-            /* padding: 10px; */
-            border-radius: 5px 5px 0 0;
-            margin-bottom: 17px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            justify-content: center;
+            gap: 15px;
+            background: transparent;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .tab-buttons button {
-            flex: 1;
-            text-align: center;
-            color: #000;
-            border: none;
-            border-bottom: 2px solid transparent;
-            padding: 10px;
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px 25px;
             font-weight: 600;
-            background: none;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+            text-align: center;
         }
         .tab-buttons button.active {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: #fff;
+            border-color: #ff4040;
         }
         .tab-buttons button:hover {
-            color: #0056b3;
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: #fff;
+            transform: translateY(-2px);
         }
         /* Table Styles */
         .table-container {
@@ -83,7 +87,6 @@
             overflow: hidden;
         }
         .table thead th {
-            /* background-color: #343a40; */
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
@@ -128,19 +131,23 @@
             margin-top: 20px;
         }
         .add-btn {
-            /* background: linear-gradient(to right, #ff4040, #470000); */
-            background:white;
-            color: black;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
             border: none;
             border-radius: 5px;
-            padding: 6px 10px;
-            font-size: 12px;
-            width: 200px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            min-width: 150px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .add-btn:hover {
-            /* background: linear-gradient(to right, #ff3030, #360000); */
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
         /* Modal Styles */
         .modal {
@@ -151,8 +158,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.3);
             animation: fadeIn 0.3s ease-in-out;
         }
         @keyframes fadeIn {
@@ -161,40 +167,42 @@
         }
         .modal-content {
             background: #fff;
-            margin: 5% auto;
+            margin: 10% auto;
             padding: 0;
-            border-radius: 15px;
+            border-radius: 6px;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             animation: slideIn 0.3s ease-in-out;
         }
         @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
+            from { transform: translateY(-30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .modal-header {
             text-align: center;
-            padding: 20px 25px 15px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e5e5e5;
             position: relative;
         }
         .modal-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
             color: #333;
             margin: 0;
         }
         .close {
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 10px;
+            top: 10px;
             color: #666;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -206,106 +214,83 @@
             background: #e0e0e0;
         }
         .modal-body {
-            padding: 25px;
+            padding: 15px;
         }
         .form-row {
             display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 8px;
         }
         .form-group {
-            flex: 1;
-            position: relative;
-            animation: slideInField 0.3s ease-in-out;
-            animation-fill-mode: backwards;
-        }
-        .form-group:nth-child(1) { animation-delay: 0.1s; }
-        .form-group:nth-child(2) { animation-delay: 0.2s; }
-        .form-group:nth-child(3) { animation-delay: 0.3s; }
-        .form-group:nth-child(4) { animation-delay: 0.4s; }
-        @keyframes slideInField {
-            from { transform: translateY(10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            width: 100%;
+            box-sizing: border-box;
         }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            font-size: 15px;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 13px;
             color: #333;
-            transition: color 0.3s ease;
-        }
-        .form-group input:focus + label,
-        .form-group textarea:focus + label {
-            color: #d32f2f;
         }
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 13px;
             background: #fff;
             color: #333;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #d32f2f;
-            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
         }
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 60px;
         }
         .error {
             color: #d32f2f;
-            font-size: 12px;
-            margin-top: 6px;
+            font-size: 10px;
+            margin-top: 3px;
             display: none;
             font-weight: 500;
         }
         .form-group.invalid input,
         .form-group.invalid textarea {
             border-color: #d32f2f;
-            background: #ffeaea;
-            animation: shake 0.3s ease;
+            background: #fff5f5;
         }
         .form-group.invalid .error {
             display: block;
         }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
         .save-btn {
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            background: #007bff;
             color: white;
             border: none;
-            padding: 12px 40px;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: 8px 25px;
+            border-radius: 5px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             display: block;
-            margin: 20px auto 0;
-            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
-            transition: all 0.3s ease;
+            margin: 10px auto 0;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .save-btn:hover {
+            background: #0056b3;
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
         }
         .save-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
         .save-btn:active {
             animation: pulse 0.2s ease;
@@ -319,10 +304,11 @@
         @media (max-width: 576px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 1rem !important;
+                padding: 0.75rem !important;
             }
             .container {
-                margin-top: 60px;
+                margin-top: 50px;
+                padding: 0 10px;
             }
             .table {
                 min-width: 800px;
@@ -337,81 +323,117 @@
             }
             .modal-content {
                 width: 95%;
-                margin: 10% auto;
+                max-width: 360px;
+                margin: 15% auto;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .modal-header {
+                padding: 8px 12px;
+            }
+            .modal-title {
+                font-size: 14px;
+            }
+            .close {
+                font-size: 18px;
+                width: 20px;
+                height: 20px;
+                right: 8px;
+                top: 8px;
             }
             .modal-body {
-                padding: 15px;
+                padding: 10px;
             }
             .form-row {
-                flex-direction: column;
-                gap: 10px;
-                margin-bottom: 15px;
+                gap: 6px;
+                margin-bottom: 6px;
             }
             .form-group label {
-                font-size: 14px;
+                font-size: 12px;
+                margin-bottom: 3px;
             }
             .form-group input,
             .form-group textarea {
-                padding: 10px;
-                font-size: 13px;
+                padding: 6px;
+                font-size: 12px;
+            }
+            .form-group textarea {
+                min-height: 50px;
+            }
+            .error {
+                font-size: 9px;
+                margin-top: 2px;
             }
             .add-btn {
-                font-size: 14px;
+                font-size: 12px;
+                min-width: 120px;
+                height: 34px;
+                padding: 8px 15px;
+            }
+            .save-btn {
+                padding: 6px 20px;
+                font-size: 12px;
+                margin: 8px auto 0;
             }
             .tab-buttons {
                 flex-direction: column;
-                gap: 5px;
+                gap: 8px;
+                align-items: center;
             }
             .tab-buttons button {
                 font-size: 12px;
-                padding: 8px;
+                padding: 8px 15px;
+                width: 100%;
+                max-width: 180px;
             }
         }
-        @media (min-width: 577px) and (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 1rem !important;
-            }
-            .table {
-                min-width: 800px;
-                font-size: 0.85rem;
-            }
-            .modal-content {
-                width: 90%;
-                padding: 1.25rem;
-            }
-            .tab-buttons {
-                gap: 8px;
-            }
-            .form-row {
-                gap: 15px;
-            }
-            .form-group label {
-                font-size: 14px;
-            }
-            .form-group input,
-            .form-group textarea {
-                padding: 11px;
-                font-size: 13.5px;
-            }
-        }
-        @media (min-width: 769px) and (max-width: 991px) {
+        @media (min-width: 577px) and (max-width: 991px) {
             .content-wrapper {
                 margin-left: 200px;
+                padding: 1rem;
             }
             .content-wrapper.minimized {
                 margin-left: 60px;
+            }
+            .container {
+                margin-top: 60px;
             }
             .table {
                 font-size: 0.9rem;
             }
             .modal-content {
-                width: 80%;
+                width: 90%;
+                max-width: 380px;
+                margin: 10% auto;
+            }
+            .modal-body {
+                padding: 12px;
+            }
+            .form-row {
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            .form-group label {
+                font-size: 12px;
+                margin-bottom: 3px;
+            }
+            .form-group input,
+            .form-group textarea {
+                padding: 7px;
+                font-size: 12px;
+            }
+            .save-btn {
+                padding: 7px 20px;
+                font-size: 12px;
+            }
+            .tab-buttons button {
+                font-size: 13px;
+                padding: 10px 20px;
             }
         }
         @media (min-width: 992px) {
-            .igliano: .modal-content {
-                max-width: 500px;
+            .modal-content {
+                max-width: 400px;
             }
         }
         /* Touch device hover fix */
@@ -428,82 +450,84 @@
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="container">
-        <!-- Tab Buttons -->
-        <div class="tab-buttons">
-            <button class="active" onclick="switchTab('Center 1')">Center 1</button>
-            <button onclick="switchTab('Center 2')">Center 2</button>
-            <button onclick="switchTab('Center 3')">Center 3</button>
-            <button onclick="switchTab('Center 4')">Center 4</button>
-        </div>
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container">
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <button class="active" onclick="switchTab('Center 1')">Center 1</button>
+                <button onclick="switchTab('Center 2')">Center 2</button>
+                <button onclick="switchTab('Center 3')">Center 3</button>
+                <button onclick="switchTab('Center 4')">Center 4</button>
+            </div>
 
-        <!-- Leave Table -->
-        <div class="table-container">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Batch</th>
-                        <th>Level</th>
-                        <th>Date</th>
-                        <th>Reason</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="leaveTableBody">
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                            <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                            <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>B1</td>
-                        <td>Intermediate</td>
-                        <td>15/07/2025</td>
-                        <td>sdfghj</td>
-                        <td>sdfghjertyuiopasdfghj</td>
-                        <td class="action-cell">
-                            <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                            <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Leave Table -->
+            <div class="table-container">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Batch</th>
+                            <th>Level</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveTableBody">
+                        <tr>
+                            <td>Jane Doe</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>15/07/2025</td>
+                            <td>Personal</td>
+                            <td>Attending a family event</td>
+                            <td class="action-cell">
+                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>John Smith</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>16/07/2025</td>
+                            <td>Medical</td>
+                            <td>Doctor appointment</td>
+                            <td class="action-cell">
+                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Alice Brown</td>
+                            <td>B1</td>
+                            <td>Intermediate</td>
+                            <td>17/07/2025</td>
+                            <td>Personal</td>
+                            <td>Family event</td>
+                            <td class="action-cell">
+                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
+                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Add Button -->
-        <div class="add-btn-container">
-            <button class="add-btn" onclick="openModal()">Add Leave</button>
+            <!-- Add Button -->
+            <div class="add-btn-container">
+                <button class="add-btn" onclick="openModal()">
+                    <i class="fas fa-plus me-1"></i> Add Leave
+                </button>
+            </div>
         </div>
     </div>
-  </div>
 
     <!-- Modal -->
     <div id="leaveModal" class="modal">
@@ -561,7 +585,7 @@
         // Sample data for each center
         const centerData = {
             'Center 1': [
-                { name: 'Jane Doe', batch: 'B1', level: 'Intermediate', date: '2025-07-15', reason: 'sdfghj', description: 'sdfghjertyuiopasdfghj' },
+                { name: 'Jane Doe', batch: 'B1', level: 'Intermediate', date: '2025-07-15', reason: 'Personal', description: 'Attending a family event' },
                 { name: 'John Smith', batch: 'B1', level: 'Intermediate', date: '2025-07-16', reason: 'Medical', description: 'Doctor appointment' },
                 { name: 'Alice Brown', batch: 'B1', level: 'Intermediate', date: '2025-07-17', reason: 'Personal', description: 'Family event' }
             ],
