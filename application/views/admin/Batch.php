@@ -29,49 +29,51 @@
     }
 
     .content {
-      position: relative; /* Added to provide context for absolute positioning */
+      position: relative;
     }
 
     .center-card {
       background-color: #ffffff;
-      border-radius: 1.25rem;
-      padding: 1.25rem;
+      border-radius: 1rem;
+      padding: 1rem; /* Reduced padding to decrease height */
       width: 100%;
-      max-width: 18.75rem;
+      max-width: 22rem; /* Increased width from 18.75rem */
       border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
-      font-size: 0.9375rem;
+      font-size: 0.875rem; /* Slightly smaller font size */
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: auto;
+      min-height: 12rem; /* Reduced minimum height */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .card-icon {
       position: absolute;
-      top: 0.9375rem;
-      right: 0.9375rem;
-      font-size: 1.25rem;
+      top: 0.75rem; /* Adjusted for smaller card */
+      right: 0.75rem;
+      font-size: 1.125rem; /* Slightly smaller icon */
       color: #333;
     }
 
     .card-details {
-      padding-top: 0.3125rem;
+      padding-top: 0.25rem;
     }
 
     .card-details p {
-      margin: 0.5rem 0;
-      line-height: 1.5;
+      margin: 0.3rem 0; /* Reduced margin to decrease height */
+      line-height: 1.4; /* Tighter line spacing */
       color: #333;
     }
 
     .card-details p:first-child {
-      font-size: 1.125rem;
+      font-size: 1rem; /* Smaller font for batch name */
       font-weight: bold;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem; /* Reduced margin */
     }
 
     .card-details p span {
@@ -80,12 +82,12 @@
     }
 
     .view-btn {
-      margin-top: 0.9375rem;
-      padding: 0.5rem 1.25rem;
+      margin-top: 0.5rem; /* Reduced margin to decrease height */
+      padding: 0.4rem 1rem; /* Smaller padding */
       border: none;
       background-color: #eee;
       border-radius: 0.5rem;
-      font-size: 1rem;
+      font-size: 0.875rem; /* Smaller font size */
       font-weight: bold;
       cursor: pointer;
       width: 100%;
@@ -125,7 +127,7 @@
       position: absolute;
       top: 1.25rem;
       right: 1.25rem;
-      z-index: 1000; /* Ensure it stays above other content */
+      z-index: 1000;
     }
 
     .filter-btn {
@@ -247,16 +249,17 @@
         padding: 0.9375rem !important;
       }
       .center-card {
-        padding: 0.9375rem;
-        max-width: 100%;
+        padding: 0.75rem;
+        max-width: 100%; /* Full width on mobile */
         margin: 0.3125rem;
+        font-size: 0.8125rem; /* Smaller font for mobile */
       }
       .card-details p:first-child {
-        font-size: 1rem;
+        font-size: 0.9375rem;
       }
       .view-btn {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.9375rem;
+        font-size: 0.8125rem;
+        padding: 0.3rem 0.75rem;
       }
       .add-center-btn {
         width: 100%;
@@ -290,8 +293,9 @@
         margin-left: 3.75rem;
       }
       .center-card {
-        max-width: 15.625rem;
+        max-width: 18rem; /* Adjusted width for tablet */
         margin: 0.5rem;
+        font-size: 0.875rem;
       }
       .add-center-btn {
         max-width: 15.625rem;
@@ -313,7 +317,7 @@
         padding: 2.5rem;
       }
       .center-card {
-        max-width: 18.75rem;
+        max-width: 22rem; /* Wider cards for desktop */
         margin: 0.9375rem;
       }
       .modal-content {
@@ -638,7 +642,7 @@
       const row = document.querySelector('.row.justify-content-center');
       if (row) {
         row.insertAdjacentHTML('beforeend', newCard);
-        initialCards.push(newCard); // Add to initial cards for filtering
+        initialCards.push(newCard);
       } else {
         console.error('Row element not found!');
       }

@@ -7,12 +7,13 @@
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900&display=swap" rel="stylesheet">
   <style>
     body {
       background-color: #e9ecef !important;
       margin: 0;
       font-family: 'Montserrat', serif !important;
+      font-style: normal; /* Ensure normal font style */
       overflow-x: hidden;
     }
     .content-wrapper {
@@ -31,36 +32,40 @@
       margin-bottom: 20px;
     }
     .filter-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
-      border: none;
+      background: #ffffff; /* White background */
+      color: #000000; /* Black text */
+      border: 1px solid #ced4da; /* Subtle border for definition */
       border-radius: 8px;
       padding: 8px 15px;
       font-size: 15px;
+      font-style: normal; /* Ensure normal font style */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
     .filter-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
+      background: #f0f0f0; /* Slightly darker white for hover */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .center-card {
       background-color: #ffffff;
-      border-radius: 1.25rem;
-      padding: 1.25rem;
+      border-radius: 1rem;
+      padding: 1rem;
       width: 100%;
-      max-width: 18.75rem;
+      max-width: 22rem;
       border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
+      font-style: normal; /* Ensure normal font style */
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: auto;
+      min-height: 10rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .center-card:hover {
@@ -69,36 +74,38 @@
     }
     .card-icon {
       position: absolute;
-      top: 0.9375rem;
-      right: 0.9375rem;
-      font-size: 1.25rem;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-size: 1.125rem;
       color: #333;
     }
     .card-details {
-      padding-top: 0.3125rem;
+      padding-top: 0.25rem;
     }
     .card-details p {
-      margin: 0.5rem 0;
-      line-height: 1.5;
+      margin: 0.3rem 0;
+      line-height: 1.4;
       color: #333;
+      font-style: normal; /* Ensure normal font style */
     }
     .card-details p:first-child {
-      font-size: 1.125rem;
+      font-size: 1rem;
       font-weight: bold;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
     .card-details p span {
       font-weight: 500;
       color: #444;
     }
     .view-btn {
-      margin-top: 0.9375rem;
-      padding: 0.5rem 1.25rem;
+      margin-top: 0.5rem;
+      padding: 0.4rem 1rem;
       border: none;
       background-color: #eee;
       border-radius: 0.5rem;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-weight: bold;
+      font-style: normal; /* Ensure normal font style */
       cursor: pointer;
       width: 100%;
       transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -109,19 +116,20 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .add-center-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
+      /* background: linear-gradient(90deg, #ff4040, #470000); */
+      color: black;
       border: none;
       border-radius: 8px;
       padding: 8px 15px;
       width: 180px;
       font-size: 15px;
+      font-style: normal; /* Ensure normal font style */
       margin: 25px auto;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
     .add-center-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
+      /* background: linear-gradient(90deg, #ff3030, #360000); */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -130,68 +138,65 @@
       justify-content: center;
     }
     .modal-content {
-      background: linear-gradient(135deg, #ffffff, #f8f9fa);
-      border-radius: 8px;
-      padding: 20px;
-      max-width: 450px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      padding: 20px; /* Reduced from 30px */
+      max-width: 500px;
       margin: auto;
-      border: 2px solid #ff4040;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border: 2px solid #007bff;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
     .modal-content h3 {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 20px;
-      color: #222;
-      font-size: 1.25rem;
+      margin-bottom: 15px; /* Reduced from 20px */
+      color: #333;
+      font-style: normal; /* Ensure normal font style */
     }
     .modal-close-btn {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background: #e0e0e0;
+      top: 10px;
+      right: 10px;
+      background: none;
       border: none;
-      font-size: 1.25rem;
-      color: #666;
+      font-size: 1.5rem;
+      color: #333;
       cursor: pointer;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      color: #ff4040;
+      transform: scale(1.2);
     }
     .modal-backdrop.show {
       backdrop-filter: blur(6px);
     }
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem; /* Reduced from 1rem */
     }
     .form-group label {
-      font-weight: 600;
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 14px; /* Reduced from 15px */
+      color: #444;
+      margin-bottom: 4px; /* Reduced from 6px */
       display: block;
+      font-style: normal; /* Ensure normal font style */
     }
     .form-control, .form-control select {
-      height: 40px;
+      height: 38px; /* Reduced from 45px */
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 13px; /* Reduced from 14px */
       border: 1px solid #ced4da;
-      background-color: #f9f9f9;
-      padding: 8px 12px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-style: normal; /* Ensure normal font style */
+      transition: border-color 0.3s ease;
     }
     .form-control:focus, .form-control select:focus {
       border-color: #ff4040;
-      box-shadow: 0 0 6px rgba(255, 64, 64, 0.3);
-      background-color: #fff;
+      box-shadow: 0 0 5px rgba(255, 64, 64, 0.3);
     }
     .form-control::placeholder {
       color: #999;
-      font-style: italic;
     }
     .form-group select.form-control {
       appearance: none;
@@ -200,22 +205,23 @@
       background-position: right 10px center;
       background-size: 12px;
     }
-    .submit-btn, .close-btn {
+    .submit-btn, .close-btn, .update-btn, .delete-btn {
       border-radius: 8px;
-      padding: 10px;
+      padding: 8px; /* Reduced from 10px */
       font-weight: 600;
-      width: 140px;
-      margin: 8px 5px;
+      width: 120px; /* Reduced from 140px */
+      margin: 6px 5px; /* Reduced from 8px */
       border: none;
-      color: white;
+      color: #000000; /* Default to black text */
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
       transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      font-style: normal; /* Ensure normal font style */
     }
     .submit-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
+      background: #ffffff; /* White background for filter form submit button */
     }
     .submit-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
+      background: #f0f0f0; /* Slightly darker white for hover */
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -229,18 +235,17 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
     .update-btn {
-      /* background:#d0d0d0; */
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      /* background: linear-gradient(90deg, #007bff, #0056b3); */
+      color: white;
     }
     .update-btn:hover {
       /* background: linear-gradient(90deg, #0056b3, #003d82); */
-
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
     .delete-btn {
       /* background: linear-gradient(90deg, #dc3545, #a71d2a); */
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      color: white;
     }
     .delete-btn:hover {
       /* background: linear-gradient(90deg, #a71d2a, #7a1a20); */
@@ -250,7 +255,7 @@
     .invalid-feedback {
       color: #dc3545;
       font-size: 12px;
-      margin-top: 5px;
+      margin-top: 4px; /* Reduced from 5px */
     }
     .sidebar {
       position: fixed;
@@ -267,7 +272,6 @@
       top: 0;
       left: 250px;
       right: 0;
-      /* background-color: #444; */
       color: white;
       padding: 10px;
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -286,16 +290,17 @@
         padding: 10px;
       }
       .center-card {
-        padding: 0.9375rem;
+        padding: 0.75rem;
         max-width: 100%;
         margin: 0.3125rem;
+        font-size: 0.8125rem;
       }
       .card-details p:first-child {
-        font-size: 1rem;
+        font-size: 0.9375rem;
       }
       .view-btn {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.9375rem;
+        font-size: 0.8125rem;
+        padding: 0.3rem 0.75rem;
       }
       .add-center-btn, .filter-btn {
         width: 120px;
@@ -303,27 +308,27 @@
         padding: 6px 10px;
       }
       .modal-content {
-        max-width: 95%;
-        padding: 15px;
+        max-width: 90%;
+        padding: 12px; /* Reduced from 15px */
       }
       .form-row {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px; /* Reduced from 10px */
       }
       .form-control, .form-control select {
-        height: 36px;
-        font-size: 13px;
+        height: 34px; /* Reduced from 40px */
+        font-size: 12px; /* Reduced from 13px */
       }
       .form-group label {
-        font-size: 14px;
+        font-size: 13px; /* Reduced from 14px */
       }
       .submit-btn, .close-btn, .update-btn, .delete-btn {
-        width: 120px;
-        padding: 8px;
-        font-size: 13px;
+        width: 100px; /* Reduced from 120px */
+        padding: 6px; /* Reduced from 8px */
+        font-size: 12px; /* Reduced from 13px */
       }
       .modal-content h3 {
-        font-size: 1.125rem;
+        font-size: 1rem; /* Reduced from 1.125rem */
       }
     }
     @media (min-width: 577px) and (max-width: 768px) {
@@ -335,23 +340,24 @@
         margin-left: 0;
       }
       .center-card {
-        max-width: 15.625rem;
+        max-width: 18rem;
         margin: 0.5rem;
+        font-size: 0.875rem;
       }
       .add-center-btn, .filter-btn {
         width: 140px;
         font-size: 13px;
       }
       .modal-content {
-        max-width: 400px;
-        padding: 18px;
+        max-width: 90%;
+        padding: 15px; /* Reduced from 20px */
       }
       .form-row {
-        gap: 12px;
+        gap: 10px; /* Reduced from 12px */
       }
       .submit-btn, .close-btn, .update-btn, .delete-btn {
-        width: 120px;
-        font-size: 13px;
+        width: 100px; /* Reduced from 120px */
+        font-size: 12px; /* Reduced from 13px */
       }
       .navbar {
         left: 0;
@@ -363,7 +369,7 @@
       }
       #filterModal .form-row {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px; /* Reduced from 10px */
       }
     }
     @media (min-width: 769px) and (max-width: 991px) {
@@ -375,8 +381,9 @@
         margin-left: 60px;
       }
       .center-card {
-        max-width: 15.625rem;
+        max-width: 18rem;
         margin: 0.5rem;
+        font-size: 0.875rem;
       }
       .add-center-btn, .filter-btn {
         width: 150px;
@@ -384,6 +391,7 @@
       }
       .modal-content {
         max-width: 450px;
+        padding: 15px; /* Reduced from 20px */
       }
       .navbar {
         left: 200px;
@@ -396,18 +404,17 @@
     }
     @media (min-width: 992px) {
       .center-card {
-        max-width: 18.75rem;
-        margin: 0.9375rem;
+        max-width: 22rem;
+        /* margin: 0.9375rem; */
       }
       .add-center-btn, .filter-btn {
         width: 180px;
         font-size: 15px;
       }
       .modal-content {
-        max-width: 450px;
+        max-width: 500px;
       }
     }
-    /* Touch device hover fix */
     @media (hover: none) {
       .view-btn:hover,
       .add-center-btn:hover,
@@ -436,7 +443,7 @@
       <div class="container-fluid">
         <!-- Filter Button -->
         <div class="header-container">
-          <button class="filter-btn btn btn-danger" data-toggle="modal" data-target="#filterModal">Filter</button>
+          <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">Filter</button>
         </div>
         <div class="row justify-content-start" id="centerCards">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
@@ -558,6 +565,9 @@
   <div class="modal fade" id="viewCenterModal" tabindex="-1" aria-labelledby="viewCenterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
         <h3 id="viewCenterLabel">Center Details</h3>
         <form id="viewCenterForm" novalidate>
           <div class="form-row">

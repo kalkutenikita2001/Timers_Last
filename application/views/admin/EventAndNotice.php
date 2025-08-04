@@ -55,44 +55,46 @@
 
     .center-card {
       background-color: #ffffff;
-      border-radius: 1.25rem;
-      padding: 1.25rem;
+      border-radius: 1rem;
+      padding: 1rem; /* Reduced from 1.25rem */
       width: 100%;
-      max-width: 18.75rem;
+      max-width: 22rem; /* Increased from 18.75rem */
       border-left: 2px solid #ff4040;
       position: relative;
       margin: 0.625rem;
       color: #333;
-      font-size: 0.9375rem;
+      font-size: 0.875rem; /* Reduced from 0.9375rem */
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: auto;
+      min-height: 10rem; /* Reduced height */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
     }
 
     .card-icon {
       position: absolute;
-      top: 0.9375rem;
-      right: 0.9375rem;
-      font-size: 1.25rem;
+      top: 0.75rem; /* Adjusted from 0.9375rem */
+      right: 0.75rem;
+      font-size: 1.125rem; /* Reduced from 1.25rem */
       color: #333;
     }
 
     .card-details {
-      padding-top: 0.3125rem;
+      padding-top: 0.25rem; /* Reduced from 0.3125rem */
     }
 
     .card-details p {
-      margin: 0.5rem 0;
-      line-height: 1.5;
+      margin: 0.3rem 0; /* Reduced from 0.5rem */
+      line-height: 1.4; /* Reduced from 1.5 */
       color: #333;
     }
 
     .card-details p:first-child {
-      font-size: 1.125rem;
+      font-size: 1rem; /* Reduced from 1.125rem */
       font-weight: bold;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem; /* Reduced from 0.75rem */
     }
 
     .card-details p span {
@@ -101,12 +103,12 @@
     }
 
     .view-btn {
-      margin-top: 0.9375rem;
-      padding: 0.5rem 1.25rem;
+      margin-top: 0.5rem; /* Reduced from 0.9375rem */
+      padding: 0.4rem 1rem; /* Reduced from 0.5rem 1.25rem */
       border: none;
       background-color: #eee;
       border-radius: 0.5rem;
-      font-size: 1rem;
+      font-size: 0.875rem; /* Reduced from 1rem */
       font-weight: bold;
       cursor: pointer;
       width: 100%;
@@ -206,13 +208,12 @@
       color: white;
       border-radius: 10px;
       padding: 12px;
-      width: 150px;
+      width: 199px;
       font-weight: 600;
       display: block;
       margin: 25px auto 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      width: 199px;
     }
 
     .submit-btn:hover {
@@ -237,16 +238,17 @@
         padding: 10px;
       }
       .center-card {
-        padding: 0.9375rem;
-        max-width: 100%;
+        padding: 0.75rem; /* Reduced from 0.9375rem */
+        max-width: 100%; /* Full width on mobile */
         margin: 0.3125rem;
+        font-size: 0.8125rem; /* Smaller font */
       }
       .card-details p:first-child {
-        font-size: 1rem;
+        font-size: 0.9375rem; /* Reduced from 1rem */
       }
       .view-btn {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.9375rem;
+        font-size: 0.8125rem; /* Reduced from 0.875rem */
+        padding: 0.3rem 0.75rem; /* Reduced from 0.375rem 0.9375rem */
       }
       .participate-btn {
         width: 120px;
@@ -281,8 +283,9 @@
         margin-left: 0;
       }
       .center-card {
-        max-width: 15.625rem;
+        max-width: 18rem; /* Adjusted for tablet */
         margin: 0.5rem;
+        font-size: 0.875rem;
       }
       .participate-btn {
         width: 140px;
@@ -308,8 +311,9 @@
         margin-left: 60px;
       }
       .center-card {
-        max-width: 15.625rem;
+        max-width: 18rem; /* Adjusted for tablet */
         margin: 0.5rem;
+        font-size: 0.875rem;
       }
       .participate-btn {
         width: 150px;
@@ -322,7 +326,7 @@
 
     @media (min-width: 992px) {
       .center-card {
-        max-width: 18.75rem;
+        max-width: 22rem; /* Increased from 18.75rem */
         margin: 0.9375rem;
       }
       .participate-btn {

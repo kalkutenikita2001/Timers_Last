@@ -391,12 +391,12 @@
         </div>
       </div>
       <div class="d-flex justify-content-center gap-3 my-4">
-        <div class="bg-gray px-3 py-2 rounded shadow-sm d-flex align-items-center">
+        <div class="bg-gray px-3 py-2 rounded d-flex align-items-center">
           <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
             <i class="bi bi-download me-1"></i> Export Excel
           </button>
         </div>
-        <div class="bg-gray px-3 py-2 rounded shadow-sm d-flex align-items-center">
+        <div class="bg-gray px-3 py-2 rounded d-flex align-items-center">
           <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
             <i class="bi bi-download me-1"></i> Export PDF
           </button>
