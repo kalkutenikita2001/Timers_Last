@@ -318,8 +318,8 @@
         }
 
         .save-btn {
-            background: #dc3545;
-            color: white;
+            /* background: #dc3545; */
+            color: black;
             border: none;
             padding: 0.75rem 2rem;
             border-radius: 0.25rem;
