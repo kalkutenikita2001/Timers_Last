@@ -37,7 +37,6 @@
     }
 
     .participate-btn {
-      /* background: linear-gradient(90deg, #ff4040, #470000); */
       color: black;
       border: none;
       border-radius: 8px;
@@ -48,31 +47,30 @@
     }
 
     .participate-btn:hover {
-      /* background: linear-gradient(90deg, #ff3030, #360000); */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-  .center-card {
-    background-color: #ffffff;
-    border-radius: 1rem;
-    padding: 1rem;
-    width: 100%;
-    max-width: 22rem;
-    border-left: 2px solid #ff4040;
-    position: relative;
-    color: #333;
-    font-size: 0.875rem;
-    font-style: normal;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: auto;
-    min-height: 10rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .center-card {
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 100%;
+      max-width: 22rem;
+      border-left: 2px solid #ff4040;
+      position: relative;
+      color: #333;
+      font-size: 0.875rem;
+      font-style: normal;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: auto;
+      min-height: 10rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
     .card-icon {
       position: absolute;
@@ -122,7 +120,6 @@
     }
 
     .add-center-btn {
-      /* background: linear-gradient(90deg, #ff4040, #470000); */
       color: black;
       border: none;
       border-radius: 8px;
@@ -135,7 +132,6 @@
     }
 
     .add-center-btn:hover {
-      /* background: linear-gradient(90deg, #ff3030, #360000); */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -203,10 +199,10 @@
       box-shadow: 0 0 5px rgba(255, 64, 64, 0.3);
     }
 
-    .submit-btn {
-      /* background: linear-gradient(to top, #990000, #ff0000);s */
+    .submit-btn, .update-btn {
+      /* background: linear-gradient(to top, #990000, #ff0000); */
       border: none;
-      color: black;
+      color: white;
       border-radius: 10px;
       padding: 12px;
       width: 150px;
@@ -215,18 +211,48 @@
       margin: 25px auto 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      width: 199px;
     }
 
-    .submit-btn:hover {
+    .submit-btn:hover, .update-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .close-btn {
+      background: #e0e0e0;
+      color: #333;
+      border: none;
+      border-radius: 10px;
       padding: 5px 10px;
       font-size: 14px;
       width: 80px;
+      margin: 25px 5px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .close-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      width: 120px;
+      font-weight: 600;
+      margin: 25px 5px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .delete-btn:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .invalid-feedback {
@@ -264,7 +290,7 @@
         height: 40px;
         font-size: 13px;
       }
-      .submit-btn {
+      .submit-btn, .update-btn {
         width: 120px;
         padding: 10px;
       }
@@ -272,6 +298,10 @@
         width: 60px;
         font-size: 12px;
         padding: 3px 8px;
+      }
+      .delete-btn {
+        width: 100px;
+        padding: 10px;
       }
     }
 
@@ -285,7 +315,6 @@
       }
       .center-card {
         max-width: 15.625rem;
-        /* margin: 0.5rem; */
       }
       .participate-btn {
         width: 140px;
@@ -299,6 +328,9 @@
         width: 70px;
         font-size: 13px;
         padding: 4px 10px;
+      }
+      .delete-btn {
+        width: 110px;
       }
     }
 
@@ -326,7 +358,6 @@
     @media (min-width: 992px) {
       .center-card {
         max-width: 18.75rem;
-        /* margin: 0.9375rem; */
       }
       .participate-btn {
         width: 180px;
@@ -340,7 +371,11 @@
     @media (hover: none) {
       .view-btn:hover,
       .add-center-btn:hover,
-      .participate-btn:hover {
+      .participate-btn:hover,
+      .submit-btn:hover,
+      .close-btn:hover,
+      .delete-btn:hover,
+      .update-btn:hover {
         background-color: inherit;
         transform: none;
         box-shadow: none;
@@ -470,20 +505,50 @@
 
 <!-- View Event Modal -->
 <div class="modal fade" id="viewEventModal" tabindex="-1" aria-labelledby="viewEventLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
         <i class="fas fa-times"></i>
       </button>
       <h3 id="viewEventLabel">Event/Notice Details</h3>
-      <div class="card-details">
-        <p>Title: <span id="viewTitle"></span></p>
-        <p>Center: <span id="viewCenter"></span></p>
-        <p>Date: <span id="viewDate"></span></p>
-        <p>Time: <span id="viewTime"></span></p>
-        <p>Description: <span id="viewDescription"></span></p>
-      </div>
-      <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
+      <form id="viewEventForm" novalidate>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="viewTitle">Title <span class="text-danger">*</span>:</label>
+            <input type="text" id="viewTitle" name="title" class="form-control" required />
+            <div class="invalid-feedback">Please enter a title.</div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="viewCenter">Center <span class="text-danger">*</span>:</label>
+            <input type="text" id="viewCenter" name="center" class="form-control" required />
+            <div class="invalid-feedback">Please enter a center.</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="viewDate">Date <span class="text-danger">*</span>:</label>
+            <input type="date" id="viewDate" name="date" class="form-control" required />
+            <div class="invalid-feedback">Please select a date.</div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="viewTime">Time <span class="text-danger">*</span>:</label>
+            <input type="time" id="viewTime" name="time" class="form-control" required />
+            <div class="invalid-feedback">Please select a time.</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="viewDescription">Description <span class="text-danger">*</span>:</label>
+            <textarea id="viewDescription" name="description" class="form-control" required></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="update-btn btn btn-primary1" aria-label="Update event">Update</button>
+          <button type="button" class="delete-btn btn" aria-label="Delete event">Delete</button>
+          <button type="button" class="close-btn btn" data-dismiss="modal" aria-label="Close view modal">Close</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -548,6 +613,7 @@
     'use strict';
     const form = document.getElementById('eventForm');
     const participateForm = document.getElementById('participateForm');
+    const viewForm = document.getElementById('viewEventForm');
     if (!form) {
       console.error('Event form not found!');
       return;
@@ -556,6 +622,13 @@
       console.error('Participate form not found!');
       return;
     }
+    if (!viewForm) {
+      console.error('View form not found!');
+      return;
+    }
+
+    // Store initial cards for updates
+    let initialCards = Array.from(document.querySelectorAll('.center-card')).map(card => card.parentElement.outerHTML);
 
     // Event form submission
     form.addEventListener('submit', function (event) {
@@ -599,7 +672,7 @@
               <p><span>Time:</span> ${time}</p>
               <p><span>Description:</span> ${description}</p>
             </div>
-            <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="${title}" data-center="${center}" data-date="${date}" data-time="${time}" data-description="${description}">View</button>
+            <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-title="${title}" data-center="${center}" data-date="${date}" data-time="${time}" data-description="${description}" aria-label="View ${title} details">View</button>
           </div>
         </div>
       `;
@@ -608,6 +681,7 @@
       const row = document.querySelector('.row.justify-content-start .row');
       if (row) {
         row.insertAdjacentHTML('beforeend', newCard);
+        initialCards.push(newCard);
         // Update event dropdown in participate modal
         const eventSelect = document.getElementById('eventTitle');
         const newOption = document.createElement('option');
@@ -665,6 +739,7 @@
     // Handle view button clicks with jQuery modal event
     $('#viewEventModal').on('show.bs.modal', function (event) {
       const button = $(event.relatedTarget);
+      const batchId = button.data('batch-id') || button.closest('.center-card').attr('id');
       const title = button.data('title');
       const center = button.data('center');
       const date = button.data('date');
@@ -673,11 +748,107 @@
 
       const modal = $(this);
       modal.find('#viewEventLabel').text(`Event/Notice Details - ${title}`);
-      modal.find('#viewTitle').text(title);
-      modal.find('#viewCenter').text(center);
-      modal.find('#viewDate').text(date);
-      modal.find('#viewTime').text(time);
-      modal.find('#viewDescription').text(description);
+      modal.find('#viewTitle').val(title);
+      modal.find('#viewCenter').val(center);
+      modal.find('#viewDate').val(new Date(date.split('/').reverse().join('-')).toISOString().split('T')[0]);
+      modal.find('#viewTime').val(time.split(' to ')[0].trim());
+      modal.find('#viewDescription').val(description);
+      modal.find('.update-btn').data('batch-id', batchId);
+      modal.find('.delete-btn').data('batch-id', batchId);
+    });
+
+    // Handle update form submission
+    viewForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!viewForm.checkValidity()) {
+        viewForm.classList.add('was-validated');
+        return;
+      }
+
+      const batchId = $(viewForm).find('.update-btn').data('batch-id');
+      const title = document.getElementById('viewTitle').value.trim();
+      const center = document.getElementById('viewCenter').value.trim();
+      const dateRaw = document.getElementById('viewDate').value;
+      const timeRaw = document.getElementById('viewTime').value;
+      const description = document.getElementById('viewDescription').value.trim();
+
+      // Format date to DD/MM/YYYY
+      const dateObj = new Date(dateRaw);
+      const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+
+      // Format time to "H to H+1 AM/PM"
+      const [hours, minutes] = timeRaw.split(':');
+      const hourNum = parseInt(hours, 10);
+      const period = hourNum >= 12 ? 'PM' : 'AM';
+      const displayHour = hourNum % 12 || 12;
+      const nextHour = (hourNum + 1) % 12 || 12;
+      const time = `${displayHour} to ${nextHour} ${period}`;
+
+      // Update the card
+      const card = document.getElementById(batchId);
+      if (card) {
+        card.querySelector('p:nth-child(1) span').nextSibling.textContent = ` ${title}`;
+        card.querySelector('p:nth-child(2) span').nextSibling.textContent = ` ${center}`;
+        card.querySelector('p:nth-child(3) span').nextSibling.textContent = ` ${date}`;
+        card.querySelector('p:nth-child(4) span').nextSibling.textContent = ` ${time}`;
+        card.querySelector('p:nth-child(5) span').nextSibling.textContent = ` ${description}`;
+        card.querySelector('.view-btn').setAttribute('data-title', title);
+        card.querySelector('.view-btn').setAttribute('data-center', center);
+        card.querySelector('.view-btn').setAttribute('data-date', date);
+        card.querySelector('.view-btn').setAttribute('data-time', time);
+        card.querySelector('.view-btn').setAttribute('data-description', description);
+        card.querySelector('.view-btn').setAttribute('aria-label', `View ${title} details`);
+
+        // Update event dropdown in participate modal
+        const eventSelect = document.getElementById('eventTitle');
+        Array.from(eventSelect.options).forEach(option => {
+          if (option.value === $(card.querySelector('.view-btn')).data('title-old')) {
+            option.value = title;
+            option.textContent = title;
+          }
+        });
+        card.querySelector('.view-btn').setAttribute('data-title-old', title);
+
+        // Update initialCards
+        const cardIndex = initialCards.findIndex(c => c.includes(`id="${batchId}"`));
+        if (cardIndex !== -1) {
+          initialCards[cardIndex] = card.parentElement.outerHTML;
+        }
+      }
+
+      // Reset form and close modal
+      viewForm.classList.remove('was-validated');
+      $('#viewEventModal').modal('hide');
+    });
+
+    // Ensure validation feedback on input for view form
+    viewForm.addEventListener('input', function () {
+      if (viewForm.checkValidity()) {
+        viewForm.classList.remove('was-validated');
+      }
+    });
+
+    // Handle delete button click
+    viewForm.querySelector('.delete-btn').addEventListener('click', function () {
+      const batchId = $(this).data('batch-id');
+      const card = document.getElementById(batchId);
+      if (card) {
+        const title = card.querySelector('.view-btn').getAttribute('data-title');
+        const cardContainer = card.parentElement;
+        cardContainer.remove();
+        // Update initialCards
+        initialCards = initialCards.filter(c => !c.includes(`id="${batchId}"`));
+        // Remove from event dropdown
+        const eventSelect = document.getElementById('eventTitle');
+        Array.from(eventSelect.options).forEach(option => {
+          if (option.value === title) {
+            option.remove();
+          }
+        });
+        $('#viewEventModal').modal('hide');
+      }
     });
 
     // Sidebar toggle functionality
