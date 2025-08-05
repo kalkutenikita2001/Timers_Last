@@ -320,7 +320,7 @@
 
       .modal-content {
         padding: 1.25rem;
-        max-width: 95%;
+        /* max-width: 95%; */
       }
 
       .form-row {

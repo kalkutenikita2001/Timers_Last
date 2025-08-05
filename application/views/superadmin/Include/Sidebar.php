@@ -31,7 +31,7 @@
     <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">
       <i class="bi bi-receipt-cutoff"></i><span>Leave</span>
     </a>
-    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+     <a class="nav-link" href="<?php echo base_url('base/superadminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
   </nav>
 </div>
 

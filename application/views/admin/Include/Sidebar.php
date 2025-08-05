@@ -34,7 +34,7 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Report') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Report'; ?>">
             <i class="bi bi-clipboard-data"></i><span>Report</span>
         </a>
-        <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a class="nav-link" href="<?php echo base_url('base/adminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a> 
     </nav>
 </div>
 
