@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Centers UI</title>
-  <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900&display=swap" rel="stylesheet">
@@ -270,13 +269,12 @@
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
     .content {
-      margin-top: 20px; /* Reduced from 60px to minimize gap */
+      margin-top: 20px;
     }
     .blur {
       filter: blur(5px);
       transition: filter 0.3s ease;
     }
-    /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0;
@@ -424,78 +422,20 @@
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
   <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
   <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-  <!-- Main Content -->
   <div class="content-wrapper" id="contentWrapper">
     <div class="content" id="mainContent">
       <div class="container-fluid">
-        <!-- Filter Button -->
         <div class="filter-wrapper">
           <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">
             <i class="bi bi-funnel me-2"></i> Filter
           </button>
         </div>
         
-        <div class="row justify-content-start" id="centerCards">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-1">
-              <i class="fas fa-building card-icon"></i>
-              <div class="card-details">
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Admin:</span> Jony Deo</p>
-                <p><span>Coordinator:</span> John Deo</p>
-                <p><span>Coach:</span> John Deo</p>
-                <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-1" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-2">
-              <i class="fas fa-building card-icon"></i>
-              <div class="card-details">
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Admin:</span> Jony Deo</p>
-                <p><span>Coordinator:</span> John Deo</p>
-                <p><span>Coach:</span> John Deo</p>
-                <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-2" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-3">
-              <i class="fas fa-building card-icon"></i>
-              <div class="card-details">
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Admin:</span> Jony Deo</p>
-                <p><span>Coordinator:</span> John Deo</p>
-                <p><span>Coach:</span> John Deo</p>
-                <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-3" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-4">
-              <i class="fas fa-building card-icon"></i>
-              <div class="card-details">
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Admin:</span> Jony Deo</p>
-                <p><span>Coordinator:</span> John Deo</p>
-                <p><span>Coach:</span> John Deo</p>
-                <p><span>Address:</span> Shantinagar, Nashik, Maharashtra-456789</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-4" data-center-name="ABC" data-admin="Jony Deo" data-coordinator="John Deo" data-coach="John Deo" data-address="Shantinagar, Nashik, Maharashtra-456789">View</button>
-            </div>
-          </div>
-        </div>
+        <div class="row justify-content-start" id="centerCards"></div>
 
-        <!-- Add Center Button -->
         <div class="button-container">
           <button class="add-center-btn" data-toggle="modal" data-target="#addCenterModal">Add Center</button>
         </div>
@@ -503,7 +443,6 @@
     </div>
   </div>
 
-  <!-- Add Center Modal -->
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -556,7 +495,6 @@
     </div>
   </div>
 
-  <!-- View Center Modal -->
   <div class="modal fade" id="viewCenterModal" tabindex="-1" aria-labelledby="viewCenterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
@@ -610,7 +548,6 @@
     </div>
   </div>
 
-  <!-- Filter Modal -->
   <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -650,128 +587,126 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Form Submission, View Modal, Update, Delete, and Filter Handling -->
   <script>
     (function () {
       'use strict';
-      const form = document.getElementById('centerForm');
-      const filterForm = document.getElementById('filterForm');
-      const viewForm = document.getElementById('viewCenterForm');
-      if (!form) {
-        console.error('Center form not found!');
-        return;
-      }
-      if (!filterForm) {
-        console.error('Filter form not found!');
-        return;
-      }
-      if (!viewForm) {
-        console.error('View form not found!');
-        return;
+
+      const baseUrl = '<?php echo base_url(); ?>center/';
+
+      function loadCenters(filters = {}) {
+        $.ajax({
+          url: baseUrl + 'get_centers',
+          method: 'GET',
+          data: filters,
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              const row = $('#centerCards');
+              row.empty();
+              if (centers.length === 0) {
+                row.html('<p class="text-center">No centers match the filter criteria.</p>');
+                return;
+              }
+              centers.forEach(center => {
+                const card = `
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+                    <div class="center-card" id="card-${center.id}">
+                      <i class="fas fa-building card-icon"></i>
+                      <div class="card-details">
+                        <p><span>Center Name:</span> ${center.center_name}</p>
+                        <p><span>Admin:</span> ${center.admin}</p>
+                        <p><span>Coordinator:</span> ${center.coordinator}</p>
+                        <p><span>Coach:</span> ${center.coach}</p>
+                        <p><span>Address:</span> ${center.address}</p>
+                      </div>
+                      <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" 
+                              data-center-id="${center.id}" 
+                              data-center-name="${center.center_name}" 
+                              data-admin="${center.admin}" 
+                              data-coordinator="${center.coordinator}" 
+                              data-coach="${center.coach}" 
+                              data-address="${center.address}">View</button>
+                    </div>
+                  </div>
+                `;
+                row.append(card);
+              });
+            } else {
+              console.error('Error fetching centers:', response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+          }
+        });
       }
 
-      // Store initial cards for filtering
-      let initialCards = Array.from(document.querySelectorAll('#centerCards .col-12')).map(card => card.outerHTML);
+      $(document).ready(function () {
+        loadCenters();
+      });
 
-      // Form submission for adding centers
-      form.addEventListener('submit', function (e) {
+      $('#centerForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        // Get form values
-        const centerName = document.getElementById('centerName').value.trim();
-        const coordinator = document.getElementById('coordinator').value;
-        const admin = document.getElementById('admin').value.trim();
-        const coach = document.getElementById('coach').value;
-        const address = document.getElementById('address').value.trim();
+        const formData = {
+          centerName: $('#centerName').val().trim(),
+          admin: $('#admin').val().trim(),
+          coordinator: $('#coordinator').val(),
+          coach: $('#coach').val(),
+          address: $('#address').val().trim()
+        };
 
-        // Create new card
-        let cardCounter = document.querySelectorAll('.center-card').length + 1;
-        const newCard = `
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-${cardCounter}">
-              <i class="fas fa-building card-icon"></i>
-              <div class="card-details">
-                <p><span>Center Name:</span> ${centerName}</p>
-                <p><span>Admin:</span> ${admin}</p>
-                <p><span>Coordinator:</span> ${coordinator}</p>
-                <p><span>Coach:</span> ${coach}</p>
-                <p><span>Address:</span> ${address}</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewCenterModal" data-center-id="card-${cardCounter}" data-center-name="${centerName}" data-admin="${admin}" data-coordinator="${coordinator}" data-coach="${coach}" data-address="${address}">View</button>
-            </div>
-          </div>
-        `;
-
-        // Append new card to the row
-        const row = document.querySelector('#centerCards');
-        if (row) {
-          row.insertAdjacentHTML('beforeend', newCard);
-          initialCards.push(newCard);
-        } else {
-          console.error('Row element not found!');
-        }
-
-        // Reset form and close modal
-        form.reset();
-        form.classList.remove('was-validated');
-        $('#addCenterModal').modal('hide');
+        $.ajax({
+          url: baseUrl + 'add_center',
+          method: 'POST',
+          data: formData,
+          success: function (response) {
+            if (response.status === 'success') {
+              loadCenters();
+              $('#centerForm').removeClass('was-validated').trigger('reset');
+              $('#addCenterModal').modal('hide');
+            } else {
+              alert(response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            alert('An error occurred while adding the center.');
+          }
+        });
       });
 
-      // Ensure validation feedback on input for add form
-      form.addEventListener('input', function () {
-        if (form.checkValidity()) {
-          form.classList.remove('was-validated');
+      $('#centerForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
-      // Filter form submission
-      filterForm.addEventListener('submit', function (e) {
+      $('#filterForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        // Get filter values
-        const filterCenterName = document.getElementById('filterCenterName').value.trim().toLowerCase();
-        const filterAdmin = document.getElementById('filterAdmin').value.trim().toLowerCase();
-        const filterCoordinator = document.getElementById('filterCoordinator').value.trim().toLowerCase();
-        const filterCoach = document.getElementById('filterCoach').value.trim().toLowerCase();
-        const filterAddress = document.getElementById('filterAddress').value.trim().toLowerCase();
+        const filters = {
+          center_name: $('#filterCenterName').val().trim(),
+          admin: $('#filterAdmin').val().trim(),
+          coordinator: $('#filterCoordinator').val().trim(),
+          coach: $('#filterCoach').val().trim(),
+          address: $('#filterAddress').val().trim()
+        };
 
-        // Filter cards
-        const filteredCards = initialCards.filter(card => {
-          const cardElement = document.createElement('div');
-          cardElement.innerHTML = card;
-          const centerName = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
-          const admin = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
-          const coordinator = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
-          const coach = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
-          const address = cardElement.querySelector('p:nth-child(5) span').nextSibling.textContent.trim().toLowerCase();
-
-          return (!filterCenterName || centerName.includes(filterCenterName)) &&
-                 (!filterAdmin || admin.includes(filterAdmin)) &&
-                 (!filterCoordinator || coordinator.includes(filterCoordinator)) &&
-                 (!filterCoach || coach.includes(filterCoach)) &&
-                 (!filterAddress || address.includes(filterAddress));
-        });
-
-        // Update card display
-        const row = document.getElementById('centerCards');
-        row.innerHTML = filteredCards.length ? filteredCards.join('') : '<p class="text-center">No centers match the filter criteria.</p>';
-
-        // Close modal
+        loadCenters(filters);
         $('#filterModal').modal('hide');
       });
 
-      // Handle view button clicks
       $('#viewCenterModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const centerId = button.data('center-id');
@@ -792,103 +727,98 @@
         modal.find('.delete-btn').data('center-id', centerId);
       });
 
-      // Handle update form submission
-      viewForm.addEventListener('submit', function (e) {
+      $('#viewCenterForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!viewForm.checkValidity()) {
-          viewForm.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const centerId = $(viewForm).find('.update-btn').data('center-id');
-        const centerName = document.getElementById('viewCenterName').value.trim();
-        const admin = document.getElementById('viewAdmin').value.trim();
-        const coordinator = document.getElementById('viewCoordinator').value;
-        const coach = document.getElementById('viewCoach').value;
-        const address = document.getElementById('viewAddress').value.trim();
+        const centerId = $(this).find('.update-btn').data('center-id');
+        const formData = {
+          centerName: $('#viewCenterName').val().trim(),
+          admin: $('#viewAdmin').val().trim(),
+          coordinator: $('#viewCoordinator').val(),
+          coach: $('#viewCoach').val(),
+          address: $('#viewAddress').val().trim()
+        };
 
-        // Update the card
-        const card = document.getElementById(centerId);
-        if (card) {
-          card.querySelector('p:nth-child(1) span').nextSibling.textContent = ` ${centerName}`;
-          card.querySelector('p:nth-child(2) span').nextSibling.textContent = ` ${admin}`;
-          card.querySelector('p:nth-child(3) span').nextSibling.textContent = ` ${coordinator}`;
-          card.querySelector('p:nth-child(4) span').nextSibling.textContent = ` ${coach}`;
-          card.querySelector('p:nth-child(5) span').nextSibling.textContent = ` ${address}`;
-          card.querySelector('.view-btn').setAttribute('data-center-name', centerName);
-          card.querySelector('.view-btn').setAttribute('data-admin', admin);
-          card.querySelector('.view-btn').setAttribute('data-coordinator', coordinator);
-          card.querySelector('.view-btn').setAttribute('data-coach', coach);
-          card.querySelector('.view-btn').setAttribute('data-address', address);
-
-          // Update initialCards
-          const cardIndex = initialCards.findIndex(c => c.includes(`id="${centerId}"`));
-          if (cardIndex !== -1) {
-            initialCards[cardIndex] = card.parentElement.outerHTML;
-          }
-        }
-
-        // Reset form and close modal
-        viewForm.classList.remove('was-validated');
-        $('#viewCenterModal').modal('hide');
-      });
-
-      // Ensure validation feedback on input for view form
-      viewForm.addEventListener('input', function () {
-        if (viewForm.checkValidity()) {
-          viewForm.classList.remove('was-validated');
-        }
-      });
-
-      // Handle delete button click
-      viewForm.querySelector('.delete-btn').addEventListener('click', function () {
-        const centerId = $(this).data('center-id');
-        const card = document.getElementById(centerId);
-        if (card) {
-          const cardContainer = card.parentElement;
-          cardContainer.remove();
-          // Update initialCards
-          initialCards = initialCards.filter(c => !c.includes(`id="${centerId}"`));
-          $('#viewCenterModal').modal('hide');
-        }
-      });
-
-      // Sidebar toggle functionality
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const navbar = document.querySelector('.navbar');
-        const contentWrapper = document.getElementById('contentWrapper');
-
-        if (sidebarToggle) {
-          sidebarToggle.addEventListener('click', () => {
-            if (window.innerWidth <= 576) {
-              // Mobile behavior
-              if (sidebar) {
-                sidebar.classList.toggle('active');
-                navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-              }
+        $.ajax({
+          url: baseUrl + 'update_center/' + centerId,
+          method: 'POST',
+          data: formData,
+          success: function (response) {
+            if (response.status === 'success') {
+              loadCenters();
+              $('#viewCenterForm').removeClass('was-validated');
+              $('#viewCenterModal').modal('hide');
             } else {
-              // Desktop behavior - minimize/maximize
-              if (sidebar && contentWrapper) {
-                const isMinimized = sidebar.classList.toggle('minimized');
-                navbar.classList.toggle('sidebar-minimized', isMinimized);
-                contentWrapper.classList.toggle('minimized', isMinimized);
+              alert(response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            alert('An error occurred while updating the center.');
+          }
+        });
+      });
+
+      $('#viewCenterForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
+        }
+      });
+
+      $('#viewCenterForm .delete-btn').on('click', function () {
+        const centerId = $(this).data('center-id');
+        if (confirm('Are you sure you want to delete this center?')) {
+          $.ajax({
+            url: baseUrl + 'delete_center/' + centerId,
+            method: 'POST',
+            success: function (response) {
+              if (response.status === 'success') {
+                loadCenters();
+                $('#viewCenterModal').modal('hide');
+              } else {
+                alert(response.message);
               }
+            },
+            error: function (xhr, status, error) {
+              console.error('AJAX error:', error);
+              alert('An error occurred while deleting the center.');
             }
           });
         }
       });
 
-      // Modal blur effect
+      $(document).ready(function () {
+        const sidebarToggle = $('#sidebarToggle');
+        const sidebar = $('#sidebar');
+        const navbar = $('.navbar');
+        const contentWrapper = $('#contentWrapper');
+
+        if (sidebarToggle.length) {
+          sidebarToggle.on('click', function () {
+            if (window.innerWidth <= 576) {
+              sidebar.toggleClass('active');
+              navbar.toggleClass('sidebar-hidden', !sidebar.hasClass('active'));
+            } else {
+              const isMinimized = sidebar.toggleClass('minimized').hasClass('minimized');
+              navbar.toggleClass('sidebar-minimized', isMinimized);
+              contentWrapper.toggleClass('minimized', isMinimized);
+            }
+          });
+        }
+      });
+
       $('#addCenterModal, #filterModal, #viewCenterModal').on('show.bs.modal', function () {
-        document.getElementById('mainContent').classList.add('blur');
+        $('#mainContent').addClass('blur');
       });
 
       $('#addCenterModal, #filterModal, #viewCenterModal').on('hidden.bs.modal', function () {
-        document.getElementById('mainContent').classList.remove('blur');
+        $('#mainContent').removeClass('blur');
       });
     })();
   </script>

@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Staff Management</title>
-  <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -274,13 +273,12 @@
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
     .content {
-      margin-top: 20px; /* Reduced from 60px to minimize gap */
+      margin-top: 20px;
     }
     .blur {
       filter: blur(5px);
       transition: filter 0.3s ease;
     }
-    /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0;
@@ -428,89 +426,18 @@
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
   <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
   <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-  <!-- Main Content -->
   <div class="content-wrapper" id="contentWrapper">
     <div class="content" id="mainContent">
       <div class="container-fluid">
-        <!-- Filter Button -->
         <div class="header-container">
           <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">
             <i class="bi bi-funnel me-2"></i> Filter
           </button>
         </div>
-        <div class="row justify-content-start" id="staffRow">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-1">
-              <i class="fas fa-user card-icon"></i>
-              <div class="card-details">
-                <p><span>Name:</span> Jony Deo</p>
-                <p><span>Contact:</span> 7896059485</p>
-                <p><span>Address:</span> Nashik</p>
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" data-staff-id="card-1" data-name="Jony Deo" data-contact="7896059485" data-address="Nashik" data-center-name="ABC" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-2">
-              <i class="fas fa-user card-icon"></i>
-              <div class="card-details">
-                <p><span>Name:</span> Jony Deo</p>
-                <p><span>Contact:</span> 7896059485</p>
-                <p><span>Address:</span> Nashik</p>
-                <p><span>Center Name:</span> ABC</p>
-                <p><span>Batch:</span> B2</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" data-staff-id="card-2" data-name="Jony Deo" data-contact="7896059485" data-address="Nashik" data-center-name="ABC" data-batch="B2" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-3">
-              <i class="fas fa-user card-icon"></i>
-              <div class="card-details">
-                <p><span>Name:</span> Jony Deo</p>
-                <p><span>Contact:</span> 7896059485</p>
-                <p><span>Address:</span> Nashik</p>
-                <p><span>Center Name:</span> XYZ</p>
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" data-staff-id="card-3" data-name="Jony Deo" data-contact="7896059485" data-address="Nashik" data-center-name="XYZ" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-4">
-              <i class="fas fa-user card-icon"></i>
-              <div class="card-details">
-                <p><span>Name:</span> Jony Deo</p>
-                <p><span>Contact:</span> 7896059485</p>
-                <p><span>Address:</span> Nashik</p>
-                <p><span>Center Name:</span> XYZ</p>
-                <p><span>Batch:</span> B2</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" data-staff-id="card-4" data-name="Jony Deo" data-contact="7896059485" data-address="Nashik" data-center-name="XYZ" data-batch="B2" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add Button -->
+        <div class="row justify-content-start" id="staffRow"></div>
         <div class="button-container">
           <button class="add-center-btn" data-toggle="modal" data-target="#addStaffModal">Add Staff</button>
         </div>
@@ -518,7 +445,6 @@
     </div>
   </div>
 
-  <!-- Add Staff Modal -->
   <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -545,8 +471,15 @@
             </div>
             <div class="form-group col-md-6">
               <label for="centerName">Center Name <span class="text-danger">*</span></label>
-              <input type="text" id="centerName" name="centerName" class="form-control" placeholder="Enter center name" required />
-              <div class="invalid-feedback">Please enter center name.</div>
+              <select id="centerName" name="centerName" class="form-control" required>
+                <option value="">-- Select Center --</option>
+                <?php foreach ($centers as $center): ?>
+                  <option value="<?php echo htmlspecialchars($center['center_name']); ?>">
+                    <?php echo htmlspecialchars($center['center_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <div class="invalid-feedback">Please select a center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="batch">Batch <span class="text-danger">*</span></label>
@@ -582,7 +515,6 @@
     </div>
   </div>
 
-  <!-- View Staff Modal -->
   <div class="modal fade" id="viewStaffModal" tabindex="-1" aria-labelledby="viewStaffLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
@@ -609,8 +541,15 @@
             </div>
             <div class="form-group col-md-6">
               <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
-              <input type="text" id="viewCenterName" name="centerName" class="form-control" placeholder="Enter center name" required />
-              <div class="invalid-feedback">Please enter center name.</div>
+              <select id="viewCenterName" name="centerName" class="form-control" required>
+                <option value="">-- Select Center --</option>
+                <?php foreach ($centers as $center): ?>
+                  <option value="<?php echo htmlspecialchars($center['center_name']); ?>">
+                    <?php echo htmlspecialchars($center['center_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <div class="invalid-feedback">Please select a center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="viewBatch">Batch <span class="text-danger">*</span></label>
@@ -647,7 +586,6 @@
     </div>
   </div>
 
-  <!-- Filter Modal -->
   <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -699,156 +637,162 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Form Submission, View Modal, Update, Delete, and Filter Handling -->
   <script>
     (function () {
       'use strict';
-      let cardCounter = 5;
-      const form = document.getElementById('staffForm');
-      const filterForm = document.getElementById('filterForm');
-      const viewForm = document.getElementById('viewStaffForm');
-      if (!form) {
-        console.error('Staff form not found!');
-        return;
-      }
-      if (!filterForm) {
-        console.error('Filter form not found!');
-        return;
-      }
-      if (!viewForm) {
-        console.error('View form not found!');
-        return;
+
+      const baseUrl = '<?php echo base_url(); ?>staff/';
+
+      function formatDateForDisplay(dateStr) {
+        if (!dateStr) return '';
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year}`;
       }
 
-      // Store initial cards for filtering
-      let initialCards = Array.from(document.querySelectorAll('#staffRow .col-12')).map(card => card.outerHTML);
+      function formatTimeForDisplay(timeStr) {
+        if (!timeStr) return '';
+        const [hours, minutes] = timeStr.split(':');
+        const hourNum = parseInt(hours, 10);
+        const period = hourNum >= 12 ? 'PM' : 'AM';
+        const displayHour = hourNum % 12 || 12;
+        const nextHour = (hourNum + 1) % 12 || 12;
+        return `${displayHour} to ${nextHour} ${period}`;
+      }
 
-      // Form submission for adding staff
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+      function loadStaff(filters = {}) {
+        $.ajax({
+          url: baseUrl + 'get_staff',
+          method: 'GET',
+          data: filters,
+          success: function (response) {
+            if (response.status === 'success') {
+              const staff = response.data;
+              const row = $('#staffRow');
+              row.empty();
+              if (staff.length === 0) {
+                row.html('<p class="text-center">No staff match the filter criteria.</p>');
+                return;
+              }
+              staff.forEach(member => {
+                const card = `
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+                    <div class="center-card" id="card-${member.id}">
+                      <i class="fas fa-user card-icon"></i>
+                      <div class="card-details">
+                        <p><span>Name:</span> ${member.name}</p>
+                        <p><span>Contact:</span> ${member.contact}</p>
+                        <p><span>Address:</span> ${member.address}</p>
+                        <p><span>Center Name:</span> ${member.center_name}</p>
+                        <p><span>Batch:</span> ${member.batch}</p>
+                        <p><span>Date:</span> ${formatDateForDisplay(member.date)}</p>
+                        <p><span>Time:</span> ${member.time}</p>
+                        <p><span>Category:</span> ${member.category}</p>
+                      </div>
+                      <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" 
+                              data-staff-id="${member.id}" 
+                              data-name="${member.name}" 
+                              data-contact="${member.contact}" 
+                              data-address="${member.address}" 
+                              data-center-name="${member.center_name}" 
+                              data-batch="${member.batch}" 
+                              data-date="${member.date}" 
+                              data-time="${member.time}" 
+                              data-category="${member.category}">View</button>
+                    </div>
+                  </div>
+                `;
+                row.append(card);
+              });
+            } else {
+              console.error('Error fetching staff:', response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+          }
+        });
+      }
 
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
+      $(document).ready(function () {
+        loadStaff();
+      });
+
+      $('#staffForm').on('submit', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        // Get form values
-        const name = document.getElementById('name').value.trim();
-        const contact = document.getElementById('contact').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const centerName = document.getElementById('centerName').value.trim();
-        const batch = document.getElementById('batch').value.trim();
-        const dateRaw = document.getElementById('date').value;
-        const timeRaw = document.getElementById('time').value;
-        const category = document.getElementById('category').value;
-
-        // Format date to DD/MM/YYYY
-        const dateObj = new Date(dateRaw);
-        const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
-
-        // Format time to "H to H+1 AM/PM"
+        const timeRaw = $('#time').val();
         const [hours, minutes] = timeRaw.split(':');
         const hourNum = parseInt(hours, 10);
         const period = hourNum >= 12 ? 'PM' : 'AM';
         const displayHour = hourNum % 12 || 12;
         const nextHour = (hourNum + 1) % 12 || 12;
-        const time = `${displayHour} to ${nextHour} ${period}`;
+        const formattedTime = `${displayHour} to ${nextHour} ${period}`;
 
-        // Create new card
-        const newCard = `
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-${cardCounter}">
-              <i class="fas fa-user card-icon"></i>
-              <div class="card-details">
-                <p><span>Name:</span> ${name}</p>
-                <p><span>Contact:</span> ${contact}</p>
-                <p><span>Address:</span> ${address}</p>
-                <p><span>Center Name:</span> ${centerName}</p>
-                <p><span>Batch:</span> ${batch}</p>
-                <p><span>Date:</span> ${date}</p>
-                <p><span>Time:</span> ${time}</p>
-                <p><span>Category:</span> ${category}</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewStaffModal" data-staff-id="card-${cardCounter}" data-name="${name}" data-contact="${contact}" data-address="${address}" data-center-name="${centerName}" data-batch="${batch}" data-date="${date}" data-time="${time}" data-category="${category}">View</button>
-            </div>
-          </div>
-        `;
+        const formData = {
+          name: $('#name').val().trim(),
+          contact: $('#contact').val().trim(),
+          address: $('#address').val().trim(),
+          centerName: $('#centerName').val(),
+          batch: $('#batch').val().trim(),
+          date: $('#date').val(),
+          time: formattedTime,
+          category: $('#category').val()
+        };
 
-        // Append new card to the row
-        const staffRow = document.getElementById('staffRow');
-        if (staffRow) {
-          staffRow.insertAdjacentHTML('beforeend', newCard);
-          initialCards.push(newCard);
-          cardCounter++;
-        } else {
-          console.error('staffRow element not found!');
-        }
-
-        // Reset form and close modal
-        form.reset();
-        form.classList.remove('was-validated');
-        $('#addStaffModal').modal('hide');
+        $.ajax({
+          url: baseUrl + 'add_staff',
+          method: 'POST',
+          data: formData,
+          success: function (response) {
+            if (response.status === 'success') {
+              loadStaff();
+              $('#staffForm').removeClass('was-validated').trigger('reset');
+              $('#addStaffModal').modal('hide');
+            } else {
+              alert(response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            alert('An error occurred while adding the staff.');
+          }
+        });
       });
 
-      // Ensure validation feedback on input for add form
-      form.addEventListener('input', function () {
-        if (form.checkValidity()) {
-          form.classList.remove('was-validated');
+      $('#staffForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
-      // Filter form submission
-      filterForm.addEventListener('submit', function (e) {
+      $('#filterForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        // Get filter values
-        const filterName = document.getElementById('filterName').value.trim().toLowerCase();
-        const filterContact = document.getElementById('filterContact').value.trim().toLowerCase();
-        const filterAddress = document.getElementById('filterAddress').value.trim().toLowerCase();
-        const filterCenterName = document.getElementById('filterCenterName').value.trim().toLowerCase();
-        const filterBatch = document.getElementById('filterBatch').value.trim().toLowerCase();
-        const filterDate = document.getElementById('filterDate').value.trim().toLowerCase();
-        const filterTime = document.getElementById('filterTime').value.trim().toLowerCase();
-        const filterCategory = document.getElementById('filterCategory').value.trim().toLowerCase();
+        const filters = {
+          name: $('#filterName').val().trim(),
+          contact: $('#filterContact').val().trim(),
+          address: $('#filterAddress').val().trim(),
+          center_name: $('#filterCenterName').val().trim(),
+          batch: $('#filterBatch').val().trim(),
+          date: $('#filterDate').val().trim(),
+          time: $('#filterTime').val().trim(),
+          category: $('#filterCategory').val().trim()
+        };
 
-        // Filter cards
-        const filteredCards = initialCards.filter(card => {
-          const cardElement = document.createElement('div');
-          cardElement.innerHTML = card;
-          const name = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
-          const contact = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
-          const address = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
-          const centerName = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
-          const batch = cardElement.querySelector('p:nth-child(5) span').nextSibling.textContent.trim().toLowerCase();
-          const date = cardElement.querySelector('p:nth-child(6) span').nextSibling.textContent.trim().toLowerCase();
-          const time = cardElement.querySelector('p:nth-child(7) span').nextSibling.textContent.trim().toLowerCase();
-          const category = cardElement.querySelector('p:nth-child(8) span').nextSibling.textContent.trim().toLowerCase();
-
-          return (!filterName || name.includes(filterName)) &&
-                 (!filterContact || contact.includes(filterContact)) &&
-                 (!filterAddress || address.includes(filterAddress)) &&
-                 (!filterCenterName || centerName.includes(filterCenterName)) &&
-                 (!filterBatch || batch.includes(filterBatch)) &&
-                 (!filterDate || date.includes(filterDate)) &&
-                 (!filterTime || time.includes(filterTime)) &&
-                 (!filterCategory || category.includes(filterCategory));
-        });
-
-        // Update card display
-        const row = document.getElementById('staffRow');
-        row.innerHTML = filteredCards.length ? filteredCards.join('') : '<p class="text-center">No staff match the filter criteria.</p>';
-
-        // Close modal
+        loadStaff(filters);
         $('#filterModal').modal('hide');
       });
 
-      // Handle view button clicks
       $('#viewStaffModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const staffId = button.data('staff-id');
@@ -868,130 +812,116 @@
         modal.find('#viewAddress').val(address);
         modal.find('#viewCenterName').val(centerName);
         modal.find('#viewBatch').val(batch);
-        modal.find('#viewDate').val(new Date(date.split('/').reverse().join('-')).toISOString().split('T')[0]);
+        modal.find('#viewDate').val(date);
         modal.find('#viewTime').val(time.split(' to ')[0].trim());
+        modal.find('#viewCategory').val(category);
         modal.find('.update-btn').data('staff-id', staffId);
         modal.find('.delete-btn').data('staff-id', staffId);
       });
 
-      // Handle update form submission
-      viewForm.addEventListener('submit', function (e) {
+      $('#viewStaffForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!viewForm.checkValidity()) {
-          viewForm.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const staffId = $(viewForm).find('.update-btn').data('staff-id');
-        const name = document.getElementById('viewName').value.trim();
-        const contact = document.getElementById('viewContact').value.trim();
-        const address = document.getElementById('viewAddress').value.trim();
-        const centerName = document.getElementById('viewCenterName').value.trim();
-        const batch = document.getElementById('viewBatch').value.trim();
-        const dateRaw = document.getElementById('viewDate').value;
-        const timeRaw = document.getElementById('viewTime').value;
-        const category = document.getElementById('viewCategory').value;
-
-        // Format date to DD/MM/YYYY
-        const dateObj = new Date(dateRaw);
-        const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
-
-        // Format time to "H to H+1 AM/PM"
+        const staffId = $(this).find('.update-btn').data('staff-id');
+        const timeRaw = $('#viewTime').val();
         const [hours, minutes] = timeRaw.split(':');
         const hourNum = parseInt(hours, 10);
         const period = hourNum >= 12 ? 'PM' : 'AM';
         const displayHour = hourNum % 12 || 12;
         const nextHour = (hourNum + 1) % 12 || 12;
-        const time = `${displayHour} to ${nextHour} ${period}`;
+        const formattedTime = `${displayHour} to ${nextHour} ${period}`;
 
-        // Update the card
-        const card = document.getElementById(staffId);
-        if (card) {
-          card.querySelector('p:nth-child(1) span').nextSibling.textContent = ` ${name}`;
-          card.querySelector('p:nth-child(2) span').nextSibling.textContent = ` ${contact}`;
-          card.querySelector('p:nth-child(3) span').nextSibling.textContent = ` ${address}`;
-          card.querySelector('p:nth-child(4) span').nextSibling.textContent = ` ${centerName}`;
-          card.querySelector('p:nth-child(5) span').nextSibling.textContent = ` ${batch}`;
-          card.querySelector('p:nth-child(6) span').nextSibling.textContent = ` ${date}`;
-          card.querySelector('p:nth-child(7) span').nextSibling.textContent = ` ${time}`;
-          card.querySelector('p:nth-child(8) span').nextSibling.textContent = ` ${category}`;
-          card.querySelector('.view-btn').setAttribute('data-name', name);
-          card.querySelector('.view-btn').setAttribute('data-contact', contact);
-          card.querySelector('.view-btn').setAttribute('data-address', address);
-          card.querySelector('.view-btn').setAttribute('data-center-name', centerName);
-          card.querySelector('.view-btn').setAttribute('data-batch', batch);
-          card.querySelector('.view-btn').setAttribute('data-date', date);
-          card.querySelector('.view-btn').setAttribute('data-time', time);
-          card.querySelector('.view-btn').setAttribute('data-category', category);
+        const formData = {
+          name: $('#viewName').val().trim(),
+          contact: $('#viewContact').val().trim(),
+          address: $('#viewAddress').val().trim(),
+          centerName: $('#viewCenterName').val(),
+          batch: $('#viewBatch').val().trim(),
+          date: $('#viewDate').val(),
+          time: formattedTime,
+          category: $('#viewCategory').val()
+        };
 
-          // Update initialCards
-          const cardIndex = initialCards.findIndex(c => c.includes(`id="${staffId}"`));
-          if (cardIndex !== -1) {
-            initialCards[cardIndex] = card.parentElement.outerHTML;
-          }
-        }
-
-        // Reset form and close modal
-        viewForm.classList.remove('was-validated');
-        $('#viewStaffModal').modal('hide');
-      });
-
-      // Ensure validation feedback on input for view form
-      viewForm.addEventListener('input', function () {
-        if (viewForm.checkValidity()) {
-          viewForm.classList.remove('was-validated');
-        }
-      });
-
-      // Handle delete button click
-      viewForm.querySelector('.delete-btn').addEventListener('click', function () {
-        const staffId = $(this).data('staff-id');
-        const card = document.getElementById(staffId);
-        if (card) {
-          const cardContainer = card.parentElement;
-          cardContainer.remove();
-          // Update initialCards
-          initialCards = initialCards.filter(c => !c.includes(`id="${staffId}"`));
-          $('#viewStaffModal').modal('hide');
-        }
-      });
-
-      // Sidebar toggle functionality
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const navbar = document.querySelector('.navbar');
-        const contentWrapper = document.getElementById('contentWrapper');
-
-        if (sidebarToggle) {
-          sidebarToggle.addEventListener('click', () => {
-            if (window.innerWidth <= 576) {
-              // Mobile behavior
-              if (sidebar) {
-                sidebar.classList.toggle('active');
-                navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-              }
+        $.ajax({
+          url: baseUrl + 'update_staff/' + staffId,
+          method: 'POST',
+          data: formData,
+          success: function (response) {
+            if (response.status === 'success') {
+              loadStaff();
+              $('#viewStaffForm').removeClass('was-validated');
+              $('#viewStaffModal').modal('hide');
             } else {
-              // Desktop behavior - minimize/maximize
-              if (sidebar && contentWrapper) {
-                const isMinimized = sidebar.classList.toggle('minimized');
-                navbar.classList.toggle('sidebar-minimized', isMinimized);
-                contentWrapper.classList.toggle('minimized', isMinimized);
+              alert(response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            alert('An error occurred while updating the staff.');
+          }
+        });
+      });
+
+      $('#viewStaffForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
+        }
+      });
+
+      $('#viewStaffForm .delete-btn').on('click', function () {
+        const staffId = $(this).data('staff-id');
+        if (confirm('Are you sure you want to delete this staff member?')) {
+          $.ajax({
+            url: baseUrl + 'delete_staff/' + staffId,
+            method: 'POST',
+            success: function (response) {
+              if (response.status === 'success') {
+                loadStaff();
+                $('#viewStaffModal').modal('hide');
+              } else {
+                alert(response.message);
               }
+            },
+            error: function (xhr, status, error) {
+              console.error('AJAX error:', error);
+              alert('An error occurred while deleting the staff.');
             }
           });
         }
       });
 
-      // Modal blur effect
+      $(document).ready(function () {
+        const sidebarToggle = $('#sidebarToggle');
+        const sidebar = $('#sidebar');
+        const navbar = $('.navbar');
+        const contentWrapper = $('#contentWrapper');
+
+        if (sidebarToggle.length) {
+          sidebarToggle.on('click', function () {
+            if (window.innerWidth <= 576) {
+              sidebar.toggleClass('active');
+              navbar.toggleClass('sidebar-hidden', !sidebar.hasClass('active'));
+            } else {
+              const isMinimized = sidebar.toggleClass('minimized').hasClass('minimized');
+              navbar.toggleClass('sidebar-minimized', isMinimized);
+              contentWrapper.toggleClass('minimized', isMinimized);
+            }
+          });
+        }
+      });
+
       $('#addStaffModal, #filterModal, #viewStaffModal').on('show.bs.modal', function () {
-        document.getElementById('mainContent').classList.add('blur');
+        $('#mainContent').addClass('blur');
       });
 
       $('#addStaffModal, #filterModal, #viewStaffModal').on('hidden.bs.modal', function () {
-        document.getElementById('mainContent').classList.remove('blur');
+        $('#mainContent').removeClass('blur');
       });
     })();
   </script>

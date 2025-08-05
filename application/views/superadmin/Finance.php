@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-           background-color: #f4f6f8 !important;
+            background-color: #f4f6f8 !important;
             margin: 0;
             font-family: 'Montserrat', serif !important;
             overflow-x: hidden;
@@ -83,13 +83,29 @@
         }
 
         .table thead th {
-            /* background-color: #343a40; */
-            color: black;
+            background-color: #343a40;
+            color: white;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
             padding: 1rem;
             text-align: center;
             font-weight: 600;
+            position: relative;
+        }
+
+        .table thead th:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: #343a40;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 10;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .table td, .table th {
@@ -101,8 +117,12 @@
             font-size: 0.9rem;
         }
 
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
         .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgba(0, 123, 255, 0.1);
         }
 
         .table .horizontal-line td {
@@ -112,21 +132,30 @@
             padding: 0;
         }
 
-        .action-btn {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            margin: 0 0.25rem;
+        .action-icon {
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
             transition: transform 0.2s ease;
-            color: #6c757d;
         }
 
-        .action-btn:hover {
-            transform: scale(1.2);
+        .action-icon.view-icon {
             color: #007bff;
         }
 
-        .action-btn:disabled {
+        .action-icon.approve-icon {
+            color: #28a745;
+        }
+
+        .action-icon.reject-icon {
+            color: #dc3545;
+        }
+
+        .action-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .action-icon:disabled {
             color: #ccc;
             cursor: not-allowed;
             transform: none;
@@ -134,7 +163,7 @@
 
         /* Button Styles */
         .btn-custom {
-            background:#6c757d;
+            background: #6c757d;
             color: white;
             border: none;
             border-radius: 0.25rem;
@@ -179,7 +208,7 @@
             color: #495057;
         }
 
-        .form-control {
+        .form-control, .form-control select {
             height: calc(2.25rem + 2px);
             border-radius: 0.25rem;
             font-size: 0.9rem;
@@ -188,7 +217,7 @@
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
-        .form-control:focus {
+        .form-control:focus, .form-control select:focus {
             border-color: #80bdff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
@@ -239,6 +268,13 @@
             margin-bottom: 1rem;
         }
 
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+
         /* Responsive Design */
         @media (max-width: 576px) {
             .content-wrapper {
@@ -250,14 +286,13 @@
                 font-size: 0.8rem;
             }
 
-            .action-btn {
+            .action-icon {
                 margin: 0.1rem;
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
 
             .modal-content {
                 padding: 1rem;
-                /* max-width: 95%; */
             }
 
             .form-row {
@@ -290,7 +325,6 @@
 
             .add-btn-container {
                 justify-content: center;
-                /* flex-direction: column; */
                 gap: 10px;
             }
 
@@ -316,7 +350,6 @@
             }
 
             .modal-content {
-                /* max-width: 90%; */
                 padding: 1.25rem;
             }
 
@@ -360,12 +393,14 @@
 
         /* Touch device hover fix */
         @media (hover: none) {
-            .action-btn:hover,
+            .action-icon:hover,
             .btn-custom:hover,
             .option-buttons button:hover {
-                background-color: inherit;
                 transform: none;
-                box-shadow: none;
+            }
+
+            .table thead th:hover::after {
+                display: none;
             }
         }
     </style>
@@ -397,69 +432,20 @@
 
                 <!-- Revenue Table -->
                 <div class="table-container">
+                    <div class="table-title">Revenue Records</div>
                     <table class="table table-bordered table-hover" id="expenseTable">
                         <thead class="thead-dark1">
                             <tr>
-                                <th>Title</th>
-                                <th>Daily Revenue(₹)</th>
-                                <th>Weekly Revenue(₹)</th>
-                                <th>Monthly Revenue(₹)</th>
-                                <th>Yearly Revenue(₹)</th>
-                                <th>Action</th>
+                                <th data-tooltip="Title of the revenue entry">Title</th>
+                                <th data-tooltip="Revenue for the specific day">Daily Revenue(₹)</th>
+                                <th data-tooltip="Revenue for the week">Weekly Revenue(₹)</th>
+                                <th data-tooltip="Revenue for the month">Monthly Revenue(₹)</th>
+                                <th data-tooltip="Revenue for the year">Yearly Revenue(₹)</th>
+                                <th data-tooltip="Actions to manage the record">Action</th>
                             </tr>
                         </thead>
                         <tbody id="expenseTableBody">
-                            <tr>
-                                <td>Rent</td>
-                                <td>500</td>
-                                <td>3500</td>
-                                <td>15000</td>
-                                <td>180000</td>
-                                <td>
-                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
-                                            data-title="Rent" data-date="2025-07-30" data-daily="500" data-weekly="3500" 
-                                            data-monthly="15000" data-yearly="180000" data-notes="N/A">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
-                                    <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="horizontal-line"><td colspan="6"></td></tr>
-                            <tr>
-                                <td>Food</td>
-                                <td>300</td>
-                                <td>2100</td>
-                                <td>9000</td>
-                                <td>108000</td>
-                                <td>
-                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
-                                            data-title="Food" data-date="2025-07-30" data-daily="300" data-weekly="2100" 
-                                            data-monthly="9000" data-yearly="108000" data-notes="N/A">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn thumbs-up" data-title="Food"><i class="fas fa-check"></i></button>
-                                    <button class="action-btn cross" data-title="Food"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="horizontal-line"><td colspan="6"></td></tr>
-                            <tr>
-                                <td>Rent</td>
-                                <td>500</td>
-                                <td>3500</td>
-                                <td>15000</td>
-                                <td>180000</td>
-                                <td>
-                                    <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
-                                            data-title="Rent" data-date="2025-07-30" data-daily="500" data-weekly="3500" 
-                                            data-monthly="15000" data-yearly="180000" data-notes="N/A">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
-                                    <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="horizontal-line"><td colspan="6"></td></tr>
+                            <!-- Populated via AJAX -->
                         </tbody>
                     </table>
                 </div>
@@ -478,6 +464,7 @@
                     </button>
                 </div>
                 <form id="expenseForm" novalidate>
+                    <input type="hidden" id="revenueId" name="revenueId">
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="title">Title <span class="text-danger">*</span></label>
@@ -486,42 +473,53 @@
                             <div class="invalid-feedback">Title is required, letters and spaces only, max 50 characters.</div>
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="center_name">Center Name <span class="text-danger">*</span></label>
+                            <select id="center_name" name="center_name" class="form-control" required>
+                                <option value="">Select Center</option>
+                                <option value="ABC">ABC</option>
+                                <option value="XYZ">XYZ</option>
+                                <option value="PQR">PQR</option>
+                                <option value="LMN">LMN</option>
+                            </select>
+                            <div class="invalid-feedback">Center Name is required.</div>
+                        </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
+                        <div class="form-group col-md-6">
                             <label for="date">Date <span class="text-danger">*</span></label>
                             <input type="date" id="date" name="date" class="form-control" required
                                    max="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">Date is required and must not be a future date.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="dailyRevenue">Daily Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="dailyRevenue" name="dailyRevenue" class="form-control" required
                                    min="1" step="0.01" title="Daily Revenue must be greater than 0">
                             <div class="invalid-feedback">Daily Revenue is required and must be greater than 0.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="weeklyRevenue">Weekly Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="weeklyRevenue" name="weeklyRevenue" class="form-control" required
                                    min="1" step="0.01" title="Weekly Revenue must be greater than 0">
                             <div class="invalid-feedback">Weekly Revenue is required and must be greater than 0.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="monthlyRevenue">Monthly Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="monthlyRevenue" name="monthlyRevenue" class="form-control" required
                                    min="1" step="0.01" title="Monthly Revenue must be greater than 0">
                             <div class="invalid-feedback">Monthly Revenue is required and must be greater than 0.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="yearlyRevenue">Yearly Revenue(₹) <span class="text-danger">*</span></label>
                             <input type="number" id="yearlyRevenue" name="yearlyRevenue" class="form-control" required
                                    min="1" step="0.01" title="Yearly Revenue must be greater than 0">
                             <div class="invalid-feedback">Yearly Revenue is required and must be greater than 0.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="notes">Notes</label>
                             <textarea id="notes" name="notes" class="form-control" rows="3" maxlength="200"></textarea>
                             <div class="invalid-feedback">Notes must be less than 200 characters.</div>
@@ -549,15 +547,18 @@
                 <div class="modal-body">
                     <div class="receipt-card">
                         <p><strong>Title:</strong> <span id="viewTitle"></span></p>
+                        <p><strong>Center Name:</strong> <span id="viewCenterName"></span></p>
                         <p><strong>Date:</strong> <span id="viewDate"></span></p>
                         <p><strong>Daily Revenue:</strong> ₹<span id="viewDailyRevenue"></span></p>
                         <p><strong>Weekly Revenue:</strong> ₹<span id="viewWeeklyRevenue"></span></p>
                         <p><strong>Monthly Revenue:</strong> ₹<span id="viewMonthlyRevenue"></span></p>
                         <p><strong>Yearly Revenue:</strong> ₹<span id="viewYearlyRevenue"></span></p>
                         <p><strong>Notes:</strong> <span id="viewNotes"></span></p>
+                        <p><strong>Status:</strong> <span id="viewStatus"></span></p>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-custom edit-btn" data-dismiss="modal" data-toggle="modal" data-target="#expenseModal">Edit</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -584,69 +585,79 @@
                             <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="filterCenterName">Center Name</label>
+                            <select id="filterCenterName" name="filterCenterName" class="form-control">
+                                <option value="">All Centers</option>
+                                <option value="ABC">ABC</option>
+                                <option value="XYZ">XYZ</option>
+                                <option value="PQR">PQR</option>
+                                <option value="LMN">LMN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
+                        <div class="form-group col-md-6">
                             <label for="startDate">Start Date</label>
                             <input type="date" id="startDate" name="startDate" class="form-control"
                                    max="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">Start Date must not be a future date.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="endDate">End Date</label>
                             <input type="date" id="endDate" name="endDate" class="form-control"
                                    max="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">End Date must not be before Start Date or a future date.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="minDailyRevenue">Min Daily Revenue(₹)</label>
                             <input type="number" id="minDailyRevenue" name="minDailyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Daily Revenue must be 0 or greater">
                             <div class="invalid-feedback">Min Daily Revenue must be 0 or greater.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="maxDailyRevenue">Max Daily Revenue(₹)</label>
                             <input type="number" id="maxDailyRevenue" name="maxDailyRevenue" class="form-control"
                                    min="0" step="0.01" title="Max Daily Revenue must be 0 or greater">
                             <div class="invalid-feedback">Max Daily Revenue must be 0 or greater and not less than Min Daily Revenue.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="minWeeklyRevenue">Min Weekly Revenue(₹)</label>
                             <input type="number" id="minWeeklyRevenue" name="minWeeklyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Weekly Revenue must be 0 or greater">
                             <div class="invalid-feedback">Min Weekly Revenue must be 0 or greater.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="maxWeeklyRevenue">Max Weekly Revenue(₹)</label>
                             <input type="number" id="maxWeeklyRevenue" name="maxWeeklyRevenue" class="form-control"
                                    min="0" step="0.01" title="Max Weekly Revenue must be 0 or greater">
                             <div class="invalid-feedback">Max Weekly Revenue must be 0 or greater and not less than Min Weekly Revenue.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="minMonthlyRevenue">Min Monthly Revenue(₹)</label>
                             <input type="number" id="minMonthlyRevenue" name="minMonthlyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Monthly Revenue must be 0 or greater">
                             <div class="invalid-feedback">Min Monthly Revenue must be 0 or greater.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="maxMonthlyRevenue">Max Monthly Revenue(₹)</label>
                             <input type="number" id="maxMonthlyRevenue" name="maxMonthlyRevenue" class="form-control"
                                    min="0" step="0.01" title="Max Monthly Revenue must be 0 or greater">
                             <div class="invalid-feedback">Max Monthly Revenue must be 0 or greater and not less than Min Monthly Revenue.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="minYearlyRevenue">Min Yearly Revenue(₹)</label>
                             <input type="number" id="minYearlyRevenue" name="minYearlyRevenue" class="form-control"
                                    min="0" step="0.01" title="Min Yearly Revenue must be 0 or greater">
                             <div class="invalid-feedback">Min Yearly Revenue must be 0 or greater.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="maxYearlyRevenue">Max Yearly Revenue(₹)</label>
                             <input type="number" id="maxYearlyRevenue" name="maxYearlyRevenue" class="form-control"
@@ -670,8 +681,11 @@
     <script>
         $(document).ready(function() {
             let editingRow = null;
-            const initialRows = Array.from(document.querySelectorAll('#expenseTableBody tr:not(.horizontal-line)'))
-                .map(row => row.outerHTML);
+            let currentRevenueId = null;
+
+            // CSRF Token Setup
+            const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+            const csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
 
             // Form validation function
             function validateForm(formId) {
@@ -683,6 +697,7 @@
                     // Custom validation for expenseForm
                     if (formId === 'expenseForm') {
                         const titleInput = form.querySelector('#title');
+                        const centerNameInput = form.querySelector('#center_name');
                         const dateInput = form.querySelector('#date');
                         const dailyRevenueInput = form.querySelector('#dailyRevenue');
                         const weeklyRevenueInput = form.querySelector('#weeklyRevenue');
@@ -702,6 +717,14 @@
                             isValid = false;
                         } else {
                             titleInput.setCustomValidity('');
+                        }
+
+                        // Center Name validation
+                        if (!centerNameInput.value) {
+                            centerNameInput.setCustomValidity('Center Name is required.');
+                            isValid = false;
+                        } else {
+                            centerNameInput.setCustomValidity('');
                         }
 
                         // Date validation
@@ -748,7 +771,7 @@
 
                     // Custom validation for filterForm
                     if (formId === 'filterForm') {
-                        const inputs = form.querySelectorAll('input');
+                        const inputs = form.querySelectorAll('input, select');
                         inputs.forEach(input => {
                             if (input.value.trim() !== '') {
                                 atLeastOneFilled = true;
@@ -834,7 +857,7 @@
 
                 // Real-time validation
                 if (formId === 'expenseForm') {
-                    const inputs = form.querySelectorAll('input, textarea');
+                    const inputs = form.querySelectorAll('input, textarea, select');
                     inputs.forEach(input => {
                         input.addEventListener('input', () => {
                             if (input.id === 'title') {
@@ -844,6 +867,12 @@
                                     input.setCustomValidity('Title must contain only letters and spaces.');
                                 } else if (input.value.length > 50) {
                                     input.setCustomValidity('Title must be 50 characters or less.');
+                                } else {
+                                    input.setCustomValidity('');
+                                }
+                            } else if (input.id === 'center_name') {
+                                if (!input.value) {
+                                    input.setCustomValidity('Center Name is required.');
                                 } else {
                                     input.setCustomValidity('');
                                 }
@@ -956,178 +985,304 @@
                 const form = document.getElementById('filterForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
+                form.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
             });
+
+            // Load revenues
+            function loadRevenues(option = 'centerwise') {
+                const url = option === 'totalrevenue' ? '<?php echo base_url('revenue/get_total_revenue'); ?>' : '<?php echo base_url('revenue/get_revenues'); ?>';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(data) {
+                        const tableBody = $('#expenseTableBody');
+                        tableBody.empty();
+                        if (data.length === 0) {
+                            tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
+                            return;
+                        }
+                        data.forEach(item => {
+                            const rowClass = item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : '';
+                            const rowStyle = item.status === 'approved' ? 'background-color: #d4edda;' : item.status === 'rejected' ? 'background-color: #f8d7da;' : '';
+                            const approveDisabled = item.status !== 'pending' ? 'disabled' : '';
+                            const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
+                            const row = `
+                                <tr class="${rowClass}" style="${rowStyle}">
+                                    <td>${item.title}</td>
+                                    <td>${parseFloat(item.daily_revenue).toFixed(0)}</td>
+                                    <td>${parseFloat(item.weekly_revenue).toFixed(0)}</td>
+                                    <td>${parseFloat(item.monthly_revenue).toFixed(0)}</td>
+                                    <td>${parseFloat(item.yearly_revenue).toFixed(0)}</td>
+                                    <td>
+                                        <i class="fas fa-eye action-icon view-icon" data-toggle="modal" data-target="#viewModal" 
+                                           data-id="${item.id}" data-title="${item.title}" data-center="${item.center_name}" 
+                                           data-date="${item.date}" data-daily="${item.daily_revenue}" 
+                                           data-weekly="${item.weekly_revenue}" data-monthly="${item.monthly_revenue}" 
+                                           data-yearly="${item.yearly_revenue}" data-notes="${item.notes}" 
+                                           data-status="${item.status}"></i>
+                                        <i class="fas fa-check action-icon approve-icon" data-id="${item.id}" 
+                                           data-title="${item.title}" ${approveDisabled}></i>
+                                        <i class="fas fa-times action-icon reject-icon" data-id="${item.id}" 
+                                           data-title="${item.title}" ${rejectDisabled}></i>
+                                    </td>
+                                </tr>
+                                <tr class="horizontal-line"><td colspan="6"></td></tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function() {
+                        alert('Error loading revenues.');
+                    }
+                });
+            }
+
+            // Initial load
+            loadRevenues();
 
             // Expense form submission
             $('#expenseForm').on('submit', function(event) {
-                if (this.checkValidity()) {
+                if (!this.checkValidity()) {
                     event.preventDefault();
-
-                    const formData = new FormData(this);
-                    const data = {
-                        title: formData.get('title'),
-                        date: formData.get('date'),
-                        dailyRevenue: parseFloat(formData.get('dailyRevenue')).toFixed(0),
-                        weeklyRevenue: parseFloat(formData.get('weeklyRevenue')).toFixed(0),
-                        monthlyRevenue: parseFloat(formData.get('monthlyRevenue')).toFixed(0),
-                        yearlyRevenue: parseFloat(formData.get('yearlyRevenue')).toFixed(0),
-                        notes: formData.get('notes') || 'N/A'
-                    };
-
-                    const tableBody = document.getElementById('expenseTableBody');
-                    if (editingRow) {
-                        updateRow(editingRow, data);
-                    } else {
-                        addNewRow(data);
-                        initialRows.push(tableBody.lastElementChild.outerHTML); // Add to initialRows for filtering
-                    }
-
-                    $('#expenseModal').modal('hide');
-                    this.reset();
-                    this.classList.remove('was-validated');
-                    editingRow = null;
+                    event.stopPropagation();
+                    return;
                 }
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const data = {
+                    [csrfName]: csrfToken,
+                    title: formData.get('title'),
+                    center_name: formData.get('center_name'),
+                    date: formData.get('date'),
+                    daily_revenue: parseFloat(formData.get('dailyRevenue')).toFixed(2),
+                    weekly_revenue: parseFloat(formData.get('weeklyRevenue')).toFixed(2),
+                    monthly_revenue: parseFloat(formData.get('monthlyRevenue')).toFixed(2),
+                    yearly_revenue: parseFloat(formData.get('yearlyRevenue')).toFixed(2),
+                    notes: formData.get('notes') || 'N/A'
+                };
+                const url = formData.get('revenueId') ? '<?php echo base_url('revenue/update_revenue'); ?>' : '<?php echo base_url('revenue/add_revenue'); ?>';
+                if (formData.get('revenueId')) {
+                    data.id = formData.get('revenueId');
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert(response.message);
+                            $('#expenseModal').modal('hide');
+                            $('#expenseForm')[0].reset();
+                            $('#expenseForm').removeClass('was-validated');
+                            $('#expenseLabel').text('Add Revenue');
+                            $('#revenueId').val('');
+                            loadRevenues($('.option-buttons button.active').data('option'));
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error saving revenue.');
+                    }
+                });
             });
-
-            // Add new row to table
-            function addNewRow(data) {
-                const tableBody = document.getElementById('expenseTableBody');
-                const row = `
-                    <tr>
-                        <td>${data.title}</td>
-                        <td>${data.dailyRevenue}</td>
-                        <td>${data.weeklyRevenue}</td>
-                        <td>${data.monthlyRevenue}</td>
-                        <td>${data.yearlyRevenue}</td>
-                        <td>
-                            <button class="action-btn view-btn" data-toggle="modal" data-target="#viewModal" 
-                                    data-title="${data.title}" data-date="${data.date}" data-daily="${data.dailyRevenue}" 
-                                    data-weekly="${data.weeklyRevenue}" data-monthly="${data.monthlyRevenue}" 
-                                    data-yearly="${data.yearlyRevenue}" data-notes="${data.notes}">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
-                            <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="horizontal-line"><td colspan="6"></td></tr>
-                `;
-                tableBody.insertAdjacentHTML('beforeend', row);
-            }
-
-            // Update existing row
-            function updateRow(row, data) {
-                const cells = row.querySelectorAll('td');
-                cells[0].textContent = data.title;
-                cells[1].textContent = data.dailyRevenue;
-                cells[2].textContent = data.weeklyRevenue;
-                cells[3].textContent = data.monthlyRevenue;
-                cells[4].textContent = data.yearlyRevenue;
-                const viewBtn = cells[5].querySelector('.view-btn');
-                viewBtn.setAttribute('data-title', data.title);
-                viewBtn.setAttribute('data-date', data.date);
-                viewBtn.setAttribute('data-daily', data.dailyRevenue);
-                viewBtn.setAttribute('data-weekly', data.weeklyRevenue);
-                viewBtn.setAttribute('data-monthly', data.monthlyRevenue);
-                viewBtn.setAttribute('data-yearly', data.yearlyRevenue);
-                viewBtn.setAttribute('data-notes', data.notes);
-                cells[5].querySelector('.thumbs-up').setAttribute('data-title', data.title);
-                cells[5].querySelector('.cross').setAttribute('data-title', data.title);
-            }
 
             // View modal population
             $('#viewModal').on('show.bs.modal', function(event) {
-                const button = $(event.relatedTarget);
-                const title = button.data('title');
-                const date = button.data('date');
-                const daily = button.data('daily');
-                const weekly = button.data('weekly');
-                const monthly = button.data('monthly');
-                const yearly = button.data('yearly');
-                const notes = button.data('notes');
+                const icon = $(event.relatedTarget);
+                currentRevenueId = icon.data('id');
+                const title = icon.data('title');
+                const center = icon.data('center');
+                const date = icon.data('date');
+                const daily = icon.data('daily');
+                const weekly = icon.data('weekly');
+                const monthly = icon.data('monthly');
+                const yearly = icon.data('yearly');
+                const notes = icon.data('notes');
+                const status = icon.data('status');
 
                 const modal = $(this);
                 modal.find('#viewLabel').text(`Revenue Details - ${title}`);
                 modal.find('#viewTitle').text(title);
+                modal.find('#viewCenterName').text(center);
                 modal.find('#viewDate').text(date);
-                modal.find('#viewDailyRevenue').text(daily);
-                modal.find('#viewWeeklyRevenue').text(weekly);
-                modal.find('#viewMonthlyRevenue').text(monthly);
-                modal.find('#viewYearlyRevenue').text(yearly);
+                modal.find('#viewDailyRevenue').text(parseFloat(daily).toFixed(0));
+                modal.find('#viewWeeklyRevenue').text(parseFloat(weekly).toFixed(0));
+                modal.find('#viewMonthlyRevenue').text(parseFloat(monthly).toFixed(0));
+                modal.find('#viewYearlyRevenue').text(parseFloat(yearly).toFixed(0));
                 modal.find('#viewNotes').text(notes);
+                modal.find('#viewStatus').text(status.charAt(0).toUpperCase() + status.slice(1));
+            });
+
+            // Edit button in view modal
+            $(document).on('click', '.edit-btn', function() {
+                $.ajax({
+                    url: '<?php echo base_url('revenue/get_revenue'); ?>/' + currentRevenueId,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const data = response.data;
+                            $('#expenseLabel').text('Edit Revenue');
+                            $('#revenueId').val(data.id);
+                            $('#title').val(data.title);
+                            $('#center_name').val(data.center_name);
+                            $('#date').val(data.date);
+                            $('#dailyRevenue').val(data.daily_revenue);
+                            $('#weeklyRevenue').val(data.weekly_revenue);
+                            $('#monthlyRevenue').val(data.monthly_revenue);
+                            $('#yearlyRevenue').val(data.yearly_revenue);
+                            $('#notes').val(data.notes);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error loading revenue data.');
+                    }
+                });
             });
 
             // Filter form submission
             $('#filterForm').on('submit', function(event) {
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
                 event.preventDefault();
-                if (!this.checkValidity()) return;
 
-                const filterTitle = $('#filterTitle').val().trim().toLowerCase();
-                const startDate = $('#startDate').val();
-                const endDate = $('#endDate').val();
-                const minDailyRevenue = parseFloat($('#minDailyRevenue').val()) || 0;
-                const maxDailyRevenue = parseFloat($('#maxDailyRevenue').val()) || Infinity;
-                const minWeeklyRevenue = parseFloat($('#minWeeklyRevenue').val()) || 0;
-                const maxWeeklyRevenue = parseFloat($('#maxWeeklyRevenue').val()) || Infinity;
-                const minMonthlyRevenue = parseFloat($('#minMonthlyRevenue').val()) || 0;
-                const maxMonthlyRevenue = parseFloat($('#maxMonthlyRevenue').val()) || Infinity;
-                const minYearlyRevenue = parseFloat($('#minYearlyRevenue').val()) || 0;
-                const maxYearlyRevenue = parseFloat($('#maxYearlyRevenue').val()) || Infinity;
+                const formData = new FormData(this);
+                const data = {
+                    [csrfName]: csrfToken,
+                    title: formData.get('filterTitle'),
+                    center_name: formData.get('filterCenterName'),
+                    start_date: formData.get('startDate'),
+                    end_date: formData.get('endDate'),
+                    min_daily_revenue: formData.get('minDailyRevenue') || 0,
+                    max_daily_revenue: formData.get('maxDailyRevenue') || '',
+                    min_weekly_revenue: formData.get('minWeeklyRevenue') || 0,
+                    max_weekly_revenue: formData.get('maxWeeklyRevenue') || '',
+                    min_monthly_revenue: formData.get('minMonthlyRevenue') || 0,
+                    max_monthly_revenue: formData.get('maxMonthlyRevenue') || '',
+                    min_yearly_revenue: formData.get('minYearlyRevenue') || 0,
+                    max_yearly_revenue: formData.get('maxYearlyRevenue') || ''
+                };
 
-                const filteredRows = initialRows.filter(row => {
-                    const rowElement = document.createElement('div');
-                    rowElement.innerHTML = row;
-                    const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                    const dailyRevenue = parseFloat(rowElement.querySelector('td:nth-child(2)').textContent);
-                    const weeklyRevenue = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent);
-                    const monthlyRevenue = parseFloat(rowElement.querySelector('td:nth-child(4)').textContent);
-                    const yearlyRevenue = parseFloat(rowElement.querySelector('td:nth-child(5)').textContent);
-                    const date = rowElement.querySelector('.view-btn').getAttribute('data-date');
-
-                    return (!filterTitle || title.includes(filterTitle)) &&
-                           (!startDate || new Date(date) >= new Date(startDate)) &&
-                           (!endDate || new Date(date) <= new Date(endDate)) &&
-                           (dailyRevenue >= minDailyRevenue && dailyRevenue <= maxDailyRevenue) &&
-                           (weeklyRevenue >= minWeeklyRevenue && weeklyRevenue <= maxWeeklyRevenue) &&
-                           (monthlyRevenue >= minMonthlyRevenue && monthlyRevenue <= maxMonthlyRevenue) &&
-                           (yearlyRevenue >= minYearlyRevenue && yearlyRevenue <= maxYearlyRevenue);
+                $.ajax({
+                    url: '<?php echo base_url('revenue/get_revenues'); ?>',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(data) {
+                        const tableBody = $('#expenseTableBody');
+                        tableBody.empty();
+                        if (data.length === 0) {
+                            tableBody.append('<tr><td colspan="6" class="text-center">No records match the filter criteria.</td></tr>');
+                        } else {
+                            data.forEach(item => {
+                                const rowClass = item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : '';
+                                const rowStyle = item.status === 'approved' ? 'background-color: #d4edda;' : item.status === 'rejected' ? 'background-color: #f8d7da;' : '';
+                                const approveDisabled = item.status !== 'pending' ? 'disabled' : '';
+                                const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
+                                const row = `
+                                    <tr class="${rowClass}" style="${rowStyle}">
+                                        <td>${item.title}</td>
+                                        <td>${parseFloat(item.daily_revenue).toFixed(0)}</td>
+                                        <td>${parseFloat(item.weekly_revenue).toFixed(0)}</td>
+                                        <td>${parseFloat(item.monthly_revenue).toFixed(0)}</td>
+                                        <td>${parseFloat(item.yearly_revenue).toFixed(0)}</td>
+                                        <td>
+                                            <i class="fas fa-eye action-icon view-icon" data-toggle="modal" data-target="#viewModal" 
+                                               data-id="${item.id}" data-title="${item.title}" data-center="${item.center_name}" 
+                                               data-date="${item.date}" data-daily="${item.daily_revenue}" 
+                                               data-weekly="${item.weekly_revenue}" data-monthly="${item.monthly_revenue}" 
+                                               data-yearly="${item.yearly_revenue}" data-notes="${item.notes}" 
+                                               data-status="${item.status}"></i>
+                                            <i class="fas fa-check action-icon approve-icon" data-id="${item.id}" 
+                                               data-title="${item.title}" ${approveDisabled}></i>
+                                            <i class="fas fa-times action-icon reject-icon" data-id="${item.id}" 
+                                               data-title="${item.title}" ${rejectDisabled}></i>
+                                        </td>
+                                    </tr>
+                                    <tr class="horizontal-line"><td colspan="6"></td></tr>
+                                `;
+                                tableBody.append(row);
+                            });
+                        }
+                        $('#filterModal').modal('hide');
+                        $('#filterForm')[0].reset();
+                        $('#filterForm').removeClass('was-validated');
+                    },
+                    error: function() {
+                        alert('Error applying filter.');
+                    }
                 });
-
-                const tableBody = document.getElementById('expenseTableBody');
-                tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="6"></td></tr>') : '<tr><td colspan="6" class="text-center">No records match the filter criteria.</td></tr>';
-
-                $('#filterModal').modal('hide');
-                this.reset();
-                this.classList.remove('was-validated');
-                this.querySelectorAll('input').forEach(input => input.setCustomValidity(''));
             });
 
             // Approve and Reject functionality
-            $(document).on('click', '.thumbs-up', function() {
-                const row = $(this).closest('tr');
+            $(document).on('click', '.approve-icon', function() {
+                const id = $(this).data('id');
                 const title = $(this).data('title');
+                const row = $(this).closest('tr');
                 if (row.hasClass('approved') || row.hasClass('rejected')) {
                     alert(`Revenue "${title}" has already been processed.`);
                     return;
                 }
-                row.addClass('approved').css('backgroundColor', '#d4edda');
-                $(this).prop('disabled', true).css('color', '#28a745');
-                row.find('.cross').prop('disabled', true).css('color', '#ccc');
-                alert(`Revenue "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                $.ajax({
+                    url: '<?php echo base_url('revenue/approve_revenue'); ?>/' + id,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            row.addClass('approved').css('backgroundColor', '#d4edda');
+                            $(this).prop('disabled', true);
+                            row.find('.reject-icon').prop('disabled', true);
+                            alert(`Revenue "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error approving revenue.');
+                    }
+                });
             });
 
-            $(document).on('click', '.cross', function() {
-                const row = $(this).closest('tr');
+            $(document).on('click', '.reject-icon', function() {
+                const id = $(this).data('id');
                 const title = $(this).data('title');
+                const row = $(this).closest('tr');
                 if (row.hasClass('approved') || row.hasClass('rejected')) {
                     alert(`Revenue "${title}" has already been processed.`);
                     return;
                 }
-                row.addClass('rejected').css('backgroundColor', '#f8d7da');
-                $(this).prop('disabled', true).css('color', '#dc3545');
-                row.find('.thumbs-up').prop('disabled', true).css('color', '#ccc');
-                alert(`Revenue "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                $.ajax({
+                    url: '<?php echo base_url('revenue/reject_revenue'); ?>/' + id,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            row.addClass('rejected').css('backgroundColor', '#f8d7da');
+                            $(this).prop('disabled', true);
+                            row.find('.approve-icon').prop('disabled', true);
+                            alert(`Revenue "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error rejecting revenue.');
+                    }
+                });
             });
 
             // Option switching functionality
@@ -1135,25 +1290,7 @@
                 const option = $(this).data('option');
                 $('.option-buttons button').removeClass('active');
                 $(this).addClass('active');
-
-                const tableBody = document.getElementById('expenseTableBody');
-                tableBody.innerHTML = '';
-
-                if (option === 'totalrevenue') {
-                    const totalRevenue = [
-                        { title: 'Center A', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' },
-                        { title: 'Center B', date: '2025-07-30', dailyRevenue: '300', weeklyRevenue: '2100', monthlyRevenue: '9000', yearlyRevenue: '108000', notes: 'N/A' },
-                        { title: 'Center C', date: '2025-07-30', dailyRevenue: '400', weeklyRevenue: '2800', monthlyRevenue: '12000', yearlyRevenue: '144000', notes: 'N/A' }
-                    ];
-                    totalRevenue.forEach(data => addNewRow(data));
-                } else {
-                    const centerwiseExpenses = [
-                        { title: 'Rent', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' },
-                        { title: 'Food', date: '2025-07-30', dailyRevenue: '300', weeklyRevenue: '2100', monthlyRevenue: '9000', yearlyRevenue: '108000', notes: 'N/A' },
-                        { title: 'Rent', date: '2025-07-30', dailyRevenue: '500', weeklyRevenue: '3500', monthlyRevenue: '15000', yearlyRevenue: '180000', notes: 'N/A' }
-                    ];
-                    centerwiseExpenses.forEach(data => addNewRow(data));
-                }
+                loadRevenues(option);
             });
 
             // Sidebar toggle functionality
@@ -1175,6 +1312,14 @@
                     $('.navbar').removeClass('sidebar-minimized');
                     $('#contentWrapper').removeClass('minimized');
                 }
+            });
+
+            // Reset expense form when opening
+            $('#expenseModal').on('show.bs.modal', function() {
+                $('#expenseForm')[0].reset();
+                $('#expenseForm').removeClass('was-validated');
+                $('#expenseLabel').text('Add Revenue');
+                $('#revenueId').val('');
             });
         });
     </script>

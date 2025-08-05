@@ -233,6 +233,7 @@
     }
     .update-btn {
       color: white;
+      background: #007bff;
     }
     .update-btn:hover {
       transform: translateY(-2px);
@@ -240,6 +241,7 @@
     }
     .delete-btn {
       color: white;
+      background: #dc3545;
     }
     .delete-btn:hover {
       transform: translateY(-2px);
@@ -440,54 +442,7 @@
           </button>
         </div>
         <div class="row justify-content-start" id="batchRow">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-1">
-              <i class="fas fa-calendar-alt card-icon"></i>
-              <div class="card-details">
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="card-1" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-2">
-              <i class="fas fa-calendar-alt card-icon"></i>
-              <div class="card-details">
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="card-2" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-3">
-              <i class="fas fa-calendar-alt card-icon"></i>
-              <div class="card-details">
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="card-3" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-4">
-              <i class="fas fa-calendar-alt card-icon"></i>
-              <div class="card-details">
-                <p><span>Batch:</span> B1</p>
-                <p><span>Date:</span> 15/07/2025</p>
-                <p><span>Time:</span> 6 to 7 AM</p>
-                <p><span>Category:</span> Coach</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="card-4" data-batch="B1" data-date="15/07/2025" data-time="6 to 7 AM" data-category="Coach">View</button>
-            </div>
-          </div>
+          <!-- Batch cards will be loaded dynamically via AJAX -->
         </div>
 
         <!-- Add Button -->
@@ -531,6 +486,17 @@
                 <option value="Coordinator">Coordinator</option>
               </select>
               <div class="invalid-feedback">Please select a category.</div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="center_name">Center Name <span class="text-danger">*</span></label>
+              <select id="center_name" name="center_name" class="form-control" required>
+                <option value="">-- Select Center --</option>
+                <option value="ABC">ABC</option>
+                <option value="XYZ">XYZ</option>
+                <option value="PQR">PQR</option>
+                <option value="LMN">LMN</option>
+              </select>
+              <div class="invalid-feedback">Please select a center name.</div>
             </div>
           </div>
           <div class="d-flex justify-content-center">
@@ -576,6 +542,17 @@
               </select>
               <div class="invalid-feedback">Please select a category.</div>
             </div>
+            <div class="form-group col-md-6">
+              <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
+              <select id="viewCenterName" name="center_name" class="form-control" required>
+                <option value="">-- Select Center --</option>
+                <option value="ABC">ABC</option>
+                <option value="XYZ">XYZ</option>
+                <option value="PQR">PQR</option>
+                <option value="LMN">LMN</option>
+              </select>
+              <div class="invalid-feedback">Please select a center name.</div>
+            </div>
           </div>
           <div class="d-flex justify-content-center">
             <button type="submit" class="update-btn btn">Update</button>
@@ -613,6 +590,10 @@
               <label for="filterCategory">Category</label>
               <input type="text" id="filterCategory" name="filterCategory" class="form-control" placeholder="Enter category" />
             </div>
+            <div class="form-group col-md-12">
+              <label for="filterCenterName">Center Name</label>
+              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
+            </div>
           </div>
           <div class="d-flex justify-content-center">
             <button type="submit" class="submit-btn btn">Apply Filter</button>
@@ -631,7 +612,7 @@
   <script>
     (function () {
       'use strict';
-      let cardCounter = 5;
+      let cardCounter = 1;
       const form = document.getElementById('batchForm');
       const filterForm = document.getElementById('filterForm');
       const viewForm = document.getElementById('viewBatchForm');
@@ -648,8 +629,60 @@
         return;
       }
 
-      // Store initial cards for filtering
-      let initialCards = Array.from(document.querySelectorAll('#batchRow .col-12')).map(card => card.outerHTML);
+      // CSRF Token
+      const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+      const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+      // Function to load batches
+      function loadBatches(filters = {}) {
+        $.ajax({
+          url: '<?php echo base_url('batch/get_batches'); ?>',
+          type: 'POST',
+          data: { ...filters, [csrfName]: csrfHash },
+          dataType: 'json',
+          success: function(response) {
+            if (response.status === 'success') {
+              const batchRow = document.getElementById('batchRow');
+              batchRow.innerHTML = '';
+              if (response.data.length === 0) {
+                batchRow.innerHTML = '<p class="text-center">No batches match the filter criteria.</p>';
+                return;
+              }
+              response.data.forEach(batch => {
+                const date = new Date(batch.date);
+                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                const card = `
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+                    <div class="center-card" id="card-${cardCounter}">
+                      <i class="fas fa-calendar-alt card-icon"></i>
+                      <div class="card-details">
+                        <p><span>Batch:</span> ${batch.batch}</p>
+                        <p><span>Date:</span> ${formattedDate}</p>
+                        <p><span>Time:</span> ${batch.time}</p>
+                        <p><span>Category:</span> ${batch.category}</p>
+                        <p><span>Center:</span> ${batch.center_name}</p>
+                      </div>
+                      <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="${batch.id}" data-batch="${batch.batch}" data-date="${formattedDate}" data-time="${batch.time}" data-category="${batch.category}" data-center-name="${batch.center_name}">View</button>
+                    </div>
+                  </div>
+                `;
+                batchRow.insertAdjacentHTML('beforeend', card);
+                cardCounter++;
+              });
+            } else {
+              console.error('Error loading batches:', response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX error:', error);
+          }
+        });
+      }
+
+      // Load batches on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        loadBatches();
+      });
 
       // Form submission for adding batches
       form.addEventListener('submit', function (event) {
@@ -661,15 +694,11 @@
           return;
         }
 
-        // Get form values
         const batch = document.getElementById('batch').value.trim();
         const dateRaw = document.getElementById('date').value;
         const timeRaw = document.getElementById('time').value;
         const category = document.getElementById('category').value;
-
-        // Format date to DD/MM/YYYY
-        const dateObj = new Date(dateRaw);
-        const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+        const centerName = document.getElementById('center_name').value;
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -679,36 +708,32 @@
         const nextHour = (hourNum + 1) % 12 || 12;
         const time = `${displayHour} to ${nextHour} ${period}`;
 
-        // Create new card
-        const newCard = `
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-            <div class="center-card" id="card-${cardCounter}">
-              <i class="fas fa-calendar-alt card-icon"></i>
-              <div class="card-details">
-                <p><span>Batch:</span> ${batch}</p>
-                <p><span>Date:</span> ${date}</p>
-                <p><span>Time:</span> ${time}</p>
-                <p><span>Category:</span> ${category}</p>
-              </div>
-              <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="card-${cardCounter}" data-batch="${batch}" data-date="${date}" data-time="${time}" data-category="${category}">View</button>
-            </div>
-          </div>
-        `;
-
-        // Append new card to the row
-        const batchRow = document.getElementById('batchRow');
-        if (batchRow) {
-          batchRow.insertAdjacentHTML('beforeend', newCard);
-          initialCards.push(newCard);
-          cardCounter++;
-        } else {
-          console.error('batchRow element not found!');
-        }
-
-        // Reset form and close modal
-        form.reset();
-        form.classList.remove('was-validated');
-        $('#addBatchModal').modal('hide');
+        $.ajax({
+          url: '<?php echo base_url('batch/add_batch'); ?>',
+          type: 'POST',
+          data: {
+            batch: batch,
+            date: dateRaw,
+            time: time,
+            category: category,
+            center_name: centerName,
+            [csrfName]: csrfHash
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.status === 'success') {
+              loadBatches();
+              form.reset();
+              form.classList.remove('was-validated');
+              $('#addBatchModal').modal('hide');
+            } else {
+              console.error('Error adding batch:', response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX error:', error);
+          }
+        });
       });
 
       // Ensure validation feedback on input for add form
@@ -723,32 +748,20 @@
         e.preventDefault();
         e.stopPropagation();
 
-        // Get filter values
-        const filterBatch = document.getElementById('filterBatch').value.trim().toLowerCase();
-        const filterDate = document.getElementById('filterDate').value.trim().toLowerCase();
-        const filterTime = document.getElementById('filterTime').value.trim().toLowerCase();
-        const filterCategory = document.getElementById('filterCategory').value.trim().toLowerCase();
+        const filterBatch = document.getElementById('filterBatch').value.trim();
+        const filterDate = document.getElementById('filterDate').value.trim();
+        const filterTime = document.getElementById('filterTime').value.trim();
+        const filterCategory = document.getElementById('filterCategory').value.trim();
+        const filterCenterName = document.getElementById('filterCenterName').value.trim();
 
-        // Filter cards
-        const filteredCards = initialCards.filter(card => {
-          const cardElement = document.createElement('div');
-          cardElement.innerHTML = card;
-          const batch = cardElement.querySelector('p:nth-child(1) span').nextSibling.textContent.trim().toLowerCase();
-          const date = cardElement.querySelector('p:nth-child(2) span').nextSibling.textContent.trim().toLowerCase();
-          const time = cardElement.querySelector('p:nth-child(3) span').nextSibling.textContent.trim().toLowerCase();
-          const category = cardElement.querySelector('p:nth-child(4) span').nextSibling.textContent.trim().toLowerCase();
+        const filters = {};
+        if (filterBatch) filters.batch = filterBatch;
+        if (filterDate) filters.date = filterDate;
+        if (filterTime) filters.time = filterTime;
+        if (filterCategory) filters.category = filterCategory;
+        if (filterCenterName) filters.center_name = filterCenterName;
 
-          return (!filterBatch || batch.includes(filterBatch)) &&
-                 (!filterDate || date.includes(filterDate)) &&
-                 (!filterTime || time.includes(filterTime)) &&
-                 (!filterCategory || category.includes(filterCategory));
-        });
-
-        // Update card display
-        const row = document.getElementById('batchRow');
-        row.innerHTML = filteredCards.length ? filteredCards.join('') : '<p class="text-center">No batches match the filter criteria.</p>';
-
-        // Close modal
+        loadBatches(filters);
         $('#filterModal').modal('hide');
       });
 
@@ -760,6 +773,7 @@
         const date = button.data('date');
         const time = button.data('time');
         const category = button.data('category');
+        const centerName = button.data('center-name');
 
         const modal = $(this);
         modal.find('#viewBatchLabel').text(`Batch Details - ${batch}`);
@@ -767,6 +781,7 @@
         modal.find('#viewDate').val(new Date(date.split('/').reverse().join('-')).toISOString().split('T')[0]);
         modal.find('#viewTime').val(time.split(' to ')[0].trim());
         modal.find('#viewCategory').val(category);
+        modal.find('#viewCenterName').val(centerName);
         modal.find('.update-btn').data('batch-id', batchId);
         modal.find('.delete-btn').data('batch-id', batchId);
       });
@@ -786,10 +801,7 @@
         const dateRaw = document.getElementById('viewDate').value;
         const timeRaw = document.getElementById('viewTime').value;
         const category = document.getElementById('viewCategory').value;
-
-        // Format date to DD/MM/YYYY
-        const dateObj = new Date(dateRaw);
-        const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+        const centerName = document.getElementById('viewCenterName').value;
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -799,28 +811,32 @@
         const nextHour = (hourNum + 1) % 12 || 12;
         const time = `${displayHour} to ${nextHour} ${period}`;
 
-        // Update the card
-        const card = document.getElementById(batchId);
-        if (card) {
-          card.querySelector('p:nth-child(1) span').nextSibling.textContent = ` ${batch}`;
-          card.querySelector('p:nth-child(2) span').nextSibling.textContent = ` ${date}`;
-          card.querySelector('p:nth-child(3) span').nextSibling.textContent = ` ${time}`;
-          card.querySelector('p:nth-child(4) span').nextSibling.textContent = ` ${category}`;
-          card.querySelector('.view-btn').setAttribute('data-batch', batch);
-          card.querySelector('.view-btn').setAttribute('data-date', date);
-          card.querySelector('.view-btn').setAttribute('data-time', time);
-          card.querySelector('.view-btn').setAttribute('data-category', category);
-
-          // Update initialCards
-          const cardIndex = initialCards.findIndex(c => c.includes(`id="${batchId}"`));
-          if (cardIndex !== -1) {
-            initialCards[cardIndex] = card.parentElement.outerHTML;
+        $.ajax({
+          url: '<?php echo base_url('batch/update_batch'); ?>',
+          type: 'POST',
+          data: {
+            id: batchId,
+            batch: batch,
+            date: dateRaw,
+            time: time,
+            category: category,
+            center_name: centerName,
+            [csrfName]: csrfHash
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.status === 'success') {
+              loadBatches();
+              viewForm.classList.remove('was-validated');
+              $('#viewBatchModal').modal('hide');
+            } else {
+              console.error('Error updating batch:', response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX error:', error);
           }
-        }
-
-        // Reset form and close modal
-        viewForm.classList.remove('was-validated');
-        $('#viewBatchModal').modal('hide');
+        });
       });
 
       // Ensure validation feedback on input for view form
@@ -833,14 +849,26 @@
       // Handle delete button click
       viewForm.querySelector('.delete-btn').addEventListener('click', function () {
         const batchId = $(this).data('batch-id');
-        const card = document.getElementById(batchId);
-        if (card) {
-          const cardContainer = card.parentElement;
-          cardContainer.remove();
-          // Update initialCards
-          initialCards = initialCards.filter(c => !c.includes(`id="${batchId}"`));
-          $('#viewBatchModal').modal('hide');
-        }
+        $.ajax({
+          url: '<?php echo base_url('batch/delete_batch'); ?>',
+          type: 'POST',
+          data: {
+            id: batchId,
+            [csrfName]: csrfHash
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.status === 'success') {
+              loadBatches();
+              $('#viewBatchModal').modal('hide');
+            } else {
+              console.error('Error deleting batch:', response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX error:', error);
+          }
+        });
       });
 
       // Sidebar toggle functionality

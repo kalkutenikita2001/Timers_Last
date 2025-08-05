@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-               background-color: #f4f6f8 !important;
+            background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
@@ -84,7 +84,6 @@
             gap: 0.75rem;
             align-items: center;
             flex-wrap: wrap;
-            
         }
 
         .add-btn {
@@ -118,10 +117,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
             touch-action: manipulation;
-            
         }
-        .btn{
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .btn {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn-filter:hover {
@@ -133,7 +132,6 @@
 
         /* Table Styles */
         .table-container {
-            /* overflow-x: auto; */
             margin-top: 1.5rem;
             margin-bottom: 1.5rem;
             background: #fff;
@@ -151,11 +149,9 @@
         }
 
         .table thead th {
-            /* background-color: #343a40; */
             color: black;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            /* padding: 1rem; */
             text-align: center;
             font-weight: 600;
             font-size: clamp(0.75rem, 2vw, 0.9rem);
@@ -225,7 +221,6 @@
             font-weight: 600;
             color: #333;
             margin: 0;
-            /* padding: 1.5rem 1rem 1rem; */
         }
 
         .close {
@@ -256,7 +251,6 @@
 
         .form-row {
             display: flex;
-            /* gap: 1rem; */
             margin-bottom: 1rem;
             flex-wrap: wrap;
             align-items: center;
@@ -318,7 +312,6 @@
         }
 
         .save-btn {
-            /* background: #dc3545; */
             color: black;
             border: none;
             padding: 0.75rem 2rem;
@@ -333,7 +326,6 @@
         }
 
         .save-btn:hover {
-            /* background: #c82333; */
             box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
             transform: translateY(-1px);
         }
@@ -645,18 +637,14 @@
                 <button onclick="switchOption('own')">Own Expenses</button>
             </div>
 
-          
-<div class="add-btn-container">
-    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
-        <i class="fas fa-filter mr-1"></i> Filter
-    </button>
-    <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
-        <i class="fas fa-plus mr-1"></i> Add Expense
-    </button>
-</div>
-
-
-            
+            <div class="add-btn-container">
+                <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+                    <i class="fas fa-filter mr-1"></i> Filter
+                </button>
+                <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
+                    <i class="fas fa-plus mr-1"></i> Add Expense
+                </button>
+            </div>
 
             <!-- Centerwise Expenses Table -->
             <div class="table-container" id="centerwiseTableContainer">
@@ -671,39 +659,7 @@
                         </tr>
                     </thead>
                     <tbody id="centerwiseTableBody">
-                        <tr>
-                            <td>Rent</td>
-                            <td>01/07/2025</td>
-                            <td>Rs.5674</td>
-                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
-                        <tr>
-                            <td>Food</td>
-                            <td>15/07/2025</td>
-                            <td>Rs.5674</td>
-                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Food"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Food"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
-                        <tr>
-                            <td>Rent</td>
-                            <td>15/07/2025</td>
-                            <td>Rs.5674</td>
-                            <td>sdhjkhfv bnmvhfgtdvjhgjjhg</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Rent"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Rent"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <!-- Populated via AJAX -->
                     </tbody>
                 </table>
             </div>
@@ -721,39 +677,7 @@
                         </tr>
                     </thead>
                     <tbody id="ownTableBody">
-                        <tr>
-                            <td>Groceries</td>
-                            <td>01/07/2025</td>
-                            <td>Rs.2500</td>
-                            <td>Personal</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Groceries"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Groceries"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
-                        <tr>
-                            <td>Utilities</td>
-                            <td>05/07/2025</td>
-                            <td>Rs.1200</td>
-                            <td>Household</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Utilities"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Utilities"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
-                        <tr>
-                            <td>Fuel</td>
-                            <td>10/07/2025</td>
-                            <td>Rs.3000</td>
-                            <td>Travel</td>
-                            <td>
-                                <button class="action-btn thumbs-up" data-title="Fuel"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" data-title="Fuel"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        <!-- Populated via AJAX -->
                     </tbody>
                 </table>
             </div>
@@ -772,6 +696,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="expenseForm" novalidate>
+                        <input type="hidden" id="expenseId" name="expenseId">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="title">Title <span class="text-danger">*</span></label>
@@ -853,10 +778,10 @@
         $(document).ready(function() {
             let editingRow = null;
             let currentOption = 'centerwise';
-            const centerwiseRows = Array.from(document.querySelectorAll('#centerwiseTableBody tr:not(.horizontal-line)'))
-                .map(row => row.outerHTML);
-            const ownRows = Array.from(document.querySelectorAll('#ownTableBody tr:not(.horizontal-line)'))
-                .map(row => row.outerHTML);
+
+            // CSRF Token Setup
+            const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+            const csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
 
             // Clear form on modal close
             $('#expenseModal').on('hidden.bs.modal', function() {
@@ -865,6 +790,8 @@
                 form.classList.remove('was-validated');
                 clearValidationErrors();
                 editingRow = null;
+                $('#expenseId').val('');
+                $('#expenseLabel').text('Add Income / Expenses');
                 toggleFormFields('centerwise');
             });
 
@@ -908,6 +835,52 @@
                     categoryField.style.display = 'none';
                 }
             }
+
+            // Load expenses
+            function loadExpenses(option = 'centerwise') {
+                const url = option === 'own' ? '<?php echo base_url('expense/get_own_expenses'); ?>' : '<?php echo base_url('expense/get_centerwise_expenses'); ?>';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(data) {
+                        const tableBody = $(`#${option}TableBody`);
+                        tableBody.empty();
+                        if (data.length === 0) {
+                            tableBody.append('<tr><td colspan="5" class="text-center">No records found.</td></tr>');
+                            return;
+                        }
+                        data.forEach(item => {
+                            const rowClass = item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : '';
+                            const rowStyle = item.status === 'approved' ? 'background-color: #d4edda;' : item.status === 'rejected' ? 'background-color: #f8d7da;' : '';
+                            const approveDisabled = item.status !== 'pending' ? 'disabled' : '';
+                            const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
+                            const detail = option === 'centerwise' ? item.description : item.category;
+                            const row = `
+                                <tr class="${rowClass}" style="${rowStyle}">
+                                    <td>${item.title}</td>
+                                    <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
+                                    <td>Rs.${parseFloat(item.amount).toFixed(0)}</td>
+                                    <td>${item.description}</td>
+                                    <td>
+                                        <button class="action-btn thumbs-up" data-id="${item.id}" data-title="${item.title}" ${approveDisabled}><i class="fas fa-check"></i></button>
+                                        <button class="action-btn cross" data-id="${item.id}" data-title="${item.title}" ${rejectDisabled}><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="horizontal-line"><td colspan="5"></td></tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function() {
+                        alert('Error loading expenses.');
+                    }
+                });
+            }
+
+            // Initial load
+            loadExpenses();
 
             // Expense Form validation
             function validateExpenseForm() {
@@ -1161,24 +1134,36 @@
                 if (validateExpenseForm()) {
                     const formData = new FormData(this);
                     const data = {
+                        [csrfName]: csrfToken,
                         title: formData.get('title'),
                         date: formData.get('date'),
-                        amount: `Rs.${parseFloat(formData.get('amount')).toFixed(0)}`,
-                        description: currentOption === 'centerwise' ? formData.get('description') : formData.get('category')
+                        amount: parseFloat(formData.get('amount')).toFixed(2),
+                        description: currentOption === 'centerwise' ? formData.get('description') : formData.get('category'),
+                        type: currentOption
                     };
-
-                    const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
-                    const rowArray = currentOption === 'centerwise' ? centerwiseRows : ownRows;
-
-                    if (editingRow) {
-                        updateRow(editingRow, data);
-                        rowArray[Array.from(tableBody.querySelectorAll('tr:not(.horizontal-line)')).indexOf(editingRow)] = editingRow.outerHTML;
-                    } else {
-                        addNewRow(data);
-                        rowArray.push(tableBody.querySelector('tr:not(.horizontal-line):last-child').outerHTML);
+                    const url = formData.get('expenseId') ? '<?php echo base_url('expense/update_expense'); ?>' : '<?php echo base_url('expense/add_expense'); ?>';
+                    if (formData.get('expenseId')) {
+                        data.id = formData.get('expenseId');
                     }
 
-                    $('#expenseModal').modal('hide');
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                alert(response.message);
+                                $('#expenseModal').modal('hide');
+                                loadExpenses(currentOption);
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Error saving expense.');
+                        }
+                    });
                 }
                 this.classList.add('was-validated');
             });
@@ -1187,93 +1172,114 @@
             $('#filterForm').on('submit', function(e) {
                 e.preventDefault();
                 if (validateFilterForm()) {
-                    const filterTitle = $('#filterTitle').val().trim().toLowerCase();
-                    const filterDescription = $('#filterDescription').val().trim().toLowerCase();
-                    const filterCategory = $('#filterCategory').val().trim().toLowerCase();
+                    const formData = new FormData(this);
+                    const data = {
+                        [csrfName]: csrfToken,
+                        title: formData.get('filterTitle'),
+                        description: currentOption === 'centerwise' ? formData.get('filterDescription') : formData.get('filterCategory'),
+                        type: currentOption
+                    };
 
-                    const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
-                    const rowArray = currentOption === 'centerwise' ? centerwiseRows : ownRows;
-                    tableBody.innerHTML = '';
-
-                    const filteredRows = rowArray.filter(row => {
-                        const rowElement = document.createElement('div');
-                        rowElement.innerHTML = row;
-                        const title = rowElement.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                        const dateText = rowElement.querySelector('td:nth-child(2)').textContent;
-                        const amount = parseFloat(rowElement.querySelector('td:nth-child(3)').textContent.replace('Rs.', ''));
-                        const detail = rowElement.querySelector('td:nth-child(4)').textContent.toLowerCase();
-
-                        return (!filterTitle || title.includes(filterTitle)) &&
-                               (currentOption === 'centerwise' ? (!filterDescription || detail.includes(filterDescription)) : (!filterCategory || detail.includes(filterCategory)));
+                    $.ajax({
+                        url: '<?php echo base_url('expense/get_centerwise_expenses'); ?>',
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function(data) {
+                            const tableBody = $(`#${currentOption}TableBody`);
+                            tableBody.empty();
+                            if (data.length === 0) {
+                                tableBody.append('<tr><td colspan="5" class="text-center">No records match the filter criteria.</td></tr>');
+                            } else {
+                                data.forEach(item => {
+                                    const rowClass = item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : '';
+                                    const rowStyle = item.status === 'approved' ? 'background-color: #d4edda;' : item.status === 'rejected' ? 'background-color: #f8d7da;' : '';
+                                    const approveDisabled = item.status !== 'pending' ? 'disabled' : '';
+                                    const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
+                                    const detail = currentOption === 'centerwise' ? item.description : item.category;
+                                    const row = `
+                                        <tr class="${rowClass}" style="${rowStyle}">
+                                            <td>${item.title}</td>
+                                            <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
+                                            <td>Rs.${parseFloat(item.amount).toFixed(0)}</td>
+                                            <td>${item.description}</td>
+                                            <td>
+                                                <button class="action-btn thumbs-up" data-id="${item.id}" data-title="${item.title}" ${approveDisabled}><i class="fas fa-check"></i></button>
+                                                <button class="action-btn cross" data-id="${item.id}" data-title="${item.title}" ${rejectDisabled}><i class="fas fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="horizontal-line"><td colspan="5"></td></tr>
+                                    `;
+                                    tableBody.append(row);
+                                });
+                            }
+                            $('#filterModal').modal('hide');
+                        },
+                        error: function() {
+                            alert('Error applying filter.');
+                        }
                     });
-
-                    tableBody.innerHTML = filteredRows.length ? filteredRows.join('<tr class="horizontal-line"><td colspan="5"></td></tr>') : 
-                        '<tr><td colspan="5" class="text-center">No records match the filter criteria.</td></tr>';
-
-                    $('#filterModal').modal('hide');
                 }
                 this.classList.add('was-validated');
             });
 
-            // Add new row to table
-            function addNewRow(data) {
-                const tableBody = document.getElementById(currentOption === 'centerwise' ? 'centerwiseTableBody' : 'ownTableBody');
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.title}</td>
-                    <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                    <td>${data.amount}</td>
-                    <td>${data.description}</td>
-                    <td>
-                        <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
-                        <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-                const separator = document.createElement('tr');
-                separator.className = 'horizontal-line';
-                separator.innerHTML = '<td colspan="5"></td>';
-                tableBody.appendChild(separator);
-            }
-
-            // Update existing row
-            function updateRow(row, data) {
-                const cells = row.querySelectorAll('td');
-                cells[0].textContent = data.title;
-                cells[1].textContent = new Date(data.date).toLocaleDateString('en-GB');
-                cells[2].textContent = data.amount;
-                cells[3].textContent = data.description;
-                cells[4].innerHTML = `
-                    <button class="action-btn thumbs-up" data-title="${data.title}"><i class="fas fa-check"></i></button>
-                    <button class="action-btn cross" data-title="${data.title}"><i class="fas fa-times"></i></button>
-                `;
-            }
-
             // Approve and Reject functionality
             $(document).on('click', '.thumbs-up', function() {
-                const row = $(this).closest('tr');
+                const id = $(this).data('id');
                 const title = $(this).data('title');
+                const row = $(this).closest('tr');
                 if (row.hasClass('approved') || row.hasClass('rejected')) {
                     alert(`Expense "${title}" has already been processed.`);
                     return;
                 }
-                row.addClass('approved').css('backgroundColor', '#d4edda');
-                $(this).prop('disabled', true).css('color', '#28a745');
-                row.find('.cross').prop('disabled', true).css('color', '#ccc');
-                alert(`Expense "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                $.ajax({
+                    url: '<?php echo base_url('expense/approve_expense'); ?>/' + id,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            row.addClass('approved').css('backgroundColor', '#d4edda');
+                            $(this).prop('disabled', true).css('color', '#28a745');
+                            row.find('.cross').prop('disabled', true).css('color', '#ccc');
+                            alert(`Expense "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error approving expense.');
+                    }
+                });
             });
 
             $(document).on('click', '.cross', function() {
-                const row = $(this).closest('tr');
+                const id = $(this).data('id');
                 const title = $(this).data('title');
+                const row = $(this).closest('tr');
                 if (row.hasClass('approved') || row.hasClass('rejected')) {
                     alert(`Expense "${title}" has already been processed.`);
                     return;
                 }
-                row.addClass('rejected').css('backgroundColor', '#f8d7da');
-                $(this).prop('disabled', true).css('color', '#dc3545');
-                row.find('.thumbs-up').prop('disabled', true).css('color', '#ccc');
-                alert(`Expense "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                $.ajax({
+                    url: '<?php echo base_url('expense/reject_expense'); ?>/' + id,
+                    type: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            row.addClass('rejected').css('backgroundColor', '#f8d7da');
+                            $(this).prop('disabled', true).css('color', '#dc3545');
+                            row.find('.thumbs-up').prop('disabled', true).css('color', '#ccc');
+                            alert(`Expense "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error rejecting expense.');
+                    }
+                });
             });
 
             // Option switching functionality
@@ -1287,6 +1293,7 @@
 
                 toggleFormFields(option);
                 toggleFilterFields(option);
+                loadExpenses(option);
             };
 
             // Open expense modal with appropriate fields

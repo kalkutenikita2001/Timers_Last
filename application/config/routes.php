@@ -64,7 +64,7 @@ $route['EventAndNotice'] = 'superadmin/EventAndNotice';
 $route['Admission'] = 'superadmin/Admission';
 $route['Students'] = 'superadmin/Students';
 $route['Leave'] = 'superadmin/Leave';
-$route['Expenses'] = 'superadmin/Expenses';
+// $route['Expenses'] = 'superadmin/Expenses';
 
 //Admin
 $route['Sidebar'] = 'admin/Include/Sidebar';
@@ -85,3 +85,12 @@ $route['venue'] = 'admin/venue';
 $route['login'] = 'base/login';
 $route['adminlogin'] = 'base/adminlogin';
 $route['superadminlogin'] = 'base/superadminlogin';
+
+//SuperAdmin Backend Side
+$route['center'] = 'center/index';
+$route['staff'] = 'staff/index';
+$route['batch'] = 'batch/index';
+$route['event_notice'] = 'event_notice/index';
+$route['revenue'] = 'revenue/index';
+$route['expense/(:any)'] = 'expense/$1';
+$route['expense'] = 'expense/index';
