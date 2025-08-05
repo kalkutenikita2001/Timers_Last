@@ -25,6 +25,9 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'venue') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venue'; ?>">
+            <i class="bi bi-calendar-x"></i><span>Venue</span>
+        </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
         </a>

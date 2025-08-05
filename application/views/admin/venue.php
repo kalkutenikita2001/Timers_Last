@@ -104,8 +104,8 @@
             margin-top: 25px;
         }
         .add-btn {
-            background: linear-gradient(135deg, #ff4040, #c62828);
-            color: white;
+            /* background: linear-gradient(135deg, #ff4040, #c62828); */
+            color: black;
             border: none;
             border-radius: 25px;
             padding: 12px 30px;
@@ -176,12 +176,12 @@
             transition: all 0.3s ease;
         }
         .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0,123,255,0.2);
+            /* border-color: #007bff; */
+            /* box-shadow: 0 0 8px rgba(0,123,255,0.2); */
         }
         .save-btn {
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
-            color: white;
+            /* background: linear-gradient(135deg, #d32f2f, #b71c1c); */
+            color: black;
             border: none;
             border-radius: 25px;
             padding: 12px 40px;
@@ -189,12 +189,12 @@
             font-weight: 600;
             display: block;
             margin: 20px auto;
-            box-shadow: 0 4px 15px rgba(211,47,47,0.3);
+            /* box-shadow: 0 4px 15px rgba(211,47,47,0.3); */
             transition: all 0.3s ease;
         }
         .save-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(211,47,47,0.4);
+            /* box-shadow: 0 6px 20px rgba(211,47,47,0.4); */
         }
         .error {
             color: #dc3545;
@@ -204,7 +204,7 @@
         }
         .form-group.invalid .form-control {
             border-color: #dc3545;
-            box-shadow: 0 0 8px rgba(220,53,69,0.2);
+            /* box-shadow: 0 0 8px rgba(220,53,69,0.2); */
         }
         .form-group.invalid .error {
             display: block;

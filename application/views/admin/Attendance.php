@@ -174,7 +174,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0);
             animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn {

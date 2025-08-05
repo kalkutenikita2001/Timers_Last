@@ -117,7 +117,7 @@
     .modal-content h3 {
       text-align: center;
       font-weight: 700;
-      margin-bottom: 1.5rem;
+      /* margin-bottom: 1.5rem; */
       font-size: 1.5rem;
       color: #343a40;
     }

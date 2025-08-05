@@ -225,7 +225,7 @@
             font-weight: 600;
             color: #333;
             margin: 0;
-            padding: 1.5rem 1rem 1rem;
+            /* padding: 1.5rem 1rem 1rem; */
         }
 
         .close {
@@ -256,7 +256,7 @@
 
         .form-row {
             display: flex;
-            gap: 1rem;
+            /* gap: 1rem; */
             margin-bottom: 1rem;
             flex-wrap: wrap;
             align-items: center;
@@ -333,7 +333,7 @@
         }
 
         .save-btn:hover {
-            background: #c82333;
+            /* background: #c82333; */
             box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
             transform: translateY(-1px);
         }

@@ -72,7 +72,7 @@
         }
         /* Table Styles */
         .table-container {
-            overflow-x: auto;
+            /* overflow-x: auto; */
             margin-top: 20px;
             margin-bottom: 20px;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -131,8 +131,8 @@
             margin-top: 20px;
         }
         .add-btn {
-            background-color: #007bff;
-            color: white;
+            background-color: white;
+            color: black;
             padding: 10px 20px;
             font-size: 14px;
             border: none;
@@ -146,7 +146,6 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .add-btn:hover {
-            background-color: #0056b3;
             transform: scale(1.05);
         }
         /* Modal Styles */
@@ -158,7 +157,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease-in-out;
         }
         @keyframes fadeIn {
@@ -168,13 +167,11 @@
         .modal-content {
             background: #fff;
             margin: 10% auto;
-            padding: 0;
-            border-radius: 6px;
+            padding: 15px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease-in-out;
         }
         @keyframes slideIn {
@@ -183,122 +180,106 @@
         }
         .modal-header {
             text-align: center;
-            padding: 10px 15px;
-            border-bottom: 1px solid #e5e5e5;
+            padding: 15px;
+            border-bottom: none;
             position: relative;
         }
         .modal-title {
-            font-size: 16px;
+            font-size: 1.5rem;
             font-weight: 600;
             color: #333;
             margin: 0;
         }
         .close {
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: 15px;
+            top: 15px;
             color: #666;
-            font-size: 20px;
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
         .close:hover {
-            color: #000;
-            background: #e0e0e0;
+            color: #dc3545;
         }
         .modal-body {
             padding: 15px;
         }
         .form-row {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 8px;
+            flex-wrap: wrap;
+            /* gap: 10px; */
+            margin-bottom: 10px;
         }
         .form-group {
-            width: 100%;
-            box-sizing: border-box;
+            margin-bottom: 1rem;
         }
         .form-group label {
             display: block;
-            margin-bottom: 4px;
-            font-weight: 500;
-            font-size: 13px;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
             color: #333;
         }
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 13px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.9rem;
             background: #fff;
             color: #333;
             box-sizing: border-box;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
         }
         .form-group textarea {
             resize: vertical;
             min-height: 60px;
         }
         .error {
-            color: #d32f2f;
-            font-size: 10px;
-            margin-top: 3px;
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 4px;
             display: none;
             font-weight: 500;
         }
         .form-group.invalid input,
         .form-group.invalid textarea {
-            border-color: #d32f2f;
-            background: #fff5f5;
+            border-color: #dc3545;
+            box-shadow: 0 0 6px rgba(220, 53, 69, 0.2);
         }
         .form-group.invalid .error {
             display: block;
         }
         .save-btn {
-            background: #007bff;
-            color: white;
+            /* background: #007bff; */
+            color: black;
             border: none;
-            padding: 8px 25px;
-            border-radius: 5px;
-            font-size: 13px;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             display: block;
-            margin: 10px auto 0;
+            margin: 15px auto 0;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .save-btn:hover {
-            background: #0056b3;
-            transform: scale(1.05);
+            /* background: #0056b3; */
+            transform: translateY(-2px);
         }
         .save-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
-        }
-        .save-btn:active {
-            animation: pulse 0.2s ease;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
         }
         /* Responsive Design */
         @media (max-width: 576px) {
@@ -325,44 +306,44 @@
                 width: 95%;
                 max-width: 360px;
                 margin: 15% auto;
-                max-height: 80vh;
-                overflow-y: auto;
             }
             .modal-header {
-                padding: 8px 12px;
+                padding: 10px;
             }
             .modal-title {
-                font-size: 14px;
+                font-size: 1.2rem;
             }
             .close {
-                font-size: 18px;
-                width: 20px;
-                height: 20px;
-                right: 8px;
-                top: 8px;
+                font-size: 1.2rem;
+                right: 10px;
+                top: 10px;
             }
             .modal-body {
                 padding: 10px;
             }
             .form-row {
+                flex-direction: column;
                 gap: 6px;
                 margin-bottom: 6px;
             }
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
             .form-group label {
-                font-size: 12px;
-                margin-bottom: 3px;
+                font-size: 0.85rem;
+                margin-bottom: 0.3rem;
             }
             .form-group input,
             .form-group textarea {
                 padding: 6px;
-                font-size: 12px;
+                font-size: 0.85rem;
             }
             .form-group textarea {
                 min-height: 50px;
             }
             .error {
-                font-size: 9px;
-                margin-top: 2px;
+                font-size: 0.75rem;
+                margin-top: 3px;
             }
             .add-btn {
                 font-size: 12px;
@@ -371,9 +352,9 @@
                 padding: 8px 15px;
             }
             .save-btn {
-                padding: 6px 20px;
-                font-size: 12px;
-                margin: 8px auto 0;
+                padding: 8px 25px;
+                font-size: 0.9rem;
+                margin: 10px auto 0;
             }
             .tab-buttons {
                 flex-direction: column;
@@ -403,28 +384,29 @@
             }
             .modal-content {
                 width: 90%;
-                max-width: 380px;
+                max-width: 450px;
                 margin: 10% auto;
             }
             .modal-body {
                 padding: 12px;
             }
             .form-row {
+                flex-direction: column;
                 gap: 8px;
                 margin-bottom: 8px;
             }
             .form-group label {
-                font-size: 12px;
-                margin-bottom: 3px;
+                font-size: 0.9rem;
+                margin-bottom: 0.3rem;
             }
             .form-group input,
             .form-group textarea {
                 padding: 7px;
-                font-size: 12px;
+                font-size: 0.85rem;
             }
             .save-btn {
-                padding: 7px 20px;
-                font-size: 12px;
+                padding: 8px 25px;
+                font-size: 0.9rem;
             }
             .tab-buttons button {
                 font-size: 13px;
@@ -433,7 +415,7 @@
         }
         @media (min-width: 992px) {
             .modal-content {
-                max-width: 400px;
+                max-width: 600px;
             }
         }
         /* Touch device hover fix */
@@ -533,44 +515,48 @@
     <div id="leaveModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close" onclick="closeModal()">×</span>
+                <span class="close" onclick="closeModal()">&times;</span>
                 <h2 class="modal-title">Add Leave</h2>
             </div>
             <div class="modal-body">
                 <form id="leaveForm">
                     <div class="form-row">
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required aria-describedby="nameError">
-                            <div id="nameError" class="error">Please enter a valid name (letters only, min 2 characters)</div>
+                            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter full name">
+                            <div class="error">Please enter a valid name (letters only, min 2 characters)</div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="batch">Batch</label>
-                            <input type="text" id="batch" name="batch" required aria-describedby="batchError">
-                            <div id="batchError" class="error">Please enter a valid batch (alphanumeric, 1-10 characters)</div>
+                            <input type="text" id="batch" name="batch" class="form-control" required placeholder="Enter batch code (e.g., B1)">
+                            <div class="error">Please enter a valid batch (alphanumeric, 1-10 characters)</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="level">Level</label>
-                            <input type="text" id="level" name="level" required aria-describedby="levelError">
-                            <div id="levelError" class="error">Please enter Beginner, Intermediate, or Advanced</div>
+                            <input type="text" id="level" name="level" class="form-control" required placeholder="Beginner, Intermediate, or Advanced">
+                            <div class="error">Please enter Beginner, Intermediate, or Advanced</div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="date">Date</label>
-                            <input type="date" id="date" name="date" required aria-describedby="dateError">
-                            <div id="dateError" class="error">Please select a future date</div>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                            <div class="error">Please select a future date</div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="reason">Reason</label>
-                        <input type="text" id="reason" name="reason" required aria-describedby="reasonError">
-                        <div id="reasonError" class="error">Please enter a reason (min 5 characters)</div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="reason">Reason</label>
+                            <input type="text" id="reason" name="reason" class="form-control" required placeholder="Enter reason for leave">
+                            <div class="error">Please enter a reason (min 5 characters)</div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" required aria-describedby="descriptionError"></textarea>
-                        <div id="descriptionError" class="error">Please enter a description (10-500 characters)</div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" class="form-control" required placeholder="Enter detailed description"></textarea>
+                            <div class="error">Please enter a description (10-500 characters)</div>
+                        </div>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
                 </form>

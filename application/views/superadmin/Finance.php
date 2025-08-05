@@ -354,7 +354,7 @@
 
         @media (min-width: 992px) {
             .modal-content {
-                max-width: 600px;
+                /* max-width: 600px; */
             }
         }
 
