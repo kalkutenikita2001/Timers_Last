@@ -37,8 +37,8 @@
     }
 
     .participate-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
+      /* background: linear-gradient(90deg, #ff4040, #470000); */
+      color: black;
       border: none;
       border-radius: 8px;
       padding: 8px 15px;
@@ -48,28 +48,31 @@
     }
 
     .participate-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
+      /* background: linear-gradient(90deg, #ff3030, #360000); */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .center-card {
-      background-color: #ffffff;
-      border-radius: 1.25rem;
-      padding: 1.25rem;
-      width: 100%;
-      max-width: 18.75rem;
-      border-left: 2px solid #ff4040;
-      position: relative;
-      margin: 0.625rem;
-      color: #333;
-      font-size: 0.9375rem;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: auto;
-    }
+  .center-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 22rem;
+    border-left: 2px solid #ff4040;
+    position: relative;
+    color: #333;
+    font-size: 0.875rem;
+    font-style: normal;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+    min-height: 10rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
     .card-icon {
       position: absolute;
@@ -119,8 +122,8 @@
     }
 
     .add-center-btn {
-      background: linear-gradient(90deg, #ff4040, #470000);
-      color: white;
+      /* background: linear-gradient(90deg, #ff4040, #470000); */
+      color: black;
       border: none;
       border-radius: 8px;
       padding: 8px 15px;
@@ -132,7 +135,7 @@
     }
 
     .add-center-btn:hover {
-      background: linear-gradient(90deg, #ff3030, #360000);
+      /* background: linear-gradient(90deg, #ff3030, #360000); */
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -201,9 +204,9 @@
     }
 
     .submit-btn {
-      background: linear-gradient(to top, #990000, #ff0000);
+      /* background: linear-gradient(to top, #990000, #ff0000);s */
       border: none;
-      color: white;
+      color: black;
       border-radius: 10px;
       padding: 12px;
       width: 150px;
@@ -282,7 +285,7 @@
       }
       .center-card {
         max-width: 15.625rem;
-        margin: 0.5rem;
+        /* margin: 0.5rem; */
       }
       .participate-btn {
         width: 140px;
@@ -323,7 +326,7 @@
     @media (min-width: 992px) {
       .center-card {
         max-width: 18.75rem;
-        margin: 0.9375rem;
+        /* margin: 0.9375rem; */
       }
       .participate-btn {
         width: 180px;
@@ -359,7 +362,7 @@
     <div class="container-fluid">
       <!-- Participate Button -->
       <div class="header-container">
-        <button class="participate-btn btn btn-danger" data-toggle="modal" data-target="#participateModal">Participate</button>
+        <button class="participate-btn btn btn-danger1" data-toggle="modal" data-target="#participateModal">Participate</button>
       </div>
       <div class="row justify-content-start">
         <!-- Event & Notice Cards -->
@@ -410,7 +413,7 @@
 
       <!-- Add Button -->
       <div class="button-container">
-        <button class="add-center-btn btn btn-danger" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
+        <button class="add-center-btn btn btn-danger1" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
       </div>
     </div>
   </div>
@@ -459,7 +462,7 @@
           </div>
         </div>
 
-        <button type="submit" class="submit-btn btn btn-primary">Submit</button>
+        <button type="submit" class="submit-btn btn btn-primary1">Submit</button>
       </form>
     </div>
   </div>
@@ -529,7 +532,7 @@
             <div class="invalid-feedback">Please select a payment mode.</div>
           </div>
         </div>
-        <button type="submit" class="submit-btn btn btn-primary">Confirm Participation</button>
+        <button type="submit" class="submit-btn btn btn-primary1">Confirm Participation</button>
       </form>
     </div>
   </div>
