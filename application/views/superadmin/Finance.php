@@ -8,6 +8,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Montserrat Font -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
@@ -133,32 +135,45 @@
         }
 
         .action-icon {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin: 0 0.5rem;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
 
-        .action-icon.view-icon {
-            color: #007bff;
+        .action-icon.info-icon {
+            color: #17a2b8;
         }
 
-        .action-icon.approve-icon {
-            color: #28a745;
+        .action-btn {
+            font-size: 0.85rem;
+            margin: 0 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .action-icon.reject-icon {
-            color: #dc3545;
+        .action-btn.approve-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
         }
 
-        .action-icon:hover {
-            transform: scale(1.2);
+        .action-btn.reject-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
         }
 
-        .action-icon:disabled {
-            color: #ccc;
+        .action-btn:hover {
+            filter: brightness(90%);
+        }
+
+        .action-btn:disabled {
+            background-color: #ccc !important;
             cursor: not-allowed;
-            transform: none;
+            opacity: 0.6;
         }
 
         /* Button Styles */
@@ -182,7 +197,7 @@
         .modal-content {
             background-color: #fff;
             border-radius: 0.5rem;
-            padding: 1.5rem;
+            padding: 1rem;
             border: none;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             margin-top: 65px;
@@ -191,39 +206,55 @@
         .modal-content h3 {
             text-align: center;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
             color: #343a40;
         }
 
         .modal-header {
             border-bottom: none;
             padding-bottom: 0;
+            position: relative;
         }
 
+        .modal-header .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.25rem;
+            color: #343a40;
+            opacity: 0.7;
+        }
+
+        .modal-header .close:hover {
+            opacity: 1;
+        }
+
+        /* Form Styles for Add and Filter Modals */
         .form-group label {
             font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
             color: #495057;
         }
 
         .form-control, .form-control select {
-            height: calc(2.25rem + 2px);
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            height: calc(1.8rem + 2px);
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            padding: 0.3rem 0.5rem;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
             border: 1px solid #ced4da;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
         .form-control:focus, .form-control select:focus {
             border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
         }
 
         .invalid-feedback {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: #dc3545;
         }
 
@@ -248,9 +279,9 @@
         }
 
         .form-note {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #6c757d;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             text-align: center;
         }
 
@@ -265,7 +296,7 @@
         .form-group {
             padding-right: 5px;
             padding-left: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .table-title {
@@ -273,6 +304,146 @@
             font-weight: 600;
             color: #343a40;
             margin-bottom: 10px;
+        }
+
+        /* Confirmation Modal Styles */
+        .confirmation-modal .modal-content {
+            max-width: 400px;
+            margin: auto;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .confirmation-modal .modal-header {
+            border-bottom: none;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .confirmation-modal .modal-title {
+            font-size: 1.25rem;
+            color: #343a40;
+            font-weight: 600;
+        }
+
+        .confirmation-modal .modal-body {
+            text-align: center;
+            font-size: 1rem;
+            color: #495057;
+            padding: 1rem 1.5rem;
+        }
+
+        .confirmation-modal .modal-footer {
+            justify-content: center;
+            gap: 15px;
+            padding: 1rem 1.5rem;
+            border-top: none;
+        }
+
+        .btn-confirm {
+            background: #28a745;
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        /* View Modal Enhanced Styles */
+        .view-modal .modal-content {
+            max-width: 500px;
+            margin: auto;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .view-modal .modal-body {
+            padding: 1.5rem;
+        }
+
+        .receipt-card {
+            background: #fff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .receipt-card p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .receipt-card p strong {
+            color: #343a40;
+            font-weight: 600;
+            flex: 0 0 40%;
+        }
+
+        .receipt-card p span {
+            color: #495057;
+            flex: 0 0 60%;
+            text-align: right;
+        }
+
+        .receipt-card p.status-approved span {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .receipt-card p.status-rejected span {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .view-modal .modal-footer {
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-top: none;
+        }
+
+        /* Add/Edit Revenue Modal Styles */
+        .add-modal .modal-content {
+            max-width: 500px;
+            margin: auto;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+        }
+
+        /* Filter Revenue Modal Styles */
+        .filter-modal .modal-content {
+            max-width: 500px;
+            margin: auto;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            padding: 1rem;
         }
 
         /* Responsive Design */
@@ -286,13 +457,14 @@
                 font-size: 0.8rem;
             }
 
-            .action-icon {
+            .action-icon, .action-btn {
                 margin: 0.1rem;
-                font-size: 0.9rem;
+                font-size: 0.8rem;
+                padding: 0.2rem 0.4rem;
             }
 
             .modal-content {
-                padding: 1rem;
+                padding: 0.8rem;
             }
 
             .form-row {
@@ -305,11 +477,9 @@
             .form-group {
                 padding-right: 5px;
                 padding-left: 5px;
-            }
-
-            .col-md-6 {
                 flex: 0 0 100%;
                 max-width: 100%;
+                margin-bottom: 0.6rem;
             }
 
             .option-buttons {
@@ -329,9 +499,57 @@
             }
 
             .btn-custom {
-                width: 120px;
                 font-size: 0.875rem;
                 padding: 0.375rem 0.75rem;
+            }
+
+            .confirmation-modal .modal-content,
+            .view-modal .modal-content,
+            .add-modal .modal-content,
+            .filter-modal .modal-content {
+                max-width: 90%;
+                padding: 0.8rem;
+            }
+
+            .confirmation-modal .modal-title,
+            .add-modal .modal-title,
+            .filter-modal .modal-title {
+                font-size: 1.1rem;
+            }
+
+            .confirmation-modal .modal-body {
+                font-size: 0.9rem;
+            }
+
+            .btn-confirm, .btn-cancel {
+                padding: 0.3rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .receipt-card {
+                padding: 1rem;
+            }
+
+            .receipt-card p {
+                font-size: 0.85rem;
+            }
+
+            .form-group label {
+                font-size: 0.8rem;
+            }
+
+            .form-control, .form-control select {
+                height: calc(1.6rem + 2px);
+                font-size: 0.8rem;
+                padding: 0.25rem 0.4rem;
+            }
+
+            .invalid-feedback {
+                font-size: 0.7rem;
+            }
+
+            .form-note {
+                font-size: 0.75rem;
             }
         }
 
@@ -350,7 +568,7 @@
             }
 
             .modal-content {
-                padding: 1.25rem;
+                padding: 0.9rem;
             }
 
             .add-btn-container {
@@ -364,6 +582,27 @@
 
             .btn-custom {
                 font-size: 0.9rem;
+            }
+
+            .confirmation-modal .modal-content,
+            .view-modal .modal-content,
+            .add-modal .modal-content,
+            .filter-modal .modal-content {
+                max-width: 95%;
+            }
+
+            .form-group label {
+                font-size: 0.85rem;
+            }
+
+            .form-control, .form-control select {
+                height: calc(1.7rem + 2px);
+                font-size: 0.85rem;
+                padding: 0.3rem 0.5rem;
+            }
+
+            .invalid-feedback {
+                font-size: 0.75rem;
             }
         }
 
@@ -381,21 +620,33 @@
             }
 
             .modal-content {
-                max-width: 80%;
+                padding: 1rem;
             }
         }
 
         @media (min-width: 992px) {
-            .modal-content {
-                /* max-width: 600px; */
+            .confirmation-modal .modal-content {
+                max-width: 400px;
+            }
+
+            .view-modal .modal-content {
+                max-width: 500px;
+            }
+
+            .add-modal .modal-content,
+            .filter-modal .modal-content {
+                max-width: 500px;
             }
         }
 
         /* Touch device hover fix */
         @media (hover: none) {
             .action-icon:hover,
+            .action-btn:hover,
             .btn-custom:hover,
-            .option-buttons button:hover {
+            .option-buttons button:hover,
+            .btn-confirm:hover,
+            .btn-cancel:hover {
                 transform: none;
             }
 
@@ -406,6 +657,27 @@
     </style>
 </head>
 <body>
+    <!-- Confirmation Modal for Approve/Reject -->
+    <div class="modal fade confirmation-modal" id="confirmActionModal" tabindex="-1" aria-labelledby="confirmActionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="confirmActionLabel" class="modal-title w-100 text-center"></h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-confirm" id="confirmActionBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <?php $this->load->view('superadmin/Include/Sidebar') ?>
     <!-- Navbar -->
@@ -441,7 +713,7 @@
                                 <th data-tooltip="Revenue for the week">Weekly Revenue(₹)</th>
                                 <th data-tooltip="Revenue for the month">Monthly Revenue(₹)</th>
                                 <th data-tooltip="Revenue for the year">Yearly Revenue(₹)</th>
-                                <th data-tooltip="Actions to manage the record">Action</th>
+                                <th data-tooltip="View, Approve, or Reject the record">Action</th>
                             </tr>
                         </thead>
                         <tbody id="expenseTableBody">
@@ -453,9 +725,9 @@
         </div>
     </div>
 
-    <!-- Add Revenue Modal -->
-    <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <!-- Add/Edit Revenue Modal -->
+    <div class="modal fade add-modal" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="expenseLabel" class="modal-title w-100 text-center">Add Revenue</h3>
@@ -521,13 +793,13 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="notes">Notes</label>
-                            <textarea id="notes" name="notes" class="form-control" rows="3" maxlength="200"></textarea>
+                            <textarea id="notes" name="notes" class="form-control" rows="2" maxlength="200"></textarea>
                             <div class="invalid-feedback">Notes must be less than 200 characters.</div>
                         </div>
                     </div>
                     <div class="modal-footer border-top-0 pt-0">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-custom">Save</button>
+                        <button type="button" class="btn btn-cancel" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-confirm">Save</button>
                     </div>
                 </form>
             </div>
@@ -535,7 +807,7 @@
     </div>
 
     <!-- View Revenue Modal -->
-    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewLabel" aria-hidden="true">
+    <div class="modal fade view-modal" id="viewModal" tabindex="-1" aria-labelledby="viewLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -549,25 +821,25 @@
                         <p><strong>Title:</strong> <span id="viewTitle"></span></p>
                         <p><strong>Center Name:</strong> <span id="viewCenterName"></span></p>
                         <p><strong>Date:</strong> <span id="viewDate"></span></p>
-                        <p><strong>Daily Revenue:</strong> ₹<span id="viewDailyRevenue"></span></p>
-                        <p><strong>Weekly Revenue:</strong> ₹<span id="viewWeeklyRevenue"></span></p>
-                        <p><strong>Monthly Revenue:</strong> ₹<span id="viewMonthlyRevenue"></span></p>
-                        <p><strong>Yearly Revenue:</strong> ₹<span id="viewYearlyRevenue"></span></p>
+                        <p><strong>Daily Revenue:</strong> <span id="viewDailyRevenue"></span></p>
+                        <p><strong>Weekly Revenue:</strong> <span id="viewWeeklyRevenue"></span></p>
+                        <p><strong>Monthly Revenue:</strong> <span id="viewMonthlyRevenue"></span></p>
+                        <p><strong>Yearly Revenue:</strong> <span id="viewYearlyRevenue"></span></p>
                         <p><strong>Notes:</strong> <span id="viewNotes"></span></p>
-                        <p><strong>Status:</strong> <span id="viewStatus"></span></p>
+                        <p id="statusField"><strong>Status:</strong> <span id="viewStatus"></span></p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-custom edit-btn" data-dismiss="modal" data-toggle="modal" data-target="#expenseModal">Edit</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-confirm edit-btn" data-dismiss="modal" data-toggle="modal" data-target="#expenseModal">Edit</button>
+                    <button type="button" class="btn btn-cancel" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Filter Revenue Modal -->
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal fade filter-modal" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="filterLabel" class="modal-title w-100 text-center">Filter Revenue</h3>
@@ -666,8 +938,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Clear</button>
-                        <button type="submit" class="btn btn-custom">Apply Filter</button>
+                        <button type="button" class="btn btn-cancel" data-dismiss="modal">Clear</button>
+                        <button type="submit" class="btn btn-confirm">Apply Filter</button>
                     </div>
                 </form>
             </div>
@@ -677,11 +949,15 @@
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function() {
             let editingRow = null;
             let currentRevenueId = null;
+            let currentAction = null;
+            let currentStatus = null; // Track current status for View modal
 
             // CSRF Token Setup
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
@@ -855,7 +1131,7 @@
                     form.classList.add('was-validated');
                 }, false);
 
-                // Real-time validation
+                // Real-time validation for expenseForm
                 if (formId === 'expenseForm') {
                     const inputs = form.querySelectorAll('input, textarea, select');
                     inputs.forEach(input => {
@@ -863,48 +1139,78 @@
                             if (input.id === 'title') {
                                 if (!input.value.trim()) {
                                     input.setCustomValidity('Title is required.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else if (!/^[A-Za-z\s]+$/.test(input.value)) {
                                     input.setCustomValidity('Title must contain only letters and spaces.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else if (input.value.length > 50) {
                                     input.setCustomValidity('Title must be 50 characters or less.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else {
                                     input.setCustomValidity('');
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
                                 }
                             } else if (input.id === 'center_name') {
                                 if (!input.value) {
                                     input.setCustomValidity('Center Name is required.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else {
                                     input.setCustomValidity('');
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
                                 }
                             } else if (input.id === 'date') {
                                 const today = new Date().toISOString().split('T')[0];
                                 if (!input.value) {
                                     input.setCustomValidity('Date is required.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else if (input.value > today) {
                                     input.setCustomValidity('Date must not be a future date.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else {
                                     input.setCustomValidity('');
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
                                 }
                             } else if (['dailyRevenue', 'weeklyRevenue', 'monthlyRevenue', 'yearlyRevenue'].includes(input.id)) {
                                 const value = parseFloat(input.value);
+                                const fieldName = input.id.replace(/([A-Z])/g, ' $1');
                                 if (!input.value || isNaN(value)) {
-                                    input.setCustomValidity(`${input.id.replace(/([A-Z])/g, ' $1')} is required.`);
+                                    input.setCustomValidity(`${fieldName} is required.`);
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else if (value <= 0) {
-                                    input.setCustomValidity(`${input.id.replace(/([A-Z])/g, ' $1')} must be greater than 0.`);
+                                    input.setCustomValidity(`${fieldName} must be greater than 0.`);
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else {
                                     input.setCustomValidity('');
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
                                 }
                             } else if (input.id === 'notes') {
                                 if (input.value.length > 200) {
                                     input.setCustomValidity('Notes must be less than 200 characters.');
+                                    input.classList.add('is-invalid');
+                                    input.classList.remove('is-valid');
                                 } else {
                                     input.setCustomValidity('');
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
                                 }
                             }
                         });
                     });
                 }
 
+                // Real-time validation for filterForm
                 if (formId === 'filterForm') {
                     const startDateInput = form.querySelector('#startDate');
                     const endDateInput = form.querySelector('#endDate');
@@ -919,10 +1225,16 @@
                     titleInput.addEventListener('input', () => {
                         if (titleInput.value && !/^[A-Za-z\s]+$/.test(titleInput.value)) {
                             titleInput.setCustomValidity('Title must contain only letters and spaces.');
+                            titleInput.classList.add('is-invalid');
+                            titleInput.classList.remove('is-valid');
                         } else if (titleInput.value.length > 50) {
                             titleInput.setCustomValidity('Title must be 50 characters or less.');
+                            titleInput.classList.add('is-invalid');
+                            titleInput.classList.remove('is-valid');
                         } else {
                             titleInput.setCustomValidity('');
+                            titleInput.classList.remove('is-invalid');
+                            titleInput.classList.add('is-valid');
                         }
                     });
 
@@ -938,19 +1250,24 @@
                         if (startDateInput.value && startDateInput.value > today) {
                             startDateInput.setCustomValidity('Start Date must not be a future date.');
                             startDateInput.classList.add('is-invalid');
+                            startDateInput.classList.remove('is-valid');
                         } else {
                             startDateInput.setCustomValidity('');
                             startDateInput.classList.remove('is-invalid');
+                            startDateInput.classList.add('is-valid');
                         }
                         if (endDateInput.value && endDateInput.value > today) {
                             endDateInput.setCustomValidity('End Date must not be a future date.');
                             endDateInput.classList.add('is-invalid');
+                            endDateInput.classList.remove('is-valid');
                         } else if (startDateInput.value && endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
                             endDateInput.setCustomValidity('End Date must not be before Start Date.');
                             endDateInput.classList.add('is-invalid');
+                            endDateInput.classList.remove('is-valid');
                         } else {
                             endDateInput.setCustomValidity('');
                             endDateInput.classList.remove('is-invalid');
+                            endDateInput.classList.add('is-valid');
                         }
                     }
 
@@ -966,12 +1283,15 @@
                         if (field.value && fieldValue < 0) {
                             field.setCustomValidity(`${fieldId.replace(/([A-Z])/g, ' $1')} must be 0 or greater.`);
                             field.classList.add('is-invalid');
+                            field.classList.remove('is-valid');
                         } else if (fieldId.startsWith('max') && field.value && pair.value && fieldValue < pairValue) {
                             field.setCustomValidity(`${fieldId.replace(/([A-Z])/g, ' $1')} must not be less than ${pairId.replace(/([A-Z])/g, ' $1')}.`);
                             field.classList.add('is-invalid');
+                            field.classList.remove('is-valid');
                         } else {
                             field.setCustomValidity('');
                             field.classList.remove('is-invalid');
+                            field.classList.add('is-valid');
                         }
                     }
                 }
@@ -985,7 +1305,10 @@
                 const form = document.getElementById('filterForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
+                form.querySelectorAll('input, select').forEach(input => {
+                    input.setCustomValidity('');
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
             });
 
             // Load revenues
@@ -1016,16 +1339,16 @@
                                     <td>${parseFloat(item.monthly_revenue).toFixed(0)}</td>
                                     <td>${parseFloat(item.yearly_revenue).toFixed(0)}</td>
                                     <td>
-                                        <i class="fas fa-eye action-icon view-icon" data-toggle="modal" data-target="#viewModal" 
+                                        <i class="fas fa-info-circle action-icon info-icon" title="View Details" data-toggle="modal" data-target="#viewModal" 
                                            data-id="${item.id}" data-title="${item.title}" data-center="${item.center_name}" 
                                            data-date="${item.date}" data-daily="${item.daily_revenue}" 
                                            data-weekly="${item.weekly_revenue}" data-monthly="${item.monthly_revenue}" 
                                            data-yearly="${item.yearly_revenue}" data-notes="${item.notes}" 
                                            data-status="${item.status}"></i>
-                                        <i class="fas fa-check action-icon approve-icon" data-id="${item.id}" 
-                                           data-title="${item.title}" ${approveDisabled}></i>
-                                        <i class="fas fa-times action-icon reject-icon" data-id="${item.id}" 
-                                           data-title="${item.title}" ${rejectDisabled}></i>
+                                        <button class="action-btn approve-btn" title="Approve" data-id="${item.id}" 
+                                           data-title="${item.title}" ${approveDisabled}>Approve</button>
+                                        <button class="action-btn reject-btn" title="Reject" data-id="${item.id}" 
+                                           data-title="${item.title}" ${rejectDisabled}>Reject</button>
                                     </td>
                                 </tr>
                                 <tr class="horizontal-line"><td colspan="6"></td></tr>
@@ -1034,7 +1357,13 @@
                         });
                     },
                     error: function() {
-                        alert('Error loading revenues.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load revenues.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             }
@@ -1074,20 +1403,30 @@
                     data: data,
                     dataType: 'json',
                     success: function(response) {
+                        Swal.fire({
+                            icon: response.status === 'success' ? 'success' : 'error',
+                            title: response.status === 'success' ? 'Success' : 'Error',
+                            text: response.message,
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                         if (response.status === 'success') {
-                            alert(response.message);
                             $('#expenseModal').modal('hide');
                             $('#expenseForm')[0].reset();
                             $('#expenseForm').removeClass('was-validated');
                             $('#expenseLabel').text('Add Revenue');
                             $('#revenueId').val('');
                             loadRevenues($('.option-buttons button.active').data('option'));
-                        } else {
-                            alert(response.message);
                         }
                     },
                     error: function() {
-                        alert('Error saving revenue.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error saving revenue.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             });
@@ -1104,19 +1443,26 @@
                 const monthly = icon.data('monthly');
                 const yearly = icon.data('yearly');
                 const notes = icon.data('notes');
-                const status = icon.data('status');
+                currentStatus = icon.data('status'); // Update currentStatus
 
                 const modal = $(this);
                 modal.find('#viewLabel').text(`Revenue Details - ${title}`);
                 modal.find('#viewTitle').text(title);
                 modal.find('#viewCenterName').text(center);
                 modal.find('#viewDate').text(date);
-                modal.find('#viewDailyRevenue').text(parseFloat(daily).toFixed(0));
-                modal.find('#viewWeeklyRevenue').text(parseFloat(weekly).toFixed(0));
-                modal.find('#viewMonthlyRevenue').text(parseFloat(monthly).toFixed(0));
-                modal.find('#viewYearlyRevenue').text(parseFloat(yearly).toFixed(0));
-                modal.find('#viewNotes').text(notes);
-                modal.find('#viewStatus').text(status.charAt(0).toUpperCase() + status.slice(1));
+                modal.find('#viewDailyRevenue').text(`₹${parseFloat(daily).toFixed(0)}`);
+                modal.find('#viewWeeklyRevenue').text(`₹${parseFloat(weekly).toFixed(0)}`);
+                modal.find('#viewMonthlyRevenue').text(`₹${parseFloat(monthly).toFixed(0)}`);
+                modal.find('#viewYearlyRevenue').text(`₹${parseFloat(yearly).toFixed(0)}`);
+                modal.find('#viewNotes').text(notes || 'N/A');
+                const statusField = modal.find('#statusField');
+                statusField.removeClass('status-approved status-rejected');
+                if (currentStatus === 'approved') {
+                    statusField.addClass('status-approved');
+                } else if (currentStatus === 'rejected') {
+                    statusField.addClass('status-rejected');
+                }
+                modal.find('#viewStatus').text(currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1));
             });
 
             // Edit button in view modal
@@ -1139,12 +1485,26 @@
                             $('#monthlyRevenue').val(data.monthly_revenue);
                             $('#yearlyRevenue').val(data.yearly_revenue);
                             $('#notes').val(data.notes);
+                            // Trigger validation to show initial valid state
+                            $('#expenseForm').find('input, select, textarea').trigger('input');
                         } else {
-                            alert(response.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
                         }
                     },
                     error: function() {
-                        alert('Error loading revenue data.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error loading revenue data.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             });
@@ -1199,16 +1559,16 @@
                                         <td>${parseFloat(item.monthly_revenue).toFixed(0)}</td>
                                         <td>${parseFloat(item.yearly_revenue).toFixed(0)}</td>
                                         <td>
-                                            <i class="fas fa-eye action-icon view-icon" data-toggle="modal" data-target="#viewModal" 
+                                            <i class="fas fa-info-circle action-icon info-icon" title="View Details" data-toggle="modal" data-target="#viewModal" 
                                                data-id="${item.id}" data-title="${item.title}" data-center="${item.center_name}" 
                                                data-date="${item.date}" data-daily="${item.daily_revenue}" 
                                                data-weekly="${item.weekly_revenue}" data-monthly="${item.monthly_revenue}" 
                                                data-yearly="${item.yearly_revenue}" data-notes="${item.notes}" 
                                                data-status="${item.status}"></i>
-                                            <i class="fas fa-check action-icon approve-icon" data-id="${item.id}" 
-                                               data-title="${item.title}" ${approveDisabled}></i>
-                                            <i class="fas fa-times action-icon reject-icon" data-id="${item.id}" 
-                                               data-title="${item.title}" ${rejectDisabled}></i>
+                                            <button class="action-btn approve-btn" title="Approve" data-id="${item.id}" 
+                                               data-title="${item.title}" ${approveDisabled}>Approve</button>
+                                            <button class="action-btn reject-btn" title="Reject" data-id="${item.id}" 
+                                               data-title="${item.title}" ${rejectDisabled}>Reject</button>
                                         </td>
                                     </tr>
                                     <tr class="horizontal-line"><td colspan="6"></td></tr>
@@ -1219,68 +1579,99 @@
                         $('#filterModal').modal('hide');
                         $('#filterForm')[0].reset();
                         $('#filterForm').removeClass('was-validated');
+                        $('#filterForm').find('input, select').trigger('input');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Filter applied successfully.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     },
                     error: function() {
-                        alert('Error applying filter.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error applying filter.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             });
 
-            // Approve and Reject functionality
-            $(document).on('click', '.approve-icon', function() {
+            // Show confirmation modal for approve/reject
+            $(document).on('click', '.approve-btn, .reject-btn', function(e) {
+                e.preventDefault();
                 const id = $(this).data('id');
                 const title = $(this).data('title');
                 const row = $(this).closest('tr');
                 if (row.hasClass('approved') || row.hasClass('rejected')) {
-                    alert(`Revenue "${title}" has already been processed.`);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Already Processed',
+                        text: `Revenue "${title}" has already been processed.`,
+                        showConfirmButton: true,
+                        timer: 3000
+                    });
                     return;
                 }
+                currentRevenueId = id;
+                currentAction = $(this).hasClass('approve-btn') ? 'approve' : 'reject';
+                const actionText = currentAction === 'approve' ? 'Approve' : 'Reject';
+                $('#confirmActionLabel').text(`${actionText} Revenue`);
+                $('#confirmMessage').text(`Are you sure you want to ${actionText.toLowerCase()} the revenue "${title}"?`);
+                $('#confirmActionModal').modal('show');
+            });
+
+            // Handle confirmation modal confirm button
+            $('#confirmActionBtn').on('click', function() {
+                const url = currentAction === 'approve' 
+                    ? '<?php echo base_url('revenue/approve_revenue'); ?>/' + currentRevenueId 
+                    : '<?php echo base_url('revenue/reject_revenue'); ?>/' + currentRevenueId;
+                const title = $(`.action-btn[data-id="${currentRevenueId}"]`).data('title');
+                const row = $(`.action-btn[data-id="${currentRevenueId}"]`).closest('tr');
+
                 $.ajax({
-                    url: '<?php echo base_url('revenue/approve_revenue'); ?>/' + id,
+                    url: url,
                     type: 'POST',
                     data: { [csrfName]: csrfToken },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            row.addClass('approved').css('backgroundColor', '#d4edda');
-                            $(this).prop('disabled', true);
-                            row.find('.reject-icon').prop('disabled', true);
-                            alert(`Revenue "${title}" approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+                            currentStatus = currentAction === 'approve' ? 'approved' : 'rejected';
+                            row.addClass(currentStatus).css('backgroundColor', currentStatus === 'approved' ? '#d4edda' : '#f8d7da');
+                            row.find('.approve-btn').prop('disabled', true);
+                            row.find('.reject-btn').prop('disabled', true);
+                            // Update data-status attribute in the view icon
+                            row.find('.info-icon').data('status', currentStatus);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: `Revenue "${title}" ${currentAction}d at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
                         } else {
-                            alert(response.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
                         }
+                        $('#confirmActionModal').modal('hide');
                     },
                     error: function() {
-                        alert('Error approving revenue.');
-                    }
-                });
-            });
-
-            $(document).on('click', '.reject-icon', function() {
-                const id = $(this).data('id');
-                const title = $(this).data('title');
-                const row = $(this).closest('tr');
-                if (row.hasClass('approved') || row.hasClass('rejected')) {
-                    alert(`Revenue "${title}" has already been processed.`);
-                    return;
-                }
-                $.ajax({
-                    url: '<?php echo base_url('revenue/reject_revenue'); ?>/' + id,
-                    type: 'POST',
-                    data: { [csrfName]: csrfToken },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            row.addClass('rejected').css('backgroundColor', '#f8d7da');
-                            $(this).prop('disabled', true);
-                            row.find('.approve-icon').prop('disabled', true);
-                            alert(`Revenue "${title}" rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Error rejecting revenue.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `Error ${currentAction}ing revenue.`,
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                        $('#confirmActionModal').modal('hide');
                     }
                 });
             });
@@ -1318,6 +1709,7 @@
             $('#expenseModal').on('show.bs.modal', function() {
                 $('#expenseForm')[0].reset();
                 $('#expenseForm').removeClass('was-validated');
+                $('#expenseForm').find('input, select, textarea').removeClass('is-valid is-invalid');
                 $('#expenseLabel').text('Add Revenue');
                 $('#revenueId').val('');
             });
