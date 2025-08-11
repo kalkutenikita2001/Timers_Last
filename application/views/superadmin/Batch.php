@@ -66,6 +66,7 @@
       min-height: 10rem;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top:10px;
     }
     .center-card:hover {
       transform: translateY(-5px);
@@ -236,6 +237,7 @@
       background: #007bff;
     }
     .update-btn:hover {
+      background: #0056b3;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -244,6 +246,7 @@
       background: #dc3545;
     }
     .delete-btn:hover {
+      background: #c82333;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -272,13 +275,12 @@
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
     .content {
-      margin-top: 20px; /* Reduced from 60px to minimize gap */
+      margin-top: 20px;
     }
     .blur {
       filter: blur(5px);
       transition: filter 0.3s ease;
     }
-    /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0;
@@ -491,10 +493,7 @@
               <label for="center_name">Center Name <span class="text-danger">*</span></label>
               <select id="center_name" name="center_name" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <option value="ABC">ABC</option>
-                <option value="XYZ">XYZ</option>
-                <option value="PQR">PQR</option>
-                <option value="LMN">LMN</option>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center name.</div>
             </div>
@@ -546,10 +545,7 @@
               <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
               <select id="viewCenterName" name="center_name" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <option value="ABC">ABC</option>
-                <option value="XYZ">XYZ</option>
-                <option value="PQR">PQR</option>
-                <option value="LMN">LMN</option>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center name.</div>
             </div>
@@ -613,30 +609,63 @@
     (function () {
       'use strict';
       let cardCounter = 1;
-      const form = document.getElementById('batchForm');
-      const filterForm = document.getElementById('filterForm');
-      const viewForm = document.getElementById('viewBatchForm');
-      if (!form) {
-        console.error('Batch form not found!');
-        return;
-      }
-      if (!filterForm) {
-        console.error('Filter form not found!');
-        return;
-      }
-      if (!viewForm) {
-        console.error('View form not found!');
-        return;
-      }
-
-      // CSRF Token
+      const baseUrl = '<?php echo base_url(); ?>';
+      const batchUrl = baseUrl + 'batch/';
+      const centerUrl = baseUrl + 'center/get_centers';
       const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
       const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+      // Function to format date for display
+      function formatDateForDisplay(dateStr) {
+        if (!dateStr) return '';
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year}`;
+      }
+
+      // Function to format time for display
+      function formatTimeForDisplay(timeStr) {
+        if (!timeStr) return '';
+        const [hours, minutes] = timeStr.split(':');
+        const hourNum = parseInt(hours, 10);
+        const period = hourNum >= 12 ? 'PM' : 'AM';
+        const displayHour = hourNum % 12 || 12;
+        const nextHour = (hourNum + 1) % 12 || 12;
+        return `${displayHour} to ${nextHour} ${period}`;
+      }
+
+      // Function to load centers dynamically
+      function loadCenters(selectElement) {
+        $.ajax({
+          url: centerUrl,
+          method: 'GET',
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Center --</option>');
+              if (centers.length === 0) {
+                selectElement.append('<option value="" disabled>No centers available</option>');
+              } else {
+                centers.forEach(center => {
+                  selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching centers:', response.message);
+              selectElement.append('<option value="" disabled>Error loading centers</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading centers</option>');
+          }
+        });
+      }
 
       // Function to load batches
       function loadBatches(filters = {}) {
         $.ajax({
-          url: '<?php echo base_url('batch/get_batches'); ?>',
+          url: batchUrl + 'get_batches',
           type: 'POST',
           data: { ...filters, [csrfName]: csrfHash },
           dataType: 'json',
@@ -649,8 +678,7 @@
                 return;
               }
               response.data.forEach(batch => {
-                const date = new Date(batch.date);
-                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                const formattedDate = formatDateForDisplay(batch.date);
                 const card = `
                   <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
                     <div class="center-card" id="card-${cardCounter}">
@@ -662,7 +690,13 @@
                         <p><span>Category:</span> ${batch.category}</p>
                         <p><span>Center:</span> ${batch.center_name}</p>
                       </div>
-                      <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" data-batch-id="${batch.id}" data-batch="${batch.batch}" data-date="${formattedDate}" data-time="${batch.time}" data-category="${batch.category}" data-center-name="${batch.center_name}">View</button>
+                      <button class="view-btn" data-toggle="modal" data-target="#viewBatchModal" 
+                              data-batch-id="${batch.id}" 
+                              data-batch="${batch.batch}" 
+                              data-date="${batch.date}" 
+                              data-time="${batch.time}" 
+                              data-category="${batch.category}" 
+                              data-center-name="${batch.center_name}">View</button>
                     </div>
                   </div>
                 `;
@@ -679,26 +713,32 @@
         });
       }
 
-      // Load batches on page load
-      document.addEventListener('DOMContentLoaded', function() {
+      // Load batches and centers on page load
+      $(document).ready(function() {
         loadBatches();
+        $('#addBatchModal').on('show.bs.modal', function () {
+          loadCenters($('#center_name'));
+        });
+        $('#viewBatchModal').on('show.bs.modal', function () {
+          loadCenters($('#viewCenterName'));
+        });
       });
 
       // Form submission for adding batches
-      form.addEventListener('submit', function (event) {
+      $('#batchForm').on('submit', function (event) {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const batch = document.getElementById('batch').value.trim();
-        const dateRaw = document.getElementById('date').value;
-        const timeRaw = document.getElementById('time').value;
-        const category = document.getElementById('category').value;
-        const centerName = document.getElementById('center_name').value;
+        const batch = $('#batch').val().trim();
+        const dateRaw = $('#date').val();
+        const timeRaw = $('#time').val();
+        const category = $('#category').val();
+        const centerName = $('#center_name').val();
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -709,7 +749,7 @@
         const time = `${displayHour} to ${nextHour} ${period}`;
 
         $.ajax({
-          url: '<?php echo base_url('batch/add_batch'); ?>',
+          url: batchUrl + 'add_batch',
           type: 'POST',
           data: {
             batch: batch,
@@ -723,36 +763,36 @@
           success: function(response) {
             if (response.status === 'success') {
               loadBatches();
-              form.reset();
-              form.classList.remove('was-validated');
+              $('#batchForm').removeClass('was-validated').trigger('reset');
               $('#addBatchModal').modal('hide');
             } else {
-              console.error('Error adding batch:', response.message);
+              alert(response.message);
             }
           },
           error: function(xhr, status, error) {
             console.error('AJAX error:', error);
+            alert('An error occurred while adding the batch.');
           }
         });
       });
 
       // Ensure validation feedback on input for add form
-      form.addEventListener('input', function () {
-        if (form.checkValidity()) {
-          form.classList.remove('was-validated');
+      $('#batchForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
       // Filter form submission
-      filterForm.addEventListener('submit', function (e) {
+      $('#filterForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const filterBatch = document.getElementById('filterBatch').value.trim();
-        const filterDate = document.getElementById('filterDate').value.trim();
-        const filterTime = document.getElementById('filterTime').value.trim();
-        const filterCategory = document.getElementById('filterCategory').value.trim();
-        const filterCenterName = document.getElementById('filterCenterName').value.trim();
+        const filterBatch = $('#filterBatch').val().trim();
+        const filterDate = $('#filterDate').val().trim();
+        const filterTime = $('#filterTime').val().trim();
+        const filterCategory = $('#filterCategory').val().trim();
+        const filterCenterName = $('#filterCenterName').val().trim();
 
         const filters = {};
         if (filterBatch) filters.batch = filterBatch;
@@ -778,7 +818,7 @@
         const modal = $(this);
         modal.find('#viewBatchLabel').text(`Batch Details - ${batch}`);
         modal.find('#viewBatch').val(batch);
-        modal.find('#viewDate').val(new Date(date.split('/').reverse().join('-')).toISOString().split('T')[0]);
+        modal.find('#viewDate').val(date);
         modal.find('#viewTime').val(time.split(' to ')[0].trim());
         modal.find('#viewCategory').val(category);
         modal.find('#viewCenterName').val(centerName);
@@ -787,21 +827,21 @@
       });
 
       // Handle update form submission
-      viewForm.addEventListener('submit', function (e) {
+      $('#viewBatchForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!viewForm.checkValidity()) {
-          viewForm.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const batchId = $(viewForm).find('.update-btn').data('batch-id');
-        const batch = document.getElementById('viewBatch').value.trim();
-        const dateRaw = document.getElementById('viewDate').value;
-        const timeRaw = document.getElementById('viewTime').value;
-        const category = document.getElementById('viewCategory').value;
-        const centerName = document.getElementById('viewCenterName').value;
+        const batchId = $(this).find('.update-btn').data('batch-id');
+        const batch = $('#viewBatch').val().trim();
+        const dateRaw = $('#viewDate').val();
+        const timeRaw = $('#viewTime').val();
+        const category = $('#viewCategory').val();
+        const centerName = $('#viewCenterName').val();
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -812,7 +852,7 @@
         const time = `${displayHour} to ${nextHour} ${period}`;
 
         $.ajax({
-          url: '<?php echo base_url('batch/update_batch'); ?>',
+          url: batchUrl + 'update_batch',
           type: 'POST',
           data: {
             id: batchId,
@@ -827,72 +867,70 @@
           success: function(response) {
             if (response.status === 'success') {
               loadBatches();
-              viewForm.classList.remove('was-validated');
+              $('#viewBatchForm').removeClass('was-validated');
               $('#viewBatchModal').modal('hide');
             } else {
-              console.error('Error updating batch:', response.message);
+              alert(response.message);
             }
           },
           error: function(xhr, status, error) {
             console.error('AJAX error:', error);
+            alert('An error occurred while updating the batch.');
           }
         });
       });
 
       // Ensure validation feedback on input for view form
-      viewForm.addEventListener('input', function () {
-        if (viewForm.checkValidity()) {
-          viewForm.classList.remove('was-validated');
+      $('#viewBatchForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
       // Handle delete button click
-      viewForm.querySelector('.delete-btn').addEventListener('click', function () {
+      $('#viewBatchForm .delete-btn').on('click', function () {
         const batchId = $(this).data('batch-id');
-        $.ajax({
-          url: '<?php echo base_url('batch/delete_batch'); ?>',
-          type: 'POST',
-          data: {
-            id: batchId,
-            [csrfName]: csrfHash
-          },
-          dataType: 'json',
-          success: function(response) {
-            if (response.status === 'success') {
-              loadBatches();
-              $('#viewBatchModal').modal('hide');
-            } else {
-              console.error('Error deleting batch:', response.message);
+        if (confirm('Are you sure you want to delete this batch?')) {
+          $.ajax({
+            url: batchUrl + 'delete_batch',
+            type: 'POST',
+            data: {
+              id: batchId,
+              [csrfName]: csrfHash
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.status === 'success') {
+                loadBatches();
+                $('#viewBatchModal').modal('hide');
+              } else {
+                alert(response.message);
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error('AJAX error:', error);
+              alert('An error occurred while deleting the batch.');
             }
-          },
-          error: function(xhr, status, error) {
-            console.error('AJAX error:', error);
-          }
-        });
+          });
+        }
       });
 
       // Sidebar toggle functionality
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const navbar = document.querySelector('.navbar');
-        const contentWrapper = document.getElementById('contentWrapper');
+      $(document).ready(function () {
+        const sidebarToggle = $('#sidebarToggle');
+        const sidebar = $('#sidebar');
+        const navbar = $('.navbar');
+        const contentWrapper = $('#contentWrapper');
 
-        if (sidebarToggle) {
-          sidebarToggle.addEventListener('click', () => {
+        if (sidebarToggle.length) {
+          sidebarToggle.on('click', function () {
             if (window.innerWidth <= 576) {
-              // Mobile behavior
-              if (sidebar) {
-                sidebar.classList.toggle('active');
-                navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-              }
+              sidebar.toggleClass('active');
+              navbar.toggleClass('sidebar-hidden', !sidebar.hasClass('active'));
             } else {
-              // Desktop behavior - minimize/maximize
-              if (sidebar && contentWrapper) {
-                const isMinimized = sidebar.classList.toggle('minimized');
-                navbar.classList.toggle('sidebar-minimized', isMinimized);
-                contentWrapper.classList.toggle('minimized', isMinimized);
-              }
+              const isMinimized = sidebar.toggleClass('minimized').hasClass('minimized');
+              navbar.toggleClass('sidebar-minimized', isMinimized);
+              contentWrapper.toggleClass('minimized', isMinimized);
             }
           });
         }
@@ -900,11 +938,11 @@
 
       // Modal blur effect
       $('#addBatchModal, #filterModal, #viewBatchModal').on('show.bs.modal', function () {
-        document.getElementById('mainContent').classList.add('blur');
+        $('#mainContent').addClass('blur');
       });
 
       $('#addBatchModal, #filterModal, #viewBatchModal').on('hidden.bs.modal', function () {
-        document.getElementById('mainContent').classList.remove('blur');
+        $('#mainContent').removeClass('blur');
       });
     })();
   </script>

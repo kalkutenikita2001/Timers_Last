@@ -727,6 +727,41 @@
             return isValid;
         }
 
+        function loadBatches() {
+            $.ajax({
+                url: '<?php echo base_url('batch/get_batches'); ?>',
+                type: 'POST',
+                data: { [csrfName]: csrfHash },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        const batchSelect = document.getElementById('batch');
+                        batchSelect.innerHTML = '<option value="">Select Batch</option>';
+                        const data = response.data || [];
+                        if (data.length === 0) {
+                            batchSelect.innerHTML += '<option value="" disabled>No batches available</option>';
+                        } else {
+                            data.forEach(batch => {
+                                const option = document.createElement('option');
+                                option.value = batch.batch;
+                                option.textContent = batch.batch;
+                                batchSelect.appendChild(option);
+                            });
+                        }
+                    } else {
+                        console.error('Error loading batches:', response.message);
+                        const batchSelect = document.getElementById('batch');
+                        batchSelect.innerHTML = '<option value="">Select Batch</option><option value="" disabled>Error loading batches</option>';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                    const batchSelect = document.getElementById('batch');
+                    batchSelect.innerHTML = '<option value="">Select Batch</option><option value="" disabled>Error loading batches</option>';
+                }
+            });
+        }
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const saveBtn = form.querySelector('.save-btn');
@@ -787,32 +822,6 @@
                 saveBtn.disabled = false;
             }
         });
-
-        function loadBatches() {
-            $.ajax({
-                url: '<?php echo base_url('leave/get_batches'); ?>',
-                type: 'POST',
-                data: { [csrfName]: csrfHash },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        const batchSelect = document.getElementById('batch');
-                        batchSelect.innerHTML = '<option value="">Select Batch</option>';
-                        response.data.forEach(batch => {
-                            const option = document.createElement('option');
-                            option.value = batch.batch;
-                            option.textContent = batch.batch;
-                            batchSelect.appendChild(option);
-                        });
-                    } else {
-                        console.error('Error loading batches:', response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX error:', error);
-                }
-            });
-        }
 
         function addNewRow(data) {
             const tableBody = document.getElementById('leaveTableBody');

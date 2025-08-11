@@ -80,7 +80,7 @@
             color: #fff;
         }
 
-        /* Add Button and Filter */
+        /* Add Button, Filter, and Center Select */
         .add-btn-container {
             display: flex;
             justify-content: flex-end;
@@ -109,6 +109,27 @@
             transform: translateY(-1px);
         }
 
+        .center-select-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .center-select-container select {
+            height: calc(1.8rem + 2px);
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            padding: 0.3rem 0.5rem;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .center-select-container select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+        }
+
         /* Table Styles */
         .table-container {
             margin-top: 1.5rem;
@@ -116,7 +137,6 @@
             background: #fff;
             border-radius: 0.5rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        
         }
 
         .table {
@@ -447,6 +467,11 @@
                 padding: 0.3rem 0.6rem;
             }
 
+            .center-select-container select {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+
             .confirmation-modal .modal-content,
             .add-modal .modal-content,
             .filter-modal .modal-content {
@@ -545,6 +570,11 @@
                 padding: 0.375rem 0.75rem;
             }
 
+            .center-select-container select {
+                font-size: 0.875rem;
+                padding: 0.375rem 0.75rem;
+            }
+
             .confirmation-modal .modal-content,
             .add-modal .modal-content,
             .filter-modal .modal-content {
@@ -626,6 +656,10 @@
             }
 
             .btn-custom {
+                font-size: 0.9rem;
+            }
+
+            .center-select-container select {
                 font-size: 0.9rem;
             }
 
@@ -781,6 +815,18 @@
                 </button>
             </div>
 
+            <!-- Center Select for Centerwise Expenses -->
+            <div class="center-select-container" id="centerSelectContainer">
+                <div class="form-group">
+                    <label for="centerSelect">Select Center <span class="text-danger">*</span></label>
+                    <select id="centerSelect" name="centerSelect" class="form-control" required>
+                        <option value="">-- Select Center --</option>
+                        <!-- Populated via AJAX -->
+                    </select>
+                    <div class="invalid-feedback">Please select a center.</div>
+                </div>
+            </div>
+
             <!-- Centerwise Expenses Table -->
             <div class="table-container" id="centerwiseTableContainer">
                 <table class="table table-bordered table-hover" id="centerwiseTable">
@@ -832,23 +878,33 @@
                 <form id="expenseForm" novalidate>
                     <input type="hidden" id="expenseId" name="expenseId">
                     <div class="form-row d-flex align-items-center">
+                        <div class="form-group col-md-6" id="expenseCenterField">
+                            <label for="expenseCenter">Center <span class="text-danger">*</span></label>
+                            <select id="expenseCenter" name="expenseCenter" class="form-control" required>
+                                <option value="">-- Select Center --</option>
+                                <!-- Populated via AJAX -->
+                            </select>
+                            <div class="invalid-feedback">Please select a center.</div>
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="title">Title <span class="text-danger">*</span></label>
                             <input type="text" id="title" name="title" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50">
                             <div class="invalid-feedback">Title is required, letters and spaces only, max 50 characters.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="date">Date <span class="text-danger">*</span></label>
                             <input type="date" id="date" name="date" class="form-control" required max="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">Date is required and must not be a future date.</div>
                         </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6">
                             <label for="amount">Amount (₹) <span class="text-danger">*</span></label>
                             <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="1" required>
                             <div class="invalid-feedback">Amount is required and must be greater than 0.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6" id="descriptionField">
                             <label for="description">Description <span class="text-danger">*</span></label>
                             <textarea id="description" name="description" class="form-control" required maxlength="200" rows="2"></textarea>
@@ -882,11 +938,21 @@
                 <form id="filterForm" novalidate>
                     <div class="form-note">Fill at least one field to apply a filter.</div>
                     <div class="form-row d-flex align-items-center">
+                        <div class="form-group col-md-6" id="filterCenterField">
+                            <label for="filterCenter">Center</label>
+                            <select id="filterCenter" name="filterCenter" class="form-control">
+                                <option value="">-- Select Center --</option>
+                                <!-- Populated via AJAX -->
+                            </select>
+                            <div class="invalid-feedback">Please select a valid center.</div>
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="filterTitle">Title</label>
                             <input type="text" id="filterTitle" name="filterTitle" class="form-control" pattern="[A-Za-z\s]+" maxlength="50">
                             <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
                         <div class="form-group col-md-6" id="filterDescriptionField">
                             <label for="filterDescription">Description</label>
                             <input type="text" id="filterDescription" name="filterDescription" class="form-control" maxlength="200">
@@ -924,12 +990,54 @@
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
             const csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
 
+            // Load Centers for Dropdowns
+            function loadCenters() {
+                $.ajax({
+                    url: '<?php echo base_url('center/get_centers'); ?>',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const centerSelect = $('#centerSelect');
+                            const expenseCenter = $('#expenseCenter');
+                            const filterCenter = $('#filterCenter');
+                            centerSelect.empty().append('<option value="">-- Select Center --</option>');
+                            expenseCenter.empty().append('<option value="">-- Select Center --</option>');
+                            filterCenter.empty().append('<option value="">-- Select Center --</option>');
+                            response.data.forEach(center => {
+                                const option = `<option value="${center.id}">${center.center_name}</option>`;
+                                centerSelect.append(option);
+                                expenseCenter.append(option);
+                                filterCenter.append(option);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error loading centers.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error loading centers.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            }
+
             // Clear form on modal close
             $('#expenseModal').on('hidden.bs.modal', function() {
                 const form = document.getElementById('expenseForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input, textarea').forEach(input => {
+                form.querySelectorAll('input, textarea, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
@@ -943,7 +1051,7 @@
                 const form = document.getElementById('filterForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input').forEach(input => {
+                form.querySelectorAll('input, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
@@ -954,12 +1062,15 @@
             function toggleFormFields(option) {
                 const descriptionField = document.getElementById('descriptionField');
                 const categoryField = document.getElementById('categoryField');
+                const expenseCenterField = document.getElementById('expenseCenterField');
                 if (option === 'own') {
                     descriptionField.style.display = 'none';
                     categoryField.style.display = 'block';
+                    expenseCenterField.style.display = 'none';
                 } else {
                     descriptionField.style.display = 'block';
                     categoryField.style.display = 'none';
+                    expenseCenterField.style.display = 'block';
                 }
             }
 
@@ -967,22 +1078,31 @@
             function toggleFilterFields(option) {
                 const descriptionField = document.getElementById('filterDescriptionField');
                 const categoryField = document.getElementById('filterCategoryField');
+                const filterCenterField = document.getElementById('filterCenterField');
                 if (option === 'own') {
                     descriptionField.style.display = 'none';
                     categoryField.style.display = 'block';
+                    filterCenterField.style.display = 'none';
                 } else {
                     descriptionField.style.display = 'block';
                     categoryField.style.display = 'none';
+                    filterCenterField.style.display = 'block';
                 }
             }
 
             // Load expenses
             function loadExpenses(option = 'centerwise') {
+                const centerId = option === 'centerwise' ? $('#centerSelect').val() : '';
+                if (option === 'centerwise' && !centerId) {
+                    $('#centerwiseTableBody').empty().append('<tr><td colspan="5" class="text-center">Please select a center.</td></tr>');
+                    return;
+                }
                 const url = option === 'own' ? '<?php echo base_url('expense/get_own_expenses'); ?>' : '<?php echo base_url('expense/get_centerwise_expenses'); ?>';
+                const data = option === 'centerwise' ? { [csrfName]: csrfToken, center_id: centerId } : { [csrfName]: csrfToken };
                 $.ajax({
                     url: url,
                     type: 'POST',
-                    data: { [csrfName]: csrfToken },
+                    data: data,
                     dataType: 'json',
                     success: function(data) {
                         const tableBody = $(`#${option}TableBody`);
@@ -998,7 +1118,7 @@
                             const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
                             const detail = option === 'centerwise' ? item.description : item.category;
                             const row = `
-                                <tr class="${rowClass}" style="${rowStyle}">
+                                <tr class="${rowClass}" style="${rowStyle}" data-center-id="${item.center_id || ''}">
                                     <td>${item.title}</td>
                                     <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
                                     <td>Rs.${parseFloat(item.amount).toFixed(0)}</td>
@@ -1026,23 +1146,37 @@
             }
 
             // Initial load
-            loadExpenses();
+            loadCenters();
+            $('#centerSelect').on('change', function() {
+                if (currentOption === 'centerwise') {
+                    loadExpenses('centerwise');
+                }
+            });
 
             // Expense Form validation
             function validateExpenseForm() {
                 const form = document.getElementById('expenseForm');
                 let isValid = true;
 
-                form.querySelectorAll('input, textarea').forEach(input => {
+                form.querySelectorAll('input, textarea, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-invalid', 'is-valid');
                 });
 
+                const expenseCenter = form.querySelector('#expenseCenter');
                 const title = form.querySelector('#title');
                 const date = form.querySelector('#date');
                 const amount = form.querySelector('#amount');
                 const description = form.querySelector('#description');
                 const category = form.querySelector('#category');
+
+                if (currentOption === 'centerwise' && !expenseCenter.value) {
+                    expenseCenter.setCustomValidity('Center is required.');
+                    expenseCenter.classList.add('is-invalid');
+                    isValid = false;
+                } else if (currentOption === 'centerwise') {
+                    expenseCenter.classList.add('is-valid');
+                }
 
                 if (!title.value.trim()) {
                     title.setCustomValidity('Title is required.');
@@ -1120,14 +1254,20 @@
                 let isValid = true;
                 let atLeastOneFilled = false;
 
-                form.querySelectorAll('input').forEach(input => {
+                form.querySelectorAll('input, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-invalid', 'is-valid');
                 });
 
+                const filterCenter = form.querySelector('#filterCenter');
                 const filterTitle = form.querySelector('#filterTitle');
                 const filterDescription = form.querySelector('#filterDescription');
                 const filterCategory = form.querySelector('#filterCategory');
+
+                if (filterCenter.value.trim()) {
+                    atLeastOneFilled = true;
+                    filterCenter.classList.add('is-valid');
+                }
 
                 if (filterTitle.value.trim()) {
                     atLeastOneFilled = true;
@@ -1180,9 +1320,19 @@
             }
 
             // Real-time validation for Expense Form
-            $('#expenseForm').find('input, textarea').on('input', function() {
+            $('#expenseForm').find('input, textarea, select').on('input', function() {
                 const input = this;
-                if (input.id === 'title') {
+                if (input.id === 'expenseCenter' && currentOption === 'centerwise') {
+                    if (!input.value) {
+                        input.setCustomValidity('Center is required.');
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                    } else {
+                        input.setCustomValidity('');
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    }
+                } else if (input.id === 'title') {
                     if (!input.value.trim()) {
                         input.setCustomValidity('Title is required.');
                         input.classList.add('is-invalid');
@@ -1261,13 +1411,18 @@
             });
 
             // Real-time validation for Filter Form
-            $('#filterForm').find('input').on('input', function() {
+            $('#filterForm').find('input, select').on('input', function() {
                 const form = document.getElementById('filterForm');
+                const filterCenter = form.querySelector('#filterCenter');
                 const filterTitle = form.querySelector('#filterTitle');
                 const filterDescription = form.querySelector('#filterDescription');
                 const filterCategory = form.querySelector('#filterCategory');
 
-                if (this.id === 'filterTitle') {
+                if (this.id === 'filterCenter') {
+                    this.setCustomValidity('');
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else if (this.id === 'filterTitle') {
                     if (!this.value.trim() || (/^[A-Za-z\s]+$/.test(this.value) && this.value.length <= 50)) {
                         this.setCustomValidity('');
                         this.classList.remove('is-invalid');
@@ -1307,6 +1462,7 @@
                     const formData = new FormData(this);
                     const data = {
                         [csrfName]: csrfToken,
+                        center_id: formData.get('expenseCenter'),
                         title: formData.get('title'),
                         date: formData.get('date'),
                         amount: parseFloat(formData.get('amount')).toFixed(2),
@@ -1357,6 +1513,7 @@
                     const formData = new FormData(this);
                     const data = {
                         [csrfName]: csrfToken,
+                        center_id: formData.get('filterCenter'),
                         title: formData.get('filterTitle'),
                         description: currentOption === 'centerwise' ? formData.get('filterDescription') : formData.get('filterCategory'),
                         type: currentOption
@@ -1380,7 +1537,7 @@
                                     const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
                                     const detail = currentOption === 'centerwise' ? item.description : item.category;
                                     const row = `
-                                        <tr class="${rowClass}" style="${rowStyle}">
+                                        <tr class="${rowClass}" style="${rowStyle}" data-center-id="${item.center_id || ''}">
                                             <td>${item.title}</td>
                                             <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
                                             <td>Rs.${parseFloat(item.amount).toFixed(0)}</td>
@@ -1500,6 +1657,7 @@
 
                 document.getElementById('centerwiseTableContainer').style.display = option === 'centerwise' ? 'block' : 'none';
                 document.getElementById('ownTableContainer').style.display = option === 'own' ? 'block' : 'none';
+                document.getElementById('centerSelectContainer').style.display = option === 'centerwise' ? 'block' : 'none';
 
                 toggleFormFields(option);
                 toggleFilterFields(option);
@@ -1509,6 +1667,7 @@
             // Open expense modal with appropriate fields
             $('.btn-custom').on('click', function() {
                 toggleFormFields(currentOption);
+                loadCenters();
             });
 
             // Sidebar toggle functionality
