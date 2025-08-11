@@ -37,17 +37,17 @@
       margin-left: 4rem;
     }
     .container {
-      max-width: calc(1200px + 2vw);
+      max-width: 100%;
       margin: 4rem auto 0;
       width: 100%;
+      padding: 0 1rem;
     }
     .content {
       margin-top: 4rem;
     }
-    /* Add Button and Filter */
     .add-btn-container {
       /* display: flex; */
-      justify-content: flex-end;
+      justify-content: space-between;
       margin-bottom: 1.5rem;
       gap: 0.75rem;
       align-items: center;
@@ -59,24 +59,26 @@
       border: none;
       border-radius: 0.25rem;
       padding: 0.5rem 1rem;
-      font-size: clamp(0.8rem, 2vw, 1rem);
+      font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
       touch-action: manipulation;
+      flex: 1;
+      min-width: 120px;
     }
     .btn-custom:hover {
       box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }
-    /* Table Styles */
     .table-container {
       margin-top: 1.5rem;
       margin-bottom: 1.5rem;
       background: #fff;
       border-radius: 0.5rem;
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      overflow-x: auto;
     }
     .table {
       width: 100%;
@@ -85,6 +87,7 @@
       background: #fff;
       border-radius: 0.5rem;
       overflow: hidden;
+      min-width: 600px;
     }
     .table thead th {
       background-color: #343a40;
@@ -93,7 +96,7 @@
       white-space: nowrap;
       text-align: center;
       font-weight: 600;
-      font-size: clamp(0.75rem, 2vw, 0.9rem);
+      font-size: 0.875rem;
       padding: 1rem;
     }
     .table td, .table th {
@@ -102,7 +105,7 @@
       padding: 0.75rem;
       white-space: nowrap;
       border-bottom: 1px solid #dee2e6;
-      font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+      font-size: 0.85rem;
       color: #000;
     }
     .table tbody tr:hover {
@@ -115,7 +118,7 @@
       padding: 0;
     }
     .action-btn {
-      font-size: clamp(0.8rem, 2vw, 0.85rem);
+      font-size: 0.85rem;
       margin: 0 0.3rem;
       padding: 0.3rem 0.6rem;
       border-radius: 0.25rem;
@@ -147,7 +150,6 @@
       cursor: not-allowed;
       opacity: 0.6;
     }
-    /* Modal Styles */
     .modal-content {
       background-color: #fff;
       border-radius: 0.5rem;
@@ -188,7 +190,6 @@
       opacity: 1;
       background: #e0e0e0;
     }
-    /* Form Styles */
     .form-group label {
       font-weight: 600;
       font-size: 0.85rem;
@@ -243,8 +244,9 @@
       padding-right: 5px;
       padding-left: 5px;
       margin-bottom: 0.8rem;
+      flex: 0 0 50%;
+      max-width: 50%;
     }
-    /* Step Navigation Styles */
     .step-nav {
       display: flex;
       justify-content: space-between;
@@ -253,6 +255,7 @@
       padding: 1rem;
       margin-bottom: 1.5rem;
       gap: 30px;
+      flex-wrap: wrap;
     }
     .step-nav span {
       font-weight: 600;
@@ -276,7 +279,6 @@
     .step-nav span.step-active i {
       color: #0056b3;
     }
-    /* Receipt Styles */
     .receipt-card {
       background: #f8f9fa;
       padding: 1.5rem;
@@ -292,13 +294,13 @@
       color: #1a1a1a;
       font-weight: 600;
     }
-    /* Modal Footer */
     .modal-footer {
       border-top: none;
       padding-top: 1rem;
       display: flex;
       justify-content: flex-end;
       gap: 10px;
+      flex-wrap: wrap;
     }
     .modal-footer .btn-secondary {
       background-color: #6c757d;
@@ -312,17 +314,18 @@
       background-color: #5a6268;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
-    /* Responsive Design */
-    @media (max-width: 320px) {
+    @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0 !important;
         padding: 0.5rem !important;
       }
       .container {
         margin-top: 3rem;
+        padding: 0 0.5rem;
       }
       .table {
         font-size: 0.7rem;
+        min-width: 100%;
       }
       .table th:nth-child(3), .table td:nth-child(3),
       .table th:nth-child(4), .table td:nth-child(4) {
@@ -334,6 +337,7 @@
       }
       .modal-content {
         padding: 0.8rem;
+        margin-top: 30px;
       }
       .form-row {
         flex-direction: column;
@@ -343,6 +347,8 @@
       .form-group {
         padding: 0;
         margin-bottom: 0.6rem;
+        flex: 0 0 100%;
+        max-width: 100%;
       }
       .add-btn-container {
         justify-content: center;
@@ -352,6 +358,7 @@
       .btn-custom {
         font-size: 0.75rem;
         padding: 0.3rem 0.6rem;
+        width: 100%;
       }
       .step-nav {
         flex-direction: column;
@@ -367,13 +374,14 @@
         margin-left: 8px;
       }
     }
-    @media (min-width: 321px) and (max-width: 576px) {
+    @media (min-width: 577px) and (max-width: 768px) {
       .content-wrapper {
         margin-left: 0 !important;
         padding: 1rem !important;
       }
       .container {
         margin-top: 3.5rem;
+        padding: 0 0.75rem;
       }
       .table {
         font-size: 0.8rem;
@@ -387,76 +395,32 @@
       }
       .modal-content {
         padding: 0.9rem;
+        margin-top: 40px;
       }
       .form-row {
-        flex-direction: column;
-        gap: 0.75rem;
+        flex-direction: row;
+        flex-wrap: wrap;
       }
       .form-group {
-        padding: 0;
-        margin-bottom: 0.6rem;
+        flex: 0 0 50%;
+        max-width: 50%;
       }
       .add-btn-container {
-        justify-content: center;
-        flex-direction: column;
-        gap: 0.75rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
       }
       .btn-custom {
         font-size: 0.875rem;
         padding: 0.375rem 0.75rem;
       }
       .step-nav {
-        flex-direction: column;
         gap: 0.75rem;
-        padding: 0.75rem;
       }
       .step-nav span {
         font-size: 0.8rem;
       }
       .step-nav span i {
         font-size: 1.2rem;
-        margin-left: 8px;
-      }
-    }
-    @media (min-width: 577px) and (max-width: 768px) {
-      .content-wrapper {
-        margin-left: 0 !important;
-        padding: 1.25rem !important;
-      }
-      .content-wrapper.minimized {
-        margin-left: 0;
-      }
-      .container {
-        margin-top: 4rem;
-      }
-      .table {
-        font-size: 0.85rem;
-      }
-      .table th:nth-child(4), .table td:nth-child(4) {
-        display: none;
-      }
-      .modal-content {
-        padding: 1rem;
-      }
-      .form-row {
-        flex-direction: row;
-        gap: 1rem;
-      }
-      .add-btn-container {
-        justify-content: center;
-        gap: 0.75rem;
-      }
-      .btn-custom {
-        font-size: 0.9rem;
-      }
-      .step-nav {
-        gap: 20px;
-      }
-      .step-nav span {
-        font-size: 0.85rem;
-      }
-      .step-nav span i {
-        font-size: 1.3rem;
         margin-left: 8px;
       }
     }
@@ -467,11 +431,16 @@
       .content-wrapper.minimized {
         margin-left: 4rem;
       }
+      .container {
+        margin-top: 4rem;
+        padding: 0 1rem;
+      }
       .table {
         font-size: 0.9rem;
       }
       .modal-content {
         max-width: calc(450px + 2vw);
+        margin-top: 60px;
       }
       .step-nav {
         gap: 25px;
@@ -485,24 +454,39 @@
       .content-wrapper {
         margin-left: 14rem;
       }
+      .container {
+        margin-top: 4rem;
+        padding: 0 1rem;
+      }
       .modal-content {
         max-width: calc(480px + 2vw);
+        margin-top: 65px;
       }
     }
     @media (min-width: 1201px) {
       .content-wrapper {
         margin-left: 15rem;
       }
+      .container {
+        margin-top: 4rem;
+        padding: 0 1rem;
+      }
       .modal-content {
         max-width: 800px;
+        margin-top: 65px;
       }
     }
     @media (min-width: 1600px) {
       .content-wrapper {
         margin-left: 16rem;
       }
+      .container {
+        margin-top: 4rem;
+        padding: 0 1rem;
+      }
       .modal-content {
         max-width: calc(520px + 2vw);
+        margin-top: 65px;
       }
       .table {
         font-size: 1rem;
@@ -512,7 +496,6 @@
         padding: 0.6rem 1.2rem;
       }
     }
-    /* Touch device hover fix */
     @media (hover: none) {
       .action-btn:hover,
       .btn-custom:hover,
@@ -532,7 +515,7 @@
   <!-- Main Content -->
   <div class="content-wrapper" id="contentWrapper">
     <div class="content">
-      <div class="container-fluid">
+      <div class="container">
         <!-- Add Button and Filter -->
         <div class="add-btn-container">
           <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
@@ -556,37 +539,37 @@
               </tr>
             </thead>
             <tbody id="studentTableBody">
-  <tr>
-    <td>Center 1</td>
-    <td>Jane Doe</td>
-    <td>897657689</td>
-    <td>B1</td>
-    <td>Corporate</td>
-    <td>2025-07-31</td>
-    <td>
-      <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-edit"></i></button>
-      <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-      <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-eye"></i></button>
-      <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-sync"></i></button>
-    </td>
-  </tr>
-  <tr class="horizontal-line"><td colspan="7"></td></tr>
-  <tr>
-    <td>Center 2</td>
-    <td>John Smith</td>
-    <td>987654321</td>
-    <td>B2</td>
-    <td>Individual</td>
-    <td>2025-06-15</td>
-    <td>
-      <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-edit"></i></button>
-      <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-      <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-eye"></i></button>
-      <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-sync"></i></button>
-    </td>
-  </tr>
-  <tr class="horizontal-line"><td colspan="7"></td></tr>
-</tbody>
+              <tr>
+                <td>Center 1</td>
+                <td>Jane Doe</td>
+                <td>897657689</td>
+                <td>B1</td>
+                <td>Corporate</td>
+                <td>2025-07-31</td>
+                <td>
+                  <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-edit"></i></button>
+                  <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                  <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="Jane Doe" data-contact="897657689" data-center="Center 1" data-batch="B1" data-category="Corporate"><i class="fas fa-sync"></i></button>
+                </td>
+              </tr>
+              <tr class="horizontal-line"><td colspan="7"></td></tr>
+              <tr>
+                <td>Center 2</td>
+                <td>John Smith</td>
+                <td>987654321</td>
+                <td>B2</td>
+                <td>Individual</td>
+                <td>2025-06-15</td>
+                <td>
+                  <button class="action-btn edit-btn" data-toggle="modal" data-target="#editModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-edit"></i></button>
+                  <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                  <button class="action-btn view-btn" data-toggle="modal" data-target="#receiptModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn renew-btn" data-toggle="modal" data-target="#renewModal" data-name="John Smith" data-contact="987654321" data-center="Center 2" data-batch="B2" data-category="Individual"><i class="fas fa-sync"></i></button>
+                </td>
+              </tr>
+              <tr class="horizontal-line"><td colspan="7"></td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -988,562 +971,552 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- <script>
-  $(document).ready(function () {
-    const forms = ['admissionForm1', 'admissionForm2', 'admissionForm3', 'filterForm', 'editForm', 'renewForm'].map(id => document.getElementById(id));
-    const tableBody = document.querySelector('#studentTableBody');
-    const filterButton = document.querySelector('#filterModal .btn-custom[type="submit"]');
+  <script>
+    $(document).ready(function () {
+      const forms = ['admissionForm1', 'admissionForm2', 'admissionForm3', 'filterForm', 'editForm', 'renewForm'].map(id => document.getElementById(id));
+      const tableBody = document.querySelector('#studentTableBody');
+      const filterButton = document.querySelector('#filterModal .btn-custom[type="submit"]');
 
-    // Load initial students
-    function loadStudents() {
-        $.ajax({
-            url: '<?= base_url('Student_controller/index') ?>',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('loadStudents response:', response);
-                tableBody.innerHTML = '';
-                if (response.status === 'success' && Array.isArray(response.students) && response.students.length > 0) {
-                    response.students.forEach(student => {
-                        const row = `
-                            <tr>
-                                <td>${student.center || 'N/A'}</td>
-                                <td>${student.name || 'N/A'}</td>
-                                <td>${student.contact || 'N/A'}</td>
-                                <td>${student.batch || 'N/A'}</td>
-                                <td>${student.category || 'N/A'}</td>
-                                <td>${student.plan_expiry || 'N/A'}</td>
-                                <td>
-                                    <button class="action-btn edit-btn" data-id="${student.id}" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn" data-id="${student.id}"><i class="fas fa-trash"></i></button>
-                                    <button class="action-btn view-btn" data-id="${student.id}" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
-                                    <button class="action-btn renew-btn" data-id="${student.id}" data-toggle="modal" data-target="#renewModal"><i class="fas fa-sync"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="horizontal-line"><td colspan="7"></td></tr>
-                        `;
-                        tableBody.insertAdjacentHTML('beforeend', row);
-                    });
-                } else {
-                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('loadStudents error:', xhr.responseText, status, error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load students: ' + (xhr.responseJSON?.message || error),
-                    timer: 3000
-                });
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
-            }
-        });
-    }
+      // Load initial students
+      function loadStudents() {
+          $.ajax({
+              url: '<?= base_url('Student_controller/index') ?>',
+              method: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log('loadStudents response:', response);
+                  tableBody.innerHTML = '';
+                  if (response.status === 'success' && Array.isArray(response.students) && response.students.length > 0) {
+                      response.students.forEach(student => {
+                          const row = `
+                              <tr>
+                                  <td>${student.center || 'N/A'}</td>
+                                  <td>${student.name || 'N/A'}</td>
+                                  <td>${student.contact || 'N/A'}</td>
+                                  <td>${student.batch || 'N/A'}</td>
+                                  <td>${student.category || 'N/A'}</td>
+                                  <td>${student.plan_expiry || 'N/A'}</td>
+                                  <td>
+                                      <button class="action-btn edit-btn" data-id="${student.id}" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
+                                      <button class="action-btn delete-btn" data-id="${student.id}"><i class="fas fa-trash"></i></button>
+                                      <button class="action-btn view-btn" data-id="${student.id}" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
+                                      <button class="action-btn renew-btn" data-id="${student.id}" data-toggle="modal" data-target="#renewModal"><i class="fas fa-sync"></i></button>
+                                  </td>
+                              </tr>
+                              <tr class="horizontal-line"><td colspan="7"></td></tr>
+                          `;
+                          tableBody.insertAdjacentHTML('beforeend', row);
+                      });
+                  } else {
+                      tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error('loadStudents error:', xhr.responseText, status, error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to load students: ' + (xhr.responseJSON?.message || error),
+                      timer: 3000
+                  });
+                  tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
+              }
+          });
+      }
 
-    // Initial load
-    loadStudents();
+      // Initial load
+      loadStudents();
 
-    // Form validation
-    forms.forEach(form => {
-        form.addEventListener('submit', function (event) {
-            let isValid = form.checkValidity();
-            if (form.id === 'filterForm') {
-                let atLeastOneFilled = false;
-                form.querySelectorAll('input, select').forEach(input => {
-                    if (input.value.trim() !== '') atLeastOneFilled = true;
-                });
-                if (!atLeastOneFilled) {
-                    form.querySelector('#filterName').setCustomValidity('At least one filter field must be filled.');
-                    isValid = false;
-                } else {
-                    form.querySelector('#filterName').setCustomValidity('');
-                }
-            }
-            if (!isValid) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
+      // Form validation
+      forms.forEach(form => {
+          form.addEventListener('submit', function (event) {
+              let isValid = form.checkValidity();
+              if (form.id === 'filterForm') {
+                  let atLeastOneFilled = false;
+                  form.querySelectorAll('input, select').forEach(input => {
+                      if (input.value.trim() !== '') atLeastOneFilled = true;
+                  });
+                  if (!atLeastOneFilled) {
+                      form.querySelector('#filterName').setCustomValidity('At least one filter field must be filled.');
+                      isValid = false;
+                  } else {
+                      form.querySelector('#filterName').setCustomValidity('');
+                  }
+              }
+              if (!isValid) {
+                  event.preventDefault();
+                  event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+          }, false);
+      });
+
+      // Navigation between steps
+      let admissionData = {};
+      $('#admissionForm1').on('submit', function (event) {
+          if (this.checkValidity()) {
+              event.preventDefault();
+              admissionData = {
+                  name: $('#name').val(),
+                  contact: $('#contact').val(),
+                  parentName: $('#parentName').val(),
+                  emergencyContact: $('#emergencyContact').val(),
+                  email: $('#email').val(),
+                  address: $('#address').val()
+              };
+              $('#newAdmissionModal').modal('hide');
+              $('#batchDetailsModal').modal('show');
+          }
+          this.classList.add('was-validated');
+      });
+
+      $('#admissionForm2').on('submit', function (event) {
+          if (this.checkValidity()) {
+              event.preventDefault();
+              admissionData = {
+                  ...admissionData,
+                  center: $('#center').val(),
+                  batch: $('#batch').val(),
+                  category: $('#category').val(),
+                  coach: $('#coach').val(),
+                  coordinator: $('#coordinator').val(),
+                  duration: $('#duration').val()
+              };
+              $('#batchDetailsModal').modal('hide');
+              $('#feesDetailsModal').modal('show');
+          }
+          this.classList.add('was-validated');
+      });
+
+      // Calculate remaining amount
+      ['amountPaid', 'renewAmountPaid'].forEach(id => {
+          document.getElementById(id).addEventListener('input', function () {
+              const totalFees = parseFloat(document.getElementById(id === 'amountPaid' ? 'totalFees' : 'renewTotalFees').value) || 0;
+              const amountPaid = parseFloat(this.value) || 0;
+              document.getElementById(id === 'amountPaid' ? 'remainingAmount' : 'renewRemainingAmount').value = Math.max(0, totalFees - amountPaid);
+          });
+      });
+
+      // Add new student and generate receipt
+      $('#admissionForm3').on('submit', function (event) {
+          if (this.checkValidity()) {
+              event.preventDefault();
+              admissionData = {
+                  ...admissionData,
+                  totalFees: $('#totalFees').val(),
+                  amountPaid: $('#amountPaid').val(),
+                  paymentMethod: $('input[name="paymentMethod"]:checked').val()
+              };
+              $.ajax({
+                  url: '<?= base_url('Student_controller/add_student') ?>',
+                  method: 'POST',
+                  data: admissionData,
+                  dataType: 'json',
+                  success: function(response) {
+                      console.log('add_student response:', response);
+                      if (response.status === 'success') {
+                          $('#receiptName').text(response.data.name);
+                          $('#receiptContact').text(response.data.contact);
+                          $('#receiptCenter').text(response.data.center);
+                          $('#receiptBatch').text(response.data.batch);
+                          $('#receiptCategory').text(response.data.category);
+                          $('#receiptTotalFees').text(response.data.total_fees);
+                          $('#receiptAmountPaid').text(response.data.amount_paid);
+                          $('#receiptRemainingAmount').text(response.data.remaining_amount);
+                          $('#receiptPaymentMethod').text(response.data.payment_method);
+                          $('#receiptModal').modal('show');
+                          $('#feesDetailsModal').modal('hide');
+                          forms.forEach(f => f.reset());
+                          forms.forEach(f => f.classList.remove('was-validated'));
+                          setTimeout(loadStudents, 500);
+                          Swal.fire({
+                              icon: 'success',
+                              title: 'Success',
+                              text: response.message,
+                              timer: 3000
+                          });
+                      } else {
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: response.message || response.errors || 'Failed to add student',
+                              timer: 3000
+                          });
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      console.error('add_student error:', xhr.responseText, status, error);
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: 'Failed to add student: ' + (xhr.responseJSON?.message || error),
+                          timer: 3000
+                      });
+                  }
+              });
+          }
+          this.classList.add('was-validated');
+      });
+
+      // Edit functionality
+      $(document).on('click', '.edit-btn', function () {
+          const id = $(this).data('id');
+          $.ajax({
+              url: '<?= base_url('Student_controller/get_student/') ?>' + id,
+              method: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log('get_student response:', response);
+                  if (response.status === 'success' && response.data) {
+                      $('#editName').val(response.data.name || '');
+                      $('#editContact').val(response.data.contact || '');
+                      $('#editCenter').val(response.data.center || '');
+                      $('#editBatch').val(response.data.batch || '');
+                      $('#editCategory').val(response.data.category || '');
+                      $('#editForm').off('submit').on('submit', function (event) {
+                          if (this.checkValidity()) {
+                              event.preventDefault();
+                              $.ajax({
+                                  url: '<?= base_url('Student_controller/edit_student/') ?>' + id,
+                                  method: 'POST',
+                                  data: {
+                                      editName: $('#editName').val(),
+                                      editContact: $('#editContact').val(),
+                                      editCenter: $('#editCenter').val(),
+                                      editBatch: $('#editBatch').val(),
+                                      editCategory: $('#editCategory').val()
+                                  },
+                                  dataType: 'json',
+                                  success: function(response) {
+                                      console.log('edit_student response:', response);
+                                      if (response.status === 'success') {
+                                          loadStudents();
+                                          $('#editModal').modal('hide');
+                                          this.classList.remove('was-validated');
+                                          Swal.fire({
+                                              icon: 'success',
+                                              title: 'Success',
+                                              text: response.message,
+                                              timer: 3000
+                                          });
+                                      } else {
+                                          Swal.fire({
+                                              icon: 'error',
+                                              title: 'Error',
+                                              text: response.message || response.errors || 'Failed to update student',
+                                              timer: 3000
+                                          });
+                                      }
+                                  },
+                                  error: function(xhr, status, error) {
+                                      console.error('edit_student error:', xhr.responseText, status, error);
+                                      Swal.fire({
+                                          icon: 'error',
+                                          title: 'Error',
+                                          text: 'Failed to update student: ' + (xhr.responseJSON?.message || error),
+                                          timer: 3000
+                                      });
+                                  }
+                              });
+                          }
+                          this.classList.add('was-validated');
+                      });
+                  } else {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: response.message || 'Student not found',
+                          timer: 3000
+                      });
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error('get_student error:', xhr.responseText, status, error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to fetch student: ' + (xhr.responseJSON?.message || error),
+                      timer: 3000
+                  });
+              }
+          });
+      });
+
+      // Delete functionality
+      $(document).on('click', '.delete-btn', function () {
+          const id = $(this).data('id');
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('Student_controller/delete_student/') ?>' + id,
+                      method: 'POST',
+                      dataType: 'json',
+                      success: function(response) {
+                          console.log('delete_student response:', response);
+                          if (response.status === 'success') {
+                              loadStudents();
+                              Swal.fire({
+                                  icon: 'success',
+                                  title: 'Deleted!',
+                                  text: response.message,
+                                  timer: 3000
+                              });
+                          } else {
+                              Swal.fire({
+                                  icon: 'error',
+                                  title: 'Error',
+                                  text: response.message || 'Failed to delete student',
+                                  timer: 3000
+                              });
+                          }
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('delete_student error:', xhr.responseText, status, error);
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Failed to delete student: ' + (xhr.responseJSON?.message || error),
+                              timer: 3000
+                          });
+                      }
+                  });
+              }
+          });
+      });
+
+      // View receipt
+      $(document).on('click', '.view-btn', function () {
+          const id = $(this).data('id');
+          $.ajax({
+              url: '<?= base_url('Student_controller/get_student/') ?>' + id,
+              method: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log('get_student (view receipt) response:', response);
+                  if (response.status === 'success' && response.data) {
+                      $('#receiptName').text(response.data.name || 'N/A');
+                      $('#receiptContact').text(response.data.contact || 'N/A');
+                      $('#receiptCenter').text(response.data.center || 'N/A');
+                      $('#receiptBatch').text(response.data.batch || 'N/A');
+                      $('#receiptCategory').text(response.data.category || 'N/A');
+                      $('#receiptTotalFees').text(response.data.total_fees || '0');
+                      $('#receiptAmountPaid').text(response.data.amount_paid || '0');
+                      $('#receiptRemainingAmount').text(response.data.remaining_amount || '0');
+                      $('#receiptPaymentMethod').text(response.data.payment_method || 'N/A');
+                  } else {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: response.message || 'Student not found',
+                          timer: 3000
+                      });
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error('get_student (view receipt) error:', xhr.responseText, status, error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to fetch receipt: ' + (xhr.responseJSON?.message || error),
+                      timer: 3000
+                  });
+              }
+          });
+      });
+
+      // Renew functionality
+      $(document).on('click', '.renew-btn', function () {
+          const id = $(this).data('id');
+          $('#renewForm').off('submit').on('submit', function (event) {
+              if (this.checkValidity()) {
+                  event.preventDefault();
+                  $.ajax({
+                      url: '<?= base_url('Student_controller/renew_student/') ?>' + id,
+                      method: 'POST',
+                      data: {
+                          renewTotalFees: $('#renewTotalFees').val(),
+                          renewAmountPaid: $('#renewAmountPaid').val(),
+                          renewPaymentMethod: $('input[name="renewPaymentMethod"]:checked').val(),
+                          duration: $('#duration').val() || '1 month'
+                      },
+                      dataType: 'json',
+                      success: function(response) {
+                          console.log('renew_student response:', response);
+                          if (response.status === 'success') {
+                              loadStudents();
+                              $('#renewModal').modal('hide');
+                              this.classList.remove('was-validated');
+                              Swal.fire({
+                                  icon: 'success',
+                                  title: 'Success',
+                                  text: response.message,
+                                  timer: 3000
+                              });
+                              $('#receiptName').text(response.data.name || admissionData.name || 'N/A');
+                              $('#receiptContact').text(response.data.contact || admissionData.contact || 'N/A');
+                              $('#receiptCenter').text(response.data.center || admissionData.center || 'N/A');
+                              $('#receiptBatch').text(response.data.batch || admissionData.batch || 'N/A');
+                              $('#receiptCategory').text(response.data.category || admissionData.category || 'N/A');
+                              $('#receiptTotalFees').text(response.data.total_fees || '0');
+                              $('#receiptAmountPaid').text(response.data.amount_paid || '0');
+                              $('#receiptRemainingAmount').text(response.data.remaining_amount || '0');
+                              $('#receiptPaymentMethod').text(response.data.payment_method || 'N/A');
+                              $('#receiptModal').modal('show');
+                          } else {
+                              Swal.fire({
+                                  icon: 'error',
+                                  title: 'Error',
+                                  text: response.message || response.errors || 'Failed to renew student',
+                                  timer: 3000
+                              });
+                          }
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('renew_student error:', xhr.responseText, status, error);
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Failed to renew student: ' + (xhr.responseJSON?.message || error),
+                              timer: 3000
+                          });
+                      }
+                  });
+              }
+              this.classList.add('was-validated');
+          });
+      });
+
+      // Filter students
+      $('#filterForm').on('submit', function (event) {
+          event.preventDefault();
+          if (!this.checkValidity()) {
+              console.log('Filter form validation failed');
+              return;
+          }
+          // Collect filter data
+          const filterData = {
+              filterName: $('#filterName').val().trim(),
+              filterContact: $('#filterContact').val().trim(),
+              filterCenter: $('#filterCenter').val().trim(),
+              filterBatch: $('#filterBatch').val().trim(),
+              filterCategory: $('#filterCategory').val().trim()
+          };
+          console.log('filterForm data sent:', filterData);
+          // Disable filter button to prevent multiple submissions
+          filterButton.disabled = true;
+          filterButton.textContent = 'Filtering...';
+          $.ajax({
+              url: '<?= base_url('Student_controller/filter_students') ?>',
+              method: 'POST',
+              data: filterData,
+              dataType: 'json',
+              success: function(response) {
+                  console.log('filter_students response:', response);
+                  tableBody.innerHTML = '';
+                  if (response.status === 'success' && Array.isArray(response.students) && response.students.length > 0) {
+                      response.students.forEach(student => {
+                          const row = `
+                              <tr>
+                                  <td>${student.center || 'N/A'}</td>
+                                  <td>${student.name || 'N/A'}</td>
+                                  <td>${student.contact || 'N/A'}</td>
+                                  <td>${student.batch || 'N/A'}</td>
+                                  <td>${student.category || 'N/A'}</td>
+                                  <td>${student.plan_expiry || 'N/A'}</td>
+                                  <td>
+                                      <button class="action-btn edit-btn" data-id="${student.id}" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
+                                      <button class="action-btn delete-btn" data-id="${student.id}"><i class="fas fa-trash"></i></button>
+                                      <button class="action-btn view-btn" data-id="${student.id}" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
+                                      <button class="action-btn renew-btn" data-id="${student.id}" data-toggle="modal" data-target="#renewModal"><i class="fas fa-sync"></i></button>
+                                  </td>
+                              </tr>
+                              <tr class="horizontal-line"><td colspan="7"></td></tr>
+                          `;
+                          tableBody.insertAdjacentHTML('beforeend', row);
+                      });
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Success',
+                          text: `Found ${response.students.length} matching student(s)`,
+                          timer: 2000
+                      });
+                  } else {
+                      console.warn('No students found or invalid response:', response);
+                      tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No records match the filter criteria.</td></tr>';
+                      Swal.fire({
+                          icon: 'info',
+                          title: 'No Results',
+                          text: response.message || 'No students match the filter criteria.',
+                          timer: 2000
+                      });
+                  }
+                  $('#filterModal').modal('hide');
+                  this.reset();
+                  this.classList.remove('was-validated');
+                  this.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
+              },
+              error: function(xhr, status, error) {
+                  console.error('filter_students error:', {
+                      responseText: xhr.responseText,
+                      status: status,
+                      error: error,
+                      statusCode: xhr.status
+                  });
+                  tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Failed to load filtered records.</td></tr>';
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to filter students: ' + (xhr.responseJSON?.message || error || 'Server error'),
+                      timer: 3000
+                  });
+                  $('#filterModal').modal('hide');
+              },
+              complete: function() {
+                  // Re-enable filter button
+                  filterButton.disabled = false;
+                  filterButton.textContent = 'Apply Filter';
+              }
+          });
+      });
+
+      // Clear filter form on modal close
+      $('#filterModal').on('hidden.bs.modal', function () {
+          const form = document.getElementById('filterForm');
+          form.reset();
+          form.classList.remove('was-validated');
+          form.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
+          loadStudents();
+      });
+
+      // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+          if ($(window).width() <= 576) {
+              $('#sidebar').toggleClass('active');
+              $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+          } else {
+              const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+              $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+              $('#contentWrapper').toggleClass('minimized', isMinimized);
+          }
+      });
+
+      // Handle window resize
+      $(window).on('resize', function () {
+          if ($(window).width() <= 576) {
+              $('#sidebar').removeClass('minimized');
+              $('.navbar').removeClass('sidebar-minimized');
+              $('#contentWrapper').removeClass('minimized');
+          }
+      });
     });
-
-    // Navigation between steps
-    let admissionData = {};
-
-    $('#admissionForm1').on('submit', function (event) {
-        if (this.checkValidity()) {
-            event.preventDefault();
-            admissionData = {
-                name: $('#name').val(),
-                contact: $('#contact').val(),
-                parentName: $('#parentName').val(),
-                emergencyContact: $('#emergencyContact').val(),
-                email: $('#email').val(),
-                address: $('#address').val()
-            };
-            $('#newAdmissionModal').modal('hide');
-            $('#batchDetailsModal').modal('show');
-        }
-        this.classList.add('was-validated');
-    });
-
-    $('#admissionForm2').on('submit', function (event) {
-        if (this.checkValidity()) {
-            event.preventDefault();
-            admissionData = {
-                ...admissionData,
-                center: $('#center').val(),
-                batch: $('#batch').val(),
-                category: $('#category').val(),
-                coach: $('#coach').val(),
-                coordinator: $('#coordinator').val(),
-                duration: $('#duration').val()
-            };
-            $('#batchDetailsModal').modal('hide');
-            $('#feesDetailsModal').modal('show');
-        }
-        this.classList.add('was-validated');
-    });
-
-    // Calculate remaining amount
-    ['amountPaid', 'renewAmountPaid'].forEach(id => {
-        document.getElementById(id).addEventListener('input', function () {
-            const totalFees = parseFloat(document.getElementById(id === 'amountPaid' ? 'totalFees' : 'renewTotalFees').value) || 0;
-            const amountPaid = parseFloat(this.value) || 0;
-            document.getElementById(id === 'amountPaid' ? 'remainingAmount' : 'renewRemainingAmount').value = Math.max(0, totalFees - amountPaid);
-        });
-    });
-
-    // Add new student and generate receipt
-    $('#admissionForm3').on('submit', function (event) {
-        if (this.checkValidity()) {
-            event.preventDefault();
-            admissionData = {
-                ...admissionData,
-                totalFees: $('#totalFees').val(),
-                amountPaid: $('#amountPaid').val(),
-                paymentMethod: $('input[name="paymentMethod"]:checked').val()
-            };
-
-            $.ajax({
-                url: '<?= base_url('Student_controller/add_student') ?>',
-                method: 'POST',
-                data: admissionData,
-                dataType: 'json',
-                success: function(response) {
-                    console.log('add_student response:', response);
-                    if (response.status === 'success') {
-                        $('#receiptName').text(response.data.name);
-                        $('#receiptContact').text(response.data.contact);
-                        $('#receiptCenter').text(response.data.center);
-                        $('#receiptBatch').text(response.data.batch);
-                        $('#receiptCategory').text(response.data.category);
-                        $('#receiptTotalFees').text(response.data.total_fees);
-                        $('#receiptAmountPaid').text(response.data.amount_paid);
-                        $('#receiptRemainingAmount').text(response.data.remaining_amount);
-                        $('#receiptPaymentMethod').text(response.data.payment_method);
-                        $('#receiptModal').modal('show');
-
-                        $('#feesDetailsModal').modal('hide');
-                        forms.forEach(f => f.reset());
-                        forms.forEach(f => f.classList.remove('was-validated'));
-
-                        setTimeout(loadStudents, 500);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                            timer: 3000
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message || response.errors || 'Failed to add student',
-                            timer: 3000
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('add_student error:', xhr.responseText, status, error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to add student: ' + (xhr.responseJSON?.message || error),
-                        timer: 3000
-                    });
-                }
-            });
-        }
-        this.classList.add('was-validated');
-    });
-
-    // Edit functionality
-    $(document).on('click', '.edit-btn', function () {
-        const id = $(this).data('id');
-        $.ajax({
-            url: '<?= base_url('Student_controller/get_student/') ?>' + id,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('get_student response:', response);
-                if (response.status === 'success' && response.data) {
-                    $('#editName').val(response.data.name || '');
-                    $('#editContact').val(response.data.contact || '');
-                    $('#editCenter').val(response.data.center || '');
-                    $('#editBatch').val(response.data.batch || '');
-                    $('#editCategory').val(response.data.category || '');
-
-                    $('#editForm').off('submit').on('submit', function (event) {
-                        if (this.checkValidity()) {
-                            event.preventDefault();
-                            $.ajax({
-                                url: '<?= base_url('Student_controller/edit_student/') ?>' + id,
-                                method: 'POST',
-                                data: {
-                                    editName: $('#editName').val(),
-                                    editContact: $('#editContact').val(),
-                                    editCenter: $('#editCenter').val(),
-                                    editBatch: $('#editBatch').val(),
-                                    editCategory: $('#editCategory').val()
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    console.log('edit_student response:', response);
-                                    if (response.status === 'success') {
-                                        loadStudents();
-                                        $('#editModal').modal('hide');
-                                        this.classList.remove('was-validated');
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Success',
-                                            text: response.message,
-                                            timer: 3000
-                                        });
-                                    } else {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: response.message || response.errors || 'Failed to update student',
-                                            timer: 3000
-                                        });
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('edit_student error:', xhr.responseText, status, error);
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: 'Failed to update student: ' + (xhr.responseJSON?.message || error),
-                                        timer: 3000
-                                    });
-                                }
-                            });
-                        }
-                        this.classList.add('was-validated');
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Student not found',
-                        timer: 3000
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('get_student error:', xhr.responseText, status, error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to fetch student: ' + (xhr.responseJSON?.message || error),
-                    timer: 3000
-                });
-            }
-        });
-    });
-
-    // Delete functionality
-    $(document).on('click', '.delete-btn', function () {
-        const id = $(this).data('id');
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '<?= base_url('Student_controller/delete_student/') ?>' + id,
-                    method: 'POST',
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log('delete_student response:', response);
-                        if (response.status === 'success') {
-                            loadStudents();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted!',
-                                text: response.message,
-                                timer: 3000
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message || 'Failed to delete student',
-                                timer: 3000
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('delete_student error:', xhr.responseText, status, error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to delete student: ' + (xhr.responseJSON?.message || error),
-                            timer: 3000
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    // View receipt
-    $(document).on('click', '.view-btn', function () {
-        const id = $(this).data('id');
-        $.ajax({
-            url: '<?= base_url('Student_controller/get_student/') ?>' + id,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('get_student (view receipt) response:', response);
-                if (response.status === 'success' && response.data) {
-                    $('#receiptName').text(response.data.name || 'N/A');
-                    $('#receiptContact').text(response.data.contact || 'N/A');
-                    $('#receiptCenter').text(response.data.center || 'N/A');
-                    $('#receiptBatch').text(response.data.batch || 'N/A');
-                    $('#receiptCategory').text(response.data.category || 'N/A');
-                    $('#receiptTotalFees').text(response.data.total_fees || '0');
-                    $('#receiptAmountPaid').text(response.data.amount_paid || '0');
-                    $('#receiptRemainingAmount').text(response.data.remaining_amount || '0');
-                    $('#receiptPaymentMethod').text(response.data.payment_method || 'N/A');
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Student not found',
-                        timer: 3000
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('get_student (view receipt) error:', xhr.responseText, status, error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to fetch receipt: ' + (xhr.responseJSON?.message || error),
-                    timer: 3000
-                });
-            }
-        });
-    });
-
-    // Renew functionality
-    $(document).on('click', '.renew-btn', function () {
-        const id = $(this).data('id');
-        $('#renewForm').off('submit').on('submit', function (event) {
-            if (this.checkValidity()) {
-                event.preventDefault();
-                $.ajax({
-                    url: '<?= base_url('Student_controller/renew_student/') ?>' + id,
-                    method: 'POST',
-                    data: {
-                        renewTotalFees: $('#renewTotalFees').val(),
-                        renewAmountPaid: $('#renewAmountPaid').val(),
-                        renewPaymentMethod: $('input[name="renewPaymentMethod"]:checked').val(),
-                        duration: $('#duration').val() || '1 month'
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log('renew_student response:', response);
-                        if (response.status === 'success') {
-                            loadStudents();
-                            $('#renewModal').modal('hide');
-                            this.classList.remove('was-validated');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                                timer: 3000
-                            });
-                            $('#receiptName').text(response.data.name || admissionData.name || 'N/A');
-                            $('#receiptContact').text(response.data.contact || admissionData.contact || 'N/A');
-                            $('#receiptCenter').text(response.data.center || admissionData.center || 'N/A');
-                            $('#receiptBatch').text(response.data.batch || admissionData.batch || 'N/A');
-                            $('#receiptCategory').text(response.data.category || admissionData.category || 'N/A');
-                            $('#receiptTotalFees').text(response.data.total_fees || '0');
-                            $('#receiptAmountPaid').text(response.data.amount_paid || '0');
-                            $('#receiptRemainingAmount').text(response.data.remaining_amount || '0');
-                            $('#receiptPaymentMethod').text(response.data.payment_method || 'N/A');
-                            $('#receiptModal').modal('show');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message || response.errors || 'Failed to renew student',
-                                timer: 3000
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('renew_student error:', xhr.responseText, status, error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to renew student: ' + (xhr.responseJSON?.message || error),
-                            timer: 3000
-                        });
-                    }
-                });
-            }
-            this.classList.add('was-validated');
-        });
-    });
-
-    // Filter students
-    $('#filterForm').on('submit', function (event) {
-        event.preventDefault();
-        if (!this.checkValidity()) {
-            console.log('Filter form validation failed');
-            return;
-        }
-
-        // Collect filter data
-        const filterData = {
-            filterName: $('#filterName').val().trim(),
-            filterContact: $('#filterContact').val().trim(),
-            filterCenter: $('#filterCenter').val().trim(),
-            filterBatch: $('#filterBatch').val().trim(),
-            filterCategory: $('#filterCategory').val().trim()
-        };
-
-        console.log('filterForm data sent:', filterData); // Debug: Log the filter data being sent
-
-        // Disable filter button to prevent multiple submissions
-        filterButton.disabled = true;
-        filterButton.textContent = 'Filtering...';
-
-        $.ajax({
-            url: '<?= base_url('Student_controller/filter_students') ?>',
-            method: 'POST',
-            data: filterData,
-            dataType: 'json',
-            success: function(response) {
-                console.log('filter_students response:', response); // Debug: Log the server response
-                tableBody.innerHTML = ''; // Clear the table
-                if (response.status === 'success' && Array.isArray(response.students) && response.students.length > 0) {
-                    response.students.forEach(student => {
-                        const row = `
-                            <tr>
-                                <td>${student.center || 'N/A'}</td>
-                                <td>${student.name || 'N/A'}</td>
-                                <td>${student.contact || 'N/A'}</td>
-                                <td>${student.batch || 'N/A'}</td>
-                                <td>${student.category || 'N/A'}</td>
-                                <td>${student.plan_expiry || 'N/A'}</td>
-                                <td>
-                                    <button class="action-btn edit-btn" data-id="${student.id}" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn" data-id="${student.id}"><i class="fas fa-trash"></i></button>
-                                    <button class="action-btn view-btn" data-id="${student.id}" data-toggle="modal" data-target="#receiptModal"><i class="fas fa-eye"></i></button>
-                                    <button class="action-btn renew-btn" data-id="${student.id}" data-toggle="modal" data-target="#renewModal"><i class="fas fa-sync"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="horizontal-line"><td colspan="7"></td></tr>
-                        `;
-                        tableBody.insertAdjacentHTML('beforeend', row);
-                    });
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: `Found ${response.students.length} matching student(s)`,
-                        timer: 2000
-                    });
-                } else {
-                    console.warn('No students found or invalid response:', response);
-                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No records match the filter criteria.</td></tr>';
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No Results',
-                        text: response.message || 'No students match the filter criteria.',
-                        timer: 2000
-                    });
-                }
-                $('#filterModal').modal('hide');
-                this.reset();
-                this.classList.remove('was-validated');
-                this.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
-            },
-            error: function(xhr, status, error) {
-                console.error('filter_students error:', {
-                    responseText: xhr.responseText,
-                    status: status,
-                    error: error,
-                    statusCode: xhr.status
-                });
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Failed to load filtered records.</td></tr>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to filter students: ' + (xhr.responseJSON?.message || error || 'Server error'),
-                    timer: 3000
-                });
-                $('#filterModal').modal('hide');
-            },
-            complete: function() {
-                // Re-enable filter button
-                filterButton.disabled = false;
-                filterButton.textContent = 'Apply Filter';
-            }
-        });
-    });
-
-    // Clear filter form on modal close
-    $('#filterModal').on('hidden.bs.modal', function () {
-        const form = document.getElementById('filterForm');
-        form.reset();
-        form.classList.remove('was-validated');
-        form.querySelectorAll('input, select').forEach(input => input.setCustomValidity(''));
-        loadStudents();
-    });
-
-    // Sidebar toggle functionality
-    $('#sidebarToggle').on('click', function () {
-        if ($(window).width() <= 576) {
-            $('#sidebar').toggleClass('active');
-            $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-        } else {
-            const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-            $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-            $('#contentWrapper').toggleClass('minimized', isMinimized);
-        }
-    });
-
-    // Handle window resize
-    $(window).on('resize', function () {
-        if ($(window).width() <= 576) {
-            $('#sidebar').removeClass('minimized');
-            $('.navbar').removeClass('sidebar-minimized');
-            $('#contentWrapper').removeClass('minimized');
-        }
-    });
-});
- </script>
+  </script>
 </body>
 </html>

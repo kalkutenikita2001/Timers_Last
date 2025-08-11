@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Leave Management</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-    <!-- Montserrat Font -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -16,139 +14,179 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Montserrat', serif !important;
             background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow-x: hidden;
         }
+
         .content-wrapper {
             margin-left: 250px;
-            padding: 20px;
+            padding: 2vw;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            min-height: 100vh;
+            width: calc(100% - 250px);
         }
+
         .content-wrapper.minimized {
             margin-left: 60px;
+            width: calc(100% - 60px);
         }
+
         .container {
-            max-width: 1200px;
-            margin: 70px auto 0;
+            max-width: calc(1200px + 2vw);
+            margin: 4rem auto 0;
             width: 100%;
+            padding: 0 1rem;
         }
-        /* Tab Styles */
+
         .tab-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 1vw;
             background: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
+
         .tab-buttons button {
             background: #fff;
             color: #333;
             border: 1px solid #ddd;
             border-radius: 10px;
-            padding: 12px 25px;
+            padding: 0.75rem 1.5rem;
             font-weight: 600;
-            font-size: 14px;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             min-width: 120px;
             text-align: center;
         }
+
         .tab-buttons button.active {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: #fff;
             border-color: #ff4040;
         }
+
         .tab-buttons button:hover {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: #fff;
             transform: translateY(-2px);
         }
-        /* Table Styles */
+
         .table-container {
-            /* overflow-x: auto; */
-            margin-top: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
             background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            overflow-x: auto;
         }
+
         .table {
             width: 100%;
             border-collapse: collapse;
-            background: #fff;
-            border-radius: 0.5rem;
-            overflow: hidden;
         }
+
         .table thead th {
-            color: black;
+            background-color: #343a40;
+            color: white;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 1rem;
             text-align: center;
             font-weight: 600;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            padding: 1rem;
         }
+
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
             padding: 0.75rem;
-            white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
-            font-size: 0.9rem;
+            font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+            color: #000;
         }
+
+        .table tbody tr {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table tbody tr:last-child {
+            border-bottom: none;
+        }
+
         .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-            transition: background-color 0.3s ease;
+            background-color: rgba(0, 123, 255, 0.1);
         }
-        .action-cell {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-        }
+
         .action-btn {
             background: none;
             border: none;
             font-size: 1rem;
-            margin: 0 0.25rem;
-            transition: transform 0.2s ease, color 0.3s ease;
-            color: #6c757d;
+            margin: 0 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+
+        .action-btn.thumbs-up {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .action-btn.cross {
+            background-color: #dc3545;
+            color: white;
+        }
+
         .action-btn:hover {
-            transform: scale(1.2);
-            color: #007bff;
+            filter: brightness(90%);
         }
-        /* Add Button */
+
+        .action-btn:disabled {
+            background-color: #ccc !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
         .add-btn-container {
             display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .add-btn {
-            background-color: white;
-            color: black;
-            padding: 10px 20px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            min-width: 150px;
-            height: 40px;
-            display: inline-flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+            gap: 0.75rem;
             align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            flex-wrap: wrap;
         }
-        .add-btn:hover {
-            transform: scale(1.05);
+
+        .btn-custom {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
         }
-        /* Modal Styles */
+
+        .btn-custom:hover {
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -160,10 +198,12 @@
             background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease-in-out;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
         .modal-content {
             background: #fff;
             margin: 10% auto;
@@ -174,256 +214,336 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease-in-out;
         }
+
         @keyframes slideIn {
             from { transform: translateY(-30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
         .modal-header {
             text-align: center;
             padding: 15px;
             border-bottom: none;
             position: relative;
         }
+
         .modal-title {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: 600;
             color: #333;
             margin: 0;
         }
+
         .close {
             position: absolute;
             right: 15px;
             top: 15px;
             color: #666;
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s ease;
         }
+
         .close:hover {
             color: #dc3545;
         }
+
         .modal-body {
             padding: 15px;
         }
+
         .form-row {
             display: flex;
             flex-wrap: wrap;
-            /* gap: 10px; */
-            margin-bottom: 10px;
+            margin-right: -5px;
+            margin-left: -5px;
+            align-items: center;
         }
+
         .form-group {
-            margin-bottom: 1rem;
+            padding-right: 5px;
+            padding-left: 5px;
+            margin-bottom: 0.8rem;
+            flex: 0 0 50%;
+            max-width: 50%;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 0.4rem;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
             color: #333;
         }
-        .form-group input,
-        .form-group textarea {
+
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ced4da;
             border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             background: #fff;
             color: #333;
             box-sizing: border-box;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        .form-group input:focus,
-        .form-group textarea:focus {
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
         }
+
         .form-group textarea {
             resize: vertical;
             min-height: 60px;
         }
+
         .error {
             color: #dc3545;
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 1.8vw, 0.8rem);
             margin-top: 4px;
             display: none;
             font-weight: 500;
         }
-        .form-group.invalid input,
-        .form-group.invalid textarea {
+
+        .form-group.invalid input, .form-group.invalid textarea, .form-group.invalid select {
             border-color: #dc3545;
             box-shadow: 0 0 6px rgba(220, 53, 69, 0.2);
         }
+
         .form-group.invalid .error {
             display: block;
         }
+
         .save-btn {
-            /* background: #007bff; */
-            color: black;
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: white;
             border: none;
             padding: 10px 30px;
             border-radius: 20px;
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
             font-weight: 600;
             cursor: pointer;
             display: block;
             margin: 15px auto 0;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
+
         .save-btn:hover {
-            /* background: #0056b3; */
             transform: translateY(-2px);
         }
+
         .save-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
-        /* Responsive Design */
+
         @media (max-width: 576px) {
+            body {
+                padding: 0.5rem;
+            }
+
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 0.75rem !important;
+                padding: 0.5rem !important;
+                width: 100%;
             }
+
             .container {
-                margin-top: 50px;
-                padding: 0 10px;
+                margin-top: 3rem;
+                padding: 0 0.5rem;
             }
+
+            .table-container {
+                -webkit-overflow-scrolling: touch;
+            }
+
             .table {
                 min-width: 800px;
-                font-size: 0.8rem;
+                font-size: clamp(0.65rem, 2vw, 0.7rem);
             }
+
             .table td, .table th {
                 padding: 0.5rem;
             }
+
             .action-btn {
-                font-size: 0.8rem;
-                margin: 0 0.1rem;
+                font-size: clamp(0.65rem, 2vw, 0.7rem);
+                padding: 0.2rem 0.4rem;
             }
+
             .modal-content {
                 width: 95%;
                 max-width: 360px;
                 margin: 15% auto;
+                padding: 10px;
             }
+
             .modal-header {
                 padding: 10px;
             }
+
             .modal-title {
-                font-size: 1.2rem;
+                font-size: clamp(1rem, 3.5vw, 1.2rem);
             }
+
             .close {
-                font-size: 1.2rem;
+                font-size: clamp(1rem, 3vw, 1.2rem);
                 right: 10px;
                 top: 10px;
             }
+
             .modal-body {
                 padding: 10px;
             }
+
             .form-row {
                 flex-direction: column;
-                gap: 6px;
-                margin-bottom: 6px;
             }
+
             .form-group {
-                margin-bottom: 0.8rem;
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 0.6rem;
             }
-            .form-group label {
-                font-size: 0.85rem;
-                margin-bottom: 0.3rem;
+
+            .add-btn-container {
+                justify-content: center;
             }
-            .form-group input,
-            .form-group textarea {
-                padding: 6px;
-                font-size: 0.85rem;
+
+            .btn-custom {
+                font-size: clamp(0.7rem, 2vw, 0.75rem);
+                padding: 0.3rem 0.6rem;
             }
-            .form-group textarea {
-                min-height: 50px;
-            }
-            .error {
-                font-size: 0.75rem;
-                margin-top: 3px;
-            }
-            .add-btn {
-                font-size: 12px;
-                min-width: 120px;
-                height: 34px;
-                padding: 8px 15px;
-            }
-            .save-btn {
-                padding: 8px 25px;
-                font-size: 0.9rem;
-                margin: 10px auto 0;
-            }
+
             .tab-buttons {
                 flex-direction: column;
                 gap: 8px;
                 align-items: center;
             }
+
             .tab-buttons button {
-                font-size: 12px;
+                font-size: clamp(0.7rem, 2vw, 0.75rem);
                 padding: 8px 15px;
                 width: 100%;
                 max-width: 180px;
             }
         }
-        @media (min-width: 577px) and (max-width: 991px) {
+
+        @media (min-width: 577px) and (max-width: 767px) {
             .content-wrapper {
                 margin-left: 200px;
                 padding: 1rem;
+                width: calc(100% - 200px);
             }
+
             .content-wrapper.minimized {
                 margin-left: 60px;
+                width: calc(100% - 60px);
             }
+
             .container {
-                margin-top: 60px;
+                margin-top: 3.5rem;
+                padding: 0 0.75rem;
             }
+
             .table {
-                font-size: 0.9rem;
+                font-size: clamp(0.75rem, 2vw, 0.8rem);
             }
+
             .modal-content {
                 width: 90%;
                 max-width: 450px;
-                margin: 10% auto;
+                margin: 12% auto;
             }
+
             .modal-body {
                 padding: 12px;
             }
+
             .form-row {
-                flex-direction: column;
-                gap: 8px;
-                margin-bottom: 8px;
+                flex-direction: row;
+                flex-wrap: wrap;
             }
-            .form-group label {
-                font-size: 0.9rem;
-                margin-bottom: 0.3rem;
+
+            .form-group {
+                flex: 0 0 50%;
+                max-width: 50%;
             }
-            .form-group input,
-            .form-group textarea {
-                padding: 7px;
-                font-size: 0.85rem;
-            }
-            .save-btn {
-                padding: 8px 25px;
-                font-size: 0.9rem;
-            }
+
             .tab-buttons button {
-                font-size: 13px;
+                font-size: clamp(0.75rem, 2vw, 0.8rem);
+                padding: 8px 15px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+            .content-wrapper {
+                margin-left: 200px;
+                padding: 1.5rem;
+                width: calc(100% - 200px);
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+            }
+
+            .container {
+                margin-top: 4rem;
+                padding: 0 1rem;
+            }
+
+            .table {
+                font-size: clamp(0.8rem, 2vw, 0.85rem);
+            }
+
+            .modal-content {
+                width: 90%;
+                max-width: 500px;
+                margin: 10% auto;
+            }
+
+            .modal-body {
+                padding: 12px;
+            }
+
+            .form-row {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .form-group {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
+            .tab-buttons button {
+                font-size: clamp(0.8rem, 2vw, 0.85rem);
                 padding: 10px 20px;
             }
         }
+
         @media (min-width: 992px) {
+            .content-wrapper {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+            }
+
             .modal-content {
                 max-width: 600px;
             }
+
+            .tab-buttons button {
+                font-size: clamp(0.85rem, 2vw, 0.875rem);
+            }
         }
-        /* Touch device hover fix */
+
         @media (hover: none) {
-            .action-btn:hover,
-            .add-btn:hover,
-            .save-btn:hover,
-            .tab-buttons button:hover {
+            .action-btn:hover, .btn-custom:hover, .save-btn:hover, .tab-buttons button:hover {
                 background-color: inherit;
                 transform: none;
                 box-shadow: none;
@@ -432,24 +552,18 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <?php $this->load->view('superadmin/Include/Sidebar') ?>
-    <!-- Navbar -->
     <?php $this->load->view('superadmin/Include/Navbar') ?>
-
     <div class="content-wrapper" id="contentWrapper">
         <div class="container">
-            <!-- Tab Buttons -->
             <div class="tab-buttons">
                 <button class="active" onclick="switchTab('Center 1')">Center 1</button>
                 <button onclick="switchTab('Center 2')">Center 2</button>
                 <button onclick="switchTab('Center 3')">Center 3</button>
                 <button onclick="switchTab('Center 4')">Center 4</button>
             </div>
-
-            <!-- Leave Table -->
             <div class="table-container">
-                <table class="table table-bordered table-hover table-striped">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -462,56 +576,16 @@
                         </tr>
                     </thead>
                     <tbody id="leaveTableBody">
-                        <tr>
-                            <td>Jane Doe</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>15/07/2025</td>
-                            <td>Personal</td>
-                            <td>Attending a family event</td>
-                            <td class="action-cell">
-                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>John Smith</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>16/07/2025</td>
-                            <td>Medical</td>
-                            <td>Doctor appointment</td>
-                            <td class="action-cell">
-                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Alice Brown</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>17/07/2025</td>
-                            <td>Personal</td>
-                            <td>Family event</td>
-                            <td class="action-cell">
-                                <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                                <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- Add Button -->
             <div class="add-btn-container">
-                <button class="add-btn" onclick="openModal()">
+                <button class="btn btn-custom" onclick="openModal()">
                     <i class="fas fa-plus me-1"></i> Add Leave
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
     <div id="leaveModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -521,31 +595,38 @@
             <div class="modal-body">
                 <form id="leaveForm">
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" class="form-control" required placeholder="Enter full name">
                             <div class="error">Please enter a valid name (letters only, min 2 characters)</div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group">
                             <label for="batch">Batch</label>
-                            <input type="text" id="batch" name="batch" class="form-control" required placeholder="Enter batch code (e.g., B1)">
-                            <div class="error">Please enter a valid batch (alphanumeric, 1-10 characters)</div>
+                            <select id="batch" name="batch" class="form-control" required>
+                                <option value="">Select Batch</option>
+                            </select>
+                            <div class="error">Please select a valid batch</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group">
                             <label for="level">Level</label>
-                            <input type="text" id="level" name="level" class="form-control" required placeholder="Beginner, Intermediate, or Advanced">
-                            <div class="error">Please enter Beginner, Intermediate, or Advanced</div>
+                            <select id="level" name="level" class="form-control" required>
+                                <option value="">Select Level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                            <div class="error">Please select a level</div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group">
                             <label for="date">Date</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                             <div class="error">Please select a future date</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-12">
+                        <div class="form-group">
                             <label for="reason">Reason</label>
                             <input type="text" id="reason" name="reason" class="form-control" required placeholder="Enter reason for leave">
                             <div class="error">Please enter a reason (min 5 characters)</div>
@@ -563,32 +644,12 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap + jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Sample data for each center
-        const centerData = {
-            'Center 1': [
-                { name: 'Jane Doe', batch: 'B1', level: 'Intermediate', date: '2025-07-15', reason: 'Personal', description: 'Attending a family event' },
-                { name: 'John Smith', batch: 'B1', level: 'Intermediate', date: '2025-07-16', reason: 'Medical', description: 'Doctor appointment' },
-                { name: 'Alice Brown', batch: 'B1', level: 'Intermediate', date: '2025-07-17', reason: 'Personal', description: 'Family event' }
-            ],
-            'Center 2': [
-                { name: 'Bob Wilson', batch: 'B2', level: 'Beginner', date: '2025-07-18', reason: 'Vacation', description: 'Annual leave' },
-                { name: 'Emma Davis', batch: 'B2', level: 'Beginner', date: '2025-07-19', reason: 'Sick', description: 'Flu recovery' }
-            ],
-            'Center 3': [
-                { name: 'Michael Lee', batch: 'B3', level: 'Advanced', date: '2025-07-20', reason: 'Emergency', description: 'Family emergency' },
-                { name: 'Sarah Adams', batch: 'B3', level: 'Advanced', date: '2025-07-21', reason: 'Travel', description: 'Business trip' }
-            ],
-            'Center 4': [
-                { name: 'David Clark', batch: 'B4', level: 'Intermediate', date: '2025-07-22', reason: 'Personal', description: 'Personal commitment' }
-            ]
-        };
-
-        // Modal functionality
+        const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+        const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
         const modal = document.getElementById('leaveModal');
         const form = document.getElementById('leaveForm');
         let editingRow = null;
@@ -597,6 +658,7 @@
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             resetForm();
+            loadBatches();
         }
 
         function closeModal() {
@@ -619,7 +681,6 @@
             });
         }
 
-        // Form validation
         function validateForm() {
             const name = document.getElementById('name');
             const batch = document.getElementById('batch');
@@ -627,46 +688,37 @@
             const date = document.getElementById('date');
             const reason = document.getElementById('reason');
             const description = document.getElementById('description');
-            
-            let isValid = true;
 
-            // Clear previous errors
+            let isValid = true;
             clearValidationErrors();
 
-            // Validate name (letters only, min 2 characters)
             if (!name.value.trim() || !/^[a-zA-Z\s]{2,}$/.test(name.value.trim())) {
                 name.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            // Validate batch (alphanumeric, 1-10 characters)
-            if (!batch.value.trim() || !/^[a-zA-Z0-9]{1,10}$/.test(batch.value.trim())) {
+            if (!batch.value.trim()) {
                 batch.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            // Validate level (Beginner, Intermediate, Advanced)
-            const validLevels = ['Beginner', 'Intermediate', 'Advanced'];
-            if (!level.value.trim() || !validLevels.includes(level.value.trim())) {
+            if (!level.value.trim()) {
                 level.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            // Validate date (future date)
-            const today = new Date('2025-07-31');
+            const today = new Date();
             const selectedDate = new Date(date.value);
             if (!date.value || selectedDate <= today) {
                 date.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            // Validate reason (min 5 characters)
             if (!reason.value.trim() || reason.value.trim().length < 5) {
                 reason.closest('.form-group').classList.add('invalid');
                 isValid = false;
             }
 
-            // Validate description (10-500 characters)
             if (!description.value.trim() || description.value.trim().length < 10 || description.value.trim().length > 500) {
                 description.closest('.form-group').classList.add('invalid');
                 isValid = false;
@@ -675,44 +727,104 @@
             return isValid;
         }
 
-        // Form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const saveBtn = form.querySelector('.save-btn');
-            saveBtn.disabled = true; // Disable button during submission
-            
+            saveBtn.disabled = true;
+
             if (validateForm()) {
                 const formData = new FormData(form);
+                const activeCenter = document.querySelector('.tab-buttons button.active').textContent;
                 const data = {
                     name: formData.get('name'),
                     batch: formData.get('batch'),
                     level: formData.get('level'),
                     date: formData.get('date'),
                     reason: formData.get('reason'),
-                    description: formData.get('description')
+                    description: formData.get('description'),
+                    center: activeCenter,
+                    status: 'Pending',
+                    [csrfName]: csrfHash
                 };
 
-                const tableBody = document.getElementById('leaveTableBody');
-                if (editingRow) {
-                    updateRow(editingRow, data);
-                } else {
-                    addNewRow(data);
-                    const activeCenter = document.querySelector('.tab-buttons button.active').textContent;
-                    centerData[activeCenter].push(data);
-                }
-
-                closeModal();
+                $.ajax({
+                    url: '<?php echo base_url('leave/add_leave'); ?>',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            fetchLeaves(activeCenter);
+                            closeModal();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Leave request added successfully!',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || 'Failed to add leave.',
+                                showConfirmButton: true
+                            });
+                        }
+                        saveBtn.disabled = false;
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.',
+                            showConfirmButton: true
+                        });
+                        saveBtn.disabled = false;
+                    }
+                });
             } else {
-                saveBtn.disabled = false; // Re-enable button if validation fails
+                saveBtn.disabled = false;
             }
         });
 
-        // Add new row to table
+        function loadBatches() {
+            $.ajax({
+                url: '<?php echo base_url('leave/get_batches'); ?>',
+                type: 'POST',
+                data: { [csrfName]: csrfHash },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        const batchSelect = document.getElementById('batch');
+                        batchSelect.innerHTML = '<option value="">Select Batch</option>';
+                        response.data.forEach(batch => {
+                            const option = document.createElement('option');
+                            option.value = batch.batch;
+                            option.textContent = batch.batch;
+                            batchSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Error loading batches:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                }
+            });
+        }
+
         function addNewRow(data) {
             const tableBody = document.getElementById('leaveTableBody');
             const row = document.createElement('tr');
-            
+            const isApproved = data.status === 'Approved';
+            const isRejected = data.status === 'Rejected';
+            const approveDisabled = isApproved || isRejected ? 'disabled' : '';
+            const rejectDisabled = isApproved || isRejected ? 'disabled' : '';
+            const rowBackground = isApproved ? 'background-color: #d4edda;' : isRejected ? 'background-color: #f8d7da;' : '';
+
+            row.setAttribute('data-id', data.id);
+            row.style.cssText = rowBackground;
             row.innerHTML = `
                 <td>${data.name}</td>
                 <td>${data.batch}</td>
@@ -720,40 +832,116 @@
                 <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
                 <td>${data.reason}</td>
                 <td>${data.description}</td>
-                <td class="action-cell">
-                    <button class="action-btn thumbs-up" onclick="approveLeave(this)"><i class="fas fa-check"></i></button>
-                    <button class="action-btn cross" onclick="rejectLeave(this)"><i class="fas fa-times"></i></button>
+                <td>
+                    <button class="action-btn thumbs-up" onclick="approveLeave(this, ${data.id})" ${approveDisabled}><i class="fas fa-check"></i></button>
+                    <button class="action-btn cross" onclick="rejectLeave(this, ${data.id})" ${rejectDisabled}><i class="fas fa-times"></i></button>
                 </td>
             `;
-            
             tableBody.appendChild(row);
         }
 
-        // Update existing row
-        function updateRow(row, data) {
-            const cells = row.querySelectorAll('td');
-            cells[0].textContent = data.name;
-            cells[1].textContent = data.batch;
-            cells[2].textContent = data.level;
-            cells[3].textContent = new Date(data.date).toLocaleDateString('en-GB');
-            cells[4].textContent = data.reason;
-            cells[5].textContent = data.description;
-        }
-
-        // Approve and Reject functionality
-        function approveLeave(button) {
+        function approveLeave(button, leaveId) {
             const row = button.closest('tr');
-            row.style.backgroundColor = '#d4edda';
-            alert(`Leave for ${row.cells[0].textContent} approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Do you want to approve the leave for ${row.cells[0].textContent}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?php echo base_url('leave/update_status'); ?>',
+                        type: 'POST',
+                        data: { id: leaveId, status: 'Approved', [csrfName]: csrfHash },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                row.style.backgroundColor = '#d4edda';
+                                button.disabled = true;
+                                row.querySelector('.action-btn.cross').disabled = true;
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Approved',
+                                    text: `Leave for ${row.cells[0].textContent} approved at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message || 'Failed to approve leave.',
+                                    showConfirmButton: true
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred. Please try again.',
+                                showConfirmButton: true
+                            });
+                        }
+                    });
+                }
+            });
         }
 
-        function rejectLeave(button) {
+        function rejectLeave(button, leaveId) {
             const row = button.closest('tr');
-            row.style.backgroundColor = '#f8d7da';
-            alert(`Leave for ${row.cells[0].textContent} rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Do you want to reject the leave for ${row.cells[0].textContent}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?php echo base_url('leave/update_status'); ?>',
+                        type: 'POST',
+                        data: { id: leaveId, status: 'Rejected', [csrfName]: csrfHash },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                row.style.backgroundColor = '#f8d7da';
+                                button.disabled = true;
+                                row.querySelector('.action-btn.thumbs-up').disabled = true;
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Rejected',
+                                    text: `Leave for ${row.cells[0].textContent} rejected at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message || 'Failed to reject leave.',
+                                    showConfirmButton: true
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred. Please try again.',
+                                showConfirmButton: true
+                            });
+                        }
+                    });
+                }
+            });
         }
 
-        // Sidebar toggle functionality
         document.addEventListener('DOMContentLoaded', () => {
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
@@ -777,11 +965,38 @@
                 });
             }
 
-            // Initialize Center 1 table on page load
             switchTab('Center 1');
         });
 
-        // Tab switching functionality
+        function fetchLeaves(center) {
+            $.ajax({
+                url: '<?php echo base_url('leave/get_leaves'); ?>',
+                type: 'POST',
+                data: { center: center, [csrfName]: csrfHash },
+                dataType: 'json',
+                success: function(response) {
+                    const tableBody = document.getElementById('leaveTableBody');
+                    tableBody.innerHTML = '';
+                    if (response.status === 'success') {
+                        const data = response.data || [];
+                        if (data.length === 0) {
+                            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No records available for this center.</td></tr>';
+                        } else {
+                            data.forEach(item => addNewRow(item));
+                        }
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Error loading data.</td></tr>';
+                        console.error('Error fetching leaves:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    const tableBody = document.getElementById('leaveTableBody');
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">An error occurred. Please try again.</td></tr>';
+                    console.error('AJAX error:', error);
+                }
+            });
+        }
+
         function switchTab(center) {
             const buttons = document.querySelectorAll('.tab-buttons button');
             buttons.forEach(btn => {
@@ -790,18 +1005,7 @@
                     btn.classList.add('active');
                 }
             });
-
-            // Clear table body
-            const tableBody = document.getElementById('leaveTableBody');
-            tableBody.innerHTML = '';
-
-            // Populate table with data for the selected center
-            const data = centerData[center] || [];
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No records available for this center.</td></tr>';
-            } else {
-                data.forEach(item => addNewRow(item));
-            }
+            fetchLeaves(center);
         }
     </script>
 </body>

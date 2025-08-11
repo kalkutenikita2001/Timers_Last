@@ -78,7 +78,7 @@ $route['Leave'] = 'admin/Leave';
 $route['Profile'] = 'admin/Profile';
 $route['Dashboard'] = 'admin/Dashboard';
 $route['Finance'] = 'admin/Finance';
-$route['venue'] = 'admin/venue';
+$route['locker_fees'] = 'admin/locker_fees';
 
 
 // base module
@@ -94,3 +94,26 @@ $route['event_notice'] = 'event_notice/index';
 $route['revenue'] = 'revenue/index';
 $route['expense/(:any)'] = 'expense/$1';
 $route['expense'] = 'expense/index';
+// Route for the Leave controller
+$route['leave'] = 'leave/index';
+$route['leave/get_leaves'] = 'leave/get_leaves';
+$route['leave/add_leave'] = 'leave/add_leave';
+$route['leave/update_leave'] = 'leave/update_leave';
+$route['leave/delete_leave'] = 'leave/delete_leave';
+$route['leave/get_batches'] = 'leave/get_batches';
+// 
+$route['income_expenses'] = 'admincontroller/income_expenses/index';
+$route['income_expenses/get_income_expenses'] = 'admincontroller/income_expenses/get_income_expenses';
+$route['income_expenses/get_income_expense/(:num)'] = 'admincontroller/income_expenses/get_income_expense/$1';
+$route['income_expenses/add_income_expense'] = 'admincontroller/income_expenses/add_income_expense';
+$route['income_expenses/update_income_expense'] = 'admincontroller/income_expenses/update_income_expense';
+$route['income_expenses/approve_income_expense/(:num)'] = 'admincontroller/income_expenses/approve_income_expense/$1';
+$route['income_expenses/reject_income_expense/(:num)'] = 'admincontroller/income_expenses/reject_income_expense/$1';
+
+// Locker Fees Routes
+$route['admin/locker_fees'] = 'admincontroller/locker_fees/index';
+$route['admin/locker_fees/add'] = 'admincontroller/locker_fees/add';
+$route['admin/locker_fees/update'] = 'admincontroller/locker_fees/update';
+$route['admin/locker_fees/get_by_id/(:num)'] = 'admincontroller/locker_fees/get_by_id/$1';
+$route['admin/locker_fees/delete/(:num)'] = 'admincontroller/locker_fees/delete/$1';
+$route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
