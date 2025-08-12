@@ -906,6 +906,7 @@
             <p><strong>Amount Paid:</strong> Rs. <span id="receiptAmountPaid"></span></p>
             <p><strong>Remaining Amount:</strong> Rs. <span id="receiptRemainingAmount"></span></p>
             <p><strong>Payment Method:</strong> <span id="receiptPaymentMethod"></span></p>
+            <p><strong>Attendance Link:</strong>  <a id="attendancelink" href="#" target="_blank" style="word-break: break-all; display: inline-block; max-width: 100%;"></a></p>
           </div>
         </div>
         <div class="modal-footer">
@@ -1252,6 +1253,7 @@
                 $('#receiptAmountPaid').text(response.data.amount_paid);
                 $('#receiptRemainingAmount').text(response.data.remaining_amount);
                 $('#receiptPaymentMethod').text(response.data.payment_method);
+                 $('#attendancelink').attr('href', response.data.attendace_link || '#').text(response.data.attendace_link || 'N/A');
                 $('#receiptModal').modal('show');
                 $('#feesDetailsModal').modal('hide');
                 forms.forEach(f => f.reset());
@@ -1439,6 +1441,7 @@
               $('#receiptAmountPaid').text(response.data.amount_paid || '0');
               $('#receiptRemainingAmount').text(response.data.remaining_amount || '0');
               $('#receiptPaymentMethod').text(response.data.payment_method || 'N/A');
+              $('#attendancelink').attr('href', response.data.attendace_link || '#').text(response.data.attendace_link || 'N/A');
             } else {
               Swal.fire({
                 icon: 'error',
