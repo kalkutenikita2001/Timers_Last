@@ -1,64 +1,65 @@
 <?php
+// application/controllers/admincontroller/Add_on_facilities.php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Locker_fees extends CI_Controller {
+class Add_on_facilities extends CI_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model('adminmodels/Locker_fee_model');
+        $this->load->model('adminmodels/Add_on_facility_model');
         $this->load->helper('url');
         $this->load->library('session');
     }
 
     public function index() {
         $filters = array(
-            'filterVenue' => $this->input->post('filterVenue'),
+            'filterFacility' => $this->input->post('filterFacility'),
             'filterTitle' => $this->input->post('filterTitle'),
             'filterDate' => $this->input->post('filterDate'),
             'filterMinAmount' => $this->input->post('filterMinAmount'),
             'filterMaxAmount' => $this->input->post('filterMaxAmount')
         );
 
-        $data['locker_fees'] = $this->Locker_fee_model->get_all_locker_fees($filters);
+        $data['add_on_facilities'] = $this->Add_on_facility_model->get_all_add_on_facilities($filters);
         $data['csrf_token'] = $this->security->get_csrf_hash();
 
         if ($this->input->is_ajax_request()) {
             echo json_encode(array(
-                'locker_fees' => $data['locker_fees'],
+                'add_on_facilities' => $data['add_on_facilities'],
                 'csrf_token' => $data['csrf_token']
             ));
         } else {
-            $this->load->view('admin/locker_fees', $data);
+            $this->load->view('admin/add_on_facilities', $data);
         }
     }
 
     public function filter() {
         $filters = array(
-            'filterVenue' => $this->input->post('filterVenue'),
+            'filterFacility' => $this->input->post('filterFacility'),
             'filterTitle' => $this->input->post('filterTitle'),
             'filterDate' => $this->input->post('filterDate'),
             'filterMinAmount' => $this->input->post('filterMinAmount'),
             'filterMaxAmount' => $this->input->post('filterMaxAmount')
         );
 
-        $data['locker_fees'] = $this->Locker_fee_model->get_all_locker_fees($filters);
+        $data['add_on_facilities'] = $this->Add_on_facility_model->get_all_add_on_facilities($filters);
         $data['csrf_token'] = $this->security->get_csrf_hash();
 
         echo json_encode(array(
-            'locker_fees' => $data['locker_fees'],
+            'add_on_facilities' => $data['add_on_facilities'],
             'csrf_token' => $data['csrf_token']
         ));
     }
 
     public function add() {
         $data = array(
-            'venue' => $this->input->post('venue'),
+            'facility' => $this->input->post('facility'),
             'title' => $this->input->post('title'),
             'date' => $this->input->post('date'),
             'amount' => $this->input->post('amount'),
             'description' => $this->input->post('description')
         );
 
-        $result = $this->Locker_fee_model->add_locker_fee($data);
+        $result = $this->Add_on_facility_model->add_add_on_facility($data);
         if ($result) {
             $response = array(
                 'status' => 'success',
@@ -79,13 +80,13 @@ class Locker_fees extends CI_Controller {
     public function update() {
         $id = $this->input->post('id');
         $data = array(
-            'venue' => $this->input->post('venue'),
+            'facility' => $this->input->post('facility'),
             'title' => $this->input->post('title'),
             'date' => $this->input->post('date'),
             'amount' => $this->input->post('amount'),
             'description' => $this->input->post('description')
         );
-        $result = $this->Locker_fee_model->update_locker_fee($id, $data);
+        $result = $this->Add_on_facility_model->update_add_on_facility($id, $data);
         if ($result) {
             $response = array(
                 'status' => 'success',
@@ -104,11 +105,11 @@ class Locker_fees extends CI_Controller {
     }
 
     public function get_by_id($id) {
-        $fee = $this->Locker_fee_model->get_locker_fee_by_id($id);
-        if ($fee) {
+        $facility = $this->Add_on_facility_model->get_add_on_facility_by_id($id);
+        if ($facility) {
             $response = array(
                 'status' => 'success',
-                'data' => $fee,
+                'data' => $facility,
                 'csrf_token' => $this->security->get_csrf_hash()
             );
         } else {
@@ -122,7 +123,7 @@ class Locker_fees extends CI_Controller {
     }
 
     public function delete($id) {
-        $result = $this->Locker_fee_model->delete_locker_fee($id);
+        $result = $this->Add_on_facility_model->delete_add_on_facility($id);
         if ($result) {
             $response = array(
                 'status' => 'success',

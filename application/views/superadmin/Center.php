@@ -369,9 +369,7 @@
         margin-left: 200px;
         padding: 15px;
       }
-      .content-wrapper.minimized {
-        margin-left: 60px;
-      }
+      
       .center-card {
         max-width: 18rem;
         margin: 0.5rem;

@@ -1,4 +1,5 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <div class="sidebar" id="sidebar">
     <div class="logo">
         <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
@@ -25,8 +26,8 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'locker_fees') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/locker_fees'; ?>">
-            <i class="bi bi-geo-alt"></i><span>Venue</span>
+        <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
+            <i class="bi bi-plus-circle"></i><span>AddOnfacility</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
@@ -75,11 +76,13 @@
         transition: all 0.3s ease;
         margin: 5px 10px;
         border-radius: 30px;
+        background-color: transparent;
     }
 
     .sidebar.minimized .nav-link {
         justify-content: center;
         padding: 10px;
+        background-color: transparent !important;
     }
 
     .sidebar .nav-link:hover,
@@ -98,6 +101,7 @@
 
     .sidebar.minimized .nav-link i {
         margin-right: 0;
+        font-size: 18px; /* Slightly larger for better visibility */
     }
 
     .sidebar .logo {

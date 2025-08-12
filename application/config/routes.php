@@ -121,3 +121,5 @@ $route['admin/locker_fees/get_by_id/(:num)'] = 'admincontroller/locker_fees/get_
 $route['admin/locker_fees/delete/(:num)'] = 'admincontroller/locker_fees/delete/$1';
 $route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
 
+// Add this to application/config/routes.php
+$route['admin/add-on-facilities'] = 'admincontroller/add_on_facilities/index';
