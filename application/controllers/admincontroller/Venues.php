@@ -11,13 +11,18 @@ class Venues extends CI_Controller {
 
     public function index() {
         $filters = array(
-            'name' => $this->input->post('filterName'),
-            'time_start' => $this->input->post('filterTimeStart'),
-            'time_end' => $this->input->post('filterTimeEnd')
+            'name' => $this->input->post('filterName') ?: $this->input->get('filterName'),
+            'time_start' => $this->input->post('filterTimeStart') ?: $this->input->get('filterTimeStart'),
+            'time_end' => $this->input->post('filterTimeEnd') ?: $this->input->get('filterTimeEnd')
         );
-        $data['venues'] = $this->Venue_model->get_all_venues($filters);
+        $venues = $this->Venue_model->get_all_venues($filters);
         $data['csrf_token'] = $this->security->get_csrf_hash();
-        $this->load->view('admin/venues', $data); // Updated to match existing file location
+        if ($this->input->is_ajax_request()) {
+            echo json_encode(array('venues' => $venues, 'csrf_token' => $data['csrf_token']));
+        } else {
+            $data['venues'] = $venues;
+            $this->load->view('admin/venues', $data);
+        }
     }
 
     public function add() {
@@ -59,11 +64,6 @@ class Venues extends CI_Controller {
     public function get_by_id($id) {
         $venue = $this->Venue_model->get_venue_by_id($id);
         if ($venue) {
-            $batches = !empty($venue->batches) ? explode(';', $venue->batches) : array();
-            $venue->batches = array_map(function($batch) {
-                list($type, $duration, $time_start, $time_end) = explode(':', $batch);
-                return (object) array('type' => $type, 'duration' => $duration, 'time_start' => $time_start, 'time_end' => $time_end);
-            }, $batches);
             echo json_encode(array('status' => 'success', 'data' => $venue, 'csrf_token' => $this->security->get_csrf_hash()));
         } else {
             echo json_encode(array('status' => 'error', 'message' => 'Venue not found', 'csrf_token' => $this->security->get_csrf_hash()));

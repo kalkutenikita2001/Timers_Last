@@ -9,31 +9,25 @@ class Venue_model extends CI_Model {
 
     // Get all venues
     public function get_all_venues($filters = array()) {
-        $this->db->select('v.*, GROUP_CONCAT(b.type, ":", b.duration, ":", b.time_start, ":", b.time_end SEPARATOR ";") as batches');
-        $this->db->from('venues v');
-        $this->db->join('batches b', 'b.venue_id = v.id', 'left');
+        $this->db->select('*');
+        $this->db->from('venues');
         if (!empty($filters['name'])) {
-            $this->db->like('v.name', $filters['name']);
+            $this->db->like('name', $filters['name']);
         }
         if (!empty($filters['time_start'])) {
-            $this->db->where('v.time_start >=', $filters['time_start']);
+            $this->db->where('time_start >=', $filters['time_start']);
         }
         if (!empty($filters['time_end'])) {
-            $this->db->where('v.time_end <=', $filters['time_end']);
+            $this->db->where('time_end <=', $filters['time_end']);
         }
-        $this->db->group_by('v.id');
         $query = $this->db->get();
         return $query->result();
     }
 
     // Get venue by ID
     public function get_venue_by_id($id) {
-        $this->db->select('v.*, GROUP_CONCAT(b.type, ":", b.duration, ":", b.time_start, ":", b.time_end SEPARATOR ";") as batches');
-        $this->db->from('venues v');
-        $this->db->join('batches b', 'b.venue_id = v.id', 'left');
-        $this->db->where('v.id', $id);
-        $this->db->group_by('v.id');
-        $query = $this->db->get();
+        $this->db->where('id', $id);
+        $query = $this->db->get('venues');
         return $query->row();
     }
 
@@ -65,14 +59,14 @@ class Venue_model extends CI_Model {
     // Get batches by venue
     public function get_batches_by_venue($venue_id) {
         $this->db->where('venue_id', $venue_id);
-        $query = $this->db->get('batches');
+        $query = $this->db->get('venue_batches');
         return $query->result();
     }
 
     // Get batch by ID
     public function get_batch_by_id($id) {
         $this->db->where('id', $id);
-        $query = $this->db->get('batches');
+        $query = $this->db->get('venue_batches');
         return $query->row();
     }
 
@@ -84,7 +78,7 @@ class Venue_model extends CI_Model {
         if ($data['duration'] < 1) {
             return false;
         }
-        $this->db->insert('batches', $data);
+        $this->db->insert('venue_batches', $data);
         return $this->db->insert_id();
     }
 
@@ -97,13 +91,13 @@ class Venue_model extends CI_Model {
             return false;
         }
         $this->db->where('id', $id);
-        return $this->db->update('batches', $data);
+        return $this->db->update('venue_batches', $data);
     }
 
     // Delete batch
     public function delete_batch($id) {
         $this->db->where('id', $id);
-        $this->db->delete('batches');
+        $this->db->delete('venue_batches');
         return $this->db->affected_rows() > 0;
     }
 }

@@ -176,6 +176,9 @@
             opacity: 1;
             background: #e0e0e0;
         }
+        .form-group {
+            margin-bottom: 1rem !important;
+        }
         .form-group label {
             font-weight: 600;
             font-size: clamp(0.7rem, 1.5vw, 0.85rem);
@@ -200,6 +203,8 @@
             min-height: 3rem;
         }
         .invalid-feedback {
+            display: block;
+            margin-top: 0.25rem;
             font-size: clamp(0.6rem, 1.2vw, 0.75rem);
             color: #dc3545;
         }
@@ -248,7 +253,7 @@
             .action-btn { font-size: 0.6rem; padding: 0.15rem 0.3rem; margin: 0 0.1rem; }
             .modal-content { padding: 0.5rem; width: 95%; }
             .form-row { flex-direction: column; gap: 0.3rem; }
-            .form-group { margin-bottom: 0.4rem; }
+            .form-group { margin-bottom: 0.4rem !important; }
             .add-btn-container { justify-content: center; flex-direction: column; gap: 0.3rem; }
             .btn-custom { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
             .modal-title { font-size: 0.9rem; }
@@ -263,7 +268,7 @@
             .action-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; margin: 0 0.15rem; }
             .modal-content { padding: 0.75rem; width: 90%; }
             .form-row { flex-direction: column; gap: 0.5rem; }
-            .form-group { margin-bottom: 0.5rem; }
+            .form-group { margin-bottom: 0.5rem !important; }
             .add-btn-container { justify-content: center; flex-direction: column; gap: 0.5rem; }
             .btn-custom { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
             .modal-title { font-size: 1rem; }
@@ -333,6 +338,15 @@
         .add-batch-btn {
             margin-bottom: 1rem;
         }
+        .modal-note {
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .form-row {
+            align-items: flex-start !important;
+        }
     </style>
 </head>
 <body>
@@ -370,10 +384,10 @@
                                     <td><?php echo htmlspecialchars($venue->time_end); ?></td>
                                     <td><?php echo htmlspecialchars($venue->description); ?></td>
                                     <td>
-                                        <button class="action-btn view" data-id="<?php echo $venue->id; ?>" onclick="viewVenue(this)"><i class="fas fa-eye"></i></button>
-                                        <button class="action-btn edit" data-id="<?php echo $venue->id; ?>" onclick="editVenue(this)"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete" data-id="<?php echo $venue->id; ?>" onclick="deleteVenue(this)"><i class="fas fa-trash"></i></button>
-                                        <button class="action-btn batches" data-id="<?php echo $venue->id; ?>" onclick="manageBatches(this)"><i class="fas fa-list"></i></button>
+                                        <button class="action-btn view" data-id="<?php echo $venue->id; ?>" onclick="viewVenue(this)" title="View Venue Details"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn edit" data-id="<?php echo $venue->id; ?>" onclick="editVenue(this)" title="Edit Venue"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" data-id="<?php echo $venue->id; ?>" onclick="deleteVenue(this)" title="Delete Venue"><i class="fas fa-trash"></i></button>
+                                        <button class="action-btn batches" data-id="<?php echo $venue->id; ?>" onclick="manageBatches(this)" title="Manage Batches for this Venue"><i class="fas fa-list"></i></button>
                                     </td>
                                 </tr>
                                 <tr class="horizontal-line"><td colspan="5"></td></tr>
@@ -403,7 +417,7 @@
                         <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter venue name (letters and spaces only)">
                         <div class="invalid-feedback">Name is required, letters and spaces only, max 50 characters.</div>
                     </div>
-                    <div class="form-row d-flex align-items-center">
+                    <div class="form-row d-flex">
                         <div class="form-group col-12 col-md-6">
                             <label for="time_start">Time Start <span class="text-danger">*</span></label>
                             <input type="time" id="time_start" name="time_start" class="form-control" required placeholder="Select start time">
@@ -440,7 +454,7 @@
                 </div>
                 <form id="filterForm" novalidate>
                     <div class="form-note text-center mb-2" style="font-size: clamp(0.7rem, 1.5vw, 0.85rem);">Fill at least one field to apply a filter.</div>
-                    <div class="form-row d-flex align-items-center">
+                    <div class="form-row d-flex">
                         <div class="form-group col-12 col-md-6">
                             <label for="filterName">Name</label>
                             <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter name to filter">
@@ -451,7 +465,7 @@
                             <input type="time" id="filterTimeStart" name="filterTimeStart" class="form-control" placeholder="Select start time to filter">
                         </div>
                     </div>
-                    <div class="form-row d-flex align-items-center">
+                    <div class="form-row d-flex">
                         <div class="form-group col-12 col-md-6">
                             <label for="filterTimeEnd">Time End</label>
                             <input type="time" id="filterTimeEnd" name="filterTimeEnd" class="form-control" placeholder="Select end time to filter">
@@ -495,6 +509,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="modal-note">Here you can view, edit, delete existing batches or add new ones for this venue.</div>
                     <div class="table-container batches-table">
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -511,11 +526,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <h5>Add New Batch</h5>
+                    <h5>Add/Edit Batch</h5>
                     <form id="batchForm" novalidate>
                         <input type="hidden" id="batchVenueId" name="batchVenueId">
                         <input type="hidden" id="batchId" name="batchId">
-                        <div class="form-row d-flex align-items-center">
+                        <div class="form-row d-flex">
                             <div class="form-group col-12 col-md-6">
                                 <label for="batchType">Type <span class="text-danger">*</span></label>
                                 <select id="batchType" name="batchType" class="form-control" required>
@@ -531,7 +546,7 @@
                                 <div class="invalid-feedback">Duration is required and must be at least 1 hour.</div>
                             </div>
                         </div>
-                        <div class="form-row d-flex align-items-center">
+                        <div class="form-row d-flex">
                             <div class="form-group col-12 col-md-6">
                                 <label for="batchTimeStart">Time Start <span class="text-danger">*</span></label>
                                 <input type="time" id="batchTimeStart" name="batchTimeStart" class="form-control" required>
@@ -619,15 +634,12 @@
 
                 if (!name.value.trim()) {
                     name.setCustomValidity('Name is required.');
-                    if (form.classList.contains('was-validated')) name.classList.add('is-invalid');
                     isValid = false;
                 } else if (!/^[A-Za-z\s]+$/.test(name.value)) {
                     name.setCustomValidity('Name must contain only letters and spaces.');
-                    if (form.classList.contains('was-validated')) name.classList.add('is-invalid');
                     isValid = false;
                 } else if (name.value.length > 50) {
                     name.setCustomValidity('Name must be 50 characters or less.');
-                    if (form.classList.contains('was-validated')) name.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     name.classList.add('is-valid');
@@ -635,7 +647,6 @@
 
                 if (!time_start.value) {
                     time_start.setCustomValidity('Start time is required.');
-                    if (form.classList.contains('was-validated')) time_start.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     time_start.classList.add('is-valid');
@@ -643,11 +654,9 @@
 
                 if (!time_end.value) {
                     time_end.setCustomValidity('End time is required.');
-                    if (form.classList.contains('was-validated')) time_end.classList.add('is-invalid');
                     isValid = false;
                 } else if (time_end.value <= time_start.value) {
                     time_end.setCustomValidity('End time must be after start time.');
-                    if (form.classList.contains('was-validated')) time_end.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     time_end.classList.add('is-valid');
@@ -655,11 +664,9 @@
 
                 if (!description.value.trim()) {
                     description.setCustomValidity('Description is required.');
-                    if (form.classList.contains('was-validated')) description.classList.add('is-invalid');
                     isValid = false;
                 } else if (description.value.length > 200) {
                     description.setCustomValidity('Description must be 200 characters or less.');
-                    if (form.classList.contains('was-validated')) description.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     description.classList.add('is-valid');
@@ -685,7 +692,6 @@
 
                 if (!batchType.value) {
                     batchType.setCustomValidity('Type is required.');
-                    if (form.classList.contains('was-validated')) batchType.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     batchType.classList.add('is-valid');
@@ -693,7 +699,6 @@
 
                 if (!batchDuration.value || isNaN(batchDuration.value) || batchDuration.value < 1) {
                     batchDuration.setCustomValidity('Duration must be at least 1 hour.');
-                    if (form.classList.contains('was-validated')) batchDuration.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     batchDuration.classList.add('is-valid');
@@ -701,7 +706,6 @@
 
                 if (!batchTimeStart.value) {
                     batchTimeStart.setCustomValidity('Start time is required.');
-                    if (form.classList.contains('was-validated')) batchTimeStart.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     batchTimeStart.classList.add('is-valid');
@@ -709,11 +713,9 @@
 
                 if (!batchTimeEnd.value) {
                     batchTimeEnd.setCustomValidity('End time is required.');
-                    if (form.classList.contains('was-validated')) batchTimeEnd.classList.add('is-invalid');
                     isValid = false;
                 } else if (batchTimeEnd.value <= batchTimeStart.value) {
                     batchTimeEnd.setCustomValidity('End time must be after start time.');
-                    if (form.classList.contains('was-validated')) batchTimeEnd.classList.add('is-invalid');
                     isValid = false;
                 } else {
                     batchTimeEnd.classList.add('is-valid');
@@ -729,43 +731,56 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        const tableBody = $('#venueTableBody');
-                        tableBody.empty();
-                        if (data.venues.length === 0) {
-                            tableBody.append('<tr><td colspan="5" class="text-center">No records found.</td></tr>');
-                        } else {
-                            data.venues.forEach(item => {
-                                const row = `
-                                    <tr>
-                                        <td>${item.name}</td>
-                                        <td>${item.time_start}</td>
-                                        <td>${item.time_end}</td>
-                                        <td>${item.description}</td>
-                                        <td>
-                                            <button class="action-btn view" data-id="${item.id}" onclick="viewVenue(this)"><i class="fas fa-eye"></i></button>
-                                            <button class="action-btn edit" data-id="${item.id}" onclick="editVenue(this)"><i class="fas fa-edit"></i></button>
-                                            <button class="action-btn delete" data-id="${item.id}" onclick="deleteVenue(this)"><i class="fas fa-trash"></i></button>
-                                            <button class="action-btn batches" data-id="${item.id}" onclick="manageBatches(this)"><i class="fas fa-list"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr class="horizontal-line"><td colspan="5"></td></tr>
-                                `;
-                                tableBody.append(row);
-                            });
-                        }
+                        updateVenueTable(data);
                         csrfToken = data.csrf_token || csrfToken;
                     },
                     error: function() {
-                        // Error Sweet Alert removed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load venues. Please try again.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
+            }
+
+            // Update venue table with data
+            function updateVenueTable(data) {
+                const tableBody = $('#venueTableBody');
+                tableBody.empty();
+                if (data.venues.length === 0) {
+                    tableBody.append('<tr><td colspan="5" class="text-center">No records found.</td></tr>');
+                } else {
+                    data.venues.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.time_start}</td>
+                                <td>${item.time_end}</td>
+                                <td>${item.description}</td>
+                                <td>
+                                    <button class="action-btn view" data-id="${item.id}" onclick="viewVenue(this)" title="View Venue Details"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit" data-id="${item.id}" onclick="editVenue(this)" title="Edit Venue"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn delete" data-id="${item.id}" onclick="deleteVenue(this)" title="Delete Venue"><i class="fas fa-trash"></i></button>
+                                    <button class="action-btn batches" data-id="${item.id}" onclick="manageBatches(this)" title="Manage Batches for this Venue"><i class="fas fa-list"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="horizontal-line"><td colspan="5"></td></tr>
+                        `;
+                        tableBody.append(row);
+                    });
+                }
             }
 
             // Submit venue form
             $('#venueForm').on('submit', function(e) {
                 e.preventDefault();
+                const form = this;
+                form.classList.add('was-validated');
                 if (validateVenueForm()) {
-                    const formData = new FormData(this);
+                    const formData = new FormData(form);
                     const data = {
                         [csrfName]: csrfToken,
                         name: formData.get('name'),
@@ -806,11 +821,18 @@
                             }
                         },
                         error: function() {
-                            // Error Sweet Alert removed
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to save venue. Please try again.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
                         }
                     });
+                } else {
+                    // Form is invalid, was-validated shows feedbacks
                 }
-                this.classList.add('was-validated');
             });
 
             // View venue
@@ -842,7 +864,13 @@
                         }
                     },
                     error: function() {
-                        // Error Sweet Alert removed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load venue details.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             };
@@ -878,7 +906,13 @@
                         }
                     },
                     error: function() {
-                        // Error Sweet Alert removed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load venue for editing.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             };
@@ -928,7 +962,13 @@
                                 }
                             },
                             error: function() {
-                                // Error Sweet Alert removed
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to delete venue.',
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
                             }
                         });
                     }
@@ -953,28 +993,38 @@
                         const tableBody = $('#batchesTableBody');
                         tableBody.empty();
                         if (response.status === 'success') {
-                            response.batches.forEach(item => {
-                                const row = `
-                                    <tr>
-                                        <td>${item.type}</td>
-                                        <td>${item.duration}</td>
-                                        <td>${item.time_start}</td>
-                                        <td>${item.time_end}</td>
-                                        <td>
-                                            <button class="action-btn edit" data-id="${item.id}" onclick="editBatch(this)"><i class="fas fa-edit"></i></button>
-                                            <button class="action-btn delete" data-id="${item.id}" onclick="deleteBatch(this)"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                `;
-                                tableBody.append(row);
-                            });
+                            if (response.batches.length === 0) {
+                                tableBody.append('<tr><td colspan="5" class="text-center">No batches found for this venue.</td></tr>');
+                            } else {
+                                response.batches.forEach(item => {
+                                    const row = `
+                                        <tr>
+                                            <td>${item.type}</td>
+                                            <td>${item.duration}</td>
+                                            <td>${item.time_start}</td>
+                                            <td>${item.time_end}</td>
+                                            <td>
+                                                <button class="action-btn edit" data-id="${item.id}" onclick="editBatch(this)" title="Edit Batch"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn delete" data-id="${item.id}" onclick="deleteBatch(this)" title="Delete Batch"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tableBody.append(row);
+                                });
+                            }
                             csrfToken = response.csrf_token || csrfToken;
                         } else {
                             tableBody.append('<tr><td colspan="5" class="text-center">No batches found.</td></tr>');
                         }
                     },
                     error: function() {
-                        // Error Sweet Alert removed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load batches.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             }
@@ -982,8 +1032,10 @@
             // Submit batch form
             $('#batchForm').on('submit', function(e) {
                 e.preventDefault();
+                const form = this;
+                form.classList.add('was-validated');
                 if (validateBatchForm()) {
-                    const formData = new FormData(this);
+                    const formData = new FormData(form);
                     const data = {
                         [csrfName]: csrfToken,
                         venue_id: formData.get('batchVenueId'),
@@ -1011,8 +1063,13 @@
                                     timer: 3000
                                 }).then(() => {
                                     loadBatches(data.venue_id);
-                                    document.getElementById('batchForm').reset();
+                                    form.reset();
                                     $('#batchId').val('');
+                                    form.classList.remove('was-validated');
+                                    form.querySelectorAll('input, textarea, select').forEach(input => {
+                                        input.setCustomValidity('');
+                                        input.classList.remove('is-valid', 'is-invalid');
+                                    });
                                     csrfToken = response.csrf_token || csrfToken;
                                 });
                             } else {
@@ -1026,11 +1083,18 @@
                             }
                         },
                         error: function() {
-                            // Error Sweet Alert removed
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to save batch.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
                         }
                     });
+                } else {
+                    // Form is invalid, was-validated shows feedbacks
                 }
-                this.classList.add('was-validated');
             });
 
             // Edit batch
@@ -1061,7 +1125,13 @@
                         }
                     },
                     error: function() {
-                        // Error Sweet Alert removed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load batch for editing.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             };
@@ -1096,6 +1166,9 @@
                                         timer: 3000
                                     });
                                     csrfToken = response.csrf_token || csrfToken;
+                                    if ($('#batchesTableBody tr').length === 0) {
+                                        $('#batchesTableBody').append('<tr><td colspan="5" class="text-center">No batches found for this venue.</td></tr>');
+                                    }
                                 } else {
                                     Swal.fire({
                                         icon: 'error',
@@ -1107,12 +1180,49 @@
                                 }
                             },
                             error: function() {
-                                // Error Sweet Alert removed
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to delete batch.',
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
                             }
                         });
                     }
                 });
             };
+
+            // Submit filter form
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {
+                    filterName: formData.get('filterName'),
+                    filterTimeStart: formData.get('filterTimeStart'),
+                    filterTimeEnd: formData.get('filterTimeEnd')
+                };
+                $.ajax({
+                    url: '<?php echo base_url('admin/venues'); ?>',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        updateVenueTable(response);
+                        csrfToken = response.csrf_token || csrfToken;
+                        $('#filterModal').modal('hide');
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to apply filter.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            });
 
             // Sidebar toggle
             $('#sidebarToggle').on('click', function() {
@@ -1150,8 +1260,8 @@
                 $(this).blur();
             });
 
-            // Load venues on page load
-            loadAllVenues();
+            // Load venues on page load (optional since PHP populates initially, but for consistency)
+            // loadAllVenues();
         });
     </script>
 </body>
