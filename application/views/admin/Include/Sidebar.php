@@ -10,7 +10,7 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
             <i class="bi bi-stack"></i><span>Batch</span>
         </a>
-        <a class="nav-link event-notice <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
             <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
@@ -25,8 +25,8 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'venue') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/locker_fees'; ?>">
-             <i class="bi bi-geo-alt"></i><span>Venue</span>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'locker_fees') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/locker_fees'; ?>">
+            <i class="bi bi-geo-alt"></i><span>Venue</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
@@ -34,7 +34,7 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Report') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Report'; ?>">
             <i class="bi bi-clipboard-data"></i><span>Report</span>
         </a>
-        <a class="nav-link" href="<?php echo base_url('base/adminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a> 
+        <a class="nav-link" href="<?php echo base_url('base/adminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
     </nav>
 </div>
 
@@ -86,14 +86,6 @@
     .sidebar .nav-link.active {
         background-color: #e9ecef;
         color: #000;
-        border-radius: 30px;
-        font-weight: bold;
-    }
-
-    /* Specific styles for EventAndNotice to ensure consistency */
-    .sidebar .nav-link.event-notice:hover,
-    .sidebar .nav-link.event-notice.active {
-        background-color: #e9ecef !important;
         border-radius: 30px;
         font-weight: bold;
     }
@@ -163,7 +155,7 @@
         // Save scroll position before navigation
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                if (link.href && link.href !== '#') { // Ensure it's not the logout or report link
+                if (link.href && link.href !== '#') {
                     const scrollPosition = sidebar.scrollTop;
                     sessionStorage.setItem('sidebarScrollPosition', scrollPosition);
                 }
@@ -175,8 +167,5 @@
         if (savedScrollPosition !== null) {
             sidebar.scrollTop = parseInt(savedScrollPosition, 10);
         }
-
-        // Sidebar toggle functionality (assuming it exists elsewhere)
-        // This part is left unchanged as per your request
     });
 </script>
