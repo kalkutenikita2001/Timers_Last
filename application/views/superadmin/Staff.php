@@ -157,7 +157,7 @@
       background: none;
       border: none;
       font-size: 1.5rem;
-      color: #333;
+      color: Maintenant
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
     }
@@ -181,7 +181,7 @@
     }
     .form-control, .form-control select {
       height: 38px;
-      border-radius: 8px;
+      border-covid: 8px;
       font-size: 13px;
       border: 1px solid #ced4da;
       font-style: normal;
@@ -473,18 +473,17 @@
               <label for="centerName">Center Name <span class="text-danger">*</span></label>
               <select id="centerName" name="centerName" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <?php foreach ($centers as $center): ?>
-                  <option value="<?php echo htmlspecialchars($center['center_name']); ?>">
-                    <?php echo htmlspecialchars($center['center_name']); ?>
-                  </option>
-                <?php endforeach; ?>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="batch">Batch <span class="text-danger">*</span></label>
-              <input type="text" id="batch" name="batch" class="form-control" placeholder="Enter batch" required />
-              <div class="invalid-feedback">Please enter batch.</div>
+              <select id="batch" name="batch" class="form-control" required>
+                <option value="">-- Select Batch --</option>
+                <!-- Batches will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a batch.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="date">Date <span class="text-danger">*</span></label>
@@ -543,18 +542,17 @@
               <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
               <select id="viewCenterName" name="centerName" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <?php foreach ($centers as $center): ?>
-                  <option value="<?php echo htmlspecialchars($center['center_name']); ?>">
-                    <?php echo htmlspecialchars($center['center_name']); ?>
-                  </option>
-                <?php endforeach; ?>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="viewBatch">Batch <span class="text-danger">*</span></label>
-              <input type="text" id="viewBatch" name="batch" class="form-control" placeholder="Enter batch" required />
-              <div class="invalid-feedback">Please enter batch.</div>
+              <select id="viewBatch" name="batch" class="form-control" required>
+                <option value="">-- Select Batch --</option>
+                <!-- Batches will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a batch.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="viewDate">Date <span class="text-danger">*</span></label>
@@ -644,7 +642,10 @@
     (function () {
       'use strict';
 
-      const baseUrl = '<?php echo base_url(); ?>staff/';
+      const baseUrl = '<?php echo base_url(); ?>';
+      const staffUrl = baseUrl + 'staff/';
+      const centerUrl = baseUrl + 'center/get_centers';
+      const batchUrl = baseUrl + 'batch/get_batches';
 
       function formatDateForDisplay(dateStr) {
         if (!dateStr) return '';
@@ -662,9 +663,71 @@
         return `${displayHour} to ${nextHour} ${period}`;
       }
 
+      // Function to load centers dynamically
+      function loadCenters(selectElement) {
+        $.ajax({
+          url: centerUrl,
+          method: 'GET',
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Center --</option>');
+              if (centers.length === 0) {
+                selectElement.append('<option value="" disabled>No centers available</option>');
+              } else {
+                centers.forEach(center => {
+                  selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching centers:', response.message);
+              selectElement.append('<option value="" disabled>Error loading centers</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading centers</option>');
+          }
+        });
+      }
+
+      // Function to load batches dynamically
+      function loadBatches(selectElement) {
+        $.ajax({
+          url: batchUrl,
+          method: 'POST',
+          data: {
+            '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+          },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              const batches = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Batch --</option>');
+              if (batches.length === 0) {
+                selectElement.append('<option value="" disabled>No batches available</option>');
+              } else {
+                batches.forEach(batch => {
+                  selectElement.append(`<option value="${batch.batch}">${batch.batch}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching batches:', response.message);
+              selectElement.append('<option value="" disabled>Error loading batches</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading batches</option>');
+          }
+        });
+      }
+
       function loadStaff(filters = {}) {
         $.ajax({
-          url: baseUrl + 'get_staff',
+          url: staffUrl + 'get_staff',
           method: 'GET',
           data: filters,
           success: function (response) {
@@ -718,6 +781,15 @@
 
       $(document).ready(function () {
         loadStaff();
+        // Load centers and batches when modals are opened
+        $('#addStaffModal').on('show.bs.modal', function () {
+          loadCenters($('#centerName'));
+          loadBatches($('#batch'));
+        });
+        $('#viewStaffModal').on('show.bs.modal', function () {
+          loadCenters($('#viewCenterName'));
+          loadBatches($('#viewBatch'));
+        });
       });
 
       $('#staffForm').on('submit', function (e) {
@@ -742,14 +814,15 @@
           contact: $('#contact').val().trim(),
           address: $('#address').val().trim(),
           centerName: $('#centerName').val(),
-          batch: $('#batch').val().trim(),
+          batch: $('#batch').val(),
           date: $('#date').val(),
           time: formattedTime,
-          category: $('#category').val()
+          category: $('#category').val(),
+          '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
         };
 
         $.ajax({
-          url: baseUrl + 'add_staff',
+          url: staffUrl + 'add_staff',
           method: 'POST',
           data: formData,
           success: function (response) {
@@ -842,14 +915,15 @@
           contact: $('#viewContact').val().trim(),
           address: $('#viewAddress').val().trim(),
           centerName: $('#viewCenterName').val(),
-          batch: $('#viewBatch').val().trim(),
+          batch: $('#viewBatch').val(),
           date: $('#viewDate').val(),
           time: formattedTime,
-          category: $('#viewCategory').val()
+          category: $('#viewCategory').val(),
+          '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
         };
 
         $.ajax({
-          url: baseUrl + 'update_staff/' + staffId,
+          url: staffUrl + 'update_staff/' + staffId,
           method: 'POST',
           data: formData,
           success: function (response) {
@@ -878,8 +952,11 @@
         const staffId = $(this).data('staff-id');
         if (confirm('Are you sure you want to delete this staff member?')) {
           $.ajax({
-            url: baseUrl + 'delete_staff/' + staffId,
+            url: staffUrl + 'delete_staff/' + staffId,
             method: 'POST',
+            data: {
+              '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+            },
             success: function (response) {
               if (response.status === 'success') {
                 loadStaff();

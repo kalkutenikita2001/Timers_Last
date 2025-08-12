@@ -236,6 +236,7 @@
       background: #007bff;
     }
     .update-btn:hover {
+      background: #0056b3;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -244,6 +245,7 @@
       background: #dc3545;
     }
     .delete-btn:hover {
+      background: #c82333;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
@@ -272,13 +274,12 @@
       transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
     .content {
-      margin-top: 20px; /* Reduced from 60px to minimize gap */
+      margin-top: 20px;
     }
     .blur {
       filter: blur(5px);
       transition: filter 0.3s ease;
     }
-    /* Responsive Design */
     @media (max-width: 576px) {
       .content-wrapper {
         margin-left: 0;
@@ -472,10 +473,7 @@
               <label for="center_name">Center Name <span class="text-danger">*</span></label>
               <select id="center_name" name="center_name" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <option value="ABC">ABC</option>
-                <option value="XYZ">XYZ</option>
-                <option value="PQR">PQR</option>
-                <option value="LMN">LMN</option>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center name.</div>
             </div>
@@ -523,10 +521,7 @@
               <label for="viewCenterName">Center Name <span class="text-danger">*</span></label>
               <select id="viewCenterName" name="center_name" class="form-control" required>
                 <option value="">-- Select Center --</option>
-                <option value="ABC">ABC</option>
-                <option value="XYZ">XYZ</option>
-                <option value="PQR">PQR</option>
-                <option value="LMN">LMN</option>
+                <!-- Centers will be populated dynamically -->
               </select>
               <div class="invalid-feedback">Please select a center name.</div>
             </div>
@@ -605,30 +600,63 @@
     (function () {
       'use strict';
       let cardCounter = 1;
-      const form = document.getElementById('eventForm');
-      const filterForm = document.getElementById('filterForm');
-      const viewForm = document.getElementById('viewEventForm');
-      if (!form) {
-        console.error('Event form not found!');
-        return;
-      }
-      if (!filterForm) {
-        console.error('Filter form not found!');
-        return;
-      }
-      if (!viewForm) {
-        console.error('View form not found!');
-        return;
-      }
-
-      // CSRF Token
+      const baseUrl = '<?php echo base_url(); ?>';
+      const eventUrl = baseUrl + 'event_notice/';
+      const centerUrl = baseUrl + 'center/get_centers';
       const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
       const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+      // Function to format date for display
+      function formatDateForDisplay(dateStr) {
+        if (!dateStr) return '';
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year}`;
+      }
+
+      // Function to format time for display
+      function formatTimeForDisplay(timeStr) {
+        if (!timeStr) return '';
+        const [hours, minutes] = timeStr.split(':');
+        const hourNum = parseInt(hours, 10);
+        const period = hourNum >= 12 ? 'PM' : 'AM';
+        const displayHour = hourNum % 12 || 12;
+        const nextHour = (hourNum + 1) % 12 || 12;
+        return `${displayHour} to ${nextHour} ${period}`;
+      }
+
+      // Function to load centers dynamically
+      function loadCenters(selectElement) {
+        $.ajax({
+          url: centerUrl,
+          method: 'GET',
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Center --</option>');
+              if (centers.length === 0) {
+                selectElement.append('<option value="" disabled>No centers available</option>');
+              } else {
+                centers.forEach(center => {
+                  selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching centers:', response.message);
+              selectElement.append('<option value="" disabled>Error loading centers</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading centers</option>');
+          }
+        });
+      }
 
       // Function to load events
       function loadEvents(filters = {}) {
         $.ajax({
-          url: '<?php echo base_url('event_notice/get_events'); ?>',
+          url: eventUrl + 'get_events',
           type: 'POST',
           data: { ...filters, [csrfName]: csrfHash },
           dataType: 'json',
@@ -641,8 +669,7 @@
                 return;
               }
               response.data.forEach(event => {
-                const date = new Date(event.date);
-                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                const formattedDate = formatDateForDisplay(event.date);
                 const card = `
                   <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
                     <div class="center-card" id="card-${cardCounter}">
@@ -654,7 +681,13 @@
                         <p><span>Time:</span> ${event.time}</p>
                         <p><span>Description:</span> ${event.description}</p>
                       </div>
-                      <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" data-event-id="${event.id}" data-title="${event.title}" data-center-name="${event.center_name}" data-date="${formattedDate}" data-time="${event.time}" data-description="${event.description}">View</button>
+                      <button class="view-btn" data-toggle="modal" data-target="#viewEventModal" 
+                              data-event-id="${event.id}" 
+                              data-title="${event.title}" 
+                              data-center-name="${event.center_name}" 
+                              data-date="${event.date}" 
+                              data-time="${event.time}" 
+                              data-description="${event.description}">View</button>
                     </div>
                   </div>
                 `;
@@ -671,26 +704,32 @@
         });
       }
 
-      // Load events on page load
-      document.addEventListener('DOMContentLoaded', function() {
+      // Load events and centers on page load
+      $(document).ready(function() {
         loadEvents();
+        $('#addEventModal').on('show.bs.modal', function () {
+          loadCenters($('#center_name'));
+        });
+        $('#viewEventModal').on('show.bs.modal', function () {
+          loadCenters($('#viewCenterName'));
+        });
       });
 
       // Form submission for adding events/notices
-      form.addEventListener('submit', function (event) {
+      $('#eventForm').on('submit', function (event) {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const title = document.getElementById('title').value.trim();
-        const centerName = document.getElementById('center_name').value;
-        const dateRaw = document.getElementById('date').value;
-        const timeRaw = document.getElementById('time').value;
-        const description = document.getElementById('description').value.trim();
+        const title = $('#title').val().trim();
+        const centerName = $('#center_name').val();
+        const dateRaw = $('#date').val();
+        const timeRaw = $('#time').val();
+        const description = $('#description').val().trim();
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -701,7 +740,7 @@
         const time = `${displayHour} to ${nextHour} ${period}`;
 
         $.ajax({
-          url: '<?php echo base_url('event_notice/add_event'); ?>',
+          url: eventUrl + 'add_event',
           type: 'POST',
           data: {
             title: title,
@@ -715,36 +754,36 @@
           success: function(response) {
             if (response.status === 'success') {
               loadEvents();
-              form.reset();
-              form.classList.remove('was-validated');
+              $('#eventForm').removeClass('was-validated').trigger('reset');
               $('#addEventModal').modal('hide');
             } else {
-              console.error('Error adding event:', response.message);
+              alert(response.message);
             }
           },
           error: function(xhr, status, error) {
             console.error('AJAX error:', error);
+            alert('An error occurred while adding the event/notice.');
           }
         });
       });
 
       // Ensure validation feedback on input for add form
-      form.addEventListener('input', function () {
-        if (form.checkValidity()) {
-          form.classList.remove('was-validated');
+      $('#eventForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
       // Filter form submission
-      filterForm.addEventListener('submit', function (e) {
+      $('#filterForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const filterTitle = document.getElementById('filterTitle').value.trim();
-        const filterCenterName = document.getElementById('filterCenterName').value.trim();
-        const filterDate = document.getElementById('filterDate').value.trim();
-        const filterTime = document.getElementById('filterTime').value.trim();
-        const filterDescription = document.getElementById('filterDescription').value.trim();
+        const filterTitle = $('#filterTitle').val().trim();
+        const filterCenterName = $('#filterCenterName').val().trim();
+        const filterDate = $('#filterDate').val().trim();
+        const filterTime = $('#filterTime').val().trim();
+        const filterDescription = $('#filterDescription').val().trim();
 
         const filters = {};
         if (filterTitle) filters.title = filterTitle;
@@ -771,7 +810,7 @@
         modal.find('#viewEventLabel').text(`Event/Notice Details - ${title}`);
         modal.find('#viewTitle').val(title);
         modal.find('#viewCenterName').val(centerName);
-        modal.find('#viewDate').val(new Date(date.split('/').reverse().join('-')).toISOString().split('T')[0]);
+        modal.find('#viewDate').val(date);
         modal.find('#viewTime').val(time.split(' to ')[0].trim());
         modal.find('#viewDescription').val(description);
         modal.find('.update-btn').data('event-id', eventId);
@@ -779,21 +818,21 @@
       });
 
       // Handle update form submission
-      viewForm.addEventListener('submit', function (e) {
+      $('#viewEventForm').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!viewForm.checkValidity()) {
-          viewForm.classList.add('was-validated');
+        if (!this.checkValidity()) {
+          $(this).addClass('was-validated');
           return;
         }
 
-        const eventId = $(viewForm).find('.update-btn').data('event-id');
-        const title = document.getElementById('viewTitle').value.trim();
-        const centerName = document.getElementById('viewCenterName').value;
-        const dateRaw = document.getElementById('viewDate').value;
-        const timeRaw = document.getElementById('viewTime').value;
-        const description = document.getElementById('viewDescription').value.trim();
+        const eventId = $(this).find('.update-btn').data('event-id');
+        const title = $('#viewTitle').val().trim();
+        const centerName = $('#viewCenterName').val();
+        const dateRaw = $('#viewDate').val();
+        const timeRaw = $('#viewTime').val();
+        const description = $('#viewDescription').val().trim();
 
         // Format time to "H to H+1 AM/PM"
         const [hours, minutes] = timeRaw.split(':');
@@ -804,7 +843,7 @@
         const time = `${displayHour} to ${nextHour} ${period}`;
 
         $.ajax({
-          url: '<?php echo base_url('event_notice/update_event'); ?>',
+          url: eventUrl + 'update_event',
           type: 'POST',
           data: {
             id: eventId,
@@ -819,72 +858,70 @@
           success: function(response) {
             if (response.status === 'success') {
               loadEvents();
-              viewForm.classList.remove('was-validated');
+              $('#viewEventForm').removeClass('was-validated');
               $('#viewEventModal').modal('hide');
             } else {
-              console.error('Error updating event:', response.message);
+              alert(response.message);
             }
           },
           error: function(xhr, status, error) {
             console.error('AJAX error:', error);
+            alert('An error occurred while updating the event/notice.');
           }
         });
       });
 
       // Ensure validation feedback on input for view form
-      viewForm.addEventListener('input', function () {
-        if (viewForm.checkValidity()) {
-          viewForm.classList.remove('was-validated');
+      $('#viewEventForm').on('input', function () {
+        if (this.checkValidity()) {
+          $(this).removeClass('was-validated');
         }
       });
 
       // Handle delete button click
-      viewForm.querySelector('.delete-btn').addEventListener('click', function () {
+      $('#viewEventForm .delete-btn').on('click', function () {
         const eventId = $(this).data('event-id');
-        $.ajax({
-          url: '<?php echo base_url('event_notice/delete_event'); ?>',
-          type: 'POST',
-          data: {
-            id: eventId,
-            [csrfName]: csrfHash
-          },
-          dataType: 'json',
-          success: function(response) {
-            if (response.status === 'success') {
-              loadEvents();
-              $('#viewEventModal').modal('hide');
-            } else {
-              console.error('Error deleting event:', response.message);
+        if (confirm('Are you sure you want to delete this event/notice?')) {
+          $.ajax({
+            url: eventUrl + 'delete_event',
+            type: 'POST',
+            data: {
+              id: eventId,
+              [csrfName]: csrfHash
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.status === 'success') {
+                loadEvents();
+                $('#viewEventModal').modal('hide');
+              } else {
+                alert(response.message);
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error('AJAX error:', error);
+              alert('An error occurred while deleting the event/notice.');
             }
-          },
-          error: function(xhr, status, error) {
-            console.error('AJAX error:', error);
-          }
-        });
+          });
+        }
       });
 
       // Sidebar toggle functionality
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const navbar = document.querySelector('.navbar');
-        const contentWrapper = document.getElementById('contentWrapper');
+      $(document).ready(function () {
+        const sidebarToggle = $('#sidebarToggle');
+        const sidebar = $('#sidebar');
+        const navbar = $('.navbar');
+        const contentWrapper = $('#contentWrapper');
 
-        if (sidebarToggle) {
-          sidebarToggle.addEventListener('click', () => {
+        if (sidebarToggle.length) {
+          sidebarToggle.on('click', function () {
             if (window.innerWidth <= 576) {
-              // Mobile behavior
-              if (sidebar) {
-                sidebar.classList.toggle('active');
-                navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-              }
+              sidebar.toggleClass('active');
+              navbar.toggleClass('sidebar-hidden', !sidebar.hasClass('active'));
             } else {
-              // Desktop behavior - minimize/maximize
-              if (sidebar && contentWrapper) {
-                const isMinimized = sidebar.classList.toggle('minimized');
-                navbar.classList.toggle('sidebar-minimized', isMinimized);
-                contentWrapper.classList.toggle('minimized', isMinimized);
-              }
+              const isMinimized = sidebar.toggleClass('minimized').hasClass('minimized');
+              navbar.toggleClass('sidebar-minimized', isMinimized);
+              contentWrapper.toggleClass('minimized', isMinimized);
             }
           });
         }
@@ -892,11 +929,11 @@
 
       // Modal blur effect
       $('#addEventModal, #filterModal, #viewEventModal').on('show.bs.modal', function () {
-        document.getElementById('mainContent').classList.add('blur');
+        $('#mainContent').addClass('blur');
       });
 
       $('#addEventModal, #filterModal, #viewEventModal').on('hidden.bs.modal', function () {
-        document.getElementById('mainContent').classList.remove('blur');
+        $('#mainContent').removeClass('blur');
       });
     })();
   </script>

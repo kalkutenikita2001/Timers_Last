@@ -86,6 +86,8 @@ $route['login'] = 'base/login';
 $route['adminlogin'] = 'base/adminlogin';
 $route['superadminlogin'] = 'base/superadminlogin';
 
+
+
 //SuperAdmin Backend Side
 $route['center'] = 'center/index';
 $route['staff'] = 'staff/index';
@@ -101,7 +103,9 @@ $route['leave/add_leave'] = 'leave/add_leave';
 $route['leave/update_leave'] = 'leave/update_leave';
 $route['leave/delete_leave'] = 'leave/delete_leave';
 $route['leave/get_batches'] = 'leave/get_batches';
-// 
+
+
+//admin backend Side 
 $route['income_expenses'] = 'admincontroller/income_expenses/index';
 $route['income_expenses/get_income_expenses'] = 'admincontroller/income_expenses/get_income_expenses';
 $route['income_expenses/get_income_expense/(:num)'] = 'admincontroller/income_expenses/get_income_expense/$1';
@@ -109,7 +113,6 @@ $route['income_expenses/add_income_expense'] = 'admincontroller/income_expenses/
 $route['income_expenses/update_income_expense'] = 'admincontroller/income_expenses/update_income_expense';
 $route['income_expenses/approve_income_expense/(:num)'] = 'admincontroller/income_expenses/approve_income_expense/$1';
 $route['income_expenses/reject_income_expense/(:num)'] = 'admincontroller/income_expenses/reject_income_expense/$1';
-
 // Locker Fees Routes
 $route['admin/locker_fees'] = 'admincontroller/locker_fees/index';
 $route['admin/locker_fees/add'] = 'admincontroller/locker_fees/add';
@@ -117,3 +120,6 @@ $route['admin/locker_fees/update'] = 'admincontroller/locker_fees/update';
 $route['admin/locker_fees/get_by_id/(:num)'] = 'admincontroller/locker_fees/get_by_id/$1';
 $route['admin/locker_fees/delete/(:num)'] = 'admincontroller/locker_fees/delete/$1';
 $route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
+
+// Add this to application/config/routes.php
+$route['admin/add-on-facilities'] = 'admincontroller/add_on_facilities/index';

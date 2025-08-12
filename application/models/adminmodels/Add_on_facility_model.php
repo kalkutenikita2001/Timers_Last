@@ -1,16 +1,17 @@
 <?php
-class Locker_fee_model extends CI_Model {
+// application/models/adminmodels/Add_on_facility_model.php
+class Add_on_facility_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
 
-    public function get_all_locker_fees($filters = []) {
+    public function get_all_add_on_facilities($filters = []) {
         $this->db->select('*');
-        $this->db->from('venue_locker_fees');
+        $this->db->from('add_on_facilities');
 
         // Apply filters if provided
-        if (!empty($filters['filterVenue'])) {
-            $this->db->where('venue', $filters['filterVenue']);
+        if (!empty($filters['filterFacility'])) {
+            $this->db->where('facility', $filters['filterFacility']);
         }
         if (!empty($filters['filterTitle'])) {
             $this->db->like('title', $filters['filterTitle']);
@@ -29,25 +30,25 @@ class Locker_fee_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_locker_fee_by_id($id) {
-        $query = $this->db->get_where('venue_locker_fees', array('id' => $id));
+    public function get_add_on_facility_by_id($id) {
+        $query = $this->db->get_where('add_on_facilities', array('id' => $id));
         return $query->row();
     }
 
-    public function add_locker_fee($data) {
-        $this->db->insert('venue_locker_fees', $data);
+    public function add_add_on_facility($data) {
+        $this->db->insert('add_on_facilities', $data);
         return $this->db->affected_rows() > 0 ? $this->db->insert_id() : false;
     }
 
-    public function update_locker_fee($id, $data) {
+    public function update_add_on_facility($id, $data) {
         $this->db->where('id', $id);
-        $this->db->update('venue_locker_fees', $data);
+        $this->db->update('add_on_facilities', $data);
         return $this->db->affected_rows() > 0;
     }
 
-    public function delete_locker_fee($id) {
+    public function delete_add_on_facility($id) {
         $this->db->where('id', $id);
-        $this->db->delete('venue_locker_fees');
+        $this->db->delete('add_on_facilities');
         return $this->db->affected_rows() > 0;
     }
 }

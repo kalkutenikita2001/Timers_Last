@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <title>Venue Locker Fees</title>
+    <title>Add On Facilities</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -68,11 +68,11 @@
             background: #fff;
             border-radius: 0.5rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            overflow-x: auto; /* Enable horizontal scrolling on small screens */
+            overflow-x: auto;
         }
         .table {
             width: 100%;
-            min-width: 600px; /* Minimum width to ensure table usability */
+            min-width: 600px;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
@@ -316,8 +316,12 @@
         .view-modal-content p {
             margin-bottom: 0.5rem;
         }
-        .form-control{
-                padding: 1.375rem .75rem !important;
+        .form-control {
+            padding: 0.375rem 0.75rem !important;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -332,35 +336,35 @@
                 <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
                     <i class="fas fa-filter mr-1"></i> Filter
                 </button>
-                <button class="btn btn-custom" data-toggle="modal" data-target="#expenseModal">
-                    <i class="fas fa-plus mr-1"></i> Add Venue Locker Fee
+                <button class="btn btn-custom" data-toggle="modal" data-target="#addOnModal">
+                    <i class="fas fa-plus mr-1"></i> Add Add On Facility
                 </button>
             </div>
             <div class="table-container">
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Venue</th>
+                            <th>Facility</th>
                             <th>Title</th>
                             <th>Date</th>
-                            <th>Racket Fee</th>
+                            <th>Fee</th>
                             <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="expenseTableBody">
-                        <?php if (!empty($locker_fees)): ?>
-                            <?php foreach ($locker_fees as $fee): ?>
+                    <tbody id="addOnTableBody">
+                        <?php if (!empty($add_on_facilities)): ?>
+                            <?php foreach ($add_on_facilities as $facility): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($fee->venue); ?></td>
-                                    <td><?php echo htmlspecialchars($fee->title); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($fee->date)); ?></td>
-                                    <td>Rs.<?php echo number_format($fee->amount, 2); ?></td>
-                                    <td><?php echo htmlspecialchars($fee->description); ?></td>
+                                    <td><?php echo htmlspecialchars($facility->facility); ?></td>
+                                    <td><?php echo htmlspecialchars($facility->title); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($facility->date)); ?></td>
+                                    <td>Rs.<?php echo number_format($facility->amount, 2); ?></td>
+                                    <td><?php echo htmlspecialchars($facility->description); ?></td>
                                     <td>
-                                        <button class="action-btn view" data-id="<?php echo $fee->id; ?>" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                        <button class="action-btn edit" data-id="<?php echo $fee->id; ?>" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete" data-id="<?php echo $fee->id; ?>" onclick="deleteExpense(this)"><i class="fas fa-trash"></i></button>
+                                        <button class="action-btn view" data-id="<?php echo $facility->id; ?>" onclick="viewAddOn(this)"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn edit" data-id="<?php echo $facility->id; ?>" onclick="editAddOn(this)"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" data-id="<?php echo $facility->id; ?>" onclick="deleteAddOn(this)"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <tr class="horizontal-line"><td colspan="6"></td></tr>
@@ -374,49 +378,57 @@
         </div>
     </div>
     <!-- Add/Edit Modal -->
-    <div class="modal fade add-modal" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
+    <div class="modal fade add-modal" id="addOnModal" tabindex="-1" aria-labelledby="addOnLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title w-100" id="expenseLabel">Add Venue Locker Fee</h3>
+                    <h3 class="modal-title w-100" id="addOnLabel">Add Add On Facility</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="expenseForm" novalidate>
-                    <input type="hidden" id="expenseId" name="expenseId">
+                <form id="addOnForm" novalidate>
+                    <input type="hidden" id="addOnId" name="addOnId">
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-12 col-md-6">
-                            <label for="venue">Venue <span class="text-danger">*</span></label>
-                            <select id="venue" name="venue" class="form-control" required>
-                                <option value="">Select Venue</option>
-                                <option value="Main Hall">Main Hall</option>
-                                <option value="Outdoor Court">Outdoor Court</option>
-                                <option value="Indoor Arena">Indoor Arena</option>
+                            <label for="facilitySelect">Facility <span class="text-danger">*</span></label>
+                            <select id="facilitySelect" name="facilitySelect" class="form-control" required>
+                                <option value="" disabled selected>Select a facility</option>
+                                <option value="Locker">Locker</option>
+                                <option value="Racket">Racket</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Guest">Guest</option>
                             </select>
-                            <div class="invalid-feedback">Please select a venue</div>
+                            <div class="invalid-feedback">Please select a facility</div>
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label for="title">Title <span class="text-danger">*</span></label>
-                            <input type="text" id="title" name="title" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50">
-                            <div class="invalid-feedback">Title is required, letters and spaces only, max 50 characters.</div>
+                            <label for="facility">Selected Facility</label>
+                            <input type="text" id="facility" name="facility" class="form-control" readonly placeholder="Selected facility will appear here">
+                            <div class="invalid-feedback">Facility is required</div>
                         </div>
                     </div>
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-12 col-md-6">
-                            <label for="date">Date <span class="text-danger">*</span></label>
-                            <input type="date" id="date" name="date" class="form-control" required max="<?php echo date('Y-m-d'); ?>">
-                            <div class="invalid-feedback">Date is required and must not be a future date.</div>
+                            <label for="title">Title <span class="text-danger">*</span></label>
+                            <input type="text" id="title" name="title" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter title (letters and spaces only)">
+                            <div class="invalid-feedback">Title is required, letters and spaces only, max 50 characters.</div>
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label for="amount">Racket Fee (₹) <span class="text-danger">*</span></label>
-                            <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="0.01" required>
-                            <div class="invalid-feedback">Racket fee is required and must be greater than 0.</div>
+                            <label for="date">Date <span class="text-danger">*</span></label>
+                            <input type="date" id="date" name="date" class="form-control" required max="<?php echo date('Y-m-d'); ?>" placeholder="Select date">
+                            <div class="invalid-feedback">Date is required and must not be a future date.</div>
+                        </div>
+                    </div>
+                    <div class="form-row d-flex align-items-center">
+                        <div class="form-group col-12 col-md-6">
+                            <label for="amount">Fee (₹)</label>
+                            <input type="text" id="amount" name="amount" class="form-control" readonly>
+                            <div class="invalid-feedback">Fee is set based on the selected facility.</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="description">Description <span class="text-danger">*</span></label>
-                        <textarea id="description" name="description" class="form-control" required maxlength="200" rows="2"></textarea>
+                        <textarea id="description" name="description" class="form-control" required maxlength="200" rows="2" placeholder="Enter description (max 200 characters)"></textarea>
                         <div class="invalid-feedback">Description is required, max 200 characters.</div>
                     </div>
                     <div class="modal-footer border-top-0 pt-0">
@@ -432,7 +444,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title w-100" id="filterLabel">Filter Locker Fees</h3>
+                    <h3 class="modal-title w-100" id="filterLabel">Filter Add On Facilities</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -441,35 +453,38 @@
                     <div class="form-note text-center mb-2" style="font-size: clamp(0.7rem, 1.5vw, 0.85rem);">Fill at least one field to apply a filter.</div>
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-12 col-md-6">
-                            <label for="filterVenue">Venue</label>
-                            <select id="filterVenue" name="filterVenue" class="form-control">
-                                <option value="">All Venues</option>
-                                <option value="Main Hall">Main Hall</option>
-                                <option value="Outdoor Court">Outdoor Court</option>
-                                <option value="Indoor Arena">Indoor Arena</option>
+                            <label for="filterFacility">Facility</label>
+                            <select id="filterFacility" name="filterFacility" class="form-control">
+                                <option value="" selected>All Facilities</option>
+                                <option value="Locker">Locker</option>
+                                <option value="Racket">Racket</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Guest">Guest</option>
                             </select>
+                            <div class="invalid-feedback">Please select a valid facility</div>
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="filterTitle">Title</label>
-                            <input type="text" id="filterTitle" name="filterTitle" class="form-control" pattern="[A-Za-z\s]+" maxlength="50">
+                            <input type="text" id="filterTitle" name="filterTitle" class="form-control" pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter title to filter">
                             <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
                         </div>
                     </div>
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-12 col-md-6">
                             <label for="filterDate">Date</label>
-                            <input type="date" id="filterDate" name="filterDate" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                            <input type="date" id="filterDate" name="filterDate" class="form-control" max="<?php echo date('Y-m-d'); ?>" placeholder="Select date to filter">
+                            <div class="invalid-feedback">Date must not be a future date.</div>
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label for="filterMinAmount">Min Racket Fee (₹)</label>
-                            <input type="number" id="filterMinAmount" name="filterMinAmount" class="form-control" step="0.01" min="0">
+                            <label for="filterMinAmount">Min Fee (₹)</label>
+                            <input type="number" id="filterMinAmount" name="filterMinAmount" class="form-control" step="0.01" min="0" placeholder="Enter minimum fee">
                             <div class="invalid-feedback">Min amount must be a valid number.</div>
                         </div>
                     </div>
                     <div class="form-row d-flex align-items-center">
                         <div class="form-group col-12 col-md-6">
-                            <label for="filterMaxAmount">Max Racket Fee (₹)</label>
-                            <input type="number" id="filterMaxAmount" name="filterMaxAmount" class="form-control" step="0.01" min="0">
+                            <label for="filterMaxAmount">Max Fee (₹)</label>
+                            <input type="number" id="filterMaxAmount" name="filterMaxAmount" class="form-control" step="0.01" min="0" placeholder="Enter maximum fee">
                             <div class="invalid-feedback">Max amount must be a valid number.</div>
                         </div>
                     </div>
@@ -486,7 +501,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title w-100" id="viewLabel">Locker Fee Details</h3>
+                    <h3 class="modal-title w-100" id="viewLabel">Add On Facility Details</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -514,18 +529,35 @@
                 return Number(number).toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
 
-            // Reset expense modal on close
-            $('#expenseModal').on('hidden.bs.modal', function() {
-                const form = document.getElementById('expenseForm');
+            // Update facility input and set fixed fee when dropdown changes
+            $('#facilitySelect').on('change', function() {
+                $('#facility').val($(this).val());
+                const facilityFees = {
+                    'Locker': 600,
+                    'Racket': 300,
+                    'Shoes': 400,
+                    'Guest': 500
+                };
+                const selectedFacility = $(this).val();
+                $('#amount').val(selectedFacility ? `Rs.${number_format(facilityFees[selectedFacility])}` : '');
+                validateAddOnForm();
+            });
+
+            // Reset addOn modal on close
+            $('#addOnModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('addOnForm');
                 form.reset();
                 form.classList.remove('was-validated');
                 form.querySelectorAll('input, textarea, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
+                $('#facilitySelect').val('');
+                $('#facility').val('');
+                $('#amount').val('');
                 editingRow = null;
-                $('#expenseId').val('');
-                $('#expenseLabel').text('Add Venue Locker Fee');
+                $('#addOnId').val('');
+                $('#addOnLabel').text('Add Add On Facility');
             });
 
             // Reset filter modal on close
@@ -537,12 +569,12 @@
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
-                loadAllLockerFees();
+                loadAllAddOnFacilities();
             });
 
-            // Validate expense form
-            function validateExpenseForm() {
-                const form = document.getElementById('expenseForm');
+            // Validate addOn form
+            function validateAddOnForm() {
+                const form = document.getElementById('addOnForm');
                 let isValid = true;
 
                 form.querySelectorAll('input, textarea, select').forEach(input => {
@@ -550,18 +582,27 @@
                     input.classList.remove('is-invalid', 'is-valid');
                 });
 
-                const venue = form.querySelector('#venue');
+                const facilitySelect = form.querySelector('#facilitySelect');
+                const facility = form.querySelector('#facility');
                 const title = form.querySelector('#title');
                 const date = form.querySelector('#date');
-                const amount = form.querySelector('#amount');
                 const description = form.querySelector('#description');
 
-                if (!venue.value) {
-                    venue.setCustomValidity('Venue is required.');
-                    if (form.classList.contains('was-validated')) venue.classList.add('is-invalid');
+                if (!facilitySelect.value) {
+                    facilitySelect.setCustomValidity('Please select a facility.');
+                    if (form.classList.contains('was-validated')) facilitySelect.classList.add('is-invalid');
                     isValid = false;
                 } else {
-                    venue.classList.add('is-valid');
+                    facilitySelect.classList.add('is-valid');
+                    facility.classList.add('is-valid');
+                }
+
+                if (!facility.value) {
+                    facility.setCustomValidity('Facility is required.');
+                    if (form.classList.contains('was-validated')) facility.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    facility.classList.add('is-valid');
                 }
 
                 if (!title.value.trim()) {
@@ -593,14 +634,6 @@
                     date.classList.add('is-valid');
                 }
 
-                if (!amount.value || isNaN(amount.value) || amount.value <= 0) {
-                    amount.setCustomValidity('Amount must be greater than 0.');
-                    if (form.classList.contains('was-validated')) amount.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    amount.classList.add('is-valid');
-                }
-
                 if (!description.value.trim()) {
                     description.setCustomValidity('Description is required.');
                     if (form.classList.contains('was-validated')) description.classList.add('is-invalid');
@@ -627,22 +660,22 @@
                     input.classList.remove('is-invalid', 'is-valid');
                 });
 
-                const filterVenue = form.querySelector('#filterVenue');
+                const filterFacility = form.querySelector('#filterFacility');
                 const filterTitle = form.querySelector('#filterTitle');
                 const filterDate = form.querySelector('#filterDate');
                 const filterMinAmount = form.querySelector('#filterMinAmount');
                 const filterMaxAmount = form.querySelector('#filterMaxAmount');
 
-                if (filterVenue.value || filterTitle.value.trim() || filterDate.value || filterMinAmount.value || filterMaxAmount.value) {
+                if (filterFacility.value || filterTitle.value.trim() || filterDate.value || filterMinAmount.value || filterMaxAmount.value) {
                     atLeastOneFilled = true;
                 }
 
                 if (!atLeastOneFilled) {
-                    filterVenue.setCustomValidity('At least one filter field must be filled.');
-                    if (form.classList.contains('was-validated')) filterVenue.classList.add('is-invalid');
+                    filterFacility.setCustomValidity('At least one filter field must be filled.');
+                    if (form.classList.contains('was-validated')) filterFacility.classList.add('is-invalid');
                     isValid = false;
                 } else {
-                    filterVenue.classList.add('is-valid');
+                    filterFacility.classList.add('is-valid');
                 }
 
                 if (filterTitle.value.trim()) {
@@ -684,34 +717,40 @@
                     filterMaxAmount.classList.add('is-valid');
                 }
 
+                if (filterMinAmount.value && filterMaxAmount.value && parseFloat(filterMinAmount.value) > parseFloat(filterMaxAmount.value)) {
+                    filterMaxAmount.setCustomValidity('Max amount must be greater than or equal to min amount.');
+                    if (form.classList.contains('was-validated')) filterMaxAmount.classList.add('is-invalid');
+                    isValid = false;
+                }
+
                 return isValid;
             }
 
-            // Load all locker fees (used when clearing filters)
-            function loadAllLockerFees() {
+            // Load all add on facilities
+            function loadAllAddOnFacilities() {
                 $.ajax({
-                    url: '<?php echo base_url('admincontroller/locker_fees/index'); ?>',
+                    url: '<?php echo base_url('admincontroller/add_on_facilities/index'); ?>',
                     type: 'POST',
                     data: { [csrfName]: csrfToken },
                     dataType: 'json',
                     success: function(data) {
-                        const tableBody = $('#expenseTableBody');
+                        const tableBody = $('#addOnTableBody');
                         tableBody.empty();
-                        if (data.locker_fees.length === 0) {
+                        if (data.add_on_facilities.length === 0) {
                             tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
                         } else {
-                            data.locker_fees.forEach(item => {
+                            data.add_on_facilities.forEach(item => {
                                 const row = `
                                     <tr>
-                                        <td>${item.venue}</td>
+                                        <td>${item.facility}</td>
                                         <td>${item.title}</td>
                                         <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
                                         <td>Rs.${number_format(item.amount, 2)}</td>
                                         <td>${item.description}</td>
                                         <td>
-                                            <button class="action-btn view" data-id="${item.id}" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                            <button class="action-btn edit" data-id="${item.id}" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                                            <button class="action-btn delete" data-id="${item.id}" onclick="deleteExpense(this)"><i class="fas fa-trash"></i></button>
+                                            <button class="action-btn view" data-id="${item.id}" onclick="viewAddOn(this)"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn edit" data-id="${item.id}" onclick="editAddOn(this)"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn delete" data-id="${item.id}" onclick="deleteAddOn(this)"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     <tr class="horizontal-line"><td colspan="6"></td></tr>
@@ -725,7 +764,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error loading locker fees.',
+                            text: 'Error loading add on facilities.',
                             showConfirmButton: true,
                             timer: 3000
                         });
@@ -733,21 +772,21 @@
                 });
             }
 
-            // Submit expense form (add/edit)
-            $('#expenseForm').on('submit', function(e) {
+            // Submit addOn form
+            $('#addOnForm').on('submit', function(e) {
                 e.preventDefault();
-                if (validateExpenseForm()) {
+                if (validateAddOnForm()) {
                     const formData = new FormData(this);
                     const data = {
                         [csrfName]: csrfToken,
-                        venue: formData.get('venue'),
+                        facility: formData.get('facility'),
                         title: formData.get('title'),
                         date: formData.get('date'),
-                        amount: parseFloat(formData.get('amount')).toFixed(2),
+                        amount: parseFloat(formData.get('amount').replace('Rs.', '')) || 0,
                         description: formData.get('description'),
-                        id: formData.get('expenseId') || null
+                        id: formData.get('addOnId') || null
                     };
-                    const url = data.id ? '<?php echo base_url('admincontroller/locker_fees/update'); ?>' : '<?php echo base_url('admincontroller/locker_fees/add'); ?>';
+                    const url = data.id ? '<?php echo base_url('admincontroller/add_on_facilities/update'); ?>' : '<?php echo base_url('admincontroller/add_on_facilities/add'); ?>';
                     const action = data.id ? 'updated' : 'added';
 
                     $.ajax({
@@ -757,40 +796,45 @@
                         dataType: 'json',
                         success: function(response) {
                             if (response.status === 'success') {
-                                $('#expenseModal').modal('hide');
+                                $('#addOnModal').modal('hide');
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Success',
-                                    text: `Locker fee ${action} successfully`,
+                                    text: `Add on facility ${action} successfully`,
                                     showConfirmButton: true,
                                     timer: 3000
                                 }).then(() => {
                                     if (!data.id) {
                                         const newRow = `
                                             <tr>
-                                                <td>${data.venue}</td>
+                                                <td>${data.facility}</td>
                                                 <td>${data.title}</td>
                                                 <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
                                                 <td>Rs.${number_format(data.amount, 2)}</td>
                                                 <td>${data.description}</td>
                                                 <td>
-                                                    <button class="action-btn view" data-id="${response.insert_id}" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                                    <button class="action-btn edit" data-id="${response.insert_id}" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                                                    <button class="action-btn delete" data-id="${response.insert_id}" onclick="deleteExpense(this)"><i class="fas fa-trash"></i></button>
+                                                    <button class="action-btn view" data-id="${response.insert_id}" onclick="viewAddOn(this)"><i class="fas fa-eye"></i></button>
+                                                    <button class="action-btn edit" data-id="${response.insert_id}" onclick="editAddOn(this)"><i class="fas fa-edit"></i></button>
+                                                    <button class="action-btn delete" data-id="${response.insert_id}" onclick="deleteAddOn(this)"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             <tr class="horizontal-line"><td colspan="6"></td></tr>
                                         `;
-                                        $('#expenseTableBody').prepend(newRow);
-                                        if ($('#expenseTableBody tr').length === 2) {
-                                            $('#expenseTableBody tr:last').remove();
+                                        $('#addOnTableBody').prepend(newRow);
+                                        if ($('#addOnTableBody tr').length === 2) {
+                                            $('#addOnTableBody tr:last').remove();
                                         }
                                     } else {
-                                        editingRow.find('td:nth-child(1)').text(data.venue);
+                                        editingRow.find('td:nth-child(1)').text(data.facility);
                                         editingRow.find('td:nth-child(2)').text(data.title);
                                         editingRow.find('td:nth-child(3)').text(new Date(data.date).toLocaleDateString('en-GB'));
                                         editingRow.find('td:nth-child(4)').text(`Rs.${number_format(data.amount, 2)}`);
                                         editingRow.find('td:nth-child(5)').text(data.description);
+                                        editingRow.find('td:nth-child(6)').html(`
+                                            <button class="action-btn view" data-id="${data.id}" onclick="viewAddOn(this)"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn edit" data-id="${data.id}" onclick="editAddOn(this)"><i class="fas fa-edit"></i></button>
+                                            <button class="action-btn delete" data-id="${data.id}" onclick="deleteAddOn(this)"><i class="fas fa-trash"></i></button>
+                                        `);
                                     }
                                     csrfToken = response.csrf_token || csrfToken;
                                 });
@@ -798,7 +842,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: response.message || `Error ${action} locker fee.`,
+                                    text: response.message || `Error ${action} add on facility.`,
                                     showConfirmButton: true,
                                     timer: 3000
                                 });
@@ -808,7 +852,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: `An error occurred while ${action} the locker fee. Please try again.`,
+                                text: `An error occurred while ${action} the add on facility. Please try again.`,
                                 showConfirmButton: true,
                                 timer: 3000
                             });
@@ -826,7 +870,7 @@
                     const formData = new FormData(this);
                     const filters = {
                         [csrfName]: csrfToken,
-                        filterVenue: formData.get('filterVenue') || '',
+                        filterFacility: formData.get('filterFacility') || '',
                         filterTitle: formData.get('filterTitle') || '',
                         filterDate: formData.get('filterDate') || '',
                         filterMinAmount: formData.get('filterMinAmount') || '',
@@ -834,28 +878,28 @@
                     };
 
                     $.ajax({
-                        url: '<?php echo base_url('admincontroller/locker_fees/filter'); ?>',
+                        url: '<?php echo base_url('admincontroller/add_on_facilities/filter'); ?>',
                         type: 'POST',
                         data: filters,
                         dataType: 'json',
                         success: function(data) {
-                            const tableBody = $('#expenseTableBody');
+                            const tableBody = $('#addOnTableBody');
                             tableBody.empty();
-                            if (data.locker_fees.length === 0) {
+                            if (data.add_on_facilities.length === 0) {
                                 tableBody.append('<tr><td colspan="6" class="text-center">No records match the filter criteria.</td></tr>');
                             } else {
-                                data.locker_fees.forEach(item => {
+                                data.add_on_facilities.forEach(item => {
                                     const row = `
                                         <tr>
-                                            <td>${item.venue}</td>
+                                            <td>${item.facility}</td>
                                             <td>${item.title}</td>
                                             <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
                                             <td>Rs.${number_format(item.amount, 2)}</td>
                                             <td>${item.description}</td>
                                             <td>
-                                                <button class="action-btn view" data-id="${item.id}" onclick="viewExpense(this)"><i class="fas fa-eye"></i></button>
-                                                <button class="action-btn edit" data-id="${item.id}" onclick="editExpense(this)"><i class="fas fa-edit"></i></button>
-                                                <button class="action-btn delete" data-id="${item.id}" onclick="deleteExpense(this)"><i class="fas fa-trash"></i></button>
+                                                <button class="action-btn view" data-id="${item.id}" onclick="viewAddOn(this)"><i class="fas fa-eye"></i></button>
+                                                <button class="action-btn edit" data-id="${item.id}" onclick="editAddOn(this)"><i class="fas fa-edit"></i></button>
+                                                <button class="action-btn delete" data-id="${item.id}" onclick="deleteAddOn(this)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr class="horizontal-line"><td colspan="6"></td></tr>
@@ -887,23 +931,23 @@
                 this.classList.add('was-validated');
             });
 
-            // View expense details
-            window.viewExpense = function(button) {
+            // View addOn details
+            window.viewAddOn = function(button) {
                 const id = $(button).data('id');
                 $.ajax({
-                    url: '<?php echo base_url('admincontroller/locker_fees/get_by_id'); ?>/' + id,
+                    url: '<?php echo base_url('admincontroller/add_on_facilities/get_by_id'); ?>/' + id,
                     type: 'GET',
                     data: { [csrfName]: csrfToken },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            const fee = response.data;
+                            const facility = response.data;
                             $('#viewModalContent').html(`
-                                <p><strong>Venue:</strong> ${fee.venue}</p>
-                                <p><strong>Title:</strong> ${fee.title}</p>
-                                <p><strong>Date:</strong> ${new Date(fee.date).toLocaleDateString('en-GB')}</p>
-                                <p><strong>Racket Fee:</strong> Rs.${number_format(fee.amount, 2)}</p>
-                                <p><strong>Description:</strong> ${fee.description || 'No description'}</p>
+                                <p><strong>Facility:</strong> ${facility.facility}</p>
+                                <p><strong>Title:</strong> ${facility.title}</p>
+                                <p><strong>Date:</strong> ${new Date(facility.date).toLocaleDateString('en-GB')}</p>
+                                <p><strong>Fee:</strong> Rs.${number_format(facility.amount, 2)}</p>
+                                <p><strong>Description:</strong> ${facility.description || 'No description'}</p>
                             `);
                             $('#viewModal').modal('show');
                             csrfToken = response.csrf_token || csrfToken;
@@ -921,7 +965,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error fetching locker fee details.',
+                            text: 'Error fetching add on facility details.',
                             showConfirmButton: true,
                             timer: 3000
                         });
@@ -929,27 +973,34 @@
                 });
             };
 
-            // Edit expense
-            window.editExpense = function(button) {
+            // Edit addOn
+            window.editAddOn = function(button) {
                 editingRow = $(button).closest('tr');
                 const id = $(button).data('id');
                 $.ajax({
-                    url: '<?php echo base_url('admincontroller/locker_fees/get_by_id'); ?>/' + id,
+                    url: '<?php echo base_url('admincontroller/add_on_facilities/get_by_id'); ?>/' + id,
                     type: 'GET',
                     data: { [csrfName]: csrfToken },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            const fee = response.data;
-                            $('#expenseId').val(fee.id);
-                            $('#venue').val(fee.venue);
-                            $('#title').val(fee.title);
-                            $('#date').val(fee.date);
-                            $('#amount').val(fee.amount);
-                            $('#description').val(fee.description);
-                            $('#expenseLabel').text('Edit Venue Locker Fee');
-                            $('#expenseModal').modal('show');
-                            $('#expenseForm').find('input, textarea, select').trigger('input');
+                            const facility = response.data;
+                            $('#addOnId').val(facility.id);
+                            $('#facilitySelect').val(facility.facility);
+                            $('#facility').val(facility.facility);
+                            const facilityFees = {
+                                'Locker': 600,
+                                'Racket': 300,
+                                'Shoes': 400,
+                                'Guest': 500
+                            };
+                            $('#amount').val(`Rs.${number_format(facilityFees[facility.facility])}`);
+                            $('#title').val(facility.title);
+                            $('#date').val(facility.date);
+                            $('#description').val(facility.description);
+                            $('#addOnLabel').text('Edit Add On Facility');
+                            $('#addOnModal').modal('show');
+                            $('#addOnForm').find('input, textarea, select').trigger('input');
                             csrfToken = response.csrf_token || csrfToken;
                         } else {
                             Swal.fire({
@@ -965,7 +1016,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error fetching locker fee details.',
+                            text: 'Error fetching add on facility details.',
                             showConfirmButton: true,
                             timer: 3000
                         });
@@ -973,8 +1024,8 @@
                 });
             };
 
-            // Delete expense
-            window.deleteExpense = function(button) {
+            // Delete addOn
+            window.deleteAddOn = function(button) {
                 const id = $(button).data('id');
                 const row = $(button).closest('tr');
                 Swal.fire({
@@ -988,7 +1039,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '<?php echo base_url('admincontroller/locker_fees/delete'); ?>/' + id,
+                            url: '<?php echo base_url('admincontroller/add_on_facilities/delete'); ?>/' + id,
                             type: 'POST',
                             data: { [csrfName]: csrfToken },
                             dataType: 'json',
@@ -1004,8 +1055,8 @@
                                         timer: 3000
                                     });
                                     csrfToken = response.csrf_token || csrfToken;
-                                    if ($('#expenseTableBody tr').length === 0) {
-                                        $('#expenseTableBody').append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
+                                    if ($('#addOnTableBody tr').length === 0) {
+                                        $('#addOnTableBody').append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
                                     }
                                 } else {
                                     Swal.fire({
@@ -1021,7 +1072,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'Error deleting locker fee.',
+                                    text: 'Error deleting add on facility.',
                                     showConfirmButton: true,
                                     timer: 3000
                                 });
@@ -1052,9 +1103,9 @@
                 }
             });
 
-            // Real-time validation for expense form
-            $('#expenseForm input, #expenseForm textarea, #expenseForm select').on('input change', function() {
-                validateExpenseForm();
+            // Real-time validation for addOn form
+            $('#addOnForm input, #addOnForm textarea, #addOnForm select').on('input change', function() {
+                validateAddOnForm();
             });
 
             // Real-time validation for filter form

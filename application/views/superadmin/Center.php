@@ -65,6 +65,7 @@
       min-height: 10rem;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top:10px;
     }
     .center-card:hover {
       transform: translateY(-5px);
@@ -368,9 +369,7 @@
         margin-left: 200px;
         padding: 15px;
       }
-      .content-wrapper.minimized {
-        margin-left: 60px;
-      }
+      
       .center-card {
         max-width: 18rem;
         margin: 0.5rem;
@@ -419,6 +418,7 @@
         box-shadow: none;
       }
     }
+
   </style>
 </head>
 <body>
