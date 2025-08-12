@@ -79,6 +79,7 @@ $route['Profile'] = 'admin/Profile';
 $route['Dashboard'] = 'admin/Dashboard';
 $route['Finance'] = 'admin/Finance';
 $route['locker_fees'] = 'admin/locker_fees';
+$route['Venues'] = 'admin/Venues';
 
 
 // base module
@@ -123,3 +124,15 @@ $route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
 
 // Add this to application/config/routes.php
 $route['admin/add-on-facilities'] = 'admincontroller/add_on_facilities/index';
+
+
+$route['admin/venues'] = 'admincontroller/venues/index';
+$route['admin/venues/add'] = 'admincontroller/venues/add';
+$route['admin/venues/update'] = 'admincontroller/venues/update';
+$route['admin/venues/delete/(:num)'] = 'admincontroller/venues/delete/$1';
+$route['admin/venues/get_by_id/(:num)'] = 'admincontroller/venues/get_by_id/$1';
+$route['admin/venues/get_batches_by_venue/(:num)'] = 'admincontroller/venues/get_batches_by_venue/$1';
+$route['admin/venues/add_batch'] = 'admincontroller/venues/add_batch';
+$route['admin/venues/update_batch'] = 'admincontroller/venues/update_batch';
+$route['admin/venues/delete_batch/(:num)'] = 'admincontroller/venues/delete_batch/$1';
+$route['admin/venues/get_batch_by_id/(:num)'] = 'admincontroller/venues/get_batch_by_id/$1';
