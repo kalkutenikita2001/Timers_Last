@@ -328,7 +328,6 @@
       }
       .modal-content {
         padding: 0.8rem;
-        margin-top: 30px;
       }
       .form-row {
         flex-direction: column;
@@ -343,7 +342,6 @@
       }
       .add-btn-container {
         justify-content: center;
-        flex-direction: column;
         gap: 0.5rem;
       }
       .btn-custom {

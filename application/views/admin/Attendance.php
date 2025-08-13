@@ -344,11 +344,7 @@
             }
             .table {
                 font-size: 0.7rem;
-                min-width: 100%;
-            }
-            .table th:nth-child(3), .table td:nth-child(3),
-            .table th:nth-child(4), .table td:nth-child(4) {
-                display: none;
+                min-width: 800px; /* Force horizontal scroll */
             }
             .action-btn {
                 font-size: 0.7rem;
@@ -413,9 +409,7 @@
             }
             .table {
                 font-size: 0.8rem;
-            }
-            .table th:nth-child(4), .table td:nth-child(4) {
-                display: none;
+                min-width: 700px; /* Force horizontal scroll if needed */
             }
             .action-btn {
                 font-size: 0.8rem;
@@ -654,24 +648,24 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Name <span class="text-danger">*</span>:</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" required>
                             <div class="invalid-feedback">Name is required</div>
                         </div>
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
-                            <input type="text" id="batch" name="batch" class="form-control" required>
+                            <input type="text" id="batch" name="batch" class="form-control" placeholder="Enter Batch" required>
                             <div class="invalid-feedback">Batch is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="level">Level <span class="text-danger">*</span>:</label>
-                            <input type="text" id="level" name="level" class="form-control" required>
+                            <input type="text" id="level" name="level" class="form-control" placeholder="Enter Level" required>
                             <div class="invalid-feedback">Level is required</div>
                         </div>
                         <div class="form-group">
                             <label for="category">Category <span class="text-danger">*</span>:</label>
-                            <input type="text" id="category" name="category" class="form-control" required>
+                            <input type="text" id="category" name="category" class="form-control" placeholder="Enter Category" required>
                             <div class="invalid-feedback">Category is required</div>
                         </div>
                     </div>
@@ -692,21 +686,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="filterName">Name:</label>
-                            <input type="text" id="filterName" name="filterName" class="form-control">
+                            <input type="text" id="filterName" name="filterName" class="form-control" placeholder="Enter Name to Filter">
                         </div>
                         <div class="form-group">
                             <label for="filterBatch">Batch:</label>
-                            <input type="text" id="filterBatch" name="filterBatch" class="form-control">
+                            <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter Batch to Filter">
                         </div>
                     </div>
                     <div class="form-row" id="dailyFilterFields">
                         <div class="form-group">
                             <label for="filterLevel">Level:</label>
-                            <input type="text" id="filterLevel" name="filterLevel" class="form-control">
+                            <input type="text" id="filterLevel" name="filterLevel" class="form-control" placeholder="Enter Level to Filter">
                         </div>
                         <div class="form-group">
                             <label for="filterCategory">Category:</label>
-                            <input type="text" id="filterCategory" name="filterCategory" class="form-control">
+                            <input type="text" id="filterCategory" name="filterCategory" class="form-control" placeholder="Enter Category to Filter">
                         </div>
                     </div>
                     <button type="submit" class="apply-filter-btn">Apply Filter</button>
