@@ -6,6 +6,13 @@
     <title>Attendance</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Montserrat Font -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         * {
@@ -14,25 +21,29 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa !important;
+            font-family: 'Montserrat', serif !important;
+            background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow-x: hidden;
         }
         .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
+            margin-left: 15rem;
+            padding: 1.5rem;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            min-height: 100vh;
         }
         .content-wrapper.minimized {
-            margin-left: 60px;
+            margin-left: 4rem;
         }
         .container {
             max-width: 1200px;
-            margin: 70px auto 0;
+            margin: 4rem auto 0;
             width: 100%;
+            padding: 0 1rem;
         }
         /* Tab Styles */
         .tab-buttons {
@@ -67,11 +78,10 @@
         /* Main Table Styles */
         .table-container {
             background: #fff;
-            border-radius: 10px;
-            /* overflow: hidden; */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             margin-bottom: 20px;
-            /* overflow-x: auto; */
+            overflow-x: auto;
         }
         .filter-wrapper {
             display: flex;
@@ -79,19 +89,21 @@
             margin-bottom: 10px;
         }
         .filter-btn {
-            /* background: linear-gradient(90deg, #ff4040, #470000); */
+            background: #e9ecef;
             color: black;
             border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            font-size: 14px;
-            font-weight: 600;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
+            min-width: 120px;
         }
         .filter-btn:hover {
-            /* background: linear-gradient(90deg, #ff3030, #360000); */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
             transform: translateY(-1px);
         }
         table {
@@ -104,14 +116,14 @@
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
         .table thead th {
-            color: black;
+            background-color: #343a40;
+            color: white;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 0.75rem;
             text-align: center;
             font-weight: 600;
-            font-size: 0.9rem;
-            vertical-align: middle;
+            font-size: 0.875rem;
+            padding: 1rem;
         }
         .table td, .table th {
             vertical-align: middle;
@@ -119,10 +131,11 @@
             padding: 0.75rem;
             white-space: nowrap;
             border-bottom: 1px solid #dee2e6;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: #000;
         }
         .table tbody tr:hover {
-            background-color: rgba(255, 64, 64, 0.05);
+            background-color: rgba(0, 123, 255, 0.1);
         }
         .action-cell {
             display: flex;
@@ -131,17 +144,25 @@
             justify-content: center;
         }
         .action-btn {
-            background: none;
+            font-size: 0.85rem;
+            margin: 0 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
             border: none;
-            font-size: 1.1rem;
-            margin: 0 0.25rem;
-            transition: all 0.3s ease;
+            background: none;
             color: #6c757d;
         }
-        .action-btn:hover {
-            transform: scale(1.3);
-            color: #ff4040;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        .action-btn.edit-btn {
+            color: #ffc107;
+        }
+        .action-btn.view-btn {
+            color: #28a745;
+        }
+        .action-btn:hover:not(:disabled) {
+            filter: brightness(90%);
+            transform: scale(1.2);
         }
         /* Add Button */
         .add-btn-container {
@@ -150,150 +171,155 @@
             margin-top: 20px;
         }
         .add-btn {
-            /* background: linear-gradient(90deg, #ff4040, #470000); */
+            background: #e9ecef;
             color: black;
             border: none;
-            border-radius: 12px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
+            min-width: 120px;
         }
         .add-btn:hover {
-            /* background: linear-gradient(90deg, #ff3030, #360000); */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 1050;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0);
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            overflow: hidden;
+            outline: 0;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .modal-content {
             background-color: #fff;
-            border-radius: 10px;
+            border-radius: 0.5rem;
             padding: 1.5rem;
             border: none;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
             max-width: 600px;
-            margin: 10% auto;
+            margin: 65px auto;
+            position: relative;
+            width: 87% !important;
         }
         .modal-header {
             border-bottom: none;
             padding-bottom: 0;
+            position: relative;
         }
-        .modal-header h2 {
+        .modal-title {
             text-align: center;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            font-size: 1.6rem;
-            color: #2c2f33;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            color: #343a40;
+            width: 100%;
         }
         .close {
             position: absolute;
-            right: 20px;
-            top: 20px;
-            color: #666;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.25rem;
+            color: #343a40;
+            opacity: 0.7;
+            width: 2rem;
+            height: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .close:hover {
-            color: #ff4040;
-            background: #f8f9fa;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            background: #e0e0e0;
         }
         .modal-body {
-            padding: 20px 25px;
+            padding: 1rem;
         }
         .form-row {
             display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
+            margin-right: -5px;
+            margin-left: -5px;
         }
         .form-group {
-            flex: 1;
+            padding-right: 5px;
+            padding-left: 5px;
+            margin-bottom: 0.8rem;
+            flex: 0 0 50%;
+            max-width: 50%;
         }
         .form-group label {
-            display: block;
-            margin-bottom: 8px;
             font-weight: 600;
-            color: #2c2f33;
-            font-size: 14px;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: #495057;
         }
-        .form-group input,
-        .form-group textarea {
+        .form-control, .form-control select {
+            height: calc(1.8rem + 2px);
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            padding: 0.3rem 0.5rem;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #f8f9fa;
-            color: #333;
-            transition: all 0.3s ease;
         }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ff4040;
-            box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
-            background: #fff;
+        .form-control:focus, .form-control select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
         }
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 3rem;
+            width: 100%;
         }
-        .error {
+        .invalid-feedback {
+            font-size: 0.75rem;
             color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 5px;
             display: none;
         }
-        .form-group.invalid input,
-        .form-group.invalid textarea {
+        .was-validated .form-control:invalid, .form-control.is-invalid {
             border-color: #dc3545;
             background: #ffeaea;
         }
-        .form-group.invalid .error {
-            display: block;
+        .was-validated .form-control:valid, .form-control.is-valid {
+            border-color: #28a745;
+        }
+        .modal-backdrop.show {
+            backdrop-filter: blur(6px);
         }
         .save-btn, .apply-filter-btn {
-            /* background: linear-gradient(135deg, #ff4040, #b71c1c); */
-            color: BLACK;
+            background: #6c757d;
+            color: white;
             border: none;
-            padding: 12px 40px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
-            display: block;
-            margin: 20px auto 0;
-            /* box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); */
             transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
+            min-width: 120px;
+            display: block;
+            margin: 1rem auto 0;
         }
         .save-btn:hover, .apply-filter-btn:hover {
-            /* background: linear-gradient(135deg, #ff3030, #9a0000); */
-            transform: translateY(-2px);
-            /* box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4); */
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
         .save-btn:disabled, .apply-filter-btn:disabled {
             background: #ccc;
@@ -304,26 +330,66 @@
         /* Filter Modal Specific Styles */
         .filter-modal-content {
             max-width: 500px;
+            margin: 65px auto;
         }
         /* Responsive Design */
         @media (max-width: 576px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 10px !important;
+                padding: 0.5rem !important;
             }
             .container {
-                margin-top: 80px;
+                margin-top: 3rem;
+                padding: 0 0.5rem;
             }
-            .table-container {
-                overflow-x: auto;
-                border-radius: 8px;
+            .table {
+                font-size: 0.7rem;
+                min-width: 100%;
             }
-            table {
-                min-width: 700px;
+            .table th:nth-child(3), .table td:nth-child(3),
+            .table th:nth-child(4), .table td:nth-child(4) {
+                display: none;
             }
-            th, td {
-                padding: 8px 6px;
-                font-size: 0.8rem;
+            .action-btn {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+            }
+            .modal-content {
+                padding: 0.8rem;
+                width: 95%;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            .form-group {
+                padding: 0;
+                margin-bottom: 0.6rem;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .add-btn-container {
+                justify-content: center;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .btn-custom, .add-btn, .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+            .step-nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+            .step-nav span {
+                font-size: 0.7rem;
+                padding: 5px;
+            }
+            .step-nav span i {
+                font-size: 1rem;
+                margin-left: 8px;
             }
             .tab-buttons {
                 flex-direction: column;
@@ -335,106 +401,146 @@
                 padding: 10px;
                 border-radius: 10px 3px;
             }
-            .filter-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-            .add-btn {
-                padding: 8px 16px;
-                font-size: 14px;
-                border-radius: 10px;
-            }
-            .modal-content, .filter-modal-content {
-                width: 95%;
-                margin: 15% auto;
-                padding: 1rem;
-                border-radius: 8px;
-            }
-            .modal-header h2 {
-                font-size: 1.4rem;
-            }
-            .modal-body {
-                padding: 12px;
-            }
-            .form-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .form-group label {
-                font-size: 12px;
-            }
-            .form-group input,
-            .form-group textarea {
-                padding: 8px 10px;
-                font-size: 12px;
-                border-radius: 6px;
-            }
-            .save-btn, .apply-filter-btn {
-                padding: 10px 30px;
-                font-size: 14px;
-                border-radius: 20px;
-            }
         }
         @media (min-width: 577px) and (max-width: 768px) {
             .content-wrapper {
                 margin-left: 0 !important;
-                padding: 12px !important;
+                padding: 1rem !important;
             }
             .container {
-                margin-top: 80px;
+                margin-top: 3.5rem;
+                padding: 0 0.75rem;
             }
-            .table-container {
-                border-radius: 8px;
+            .table {
+                font-size: 0.8rem;
             }
-            table {
-                min-width: 750px;
+            .table th:nth-child(4), .table td:nth-child(4) {
+                display: none;
             }
-            th, td {
-                padding: 0.75rem;
-                font-size: 0.9rem;
+            .action-btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.5rem;
+            }
+            .modal-content {
+                padding: 0.9rem;
+                margin-top: 40px;
+                width: 90%;
+            }
+            .form-row {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .form-group {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+            .add-btn-container {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            .btn-custom, .add-btn, .filter-btn {
+                font-size: 0.875rem;
+                padding: 0.375rem 0.75rem;
+            }
+            .step-nav {
+                gap: 0.75rem;
+            }
+            .step-nav span {
+                font-size: 0.8rem;
+            }
+            .step-nav span i {
+                font-size: 1.2rem;
+                margin-left: 8px;
+            }
+            .tab-buttons {
+                flex-direction: row;
             }
             .tab-btn {
                 font-size: 15px;
                 padding: 10px;
             }
-            .filter-btn {
-                padding: 7px 13px;
-                font-size: 13px;
-            }
-            .add-btn {
-                padding: 9px 18px;
-                font-size: 15px;
-            }
-            .modal-content, .filter-modal-content {
-                width: 90%;
-                margin: 12% auto;
-            }
-            .modal-body {
-                padding: 15px;
-            }
-            .form-row {
-                flex-direction: column;
-                gap: 12px;
-            }
         }
         @media (min-width: 769px) and (max-width: 991px) {
             .content-wrapper {
-                margin-left: 180px;
-                padding: 15px;
+                margin-left: 12rem;
+            }
+            .content-wrapper.minimized {
+                margin-left: 4rem;
             }
             .container {
-                margin-top: 75px;
+                margin-top: 4rem;
+                padding: 0 1rem;
             }
-            .modal-content, .filter-modal-content {
-                max-width: 550px;
+            .table {
+                font-size: 0.9rem;
+            }
+            .modal-content {
+                max-width: calc(450px + 2vw);
+                margin-top: 60px;
+            }
+            .step-nav {
+                gap: 25px;
+            }
+            .step-nav span i {
+                font-size: 1.4rem;
+                margin-left: 10px;
             }
         }
-        @media (min-width: 992px) {
-            .modal-content {
-                max-width: 600px;
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .content-wrapper {
+                margin-left: 14rem;
             }
-            .filter-modal-content {
+            .container {
+                margin-top: 4rem;
+                padding: 0 1rem;
+            }
+            .modal-content {
+                max-width: calc(480px + 2vw);
+                margin-top: 65px;
+            }
+        }
+        @media (min-width: 1201px) {
+            .content-wrapper {
+                margin-left: 15rem;
+            }
+            .container {
+                margin-top: 4rem;
+                padding: 0 1rem;
+            }
+            .modal-content {
                 max-width: 500px;
+                margin-top: 65px;
+            }
+        }
+        @media (min-width: 1600px) {
+            .content-wrapper {
+                margin-left: 16rem;
+            }
+            .container {
+                margin-top: 4rem;
+                padding: 0 1rem;
+            }
+            .modal-content {
+                max-width: calc(520px + 2vw);
+                margin-top: 65px;
+            }
+            .table {
+                font-size: 1rem;
+            }
+            .btn-custom, .add-btn, .filter-btn {
+                font-size: 1.1rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+        @media (hover: none) {
+            .action-btn:hover,
+            .btn-custom:hover,
+            .add-btn:hover,
+            .filter-btn:hover,
+            .close:hover {
+                transform: none;
+                background-color: inherit;
+                box-shadow: none;
             }
         }
     </style>
@@ -549,24 +655,24 @@
                         <div class="form-group">
                             <label for="name">Name <span class="text-danger">*</span>:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
-                            <div class="error">Name is required</div>
+                            <div class="invalid-feedback">Name is required</div>
                         </div>
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
                             <input type="text" id="batch" name="batch" class="form-control" required>
-                            <div class="error">Batch is required</div>
+                            <div class="invalid-feedback">Batch is required</div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="level">Level <span class="text-danger">*</span>:</label>
                             <input type="text" id="level" name="level" class="form-control" required>
-                            <div class="error">Level is required</div>
+                            <div class="invalid-feedback">Level is required</div>
                         </div>
                         <div class="form-group">
                             <label for="category">Category <span class="text-danger">*</span>:</label>
                             <input type="text" id="category" name="category" class="form-control" required>
-                            <div class="error">Category is required</div>
+                            <div class="invalid-feedback">Category is required</div>
                         </div>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
@@ -608,11 +714,12 @@
             </div>
         </div>
     </div>
-    <!-- Bootstrap + Font Awesome + jQuery -->
+
+    <!-- Bootstrap + Font Awesome + jQuery + SweetAlert2 -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         // Tab functionality with dynamic data for Total Attendance
         function showTab(tabName) {
@@ -684,7 +791,8 @@
         function clearValidationErrors() {
             const formGroups = document.querySelectorAll('#attendanceForm .form-group');
             formGroups.forEach(group => {
-                group.classList.remove('invalid');
+                group.classList.remove('was-validated');
+                group.querySelector('.invalid-feedback').style.display = 'none';
             });
         }
 
@@ -716,29 +824,28 @@
             const level = document.getElementById('level');
             const category = document.getElementById('category');
             let isValid = true;
-
             clearValidationErrors();
 
             if (!name.value.trim()) {
-                name.closest('.form-group').classList.add('invalid');
+                name.closest('.form-group').classList.add('was-validated');
+                name.closest('.form-group').querySelector('.invalid-feedback').style.display = 'block';
                 isValid = false;
             }
-
             if (!batch.value.trim()) {
-                batch.closest('.form-group').classList.add('invalid');
+                batch.closest('.form-group').classList.add('was-validated');
+                batch.closest('.form-group').querySelector('.invalid-feedback').style.display = 'block';
                 isValid = false;
             }
-
             if (!level.value.trim()) {
-                level.closest('.form-group').classList.add('invalid');
+                level.closest('.form-group').classList.add('was-validated');
+                level.closest('.form-group').querySelector('.invalid-feedback').style.display = 'block';
                 isValid = false;
             }
-
             if (!category.value.trim()) {
-                category.closest('.form-group').classList.add('invalid');
+                category.closest('.form-group').classList.add('was-validated');
+                category.closest('.form-group').querySelector('.invalid-feedback').style.display = 'block';
                 isValid = false;
             }
-
             return isValid;
         }
 
@@ -756,8 +863,20 @@
                 const tableBody = document.getElementById(currentTab + 'TableBody');
                 if (editingRow) {
                     updateRow(editingRow, data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Attendance updated successfully.',
+                        timer: 2000
+                    });
                 } else {
                     addNewRow(data, currentTab);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Attendance added successfully.',
+                        timer: 2000
+                    });
                 }
                 closeModal();
                 applyFilters(); // Re-apply filters after adding/editing
@@ -777,23 +896,19 @@
             const filterBatch = document.getElementById('filterBatch').value.toLowerCase();
             const filterLevel = document.getElementById('filterLevel').value.toLowerCase();
             const filterCategory = document.getElementById('filterCategory').value.toLowerCase();
-
             const tableBody = document.getElementById(currentTab + 'TableBody');
             const rows = tableBody.querySelectorAll('tr');
-
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 const name = cells[0].textContent.toLowerCase();
                 const batch = cells[1].textContent.toLowerCase();
                 let matches = true;
-
                 if (filterName && !name.includes(filterName)) {
                     matches = false;
                 }
                 if (filterBatch && !batch.includes(filterBatch)) {
                     matches = false;
                 }
-
                 if (currentTab === 'daily') {
                     const level = cells[2].textContent.toLowerCase();
                     const category = cells[3].textContent.toLowerCase();
@@ -804,7 +919,6 @@
                         matches = false;
                     }
                 }
-
                 row.style.display = matches ? '' : 'none';
             });
         }
@@ -858,13 +972,21 @@
             currentTab = tab;
             const row = button.closest('tr');
             const cells = row.querySelectorAll('td');
-            let message = `Name: ${cells[0].textContent}\nBatch: ${cells[1].textContent}`;
+            let message = `<strong>Name:</strong> ${cells[0].textContent}<br>
+                           <strong>Batch:</strong> ${cells[1].textContent}`;
             if (tab === 'total') {
-                message += `\nTotal Days: ${cells[2].textContent}\nPercentage: ${cells[3].textContent}`;
+                message += `<br><strong>Total Days:</strong> ${cells[2].textContent}<br>
+                            <strong>Percentage:</strong> ${cells[3].textContent}`;
             } else {
-                message += `\nLevel: ${cells[2].textContent}\nCategory: ${cells[3].textContent}`;
+                message += `<br><strong>Level:</strong> ${cells[2].textContent}<br>
+                            <strong>Category:</strong> ${cells[3].textContent}`;
             }
-            alert(message);
+            Swal.fire({
+                title: 'Attendance Details',
+                html: message,
+                icon: 'info',
+                confirmButtonText: 'Close'
+            });
         }
 
         // Edit attendance
@@ -885,33 +1007,26 @@
         // Real-time validation for Add/Edit form
         document.getElementById('name').addEventListener('input', function() {
             if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
+                this.closest('.form-group').classList.remove('was-validated');
+                this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
             }
         });
-
         document.getElementById('batch').addEventListener('input', function() {
             if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
+                this.closest('.form-group').classList.remove('was-validated');
+                this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
             }
         });
-
         document.getElementById('level').addEventListener('input', function() {
             if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
+                this.closest('.form-group').classList.remove('was-validated');
+                this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
             }
         });
-
         document.getElementById('category').addEventListener('input', function() {
             if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
+                this.closest('.form-group').classList.remove('was-validated');
+                this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
             }
         });
 

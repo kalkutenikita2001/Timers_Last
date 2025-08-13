@@ -126,6 +126,7 @@ $route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
 $route['admin/add-on-facilities'] = 'admincontroller/add_on_facilities/index';
 
 
+
 $route['admin/venues'] = 'admincontroller/venues/index';
 $route['admin/venues/add'] = 'admincontroller/venues/add';
 $route['admin/venues/update'] = 'admincontroller/venues/update';

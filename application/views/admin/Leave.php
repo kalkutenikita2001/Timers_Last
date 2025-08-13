@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Leave Management</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,133 +15,120 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Montserrat', serif !important;
+            background-color: #f4f6f8 !important;
             color: #333;
             min-height: 100vh;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow-x: hidden;
         }
         .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            min-height: 100vh;
+            padding: 1rem;
         }
         .content-wrapper.minimized {
-            margin-left: 60px;
+            margin-left: 4rem;
         }
         .container {
-            max-width: 1200px;
-            margin: 70px auto 0;
+            max-width: 100%;
             width: 100%;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
         }
-        /* Table Styles */
+        .add-btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-custom {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: clamp(0.7rem, 2vw, 1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom:hover {
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
         .table-container {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
             background: #fff;
             border-radius: 0.5rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            margin-bottom: 20px;
+            overflow-x: auto;
         }
-        .filter-wrapper {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-        .filter-btn {
-            /* background: #e0e0e0; */
-            color: black;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .filter-btn:hover {
-            /* background: #d0d0d0; */
-        }
-        table {
+        .table {
             width: 100%;
+            min-width: 600px;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
             border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
         .table thead th {
-            color: black;
+            background-color: #343a40;
+            color: white;
             border-bottom: 2px solid #dee2e6;
             white-space: nowrap;
-            padding: 0.75rem;
             text-align: center;
             font-weight: 600;
-            font-size: 0.9rem;
-            vertical-align: middle;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            padding: 0.75rem;
         }
         .table td {
             vertical-align: middle;
             text-align: center;
-            padding: 0.75rem;
-            white-space: nowrap;
+            padding: 0.5rem;
             border-bottom: 1px solid #dee2e6;
-            font-size: 0.9rem;
+            font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+            color: #000;
         }
         .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgba(0, 123, 255, 0.1);
         }
-        .action-cell {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
+        .table .horizontal-line td {
+            border: none;
+            background-color: #dee2e6;
+            height: 1px;
+            padding: 0;
         }
         .action-btn {
-            background: none;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            margin: 0 0.2rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
             border: none;
-            font-size: 1rem;
-            margin: 0 0.25rem;
-            transition: transform 0.2s ease;
-            color: #6c757d;
+        }
+        .action-btn.view {
+            background-color: #28a745;
+            color: white;
+        }
+        .action-btn.edit {
+            background-color: #007bff;
+            color: white;
+        }
+        .action-btn.delete {
+            background-color: #dc3545;
+            color: white;
         }
         .action-btn:hover {
-            transform: scale(1.2);
-            color: #007bff;
-        }
-        /* Add Button */
-        .add-btn-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .add-btn {
-            /* background: linear-gradient(90deg, #ff4040, #470000); */
-            color: BLACK;
-            border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .add-btn:hover {
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-            transform: translateY(-1px);
-        }
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            filter: brightness(90%);
         }
         .modal-content {
             background-color: #fff;
@@ -149,291 +137,205 @@
             border: none;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             width: 90%;
-            max-width: 600px;
-            margin: 10% auto;
-            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
         }
         .modal-header {
             border-bottom: none;
             padding-bottom: 0;
-            text-align: center;
+            position: relative;
         }
-        .modal-header h2 {
+        .modal-title {
+            text-align: center;
             font-weight: 700;
-            margin: 0.5rem 0 1rem;
-            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
             color: #343a40;
+            width: 100%;
         }
         .close {
             position: absolute;
-            right: 15px;
-            top: 15px;
-            color: #666;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 24px;
-            height: 24px;
+            right: 0.5rem;
+            top: 0.5rem;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #343a40;
+            opacity: 0.7;
+            width: 1.5rem;
+            height: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .close:hover {
+            opacity: 1;
             background: #e0e0e0;
         }
-        .modal-body {
-            padding: 10px 15px;
-        }
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
         .form-group {
-            flex: 1;
-            min-width: 0;
+            margin-bottom: 1rem !important;
         }
         .form-group label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: 600;
-            color: #333;
-            font-size: 12px;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            margin-bottom: 0.3rem;
+            color: #495057;
         }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 12px;
-            background: white;
-            color: #333;
-            transition: border-color 0.3s ease;
+        .form-control, .form-control select {
+            height: calc(1.5rem + 2px);
+            border-radius: 0.3rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            padding: 0.25rem 0.5rem;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
+        .form-control:focus, .form-control select:focus {
             border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
         }
         .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 3rem;
         }
-        .date-input {
-            position: relative;
-        }
-        .date-input input[type="date"] {
-            padding-right: 30px;
-        }
-        .date-input::after {
-            /* content: "📅"; */
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-size: 14px;
-        }
-        .error {
+        .invalid-feedback {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: clamp(0.6rem, 1.2vw, 0.75rem);
             color: #dc3545;
-            font-size: 10px;
-            margin-top: 3px;
-            display: none;
         }
-        .form-group.invalid input,
-        .form-group.invalid textarea {
+        .was-validated .form-control:invalid, .form-control.is-invalid {
             border-color: #dc3545;
             background: #ffeaea;
         }
-        .form-group.invalid .error {
-            display: block;
+        .was-validated .form-control:valid, .form-control.is-valid {
+            border-color: #28a745;
         }
-        .save-btn {
-            /* background: linear-gradient(135deg, #d32f2f, #b71c1c); */
-            color: BLACK;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
-            margin: 15px auto 0;
-            /* box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); */
+        .modal-footer {
+            justify-content: center;
+            gap: 10px;
+            padding: 1rem 0;
+            border-top: none;
+        }
+        .btn-confirm {
+            background: #28a745;
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.4rem 1rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
             transition: all 0.3s ease;
         }
-        .save-btn:hover {
-            transform: translateY(-2px);
-            /* box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); */
+        .btn-confirm:hover {
+            background: #218838;
+            transform: translateY(-1px);
         }
-        .save-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.4rem 1rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            transition: all 0.3s ease;
         }
-        /* Filter Modal Styles */
-        .filter-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.3s ease;
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: translateY(-1px);
         }
-        .filter-modal-content {
-            background-color: #fff;
-            border-radius: 0.5rem;
+        @media (max-width: 320px) {
+            .content-wrapper { margin-left: 0 !important; padding: 0.5rem; }
+            .container { margin-top: 0.5rem; padding: 0 0.5rem; }
+            .table { font-size: 0.6rem; }
+            .table th:nth-child(5), .table td:nth-child(5) { display: none; }
+            .action-btn { font-size: 0.6rem; padding: 0.15rem 0.3rem; margin: 0 0.1rem; }
+            .modal-content { padding: 0.5rem; width: 95%; }
+            .form-row { flex-direction: column; gap: 0.3rem; }
+            .form-group { margin-bottom: 0.4rem !important; }
+            .add-btn-container { justify-content: center; flex-direction: column; gap: 0.3rem; }
+            .btn-custom { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
+            .modal-title { font-size: 0.9rem; }
+            .form-group label { font-size: 0.65rem; }
+            .form-control, .form-control select { height: calc(1.4rem + 2px); font-size: 0.65rem; padding: 0.2rem 0.3rem; }
+        }
+        @media (min-width: 321px) and (max-width: 576px) {
+            .content-wrapper { margin-left: 0 !important; padding: 0.75rem; }
+            .container { margin-top: 0.75rem; padding: 0 0.75rem; }
+            .table { font-size: 0.7rem; }
+            .table th:nth-child(5), .table td:nth-child(5) { display: none; }
+            .action-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; margin: 0 0.15rem; }
+            .modal-content { padding: 0.75rem; width: 90%; }
+            .form-row { flex-direction: column; gap: 0.5rem; }
+            .form-group { margin-bottom: 0.5rem !important; }
+            .add-btn-container { justify-content: center; flex-direction: column; gap: 0.5rem; }
+            .btn-custom { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+            .modal-title { font-size: 1rem; }
+            .form-group label { font-size: 0.7rem; }
+            .form-control, .form-control select { height: calc(1.5rem + 2px); font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+        }
+        @media (min-width: 577px) and (max-width: 768px) {
+            .content-wrapper { margin-left: 0 !important; padding: 1rem; }
+            .table { font-size: 0.8rem; }
+            .table th:nth-child(5), .table td:nth-child(5) { display: none; }
+            .modal-content { padding: 1rem; width: 85%; }
+            .form-row { flex-direction: row; gap: 0.75rem; }
+            .add-btn-container { justify-content: flex-end; gap: 0.75rem; }
+            .btn-custom { font-size: 0.8rem; }
+            .form-group label { font-size: 0.75rem; }
+            .form-control, .form-control select { height: calc(1.6rem + 2px); font-size: 0.75rem; padding: 0.25rem 0.5rem; }
+        }
+        @media (min-width: 769px) and (max-width: 991px) {
+            .content-wrapper { margin-left: 12rem; }
+            .modal-content { max-width: 450px; }
+            .table { font-size: 0.85rem; }
+            .form-group label { font-size: 0.8rem; }
+            .form-control, .form-control select { height: calc(1.7rem + 2px); font-size: 0.8rem; }
+        }
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .content-wrapper { margin-left: 14rem; }
+            .modal-content { max-width: 480px; }
+            .table { font-size: 0.9rem; }
+            .form-group label { font-size: 0.85rem; }
+            .form-control, .form-control select { height: calc(1.8rem + 2px); font-size: 0.85rem; }
+        }
+        @media (min-width: 1201px) and (max-width: 1599px) {
+            .content-wrapper { margin-left: 15rem; }
+            .modal-content { max-width: 500px; }
+            .table { font-size: 0.95rem; }
+            .form-group label { font-size: 0.9rem; }
+            .form-control, .form-control select { height: calc(1.9rem + 2px); font-size: 0.9rem; }
+        }
+        @media (min-width: 1600px) {
+            .content-wrapper { margin-left: 16rem; }
+            .modal-content { max-width: 520px; }
+            .table { font-size: 1rem; }
+            .btn-custom { font-size: 1rem; padding: 0.5rem 1rem; }
+            .form-group label { font-size: 0.95rem; }
+            .form-control, .form-control select { height: calc(2rem + 2px); font-size: 0.95rem; }
+        }
+        @media (hover: none) {
+            .action-btn:hover, .btn-custom:hover, .close:hover { transform: none; background-color: inherit; box-shadow: none; }
+        }
+        .view-modal-content {
             padding: 1rem;
-            border: none;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            width: 90%;
-            max-width: 400px;
-            margin: 10% auto;
-            position: relative;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
         }
-        .filter-modal-header {
-            border-bottom: none;
-            padding-bottom: 0;
+        .view-modal-content p {
+            margin-bottom: 0.5rem;
+        }
+        .form-control {
+            padding: 0.375rem 0.75rem !important;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+        .modal-note {
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            color: #6c757d;
             text-align: center;
+            margin-bottom: 1rem;
         }
-        .filter-modal-header h2 {
-            font-weight: 700;
-            margin: 0.5rem 0 1rem;
-            font-size: 1.25rem;
-            color: #343a40;
-        }
-        .filter-modal-body {
-            padding: 10px 15px;
-        }
-        .filter-form-group {
-            margin-bottom: 10px;
-        }
-        .filter-form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-            font-size: 12px;
-        }
-        .filter-form-group input,
-        .filter-form-group select {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 12px;
-            background: white;
-            color: #333;
-            transition: border-color 0.3s ease;
-        }
-        .filter-form-group input:focus,
-        .filter-form-group select:focus {
-            outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-        .filter-btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .apply-filter-btn, .reset-filter-btn {
-            /* background: linear-gradient(135deg, #d32f2f, #b71c1c); */
-            color: black;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            /* box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); */
-            transition: all 0.3s ease;
-        }
-        .reset-filter-btn {
-            background: #e0e0e0;
-            color: #333;
-            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
-        }
-        .apply-filter-btn:hover, .reset-filter-btn:hover {
-            transform: translateY(-2px);
-            /* box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); */
-        }
-        .reset-filter-btn:hover {
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 1rem !important;
-            }
-            .container {
-                margin-top: 60px;
-            }
-            .table-container {
-                overflow-x: auto;
-            }
-            table {
-                min-width: 800px;
-            }
-            th, td {
-                padding: 0.75rem;
-                font-size: 0.8rem;
-            }
-            .modal-content, .filter-modal-content {
-                width: 95%;
-                max-width: 350px;
-                margin: 15% auto;
-            }
-            .modal-body, .filter-modal-body {
-                padding: 10px;
-            }
-            .form-row {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .form-group {
-                min-width: 100%;
-            }
-            .add-btn {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-        }
-        @media (max-width: 480px) {
-            .modal-content, .filter-modal-content {
-                width: 98%;
-                max-width: 300px;
-                margin: 10% auto;
-            }
-            .modal-body, .filter-modal-body {
-                padding: 8px;
-            }
-            .form-group label, .filter-form-group label {
-                font-size: 11px;
-            }
-            .form-group input, .form-group textarea, .filter-form-group input, .filter-form-group select {
-                padding: 6px 8px;
-                font-size: 11px;
-            }
-            .save-btn, .apply-filter-btn, .reset-filter-btn {
-                padding: 6px 15px;
-                font-size: 12px;
-            }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .content-wrapper {
-                margin-left: 200px;
-            }
-            .modal-content, .filter-modal-content {
-                max-width: 450px;
-            }
+        .form-row {
+            align-items: flex-start !important;
         }
     </style>
 </head>
@@ -444,13 +346,14 @@
     <?php $this->load->view('admin/Include/Navbar') ?>
     <div class="content-wrapper" id="contentWrapper">
         <div class="container">
-            <!-- Filter Button -->
-            <div class="filter-wrapper">
-                <button class="filter-btn" onclick="openFilterModal()">
-                    <i class="bi bi-funnel me-1"></i> Filter
+            <div class="add-btn-container">
+                <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+                    <i class="fas fa-filter mr-1"></i> Filter
+                </button>
+                <button class="btn btn-custom" data-toggle="modal" data-target="#leaveModal">
+                    <i class="fas fa-plus mr-1"></i> Add Leave
                 </button>
             </div>
-            <!-- Leave Table -->
             <div class="table-container">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -465,427 +368,579 @@
                         </tr>
                     </thead>
                     <tbody id="leaveTableBody">
-                        <tr>
-                            <td>Jane Doe</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>15/07/2025</td>
-                            <td>sdfghj</td>
-                            <td>sdfghjertyuiopasdfghj</td>
-                            <td class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Jane Doe</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>15/07/2025</td>
-                            <td>sdfghj</td>
-                            <td>sdfghjertyuiopasdfghj</td>
-                            <td class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Jane Doe</td>
-                            <td>B1</td>
-                            <td>Intermediate</td>
-                            <td>15/07/2025</td>
-                            <td>sdfghj</td>
-                            <td>sdfghjertyuiopasdfghj</td>
-                            <td class="action-cell">
-                                <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                            </td>
-                        </tr>
+                        <?php if (!empty($leaves)): ?>
+                            <?php foreach ($leaves as $leave): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($leave->name); ?></td>
+                                    <td><?php echo htmlspecialchars($leave->batch); ?></td>
+                                    <td><?php echo htmlspecialchars($leave->level); ?></td>
+                                    <td><?php echo htmlspecialchars($leave->date); ?></td>
+                                    <td><?php echo htmlspecialchars($leave->reason); ?></td>
+                                    <td><?php echo htmlspecialchars($leave->description); ?></td>
+                                    <td>
+                                        <button class="action-btn view" data-id="<?php echo $leave->id; ?>" onclick="viewLeave(this)" title="View Leave Details"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn edit" data-id="<?php echo $leave->id; ?>" onclick="editLeave(this)" title="Edit Leave"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" data-id="<?php echo $leave->id; ?>" onclick="deleteLeave(this)" title="Delete Leave"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="horizontal-line"><td colspan="7"></td></tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="7" class="text-center">No records found.</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-            <!-- Add Button -->
-            <div class="add-btn-container">
-                <button class="add-btn" onclick="openModal()">Add Leave</button>
-            </div>
         </div>
     </div>
-    <!-- Modal -->
-    <div id="leaveModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">×</span>
-            <div class="modal-header">
-                <h2 class="modal-title">Add Leave</h2>
-            </div>
-            <div class="modal-body">
-                <form id="leaveForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Name <span class="text-danger">*</span>:</label>
-                            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter full name">
-                            <div class="error">Name is required</div>
+    <!-- Add/Edit Leave Modal -->
+    <div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100" id="leaveLabel">Add Leave</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="leaveForm" novalidate>
+                    <input type="hidden" id="leaveId" name="leaveId">
+                    <div class="form-row d-flex">
+                        <div class="form-group col-12 col-md-6">
+                            <label for="name">Name <span class="text-danger">*</span></label>
+                            <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter full name">
+                            <div class="invalid-feedback">Name is required, letters and spaces only, max 50 characters.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="batch">Batch <span class="text-danger">*</span>:</label>
-                            <input type="text" id="batch" name="batch" class="form-control" required placeholder="Enter batch code (e.g., B1)">
-                            <div class="error">Batch is required</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="level">Level <span class="text-danger">*</span>:</label>
-                            <input type="text" id="level" name="level" class="form-control" required placeholder="Enter level (e.g., Intermediate)">
-                            <div class="error">Level is required</div>
-                        </div>
-                        <div class="form-group date-input">
-                            <label for="date">Date <span class="text-danger">*</span>:</label>
-                            <input type="date" id="date" name="date" class="form-control" required placeholder="Select date">
-                            <div class="error">Date is required</div>
+                        <div class="form-group col-12 col-md-6">
+                            <label for="batch">Batch <span class="text-danger">*</span></label>
+                            <input type="text" id="batch" name="batch" class="form-control" required maxlength="10" placeholder="Enter batch code (e.g., B1)">
+                            <div class="invalid-feedback">Batch is required, max 10 characters.</div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="reason">Reason <span class="text-danger">*</span>:</label>
-                            <input type="text" id="reason" name="reason" class="form-control" required placeholder="Enter reason for leave">
-                            <div class="error">Reason is required</div>
+                    <div class="form-row d-flex">
+                        <div class="form-group col-12 col-md-6">
+                            <label for="level">Level <span class="text-danger">*</span></label>
+                            <input type="text" id="level" name="level" class="form-control" required maxlength="20" placeholder="Enter level (e.g., Intermediate)">
+                            <div class="invalid-feedback">Level is required, max 20 characters.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="description">Description <span class="text-danger">*</span>:</label>
-                            <textarea id="description" name="description" class="form-control" required placeholder="Enter detailed description"></textarea>
-                            <div class="error">Description is required</div>
+                        <div class="form-group col-12 col-md-6">
+                            <label for="date">Date <span class="text-danger">*</span></label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                            <div class="invalid-feedback">Date is required.</div>
                         </div>
                     </div>
-                    <button type="submit" class="save-btn">Save</button>
+                    <div class="form-group">
+                        <label for="reason">Reason <span class="text-danger">*</span></label>
+                        <input type="text" id="reason" name="reason" class="form-control" required maxlength="100" placeholder="Enter reason for leave">
+                        <div class="invalid-feedback">Reason is required, max 100 characters.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description <span class="text-danger">*</span></label>
+                        <textarea id="description" name="description" class="form-control" required maxlength="200" rows="2" placeholder="Enter detailed description (max 200 characters)"></textarea>
+                        <div class="invalid-feedback">Description is required, max 200 characters.</div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-cancel" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-confirm">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
     <!-- Filter Modal -->
-    <div id="filterModal" class="filter-modal">
-        <div class="filter-modal-content">
-            <div class="filter-modal-header">
-                <span class="close" onclick="closeFilterModal()">×</span>
-                <h2>Filter Leaves</h2>
-            </div>
-            <div class="filter-modal-body">
-                <form id="filterForm">
-                    <div class="filter-form-group">
-                        <label for="filterName">Name:</label>
-                        <input type="text" id="filterName" name="filterName" class="form-control" placeholder="Enter name to filter">
+    <div class="modal fade filter-modal" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100" id="filterLabel">Filter Leaves</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="filterForm" novalidate>
+                    <div class="modal-note">Fill at least one field to apply a filter.</div>
+                    <div class="form-row d-flex">
+                        <div class="form-group col-12 col-md-6">
+                            <label for="filterName">Name</label>
+                            <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" maxlength="50" placeholder="Enter name to filter">
+                            <div class="invalid-feedback">Name must contain only letters and spaces, max 50 characters.</div>
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label for="filterBatch">Batch</label>
+                            <input type="text" id="filterBatch" name="filterBatch" class="form-control" maxlength="10" placeholder="Enter batch to filter">
+                        </div>
                     </div>
-                    <div class="filter-form-group">
-                        <label for="filterBatch">Batch:</label>
-                        <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter batch to filter">
+                    <div class="form-row d-flex">
+                        <div class="form-group col-12 col-md-6">
+                            <label for="filterLevel">Level</label>
+                            <input type="text" id="filterLevel" name="filterLevel" class="form-control" maxlength="20" placeholder="Enter level to filter">
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label for="filterDate">Date</label>
+                            <input type="date" id="filterDate" name="filterDate" class="form-control" placeholder="Select date to filter">
+                        </div>
                     </div>
-                    <div class="filter-form-group">
-                        <label for="filterLevel">Level:</label>
-                        <input type="text" id="filterLevel" name="filterLevel" class="form-control" placeholder="Enter level to filter">
-                    </div>
-                    <div class="filter-form-group">
-                        <label for="filterDate">Date:</label>
-                        <input type="date" id="filterDate" name="filterDate" class="form-control" placeholder="Select date to filter">
-                    </div>
-                    <div class="filter-btn-container">
-                        <button type="button" class="reset-filter-btn" onclick="resetFilter()">Reset</button>
-                        <button type="submit" class="apply-filter-btn">Apply</button>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-cancel" data-dismiss="modal">Clear</button>
+                        <button type="submit" class="btn btn-confirm">Apply Filter</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Bootstrap + Font Awesome + jQuery -->
+    <!-- View Modal -->
+    <div class="modal fade view-modal" id="viewModal" tabindex="-1" aria-labelledby="viewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100" id="viewLabel">Leave Details</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="view-modal-content" id="viewModalContent">
+                    <!-- Content will be populated dynamically -->
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-cancel" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Modal functionality
-        const modal = document.getElementById('leaveModal');
-        const form = document.getElementById('leaveForm');
-        let editingRow = null;
+        $(document).ready(function() {
+            let editingRow = null;
+            let csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
+            const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
 
-        function openModal() {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            resetForm();
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            resetForm();
-            editingRow = null;
-        }
-
-        function resetForm() {
-            form.reset();
-            clearValidationErrors();
-            document.querySelector('.modal-title').textContent = 'Add Leave';
-        }
-
-        function clearValidationErrors() {
-            const formGroups = document.querySelectorAll('.form-group');
-            formGroups.forEach(group => {
-                group.classList.remove('invalid');
+            // Reset leave modal on close
+            $('#leaveModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('leaveForm');
+                form.reset();
+                form.classList.remove('was-validated');
+                form.querySelectorAll('input, textarea').forEach(input => {
+                    input.setCustomValidity('');
+                    input.classList.remove('is-valid', 'is-invalid');
+                });
+                editingRow = null;
+                $('#leaveId').val('');
+                $('#leaveLabel').text('Add Leave');
             });
-        }
 
-        // Form validation
-        function validateForm() {
-            const name = document.getElementById('name');
-            const batch = document.getElementById('batch');
-            const level = document.getElementById('level');
-            const date = document.getElementById('date');
-            const reason = document.getElementById('reason');
-            const description = document.getElementById('description');
-            let isValid = true;
+            // Reset filter modal on close
+            $('#filterModal').on('hidden.bs.modal', function() {
+                const form = document.getElementById('filterForm');
+                form.reset();
+                form.classList.remove('was-validated');
+                form.querySelectorAll('input').forEach(input => {
+                    input.setCustomValidity('');
+                    input.classList.remove('is-valid', 'is-invalid');
+                });
+                loadAllLeaves();
+            });
 
-            clearValidationErrors();
+            // Validate leave form
+            function validateLeaveForm() {
+                const form = document.getElementById('leaveForm');
+                let isValid = true;
 
-            if (!name.value.trim()) {
-                name.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
+                form.querySelectorAll('input, textarea').forEach(input => {
+                    input.setCustomValidity('');
+                    input.classList.remove('is-invalid', 'is-valid');
+                });
 
-            if (!batch.value.trim()) {
-                batch.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
+                const name = form.querySelector('#name');
+                const batch = form.querySelector('#batch');
+                const level = form.querySelector('#level');
+                const date = form.querySelector('#date');
+                const reason = form.querySelector('#reason');
+                const description = form.querySelector('#description');
 
-            if (!level.value.trim()) {
-                level.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!date.value) {
-                date.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!reason.value.trim()) {
-                reason.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            if (!description.value.trim()) {
-                description.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        // Form submission
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateForm()) {
-                const formData = new FormData(form);
-                const data = {
-                    name: formData.get('name'),
-                    batch: formData.get('batch'),
-                    level: formData.get('level'),
-                    date: formData.get('date'),
-                    reason: formData.get('reason'),
-                    description: formData.get('description')
-                };
-
-                if (editingRow) {
-                    updateRow(editingRow, data);
+                if (!name.value.trim()) {
+                    name.setCustomValidity('Name is required.');
+                    isValid = false;
+                } else if (!/^[A-Za-z\s]+$/.test(name.value)) {
+                    name.setCustomValidity('Name must contain only letters and spaces.');
+                    isValid = false;
+                } else if (name.value.length > 50) {
+                    name.setCustomValidity('Name must be 50 characters or less.');
+                    isValid = false;
                 } else {
-                    addNewRow(data);
+                    name.classList.add('is-valid');
                 }
-                closeModal();
+
+                if (!batch.value.trim()) {
+                    batch.setCustomValidity('Batch is required.');
+                    isValid = false;
+                } else if (batch.value.length > 10) {
+                    batch.setCustomValidity('Batch must be 10 characters or less.');
+                    isValid = false;
+                } else {
+                    batch.classList.add('is-valid');
+                }
+
+                if (!level.value.trim()) {
+                    level.setCustomValidity('Level is required.');
+                    isValid = false;
+                } else if (level.value.length > 20) {
+                    level.setCustomValidity('Level must be 20 characters or less.');
+                    isValid = false;
+                } else {
+                    level.classList.add('is-valid');
+                }
+
+                if (!date.value) {
+                    date.setCustomValidity('Date is required.');
+                    isValid = false;
+                } else {
+                    date.classList.add('is-valid');
+                }
+
+                if (!reason.value.trim()) {
+                    reason.setCustomValidity('Reason is required.');
+                    isValid = false;
+                } else if (reason.value.length > 100) {
+                    reason.setCustomValidity('Reason must be 100 characters or less.');
+                    isValid = false;
+                } else {
+                    reason.classList.add('is-valid');
+                }
+
+                if (!description.value.trim()) {
+                    description.setCustomValidity('Description is required.');
+                    isValid = false;
+                } else if (description.value.length > 200) {
+                    description.setCustomValidity('Description must be 200 characters or less.');
+                    isValid = false;
+                } else {
+                    description.classList.add('is-valid');
+                }
+
+                return isValid;
             }
-        });
 
-        // Add new row to table
-        function addNewRow(data) {
-            const tableBody = document.getElementById('leaveTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${data.name}</td>
-                <td>${data.batch}</td>
-                <td>${data.level}</td>
-                <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
-                <td>${data.reason}</td>
-                <td>${data.description}</td>
-                <td class="action-cell">
-                    <button class="action-btn view-btn" onclick="viewLeave(this)"><i class="fas fa-eye"></i></button>
-                    <button class="action-btn edit-btn" onclick="editLeave(this)"><i class="fas fa-edit"></i></button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        }
-
-        // Update existing row
-        function updateRow(row, data) {
-            const cells = row.querySelectorAll('td');
-            cells[0].textContent = data.name;
-            cells[1].textContent = data.batch;
-            cells[2].textContent = data.level;
-            cells[3].textContent = new Date(data.date).toLocaleDateString('en-GB');
-            cells[4].textContent = data.reason;
-            cells[5].textContent = data.description;
-        }
-
-        // View leave
-        function viewLeave(button) {
-            const row = button.closest('tr');
-            const cells = row.querySelectorAll('td');
-            alert(`Name: ${cells[0].textContent}\nBatch: ${cells[1].textContent}\nLevel: ${cells[2].textContent}\nDate: ${cells[3].textContent}\nReason: ${cells[4].textContent}\nDescription: ${cells[5].textContent}`);
-        }
-
-        // Edit leave
-        function editLeave(button) {
-            editingRow = button.closest('tr');
-            const cells = editingRow.querySelectorAll('td');
-            document.getElementById('name').value = cells[0].textContent;
-            document.getElementById('batch').value = cells[1].textContent;
-            document.getElementById('level').value = cells[2].textContent;
-            const [day, month, year] = cells[3].textContent.split('/');
-            document.getElementById('date').value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-            document.getElementById('reason').value = cells[4].textContent;
-            document.getElementById('description').value = cells[5].textContent;
-            document.querySelector('.modal-title').textContent = 'Edit Leave';
-            openModal();
-        }
-
-        // Real-time validation
-        document.getElementById('name').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('batch').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('level').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('date').addEventListener('input', function() {
-            if (this.value) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('reason').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        document.getElementById('description').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('invalid');
-            } else {
-                this.closest('.form-group').classList.add('invalid');
-            }
-        });
-
-        // Filter Modal functionality
-        const filterModal = document.getElementById('filterModal');
-        const filterForm = document.getElementById('filterForm');
-        let originalRows = [];
-
-        function openFilterModal() {
-            filterModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            // Store original table rows if not already stored
-            if (!originalRows.length) {
-                const tableBody = document.getElementById('leaveTableBody');
-                originalRows = Array.from(tableBody.querySelectorAll('tr')).map(row => row.outerHTML);
-            }
-            filterForm.reset();
-        }
-
-        function closeFilterModal() {
-            filterModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            filterForm.reset();
-        }
-
-        function resetFilter() {
-            filterForm.reset();
-            const tableBody = document.getElementById('leaveTableBody');
-            tableBody.innerHTML = originalRows.join('');
-            closeFilterModal();
-        }
-
-        // Filter form submission
-        filterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const filterData = {
-                name: document.getElementById('filterName').value.trim().toLowerCase(),
-                batch: document.getElementById('filterBatch').value.trim().toLowerCase(),
-                level: document.getElementById('filterLevel').value.trim().toLowerCase(),
-                date: document.getElementById('filterDate').value
-            };
-
-            const tableBody = document.getElementById('leaveTableBody');
-            tableBody.innerHTML = '';
-
-            const filteredRows = originalRows.filter(row => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = row;
-                const cells = tempDiv.querySelectorAll('td');
-                const rowData = {
-                    name: cells[0].textContent.toLowerCase(),
-                    batch: cells[1].textContent.toLowerCase(),
-                    level: cells[2].textContent.toLowerCase(),
-                    date: cells[3].textContent
-                };
-
-                return (
-                    (!filterData.name || rowData.name.includes(filterData.name)) &&
-                    (!filterData.batch || rowData.batch.includes(filterData.batch)) &&
-                    (!filterData.level || rowData.level.includes(filterData.level)) &&
-                    (!filterData.date || rowData.date === new Date(filterData.date).toLocaleDateString('en-GB'))
-                );
-            });
-
-            tableBody.innerHTML = filteredRows.join('');
-            closeFilterModal();
-        });
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        if (sidebar) {
-                            sidebar.classList.toggle('active');
-                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-                        }
-                    } else {
-                        if (sidebar && contentWrapper) {
-                            const isMinimized = sidebar.classList.toggle('minimized');
-                            navbar.classList.toggle('sidebar-minimized', isMinimized);
-                            contentWrapper.classList.toggle('minimized', isMinimized);
-                        }
+            // Load all leaves
+            function loadAllLeaves() {
+                $.ajax({
+                    url: '<?php echo base_url('admin/leaves'); ?>',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        updateLeaveTable(data);
+                        csrfToken = data.csrf_token || csrfToken;
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load leaves. Please try again.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             }
+
+            // Update leave table with data
+            function updateLeaveTable(data) {
+                const tableBody = $('#leaveTableBody');
+                tableBody.empty();
+                if (data.leaves.length === 0) {
+                    tableBody.append('<tr><td colspan="7" class="text-center">No records found.</td></tr>');
+                } else {
+                    data.leaves.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.batch}</td>
+                                <td>${item.level}</td>
+                                <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
+                                <td>${item.reason}</td>
+                                <td>${item.description}</td>
+                                <td>
+                                    <button class="action-btn view" data-id="${item.id}" onclick="viewLeave(this)" title="View Leave Details"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit" data-id="${item.id}" onclick="editLeave(this)" title="Edit Leave"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn delete" data-id="${item.id}" onclick="deleteLeave(this)" title="Delete Leave"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="horizontal-line"><td colspan="7"></td></tr>
+                        `;
+                        tableBody.append(row);
+                    });
+                }
+            }
+
+            // Submit leave form
+            $('#leaveForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                form.classList.add('was-validated');
+                if (validateLeaveForm()) {
+                    const formData = new FormData(form);
+                    const data = {
+                        [csrfName]: csrfToken,
+                        name: formData.get('name'),
+                        batch: formData.get('batch'),
+                        level: formData.get('level'),
+                        date: formData.get('date'),
+                        reason: formData.get('reason'),
+                        description: formData.get('description'),
+                        id: formData.get('leaveId') || null
+                    };
+                    const url = data.id ? '<?php echo base_url('admin/leaves/update'); ?>' : '<?php echo base_url('admin/leaves/add'); ?>';
+                    const action = data.id ? 'updated' : 'added';
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                $('#leaveModal').modal('hide');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: `Leave ${action} successfully`,
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                }).then(() => {
+                                    loadAllLeaves();
+                                    csrfToken = response.csrf_token || csrfToken;
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message || `Error ${action} leave.`,
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to save leave. Please try again.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        }
+                    });
+                }
+            });
+
+            // View leave
+            window.viewLeave = function(button) {
+                const id = $(button).data('id');
+                $.ajax({
+                    url: '<?php echo base_url('admin/leaves/get_by_id'); ?>/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const leave = response.data;
+                            $('#viewModalContent').html(`
+                                <p><strong>Name:</strong> ${leave.name}</p>
+                                <p><strong>Batch:</strong> ${leave.batch}</p>
+                                <p><strong>Level:</strong> ${leave.level}</p>
+                                <p><strong>Date:</strong> ${new Date(leave.date).toLocaleDateString('en-GB')}</p>
+                                <p><strong>Reason:</strong> ${leave.reason}</p>
+                                <p><strong>Description:</strong> ${leave.description || 'No description'}</p>
+                            `);
+                            $('#viewModal').modal('show');
+                            csrfToken = response.csrf_token || csrfToken;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load leave details.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            };
+
+            // Edit leave
+            window.editLeave = function(button) {
+                editingRow = $(button).closest('tr');
+                const id = $(button).data('id');
+                $.ajax({
+                    url: '<?php echo base_url('admin/leaves/get_by_id'); ?>/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const leave = response.data;
+                            $('#leaveId').val(leave.id);
+                            $('#name').val(leave.name);
+                            $('#batch').val(leave.batch);
+                            $('#level').val(leave.level);
+                            const date = new Date(leave.date);
+                            $('#date').val(`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`);
+                            $('#reason').val(leave.reason);
+                            $('#description').val(leave.description);
+                            $('#leaveLabel').text('Edit Leave');
+                            $('#leaveModal').modal('show');
+                            $('#leaveForm').find('input, textarea').trigger('input');
+                            csrfToken = response.csrf_token || csrfToken;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load leave for editing.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            };
+
+            // Delete leave
+            window.deleteLeave = function(button) {
+                const id = $(button).data('id');
+                const row = $(button).closest('tr');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '<?php echo base_url('admin/leaves/delete'); ?>/' + id,
+                            type: 'POST',
+                            data: { [csrfName]: csrfToken },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    row.next('.horizontal-line').remove();
+                                    row.remove();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Deleted!',
+                                        text: response.message,
+                                        showConfirmButton: true,
+                                        timer: 3000
+                                    });
+                                    csrfToken = response.csrf_token || csrfToken;
+                                    if ($('#leaveTableBody tr').length === 0) {
+                                        $('#leaveTableBody').append('<tr><td colspan="7" class="text-center">No records found.</td></tr>');
+                                    }
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message,
+                                        showConfirmButton: true,
+                                        timer: 3000
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to delete leave.',
+                                    showConfirmButton: true,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+            };
+
+            // Submit filter form
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {
+                    filterName: formData.get('filterName'),
+                    filterBatch: formData.get('filterBatch'),
+                    filterLevel: formData.get('filterLevel'),
+                    filterDate: formData.get('filterDate')
+                };
+                $.ajax({
+                    url: '<?php echo base_url('admin/leaves'); ?>',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        updateLeaveTable(response);
+                        csrfToken = response.csrf_token || csrfToken;
+                        $('#filterModal').modal('hide');
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to apply filter.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            });
+
+            // Sidebar toggle
+            $('#sidebarToggle').on('click', function() {
+                if (window.innerWidth <= 576) {
+                    $('#sidebar').toggleClass('active');
+                    $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+                } else {
+                    const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+                    $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+                    $('#contentWrapper').toggleClass('minimized', isMinimized);
+                }
+            });
+
+            // Handle window resize
+            $(window).on('resize', function() {
+                if (window.innerWidth <= 576) {
+                    $('#sidebar').removeClass('minimized');
+                    $('.navbar').removeClass('sidebar-minimized');
+                    $('#contentWrapper').removeClass('minimized');
+                }
+            });
+
+            // Real-time validation for leave form
+            $('#leaveForm input, #leaveForm textarea').on('input change', function() {
+                validateLeaveForm();
+            });
+
+            // Remove focus from buttons after click
+            $('.btn-custom, .action-btn').on('click', function() {
+                $(this).blur();
+            });
         });
     </script>
 </body>
