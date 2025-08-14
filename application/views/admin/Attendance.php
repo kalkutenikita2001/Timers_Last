@@ -381,19 +381,6 @@
                 font-size: 0.75rem;
                 padding: 0.3rem 0.6rem;
             }
-            .step-nav {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 0.75rem;
-            }
-            .step-nav span {
-                font-size: 0.7rem;
-                padding: 5px;
-            }
-            .step-nav span i {
-                font-size: 1rem;
-                margin-left: 8px;
-            }
             .tab-buttons {
                 flex-direction: column;
                 border-radius: 8px;
@@ -443,16 +430,6 @@
                 font-size: 0.875rem;
                 padding: 0.375rem 0.75rem;
             }
-            .step-nav {
-                gap: 0.75rem;
-            }
-            .step-nav span {
-                font-size: 0.8rem;
-            }
-            .step-nav span i {
-                font-size: 1.2rem;
-                margin-left: 8px;
-            }
             .tab-buttons {
                 flex-direction: row;
             }
@@ -478,13 +455,6 @@
             .modal-content {
                 max-width: calc(450px + 2vw);
                 margin-top: 60px;
-            }
-            .step-nav {
-                gap: 25px;
-            }
-            .step-nav span i {
-                font-size: 1.4rem;
-                margin-left: 10px;
             }
         }
         @media (min-width: 992px) and (max-width: 1200px) {
@@ -700,7 +670,11 @@
                         </div>
                         <div class="form-group">
                             <label for="filterBatch">Batch:</label>
-                            <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter Batch to Filter">
+                            <select id="filterBatch" name="filterBatch" class="form-control">
+                                <option value="">-- Select Batch --</option>
+                                <!-- Batches will be populated dynamically -->
+                            </select>
+                            <div class="invalid-feedback">Please select a valid batch.</div>
                         </div>
                     </div>
                     <div class="form-row" id="dailyFilterFields">
@@ -812,19 +786,23 @@
             document.body.style.overflow = 'hidden';
             // Ensure filter fields reflect current tab
             document.getElementById('dailyFilterFields').style.display = currentTab === 'daily' ? 'flex' : 'none';
+            loadFilterBatches(); // Load batches when filter modal opens
         }
 
         function closeFilterModal() {
             filterModal.style.display = 'none';
             document.body.style.overflow = 'auto';
+            resetFilters();
         }
 
         function resetFilters() {
             filterForm.reset();
+            const filterBatchSelect = document.getElementById('filterBatch');
+            filterBatchSelect.innerHTML = '<option value="">-- Select Batch --</option>'; // Reset batch dropdown
             applyFilters(); // Re-apply filters to refresh table
         }
 
-        // Load batches dynamically into the batch dropdown
+        // Load batches dynamically into the batch dropdown (Add/Edit Modal)
         function loadBatches() {
             const batchSelect = document.getElementById('batch');
             const baseUrl = '<?php echo base_url(); ?>';
@@ -855,6 +833,41 @@
                 error: function(xhr, status, error) {
                     console.error('AJAX error:', error);
                     batchSelect.innerHTML += '<option value="" disabled>Error loading batches</option>';
+                }
+            });
+        }
+
+        // Load batches dynamically into the filter batch dropdown
+        function loadFilterBatches() {
+            const filterBatchSelect = document.getElementById('filterBatch');
+            const baseUrl = '<?php echo base_url(); ?>';
+            const batchUrl = baseUrl + 'batch/get_batches';
+            const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+            const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+            $.ajax({
+                url: batchUrl,
+                method: 'POST',
+                data: { [csrfName]: csrfHash },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        filterBatchSelect.innerHTML = '<option value="">-- Select Batch --</option>';
+                        if (response.data.length === 0) {
+                            filterBatchSelect.innerHTML += '<option value="" disabled>No batches available</option>';
+                        } else {
+                            response.data.forEach(batch => {
+                                filterBatchSelect.innerHTML += `<option value="${batch.batch}">${batch.batch}</option>`;
+                            });
+                        }
+                    } else {
+                        console.error('Error fetching batches:', response.message);
+                        filterBatchSelect.innerHTML += '<option value="" disabled>Error loading batches</option>';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                    filterBatchSelect.innerHTML += '<option value="" disabled>Error loading batches</option>';
                 }
             });
         }
