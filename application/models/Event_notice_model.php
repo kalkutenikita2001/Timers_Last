@@ -45,5 +45,9 @@ class Event_notice_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->delete('events_notices');
     }
+
+    public function add_participation($data) {
+        return $this->db->insert('event_participations', $data);
+    }
 }
 ?>

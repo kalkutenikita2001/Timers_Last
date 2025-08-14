@@ -580,36 +580,36 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="name">Name <span class="text-danger">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="name" name="name" class="form-control" placeholder="Enter student name" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
               <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="contact">Contact <span class="text-danger">*</span></label>
-              <input type="tel" id="contact" name="contact" class="form-control" required pattern="[0-9]{10}" title="Contact must be exactly 10 digits" maxlength="10"/>
+              <input type="tel" id="contact" name="contact" class="form-control" placeholder="Enter 10-digit contact number" required pattern="[0-9]{10}" title="Contact must be exactly 10 digits" maxlength="10"/>
               <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="parentName">Parent Name <span class="text-danger">*</span></label>
-              <input type="text" id="parentName" name="parentName" class="form-control" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="parentName" name="parentName" class="form-control" placeholder="Enter parent name" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces" minlength="2" maxlength="50"/>
               <div class="invalid-feedback">Please enter a valid parent name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="emergencyContact">Emergency Contact <span class="text-danger">*</span></label>
-              <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" required pattern="[0-9]{10}" title="Emergency contact must be exactly 10 digits" maxlength="10"/>
+              <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" placeholder="Enter 10-digit emergency contact" required pattern="[0-9]{10}" title="Emergency contact must be exactly 10 digits" maxlength="10"/>
               <div class="invalid-feedback">Please enter a valid 10-digit emergency contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="email">Email <span class="text-danger">*</span></label>
-              <input type="email" id="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" maxlength="100"/>
+              <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" maxlength="100"/>
               <div class="invalid-feedback">Please enter a valid email address.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="address">Address <span class="text-danger">*</span></label>
-              <textarea id="address" name="address" class="form-control" required minlength="5" maxlength="200"></textarea>
+              <textarea id="address" name="address" class="form-control" placeholder="Enter full address" required minlength="5" maxlength="200"></textarea>
               <div class="invalid-feedback">Please enter a valid address (5-200 characters).</div>
             </div>
           </div>
@@ -672,8 +672,7 @@
               <label for="coach">Coach <span class="text-danger">*</span></label>
               <select id="coach" name="coach" class="form-control" required>
                 <option value="">Select</option>
-                <option value="GHJK">GHJK</option>
-                <option value="DFGH">DFGH</option>
+                <!-- Coaches will be populated dynamically based on center -->
               </select>
               <div class="invalid-feedback">Please select a coach.</div>
             </div>
@@ -681,7 +680,7 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="coordinator">Coordinator <span class="text-danger">*</span></label>
-              <input type="text" id="coordinator" name="coordinator" class="form-control" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="coordinator" name="coordinator" class="form-control" placeholder="Enter coordinator name" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces" minlength="2" maxlength="50"/>
               <div class="invalid-feedback">Please enter a valid coordinator name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
@@ -775,24 +774,24 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="filterName">Name</label>
-              <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="filterName" name="filterName" class="form-control" placeholder="Enter student name" pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
               <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="filterContact">Contact</label>
-              <input type="tel" id="filterContact" name="filterContact" class="form-control" pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10"/>
+              <input type="tel" id="filterContact" name="filterContact" class="form-control" placeholder="Enter 10-digit contact number" pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10"/>
               <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="filterCenter">Center</label>
-              <input type="text" id="filterCenter" name="filterCenter" class="form-control" pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="filterCenter" name="filterCenter" class="form-control" placeholder="Enter center name" pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
               <div class="invalid-feedback">Please enter a valid center name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="filterBatch">Batch</label>
-              <input type="text" id="filterBatch" name="filterBatch" class="form-control" pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20"/>
+              <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter batch name" pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20"/>
               <div class="invalid-feedback">Please enter a valid batch (1-20 letters and numbers only).</div>
             </div>
           </div>
@@ -916,6 +915,118 @@
       const tableBody = document.querySelector('#admissionTable tbody');
       const filterButton = document.querySelector('#filterModal .btn-custom[type="submit"]');
       const baseUrl = '<?php echo base_url(); ?>';
+      const centerUrl = baseUrl + 'center/get_centers';
+      const batchUrl = baseUrl + 'batch/get_batches';
+      const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+      const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+      // Function to load centers dynamically
+      function loadCenters(selectElement) {
+        $.ajax({
+          url: centerUrl,
+          method: 'GET',
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Center --</option>');
+              if (centers.length === 0) {
+                selectElement.append('<option value="" disabled>No centers available</option>');
+              } else {
+                centers.forEach(center => {
+                  selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching centers:', response.message);
+              selectElement.append('<option value="" disabled>Error loading centers</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading centers</option>');
+          }
+        });
+      }
+
+      // Function to load batches dynamically, optionally filtered by center
+      function loadBatches(selectElement, centerName = '') {
+        const filters = {};
+        if (centerName) {
+          filters.center_name = centerName;
+        }
+        $.ajax({
+          url: batchUrl,
+          type: 'POST',
+          data: { ...filters, [csrfName]: csrfHash },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              const batches = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">-- Select Batch --</option>');
+              if (batches.length === 0) {
+                selectElement.append('<option value="" disabled>No batches available</option>');
+              } else {
+                batches.forEach(batch => {
+                  selectElement.append(`<option value="${batch.batch}">${batch.batch}</option>`);
+                });
+              }
+            } else {
+              console.error('Error fetching batches:', response.message);
+              selectElement.append('<option value="" disabled>Error loading batches</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading batches</option>');
+          }
+        });
+      }
+
+      // Function to load coaches dynamically based on center
+      function loadCoaches(selectElement, centerName = '') {
+        $.ajax({
+          url: centerUrl,
+          method: 'GET',
+          success: function (response) {
+            if (response.status === 'success') {
+              const centers = response.data;
+              selectElement.empty();
+              selectElement.append('<option value="">Select</option>');
+              const center = centers.find(c => c.center_name === centerName);
+              if (center && center.coach) {
+                selectElement.append(`<option value="${center.coach}">${center.coach}</option>`);
+              } else {
+                selectElement.append('<option value="" disabled>No coaches available</option>');
+              }
+            } else {
+              console.error('Error fetching coaches:', response.message);
+              selectElement.append('<option value="" disabled>Error loading coaches</option>');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            selectElement.append('<option value="" disabled>Error loading coaches</option>');
+          }
+        });
+      }
+
+      // Load centers and batches when batchDetailsModal is shown
+      $('#batchDetailsModal').on('show.bs.modal', function () {
+        const centerSelect = $('#center');
+        const batchSelect = $('#batch');
+        const coachSelect = $('#coach');
+        loadCenters(centerSelect);
+        loadBatches(batchSelect);
+        loadCoaches(coachSelect);
+        // Update batches and coaches when center changes
+        centerSelect.on('change', function () {
+          const selectedCenter = $(this).val();
+          loadBatches(batchSelect, selectedCenter);
+          loadCoaches(coachSelect, selectedCenter);
+        });
+      });
 
       // Form validation
       forms.forEach(form => {

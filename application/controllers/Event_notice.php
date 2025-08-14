@@ -5,10 +5,23 @@ class Event_notice extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Event_notice_model');
+        // Optional: Add role-based access control if needed
+        // Example: Check if user is admin or superadmin
+        // if (!$this->session->userdata('role') || !in_array($this->session->userdata('role'), ['admin', 'superadmin'])) {
+        //     redirect('auth/login');
+        // }
     }
 
     public function index() {
-        $this->load->view('superadmin/Event & Notice');
+        // Load appropriate view based on user role
+        $role = $this->session->userdata('role');
+        if ($role === 'superadmin') {
+            $this->load->view('superadmin/EventAndNotice');
+        } elseif ($role === 'admin') {
+            $this->load->view('admin/EventAndNotice');
+        } else {
+            redirect('auth/login');
+        }
     }
 
     public function get_events() {
@@ -24,7 +37,8 @@ class Event_notice extends CI_Controller {
             'center_name' => $this->input->post('center_name', TRUE),
             'date' => $this->input->post('date', TRUE),
             'time' => $this->input->post('time', TRUE),
-            'description' => $this->input->post('description', TRUE)
+            'description' => $this->input->post('description', TRUE),
+            'created_at' => date('Y-m-d H:i:s')
         ];
 
         if ($this->Event_notice_model->add_event($data)) {
@@ -41,7 +55,8 @@ class Event_notice extends CI_Controller {
             'center_name' => $this->input->post('center_name', TRUE),
             'date' => $this->input->post('date', TRUE),
             'time' => $this->input->post('time', TRUE),
-            'description' => $this->input->post('description', TRUE)
+            'description' => $this->input->post('description', TRUE),
+            'created_at' => date('Y-m-d H:i:s')
         ];
 
         if ($this->Event_notice_model->update_event($id, $data)) {
@@ -57,6 +72,21 @@ class Event_notice extends CI_Controller {
             echo json_encode(['status' => 'success', 'message' => 'Event/Notice deleted successfully']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to delete event/notice']);
+        }
+    }
+
+    public function add_participation() {
+        $data = [
+            'student_name' => $this->input->post('student_name', TRUE),
+            'event_title' => $this->input->post('event_title', TRUE),
+            'payment_mode' => $this->input->post('payment_mode', TRUE),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        if ($this->Event_notice_model->add_participation($data)) {
+            echo json_encode(['status' => 'success', 'message' => 'Participation added successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to add participation']);
         }
     }
 }
