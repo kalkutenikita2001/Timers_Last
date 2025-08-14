@@ -194,6 +194,13 @@
             border-color: #80bdff;
             box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
         }
+        .form-group select.form-control {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+        }
         .form-group textarea {
             resize: vertical;
             min-height: 3rem;
@@ -413,15 +420,23 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="batch">Batch <span class="text-danger">*</span></label>
-                            <input type="text" id="batch" name="batch" class="form-control" required maxlength="10" placeholder="Enter batch code (e.g., B1)">
-                            <div class="invalid-feedback">Batch is required, max 10 characters.</div>
+                            <select id="batch" name="batch" class="form-control" required>
+                                <option value="">-- Select Batch --</option>
+                                <!-- Batches will be populated dynamically -->
+                            </select>
+                            <div class="invalid-feedback">Batch is required.</div>
                         </div>
                     </div>
                     <div class="form-row d-flex">
                         <div class="form-group col-12 col-md-6">
                             <label for="level">Level <span class="text-danger">*</span></label>
-                            <input type="text" id="level" name="level" class="form-control" required maxlength="20" placeholder="Enter level (e.g., Intermediate)">
-                            <div class="invalid-feedback">Level is required, max 20 characters.</div>
+                            <select id="level" name="level" class="form-control" required>
+                                <option value="">-- Select Level --</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                            <div class="invalid-feedback">Level is required.</div>
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="date">Date <span class="text-danger">*</span></label>
@@ -516,18 +531,59 @@
             let csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
 
+            // Load batches dynamically into the batch dropdown
+            function loadBatches() {
+                const batchSelect = $('#batch');
+                const baseUrl = '<?php echo base_url(); ?>';
+                const batchUrl = baseUrl + 'batch/get_batches';
+
+                $.ajax({
+                    url: batchUrl,
+                    method: 'POST',
+                    data: { [csrfName]: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            batchSelect.empty();
+                            batchSelect.append('<option value="">-- Select Batch --</option>');
+                            if (response.data.length === 0) {
+                                batchSelect.append('<option value="" disabled>No batches available</option>');
+                            } else {
+                                response.data.forEach(batch => {
+                                    batchSelect.append(`<option value="${batch.batch}">${batch.batch}</option>`);
+                                });
+                            }
+                        } else {
+                            console.error('Error fetching batches:', response.message);
+                            batchSelect.append('<option value="" disabled>Error loading batches</option>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX error:', error);
+                        batchSelect.append('<option value="" disabled>Error loading batches</option>');
+                    }
+                });
+            }
+
             // Reset leave modal on close
             $('#leaveModal').on('hidden.bs.modal', function() {
                 const form = document.getElementById('leaveForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input, textarea').forEach(input => {
+                form.querySelectorAll('input, select, textarea').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
+                $('#batch').empty().append('<option value="">-- Select Batch --</option>');
+                $('#level').val('');
                 editingRow = null;
                 $('#leaveId').val('');
                 $('#leaveLabel').text('Add Leave');
+            });
+
+            // Load batches when leave modal is shown
+            $('#leaveModal').on('show.bs.modal', function() {
+                loadBatches();
             });
 
             // Reset filter modal on close
@@ -547,7 +603,7 @@
                 const form = document.getElementById('leaveForm');
                 let isValid = true;
 
-                form.querySelectorAll('input, textarea').forEach(input => {
+                form.querySelectorAll('input, select, textarea').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-invalid', 'is-valid');
                 });
@@ -575,18 +631,12 @@
                 if (!batch.value.trim()) {
                     batch.setCustomValidity('Batch is required.');
                     isValid = false;
-                } else if (batch.value.length > 10) {
-                    batch.setCustomValidity('Batch must be 10 characters or less.');
-                    isValid = false;
                 } else {
                     batch.classList.add('is-valid');
                 }
 
                 if (!level.value.trim()) {
                     level.setCustomValidity('Level is required.');
-                    isValid = false;
-                } else if (level.value.length > 20) {
-                    level.setCustomValidity('Level must be 20 characters or less.');
                     isValid = false;
                 } else {
                     level.classList.add('is-valid');
@@ -797,7 +847,7 @@
                             $('#description').val(leave.description);
                             $('#leaveLabel').text('Edit Leave');
                             $('#leaveModal').modal('show');
-                            $('#leaveForm').find('input, textarea').trigger('input');
+                            $('#leaveForm').find('input, select, textarea').trigger('change');
                             csrfToken = response.csrf_token || csrfToken;
                         } else {
                             Swal.fire({
@@ -933,7 +983,7 @@
             });
 
             // Real-time validation for leave form
-            $('#leaveForm input, #leaveForm textarea').on('input change', function() {
+            $('#leaveForm input, #leaveForm select, #leaveForm textarea').on('input change', function() {
                 validateLeaveForm();
             });
 
