@@ -281,6 +281,13 @@
             border-color: #80bdff;
             box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
         }
+        .form-group select.form-control {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+        }
         .form-group textarea {
             resize: vertical;
             min-height: 3rem;
@@ -653,7 +660,10 @@
                         </div>
                         <div class="form-group">
                             <label for="batch">Batch <span class="text-danger">*</span>:</label>
-                            <input type="text" id="batch" name="batch" class="form-control" placeholder="Enter Batch" required>
+                            <select id="batch" name="batch" class="form-control" required>
+                                <option value="">-- Select Batch --</option>
+                                <!-- Batches will be populated dynamically -->
+                            </select>
                             <div class="invalid-feedback">Batch is required</div>
                         </div>
                     </div>
@@ -768,6 +778,7 @@
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             resetForm();
+            loadBatches(); // Load batches when modal opens
         }
 
         function closeModal() {
@@ -779,6 +790,8 @@
 
         function resetForm() {
             form.reset();
+            const batchSelect = document.getElementById('batch');
+            batchSelect.innerHTML = '<option value="">-- Select Batch --</option>'; // Reset batch dropdown
             clearValidationErrors();
         }
 
@@ -809,6 +822,41 @@
         function resetFilters() {
             filterForm.reset();
             applyFilters(); // Re-apply filters to refresh table
+        }
+
+        // Load batches dynamically into the batch dropdown
+        function loadBatches() {
+            const batchSelect = document.getElementById('batch');
+            const baseUrl = '<?php echo base_url(); ?>';
+            const batchUrl = baseUrl + 'batch/get_batches';
+            const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+            const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+            $.ajax({
+                url: batchUrl,
+                method: 'POST',
+                data: { [csrfName]: csrfHash },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        batchSelect.innerHTML = '<option value="">-- Select Batch --</option>';
+                        if (response.data.length === 0) {
+                            batchSelect.innerHTML += '<option value="" disabled>No batches available</option>';
+                        } else {
+                            response.data.forEach(batch => {
+                                batchSelect.innerHTML += `<option value="${batch.batch}">${batch.batch}</option>`;
+                            });
+                        }
+                    } else {
+                        console.error('Error fetching batches:', response.message);
+                        batchSelect.innerHTML += '<option value="" disabled>Error loading batches</option>';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                    batchSelect.innerHTML += '<option value="" disabled>Error loading batches</option>';
+                }
+            });
         }
 
         // Form validation for Add/Edit
@@ -1005,7 +1053,7 @@
                 this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
             }
         });
-        document.getElementById('batch').addEventListener('input', function() {
+        document.getElementById('batch').addEventListener('change', function() {
             if (this.value.trim()) {
                 this.closest('.form-group').classList.remove('was-validated');
                 this.closest('.form-group').querySelector('.invalid-feedback').style.display = 'none';
