@@ -30,7 +30,7 @@
             <i class="bi bi-plus-circle"></i><span>AddOnfacility</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/venues' || $this->router->fetch_class() == 'venues') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venues'; ?>">
-            <i class="bi bi-plus-circle"></i><span>Venues</span>
+            <i class="bi bi-geo-alt"></i><span>Venues</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
