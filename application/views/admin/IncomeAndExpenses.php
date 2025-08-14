@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
+        /* Existing styles remain unchanged */
         body {
             background-color: #f4f6f8 !important;
             margin: 0;
@@ -337,6 +338,29 @@
             padding: 1rem;
             border-top: none;
         }
+        /* New styles for folder-like structure in filter modal */
+        .filter-folder {
+            border: 1px solid #ced4da;
+            border-radius: 0.3rem;
+            margin-bottom: 0.75rem;
+            background: #f8f9fa;
+        }
+        .filter-folder-header {
+            padding: 0.5rem 1rem;
+            background: #e9ecef;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-folder-header:hover {
+            background: #dee2e6;
+        }
+        .filter-folder-body {
+            padding: 1rem;
+        }
         @media (max-width: 576px) {
             .content-wrapper {
                 margin-left: 0 !important;
@@ -427,6 +451,9 @@
             .receipt-card p {
                 font-size: 0.8rem;
             }
+            .filter-folder-header {
+                font-size: 0.8rem;
+            }
         }
         @media (min-width: 577px) and (max-width: 768px) {
             .content-wrapper {
@@ -494,6 +521,9 @@
             }
             .table thead th:hover::after {
                 display: none;
+            }
+            .filter-folder-header:hover {
+                background: #e9ecef;
             }
         }
     </style>
@@ -608,10 +638,7 @@
                             <label for="center_name">Center Name <span class="text-danger">*</span></label>
                             <select id="center_name" name="center_name" class="form-control" required>
                                 <option value="">Select Center</option>
-                                <option value="ABC">ABC</option>
-                                <option value="XYZ">XYZ</option>
-                                <option value="PQR">PQR</option>
-                                <option value="LMN">LMN</option>
+                                <!-- Populated via AJAX -->
                             </select>
                             <div class="invalid-feedback">Center Name is required.</div>
                         </div>
@@ -696,50 +723,57 @@
                 </div>
                 <form id="filterForm" novalidate>
                     <div class="form-note">Fill at least one field to apply a filter.</div>
-                    <div class="form-row d-flex align-items-center">
-                        <div class="form-group">
-                            <label for="filterTitle">Title</label>
-                            <input type="text" id="filterTitle" name="filterTitle" class="form-control"
-                                   pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
-                            <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
+                    <div class="filter-folder">
+                        <div class="filter-folder-header" data-toggle="collapse" data-target="#filterFields" aria-expanded="true" aria-controls="filterFields">
+                            Filter Options
+                            <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="filterCenterName">Center Name</label>
-                            <select id="filterCenterName" name="filterCenterName" class="form-control">
-                                <option value="">All Centers</option>
-                                <option value="ABC">ABC</option>
-                                <option value="XYZ">XYZ</option>
-                                <option value="PQR">PQR</option>
-                                <option value="LMN">LMN</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
-                        <div class="form-group">
-                            <label for="startDate">Start Date</label>
-                            <input type="date" id="startDate" name="startDate" class="form-control"
-                                   max="<?php echo date('Y-m-d'); ?>">
-                            <div class="invalid-feedback">Start Date must not be a future date.</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="endDate">End Date</label>
-                            <input type="date" id="endDate" name="endDate" class="form-control"
-                                   max="<?php echo date('Y-m-d'); ?>">
-                            <div class="invalid-feedback">End Date must not be before Start Date or a future date.</div>
-                        </div>
-                    </div>
-                    <div class="form-row d-flex align-items-center">
-                        <div class="form-group">
-                            <label for="minAmount">Min Amount(₹)</label>
-                            <input type="number" id="minAmount" name="minAmount" class="form-control"
-                                   min="0" step="0.01" title="Min Amount must be 0 or greater">
-                            <div class="invalid-feedback">Min Amount must be 0 or greater.</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="maxAmount">Max Amount(₹)</label>
-                            <input type="number" id="maxAmount" name="maxAmount" class="form-control"
-                                   min="0" step="0.01" title="Max Amount must be 0 or greater">
-                            <div class="invalid-feedback">Max Amount must be 0 or greater and not less than Min Amount.</div>
+                        <div id="filterFields" class="collapse show">
+                            <div class="filter-folder-body">
+                                <div class="form-row d-flex align-items-center">
+                                    <div class="form-group">
+                                        <label for="filterTitle">Title</label>
+                                        <input type="text" id="filterTitle" name="filterTitle" class="form-control"
+                                               pattern="[A-Za-z\s]+" maxlength="50" title="Title should contain only letters and spaces, max 50 characters">
+                                        <div class="invalid-feedback">Title must contain only letters and spaces, max 50 characters.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="filterCenterName">Center Name</label>
+                                        <select id="filterCenterName" name="filterCenterName" class="form-control">
+                                            <option value="">All Centers</option>
+                                            <!-- Populated via AJAX -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex align-items-center">
+                                    <div class="form-group">
+                                        <label for="startDate">Start Date</label>
+                                        <input type="date" id="startDate" name="startDate" class="form-control"
+                                               max="<?php echo date('Y-m-d'); ?>">
+                                        <div class="invalid-feedback">Start Date must not be a future date.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">End Date</label>
+                                        <input type="date" id="endDate" name="endDate" class="form-control"
+                                               max="<?php echo date('Y-m-d'); ?>">
+                                        <div class="invalid-feedback">End Date must not be before Start Date or a future date.</div>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex align-items-center">
+                                    <div class="form-group">
+                                        <label for="minAmount">Min Amount(₹)</label>
+                                        <input type="number" id="minAmount" name="minAmount" class="form-control"
+                                               min="0" step="0.01" title="Min Amount must be 0 or greater">
+                                        <div class="invalid-feedback">Min Amount must be 0 or greater.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxAmount">Max Amount(₹)</label>
+                                        <input type="number" id="maxAmount" name="maxAmount" class="form-control"
+                                               min="0" step="0.01" title="Max Amount must be 0 or greater">
+                                        <div class="invalid-feedback">Max Amount must be 0 or greater and not less than Min Amount.</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -764,6 +798,57 @@
 
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
             const csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
+            const baseUrl = '<?php echo base_url(); ?>';
+
+            // Function to fetch centers and populate dropdowns
+            function loadCenters() {
+                $.ajax({
+                    url: baseUrl + 'center/get_centers',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const centers = response.data;
+                            const centerSelect = $('#center_name');
+                            const filterCenterSelect = $('#filterCenterName');
+
+                            // Clear existing options except the default ones
+                            centerSelect.find('option:not(:first)').remove();
+                            filterCenterSelect.find('option:not(:first)').remove();
+
+                            // Populate dropdowns
+                            centers.forEach(center => {
+                                centerSelect.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                                filterCenterSelect.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to load centers.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error fetching centers.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
+                    }
+                });
+            }
+
+            // Call loadCenters when the page loads and when modals are opened
+            loadCenters();
+
+            $('#expenseModal, #filterModal').on('show.bs.modal', function() {
+                loadCenters();
+            });
 
             function validateForm(formId) {
                 const form = document.getElementById(formId);
