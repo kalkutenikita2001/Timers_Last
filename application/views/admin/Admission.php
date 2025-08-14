@@ -786,13 +786,19 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="filterCenter">Center</label>
-              <input type="text" id="filterCenter" name="filterCenter" class="form-control" placeholder="Enter center name" pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
-              <div class="invalid-feedback">Please enter a valid center name (2-50 letters and spaces only).</div>
+              <select id="filterCenter" name="filterCenter" class="form-control">
+                <option value="">-- Select Center --</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a valid center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="filterBatch">Batch</label>
-              <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter batch name" pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20"/>
-              <div class="invalid-feedback">Please enter a valid batch (1-20 letters and numbers only).</div>
+              <select id="filterBatch" name="filterBatch" class="form-control">
+                <option value="">-- Select Batch --</option>
+                <!-- Batches will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a valid batch.</div>
             </div>
           </div>
           <div class="form-row">
@@ -1012,6 +1018,19 @@
         });
       }
 
+      // Load centers and batches when filterModal is shown
+      $('#filterModal').on('show.bs.modal', function () {
+        const centerSelect = $('#filterCenter');
+        const batchSelect = $('#filterBatch');
+        loadCenters(centerSelect);
+        loadBatches(batchSelect);
+        // Update batches when center changes
+        centerSelect.on('change', function () {
+          const selectedCenter = $(this).val();
+          loadBatches(batchSelect, selectedCenter);
+        });
+      });
+
       // Load centers and batches when batchDetailsModal is shown
       $('#batchDetailsModal').on('show.bs.modal', function () {
         const centerSelect = $('#center');
@@ -1203,6 +1222,44 @@
                 timer: 3000
               });
             }
+          });
+        }
+        this.classList.add('was-validated');
+      });
+
+      // Filter form submission
+      $('#filterForm').on('submit', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let isValid = this.checkValidity();
+        let atLeastOneFilled = false;
+        this.querySelectorAll('input, select').forEach(input => {
+          if (input.value.trim() !== '') atLeastOneFilled = true;
+        });
+        if (!atLeastOneFilled) {
+          this.querySelector('#filterName').setCustomValidity('At least one filter field must be filled.');
+          isValid = false;
+        } else {
+          this.querySelector('#filterName').setCustomValidity('');
+        }
+
+        if (isValid) {
+          const filterData = {
+            name: $('#filterName').val().trim(),
+            contact: $('#filterContact').val().trim(),
+            center: $('#filterCenter').val(),
+            batch: $('#filterBatch').val(),
+            category: $('#filterCategory').val()
+          };
+          // Implement filtering logic here (e.g., AJAX call to filter admissions)
+          console.log('Filter applied:', filterData);
+          $('#filterModal').modal('hide');
+          Swal.fire({
+            icon: 'success',
+            title: 'Filter Applied',
+            text: 'Filters have been applied successfully.',
+            timer: 3000
           });
         }
         this.classList.add('was-validated');

@@ -1,3 +1,6 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -567,7 +570,10 @@
             </div>
             <div class="form-group col-md-12">
               <label for="filterCenterName">Center Name</label>
-              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
+              <select id="filterCenterName" name="filterCenterName" class="form-control">
+                <option value="">-- Select Center --</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
             </div>
             <div class="form-group col-md-12">
               <label for="filterDate">Date</label>
@@ -653,7 +659,7 @@
       const baseUrl = '<?php echo base_url(); ?>';
       const eventUrl = baseUrl + 'event_notice/';
       const centerUrl = baseUrl + 'center/get_centers';
-      const studentUrl = baseUrl + 'student/get_students';
+      const studentUrl = baseUrl + 'Student_controller/index';
       const participationUrl = baseUrl + 'event_notice/add_participation';
       const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
       const csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
@@ -681,6 +687,7 @@
         $.ajax({
           url: centerUrl,
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
             if (response.status === 'success') {
               const centers = response.data;
@@ -710,25 +717,21 @@
         $.ajax({
           url: studentUrl,
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
-            if (response.status === 'success') {
-              const students = response.data;
-              selectElement.empty();
-              selectElement.append('<option value="">-- Select Student --</option>');
-              if (students.length === 0) {
-                selectElement.append('<option value="" disabled>No students available</option>');
-              } else {
-                students.forEach(student => {
-                  selectElement.append(`<option value="${student.name}">${student.name}</option>`);
-                });
-              }
+            selectElement.empty();
+            selectElement.append('<option value="">-- Select Student --</option>');
+            if (response.status === 'success' && response.students && response.students.length > 0) {
+              response.students.forEach(student => {
+                selectElement.append(`<option value="${student.name}">${student.name}</option>`);
+              });
             } else {
-              console.error('Error fetching students:', response.message);
-              selectElement.append('<option value="" disabled>Error loading students</option>');
+              console.warn('No students found:', response.message);
+              selectElement.append('<option value="" disabled>No students available</option>');
             }
           },
           error: function (xhr, status, error) {
-            console.error('AJAX error:', error);
+            console.error('AJAX error fetching students:', error, xhr.responseText);
             selectElement.append('<option value="" disabled>Error loading students</option>');
           }
         });
@@ -825,6 +828,9 @@
         $('#viewEventModal').on('show.bs.modal', function () {
           loadCenters($('#viewCenterName'));
         });
+        $('#filterModal').on('show.bs.modal', function () {
+          loadCenters($('#filterCenterName'));
+        });
         $('#participateModal').on('show.bs.modal', function () {
           loadStudents($('#studentName'));
           loadEventsForDropdown($('#eventTitle'));
@@ -896,7 +902,7 @@
         e.stopPropagation();
 
         const filterTitle = $('#filterTitle').val().trim();
-        const filterCenterName = $('#filterCenterName').val().trim();
+        const filterCenterName = $('#filterCenterName').val();
         const filterDate = $('#filterDate').val().trim();
         const filterTime = $('#filterTime').val().trim();
         const filterDescription = $('#filterDescription').val().trim();
