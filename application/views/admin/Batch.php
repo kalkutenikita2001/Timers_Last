@@ -297,7 +297,7 @@
       }
       .view-btn {
         font-size: 0.8125rem;
-        padding: 0.3rem 0.75rem;
+        padding:.toolkit.3rem 0.75rem;
       }
       .add-center-btn, .filter-btn {
         width: 120px;
@@ -589,7 +589,10 @@
             </div>
             <div class="form-group col-md-12">
               <label for="filterCenterName">Center Name</label>
-              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
+              <select id="filterCenterName" name="filterCenterName" class="form-control">
+                <option value="">-- Select Center --</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
             </div>
           </div>
           <div class="d-flex justify-content-center">
@@ -723,6 +726,9 @@
         $('#viewBatchModal').on('show.bs.modal', function () {
           loadCenters($('#viewCenterName'));
         });
+        $('#filterModal').on('show.bs.modal', function () {
+          loadCenters($('#filterCenterName'));
+        });
       });
 
       // Form submission for adding batches
@@ -793,7 +799,7 @@
         const filterDate = $('#filterDate').val().trim();
         const filterTime = $('#filterTime').val().trim();
         const filterCategory = $('#filterCategory').val().trim();
-        const filterCenterName = $('#filterCenterName').val().trim();
+        const filterCenterName = $('#filterCenterName').val();
 
         const filters = {};
         if (filterBatch) filters.batch = filterBatch;

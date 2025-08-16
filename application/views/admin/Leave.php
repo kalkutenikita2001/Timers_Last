@@ -482,7 +482,10 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="filterBatch">Batch</label>
-                            <input type="text" id="filterBatch" name="filterBatch" class="form-control" maxlength="10" placeholder="Enter batch to filter">
+                            <select id="filterBatch" name="filterBatch" class="form-control">
+                                <option value="">-- Select Batch --</option>
+                                <!-- Batches will be populated dynamically -->
+                            </select>
                         </div>
                     </div>
                     <div class="form-row d-flex">
@@ -532,8 +535,7 @@
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
 
             // Load batches dynamically into the batch dropdown
-            function loadBatches() {
-                const batchSelect = $('#batch');
+            function loadBatches(selectElement) {
                 const baseUrl = '<?php echo base_url(); ?>';
                 const batchUrl = baseUrl + 'batch/get_batches';
 
@@ -544,23 +546,23 @@
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            batchSelect.empty();
-                            batchSelect.append('<option value="">-- Select Batch --</option>');
+                            selectElement.empty();
+                            selectElement.append('<option value="">-- Select Batch --</option>');
                             if (response.data.length === 0) {
-                                batchSelect.append('<option value="" disabled>No batches available</option>');
+                                selectElement.append('<option value="" disabled>No batches available</option>');
                             } else {
                                 response.data.forEach(batch => {
-                                    batchSelect.append(`<option value="${batch.batch}">${batch.batch}</option>`);
+                                    selectElement.append(`<option value="${batch.batch}">${batch.batch}</option>`);
                                 });
                             }
                         } else {
                             console.error('Error fetching batches:', response.message);
-                            batchSelect.append('<option value="" disabled>Error loading batches</option>');
+                            selectElement.append('<option value="" disabled>Error loading batches</option>');
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX error:', error);
-                        batchSelect.append('<option value="" disabled>Error loading batches</option>');
+                        selectElement.append('<option value="" disabled>Error loading batches</option>');
                     }
                 });
             }
@@ -583,7 +585,12 @@
 
             // Load batches when leave modal is shown
             $('#leaveModal').on('show.bs.modal', function() {
-                loadBatches();
+                loadBatches($('#batch'));
+            });
+
+            // Load batches when filter modal is shown
+            $('#filterModal').on('show.bs.modal', function() {
+                loadBatches($('#filterBatch'));
             });
 
             // Reset filter modal on close
@@ -591,10 +598,11 @@
                 const form = document.getElementById('filterForm');
                 form.reset();
                 form.classList.remove('was-validated');
-                form.querySelectorAll('input').forEach(input => {
+                form.querySelectorAll('input, select').forEach(input => {
                     input.setCustomValidity('');
                     input.classList.remove('is-valid', 'is-invalid');
                 });
+                $('#filterBatch').empty().append('<option value="">-- Select Batch --</option>');
                 loadAllLeaves();
             });
 
