@@ -595,36 +595,36 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="name">Name <span class="text-danger">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="name" name="name" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Name"/>
               <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="contact">Contact <span class="text-danger">*</span></label>
-              <input type="tel" id="contact" name="contact" class="form-control" required pattern="[0-9]{10}" title="Contact must be exactly 10 digits" maxlength="10"/>
+              <input type="tel" id="contact" name="contact" class="form-control" required pattern="[0-9]{10}" title="Contact must be exactly 10 digits" maxlength="10" placeholder="Enter Contact"/>
               <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="parentName">Parent Name <span class="text-danger">*</span></label>
-              <input type="text" id="parentName" name="parentName" class="form-control" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="parentName" name="parentName" class="form-control" required pattern="[A-Za-z\s]+" title="Parent name should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Parent Name"/>
               <div class="invalid-feedback">Please enter a valid parent name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="emergencyContact">Emergency Contact <span class="text-danger">*</span></label>
-              <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" required pattern="[0-9]{10}" title="Emergency contact must be exactly 10 digits" maxlength="10"/>
+              <input type="tel" id="emergencyContact" name="emergencyContact" class="form-control" required pattern="[0-9]{10}" title="Emergency contact must be exactly 10 digits" maxlength="10" placeholder="Enter Emergency Contact"/>
               <div class="invalid-feedback">Please enter a valid 10-digit emergency contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="email">Email <span class="text-danger">*</span></label>
-              <input type="email" id="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" maxlength="100"/>
+              <input type="email" id="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" maxlength="100" placeholder="Enter Email"/>
               <div class="invalid-feedback">Please enter a valid email address.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="address">Address <span class="text-danger">*</span></label>
-              <textarea id="address" name="address" class="form-control" required minlength="5" maxlength="200"></textarea>
+              <textarea id="address" name="address" class="form-control" required minlength="5" maxlength="200" placeholder="Enter Address"></textarea>
               <div class="invalid-feedback">Please enter a valid address (5-200 characters).</div>
             </div>
           </div>
@@ -695,7 +695,7 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="coordinator">Coordinator <span class="text-danger">*</span></label>
-              <input type="text" id="coordinator" name="coordinator" class="form-control" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="coordinator" name="coordinator" class="form-control" required pattern="[A-Za-z\s]+" title="Coordinator should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Coordinator"/>
               <div class="invalid-feedback">Please enter a valid coordinator name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
@@ -735,19 +735,19 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="totalFees">Total Fees <span class="text-danger">*</span></label>
-              <input type="number" id="totalFees" name="totalFees" class="form-control" required min="1" max="100000" title="Total fees must be between 1 and 100,000"/>
+              <input type="number" id="totalFees" name="totalFees" class="form-control" required min="1" max="100000" title="Total fees must be between 1 and 100,000" placeholder="Enter Total Fees"/>
               <div class="invalid-feedback">Please enter a valid total fees amount (1-100,000).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="amountPaid">Amount Paid <span class="text-danger">*</span></label>
-              <input type="number" id="amountPaid" name="amountPaid" class="form-control" required min="0" title="Amount paid must be a positive number or zero"/>
+              <input type="number" id="amountPaid" name="amountPaid" class="form-control" required min="0" title="Amount paid must be a positive number or zero" placeholder="Enter Amount Paid"/>
               <div class="invalid-feedback">Please enter a valid amount paid (0 or more, not exceeding total fees).</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="remainingAmount">Remaining Amount <span class="text-danger">*</span></label>
-              <input type="number" id="remainingAmount" name="remainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly/>
+              <input type="number" id="remainingAmount" name="remainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly placeholder="Remaining Amount"/>
               <div class="invalid-feedback">Please ensure remaining amount is valid.</div>
             </div>
             <div class="form-group col-md-6">
@@ -787,25 +787,31 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="filterName">Name</label>
-              <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="filterName" name="filterName" class="form-control" pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Name"/>
               <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="filterContact">Contact</label>
-              <input type="tel" id="filterContact" name="filterContact" class="form-control" pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10"/>
+              <input type="tel" id="filterContact" name="filterContact" class="form-control" pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10" placeholder="Enter Contact"/>
               <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="filterCenter">Center</label>
-              <input type="text" id="filterCenter" name="filterCenter" class="form-control" pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
-              <div class="invalid-feedback">Please enter a valid center name (2-50 letters and spaces only).</div>
+              <select id="filterCenter" name="filterCenter" class="form-control">
+                <option value="">All Centers</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a valid center.</div>
             </div>
             <div class="form-group col-md-6">
               <label for="filterBatch">Batch</label>
-              <input type="text" id="filterBatch" name="filterBatch" class="form-control" pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20"/>
-              <div class="invalid-feedback">Please enter a valid batch (1-20 letters and numbers only).</div>
+              <select id="filterBatch" name="filterBatch" class="form-control">
+                <option value="">All Batches</option>
+                <!-- Batches will be populated dynamically -->
+              </select>
+              <div class="invalid-feedback">Please select a valid batch.</div>
             </div>
           </div>
           <div class="form-row">
@@ -843,24 +849,24 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="editName">Name <span class="text-danger">*</span></label>
-              <input type="text" id="editName" name="editName" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="editName" name="editName" class="form-control" required pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Name"/>
               <div class="invalid-feedback">Please enter a valid name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="editContact">Contact <span class="text-danger">*</span></label>
-              <input type="tel" id="editContact" name="editContact" class="form-control" required pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10"/>
+              <input type="tel" id="editContact" name="editContact" class="form-control" required pattern="[0-9]{10}" title="Contact should be a 10-digit number" maxlength="10" placeholder="Enter Contact"/>
               <div class="invalid-feedback">Please enter a valid 10-digit contact number.</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="editCenter">Center <span class="text-danger">*</span></label>
-              <input type="text" id="editCenter" name="editCenter" class="form-control" required pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50"/>
+              <input type="text" id="editCenter" name="editCenter" class="form-control" required pattern="[A-Za-z\s]+" title="Center should contain only letters and spaces" minlength="2" maxlength="50" placeholder="Enter Center"/>
               <div class="invalid-feedback">Please enter a valid center name (2-50 letters and spaces only).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="editBatch">Batch <span class="text-danger">*</span></label>
-              <input type="text" id="editBatch" name="editBatch" class="form-control" required pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20"/>
+              <input type="text" id="editBatch" name="editBatch" class="form-control" required pattern="[A-Za-z0-9]+" title="Batch should contain letters and numbers only" minlength="1" maxlength="20" placeholder="Enter Batch"/>
               <div class="invalid-feedback">Please enter a valid batch (1-20 letters and numbers only).</div>
             </div>
           </div>
@@ -937,19 +943,19 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="renewTotalFees">Total Fees <span class="text-danger">*</span></label>
-              <input type="number" id="renewTotalFees" name="renewTotalFees" class="form-control" required min="1" max="100000" title="Total fees must be between 1 and 100,000"/>
+              <input type="number" id="renewTotalFees" name="renewTotalFees" class="form-control" required min="1" max="100000" title="Total fees must be between 1 and 100,000" placeholder="Enter Total Fees"/>
               <div class="invalid-feedback">Please enter a valid total fees amount (1-100,000).</div>
             </div>
             <div class="form-group col-md-6">
               <label for="renewAmountPaid">Amount Paid <span class="text-danger">*</span></label>
-              <input type="number" id="renewAmountPaid" name="renewAmountPaid" class="form-control" required min="0" title="Amount paid must be a positive number or zero"/>
+              <input type="number" id="renewAmountPaid" name="renewAmountPaid" class="form-control" required min="0" title="Amount paid must be a positive number or zero" placeholder="Enter Amount Paid"/>
               <div class="invalid-feedback">Please enter a valid amount paid (0 or more, not exceeding total fees).</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="renewRemainingAmount">Remaining Amount <span class="text-danger">*</span></label>
-              <input type="number" id="renewRemainingAmount" name="renewRemainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly/>
+              <input type="number" id="renewRemainingAmount" name="renewRemainingAmount" class="form-control" required min="0" title="Remaining amount must be a positive number" readonly placeholder="Remaining Amount"/>
               <div class="invalid-feedback">Please ensure remaining amount is valid.</div>
             </div>
             <div class="form-group col-md-6">
@@ -988,14 +994,14 @@
       const baseUrl = '<?php echo base_url(); ?>';
 
       // Function to load centers dynamically
-      function loadCenters(selectElement) {
+      function loadCenters(selectElement, isFilter = false) {
         $.ajax({
           url: baseUrl + 'center/get_centers',
           method: 'GET',
           dataType: 'json',
           success: function (response) {
             console.log('loadCenters response:', response);
-            selectElement.innerHTML = '<option value="">-- Select Center --</option>';
+            selectElement.innerHTML = isFilter ? '<option value="">All Centers</option>' : '<option value="">-- Select Center --</option>';
             if (response.status === 'success' && response.data.length > 0) {
               response.data.forEach(center => {
                 selectElement.insertAdjacentHTML('beforeend', `<option value="${center.center_name}">${center.center_name}</option>`);
@@ -1018,7 +1024,7 @@
       }
 
       // Function to load batches dynamically
-      function loadBatches(selectElement) {
+      function loadBatches(selectElement, isFilter = false) {
         $.ajax({
           url: baseUrl + 'batch/get_batches',
           method: 'POST',
@@ -1026,7 +1032,7 @@
           dataType: 'json',
           success: function (response) {
             console.log('loadBatches response:', response);
-            selectElement.innerHTML = '<option value="">-- Select Batch --</option>';
+            selectElement.innerHTML = isFilter ? '<option value="">All Batches</option>' : '<option value="">-- Select Batch --</option>';
             if (response.status === 'success' && response.data.length > 0) {
               response.data.forEach(batch => {
                 selectElement.insertAdjacentHTML('beforeend', `<option value="${batch.batch}">${batch.batch}</option>`);
@@ -1052,6 +1058,12 @@
       $('#batchDetailsModal').on('show.bs.modal', function () {
         loadCenters(document.getElementById('center'));
         loadBatches(document.getElementById('batch'));
+      });
+
+      // Load centers and batches when filterModal is shown
+      $('#filterModal').on('show.bs.modal', function () {
+        loadCenters(document.getElementById('filterCenter'), true);
+        loadBatches(document.getElementById('filterBatch'), true);
       });
 
       // Load initial students
