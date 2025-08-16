@@ -160,6 +160,7 @@
             color: var(--first-color-dark);
             background: transparent;
             width: 100%;
+            padding-right: 2rem; /* Space for eye icon */
         }
 
         .login__input::placeholder {
@@ -262,6 +263,22 @@
             transform: scale(1.2);
         }
 
+        /* Password Toggle Button */
+        .login__toggle-password {
+            position: absolute;
+            right: 1rem;
+            font-size: 1.2rem;
+            background: var(--first-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login__toggle-password:hover {
+            transform: scale(1.1);
+        }
+
         /* Validation Styles */
         .error {
             border-color: #ff4d4d;
@@ -358,6 +375,7 @@
                     <div class="login__box">
                         <i class='bx bx-lock-alt login__icon' aria-hidden="true"></i>
                         <input type="password" name="password" placeholder="Password" class="login__input" required aria-describedby="login-password-error">
+                        <i class='bx bx-show login__toggle-password' aria-label="Toggle password visibility"></i>
                         <div class="error-message" id="login-password-error"></div>
                     </div>
                     <a href="#" class="login__forgot" id="forgot-password" aria-label="Forgot Password">Forgot password?</a>
@@ -384,11 +402,13 @@
                     <div class="login__box">
                         <i class='bx bx-lock-alt login__icon' aria-hidden="true"></i>
                         <input type="password" name="password" placeholder="Password" class="login__input" required aria-describedby="signup-password-error">
+                        <i class='bx bx-show login__toggle-password' aria-label="Toggle password visibility"></i>
                         <div class="error-message" id="signup-password-error"></div>
                     </div>
                     <div class="login__box">
                         <i class='bx bx-lock-alt login__icon' aria-hidden="true"></i>
                         <input type="password" name="confirm_password" placeholder="Confirm Password" class="login__input" required aria-describedby="signup-confirm-password-error">
+                        <i class='bx bx-show login__toggle-password' aria-label="Toggle password visibility"></i>
                         <div class="error-message" id="signup-confirm-password-error"></div>
                     </div>
                     <button type="submit" class="login__button">Sign Up</button>
@@ -466,6 +486,22 @@
             toggleForm(loginIn, [loginUp, forgotPasswordForm]);
             loginIn.querySelectorAll('.login__input').forEach(input => input.classList.remove('error'));
             loginIn.querySelectorAll('.error-message').forEach(error => error.textContent = '');
+        });
+
+        // Password visibility toggle
+        document.querySelectorAll('.login__toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.previousElementSibling;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.classList.remove('bx-show');
+                    toggle.classList.add('bx-hide');
+                } else {
+                    input.type = 'password';
+                    toggle.classList.remove('bx-hide');
+                    toggle.classList.add('bx-show');
+                }
+            });
         });
 
         // Form validation and submission
