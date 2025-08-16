@@ -83,7 +83,6 @@ $route['Venues'] = 'admin/Venues';
 
 
 // base module
-$route['login'] = 'base/login';
 $route['adminlogin'] = 'base/adminlogin';
 $route['superadminlogin'] = 'base/superadminlogin';
 
