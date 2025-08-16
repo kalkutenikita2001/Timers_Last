@@ -568,7 +568,10 @@
             </div>
             <div class="form-group col-md-12">
               <label for="filterCenterName">Center Name</label>
-              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
+              <select id="filterCenterName" name="filterCenterName" class="form-control">
+                <option value="">-- Select Center --</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
             </div>
             <div class="form-group col-md-12">
               <label for="filterDate">Date</label>
@@ -714,6 +717,9 @@
         $('#viewEventModal').on('show.bs.modal', function () {
           loadCenters($('#viewCenterName'));
         });
+        $('#filterModal').on('show.bs.modal', function () {
+          loadCenters($('#filterCenterName'));
+        });
       });
 
       // Form submission for adding events/notices
@@ -781,7 +787,7 @@
         e.stopPropagation();
 
         const filterTitle = $('#filterTitle').val().trim();
-        const filterCenterName = $('#filterCenterName').val().trim();
+        const filterCenterName = $('#filterCenterName').val();
         const filterDate = $('#filterDate').val().trim();
         const filterTime = $('#filterTime').val().trim();
         const filterDescription = $('#filterDescription').val().trim();

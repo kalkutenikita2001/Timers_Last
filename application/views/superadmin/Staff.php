@@ -157,7 +157,7 @@
       background: none;
       border: none;
       font-size: 1.5rem;
-      color: Maintenant
+      color: #333;
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
     }
@@ -181,7 +181,7 @@
     }
     .form-control, .form-control select {
       height: 38px;
-      border-covid: 8px;
+      border-radius: 8px;
       font-size: 13px;
       border: 1px solid #ced4da;
       font-style: normal;
@@ -608,11 +608,17 @@
             </div>
             <div class="form-group col-md-12">
               <label for="filterCenterName">Center Name</label>
-              <input type="text" id="filterCenterName" name="filterCenterName" class="form-control" placeholder="Enter center name" />
+              <select id="filterCenterName" name="filterCenterName" class="form-control">
+                <option value="">-- Select Center --</option>
+                <!-- Centers will be populated dynamically -->
+              </select>
             </div>
             <div class="form-group col-md-12">
               <label for="filterBatch">Batch</label>
-              <input type="text" id="filterBatch" name="filterBatch" class="form-control" placeholder="Enter batch" />
+              <select id="filterBatch" name="filterBatch" class="form-control">
+                <option value="">-- Select Batch --</option>
+                <!-- Batches will be populated dynamically -->
+              </select>
             </div>
             <div class="form-group col-md-12">
               <label for="filterDate">Date</label>
@@ -791,6 +797,10 @@
           loadCenters($('#viewCenterName'));
           loadBatches($('#viewBatch'));
         });
+        $('#filterModal').on('show.bs.modal', function () {
+          loadCenters($('#filterCenterName'));
+          loadBatches($('#filterBatch'));
+        });
       });
 
       $('#staffForm').on('submit', function (e) {
@@ -856,8 +866,8 @@
           name: $('#filterName').val().trim(),
           contact: $('#filterContact').val().trim(),
           address: $('#filterAddress').val().trim(),
-          center_name: $('#filterCenterName').val().trim(),
-          batch: $('#filterBatch').val().trim(),
+          center_name: $('#filterCenterName').val(),
+          batch: $('#filterBatch').val(),
           date: $('#filterDate').val().trim(),
           time: $('#filterTime').val().trim(),
           category: $('#filterCategory').val().trim()

@@ -33,7 +33,12 @@ class Revenue extends CI_Controller {
     }
 
     public function get_total_revenue() {
-        $data = $this->Revenue_model->get_total_revenue();
+        $filters = array(
+            'center_name' => $this->input->post('center_name'),
+            'start_date' => $this->input->post('start_date'),
+            'end_date' => $this->input->post('end_date')
+        );
+        $data = $this->Revenue_model->get_total_revenue($filters);
         echo json_encode($data);
     }
 

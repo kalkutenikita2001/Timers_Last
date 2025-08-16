@@ -52,9 +52,20 @@ class Revenue_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_total_revenue() {
+    public function get_total_revenue($filters = array()) {
         $this->db->select('center_name AS title, date, SUM(daily_revenue) AS daily_revenue, SUM(weekly_revenue) AS weekly_revenue, SUM(monthly_revenue) AS monthly_revenue, SUM(yearly_revenue) AS yearly_revenue, "N/A" AS notes, status');
         $this->db->from('revenues');
+        
+        if (!empty($filters['center_name'])) {
+            $this->db->where('center_name', $filters['center_name']);
+        }
+        if (!empty($filters['start_date'])) {
+            $this->db->where('date >=', $filters['start_date']);
+        }
+        if (!empty($filters['end_date'])) {
+            $this->db->where('date <=', $filters['end_date']);
+        }
+        
         $this->db->group_by('center_name, date, status');
         $query = $this->db->get();
         return $query->result_array();
