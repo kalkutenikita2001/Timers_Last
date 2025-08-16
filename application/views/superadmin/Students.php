@@ -506,7 +506,7 @@
     .form-control{
           padding: 1.375rem .75rem;
     }
-  </style>
+  </style> 
 </head>
 <body>
   <!-- Sidebar -->

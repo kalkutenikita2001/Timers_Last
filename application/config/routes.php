@@ -54,16 +54,16 @@ $route['translate_uri_dashes'] = FALSE;
 $route['404_override'] = '';
 
 //SuperAdmin
-$route['dashboard'] = 'superadmin/dashboard';
-$route['Sidebar'] = 'superadmin/Include/Sidebar';
-$route['Navbar'] = 'superadmin/Include/Navbar';
-$route['Center'] = 'superadmin/Center';
-$route['Staff'] = 'superadmin/Staff';
-$route['Batch'] = 'superadmin/Batch';
-$route['EventAndNotice'] = 'superadmin/EventAndNotice';
-$route['Admission'] = 'superadmin/Admission';
-$route['Students'] = 'superadmin/Students';
-$route['Leave'] = 'superadmin/Leave';
+$route['dashboard'] = 'Superadmin/dashboard';
+$route['Sidebar'] = 'Superadmin/Include/Sidebar';
+$route['Navbar'] = 'Superadmin/Include/Navbar';
+$route['Center'] = 'Superadmin/Center';
+$route['Staff'] = 'Superadmin/Staff';
+$route['Batch'] = 'Superadmin/Batch';
+$route['EventAndNotice'] = 'Superadmin/EventAndNotice';
+$route['Admission'] = 'Superadmin/Admission';
+$route['Students'] = 'Superadmin/Students';
+$route['Leave'] = 'Superadmin/Leave';
 // $route['Expenses'] = 'superadmin/Expenses';
 
 //Admin
@@ -78,7 +78,7 @@ $route['Leave'] = 'admin/Leave';
 $route['Profile'] = 'admin/Profile';
 $route['Dashboard'] = 'admin/Dashboard';
 $route['Finance'] = 'admin/Finance';
-$route['locker_fees'] = 'admin/locker_fees';
+$route['Locker_fees'] = 'admin/Locker_fees';
 $route['Venues'] = 'admin/Venues';
 
 
@@ -90,50 +90,50 @@ $route['superadminlogin'] = 'base/superadminlogin';
 
 
 //SuperAdmin Backend Side
-$route['center'] = 'center/index';
-$route['staff'] = 'staff/index';
-$route['batch'] = 'batch/index';
-$route['event_notice'] = 'event_notice/index';
-$route['revenue'] = 'revenue/index';
-$route['expense/(:any)'] = 'expense/$1';
-$route['expense'] = 'expense/index';
+$route['Center'] = 'Center/index';
+$route['Staff'] = 'Staff/index';
+$route['Batch'] = 'Batch/index';
+$route['Event_notice'] = 'Event_notice/index';
+$route['Revenue'] = 'Revenue/index';
+$route['Expense/(:any)'] = 'Expense/$1';
+$route['Expense'] = 'Expense/index';
 // Route for the Leave controller
-$route['leave'] = 'leave/index';
-$route['leave/get_leaves'] = 'leave/get_leaves';
-$route['leave/add_leave'] = 'leave/add_leave';
-$route['leave/update_leave'] = 'leave/update_leave';
-$route['leave/delete_leave'] = 'leave/delete_leave';
-$route['leave/get_batches'] = 'leave/get_batches';
+$route['Leave'] = 'Leave/index';
+$route['Leave/get_leaves'] = 'Leave/get_leaves';
+$route['Leave/add_leave'] = 'Leave/add_leave';
+$route['Leave/update_leave'] = 'Leave/update_leave';
+$route['Leave/delete_leave'] = 'Leave/delete_leave';
+$route['Leave/get_batches'] = 'Leave/get_batches';
 
 
 //admin backend Side 
-$route['income_expenses'] = 'admincontroller/income_expenses/index';
-$route['income_expenses/get_income_expenses'] = 'admincontroller/income_expenses/get_income_expenses';
-$route['income_expenses/get_income_expense/(:num)'] = 'admincontroller/income_expenses/get_income_expense/$1';
-$route['income_expenses/add_income_expense'] = 'admincontroller/income_expenses/add_income_expense';
-$route['income_expenses/update_income_expense'] = 'admincontroller/income_expenses/update_income_expense';
-$route['income_expenses/approve_income_expense/(:num)'] = 'admincontroller/income_expenses/approve_income_expense/$1';
-$route['income_expenses/reject_income_expense/(:num)'] = 'admincontroller/income_expenses/reject_income_expense/$1';
-// Locker Fees Routes
-$route['admin/locker_fees'] = 'admincontroller/locker_fees/index';
-$route['admin/locker_fees/add'] = 'admincontroller/locker_fees/add';
-$route['admin/locker_fees/update'] = 'admincontroller/locker_fees/update';
-$route['admin/locker_fees/get_by_id/(:num)'] = 'admincontroller/locker_fees/get_by_id/$1';
-$route['admin/locker_fees/delete/(:num)'] = 'admincontroller/locker_fees/delete/$1';
-$route['admin/locker_fees/filter'] = 'admincontroller/locker_fees/filter';
+$route['Income_expenses'] = 'admincontroller/Income_expenses/index';
+$route['Income_expenses/get_income_expenses'] = 'admincontroller/Income_expenses/get_income_expenses';
+$route['Income_expenses/get_income_expense/(:num)'] = 'admincontroller/Income_expenses/get_income_expense/$1';
+$route['Income_expenses/add_income_expense'] = 'admincontroller/Income_expenses/add_income_expense';
+$route['Income_expenses/update_income_expense'] = 'admincontroller/Income_expenses/update_income_expense';
+$route['Income_expenses/approve_income_expense/(:num)'] = 'admincontroller/Income_expenses/approve_income_expense/$1';
+$route['Income_expenses/reject_income_expense/(:num)'] = 'admincontroller/Income_expenses/reject_income_expense/$1';
+// // Locker Fees Routes
+// $route['admin/Locker_fees'] = 'admincontroller/Locker_fees/index';
+// $route['admin/Locker_fees/add'] = 'admincontroller/Locker_fees/add';
+// $route['admin/Locker_fees/update'] = 'admincontroller/Locker_fees/update';
+// $route['admin/Locker_fees/get_by_id/(:num)'] = 'admincontroller/Locker_fees/get_by_id/$1';
+// $route['admin/Locker_fees/delete/(:num)'] = 'admincontroller/Locker_fees/delete/$1';
+// $route['admin/Locker_fees/filter'] = 'admincontroller/Locker_fees/filter';
 
 // Add this to application/config/routes.php
-$route['admin/add-on-facilities'] = 'admincontroller/add_on_facilities/index';
+$route['admin/add-on-facilities'] = 'admincontroller/Add_on_facilities/index';
 
 
 
-$route['admin/venues'] = 'admincontroller/venues/index';
-$route['admin/venues/add'] = 'admincontroller/venues/add';
-$route['admin/venues/update'] = 'admincontroller/venues/update';
-$route['admin/venues/delete/(:num)'] = 'admincontroller/venues/delete/$1';
-$route['admin/venues/get_by_id/(:num)'] = 'admincontroller/venues/get_by_id/$1';
-$route['admin/venues/get_batches_by_venue/(:num)'] = 'admincontroller/venues/get_batches_by_venue/$1';
-$route['admin/venues/add_batch'] = 'admincontroller/venues/add_batch';
-$route['admin/venues/update_batch'] = 'admincontroller/venues/update_batch';
-$route['admin/venues/delete_batch/(:num)'] = 'admincontroller/venues/delete_batch/$1';
-$route['admin/venues/get_batch_by_id/(:num)'] = 'admincontroller/venues/get_batch_by_id/$1';
+$route['admin/venues'] = 'admincontroller/Venues/index';
+$route['admin/venues/add'] = 'admincontroller/Venues/add';
+$route['admin/venues/update'] = 'admincontroller/Venues/update';
+$route['admin/venues/delete/(:num)'] = 'admincontroller/Venues/delete/$1';
+$route['admin/venues/get_by_id/(:num)'] = 'admincontroller/Venues/get_by_id/$1';
+$route['admin/venues/get_batches_by_venue/(:num)'] = 'admincontroller/Venues/get_batches_by_venue/$1';
+$route['admin/venues/add_batch'] = 'admincontroller/Venues/add_batch';
+$route['admin/venues/update_batch'] = 'admincontroller/Venues/update_batch';
+$route['admin/venues/delete_batch/(:num)'] = 'admincontroller/Venues/delete_batch/$1';
+$route['admin/venues/get_batch_by_id/(:num)'] = 'admincontroller/Venues/get_batch_by_id/$1';
