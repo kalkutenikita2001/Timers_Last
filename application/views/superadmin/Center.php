@@ -437,7 +437,8 @@
         <div class="row justify-content-start" id="centerCards"></div>
 
         <div class="button-container">
-          <button class="add-center-btn" data-toggle="modal" data-target="#addCenterModal">Add Center</button>
+          <button class="add-center-btn" data-toggle="modal" data-target="#addCenterModal">
+             <i class="fas fa-plus mr-1"></i>Add Center</button>
         </div>
       </div>
     </div>

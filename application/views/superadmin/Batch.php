@@ -449,7 +449,8 @@
 
         <!-- Add Button -->
         <div class="button-container">
-          <button class="add-center-btn" data-toggle="modal" data-target="#addBatchModal">Add Batch</button>
+          <button class="add-center-btn" data-toggle="modal" data-target="#addBatchModal">
+             <i class="fas fa-plus mr-1"></i>Add Batch</button>
         </div>
       </div>
     </div>

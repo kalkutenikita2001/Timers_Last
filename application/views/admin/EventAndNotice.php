@@ -443,7 +443,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <!-- Filter and Participate Buttons -->
         <div class="header-container">
           <button class="participate-btn btn" data-toggle="modal" data-target="#participateModal" aria-label="Open participate modal">Participate</button>
-          <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">Filter</button>
+          <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal" aria-label="Open filter modal">
+             <i class="bi bi-funnel me-2"></i>Filter</button>
         </div>
         <div class="row justify-content-start" id="eventRow">
           <!-- Event cards will be loaded dynamically via AJAX -->
@@ -451,7 +452,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         <!-- Add Button -->
         <div class="button-container">
-          <button class="add-center-btn" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
+          <button class="add-center-btn" data-toggle="modal" data-target="#addEventModal">
+             <i class="fas fa-plus mr-1"></i>Add Event/Notice</button>
         </div>
       </div>
     </div>

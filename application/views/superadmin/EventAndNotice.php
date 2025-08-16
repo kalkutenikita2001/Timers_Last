@@ -448,7 +448,8 @@
 
         <!-- Add Button -->
         <div class="button-container">
-          <button class="add-center-btn" data-toggle="modal" data-target="#addEventModal">Add Event/Notice</button>
+          <button class="add-center-btn" data-toggle="modal" data-target="#addEventModal">
+             <i class="fas fa-plus mr-1"></i>Add Event/Notice</button>
         </div>
       </div>
     </div>

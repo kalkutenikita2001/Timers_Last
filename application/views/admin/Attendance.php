@@ -531,7 +531,7 @@
             <!-- Filter Button -->
             <div class="filter-wrapper">
                 <button class="filter-btn" onclick="openFilterModal()">
-                    <i class="bi bi-funnel me-1"></i> Filter
+                     <i class="bi bi-funnel me-2"></i> Filter
                 </button>
             </div>
             <!-- Daily Attendance Table -->
@@ -609,7 +609,8 @@
             </div>
             <!-- Add Button -->
             <div class="add-btn-container">
-                <button class="add-btn" onclick="openModal()">Add Attendance</button>
+                <button class="add-btn" onclick="openModal()">
+                     <i class="fas fa-plus mr-1"></i>Add Attendance</button>
             </div>
         </div>
     </div>

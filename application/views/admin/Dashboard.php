@@ -820,7 +820,7 @@
                 <i class="bi bi-funnel"></i> Filter
               </button>
               <button class="add-btn" onclick="addStudent()">
-                Add Student
+                 <i class="fas fa-plus mr-1"></i>Add Student
               </button>
             </div>
           </h6>

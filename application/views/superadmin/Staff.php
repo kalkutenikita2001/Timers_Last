@@ -439,7 +439,8 @@
         </div>
         <div class="row justify-content-start" id="staffRow"></div>
         <div class="button-container">
-          <button class="add-center-btn" data-toggle="modal" data-target="#addStaffModal">Add Staff</button>
+          <button class="add-center-btn" data-toggle="modal" data-target="#addStaffModal">
+             <i class="fas fa-plus mr-1"></i>Add Staff</button>
         </div>
       </div>
     </div>

@@ -358,7 +358,7 @@
         <div class="container">
             <div class="add-btn-container">
                 <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
-                    <i class="fas fa-filter mr-1"></i> Filter
+                     <i class="bi bi-funnel me-2"></i> Filter
                 </button>
                 <button class="btn btn-custom" data-toggle="modal" data-target="#venueModal">
                     <i class="fas fa-plus mr-1"></i> Add Venue
