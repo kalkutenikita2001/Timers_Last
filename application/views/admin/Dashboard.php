@@ -4,11 +4,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -32,17 +32,18 @@
       margin-left: 60px;
       max-width: calc(100vw - 60px);
     }
-    
     .dashboard-wrapper.sidebar-minimized {
       margin-left: 60px;
       max-width: calc(100vw - 60px);
     }
-    
     .dashboard-wrapper.sidebar-collapsed {
       margin-left: 60px;
       max-width: calc(100vw - 60px);
     }
-
+    .dashboard-wrapper.sidebar-hidden {
+      margin-left: 0;
+      max-width: 100vw;
+    }
     .container-fluid {
       max-width: 100%;
       margin: 0 auto;
@@ -540,7 +541,6 @@
         padding: 15px !important;
         max-width: 100vw !important;
       }
-      
       .container-fluid {
         padding: 0 10px;
       }
@@ -564,8 +564,8 @@
       }
       .btn-custom {
         font-size: 12px;
-        padding: 8px 16px;
-        min-width: 120px;
+        padding: 6px 12px;
+        min-width: 100px;
         margin: 5px;
       }
       .students-table-container,
@@ -582,7 +582,8 @@
         gap: 10px;
       }
       .filter-btn, .add-btn {
-        padding: 5px 12px;
+        padding: 4px 10px;
+        font-size: 11px;
       }
       .modal-content {
         max-width: 90%;
@@ -646,6 +647,11 @@
         max-width: 95%;
         padding: 12px;
       }
+      .btn-custom {
+        font-size: 11px;
+        padding: 5px 10px;
+        min-width: 90px;
+      }
     }
   </style>
 </head>
@@ -654,7 +660,6 @@
   <?php $this->load->view('admin/Include/Sidebar') ?>
   <!-- Navbar -->
   <?php $this->load->view('admin/Include/Navbar') ?>
-
   <!-- Dashboard Content -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
     <div class="container-fluid">
@@ -697,27 +702,25 @@
           <i class="bi bi-graph-down fs-3 opacity-50" style="position: absolute; top: 5px; right: 15px;"></i>
         </div>
       </div>
-
       <!-- Export Buttons -->
-      <div class="d-flex justify-content-center gap-3 my-4">
-        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
-          <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
-            <i class="bi bi-download me-1"></i> Export Excel
+      <div class="d-flex justify-content-center gap-2 my-3 flex-wrap">
+        <div class=" px-2 py-1 rounded  d-flex align-items-center">
+          <button class="bg-white btn btn-sm btn-custom shadow-sm" onclick="exportToExcel()">
+            <i class="bi bi-download me-1"></i> Excel
           </button>
         </div>
-        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center">
-          <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
-            <i class="bi bi-download me-1"></i> Export PDF
+        <div class=" px-2 py-1 rounded  d-flex align-items-center">
+          <button class="bg-white btn btn-sm btn-custom shadow-sm" onclick="exportToPDF()">
+            <i class="bi bi-download me-1"></i> PDF
           </button>
         </div>
       </div>
-
       <!-- Main Content Grid -->
       <div class="main-content">
         <!-- Recently Added Students -->
         <div class="students-table-container">
           <h6>
-            Recently Added Students 
+            Recently Added Students
             <div>
               <button class="filter-btn me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal">
                 <i class="bi bi-funnel"></i> Filter
@@ -747,13 +750,12 @@
           </div>
         </div>
       </div>
-
       <!-- Bottom Grid -->
       <div class="bottom-grid">
         <!-- Student Attendance -->
         <div class="attendance-container">
           <h6>
-            Student Attendance 
+            Student Attendance
             <button class="filter-btn" data-bs-toggle="modal" data-bs-target="#attendanceFilterModal">
               <i class="bi bi-funnel"></i> Filter
             </button>
@@ -775,11 +777,10 @@
             </table>
           </div>
         </div>
-
         <!-- Total Staff -->
         <div class="staff-container">
           <h6>
-            Total Staff 
+            Total Staff
             <button class="filter-btn" data-bs-toggle="modal" data-bs-target="#staffFilterModal">
               <i class="bi bi-funnel"></i> Filter
             </button>
@@ -800,7 +801,6 @@
             </table>
           </div>
         </div>
-
         <!-- Total Students Chart -->
         <div class="chart-container">
           <h6>Total Students</h6>
@@ -821,7 +821,6 @@
         </div>
       </div>
     </div>
-
     <!-- Students Filter Modal -->
     <div class="modal fade" id="studentsFilterModal" tabindex="-1" aria-labelledby="studentsFilterLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -880,7 +879,6 @@
         </div>
       </div>
     </div>
-
     <!-- Add Student Modal -->
     <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -903,13 +901,17 @@
               </div>
               <div class="form-group col-md-12">
                 <label for="addStudentCenter">Center</label>
-                <input type="text" id="addStudentCenter" name="center" class="form-control" placeholder="Enter center" pattern="[A-Za-z0-9\s]+" required />
-                <div class="invalid-feedback">Please enter a valid center name.</div>
+                <select id="addStudentCenter" name="center" class="form-control" required>
+                  <option value="">-- Select Center --</option>
+                </select>
+                <div class="invalid-feedback">Please select a center.</div>
               </div>
               <div class="form-group col-md-12">
                 <label for="addStudentBatch">Batch</label>
-                <input type="text" id="addStudentBatch" name="batch" class="form-control" placeholder="Enter batch" pattern="[A-Za-z0-9\s]+" required />
-                <div class="invalid-feedback">Please enter a valid batch code.</div>
+                <select id="addStudentBatch" name="batch" class="form-control" required>
+                  <option value="">-- Select Batch --</option>
+                </select>
+                <div class="invalid-feedback">Please select a batch.</div>
               </div>
               <div class="form-group col-md-12">
                 <label for="addStudentLevel">Level</label>
@@ -939,7 +941,6 @@
         </div>
       </div>
     </div>
-
     <!-- Edit Student Modal -->
     <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -999,7 +1000,6 @@
         </div>
       </div>
     </div>
-
     <!-- View Student Modal -->
     <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -1015,7 +1015,6 @@
         </div>
       </div>
     </div>
-
     <!-- Attendance Filter Modal -->
     <div class="modal fade" id="attendanceFilterModal" tabindex="-1" aria-labelledby="attendanceFilterLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -1064,7 +1063,6 @@
         </div>
       </div>
     </div>
-
     <!-- Staff Filter Modal -->
     <div class="modal fade" id="staffFilterModal" tabindex="-1" aria-labelledby="staffFilterLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -1107,7 +1105,8 @@
       </div>
     </div>
   </div>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
     // Dummy data
     const studentData = {
@@ -1117,7 +1116,6 @@
       emma: { name: 'Emma Brown', contact: '9876543213', center: 'DEF', batch: 'B4', level: 'Intermediate', category: 'Pending' },
       michael: { name: 'Michael Lee', contact: '9876543214', center: 'GHI', batch: 'B5', level: 'Advanced', category: 'Complete' }
     };
-
     const attendanceData = {
       jane: { name: 'Jane Doe', batch: 'B1', level: 'Basic', category: 'Present' },
       john: { name: 'John Smith', batch: 'B2', level: 'Advanced', category: 'Absent' },
@@ -1125,7 +1123,6 @@
       emma: { name: 'Emma Brown', batch: 'B4', level: 'Intermediate', category: 'Present' },
       michael: { name: 'Michael Lee', batch: 'B5', level: 'Advanced', category: 'Absent' }
     };
-
     const staffData = {
       alice: { name: 'Alice Johnson', contact: '9876543213', category: 'Coordinator' },
       bob: { name: 'Bob Brown', contact: '9876543214', category: 'Admin' },
@@ -1133,6 +1130,92 @@
       david: { name: 'David Wilson', contact: '9876543216', category: 'Trainer' },
       eve: { name: 'Eve Taylor', contact: '9876543217', category: 'Manager' }
     };
+
+    // Function to fetch and populate Centers
+    function loadCenters(selectElementId) {
+        $.ajax({
+            url: '<?php echo base_url("center/get_centers"); ?>',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                const selectElement = document.getElementById(selectElementId);
+                selectElement.innerHTML = '<option value="">-- Select Center --</option>';
+                if (response.status === 'success' && response.data && response.data.length > 0) {
+                    response.data.forEach(center => {
+                        const option = document.createElement('option');
+                        option.value = center.center_name;
+                        option.textContent = center.center_name;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No centers available';
+                    option.disabled = true;
+                    selectElement.appendChild(option);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching centers:', error);
+                const selectElement = document.getElementById(selectElementId);
+                selectElement.innerHTML = '<option value="" disabled>Error loading centers</option>';
+            }
+        });
+    }
+
+    // Function to fetch and populate Batches
+    function loadBatches(selectElementId) {
+        $.ajax({
+            url: '<?php echo base_url("batch/get_batches"); ?>',
+            method: 'POST',
+            data: { '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>' },
+            dataType: 'json',
+            success: function(response) {
+                const selectElement = document.getElementById(selectElementId);
+                selectElement.innerHTML = '<option value="">-- Select Batch --</option>';
+                if (response.status === 'success' && response.data && response.data.length > 0) {
+                    response.data.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.batch;
+                        option.textContent = batch.batch;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No batches available';
+                    option.disabled = true;
+                    selectElement.appendChild(option);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching batches:', error);
+                const selectElement = document.getElementById(selectElementId);
+                selectElement.innerHTML = '<option value="" disabled>Error loading batches</option>';
+            }
+        });
+    }
+
+    // Function to fetch and autocomplete Student Names
+    function loadStudentNames(inputElementId) {
+        $.ajax({
+            url: '<?php echo base_url("Student_controller/get_students"); ?>',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success' && response.students && response.students.length > 0) {
+                    const names = response.students.map(student => student.name);
+                    $(`#${inputElementId}`).autocomplete({
+                        source: names,
+                        minLength: 2
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching student names:', error);
+            }
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       initializeCharts();
@@ -1263,7 +1346,6 @@
       const studentsFilterForm = document.getElementById('studentsFilterForm');
       const attendanceFilterForm = document.getElementById('attendanceFilterForm');
       const staffFilterForm = document.getElementById('staffFilterForm');
-
       studentsFilterForm.addEventListener('submit', function (e) {
         e.preventDefault();
         if (!validateForm(this)) return;
@@ -1278,7 +1360,6 @@
         renderTables({ students: filter });
         bootstrap.Modal.getInstance(document.getElementById('studentsFilterModal')).hide();
       });
-
       attendanceFilterForm.addEventListener('submit', function (e) {
         e.preventDefault();
         if (!validateForm(this)) return;
@@ -1291,7 +1372,6 @@
         renderTables({ attendance: filter });
         bootstrap.Modal.getInstance(document.getElementById('attendanceFilterModal')).hide();
       });
-
       staffFilterForm.addEventListener('submit', function (e) {
         e.preventDefault();
         if (!validateForm(this)) return;
@@ -1307,13 +1387,22 @@
 
     function setupAddStudentForm() {
       const addStudentForm = document.getElementById('addStudentForm');
-      addStudentForm.addEventListener('submit', function (e) {
+      const addStudentModal = document.getElementById('addStudentModal');
+
+      // Load Centers and Batches when the modal is shown
+      $(addStudentModal).on('shown.bs.modal', function() {
+        loadCenters('addStudentCenter');
+        loadBatches('addStudentBatch');
+        loadStudentNames('addStudentName');
+      });
+
+      addStudentForm.addEventListener('submit', function(e) {
         e.preventDefault();
         if (!validateForm(this)) return;
         const name = document.getElementById('addStudentName').value.trim();
         const contact = document.getElementById('addStudentContact').value.trim();
-        const center = document.getElementById('addStudentCenter').value.trim();
-        const batch = document.getElementById('addStudentBatch').value.trim();
+        const center = document.getElementById('addStudentCenter').value;
+        const batch = document.getElementById('addStudentBatch').value;
         const level = document.getElementById('addStudentLevel').value;
         const category = document.getElementById('addStudentCategory').value;
         const id = name.toLowerCase().replace(/\s+/g, '');
@@ -1333,7 +1422,7 @@
 
     function setupEditStudentForm() {
       const editStudentForm = document.getElementById('editStudentForm');
-      editStudentForm.addEventListener('submit', function (e) {
+      editStudentForm.addEventListener('submit', function(e) {
         e.preventDefault();
         if (!validateForm(this)) return;
         const id = document.getElementById('editStudentId').value;
@@ -1361,41 +1450,51 @@
       const toggleBtn = document.querySelector('.sidebar-toggle');
       const dashboardWrapper = document.getElementById('dashboardWrapper');
       const sidebar = document.getElementById('sidebar');
+      const navbar = document.querySelector('.navbar');
 
-      if (toggleBtn && dashboardWrapper && sidebar) {
+      if (toggleBtn && dashboardWrapper && sidebar && navbar) {
         toggleBtn.addEventListener('click', function() {
-          const isMinimized = sidebar.classList.toggle('minimized');
-          dashboardWrapper.classList.toggle('minimized', isMinimized);
-        });
-      }
-
-      // Enhanced observer to handle multiple sidebar class changes
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'class' && dashboardWrapper && sidebar) {
-            // Check for various sidebar states
-            if (sidebar.classList.contains('minimized') || 
-                sidebar.classList.contains('sidebar-minimized') || 
-                sidebar.classList.contains('collapsed')) {
-              dashboardWrapper.classList.add('minimized');
-            } else {
-              dashboardWrapper.classList.remove('minimized');
-            }
+          if (window.innerWidth <= 768) {
+            // Mobile behavior: toggle sidebar visibility
+            sidebar.classList.toggle('active');
+            const isHidden = sidebar.classList.contains('active');
+            dashboardWrapper.classList.toggle('sidebar-hidden', isHidden);
+            navbar.classList.toggle('sidebar-hidden', isHidden);
+          } else {
+            // Desktop behavior: minimize/maximize sidebar
+            const isMinimized = sidebar.classList.toggle('minimized');
+            dashboardWrapper.classList.toggle('minimized', isMinimized);
+            navbar.classList.toggle('sidebar-minimized', isMinimized);
           }
         });
-      });
-
-      if (sidebar) {
-        observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
       }
 
-      // Listen for custom events that might be dispatched by the sidebar
-      document.addEventListener('sidebarToggle', function(event) {
-        if (dashboardWrapper) {
-          if (event.detail && event.detail.minimized) {
-            dashboardWrapper.classList.add('minimized');
-          } else {
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        const dashboardWrapper = document.getElementById('dashboardWrapper');
+        const sidebar = document.getElementById('sidebar');
+        const navbar = document.querySelector('.navbar');
+
+        if (window.innerWidth <= 768) {
+          // Mobile view
+          if (sidebar.classList.contains('minimized')) {
+            sidebar.classList.remove('minimized');
             dashboardWrapper.classList.remove('minimized');
+            navbar.classList.remove('sidebar-minimized');
+          }
+          if (sidebar.classList.contains('active')) {
+            dashboardWrapper.classList.add('sidebar-hidden');
+            navbar.classList.add('sidebar-hidden');
+          } else {
+            dashboardWrapper.classList.remove('sidebar-hidden');
+            navbar.classList.remove('sidebar-hidden');
+          }
+        } else {
+          // Desktop view
+          if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            dashboardWrapper.classList.remove('sidebar-hidden');
+            navbar.classList.remove('sidebar-hidden');
           }
         }
       });
@@ -1595,64 +1694,19 @@
     window.toggleDashboard = function() {
       const dashboardWrapper = document.getElementById('dashboardWrapper');
       const sidebar = document.getElementById('sidebar');
-      if (dashboardWrapper && sidebar) {
-        const isMinimized = sidebar.classList.toggle('minimized');
-        dashboardWrapper.classList.toggle('minimized', isMinimized);
+      const navbar = document.querySelector('.navbar');
+      if (dashboardWrapper && sidebar && navbar) {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.toggle('active');
+          navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+          dashboardWrapper.classList.toggle('sidebar-hidden', sidebar.classList.contains('active'));
+        } else {
+          const isMinimized = sidebar.classList.toggle('minimized');
+          navbar.classList.toggle('sidebar-minimized', isMinimized);
+          dashboardWrapper.classList.toggle('minimized', isMinimized);
+        }
       }
     };
-
-    // Additional event listeners for different sidebar toggle scenarios
-    document.addEventListener('DOMContentLoaded', function() {
-      // Handle sidebar toggle button clicks
-      const sidebarToggleButtons = document.querySelectorAll('.sidebar-toggle, .navbar-toggler, [data-toggle="sidebar"]');
-      sidebarToggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const dashboardWrapper = document.getElementById('dashboardWrapper');
-          const sidebar = document.getElementById('sidebar');
-          if (dashboardWrapper && sidebar) {
-            // Check current state and toggle
-            const isCurrentlyMinimized = sidebar.classList.contains('minimized') || 
-                                       sidebar.classList.contains('collapsed') ||
-                                       sidebar.classList.contains('sidebar-minimized');
-            
-            if (isCurrentlyMinimized) {
-              sidebar.classList.remove('minimized', 'collapsed', 'sidebar-minimized');
-              dashboardWrapper.classList.remove('minimized');
-            } else {
-              sidebar.classList.add('minimized');
-              dashboardWrapper.classList.add('minimized');
-            }
-          }
-        });
-      });
-
-      // Handle window resize to ensure proper responsiveness
-      window.addEventListener('resize', function() {
-        const dashboardWrapper = document.getElementById('dashboardWrapper');
-        const sidebar = document.getElementById('sidebar');
-        
-        if (window.innerWidth <= 768) {
-          // Mobile view - sidebar should not affect dashboard wrapper margin
-          if (dashboardWrapper) {
-            dashboardWrapper.style.marginLeft = '0';
-            dashboardWrapper.style.maxWidth = '100vw';
-          }
-        } else {
-          // Desktop view - restore normal sidebar behavior
-          if (dashboardWrapper && sidebar) {
-            if (sidebar.classList.contains('minimized') || 
-                sidebar.classList.contains('collapsed') ||
-                sidebar.classList.contains('sidebar-minimized')) {
-              dashboardWrapper.style.marginLeft = '60px';
-              dashboardWrapper.style.maxWidth = 'calc(100vw - 60px)';
-            } else {
-              dashboardWrapper.style.marginLeft = '250px';
-              dashboardWrapper.style.maxWidth = 'calc(100vw - 250px)';
-            }
-          }
-        }
-      });
-    });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
