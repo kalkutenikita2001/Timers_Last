@@ -88,12 +88,13 @@
             background: #fff;
             border-radius: 0.5rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            overflow-x: auto;
+            overflow-x: hidden;
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: auto;
         }
 
         .table thead th {
@@ -104,20 +105,25 @@
             text-align: center;
             font-weight: 600;
             font-size: clamp(0.75rem, 2vw, 0.9rem);
-            padding: 1rem;
+            padding: 0.75rem;
         }
 
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            padding: 0.75rem;
+            padding: 0.5rem;
             border-bottom: 1px solid #dee2e6;
             font-size: clamp(0.7rem, 1.8vw, 0.85rem);
-            color: #000;
+            color: #333;
+        }
+
+        .table th.action-column {
+            min-width: 100px;
         }
 
         .table tbody tr {
             border-bottom: 1px solid #dee2e6;
+            transition: background-color 0.2s ease;
         }
 
         .table tbody tr:last-child {
@@ -125,18 +131,30 @@
         }
 
         .table tbody tr:hover {
-            background-color: rgba(0, 123, 255, 0.1);
+            background-color: #f1f3f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.2rem;
+            flex-wrap: nowrap;
         }
 
         .action-btn {
             background: none;
             border: none;
-            font-size: 1rem;
-            margin: 0 0.3rem;
-            padding: 0.3rem 0.6rem;
+            font-size: 0.9rem;
+            padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            min-width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .action-btn.thumbs-up {
@@ -196,6 +214,9 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             animation: fadeIn 0.3s ease-in-out;
         }
 
@@ -206,13 +227,14 @@
 
         .modal-content {
             background: #fff;
-            margin: 10% auto;
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
             width: 90%;
             max-width: 600px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease-in-out;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         @keyframes slideIn {
@@ -222,7 +244,7 @@
 
         .modal-header {
             text-align: center;
-            padding: 15px;
+            padding: 10px 15px;
             border-bottom: none;
             position: relative;
         }
@@ -256,33 +278,38 @@
         .form-row {
             display: flex;
             flex-wrap: wrap;
-            margin-right: -5px;
-            margin-left: -5px;
-            align-items: center;
+            margin-right: -10px;
+            margin-left: -10px;
+            align-items: flex-start;
         }
 
         .form-group {
-            padding-right: 5px;
-            padding-left: 5px;
-            margin-bottom: 0.8rem;
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-bottom: 1rem;
             flex: 0 0 50%;
             max-width: 50%;
         }
 
+        .form-group.full-width {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
         .form-group label {
             display: block;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            font-size: clamp(0.85rem, 2vw, 1rem);
             color: #333;
         }
 
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ced4da;
             border-radius: 6px;
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-size: clamp(0.85rem, 2vw, 1rem);
             background: #fff;
             color: #333;
             box-sizing: border-box;
@@ -297,13 +324,14 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
+            max-height: 200px;
         }
 
         .error {
             color: #dc3545;
-            font-size: clamp(0.7rem, 1.8vw, 0.8rem);
-            margin-top: 4px;
+            font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+            margin-top: 0.25rem;
             display: none;
             font-weight: 500;
         }
@@ -321,13 +349,13 @@
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: white;
             border: none;
-            padding: 10px 30px;
+            padding: 12px 30px;
             border-radius: 20px;
-            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            font-size: clamp(0.9rem, 2vw, 1rem);
             font-weight: 600;
             cursor: pointer;
             display: block;
-            margin: 15px auto 0;
+            margin: 20px auto 10px;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
@@ -339,6 +367,14 @@
             background: #ccc;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .center-indicator {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         @media (max-width: 576px) {
@@ -362,28 +398,33 @@
             }
 
             .table {
-                min-width: 800px;
                 font-size: clamp(0.65rem, 2vw, 0.7rem);
             }
 
             .table td, .table th {
-                padding: 0.5rem;
+                padding: 0.4rem;
+            }
+
+            .table th.action-column {
+                min-width: 80px;
             }
 
             .action-btn {
-                font-size: clamp(0.65rem, 2vw, 0.7rem);
+                font-size: clamp(0.6rem, 1.8vw, 0.65rem);
                 padding: 0.2rem 0.4rem;
+                min-width: 28px;
+                height: 28px;
             }
 
             .modal-content {
                 width: 95%;
                 max-width: 360px;
-                margin: 15% auto;
-                padding: 10px;
+                padding: 15px;
+                max-height: 90vh;
             }
 
             .modal-header {
-                padding: 10px;
+                padding: 8px 15px;
             }
 
             .modal-title {
@@ -402,12 +443,16 @@
 
             .form-row {
                 flex-direction: column;
+                margin-right: 0;
+                margin-left: 0;
             }
 
             .form-group {
                 flex: 0 0 100%;
                 max-width: 100%;
-                margin-bottom: 0.6rem;
+                margin-bottom: 0.8rem;
+                padding-right: 0;
+                padding-left: 0;
             }
 
             .add-btn-container {
@@ -454,10 +499,21 @@
                 font-size: clamp(0.75rem, 2vw, 0.8rem);
             }
 
+            .table th.action-column {
+                min-width: 90px;
+            }
+
+            .action-btn {
+                font-size: clamp(0.7rem, 1.8vw, 0.75rem);
+                padding: 0.25rem 0.5rem;
+                min-width: 30px;
+                height: 30px;
+            }
+
             .modal-content {
                 width: 90%;
                 max-width: 450px;
-                margin: 12% auto;
+                max-height: 85vh;
             }
 
             .modal-body {
@@ -501,10 +557,14 @@
                 font-size: clamp(0.8rem, 2vw, 0.85rem);
             }
 
+            .table th.action-column {
+                min-width: 100px;
+            }
+
             .modal-content {
                 width: 90%;
                 max-width: 500px;
-                margin: 10% auto;
+                max-height: 85vh;
             }
 
             .modal-body {
@@ -562,6 +622,7 @@
                 <button onclick="switchTab('Center 3')">Center 3</button>
                 <button onclick="switchTab('Center 4')">Center 4</button>
             </div>
+            <div class="center-indicator" id="centerIndicator">Leaves for Center 1</div>
             <div class="table-container">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -572,7 +633,7 @@
                             <th>Date</th>
                             <th>Reason</th>
                             <th>Description</th>
-                            <th>Action</th>
+                            <th class="action-column">Action</th>
                         </tr>
                     </thead>
                     <tbody id="leaveTableBody">
@@ -598,7 +659,7 @@
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" class="form-control" required placeholder="Enter full name">
-                            <div class="error">Please enter a valid name (letters only, min 2 characters)</div>
+                            <div class="error">Name must be 2-50 characters, letters and spaces only</div>
                         </div>
                         <div class="form-group">
                             <label for="batch">Batch</label>
@@ -629,14 +690,14 @@
                         <div class="form-group">
                             <label for="reason">Reason</label>
                             <input type="text" id="reason" name="reason" class="form-control" required placeholder="Enter reason for leave">
-                            <div class="error">Please enter a reason (min 5 characters)</div>
+                            <div class="error">Reason must be 5-100 characters</div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-12">
+                        <div class="form-group full-width">
                             <label for="description">Description</label>
                             <textarea id="description" name="description" class="form-control" required placeholder="Enter detailed description"></textarea>
-                            <div class="error">Please enter a description (10-500 characters)</div>
+                            <div class="error">Description must be 10-500 characters</div>
                         </div>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
@@ -655,7 +716,7 @@
         let editingRow = null;
 
         function openModal() {
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             resetForm();
             loadBatches();
@@ -672,12 +733,57 @@
             form.reset();
             clearValidationErrors();
             form.querySelector('.save-btn').disabled = false;
+            removeRealTimeValidation();
+            setupRealTimeValidation();
         }
 
         function clearValidationErrors() {
             const formGroups = document.querySelectorAll('.form-group');
             formGroups.forEach(group => {
                 group.classList.remove('invalid');
+            });
+        }
+
+        function validateField(field, regex, minLength, maxLength, errorMessage) {
+            const value = field.value.trim();
+            const formGroup = field.closest('.form-group');
+            const errorElement = formGroup.querySelector('.error');
+            if (!value || (regex && !regex.test(value)) || (minLength && value.length < minLength) || (maxLength && value.length > maxLength)) {
+                formGroup.classList.add('invalid');
+                errorElement.textContent = errorMessage;
+                return false;
+            } else {
+                formGroup.classList.remove('invalid');
+                return true;
+            }
+        }
+
+        function setupRealTimeValidation() {
+            const name = document.getElementById('name');
+            const batch = document.getElementById('batch');
+            const level = document.getElementById('level');
+            const date = document.getElementById('date');
+            const reason = document.getElementById('reason');
+            const description = document.getElementById('description');
+
+            name.addEventListener('input', () => validateField(name, /^[a-zA-Z\s]+$/, 2, 50, 'Name must be 2-50 characters, letters and spaces only'));
+            batch.addEventListener('change', () => validateField(batch, null, 1, null, 'Please select a valid batch'));
+            level.addEventListener('change', () => validateField(level, null, 1, null, 'Please select a level'));
+            date.addEventListener('change', () => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const selectedDate = new Date(date.value);
+                validateField(date, null, null, null, selectedDate <= today ? 'Please select a future date' : 'Please select a valid date');
+            });
+            reason.addEventListener('input', () => validateField(reason, null, 5, 100, 'Reason must be 5-100 characters'));
+            description.addEventListener('input', () => validateField(description, null, 10, 500, 'Description must be 10-500 characters'));
+        }
+
+        function removeRealTimeValidation() {
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.removeEventListener('input', null);
+                input.removeEventListener('change', null);
             });
         }
 
@@ -690,37 +796,31 @@
             const description = document.getElementById('description');
 
             let isValid = true;
-            clearValidationErrors();
 
-            if (!name.value.trim() || !/^[a-zA-Z\s]{2,}$/.test(name.value.trim())) {
-                name.closest('.form-group').classList.add('invalid');
+            if (!validateField(name, /^[a-zA-Z\s]+$/, 2, 50, 'Name must be 2-50 characters, letters and spaces only')) {
                 isValid = false;
             }
 
-            if (!batch.value.trim()) {
-                batch.closest('.form-group').classList.add('invalid');
+            if (!validateField(batch, null, 1, null, 'Please select a valid batch')) {
                 isValid = false;
             }
 
-            if (!level.value.trim()) {
-                level.closest('.form-group').classList.add('invalid');
+            if (!validateField(level, null, 1, null, 'Please select a level')) {
                 isValid = false;
             }
 
             const today = new Date();
+            today.setHours(0, 0, 0, 0);
             const selectedDate = new Date(date.value);
-            if (!date.value || selectedDate <= today) {
-                date.closest('.form-group').classList.add('invalid');
+            if (!validateField(date, null, null, null, selectedDate <= today ? 'Please select a future date' : 'Please select a valid date')) {
                 isValid = false;
             }
 
-            if (!reason.value.trim() || reason.value.trim().length < 5) {
-                reason.closest('.form-group').classList.add('invalid');
+            if (!validateField(reason, null, 5, 100, 'Reason must be 5-100 characters')) {
                 isValid = false;
             }
 
-            if (!description.value.trim() || description.value.trim().length < 10 || description.value.trim().length > 500) {
-                description.closest('.form-group').classList.add('invalid');
+            if (!validateField(description, null, 10, 500, 'Description must be 10-500 characters')) {
                 isValid = false;
             }
 
@@ -777,7 +877,7 @@
                     date: formData.get('date'),
                     reason: formData.get('reason'),
                     description: formData.get('description'),
-                    center: activeCenter,
+                    center_name: activeCenter,
                     status: 'Pending',
                     [csrfName]: csrfHash
                 };
@@ -830,10 +930,8 @@
             const isRejected = data.status === 'Rejected';
             const approveDisabled = isApproved || isRejected ? 'disabled' : '';
             const rejectDisabled = isApproved || isRejected ? 'disabled' : '';
-            const rowBackground = isApproved ? 'background-color: #d4edda;' : isRejected ? 'background-color: #f8d7da;' : '';
 
             row.setAttribute('data-id', data.id);
-            row.style.cssText = rowBackground;
             row.innerHTML = `
                 <td>${data.name}</td>
                 <td>${data.batch}</td>
@@ -841,7 +939,7 @@
                 <td>${new Date(data.date).toLocaleDateString('en-GB')}</td>
                 <td>${data.reason}</td>
                 <td>${data.description}</td>
-                <td>
+                <td class="action-buttons">
                     <button class="action-btn thumbs-up" onclick="approveLeave(this, ${data.id})" ${approveDisabled}><i class="fas fa-check"></i></button>
                     <button class="action-btn cross" onclick="rejectLeave(this, ${data.id})" ${rejectDisabled}><i class="fas fa-times"></i></button>
                 </td>
@@ -868,7 +966,6 @@
                         dataType: 'json',
                         success: function(response) {
                             if (response.status === 'success') {
-                                row.style.backgroundColor = '#d4edda';
                                 button.disabled = true;
                                 row.querySelector('.action-btn.cross').disabled = true;
                                 Swal.fire({
@@ -919,7 +1016,6 @@
                         dataType: 'json',
                         success: function(response) {
                             if (response.status === 'success') {
-                                row.style.backgroundColor = '#f8d7da';
                                 button.disabled = true;
                                 row.querySelector('.action-btn.thumbs-up').disabled = true;
                                 Swal.fire({
@@ -975,17 +1071,20 @@
             }
 
             switchTab('Center 1');
+            setupRealTimeValidation();
         });
 
         function fetchLeaves(center) {
             $.ajax({
                 url: '<?php echo base_url('leave/get_leaves'); ?>',
                 type: 'POST',
-                data: { center: center, [csrfName]: csrfHash },
+                data: { center_name: center, [csrfName]: csrfHash },
                 dataType: 'json',
                 success: function(response) {
                     const tableBody = document.getElementById('leaveTableBody');
+                    const centerIndicator = document.getElementById('centerIndicator');
                     tableBody.innerHTML = '';
+                    centerIndicator.textContent = `Leaves for ${center}`;
                     if (response.status === 'success') {
                         const data = response.data || [];
                         if (data.length === 0) {

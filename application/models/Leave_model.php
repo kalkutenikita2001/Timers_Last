@@ -9,16 +9,25 @@ class Leave_model extends CI_Model {
     }
 
     public function get_leaves($filters = []) {
-        if (!empty($filters['center'])) {
-            $this->db->where('center_name', $filters['center']);
+        if (!empty($filters['filterName'])) {
+            $this->db->like('name', $filters['filterName']);
         }
+        if (!empty($filters['filterBatch'])) {
+            $this->db->where('batch', $filters['filterBatch']);
+        }
+        if (!empty($filters['filterLevel'])) {
+            $this->db->like('level', $filters['filterLevel']);
+        }
+        if (!empty($filters['filterDate'])) {
+            $this->db->where('date', $filters['filterDate']);
+        }
+        // Remove center_name filter to ensure all records are fetched when no filters are applied
         $query = $this->db->get('leaves');
         return $query->result_array();
     }
 
     public function add_leave($data) {
-        $this->db->insert('leaves', $data);
-        return $this->db->insert_id();
+        return $this->db->insert('leaves', $data);
     }
 
     public function update_leave($id, $data) {
@@ -36,4 +45,3 @@ class Leave_model extends CI_Model {
         return $query->result_array();
     }
 }
-?>

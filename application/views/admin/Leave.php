@@ -106,14 +106,21 @@
             height: 1px;
             padding: 0;
         }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
         .action-btn {
             font-size: clamp(0.7rem, 1.5vw, 0.85rem);
-            margin: 0 0.2rem;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             cursor: pointer;
             transition: all 0.2s ease;
             border: none;
+            min-width: 2rem;
         }
         .action-btn.view {
             background-color: #28a745;
@@ -253,7 +260,7 @@
             .container { margin-top: 0.5rem; padding: 0 0.5rem; }
             .table { font-size: 0.6rem; }
             .table th:nth-child(5), .table td:nth-child(5) { display: none; }
-            .action-btn { font-size: 0.6rem; padding: 0.15rem 0.3rem; margin: 0 0.1rem; }
+            .action-btn { font-size: 0.6rem; padding: 0.15rem 0.3rem; min-width: 1.5rem; }
             .modal-content { padding: 0.5rem; width: 95%; }
             .form-row { flex-direction: column; gap: 0.3rem; }
             .form-group { margin-bottom: 0.4rem !important; }
@@ -268,7 +275,7 @@
             .container { margin-top: 0.75rem; padding: 0 0.75rem; }
             .table { font-size: 0.7rem; }
             .table th:nth-child(5), .table td:nth-child(5) { display: none; }
-            .action-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; margin: 0 0.15rem; }
+            .action-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; min-width: 1.8rem; }
             .modal-content { padding: 0.75rem; width: 90%; }
             .form-row { flex-direction: column; gap: 0.5rem; }
             .form-group { margin-bottom: 0.5rem !important; }
@@ -355,7 +362,7 @@
         <div class="container">
             <div class="add-btn-container">
                 <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
-                     <i class="bi bi-funnel me-2"></i> Filter
+                    <i class="fas fa-filter mr-2"></i> Filter
                 </button>
                 <button class="btn btn-custom" data-toggle="modal" data-target="#leaveModal">
                     <i class="fas fa-plus mr-1"></i> Add Leave
@@ -384,7 +391,7 @@
                                     <td><?php echo htmlspecialchars($leave->date); ?></td>
                                     <td><?php echo htmlspecialchars($leave->reason); ?></td>
                                     <td><?php echo htmlspecialchars($leave->description); ?></td>
-                                    <td>
+                                    <td class="action-buttons">
                                         <button class="action-btn view" data-id="<?php echo $leave->id; ?>" onclick="viewLeave(this)" title="View Leave Details"><i class="fas fa-eye"></i></button>
                                         <button class="action-btn edit" data-id="<?php echo $leave->id; ?>" onclick="editLeave(this)" title="Edit Leave"><i class="fas fa-edit"></i></button>
                                         <button class="action-btn delete" data-id="<?php echo $leave->id; ?>" onclick="deleteLeave(this)" title="Delete Leave"><i class="fas fa-trash"></i></button>
@@ -537,8 +544,7 @@
             // Load batches dynamically into the batch dropdown
             function loadBatches(selectElement) {
                 const baseUrl = '<?php echo base_url(); ?>';
-                const batchUrl = baseUrl + 'batch/get_batches';
-
+                const batchUrl = baseUrl + 'Leave/get_batches';
                 $.ajax({
                     url: batchUrl,
                     method: 'POST',
@@ -561,7 +567,7 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('AJAX error:', error);
+                        console.error('AJAX error:', error, xhr);
                         selectElement.append('<option value="" disabled>Error loading batches</option>');
                     }
                 });
@@ -682,15 +688,18 @@
 
             // Load all leaves
             function loadAllLeaves() {
+                console.log('Calling loadAllLeaves...');
                 $.ajax({
-                    url: '<?php echo base_url('admin/leaves'); ?>',
+                    url: '<?php echo base_url('Leave/get_leaves'); ?>',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        console.log('Success Response:', data);
                         updateLeaveTable(data);
                         csrfToken = data.csrf_token || csrfToken;
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error, xhr);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -698,6 +707,7 @@
                             showConfirmButton: true,
                             timer: 3000
                         });
+                        $('#leaveTableBody').html('<tr><td colspan="7" class="text-center">Failed to load data.</td></tr>');
                     }
                 });
             }
@@ -706,19 +716,24 @@
             function updateLeaveTable(data) {
                 const tableBody = $('#leaveTableBody');
                 tableBody.empty();
-                if (data.leaves.length === 0) {
+                if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
                     tableBody.append('<tr><td colspan="7" class="text-center">No records found.</td></tr>');
                 } else {
-                    data.leaves.forEach(item => {
+                    data.data.forEach(item => {
+                        const formattedDate = new Date(item.date).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
                         const row = `
                             <tr>
-                                <td>${item.name}</td>
-                                <td>${item.batch}</td>
-                                <td>${item.level}</td>
-                                <td>${new Date(item.date).toLocaleDateString('en-GB')}</td>
-                                <td>${item.reason}</td>
-                                <td>${item.description}</td>
-                                <td>
+                                <td>${item.name || ''}</td>
+                                <td>${item.batch || ''}</td>
+                                <td>${item.level || ''}</td>
+                                <td>${formattedDate}</td>
+                                <td>${item.reason || ''}</td>
+                                <td>${item.description || ''}</td>
+                                <td class="action-buttons">
                                     <button class="action-btn view" data-id="${item.id}" onclick="viewLeave(this)" title="View Leave Details"><i class="fas fa-eye"></i></button>
                                     <button class="action-btn edit" data-id="${item.id}" onclick="editLeave(this)" title="Edit Leave"><i class="fas fa-edit"></i></button>
                                     <button class="action-btn delete" data-id="${item.id}" onclick="deleteLeave(this)" title="Delete Leave"><i class="fas fa-trash"></i></button>
@@ -748,7 +763,7 @@
                         description: formData.get('description'),
                         id: formData.get('leaveId') || null
                     };
-                    const url = data.id ? '<?php echo base_url('admin/leaves/update'); ?>' : '<?php echo base_url('admin/leaves/add'); ?>';
+                    const url = data.id ? '<?php echo base_url('Leave/update_leave'); ?>' : '<?php echo base_url('Leave/add_leave'); ?>';
                     const action = data.id ? 'updated' : 'added';
 
                     $.ajax({
@@ -757,6 +772,7 @@
                         data: data,
                         dataType: 'json',
                         success: function(response) {
+                            console.log('Add/Update Response:', response);
                             if (response.status === 'success') {
                                 $('#leaveModal').modal('hide');
                                 Swal.fire({
@@ -779,7 +795,8 @@
                                 });
                             }
                         },
-                        error: function() {
+                        error: function(xhr, status, error) {
+                            console.error('Add/Update Error:', error, xhr);
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -796,18 +813,19 @@
             window.viewLeave = function(button) {
                 const id = $(button).data('id');
                 $.ajax({
-                    url: '<?php echo base_url('admin/leaves/get_by_id'); ?>/' + id,
+                    url: '<?php echo base_url('Leave/get_by_id'); ?>/' + id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
+                        console.log('View Response:', response);
                         if (response.status === 'success') {
                             const leave = response.data;
                             $('#viewModalContent').html(`
-                                <p><strong>Name:</strong> ${leave.name}</p>
-                                <p><strong>Batch:</strong> ${leave.batch}</p>
-                                <p><strong>Level:</strong> ${leave.level}</p>
+                                <p><strong>Name:</strong> ${leave.name || ''}</p>
+                                <p><strong>Batch:</strong> ${leave.batch || ''}</p>
+                                <p><strong>Level:</strong> ${leave.level || ''}</p>
                                 <p><strong>Date:</strong> ${new Date(leave.date).toLocaleDateString('en-GB')}</p>
-                                <p><strong>Reason:</strong> ${leave.reason}</p>
+                                <p><strong>Reason:</strong> ${leave.reason || ''}</p>
                                 <p><strong>Description:</strong> ${leave.description || 'No description'}</p>
                             `);
                             $('#viewModal').modal('show');
@@ -816,13 +834,14 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: response.message,
+                                text: response.message || 'Failed to load leave details.',
                                 showConfirmButton: true,
                                 timer: 3000
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('View Error:', error, xhr);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -839,10 +858,11 @@
                 editingRow = $(button).closest('tr');
                 const id = $(button).data('id');
                 $.ajax({
-                    url: '<?php echo base_url('admin/leaves/get_by_id'); ?>/' + id,
+                    url: '<?php echo base_url('Leave/get_by_id'); ?>/' + id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
+                        console.log('Edit Response:', response);
                         if (response.status === 'success') {
                             const leave = response.data;
                             $('#leaveId').val(leave.id);
@@ -861,13 +881,14 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: response.message,
+                                text: response.message || 'Failed to load leave for editing.',
                                 showConfirmButton: true,
                                 timer: 3000
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('Edit Error:', error, xhr);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -894,11 +915,12 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '<?php echo base_url('admin/leaves/delete'); ?>/' + id,
+                            url: '<?php echo base_url('Leave/delete_leave'); ?>/' + id,
                             type: 'POST',
                             data: { [csrfName]: csrfToken },
                             dataType: 'json',
                             success: function(response) {
+                                console.log('Delete Response:', response);
                                 if (response.status === 'success') {
                                     row.next('.horizontal-line').remove();
                                     row.remove();
@@ -917,13 +939,14 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: response.message,
+                                        text: response.message || 'Failed to delete leave.',
                                         showConfirmButton: true,
                                         timer: 3000
                                     });
                                 }
                             },
-                            error: function() {
+                            error: function(xhr, status, error) {
+                                console.error('Delete Error:', error, xhr);
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
@@ -945,19 +968,23 @@
                     filterName: formData.get('filterName'),
                     filterBatch: formData.get('filterBatch'),
                     filterLevel: formData.get('filterLevel'),
-                    filterDate: formData.get('filterDate')
+                    filterDate: formData.get('filterDate'),
+                    [csrfName]: csrfToken
                 };
+                console.log('Filter Form Data:', data);
                 $.ajax({
-                    url: '<?php echo base_url('admin/leaves'); ?>',
+                    url: '<?php echo base_url('Leave/get_leaves'); ?>',
                     type: 'POST',
                     data: data,
                     dataType: 'json',
                     success: function(response) {
+                        console.log('Filter Response:', response);
                         updateLeaveTable(response);
                         csrfToken = response.csrf_token || csrfToken;
                         $('#filterModal').modal('hide');
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('Filter Error:', error, xhr);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -999,6 +1026,9 @@
             $('.btn-custom, .action-btn').on('click', function() {
                 $(this).blur();
             });
+
+            // Load leaves on page load
+            loadAllLeaves();
         });
     </script>
 </body>

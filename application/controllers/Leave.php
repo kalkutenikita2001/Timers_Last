@@ -9,14 +9,20 @@ class Leave extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('superadmin/leave');
+        $data['leaves'] = $this->Leave_model->get_leaves();
+        $this->load->view('superadmin/leave', $data);
     }
 
     public function get_leaves() {
         $filters = $this->input->post();
         unset($filters[$this->security->get_csrf_token_name()]);
         $leaves = $this->Leave_model->get_leaves($filters);
-        echo json_encode(['status' => 'success', 'data' => $leaves]);
+        $response = [
+            'status' => 'success',
+            'data' => $leaves,
+            'csrf_token' => $this->security->get_csrf_hash()
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
     public function add_leave() {
@@ -27,26 +33,24 @@ class Leave extends CI_Controller {
             'date' => $this->input->post('date', TRUE),
             'reason' => $this->input->post('reason', TRUE),
             'description' => $this->input->post('description', TRUE),
-            'center_name' => $this->input->post('center', TRUE),
-            'status' => $this->input->post('status', TRUE) // Add status field
+            'center_name' => 'Center-A', // Hardcoded as per your code
+            'status' => $this->input->post('status', TRUE) ?: 'Pending' // Default to 'Pending' if not provided
         ];
 
         if ($this->Leave_model->add_leave($data)) {
-            echo json_encode(['status' => 'success', 'message' => 'Leave added successfully']);
+            $response = [
+                'status' => 'success',
+                'message' => 'Leave added successfully',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to add leave']);
+            $response = [
+                'status' => 'error',
+                'message' => 'Failed to add leave',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         }
-    }
-
-    public function update_status() {
-        $id = $this->input->post('id', TRUE);
-        $status = $this->input->post('status', TRUE);
-
-        if ($this->Leave_model->update_leave($id, ['status' => $status])) {
-            echo json_encode(['status' => 'success', 'message' => 'Leave status updated successfully']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to update leave status']);
-        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
     public function update_leave() {
@@ -61,25 +65,67 @@ class Leave extends CI_Controller {
         ];
 
         if ($this->Leave_model->update_leave($id, $data)) {
-            echo json_encode(['status' => 'success', 'message' => 'Leave updated successfully']);
+            $response = [
+                'status' => 'success',
+                'message' => 'Leave updated successfully',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to update leave']);
+            $response = [
+                'status' => 'error',
+                'message' => 'Failed to update leave',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
     public function delete_leave() {
         $id = $this->input->post('id', TRUE);
 
         if ($this->Leave_model->delete_leave($id)) {
-            echo json_encode(['status' => 'success', 'message' => 'Leave deleted successfully']);
+            $response = [
+                'status' => 'success',
+                'message' => 'Leave deleted successfully',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to delete leave']);
+            $response = [
+                'status' => 'error',
+                'message' => 'Failed to delete leave',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
         }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+    }
+
+    public function get_by_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('leaves');
+        $leave = $query->row_array();
+        if ($leave) {
+            $response = [
+                'status' => 'success',
+                'data' => $leave,
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
+        } else {
+            $response = [
+                'status' => 'error',
+                'message' => 'Leave not found',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ];
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
     public function get_batches() {
         $batches = $this->Leave_model->get_batches();
-        echo json_encode(['status' => 'success', 'data' => $batches]);
+        $response = [
+            'status' => 'success',
+            'data' => $batches,
+            'csrf_token' => $this->security->get_csrf_hash()
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 }
-?>
