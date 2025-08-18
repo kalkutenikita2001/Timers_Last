@@ -64,6 +64,7 @@ $route['EventAndNotice'] = 'Superadmin/EventAndNotice';
 $route['Admission'] = 'Superadmin/Admission';
 $route['Students'] = 'Superadmin/Students';
 $route['Leave'] = 'Superadmin/Leave';
+$route['Superadmin_profile'] = 'Superadmin/Superadmin_profile';
 // $route['Expenses'] = 'superadmin/Expenses';
 
 //Admin

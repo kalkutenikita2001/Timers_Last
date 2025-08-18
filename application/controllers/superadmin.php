@@ -45,4 +45,7 @@ public function SignUp(){
 	public function Finance(){
 		$this->load->view('superadmin/Finance');
 	}
+		public function Superadmin_profile(){
+		$this->load->view('superadmin/Superadmin_profile');
+	}
 }

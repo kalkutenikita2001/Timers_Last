@@ -176,8 +176,14 @@
                 <i class="bi bi-bell-fill"></i>
             </div>
              <div class="profile-icon ms-3">
-                 <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" class="rounded-circle" alt="Profile" width="32" height="32">
-            </div>
+    <a href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
+        <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" 
+             class="rounded-circle" 
+             alt="Profile" 
+             width="32" 
+             height="32">
+    </a>
+</div>
 
         </div>
     </div>

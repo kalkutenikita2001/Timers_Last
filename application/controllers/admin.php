@@ -36,4 +36,5 @@ class admin extends CI_Controller {
 	public function venue(){
 		$this->load->view('admin/venue');
 	}
+	
 }
