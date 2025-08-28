@@ -23,37 +23,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/timersacademy/';
-
-/*
-|--------------------------------------------------------------------------
-| Index File
-|--------------------------------------------------------------------------
-|
-| Typically this will be your index.php file, unless you've renamed it to
-| something else. If you are using mod_rewrite to remove the page set this
-| variable so that it is blank.
-|
-*/
+$config['base_url'] = 'http://localhost/timersacademy_new/';
 $config['index_page'] = '';
+$config['uri_protocol']	= 'REQUEST_URI';   // make sure it's REQUEST_URI
 
-
-/*
-|--------------------------------------------------------------------------
-| URI PROTOCOL
-|--------------------------------------------------------------------------
-|
-| This item determines which server global should be used to retrieve the
-| URI string.  The default setting of 'REQUEST_URI' works for most servers.
-| If your links do not seem to work, try one of the other delicious flavors:
-|
-| 'REQUEST_URI'    Uses $_SERVER['REQUEST_URI']
-| 'QUERY_STRING'   Uses $_SERVER['QUERY_STRING']
-| 'PATH_INFO'      Uses $_SERVER['PATH_INFO']
-|
-| WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
-*/
-$config['uri_protocol']    = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------

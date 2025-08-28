@@ -1,7 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /timersacademy/
+    RewriteBase /timersacademy_new/
+
+    # If file or directory exists, skip
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Send everything to index.php
     RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>

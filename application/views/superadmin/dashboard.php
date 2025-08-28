@@ -19,6 +19,8 @@
       font-family: 'Montserrat', serif;
       overflow-x: hidden;
     }
+    
+
     .dashboard-wrapper {
       margin-left: 250px;
       padding: 24px;
@@ -340,16 +342,187 @@
         margin-left: 60px;
       }
     }
-    
+
+/* =------------------------------------------------------------------------------------------------------------------- --> */
+
+  /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar.minimized {
+            width: 60px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            color: white;
+            padding: 10px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .navbar.sidebar-minimized {
+            left: 60px;
+        }
+
+        /* Content */
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 80px 20px 20px 20px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .content-wrapper.minimized {
+            margin-left: 60px;
+        }
+
+        /* Mobile Sidebar Overlay */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.active {
+                left: 0;
+                z-index: 1000;
+            }
+
+            .navbar {
+                left: 0;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                padding: 70px 15px 15px 15px;
+            }
+        }
+
+
+
+    /* Sidebar Responsive Fix */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: #000; /* Adjust to your theme */
+    transition: left 0.3s ease;
+    z-index: 1050;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  .dashboard-wrapper {
+    margin-left: 0 !important;
+    padding: 15px !important;
+  }
+  .sidebar-toggle {
+    display: inline-block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 1100;
+  }
+}
+
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <?php $this->load->view('superadmin/Include/Sidebar') ?>
-  <!-- Navbar -->
-  <?php $this->load->view('superadmin/Include/Navbar') ?>
-  <!-- Dashboard Content -->
-  <div class="dashboard-wrapper" id="dashboardWrapper">
+<!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
+<!-- =------------------------------------------------------------------------------------------------------------------- -->
+
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="content">
+  <!-- <div class="dashboard-wrapper" id="dashboardWrapper"> -->
+    <!-- =------------------------------------------------------------------------------------------------------------------- -->
+
+    <?php
+    // Fetch dynamic data from database
+    // Active Students
+    $active_students_query = $this->db->select('COUNT(id) as count')->from('students')->where('status', 'Active')->get();
+    $active_students = $active_students_query->row()->count ?? 0;
+
+    // Attendance Rate (Hardcoded as no full attendance history provided; can be calculated if 'attendances' table exists)
+    $attendance_rate = 85; // Placeholder; To calculate real: (total attendances / possible attendances) * 100
+
+    // Fee Defaulters (students with remaining_amount > 0)
+    $fee_defaulters_query = $this->db->select('COUNT(id) as count')->from('students')->where('remaining_amount >', 0)->get();
+    $fee_defaulters = $fee_defaulters_query->row()->count ?? 0;
+
+    // Monthly Profits (sum of paid_amount from students + sum of amount from student_facilities for current month)
+    $current_month = date('m');
+    $current_year = date('Y');
+    $student_payments = $this->db->select('SUM(paid_amount) as sum')->from('students')
+        ->where('MONTH(created_at)', $current_month)
+        ->where('YEAR(created_at)', $current_year)
+        ->get()->row()->sum ?? 0;
+    $facility_payments = $this->db->select('SUM(amount) as sum')->from('student_facilities')
+        ->where('MONTH(created_at)', $current_month)
+        ->where('YEAR(created_at)', $current_year)
+        ->get()->row()->sum ?? 0;
+    $monthly_profits = $student_payments + $facility_payments;
+
+    // Centers (real names from centers table)
+    $centers = $this->db->get('centers')->result_array();
+
+    // Student Distribution (counts by category)
+    $beginner_count = $this->db->where('category', 'Beginner')->count_all_results('students') ?? 0;
+    $intermediate_count = $this->db->where('category', 'Intermediate')->count_all_results('students') ?? 0;
+    $advanced_count = $this->db->where('category', 'Advanced')->count_all_results('students') ?? 0;
+    $total_students = $beginner_count + $intermediate_count + $advanced_count;
+    $beginner_pct = $total_students > 0 ? round(($beginner_count / $total_students) * 100) : 0;
+    $intermediate_pct = $total_students > 0 ? round(($intermediate_count / $total_students) * 100) : 0;
+    $advanced_pct = $total_students > 0 ? round(($advanced_count / $total_students) * 100) : 0;
+
+    // Weekly Attendance Data (Assuming 'attendances' table exists with 'attendance_date'; otherwise dummy)
+    // If no attendances table, use dummy data
+    $weekly_attendance = [90, 85, 75, 92, 80, 85, 90]; // Dummy
+    // Real calculation (uncomment if attendances table exists):
+    /*
+    $weekly_attendance = [];
+    $start_of_week = date('Y-m-d', strtotime('monday this week'));
+    for ($i = 0; $i < 7; $i++) {
+        $date = date('Y-m-d', strtotime($start_of_week . " +$i days"));
+        $count = $this->db->where('attendance_date', $date)->count_all_results('attendances') ?? 0;
+        $weekly_attendance[] = $count;
+    }
+    */
+
+    // Revenue Overview (monthly sums for last 8 months, including facilities)
+    $revenue_data = [];
+    for ($m = 1; $m <= 8; $m++) { // Assuming Jan-Aug; adjust as needed
+        $student_sum = $this->db->select('SUM(paid_amount) as sum')->from('students')
+            ->where('MONTH(created_at)', $m)
+            ->where('YEAR(created_at)', $current_year)
+            ->get()->row()->sum ?? 0;
+        $facility_sum = $this->db->select('SUM(amount) as sum')->from('student_facilities')
+            ->where('MONTH(created_at)', $m)
+            ->where('YEAR(created_at)', $current_year)
+            ->get()->row()->sum ?? 0;
+        $revenue_data[] = $student_sum + $facility_sum;
+    }
+    ?>
+
     <div class="container-fluid px-3">
       <!-- Stats Cards -->
       <div class="row g-3 mb-4 text-center">
@@ -357,7 +530,7 @@
           <div class="card-stat" onclick="handleStatClick('activeStudents')">
             <i class="bi bi-person-lines-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4>2450</h4>
+              <h4><?php echo $active_students; ?></h4>
               <span>Active Students</span>
             </div>
           </div>
@@ -366,7 +539,7 @@
           <div class="card-stat" onclick="handleStatClick('attendanceRate')">
             <i class="bi bi-person-check-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4>85%</h4>
+              <h4><?php echo $attendance_rate; ?>%</h4>
               <span>Attendance Rate</span>
             </div>
           </div>
@@ -375,7 +548,7 @@
           <div class="card-stat" onclick="handleStatClick('feeDefaulters')">
             <i class="bi bi-currency-rupee card-icon"></i>
             <div class="d-flex flex-column">
-              <h4>2450</h4>
+              <h4><?php echo $fee_defaulters; ?></h4>
               <span>Fee Defaulters</span>
             </div>
           </div>
@@ -384,7 +557,7 @@
           <div class="card-stat" onclick="handleStatClick('monthlyProfits')">
             <i class="bi bi-bar-chart-line-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4>Rs.42450</h4>
+              <h4>Rs.<?php echo number_format($monthly_profits, 0); ?></h4>
               <span>Monthly profits</span>
             </div>
           </div>
@@ -425,18 +598,11 @@
           <div class="center-box mb-3" style="background: #f0eaea;">
             <h6 class="fw-bold text-start">Centers</h6>
             <div class="d-grid gap-2 mt-3">
-              <button class="btn center-btn text-start" onclick="selectCenter('center1')">
-                <i class="bi bi-house-door-fill me-2"></i> Center 1
+              <?php foreach ($centers as $center): ?>
+              <button class="btn center-btn text-start" onclick="selectCenter('<?php echo $center['id']; ?>')">
+                <i class="bi bi-house-door-fill me-2"></i> <?php echo $center['name']; ?>
               </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center2')">
-                <i class="bi bi-building-fill-check me-2"></i> Center 2
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center3')">
-                <i class="bi bi-geo-alt-fill me-2"></i> Center 3
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center4')">
-                <i class="bi bi-diagram-3-fill me-2"></i> Center 4
-              </button>
+              <?php endforeach; ?>
             </div>
             <button class="add-center-btn mt-4" data-bs-toggle="modal" data-bs-target="#addCenterModal">
               <i class="bi bi-plus-circle me-2"></i> Add Center
@@ -600,7 +766,7 @@
           labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           datasets: [{
             label: "Attendance",
-            data: [90, 85, 75, 92, 80, 85, 90],
+            data: <?php echo json_encode($weekly_attendance); ?>,
             backgroundColor: gradient,
             borderRadius: 10,
             barThickness: 30
@@ -636,7 +802,7 @@
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
           datasets: [{
             label: "Revenue",
-            data: [20000, 25000, 30000, 40000, 37000, 42000, 38000, 35000],
+            data: <?php echo json_encode($revenue_data); ?>,
             borderColor: "#ff4040",
             tension: 0.3,
             fill: false,
@@ -665,7 +831,7 @@
         data: {
           labels: ["Basic", "Intermediate", "Advanced"],
           datasets: [{
-            data: [33, 33, 34],
+            data: [<?php echo $beginner_pct; ?>, <?php echo $intermediate_pct; ?>, <?php echo $advanced_pct; ?>],
             backgroundColor: ["#990000", "#000000", "#f4b6b6"],
             borderRadius: 8,
             borderWidth: 3,
@@ -738,13 +904,11 @@
     }
 
     function selectCenter(centerId) {
-      // Dummy data for demonstration (replace with actual data retrieval logic)
-      const centerData = {
-        center1: { name: "Center 1", location: "Mumbai", capacity: 100 },
-        center2: { name: "Center 2", location: "Delhi", capacity: 150 },
-        center3: { name: "Center 3", location: "Bangalore", capacity: 120 },
-        center4: { name: "Center 4", location: "Chennai", capacity: 80 }
-      };
+      // Fetch center data via AJAX or dummy
+      // For real: Use AJAX to fetch from backend
+      const centerData = {}; // Fetch real data
+      // Example dummy
+      centerData[centerId] = { name: "Fetched Center", location: "Location", capacity: 100 };
 
       const data = centerData[centerId] || { name: centerId, location: "Unknown", capacity: 100 };
       document.getElementById('editCenterName').value = data.name;
@@ -762,6 +926,7 @@
       const centerCapacity = document.getElementById('centerCapacity').value;
 
       if (centerName && centerLocation && centerCapacity) {
+        // Send to backend via AJAX to insert into centers table
         alert(`Center "${centerName}" added successfully!`);
         const modal = bootstrap.Modal.getInstance(document.getElementById('addCenterModal'));
         modal.hide();
@@ -777,6 +942,7 @@
       const centerId = document.getElementById('editCenterId').value;
 
       if (centerName && centerLocation && centerCapacity) {
+        // Send to backend via AJAX to update centers table
         alert(`Center "${centerName}" updated successfully!`);
         const modal = bootstrap.Modal.getInstance(document.getElementById('editCenterModal'));
         modal.hide();
@@ -791,9 +957,33 @@
         dashboardWrapper.classList.toggle('minimized');
       }
     }
-
-    window.toggleDashboard = toggleDashboard;
   </script>
+<!-- =------------------------------------------------------------------------------------------------------------------- -->
+
+<!-- Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const contentWrapper = document.getElementById('contentWrapper');
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.toggle('active');
+                        navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                    } else {
+                        const isMinimized = sidebar.classList.toggle('minimized');
+                        navbar.classList.toggle('sidebar-minimized', isMinimized);
+                        contentWrapper.classList.toggle('minimized', isMinimized);
+                    }
+                });
+            }
+        });
+    </script>
+<!-- =------------------------------------------------------------------------------------------------------------------- -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

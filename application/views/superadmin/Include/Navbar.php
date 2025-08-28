@@ -14,21 +14,25 @@
            font-family: 'Montserrat', serif;
             /* background-color: #EFE9E9 !important; */
         }
+        /* navbar sticky  */
+        /* ------------------------------------------------------------------------------------------------------- */
 
-        .navbar {
-            /* background-color: white !important; */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            z-index: 1100;
-            height: 60px;
-            width: calc(100% - 250px); /* Adjust for full sidebar */
-            left: 250px; /* Start after sidebar */
-            overflow-x: hidden; /* Prevent horizontal overflow */
-            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
-        }
+     .navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    z-index: 1030; /* Higher than sidebar (1000) but lower than notification (1001) */
+    height: 60px;
+    width: calc(100% - 250px);
+    left: 250px;
+    overflow-x: hidden;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+    background-color: white !important; /* Force white background */
+    border-bottom: 1px solid #dee2e6; /* Optional: Add a subtle border */
+}
 
+/* ------------------------------------------------------------------------------------------------------- */
         .navbar.sidebar-minimized {
             width: calc(100% - 60px); /* Adjust for minimized sidebar */
             left: 60px;
@@ -142,12 +146,11 @@
         @media (min-width: 769px) and (max-width: 1024px) {
             .navbar {
                 width: calc(100% - 200px); /* Adjust for tablet sidebar */
-                left: 200px;
+              
             }
 
             .navbar.sidebar-minimized {
                 width: calc(100% - 60px);
-                left: 60px;
             }
         }
         .profile-icon img {

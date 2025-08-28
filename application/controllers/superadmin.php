@@ -18,34 +18,56 @@ class superadmin extends CI_Controller {
 public function SignUp(){
 		$this->load->view('superadmin/SignUp');
 	}
-	public function Center(){
-		$this->load->view('superadmin/Center');
-	}
-	public function Staff(){
-		$this->load->view('superadmin/Staff');
-	}
-	public function Batch(){
-		$this->load->view('superadmin/Batch');
-	}
-	public function EventAndNotice(){
-		$this->load->view('superadmin/EventAndNotice');
-	}
-	public function Admission(){
-		$this->load->view('superadmin/Admission');
-	}
-	public function Students(){
-		$this->load->view('superadmin/Students');
-	}
-	public function Leave(){
-		$this->load->view('superadmin/Leave');
-	}
-	public function Expenses(){
-		$this->load->view('superadmin/Expenses');
-	}
-	public function Finance(){
-		$this->load->view('superadmin/Finance');
-	}
+
 		public function Superadmin_profile(){
 		$this->load->view('superadmin/Superadmin_profile');
 	}
+		public function CenterManagement(){
+		$this->load->view('superadmin/CenterManagement');
+	}
+			public function CenterManagement2(){
+		$this->load->view('superadmin/CenterManagement2');
+	}
+			public function New_admission(){
+		$this->load->view('superadmin/New_admission');
+	}
+		public function receipt(){
+		$this->load->view('superadmin/receipt');
+	}
+		public function Re_admission(){
+		$this->load->view('superadmin/Re_admission');
+	}
+		public function Students(){
+		$this->load->view('superadmin/Students');
+	}
+	public function Renew_admission(){
+		$this->load->view('superadmin/Renew_admission');
+	}
+	public function View_Re_Admission(){
+		$this->load->view('superadmin/View_Re_Admission');
+	}
+	public function View_Renew_Students(){
+		$this->load->view('superadmin/View_Renew_Students');
+	}
+	public function EvenetList(){
+		$this->load->view('superadmin/EvenetList');
+	}
+	public function Report(){
+		$this->load->view('superadmin/Report');
+	}
+
+	public function Finance(){
+		$this->load->view('superadmin/Finance');
+	}
+
+	public function Expenses(){
+		$this->load->view('superadmin/Expenses');
+	}
+
+	public function EventAndNotice(){
+		$this->load->view('superadmin/EventAndNotice');
+	}
+	
+
+
 }
