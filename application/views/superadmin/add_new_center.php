@@ -166,7 +166,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="header text-center">
-            <h1><i class="fas fa-building me-2"></i>Centre Management</h1>
+           
             <p class="lead">Add and manage your sports center details</p>
         </div>
 
@@ -226,12 +226,19 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="printDate" class="form-label">Print Date</label>
+                            <label for="printDate" class="form-label"> Date</label>
                             <input type="date" class="form-control" id="printDate">
                         </div>
+
+                        
                         <div class="col-md-6">
-                            <label for="printPaidDate" class="form-label">Print Paid Date</label>
+                            <label for="printPaidDate" class="form-label"> Paid Date</label>
                             <input type="date" class="form-control" id="printPaidDate">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="password" class="form-label"> Password</label>
+                            <input type="password" class="form-control" id="password">
                         </div>
                     </div>
                     <div class="d-flex justify-content-end">
@@ -253,7 +260,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="batchLevel" class="form-label required-field">Level</label>
-                            <select class="form-select" id="batchLevel" required>
+                            <select class="form-select" id="batchLevel" >
                                 <option value="">Select Level</option>
                                 <option value="beginner">Beginner</option>
                                 <option value="intermediate">Intermediate</option>
@@ -468,7 +475,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="facilityQuantity" class="form-label required-field">Quantity</label>
-                        <input type="number" class="form-control" id="facilityQuantity" min="1" required>
+                        <input type="number" class="form-control" id="facilityQuantity" min="1" >
                     </div>
                     <div class="mb-3">
                         <label for="facilityCondition" class="form-label required-field">Condition</label>
@@ -641,9 +648,7 @@
             </div>
         </div>
 
-        <footer class="bg-dark text-white text-center py-3 mt-5">
-            <p class="mb-0">© 2025 Centre Management System. All rights reserved.</p>
-        </footer>
+       
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
