@@ -101,9 +101,7 @@
 
                    
 
-                    <button type="button" class="btn btn-sm btn-secondary ml-1 btn-toggle-status btn-block-xs">
-                      <i class="fas fa-toggle-on"></i> Deactivate
-                    </button>
+                    
                   </td>
                 </tr>
 
@@ -123,7 +121,7 @@
                   <td>New</td>
                   <td>₹8000</td>
                   <td class="status-cell">
-                    <span class="badge badge-danger">Deactive</span>
+                    <span class="badge badge-danger">Active</span>
                   </td>
                   <td class="text-nowrap">
                     <a href="<?= site_url('superadmin/View_Renew_Students/2') ?>" class="btn btn-sm btn-info">
@@ -132,9 +130,7 @@
 
                    
 
-                    <button type="button" class="btn btn-sm btn-success ml-1 btn-toggle-status btn-block-xs">
-                      <i class="fas fa-toggle-off"></i> Activate
-                    </button>
+                   
                   </td>
                 </tr>
                 <!-- /STATIC DEMO ROWS -->
