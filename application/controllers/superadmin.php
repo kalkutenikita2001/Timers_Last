@@ -68,6 +68,11 @@ public function SignUp(){
 		$this->load->view('superadmin/EventAndNotice');
 	}
 	
+   	public function view_center_details(){
+		$this->load->view('superadmin/view_center_details');
+	}
 
-
+	public function add_new_center(){
+		$this->load->view('superadmin/add_new_center');
+	}
 }
