@@ -448,75 +448,59 @@
                 </div>
             </div>
 
-            <!-- Facility Details Form -->
-            <div class="form-container form-section" id="facility-details">
-                <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i>Facility Details</h3>
-                <form id="facilityForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="facilityType" class="form-label required-field">Facility Type</label>
-                            <select class="form-select" id="facilityType" >
-                                <option value="">Select Facility Type</option>
-                                <option value="sports">Sports Equipment</option>
-                                <option value="classroom">Classroom</option>
-                                <option value="court">Court</option>
-                                <option value="pool">Swimming Pool</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="subType" class="form-label">Subtype</label>
-                            <input type="text" class="form-control" id="subType">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="printDetails" class="form-label">Print Details (according to subtype)</label>
-                        <textarea class="form-control" id="printDetails" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="facilityQuantity" class="form-label required-field">Quantity</label>
-                        <input type="number" class="form-control" id="facilityQuantity" min="1" >
-                    </div>
-                    <div class="mb-3">
-                        <label for="facilityCondition" class="form-label required-field">Condition</label>
-                        <select class="form-select" id="facilityCondition" >
-                            <option value="">Select Condition</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                        </select>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="staff-details">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Staff Details
-                        </button>
-                        <div>
-                            <button type="button" class="btn btn-info" id="addAnotherFacility">
-                                <i class="fas fa-plus me-2"></i> Add Another Facility
-                            </button>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-2"></i> Save Centre Details
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <div class="text-right mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#facilityModal">
-                        <i class="fas fa-plus"></i> Add Facility
-                    </button>
-                </div> 
 
-                <!-- Facility List -->
-                <div class="facility-table mt-4">
-                    <h5 class="mb-3">Added Facilities</h5>
-                    <div id="facilityList">
-                        <p class="text-center">No facilities added yet</p>
+<!-- Facility Details Form -->
+
+    <div class="form-container form-section" id="facility-details">
+    <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i>Facility Details</h3>
+    <form id="facilityForm">
+        <!-- Facility Name -->
+        <div class="mb-3">
+            <label for="facilityName" class="form-label required-field">Facility Name</label>
+            <input type="text" class="form-control" id="facilityName" placeholder="Enter facility name">
+        </div>
+
+       
+
+        <!-- Subtypes & Rent Section -->
+        <div class="mb-3">
+            <label class="form-label">Subtypes & Rent</label>
+            <div id="subTypeContainer">
+                <div class="row mb-2 subTypeRow">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
                     </div>
                 </div>
             </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addSubTypeRow">
+                + Add Subtype
+            </button>
         </div>
+
+        <!-- Add Facility Button -->
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-info" id="addFacility">
+                <i class="fas fa-plus me-2"></i> Add Facility
+            </button>
+        </div>
+    </form>
+
+    <!-- Facility List -->
+    <div class="facility-table mt-4">
+        <h5 class="mb-3">Added Facilities</h5>
+        <div id="facilityList">
+            <p class="text-center">No facilities added yet</p>
+        </div>
+    </div>
+</div>
+
+
 
         <!-- Batch Modal -->
         <div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchLabel" aria-hidden="true">
@@ -1321,5 +1305,97 @@
             updateProgress();
         });
     </script>
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const subTypeContainer = document.getElementById("subTypeContainer");
+    const addSubTypeBtn = document.getElementById("addSubTypeRow");
+    const facilityList = document.getElementById("facilityList");
+    const addFacilityBtn = document.getElementById("addFacility");
+
+    // Add new subtype row
+    addSubTypeBtn.addEventListener("click", function () {
+        const newRow = document.createElement("div");
+        newRow.classList.add("row", "mb-2", "subTypeRow");
+        newRow.innerHTML = `
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        `;
+        subTypeContainer.appendChild(newRow);
+    });
+
+    // Remove subtype row
+    subTypeContainer.addEventListener("click", function (e) {
+        if (e.target.classList.contains("removeSubType")) {
+            e.target.closest(".subTypeRow").remove();
+        }
+    });
+
+    // Add facility to list
+    addFacilityBtn.addEventListener("click", function () {
+        const name = document.getElementById("facilityName").value;
+       
+
+        if (!name || !quantity || !condition) {
+            alert("Please fill Facility Name, Quantity and Condition.");
+            return;
+        }
+
+        // Collect subtypes with rent
+        const subTypes = [];
+        document.querySelectorAll("#subTypeContainer .subTypeRow").forEach(row => {
+            const sub = row.querySelector("input[name='subType[]']").value;
+            const rent = row.querySelector("input[name='subRent[]']").value;
+            if (sub) subTypes.push({ sub, rent });
+        });
+
+        if (subTypes.length === 0) {
+            alert("Please add at least one Subtype.");
+            return;
+        }
+
+        // Build facility card
+        const facilityHTML = `
+            <div class="card mb-2 shadow-sm">
+                <div class="card-body p-2">
+                   
+                    <ul class="mt-2">
+                        ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
+                    </ul>
+                </div>
+            </div>
+        `;
+
+        // Append to facility list
+        if (facilityList.querySelector("p")) {
+            facilityList.innerHTML = ""; // remove "No facilities added yet"
+        }
+        facilityList.innerHTML += facilityHTML;
+
+        // Reset form for new entry
+        document.getElementById("facilityForm").reset();
+        subTypeContainer.innerHTML = `
+            <div class="row mb-2 subTypeRow">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+                </div>
+            </div>
+        `;
+    });
+});
+</script>
+
 </body>
 </html>
