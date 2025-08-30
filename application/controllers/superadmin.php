@@ -75,4 +75,15 @@ public function SignUp(){
 	public function add_new_center(){
 		$this->load->view('superadmin/add_new_center');
 	}
+
+	public function adminlogin(){
+		$this->load->view('superadmin/adminlogin');
+	}
+
+	public function student_details($student_id = null) {
+        if (!$student_id) {
+            redirect('superadmin/Students');
+        }
+        $this->load->view('superadmin/student_details');
+    }
 }

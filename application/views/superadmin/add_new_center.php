@@ -224,15 +224,10 @@
                             <input type="time" class="form-control" id="closingTime" >
                         </div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="printDate" class="form-label"> Date</label>
-                            <input type="date" class="form-control" id="printDate">
-                        </div>
-
-                        
-                        <div class="col-md-6">
-                            <label for="printPaidDate" class="form-label"> Paid Date</label>
+                            <label for="printPaidDate" class="form-label"> Rent Paid Date</label>
                             <input type="date" class="form-control" id="printPaidDate">
                         </div>
 
@@ -240,7 +235,14 @@
                             <label for="password" class="form-label"> Password</label>
                             <input type="password" class="form-control" id="password">
                         </div>
+
+                         <div class="col-md-6">
+                            <label for="rent" class="form-label"> Rent (Amount) </label>
+                            <input type="number" class="form-control" id="rent">
+                        </div>
                     </div>
+
+                    
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-primary btn-next" data-next="batch-details">
                             Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
@@ -290,7 +292,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="duration" class="form-label required-field">Duration (hours)</label>
+                            <label for="duration" class="form-label required-field">Duration (Month)</label>
                             <input type="number" class="form-control" id="duration" min="1" >
                         </div>
                         <div class="col-md-6">
@@ -317,12 +319,15 @@
                         </div>
                     </div>
                 </form>
+
+
                 
                 <div class="text-right mt-4">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
                         <i class="fas fa-plus"></i> Add Batch
                     </button>
                 </div>
+
 
                 <!-- Batch List Table -->
                 <div class="batch-table mt-4">
@@ -352,10 +357,10 @@
                             <label for="role" class="form-label required-field">Role</label>
                             <select class="form-select" id="role" >
                                 <option value="">Select Role</option>
-                                <option value="admin">Administrator</option>
-                                <option value="manager">Manager</option>
+                                <option value="admin">Admin</option>
+                                <option value="co-ordinator">Co-ordinator</option>
                                 <option value="coach">Coach</option>
-                                <option value="support">Support Staff</option>
+                        
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -480,6 +485,10 @@
                 + Add Subtype
             </button>
         </div>
+
+        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="staff-details">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Staff Details
+                        </button>
 
         <!-- Add Facility Button -->
         <div class="d-flex justify-content-end mt-4">
@@ -635,751 +644,347 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize modals
-            const batchModal = new bootstrap.Modal(document.getElementById('batchModal'));
-            const facilityModal = new bootstrap.Modal(document.getElementById('facilityModal'));
-            const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
-            
-            // Modal submit buttons
-            document.getElementById('batchSubmitBtn').addEventListener('click', function() {
-                // Add your batch submission logic here
-                batchModal.hide();
-                alert('Batch added successfully!');
-            });
-            
-            document.getElementById('facilitySubmitBtn').addEventListener('click', function() {
-                // Add your facility submission logic here
-                facilityModal.hide();
-                alert('Facility added successfully!');
-            });
-            
-            document.getElementById('staffSubmitBtn').addEventListener('click', function() {
-                // Add your staff submission logic here
-                staffModal.hide();
-                alert('Staff added successfully!');
-            });
-            
-            // Rest of your existing JavaScript code...
-            const progressBar = document.querySelector('.progress-bar');
-            const steps = document.querySelectorAll('.step');
-            const formSections = document.querySelectorAll('.form-section');
-            const nextButtons = document.querySelectorAll('.btn-next');
-            const prevButtons = document.querySelectorAll('.btn-prev');
-            const roleSelect = document.getElementById('role');
-            const coachAssignment = document.getElementById('coachAssignment');
-            const addAnotherStaffBtn = document.getElementById('addAnotherStaff');
-            const staffForm = document.getElementById('staffForm');
-            const staffList = document.getElementById('staffList');
-            const addAnotherFacilityBtn = document.getElementById('addAnotherFacility');
-            const facilityForm = document.getElementById('facilityForm');
-            const facilityList = document.getElementById('facilityList');
-            const addAnotherBatchBtn = document.getElementById('addAnotherBatch');
-            const batchForm = document.getElementById('batchForm');
-            const batchList = document.getElementById('batchList');
-            const assignedBatchSelect = document.getElementById('assignedBatch');
-            const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
-            const centreForm = document.getElementById('centreForm');
-            
-            let currentStep = 1;
-            const totalSteps = 4;
-            let staffMembers = [];
-            let facilities = [];
-            let batches = [];
-            
-            // Toggle sidebar on small screens
-            if (toggleSidebarBtn) {
-                toggleSidebarBtn.addEventListener('click', function() {
-                    document.body.classList.toggle('show-sidebar');
-                });
-            }
-            
-            // Show/hide coach assignment fields based on role selection
-            if (roleSelect) {
-                roleSelect.addEventListener('change', function() {
-                    if (this.value === 'coach') {
-                        coachAssignment.style.display = 'block';
-                        updateBatchDropdown();
-                    } else {
-                        coachAssignment.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Update batch dropdown with added batches
-            function updateBatchDropdown() {
-                if (!assignedBatchSelect) return;
-                
-                assignedBatchSelect.innerHTML = '<option value="">Select Batch</option>';
-                batches.forEach((batch, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = batch.name;
-                    assignedBatchSelect.appendChild(option);
-                });
-            }
-            
-            // Add batch functionality
-            if (addAnotherBatchBtn) {
-                addAnotherBatchBtn.addEventListener('click', function() {
-                    // Validate form
-                    const batchName = document.getElementById('batchName');
-                    const batchLevel = document.getElementById('batchLevel');
-                    const batchStartTime = document.getElementById('batchStartTime');
-                    const batchEndTime = document.getElementById('batchEndTime');
-                    const startDate = document.getElementById('startDate');
-                    const endDate = document.getElementById('endDate');
-                    const duration = document.getElementById('duration');
-                    const category = document.getElementById('category');
-                    
-                    let isValid = true;
-                    
-                    if (!batchName.value) {
-                        batchName.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        batchName.classList.remove('is-invalid');
-                    }
-                    
-                    if (!batchLevel.value) {
-                        batchLevel.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        batchLevel.classList.remove('is-invalid');
-                    }
-                    
-                    if (!batchStartTime.value) {
-                        batchStartTime.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        batchStartTime.classList.remove('is-invalid');
-                    }
-                    
-                    if (!batchEndTime.value) {
-                        batchEndTime.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        batchEndTime.classList.remove('is-invalid');
-                    }
-                    
-                    if (!startDate.value) {
-                        startDate.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        startDate.classList.remove('is-invalid');
-                    }
-                    
-                    if (!endDate.value) {
-                        endDate.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        endDate.classList.remove('is-invalid');
-                    }
-                    
-                    if (!duration.value) {
-                        duration.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        duration.classList.remove('is-invalid');
-                    }
-                    
-                    if (!category.value) {
-                        category.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        category.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Please fill all required fields before adding batch.');
-                        return;
-                    }
-                    
-                    // Collect batch data
-                    const batchData = {
-                        name: batchName.value,
-                        level: batchLevel.value,
-                        startTime: batchStartTime.value,
-                        endTime: batchEndTime.value,
-                        startDate: startDate.value,
-                        endDate: endDate.value,
-                        duration: duration.value,
-                        category: category.value
-                    };
-                    
-                    // Add to batch list
-                    batches.push(batchData);
-                    updateBatchList();
-                    updateBatchDropdown();
-                    
-                    // Reset form
-                    batchForm.reset();
-                });
-            }
-            
-            // Add staff member functionality
-            if (addAnotherStaffBtn) {
-                addAnotherStaffBtn.addEventListener('click', function() {
-                    // Validate form
-                    const staffName = document.getElementById('staffName');
-                    const contactNo = document.getElementById('contactNo');
-                    const role = document.getElementById('role');
-                    const joiningDate = document.getElementById('joiningDate');
-                    
-                    let isValid = true;
-                    
-                    if (!staffName.value) {
-                        staffName.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        staffName.classList.remove('is-invalid');
-                    }
-                    
-                    if (!contactNo.value) {
-                        contactNo.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        contactNo.classList.remove('is-invalid');
-                    }
-                    
-                    if (!role.value) {
-                        role.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        role.classList.remove('is-invalid');
-                    }
-                    
-                    if (!joiningDate.value) {
-                        joiningDate.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        joiningDate.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Please fill all required fields before adding staff.');
-                        return;
-                    }
-                    
-                    // Collect staff data
-                    const staffData = {
-                        name: staffName.value,
-                        contact: contactNo.value,
-                        role: role.value,
-                        joiningDate: joiningDate.value,
-                        assignedBatch: role.value === 'coach' ? document.getElementById('assignedBatch').value : 'N/A',
-                        level: role.value === 'coach' ? document.getElementById('coachLevel').value : 'N/A',
-                        category: role.value === 'coach' ? document.getElementById('coachCategory').value : 'N/A',
-                        duration: role.value === 'coach' ? document.getElementById('coachDuration').value : 'N/A'
-                    };
-                    
-                    // Add to staff list
-                    staffMembers.push(staffData);
-                    updateStaffList();
-                    
-                    // Reset form
-                    staffForm.reset();
-                    if (coachAssignment) coachAssignment.style.display = 'none';
-                });
-            }
-            
-            // Add facility functionality
-            if (addAnotherFacilityBtn) {
-                addAnotherFacilityBtn.addEventListener('click', function() {
-                    // Validate form
-                    const facilityType = document.getElementById('facilityType');
-                    const facilityQuantity = document.getElementById('facilityQuantity');
-                    const facilityCondition = document.getElementById('facilityCondition');
-                    
-                    let isValid = true;
-                    
-                    if (!facilityType.value) {
-                        facilityType.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        facilityType.classList.remove('is-invalid');
-                    }
-                    
-                    if (!facilityQuantity.value) {
-                        facilityQuantity.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        facilityQuantity.classList.remove('is-invalid');
-                    }
-                    
-                    if (!facilityCondition.value) {
-                        facilityCondition.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        facilityCondition.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Please fill all required fields before adding facility.');
-                        return;
-                    }
-                    
-                    // Collect facility data
-                    const facilityData = {
-                        type: facilityType.value,
-                        subType: document.getElementById('subType').value,
-                        printDetails: document.getElementById('printDetails').value,
-                        quantity: facilityQuantity.value,
-                        condition: facilityCondition.value
-                    };
-                    
-                    // Add to facility list
-                    facilities.push(facilityData);
-                    updateFacilityList();
-                    
-                    // Reset form
-                    facilityForm.reset();
-                });
-            }
-            
-            // Update batch list
-            function updateBatchList() {
-                if (!batchList) return;
-                
-                if (batches.length === 0) {
-                    batchList.innerHTML = '<p class="text-center">No batches added yet</p>';
-                    return;
-                }
-                
-                batchList.innerHTML = '';
-                batches.forEach((batch, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'batch-card';
-                    card.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6>${batch.name} (${batch.level})</h6>
-                                <p class="mb-1">Time: ${batch.startTime} - ${batch.endTime}</p>
-                                <p class="mb-1">Dates: ${batch.startDate} to ${batch.endDate}</p>
-                                <p class="mb-0">Duration: ${batch.duration} hours | Category: ${batch.category}</p>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-1 edit-batch" data-index="${index}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger delete-batch" data-index="${index}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    batchList.appendChild(card);
-                });
-                
-                // Add event listeners for edit and delete buttons
-                document.querySelectorAll('.edit-batch').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        editBatch(index);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-batch').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        deleteBatch(index);
-                    });
-                });
-            }
-            
-            // Update staff list table
-            function updateStaffList() {
-                if (!staffList) return;
-                
-                if (staffMembers.length === 0) {
-                    staffList.innerHTML = '<tr><td colspan="6" class="text-center">No staff members added yet</td></tr>';
-                    return;
-                }
-                
-                staffList.innerHTML = '';
-                staffMembers.forEach((staff, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${staff.name}</td>
-                        <td>${staff.contact}</td>
-                        <td>${staff.role.charAt(0).toUpperCase() + staff.role.slice(1)}</td>
-                        <td>${staff.joiningDate}</td>
-                        <td>${staff.assignedBatch}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary me-1 edit-staff" data-index="${index}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger delete-staff" data-index="${index}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    staffList.appendChild(row);
-                });
-                
-                // Add event listeners for edit and delete buttons
-                document.querySelectorAll('.edit-staff').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        editStaff(index);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-staff').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        deleteStaff(index);
-                    });
-                });
-            }
-            
-            // Update facility list
-            function updateFacilityList() {
-                if (!facilityList) return;
-                
-                if (facilities.length === 0) {
-                    facilityList.innerHTML = '<p class="text-center">No facilities added yet</p>';
-                    return;
-                }
-                
-                facilityList.innerHTML = '';
-                facilities.forEach((facility, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'facility-card';
-                    card.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6>${facility.type.charAt(0).toUpperCase() + facility.type.slice(1)}${facility.subType ? ' - ' + facility.subType : ''}</h6>
-                                <p class="mb-1">Quantity: ${facility.quantity} | Condition: ${facility.condition}</p>
-                                ${facility.printDetails ? `<p class="mb-0">Details: ${facility.printDetails}</p>` : ''}
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-1 edit-facility" data-index="${index}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger delete-facility" data-index="${index}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    facilityList.appendChild(card);
-                });
-                
-                // Add event listeners for edit and delete buttons
-                document.querySelectorAll('.edit-facility').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        editFacility(index);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-facility').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        deleteFacility(index);
-                    });
-                });
-            }
-            
-            // Edit batch function
-            function editBatch(index) {
-                const batch = batches[index];
-                
-                // Populate form fields
-                document.getElementById('batchName').value = batch.name;
-                document.getElementById('batchLevel').value = batch.level;
-                document.getElementById('batchStartTime').value = batch.startTime;
-                document.getElementById('batchEndTime').value = batch.endTime;
-                document.getElementById('startDate').value = batch.startDate;
-                document.getElementById('endDate').value = batch.endDate;
-                document.getElementById('duration').value = batch.duration;
-                document.getElementById('category').value = batch.category;
-                
-                // Remove the batch from the list
-                batches.splice(index, 1);
-                updateBatchList();
-                updateBatchDropdown();
-            }
-            
-            // Delete batch function
-            function deleteBatch(index) {
-                if (confirm('Are you sure you want to delete this batch?')) {
-                    batches.splice(index, 1);
-                    updateBatchList();
-                    updateBatchDropdown();
-                }
-            }
-            
-            // Edit staff function
-            function editStaff(index) {
-                const staff = staffMembers[index];
-                
-                // Populate form fields
-                document.getElementById('staffName').value = staff.name;
-                document.getElementById('contactNo').value = staff.contact;
-                document.getElementById('role').value = staff.role;
-                document.getElementById('joiningDate').value = staff.joiningDate;
-                
-                if (staff.role === 'coach') {
-                    document.getElementById('assignedBatch').value = staff.assignedBatch;
-                    document.getElementById('coachLevel').value = staff.level;
-                    document.getElementById('coachCategory').value = staff.category;
-                    document.getElementById('coachDuration').value = staff.duration;
-                    if (coachAssignment) coachAssignment.style.display = 'block';
-                }
-                
-                // Remove the staff from the list
-                staffMembers.splice(index, 1);
-                updateStaffList();
-            }
-            
-            // Delete staff function
-            function deleteStaff(index) {
-                if (confirm('Are you sure you want to delete this staff member?')) {
-                    staffMembers.splice(index, 1);
-                    updateStaffList();
-                }
-            }
-            
-            // Edit facility function
-            function editFacility(index) {
-                const facility = facilities[index];
-                
-                // Populate form fields
-                document.getElementById('facilityType').value = facility.type;
-                document.getElementById('subType').value = facility.subType;
-                document.getElementById('printDetails').value = facility.printDetails;
-                document.getElementById('facilityQuantity').value = facility.quantity;
-                document.getElementById('facilityCondition').value = facility.condition;
-                
-                // Remove the facility from the list
-                facilities.splice(index, 1);
-                updateFacilityList();
-            }
-            
-            // Delete facility function
-            function deleteFacility(index) {
-                if (confirm('Are you sure you want to delete this facility?')) {
-                    facilities.splice(index, 1);
-                    updateFacilityList();
-                }
-            }
-            
-            // Update progress bar and steps
-            function updateProgress() {
-                const progressPercentage = (currentStep / totalSteps) * 100;
-                if (progressBar) progressBar.style.width = progressPercentage + '%';
-                
-                steps.forEach((step, index) => {
-                    if (index < currentStep) {
-                        step.classList.add('step-active');
-                    } else {
-                        step.classList.remove('step-active');
-                    }
-                });
-            }
-            
-            // Next button functionality
-            nextButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const nextSectionId = this.getAttribute('data-next');
-                    
-                    // Validate current form before proceeding
-                    const currentSection = document.querySelector('.form-section.active');
-                    const requiredFields = currentSection.querySelectorAll('[required]');
-                    let isValid = true;
-                    
-                    requiredFields.forEach(field => {
-                        if (!field.value) {
-                            field.classList.add('is-invalid');
-                            isValid = false;
-                        } else {
-                            field.classList.remove('is-invalid');
-                        }
-                    });
-                    
-                    if (!isValid) {
-                        alert('Please fill all required fields before proceeding.');
-                        return;
-                    }
-                    
-                    // Update progress
-                    currentStep++;
-                    updateProgress();
-                    
-                    // Switch to next section
-                    formSections.forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById(nextSectionId).classList.add('active');
-                });
-            });
-            
-            // Previous button functionality
-            prevButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const prevSectionId = this.getAttribute('data-prev');
-                    
-                    // Update progress
-                    currentStep--;
-                    updateProgress();
-                    
-                    // Switch to previous section
-                    formSections.forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById(prevSectionId).classList.add('active');
-                });
-            });
-            
-            // Form submission
-            if (facilityForm) {
-                facilityForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Validate form
-                    const requiredFields = this.querySelectorAll('[required]');
-                    let isValid = true;
-                    
-                    requiredFields.forEach(field => {
-                        if (!field.value) {
-                            field.classList.add('is-invalid');
-                            isValid = false;
-                        } else {
-                            field.classList.remove('is-invalid');
-                        }
-                    });
-                    
-                    if (!isValid) {
-                        alert('Please fill all required fields before submitting.');
-                        return;
-                    }
-                    
-                    // Collect all data
-                    const centreData = {
-                        name: document.getElementById('centreName').value,
-                        number: document.getElementById('centreNumber').value,
-                        address: document.getElementById('address').value,
-                        openingTime: document.getElementById('openingTime').value,
-                        closingTime: document.getElementById('closingTime').value,
-                        printDate: document.getElementById('printDate').value,
-                        printPaidDate: document.getElementById('printPaidDate').value,
-                        batches: batches,
-                        staff: staffMembers,
-                        facilities: facilities
-                    };
-                    
-                    // Here you would typically send the data to the server
-                    console.log('Centre Data:', centreData);
-                    alert('Centre details saved successfully!');
-                    
-                    // Reset the form and data
-                    centreForm.reset();
-                    batchForm.reset();
-                    staffForm.reset();
-                    facilityForm.reset();
-                    
-                    batches = [];
-                    staffMembers = [];
-                    facilities = [];
-                    
-                    updateBatchList();
-                    updateStaffList();
-                    updateFacilityList();
-                    
-                    // Reset to first step
-                    currentStep = 1;
-                    updateProgress();
-                    
-                    formSections.forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById('centre-details').classList.add('active');
-                });
-            }
-            
-            // Initialize the progress
-            updateProgress();
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modals
+    const batchModal = new bootstrap.Modal(document.getElementById('batchModal'));
+    const facilityModal = new bootstrap.Modal(document.getElementById('facilityModal'));
+    const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
+    
+    // Modal submit buttons
+    document.getElementById('batchSubmitBtn').addEventListener('click', function() {
+        // Add your batch submission logic here
+        batchModal.hide();
+        alert('Batch added successfully!');
+    });
+    
+    document.getElementById('facilitySubmitBtn').addEventListener('click', function() {
+        // Add your facility submission logic here
+        facilityModal.hide();
+        alert('Facility added successfully!');
+    });
+    
+    document.getElementById('staffSubmitBtn').addEventListener('click', function() {
+        // Add your staff submission logic here
+        staffModal.hide();
+        alert('Staff added successfully!');
+    });
+    
+    // Navigation and form handling
+    const progressBar = document.querySelector('.progress-bar');
+    const steps = document.querySelectorAll('.step');
+    const formSections = document.querySelectorAll('.form-section');
+    const nextButtons = document.querySelectorAll('.btn-next');
+    const prevButtons = document.querySelectorAll('.btn-prev');
+    const roleSelect = document.getElementById('role');
+    const coachAssignment = document.getElementById('coachAssignment');
+    const addAnotherStaffBtn = document.getElementById('addAnotherStaff');
+    const staffForm = document.getElementById('staffForm');
+    const staffList = document.getElementById('staffList');
+    const addAnotherBatchBtn = document.getElementById('addAnotherBatch');
+    const batchForm = document.getElementById('batchForm');
+    const batchList = document.getElementById('batchList');
+    const assignedBatchSelect = document.getElementById('assignedBatch');
+    const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
+    const centreForm = document.getElementById('centreForm');
+    
+    let currentStep = 1;
+    const totalSteps = 4;
+    let staffMembers = [];
+    let facilities = [];
+    let batches = [];
+    
+    // Toggle sidebar on small screens
+    if (toggleSidebarBtn) {
+        toggleSidebarBtn.addEventListener('click', function() {
+            document.body.classList.toggle('show-sidebar');
         });
-    </script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    }
+    
+    // Show/hide coach assignment fields based on role selection
+    if (roleSelect && coachAssignment) {
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'coach') {
+                coachAssignment.style.display = 'block';
+                updateBatchDropdown();
+            } else {
+                coachAssignment.style.display = 'none';
+            }
+        });
+    }
+    
+    // Update batch dropdown with added batches
+    function updateBatchDropdown() {
+        if (!assignedBatchSelect) return;
+        
+        assignedBatchSelect.innerHTML = '<option value="">Select Batch</option>';
+        batches.forEach((batch, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = batch.name;
+            assignedBatchSelect.appendChild(option);
+        });
+    }
+    
+    // Add batch functionality
+    if (addAnotherBatchBtn) {
+        addAnotherBatchBtn.addEventListener('click', function() {
+            // Validate form
+            const batchName = document.getElementById('batchName');
+            const batchLevel = document.getElementById('batchLevel');
+            const batchStartTime = document.getElementById('batchStartTime');
+            const batchEndTime = document.getElementById('batchEndTime');
+            const startDate = document.getElementById('startDate');
+            const endDate = document.getElementById('endDate');
+            const duration = document.getElementById('duration');
+            const category = document.getElementById('category');
+            
+            let isValid = true;
+            
+            if (!batchName.value) {
+                batchName.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                batchName.classList.remove('is-invalid');
+            }
+            
+            if (!batchLevel.value) {
+                batchLevel.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                batchLevel.classList.remove('is-invalid');
+            }
+            
+            if (!batchStartTime.value) {
+                batchStartTime.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                batchStartTime.classList.remove('is-invalid');
+            }
+            
+            if (!batchEndTime.value) {
+                batchEndTime.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                batchEndTime.classList.remove('is-invalid');
+            }
+            
+            if (!startDate.value) {
+                startDate.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                startDate.classList.remove('is-invalid');
+            }
+            
+            if (!endDate.value) {
+                endDate.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                endDate.classList.remove('is-invalid');
+            }
+            
+            if (!duration.value) {
+                duration.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                duration.classList.remove('is-invalid');
+            }
+            
+            if (!category.value) {
+                category.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                category.classList.remove('is-invalid');
+            }
+            
+            if (!isValid) {
+                alert('Please fill all required fields before adding batch.');
+                return;
+            }
+            
+            // Collect batch data
+            const batchData = {
+                name: batchName.value,
+                level: batchLevel.value,
+                startTime: batchStartTime.value,
+                endTime: batchEndTime.value,
+                startDate: startDate.value,
+                endDate: endDate.value,
+                duration: duration.value,
+                category: category.value
+            };
+            
+            // Add to batch list
+            batches.push(batchData);
+            updateBatchList();
+            updateBatchDropdown();
+            
+            // Reset form
+            batchForm.reset();
+        });
+    }
+    
+    // Update batch list
+    function updateBatchList() {
+        if (!batchList) return;
+        
+        if (batches.length === 0) {
+            batchList.innerHTML = '<p class="text-center">No batches added yet</p>';
+            return;
+        }
+        
+        batchList.innerHTML = '';
+        batches.forEach((batch, index) => {
+            const card = document.createElement('div');
+            card.className = 'batch-card';
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>${batch.name} (${batch.level})</h6>
+                        <p class="mb-1">Time: ${batch.startTime} - ${batch.endTime}</p>
+                        <p class="mb-1">Dates: ${batch.startDate} to ${batch.endDate}</p>
+                        <p class="mb-0">Duration: ${batch.duration} hours | Category: ${batch.category}</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-batch" data-index="${index}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-batch" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            batchList.appendChild(card);
+        });
+        
+        // Add event listeners for edit and delete buttons
+        document.querySelectorAll('.edit-batch').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const index = this.getAttribute('data-index');
+                editBatch(index);
+            });
+        });
+        
+        document.querySelectorAll('.delete-batch').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const index = this.getAttribute('data-index');
+                deleteBatch(index);
+            });
+        });
+    }
+    
+    // Edit batch function
+    function editBatch(index) {
+        const batch = batches[index];
+        
+        // Populate form fields
+        document.getElementById('batchName').value = batch.name;
+        document.getElementById('batchLevel').value = batch.level;
+        document.getElementById('batchStartTime').value = batch.startTime;
+        document.getElementById('batchEndTime').value = batch.endTime;
+        document.getElementById('startDate').value = batch.startDate;
+        document.getElementById('endDate').value = batch.endDate;
+        document.getElementById('duration').value = batch.duration;
+        document.getElementById('category').value = batch.category;
+        
+        // Remove the batch from the list
+        batches.splice(index, 1);
+        updateBatchList();
+        updateBatchDropdown();
+    }
+    
+    // Delete batch function
+    function deleteBatch(index) {
+        if (confirm('Are you sure you want to delete this batch?')) {
+            batches.splice(index, 1);
+            updateBatchList();
+            updateBatchDropdown();
+        }
+    }
+    
+    // Update progress bar and steps
+    function updateProgress() {
+        const progressPercentage = (currentStep / totalSteps) * 100;
+        if (progressBar) progressBar.style.width = progressPercentage + '%';
+        
+        steps.forEach((step, index) => {
+            if (index < currentStep) {
+                step.classList.add('step-active');
+            } else {
+                step.classList.remove('step-active');
+            }
+        });
+    }
+    
+    // Next button functionality
+    nextButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const nextSectionId = this.getAttribute('data-next');
+            
+            // Validate current form before proceeding
+            const currentSection = document.querySelector('.form-section.active');
+            const requiredFields = currentSection.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill all required fields before proceeding.');
+                return;
+            }
+            
+            // Update progress
+            currentStep++;
+            updateProgress();
+            
+            // Switch to next section
+            formSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(nextSectionId).classList.add('active');
+        });
+    });
+    
+    // Previous button functionality
+    prevButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const prevSectionId = this.getAttribute('data-prev');
+            
+            // Update progress
+            currentStep--;
+            updateProgress();
+            
+            // Switch to previous section
+            formSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(prevSectionId).classList.add('active');
+        });
+    });
+    
+    // Initialize the progress
+    updateProgress();
+    
+    // Facility form handling
     const subTypeContainer = document.getElementById("subTypeContainer");
     const addSubTypeBtn = document.getElementById("addSubTypeRow");
     const facilityList = document.getElementById("facilityList");
     const addFacilityBtn = document.getElementById("addFacility");
 
     // Add new subtype row
-    addSubTypeBtn.addEventListener("click", function () {
-        const newRow = document.createElement("div");
-        newRow.classList.add("row", "mb-2", "subTypeRow");
-        newRow.innerHTML = `
-            <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
-            </div>
-            <div class="col-md-4">
-                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
-            </div>
-        `;
-        subTypeContainer.appendChild(newRow);
-    });
-
-    // Remove subtype row
-    subTypeContainer.addEventListener("click", function (e) {
-        if (e.target.classList.contains("removeSubType")) {
-            e.target.closest(".subTypeRow").remove();
-        }
-    });
-
-    // Add facility to list
-    addFacilityBtn.addEventListener("click", function () {
-        const name = document.getElementById("facilityName").value;
-
-        if (!name) {
-            alert("Please enter Facility Name.");
-            return;
-        }
-
-        // Collect subtypes with rent
-        const subTypes = [];
-        document.querySelectorAll("#subTypeContainer .subTypeRow").forEach(row => {
-            const sub = row.querySelector("input[name='subType[]']").value;
-            const rent = row.querySelector("input[name='subRent[]']").value;
-            if (sub) subTypes.push({ sub, rent });
-        });
-
-        if (subTypes.length === 0) {
-            alert("Please add at least one Subtype with rent.");
-            return;
-        }
-
-        // Build facility card
-        const facilityHTML = `
-            <div class="card mb-2 shadow-sm">
-                <div class="card-body p-2">
-                    <h6 class="mb-1"><strong>${name}</strong></h6>
-                    <ul class="mt-2">
-                        ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
-                    </ul>
-                </div>
-            </div>
-        `;
-
-        // Append to facility list
-        if (facilityList.querySelector("p")) {
-            facilityList.innerHTML = ""; // remove "No facilities added yet"
-        }
-        facilityList.innerHTML += facilityHTML;
-
-        // Reset form for new entry
-        document.getElementById("facilityForm").reset();
-        subTypeContainer.innerHTML = `
-            <div class="row mb-2 subTypeRow">
+    if (addSubTypeBtn) {
+        addSubTypeBtn.addEventListener("click", function () {
+            const newRow = document.createElement("div");
+            newRow.classList.add("row", "mb-2", "subTypeRow");
+            newRow.innerHTML = `
                 <div class="col-md-6">
                     <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
                 </div>
@@ -1389,12 +994,80 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
                 </div>
-            </div>
-        `;
-    });
+            `;
+            subTypeContainer.appendChild(newRow);
+        });
+    }
+
+    // Remove subtype row
+    if (subTypeContainer) {
+        subTypeContainer.addEventListener("click", function (e) {
+            if (e.target.classList.contains("removeSubType")) {
+                e.target.closest(".subTypeRow").remove();
+            }
+        });
+    }
+
+    // Add facility to list
+    if (addFacilityBtn) {
+        addFacilityBtn.addEventListener("click", function () {
+            const name = document.getElementById("facilityName").value;
+
+            if (!name) {
+                alert("Please enter Facility Name.");
+                return;
+            }
+
+            // Collect subtypes with rent
+            const subTypes = [];
+            document.querySelectorAll("#subTypeContainer .subTypeRow").forEach(row => {
+                const sub = row.querySelector("input[name='subType[]']").value;
+                const rent = row.querySelector("input[name='subRent[]']").value;
+                if (sub) subTypes.push({ sub, rent });
+            });
+
+            if (subTypes.length === 0) {
+                alert("Please add at least one Subtype with rent.");
+                return;
+            }
+
+            // Build facility card
+            const facilityHTML = `
+                <div class="card mb-2 shadow-sm">
+                    <div class="card-body p-2">
+                        <h6 class="mb-1"><strong>${name}</strong></h6>
+                        <ul class="mt-2">
+                            ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            // Append to facility list
+            if (facilityList.querySelector("p")) {
+                facilityList.innerHTML = ""; // remove "No facilities added yet"
+            }
+            facilityList.innerHTML += facilityHTML;
+
+            // Reset form for new entry
+            document.getElementById("facilityForm").reset();
+            subTypeContainer.innerHTML = `
+                <div class="row mb-2 subTypeRow">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
 });
 </script>
-
 
 </body>
 </html>
