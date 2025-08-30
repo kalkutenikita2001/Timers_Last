@@ -451,7 +451,7 @@
 
 <!-- Facility Details Form -->
 
-    <div class="form-container form-section" id="facility-details">
+   <div class="form-container form-section" id="facility-details">
     <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i>Facility Details</h3>
     <form id="facilityForm">
         <!-- Facility Name -->
@@ -459,8 +459,6 @@
             <label for="facilityName" class="form-label required-field">Facility Name</label>
             <input type="text" class="form-control" id="facilityName" placeholder="Enter facility name">
         </div>
-
-       
 
         <!-- Subtypes & Rent Section -->
         <div class="mb-3">
@@ -499,6 +497,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -1305,7 +1304,7 @@
             updateProgress();
         });
     </script>
-   <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
     const subTypeContainer = document.getElementById("subTypeContainer");
     const addSubTypeBtn = document.getElementById("addSubTypeRow");
@@ -1340,10 +1339,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add facility to list
     addFacilityBtn.addEventListener("click", function () {
         const name = document.getElementById("facilityName").value;
-       
 
-        if (!name || !quantity || !condition) {
-            alert("Please fill Facility Name, Quantity and Condition.");
+        if (!name) {
+            alert("Please enter Facility Name.");
             return;
         }
 
@@ -1356,7 +1354,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (subTypes.length === 0) {
-            alert("Please add at least one Subtype.");
+            alert("Please add at least one Subtype with rent.");
             return;
         }
 
@@ -1364,7 +1362,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const facilityHTML = `
             <div class="card mb-2 shadow-sm">
                 <div class="card-body p-2">
-                   
+                    <h6 class="mb-1"><strong>${name}</strong></h6>
                     <ul class="mt-2">
                         ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
                     </ul>
@@ -1396,6 +1394,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
 
 </body>
 </html>
