@@ -45,17 +45,6 @@
             opacity: 0.9;
         }
 
-        .option-buttons button {
-            border-radius: 20px;
-            padding: 8px 25px;
-            margin: 0 5px;
-        }
-
-        .option-buttons button.active {
-            background: #000;
-            color: #fff;
-        }
-
         .table th {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: white;
@@ -76,37 +65,6 @@
             background-color: #dc3545;
             color: white;
         }
-
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0;
-                padding: 15px;
-            }
-        }
-
-        .card-header h4 {
-            color: #fff !important;
-        }
-
-        .table thead th {
-            color: #fff !important;
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: white;
-            border-radius: 10px 10px 0 0 !important;
-        }
-
-        .card-header h4 {
-            color: #fff !important;
-        }
-
-        .table th,
-        .table thead th {
-            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: #fff !important;
-        }
     </style>
 </head>
 
@@ -124,14 +82,14 @@
                 </div>
                 <div class="card-body">
 
-
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
                         <div class="center-select-container" id="centerSelectContainer">
                             <select class="form-control form-control-sm" style="width: 200px;">
-                                <option>-- Select Center --</option>
-                                <option>Center 1</option>
-                                <option>Center 2</option>
+                                <option value="">-- Select Center --</option>
+                                <?php foreach ($centers as $c): ?>
+                                    <option value="<?= $c->id ?>"><?= $c->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div>
@@ -149,53 +107,55 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Center</th>
                                     <th>Title</th>
                                     <th>Date</th>
                                     <th>Amount</th>
+                                    <th>Category</th>
                                     <th>Description</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Equipment Purchase</td>
-                                    <td>15/10/2023</td>
-                                    <td>Rs. 15,000</td>
-                                    <td>Bought new cricket bats</td>
-                                    <td>
-                                        <button class="action-btn thumbs-up"><i class="fas fa-check"></i></button>
-                                        <button class="action-btn cross"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Coach Payment</td>
-                                    <td>10/10/2023</td>
-                                    <td>Rs. 25,000</td>
-                                    <td>Monthly salary</td>
-                                    <td>
-                                        <button class="action-btn thumbs-up"><i class="fas fa-check"></i></button>
-                                        <button class="action-btn cross"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Utility Bills</td>
-                                    <td>05/10/2023</td>
-                                    <td>Rs. 8,500</td>
-                                    <td>Electricity and water</td>
-                                    <td>
-                                        <button class="action-btn thumbs-up"><i class="fas fa-check"></i></button>
-                                        <button class="action-btn cross"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
+                                <?php if (!empty($expenses)): ?>
+                                    <?php foreach ($expenses as $exp): ?>
+                                        <tr>
+                                            <td><?= $exp->center_name ?></td>
+                                            <td><?= $exp->title ?></td>
+                                            <td><?= date("d/m/Y", strtotime($exp->date)) ?></td>
+                                            <td>₹ <?= number_format($exp->amount, 2) ?></td>
+                                            <td><?= $exp->category ?></td>
+                                            <td><?= $exp->description ?></td>
+                                            <td>
+                                                <?php if ($exp->status == 'approved'): ?>
+                                                    <span class="badge badge-success">Approved</span>
+                                                <?php elseif ($exp->status == 'rejected'): ?>
+                                                    <span class="badge badge-danger">Rejected</span>
+                                                <?php else: ?>
+                                                    <span class="badge badge-warning">Pending</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?= base_url('superadmin/Expenses/approve/' . $exp->id) ?>" class="action-btn thumbs-up"><i class="fas fa-check"></i></a>
+                                                <a href="<?= base_url('superadmin/Expenses/reject/' . $exp->id) ?>" class="action-btn cross"><i class="fas fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="8" class="text-center">No expenses found</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Expense Modal -->
     <!-- Add Expense Modal -->
     <div class="modal fade" id="expenseModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -206,38 +166,48 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form>
+                <form method="post" action="<?= base_url('superadmin/Expenses/add') ?>">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-building mr-1 text-danger"></i> Select Center</label>
-                                <select class="form-control" required>
-                                    <option value="" disabled selected>Select Center</option>
-                                    <option>Center 1</option>
-                                    <option>Center 2</option>
+                            <div class="form-group">
+                                <label for="center_id">Select Center</label>
+                                <select name="center_id" class="form-control" required>
+                                    <option value="">-- Select Center --</option>
+                                    <?php foreach ($centers as $center): ?>
+                                        <option value="<?= $center->id ?>"><?= $center->name ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-heading mr-1 text-danger"></i> Title</label>
-                                <input type="text" class="form-control" placeholder="Enter expense title" required>
+                                <label>Title</label>
+                                <input type="text" name="title" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-calendar-alt mr-1 text-danger"></i> Date</label>
-                                <input type="date" class="form-control" required>
+                                <label>Date</label>
+                                <input type="date" name="date" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-rupee-sign mr-1 text-danger"></i> Amount (₹)</label>
-                                <input type="number" class="form-control" placeholder="Enter amount" required>
+                                <label>Amount (₹)</label>
+                                <input type="number" name="amount" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Category</label>
+                                <select name="category" class="form-control" required>
+                                    <option value="Equipment">Equipment</option>
+                                    <option value="Salaries">Salaries</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
                             <div class="col-12 mb-3">
-                                <label><i class="fas fa-align-left mr-1 text-danger"></i> Description</label>
-                                <textarea class="form-control" rows="3" placeholder="Enter description..."></textarea>
+                                <label>Description</label>
+                                <textarea name="description" class="form-control" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal"><i class="fas fa-times mr-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-danger px-4"><i class="fas fa-save mr-1"></i> Save</button>
+                        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger px-4">Save</button>
                     </div>
                 </form>
             </div>
@@ -254,76 +224,48 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form>
+                <form method="get" action="<?= base_url('superadmin/Expenses/filter') ?>">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-calendar-alt mr-1 text-danger"></i> From Date</label>
-                                <input type="date" class="form-control">
+                                <label>From Date</label>
+                                <input type="date" name="from_date" class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-calendar-check mr-1 text-danger"></i> To Date</label>
-                                <input type="date" class="form-control">
+                                <label>To Date</label>
+                                <input type="date" name="to_date" class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-coins mr-1 text-danger"></i> Min Amount</label>
-                                <input type="number" class="form-control" placeholder="Enter min amount">
+                                <label>Min Amount</label>
+                                <input type="number" name="min_amount" class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label><i class="fas fa-wallet mr-1 text-danger"></i> Max Amount</label>
-                                <input type="number" class="form-control" placeholder="Enter max amount">
+                                <label>Max Amount</label>
+                                <input type="number" name="max_amount" class="form-control">
                             </div>
                             <div class="col-md-12 mb-3">
-                                <label><i class="fas fa-tags mr-1 text-danger"></i> Category</label>
-                                <select class="form-control">
-                                    <option>All</option>
-                                    <option>Equipment</option>
-                                    <option>Salaries</option>
-                                    <option>Utilities</option>
+                                <label>Category</label>
+                                <select name="category" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="Equipment">Equipment</option>
+                                    <option value="Salaries">Salaries</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <button type="reset" class="btn btn-secondary px-4"><i class="fas fa-undo mr-1"></i> Clear</button>
-                        <button type="submit" class="btn btn-danger px-4"><i class="fas fa-check mr-1"></i> Apply Filter</button>
+                        <button type="reset" class="btn btn-secondary px-4">Clear</button>
+                        <button type="submit" class="btn btn-danger px-4">Apply Filter</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function switchOption(option) {
-            $('.option-buttons button').removeClass('active');
-            $(`.option-buttons button:contains(${option === 'centerwise' ? 'Centerwise Expenses' : 'Own Expenses'})`).addClass('active');
-
-            if (option === 'own') {
-                $('#centerSelectContainer').hide();
-            } else {
-                $('#centerSelectContainer').show();
-            }
-        }
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const contentWrapper = document.getElementById('contentWrapper');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        document.getElementById('sidebar').classList.toggle('active');
-                    } else {
-                        contentWrapper.classList.toggle('minimized');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
