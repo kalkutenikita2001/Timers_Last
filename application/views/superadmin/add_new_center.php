@@ -346,7 +346,7 @@ const rentAmount = document.getElementById("center_rent");
         </div>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="duration" class="form-label required-field">Duration (hours)</label>
+                <label for="duration" class="form-label required-field">Duration (Month)</label>
                 <input type="number" class="form-control" id="duration" min="1" required>
                 <div class="invalid-feedback">Duration must be at least 1 hour.</div>
             </div>
@@ -376,11 +376,14 @@ const rentAmount = document.getElementById("center_rent");
         </div>
     </form>
 
+
+
     <div class="text-right mt-4">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
             <i class="fas fa-plus"></i> Add Batch
         </button>
     </div>
+
 
     <!-- Batch List Table -->
     <div class="batch-table mt-4">
@@ -601,12 +604,17 @@ document.addEventListener("DOMContentLoaded", function () {
         </button>
     </div>
 
-    <div class="d-flex justify-content-end mt-4">
-        <button type="submit" class="btn btn-success" id="saveFacilityBtn" disabled>
-            <i class="fas fa-save me-2"></i> Save Facility
-        </button>
-    </div>
-</form>
+        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="staff-details">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Staff Details
+                        </button>
+
+        <!-- Add Facility Button -->
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-info" id="addFacility">
+                <i class="fas fa-plus me-2"></i> Add Facility
+            </button>
+        </div>
+    </form>
 
 </div>
 
@@ -1477,74 +1485,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const addFacilityBtn = document.getElementById("addFacility");
 
     // Add new subtype row
-    addSubTypeBtn.addEventListener("click", function () {
-        const newRow = document.createElement("div");
-        newRow.classList.add("row", "mb-2", "subTypeRow");
-        newRow.innerHTML = `
-            <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
-            </div>
-            <div class="col-md-4">
-                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
-            </div>
-        `;
-        subTypeContainer.appendChild(newRow);
-    });
-
-    // Remove subtype row
-    subTypeContainer.addEventListener("click", function (e) {
-        if (e.target.classList.contains("removeSubType")) {
-            e.target.closest(".subTypeRow").remove();
-        }
-    });
-
-    // Add facility to list
-    addFacilityBtn.addEventListener("click", function () {
-        const name = document.getElementById("facilityName").value;
-
-        if (!name) {
-            alert("Please enter Facility Name.");
-            return;
-        }
-
-        // Collect subtypes with rent
-        const subTypes = [];
-        document.querySelectorAll("#subTypeContainer .subTypeRow").forEach(row => {
-            const sub = row.querySelector("input[name='subType[]']").value;
-            const rent = row.querySelector("input[name='subRent[]']").value;
-            if (sub) subTypes.push({ sub, rent });
-        });
-
-        if (subTypes.length === 0) {
-            alert("Please add at least one Subtype with rent.");
-            return;
-        }
-
-        // Build facility card
-        const facilityHTML = `
-            <div class="card mb-2 shadow-sm">
-                <div class="card-body p-2">
-                    <h6 class="mb-1"><strong>${name}</strong></h6>
-                    <ul class="mt-2">
-                        ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
-                    </ul>
-                </div>
-            </div>
-        `;
-
-        // Append to facility list
-        if (facilityList.querySelector("p")) {
-            facilityList.innerHTML = ""; // remove "No facilities added yet"
-        }
-        facilityList.innerHTML += facilityHTML;
-
-        // Reset form for new entry
-        document.getElementById("facilityForm").reset();
-        subTypeContainer.innerHTML = `
-            <div class="row mb-2 subTypeRow">
+    if (addSubTypeBtn) {
+        addSubTypeBtn.addEventListener("click", function () {
+            const newRow = document.createElement("div");
+            newRow.classList.add("row", "mb-2", "subTypeRow");
+            newRow.innerHTML = `
                 <div class="col-md-6">
                     <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
                 </div>
@@ -1554,9 +1499,78 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
                 </div>
-            </div>
-        `;
-    });
+            `;
+            subTypeContainer.appendChild(newRow);
+        });
+    }
+
+    // Remove subtype row
+    if (subTypeContainer) {
+        subTypeContainer.addEventListener("click", function (e) {
+            if (e.target.classList.contains("removeSubType")) {
+                e.target.closest(".subTypeRow").remove();
+            }
+        });
+    }
+
+    // Add facility to list
+    if (addFacilityBtn) {
+        addFacilityBtn.addEventListener("click", function () {
+            const name = document.getElementById("facilityName").value;
+
+            if (!name) {
+                alert("Please enter Facility Name.");
+                return;
+            }
+
+            // Collect subtypes with rent
+            const subTypes = [];
+            document.querySelectorAll("#subTypeContainer .subTypeRow").forEach(row => {
+                const sub = row.querySelector("input[name='subType[]']").value;
+                const rent = row.querySelector("input[name='subRent[]']").value;
+                if (sub) subTypes.push({ sub, rent });
+            });
+
+            if (subTypes.length === 0) {
+                alert("Please add at least one Subtype with rent.");
+                return;
+            }
+
+            // Build facility card
+            const facilityHTML = `
+                <div class="card mb-2 shadow-sm">
+                    <div class="card-body p-2">
+                        <h6 class="mb-1"><strong>${name}</strong></h6>
+                        <ul class="mt-2">
+                            ${subTypes.map(st => `<li>${st.sub} - Rent: ₹${st.rent || 0}</li>`).join("")}
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            // Append to facility list
+            if (facilityList.querySelector("p")) {
+                facilityList.innerHTML = ""; // remove "No facilities added yet"
+            }
+            facilityList.innerHTML += facilityHTML;
+
+            // Reset form for new entry
+            document.getElementById("facilityForm").reset();
+            subTypeContainer.innerHTML = `
+                <div class="row mb-2 subTypeRow">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
 });
 </script>
 

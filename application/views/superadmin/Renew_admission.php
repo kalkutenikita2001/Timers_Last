@@ -98,10 +98,6 @@
                     <a href="<?= site_url('superadmin/View_Renew_Students/1') ?>" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i> View
                     </a>
-
-                   
-
-                    
                   </td>
                 </tr>
 
