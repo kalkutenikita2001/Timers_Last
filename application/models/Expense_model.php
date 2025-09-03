@@ -6,9 +6,10 @@ class Expense_model extends CI_Model
     // Get all expenses (with center info)
     public function get_all_expenses()
     {
-        $this->db->select('expenses.*, center_details.center_name AS center_name');
+        $this->db->select('expenses.*, center_details.name AS center_name');
         $this->db->from('expenses');
-        $this->db->join('center_details', 'center_details.center_id = expenses.center_id', 'left');
+        $this->db->join('center_details', 'center_details.id = expenses.center_id', 'left');
+
         $this->db->order_by('expenses.date', 'DESC');
         return $this->db->get()->result();
     }
@@ -20,12 +21,14 @@ class Expense_model extends CI_Model
         return $this->db->insert('expenses', $data);
     }
 
+
     // Filter expenses
     public function filter_expenses($filters = [])
     {
-        $this->db->select('expenses.*, center_details.center_name AS center_name');
+        $this->db->select('expenses.*, center_details.name AS center_name');
         $this->db->from('expenses');
-        $this->db->join('center_details', 'center_details.center_id = expenses.center_id', 'left');
+        $this->db->join('center_details', 'center_details.id = expenses.center_id', 'left');
+
 
 
         if (!empty($filters['from_date'])) {
@@ -40,9 +43,10 @@ class Expense_model extends CI_Model
         if (!empty($filters['max_amount'])) {
             $this->db->where('expenses.amount <=', $filters['max_amount']);
         }
-        if (!empty($filters['category']) && $filters['category'] != 'All') {
+        if (!empty($filters['category'])) {
             $this->db->where('expenses.category', $filters['category']);
         }
+
         return $this->db->get()->result();
     }
 

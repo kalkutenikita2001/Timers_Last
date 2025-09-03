@@ -88,8 +88,9 @@
                             <select class="form-control form-control-sm" style="width: 200px;">
                                 <option value="">-- Select Center --</option>
                                 <?php foreach ($centers as $c): ?>
-                                    <option value="<?= $c->id ?>"><?= $c->name ?></option>
+                                    <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                 <?php endforeach; ?>
+
                             </select>
                         </div>
                         <div>
@@ -166,16 +167,17 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('superadmin/Expenses/add') ?>">
+                <form method="post" action="<?= base_url('Expense/add') ?>">
                     <div class="modal-body">
                         <div class="row">
                             <div class="form-group">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
                                     <option value="">-- Select Center --</option>
-                                    <?php foreach ($centers as $center): ?>
-                                        <option value="<?= $center->id ?>"><?= $center->name ?></option>
+                                    <?php foreach ($centers as $c): ?>
+                                        <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                     <?php endforeach; ?>
+
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -192,12 +194,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Category</label>
-                                <select name="category" class="form-control" required>
-                                    <option value="Equipment">Equipment</option>
-                                    <option value="Salaries">Salaries</option>
-                                    <option value="Utilities">Utilities</option>
-                                    <option value="Other">Other</option>
-                                </select>
+                                <input type="text" name="category" class=" form-control" required>
+
                             </div>
                             <div class="col-12 mb-3">
                                 <label>Description</label>
@@ -224,7 +222,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="get" action="<?= base_url('superadmin/Expenses/filter') ?>">
+                <form method="post" action="<?= base_url('Expense/filter') ?>">
+
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -245,13 +244,7 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label>Category</label>
-                                <select name="category" class="form-control">
-                                    <option value="">All</option>
-                                    <option value="Equipment">Equipment</option>
-                                    <option value="Salaries">Salaries</option>
-                                    <option value="Utilities">Utilities</option>
-                                    <option value="Other">Other</option>
-                                </select>
+                                <input type="text" name="category" class="form-control">
                             </div>
                         </div>
                     </div>

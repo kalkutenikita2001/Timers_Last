@@ -65,9 +65,6 @@ class Center_model extends CI_Model {
         return $this->db->trans_status();
     }
 
-    public function get_all_centers() {
-        return $this->db->get('centers')->result_array();
-    }
 
     public function get_center($id) {
         $center = $this->db->get_where('centers', ['id' => $id])->row_array();
@@ -127,5 +124,207 @@ class Center_model extends CI_Model {
         $this->db->trans_complete();
         return $this->db->trans_status();
     }
+    
+    // <-----------------------New APIs for center Managemnet----------------------->
+
+   public function saveBatch($input) {
+        if (empty($input['center_id']) || empty($input['batch_name'])) {
+            return ["status"=>"error","message"=>"Center ID and Batch Name are required"];
+        }
+
+        $data = [
+            "center_id" => $input['center_id'],
+            "batch_name" => $input['batch_name'],
+            "batch_level" => $input['batch_level'] ?? null,
+            "start_time" => $input['start_time'] ?? null,
+            "end_time" => $input['end_time'] ?? null,
+            "start_date" => $input['start_date'] ?? null,
+            "end_date" => $input['end_date'] ?? null,
+            "duration" => $input['duration'] ?? null,
+            "category" => $input['category'] ?? null,
+            "created_at" => date("Y-m-d H:i:s")
+        ];
+
+        $this->db->insert("batches", $data);
+        return ["status"=>"success","message"=>"Batch saved"];
+    }
+
+      public function saveStaff($input) {
+        if (empty($input['center_id']) || empty($input['staff_name']) || empty($input['contact_no'])) {
+            return ["status"=>"error","message"=>"Center ID, Staff Name, and Contact No are required"];
+        }
+
+        $data = [
+            "center_id" => $input['center_id'],
+            "staff_name" => $input['staff_name'],
+            "contact_no" => $input['contact_no'],
+            "role" => $input['role'] ?? null,
+            "joining_date" => $input['joining_date'] ?? null,
+            "assigned_batch" => $input['assigned_batch'] ?? null,
+            "coach_level" => $input['coach_level'] ?? null,
+            "coach_category" => $input['coach_category'] ?? null,
+            "coach_duration" => $input['coach_duration'] ?? null,
+            "created_at" => date("Y-m-d H:i:s")
+        ];
+
+        $this->db->insert("staff", $data);
+        return ["status"=>"success","message"=>"Staff saved"];
+    }
+
+    public function saveFacility($input) {
+        if (empty($input['center_id']) || empty($input['facility_name'])) {
+            return ["status"=>"error","message"=>"Center ID and Facility Name are required"];
+        }
+
+        if (!isset($input['subtypes']) || !is_array($input['subtypes'])) {
+            return ["status"=>"error","message"=>"Subtypes must be an array"];
+        }
+
+        foreach ($input['subtypes'] as $sub) {
+            $data = [
+                "center_id" => $input['center_id'],
+                "facility_name" => $input['facility_name'],
+                "subtype_name" => $sub['name'],
+                "rent_amount" => $sub['rent'] ?? 0,
+                "rent_date" => date("Y-m-d"),
+                "created_at" => date("Y-m-d H:i:s")
+            ];
+            $this->db->insert("facilities", $data);
+        }
+
+        return ["status"=>"success","message"=>"Facility saved"];
+    }
+
+      public function insertData($table, $data) {
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+        public function getWhere($table, $conditions = []) {
+        $query = $this->db->get_where($table, $conditions);
+        return $query->result_array();
+    }
+
+    // Optional: get single row
+    public function getRow($table, $conditions = []) {
+        $query = $this->db->get_where($table, $conditions);
+        return $query->row_array();
+    }
+   public function insertFacility($data)
+    {
+        return $this->db->insert("facilities", $data);
+    }
+
+public function insertSubFacility($data)
+{
+    return $this->db->insert("facility_subtypes", $data);
+}
+
+public function getFacilities()
+{
+    $this->db->select("f.id, f.facility_name, GROUP_CONCAT(CONCAT(s.subtype, ' (₹', s.rent, ')')) as subtypes");
+    $this->db->from("facilities f");
+    $this->db->join("facility_subtypes s", "s.facility_id = f.id", "left");
+    $this->db->group_by("f.id");
+    return $this->db->get()->result();
+}
+
+ public function get_all_centers() {
+        $this->db->select('id, name, center_number, address, rent_amount, rent_paid_date, center_timing_from, center_timing_to, created_at');
+        $query = $this->db->get('center_details');
+        return $query->result_array();
+    }
+
+    // Fetch center by ID
+    public function get_center_by_id($id) {
+        $this->db->select('id, name, center_number, address, rent_amount, rent_paid_date, center_timing_from, center_timing_to, created_at');
+        $this->db->where('id', $id);
+        $query = $this->db->get('center_details');
+        return $query->row_array();
+    }
+
+    
+    public function getCenterDetails($center_id) {
+        return $this->db->get_where('center_details', ['id' => $center_id])->row_array();
+    }
+
+    public function getBatchesByCenter($center_id) {
+        return $this->db->get_where('batches', ['center_id' => $center_id])->result_array();
+    }
+
+    public function getStaffByCenter($center_id) {
+        return $this->db->get_where('staff', ['center_id' => $center_id])->result_array();
+    }
+
+    public function getFacilitiesByCenter($center_id) {
+        return $this->db->get_where('facilities', ['center_id' => $center_id])->result_array();
+    }
+       // Update batch by ID
+   // Update batch by ID
+public function update_batch($id, $data) {
+    if (empty($id) || empty($data)) {
+        return false;
+    }
+
+    return $this->db->where('id', $id)
+                    ->update('batches', $data); // direct table name
+}
+
+// Get batch by ID
+public function get_batch($id) {
+    return $this->db->where('id', $id)
+                    ->get('batches')            // direct table name
+                    ->row_array();
+}
+
+public function getCenterById($id) {
+        return $this->db->get_where('center_details', ['id' => $id])->row_array();
+    }
+
+    public function updateCenter($id, $data) {
+        $this->db->where('id', $id);
+        return $this->db->update('center_details', $data);
+    }
+    // Get facility by ID
+    public function getFacilityById($id) {
+        return $this->db->get_where('facilities', ['id' => $id])->row_array();
+    }
+
+    // Update facility by ID
+    public function updateFacilityById($id, $data) {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $this->db->where('id', $id);
+        return $this->db->update('facilities', $data);
+    }
+
+    // Delete facility by ID
+    public function deleteFacilityById($id) {
+        return $this->db->delete('facilities', ['id' => $id]);
+    }
+     public function getStaffById($id) {
+        return $this->db->get_where("staff", ['id' => $id])->row_array();
+    }
+
+    // Update staff by ID
+    public function updateStaffById($id, $data) {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $this->db->where('id', $id);
+        return $this->db->update("staff", $data);
+    }
+
+    // Delete staff by ID
+    public function deleteStaffById($id) {
+        return $this->db->delete("staff", ['id' => $id]);
+    }
+    public function delete_center_by_id($id)
+{
+    $this->db->where('id', $id);
+    return $this->db->delete('center_details');
+}
+
+public function delete_batch_by_id($id)
+{
+    $this->db->where('id', $id);
+    return $this->db->delete('batches');
+}
 }
 ?>

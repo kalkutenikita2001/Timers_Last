@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centre Management</title>
+    <title>Center Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -87,8 +90,8 @@
             border-radius: 50%;
             background-color: #e9ecef;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: Center;
+            justify-content: Center;
             margin: 0 auto 10px;
             font-weight: bold;
             color: #6c757d;
@@ -98,7 +101,7 @@
             color: white;
         }
         .step-label {
-            text-align: center;
+            text-align: Center;
             font-size: 14px;
             color: #6c757d;
         }
@@ -165,9 +168,8 @@
     
     <!-- Main Content -->
     <div class="main-content">
-        <div class="header text-center">
-           
-            <p class="lead">Add and manage your sports center details</p>
+        <div class="header text-Center">
+         <p class="lead">Add and manage your sports Center details</p>
         </div>
 
         <div class="container-fluid">
@@ -179,7 +181,7 @@
                 <div class="d-flex justify-content-between mt-3">
                     <div class="step step-active">
                         <div class="step-circle">1</div>
-                        <div class="step-label">Centre Details</div>
+                        <div class="step-label">Center Details</div>
                     </div>
                     <div class="step">
                         <div class="step-circle">2</div>
@@ -196,295 +198,411 @@
                 </div>
             </div>
 
-            <!-- Centre Details Form -->
-            <div class="form-container form-section active" id="centre-details">
-                <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Centre Details</h3>
-                <form id="centreForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="centreName" class="form-label required-field">Centre Name</label>
-                            <input type="text" class="form-control" id="centreName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="centreNumber" class="form-label">Centre Number</label>
-                            <input type="text" class="form-control" id="centreNumber">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label required-field">Address</label>
-                        <textarea class="form-control" id="address" rows="3" ></textarea>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="openingTime" class="form-label required-field">Opening Time</label>
-                            <input type="time" class="form-control" id="openingTime" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="closingTime" class="form-label required-field">Closing Time</label>
-                            <input type="time" class="form-control" id="closingTime" >
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="printPaidDate" class="form-label"> Rent Paid Date</label>
-                            <input type="date" class="form-control" id="printPaidDate">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="password" class="form-label"> Password</label>
-                            <input type="password" class="form-control" id="password">
-                        </div>
-
-                         <div class="col-md-6">
-                            <label for="rent" class="form-label"> Rent (Amount) </label>
-                            <input type="number" class="form-control" id="rent">
-                        </div>
-                    </div>
-
-                    
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary btn-next" data-next="batch-details">
-                            Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </form>
+            <!-- Center Details Form -->
+          <div class="form-container form-section active" id="Center-details">
+    <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Center Details</h3>
+    <form id="CenterForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="CenterName" class="form-label required-field">Center Name</label>
+                <input type="text" class="form-control" id="CenterName" required>
+                <div class="invalid-feedback">Center name is required.</div>
             </div>
+            <div class="col-md-6">
+                <label for="CenterNumber" class="form-label">Center Number</label>
+                <input type="text" class="form-control" id="CenterNumber">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label required-field">Address</label>
+            <textarea class="form-control" id="address" rows="3" required></textarea>
+            <div class="invalid-feedback">Address is required.</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="openingTime" class="form-label required-field">Opening Time</label>
+                <input type="time" class="form-control" id="openingTime" required>
+                <div class="invalid-feedback">Opening time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="closingTime" class="form-label required-field">Closing Time</label>
+                <input type="time" class="form-control" id="closingTime" required>
+                <div class="invalid-feedback">Closing time must be after opening time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="printPaidDate" class="form-label">Paid Date</label>
+                <input type="date" class="form-control" id="printPaidDate">
+            </div>
+            <div class="col-md-6">
+                <label for="password" class="form-label required-field">Password</label>
+                <input type="password" class="form-control" id="password" required minlength="8">
+                <div class="invalid-feedback">Password must be at least 8 characters.</div>
+            </div>
+        </div>
+<div class="col-md-6">
+      <label for="center_rent" class="form-label">Rent</label>
+      <input 
+        type="number" 
+        id="center_rent" 
+        name="center_rent" 
+        class="form-control" 
+        placeholder="Enter Rent Amount"
+        required 
+        min="1"
+      />
+      <div class="invalid-feedback">
+        Please enter a valid rent amount greater than 0.
+      </div>
+    </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-next" data-next="batch-details" disabled>
+                Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("CenterForm");
+    const nextBtn = document.querySelector(".btn-next");
+    const openingTime = document.getElementById("openingTime");
+    const closingTime = document.getElementById("closingTime");
+    const password = document.getElementById("password");
+const rentAmount = document.getElementById("center_rent");
+    function validateForm() {
+        let isValid = form.checkValidity();
+
+        // Check closing vs opening time
+        if (openingTime.value && closingTime.value && closingTime.value <= openingTime.value) {
+            closingTime.setCustomValidity("Closing time must be after opening time.");
+            isValid = false;
+        } else {
+            closingTime.setCustomValidity("");
+        }
+
+        // Bootstrap visual validation
+        form.classList.add("was-validated");
+
+        // Enable/Disable button
+        nextBtn.disabled = !isValid;
+    }
+
+    // Listen for input changes
+    form.querySelectorAll("input, textarea").forEach(input => {
+        input.addEventListener("input", validateForm);
+        input.addEventListener("change", validateForm);
+    });
+});
+</script>
+
 
             <!-- Batch Details Form -->
             <div class="form-container form-section" id="batch-details">
-                <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
-                <form id="batchForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="batchName" class="form-label required-field">Batch Name</label>
-                            <input type="text" class="form-control" id="batchName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="batchLevel" class="form-label required-field">Level</label>
-                            <select class="form-select" id="batchLevel" >
-                                <option value="">Select Level</option>
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="batchStartTime" class="form-label required-field">Start Time</label>
-                            <input type="time" class="form-control" id="batchStartTime" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="batchEndTime" class="form-label required-field">End Time</label>
-                            <input type="time" class="form-control" id="batchEndTime" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="startDate" class="form-label required-field">Start Date</label>
-                            <input type="date" class="form-control" id="startDate" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="endDate" class="form-label required-field">End Date</label>
-                            <input type="date" class="form-control" id="endDate" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="duration" class="form-label required-field">Duration (Month)</label>
-                            <input type="number" class="form-control" id="duration" min="1" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="category" class="form-label required-field">Category</label>
-                            <select class="form-select" id="category" >
-                                <option value="">Select Category</option>
-                                <option value="corporate">Corporate</option>
-                                <option value="individual">Individual</option>
-                                <option value="group">Group</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="centre-details">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Centre Details
-                        </button>
-                        <div>
-                            <button type="button" class="btn btn-info" id="addAnotherBatch">
-                                <i class="fas fa-plus me-2"></i> Add Another Batch
-                            </button>
-                            <button type="button" class="btn btn-primary btn-next" data-next="staff-details">
-                                Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-
-                
-                <div class="text-right mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
-                        <i class="fas fa-plus"></i> Add Batch
-                    </button>
-                </div>
-
-
-                <!-- Batch List Table -->
-                <div class="batch-table mt-4">
-                    <h5 class="mb-3">Added Batches</h5>
-                    <div id="batchList">
-                        <p class="text-center">No batches added yet</p>
-                    </div>
-                </div>
+    <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
+    <form id="batchForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchName" class="form-label required-field">Batch Name</label>
+                <input type="text" class="form-control" id="batchName" required>
+                <div class="invalid-feedback">Batch name is required.</div>
             </div>
+            <div class="col-md-6">
+                <label for="batchLevel" class="form-label required-field">Level</label>
+                <select class="form-select" id="batchLevel" required>
+                    <option value="">Select Level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <div class="invalid-feedback">Please select a level.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchStartTime" class="form-label required-field">Start Time</label>
+                <input type="time" class="form-control" id="batchStartTime" required>
+                <div class="invalid-feedback">Start time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="batchEndTime" class="form-label required-field">End Time</label>
+                <input type="time" class="form-control" id="batchEndTime" required>
+                <div class="invalid-feedback">End time must be after start time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="startDate" class="form-label required-field">Start Date</label>
+                <input type="date" class="form-control" id="startDate" required>
+                <div class="invalid-feedback">Start date is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="endDate" class="form-label required-field">End Date</label>
+                <input type="date" class="form-control" id="endDate" required>
+                <div class="invalid-feedback">End date must be after start date.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="duration" class="form-label required-field">Duration (Month)</label>
+                <input type="number" class="form-control" id="duration" min="1" required>
+                <div class="invalid-feedback">Duration must be at least 1 hour.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="category" class="form-label required-field">Category</label>
+                <select class="form-select" id="category" required>
+                    <option value="">Select Category</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="individual">Individual</option>
+                    <option value="group">Group</option>
+                </select>
+                <div class="invalid-feedback">Please select a category.</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="Center-details">
+                <i class="fas fa-arrow-left me-2"></i> Back to Center Details
+            </button>
+            <div>
+                <button type="button" class="btn btn-info" id="addAnotherBatch">
+                    <i class="fas fa-plus me-2"></i> Add Another Batch
+                </button>
+                <button type="button" class="btn btn-primary btn-next" data-next="staff-details" disabled>
+                    Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+
+    <div class="text-right mt-4">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
+            <i class="fas fa-plus"></i> Add Batch
+        </button>
+    </div>
+
+
+    <!-- Batch List Table -->
+    <div class="batch-table mt-4">
+        <h5 class="mb-3">Added Batches</h5>
+        <div id="batchList">
+            <p class="text-center">No batches added yet</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("batchForm");
+    const nextBtn = form.querySelector(".btn-next");
+
+    const batchStartTime = document.getElementById("batchStartTime");
+    const batchEndTime = document.getElementById("batchEndTime");
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    const duration = document.getElementById("duration");
+
+    function validateForm() {
+        let isValid = form.checkValidity();
+
+        // End time must be after start time
+        if (batchStartTime.value && batchEndTime.value && batchEndTime.value <= batchStartTime.value) {
+            batchEndTime.setCustomValidity("End time must be after start time.");
+            isValid = false;
+        } else {
+            batchEndTime.setCustomValidity("");
+        }
+
+        // End date must be after start date
+        if (startDate.value && endDate.value && endDate.value <= startDate.value) {
+            endDate.setCustomValidity("End date must be after start date.");
+            isValid = false;
+        } else {
+            endDate.setCustomValidity("");
+        }
+
+        // Duration must be >= 1
+        if (duration.value && duration.value < 1) {
+            duration.setCustomValidity("Duration must be at least 1 hour.");
+            isValid = false;
+        } else {
+            duration.setCustomValidity("");
+        }
+
+        // Add Bootstrap validation styling
+        form.classList.add("was-validated");
+
+        // Enable/Disable Next button
+        nextBtn.disabled = !isValid;
+    }
+
+    // Revalidate whenever inputs change
+    form.querySelectorAll("input, select").forEach(input => {
+        input.addEventListener("input", validateForm);
+        input.addEventListener("change", validateForm);
+    });
+});
+</script>
+
 
             <!-- Staff Details Form -->
-            <div class="form-container form-section" id="staff-details">
-                <h3 class="section-title"><i class="fas fa-users me-2"></i>Staff Details</h3>
-                <form id="staffForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="staffName" class="form-label required-field">Staff Name</label>
-                            <input type="text" class="form-control" id="staffName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="contactNo" class="form-label required-field">Contact Number</label>
-                            <input type="tel" class="form-control" id="contactNo" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="role" class="form-label required-field">Role</label>
-                            <select class="form-select" id="role" >
-                                <option value="">Select Role</option>
-                                <option value="admin">Admin</option>
-                                <option value="co-ordinator">Co-ordinator</option>
-                                <option value="coach">Coach</option>
-                        
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="joiningDate" class="form-label required-field">Joining Date</label>
-                            <input type="date" class="form-control" id="joiningDate" >
-                        </div>
-                    </div>
-                    
-                    <!-- Conditional Coach Assignment Fields -->
-                    <div id="coachAssignment" class="conditional-field">
-                        <h5 class="mt-4 mb-3">Coach Batch Assignment</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="assignedBatch" class="form-label">Assign Batch</label>
-                                <select class="form-select" id="assignedBatch">
-                                    <option value="">Select Batch</option>
-                                    <!-- Batches will be populated dynamically -->
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="coachLevel" class="form-label">Coach Level</label>
-                                <select class="form-select" id="coachLevel">
-                                    <option value="">Select Level</option>
-                                    <option value="beginner">Beginner</option>
-                                    <option value="intermediate">Intermediate</option>
-                                    <option value="advanced">Advanced</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="coachCategory" class="form-label">Category Specialization</label>
-                                <select class="form-select" id="coachCategory">
-                                    <option value="">Select Category</option>
-                                    <option value="corporate">Corporate</option>
-                                    <option value="individual">Individual</option>
-                                    <option value="group">Group</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="coachDuration" class="form-label">Session Duration (hours)</label>
-                                <input type="number" class="form-control" id="coachDuration" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="batch-details">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Batch Details
-                        </button>
-                        <div>
-                            <button type="button" class="btn btn-info" id="addAnotherStaff">
-                                <i class="fas fa-plus me-2"></i> Add Another Staff
-                            </button>
-                            <button type="button" class="btn btn-primary btn-next" data-next="facility-details">
-                                Next: Facility Details <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+<div class="form-container form-section" id="staff-details">
+    <h3 class="section-title"><i class="fas fa-users me-2"></i>Staff Details</h3>
+    <form id="staffForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="staffName" class="form-label required-field">Staff Name</label>
+                <input type="text" class="form-control" id="staffName" required>
+                <div class="invalid-feedback">Staff name is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="contactNo" class="form-label required-field">Contact Number</label>
+                <input type="tel" class="form-control" id="contactNo" pattern="^[0-9]{10}$" required>
+                <div class="invalid-feedback">Enter a valid 10-digit contact number.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="role" class="form-label required-field">Role</label>
+                <select class="form-select" id="role" required>
+                    <option value="">Select Role</option>
+                    <option value="admin">Administrator</option>
+                    <option value="manager">Manager</option>
+                    <option value="coach">Coach</option>
+                    <option value="support">Support Staff</option>
+                </select>
+                <div class="invalid-feedback">Please select a role.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="joiningDate" class="form-label required-field">Joining Date</label>
+                <input type="date" class="form-control" id="joiningDate" required>
+                <div class="invalid-feedback">Joining date is required.</div>
+            </div>
+        </div>
 
-                <div class="text-right mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staffModal">
-                        <i class="fas fa-plus"></i> Add Staff
-                    </button>
+        <!-- Conditional Coach Assignment Fields -->
+        <div id="coachAssignment" class="conditional-field d-none">
+            <h5 class="mt-4 mb-3">Coach Batch Assignment</h5>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="assignedBatch" class="form-label">Assign Batch</label>
+                    <select class="form-select" id="assignedBatch">
+                        <option value="">Select Batch</option>
+                    </select>
                 </div>
-                
-                <!-- Staff List Table -->
-                <div class="staff-table mt-4">
-                    <h5 class="mb-3">Added Staff Members</h5>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Role</th>
-                                    <th>Joining Date</th>
-                                    <th>Assigned Batch</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="staffList">
-                                <tr>
-                                    <td colspan="6" class="text-center">No staff members added yet</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-md-6">
+                    <label for="coachLevel" class="form-label">Coach Level</label>
+                    <select class="form-select" id="coachLevel">
+                        <option value="">Select Level</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="coachCategory" class="form-label">Category Specialization</label>
+                    <select class="form-select" id="coachCategory">
+                        <option value="">Select Category</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="individual">Individual</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="coachDuration" class="form-label">Session Duration (hours)</label>
+                    <input type="number" class="form-control" id="coachDuration" min="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="batch-details">
+                <i class="fas fa-arrow-left me-2"></i> Back to Batch Details
+            </button>
+            <div>
+                <button type="button" class="btn btn-info" id="addAnotherStaff">
+                    <i class="fas fa-plus me-2"></i> Add Another Staff
+                </button>
+                <button type="button" class="btn btn-primary btn-next" data-next="facility-details" disabled>
+                    Next: Facility Details <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const staffForm = document.getElementById("staffForm");
+    const nextBtn = staffForm.querySelector(".btn-next");
+    const role = document.getElementById("role");
+    const coachFields = document.getElementById("coachAssignment");
+
+    function validateStaffForm() {
+        let isValid = staffForm.checkValidity();
+
+        staffForm.classList.add("was-validated");
+        nextBtn.disabled = !isValid;
+    }
+
+    // Role-based display
+    role.addEventListener("change", function () {
+        if (role.value === "coach") {
+            coachFields.classList.remove("d-none");
+        } else {
+            coachFields.classList.add("d-none");
+        }
+        validateStaffForm();
+    });
+
+    staffForm.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("input", validateStaffForm);
+        el.addEventListener("change", validateStaffForm);
+    });
+});
+</script>
+
 
 
 <!-- Facility Details Form -->
+<!-- Facility Details Form -->
+<div class="form-container form-section" id="facility-details">
+    <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i> Facility Details</h3>
+   <form id="facilityForm" novalidate>
+    <input type="hidden" name="center_id" value="<?php echo $this->session->userdata('center_id'); ?>">
 
-   <div class="form-container form-section" id="facility-details">
-    <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i>Facility Details</h3>
-    <form id="facilityForm">
-        <!-- Facility Name -->
-        <div class="mb-3">
-            <label for="facilityName" class="form-label required-field">Facility Name</label>
-            <input type="text" class="form-control" id="facilityName" placeholder="Enter facility name">
-        </div>
+    <div class="mb-3">
+        <label for="facilityName" class="form-label required-field">Facility Name</label>
+        <input type="text" class="form-control" id="facilityName" name="facility_name" required>
+        <div class="invalid-feedback">Facility name is required.</div>
+    </div>
 
-        <!-- Subtypes & Rent Section -->
-        <div class="mb-3">
-            <label class="form-label">Subtypes & Rent</label>
-            <div id="subTypeContainer">
-                <div class="row mb-2 subTypeRow">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
-                    </div>
+    <!-- Subtypes & Rent Section -->
+    <div class="mb-3">
+        <label class="form-label">Subtypes & Rent</label>
+        <div id="subTypeContainer">
+            <div class="row mb-2 subTypeRow">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    <div class="invalid-feedback">Rent must be 0 or more.</div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
                 </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addSubTypeRow">
-                + Add Subtype
-            </button>
         </div>
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addSubTypeRow">
+            + Add Subtype
+        </button>
+    </div>
 
         <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="staff-details">
                             <i class="fas fa-arrow-left me-2"></i> Back to Staff Details
@@ -498,21 +616,61 @@
         </div>
     </form>
 
-    <!-- Facility List -->
-    <div class="facility-table mt-4">
-        <h5 class="mb-3">Added Facilities</h5>
-        <div id="facilityList">
-            <p class="text-center">No facilities added yet</p>
-        </div>
-    </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const facilityForm = document.getElementById("facilityForm");
+    const saveBtn = document.getElementById("saveFacilityBtn");
+
+    function validateFacilityForm() {
+        let isValid = facilityForm.checkValidity();
+        facilityForm.classList.add("was-validated");
+        saveBtn.disabled = !isValid;
+    }
+
+    // Dynamic subtype rows
+    document.getElementById("addSubTypeRow").addEventListener("click", function () {
+        const container = document.getElementById("subTypeContainer");
+        const row = document.createElement("div");
+        row.className = "row mb-2 subTypeRow";
+        row.innerHTML = `
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                <div class="invalid-feedback">Rent must be 0 or more.</div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        `;
+        container.appendChild(row);
+        row.querySelectorAll("input").forEach(el => {
+            el.addEventListener("input", validateFacilityForm);
+        });
+        row.querySelector(".removeSubType").addEventListener("click", function () {
+            row.remove();
+            validateFacilityForm();
+        });
+    });
+
+    // Attach listeners
+    facilityForm.querySelectorAll("input").forEach(el => {
+        el.addEventListener("input", validateFacilityForm);
+    });
+});
+</script>
+
+
 
 
 
 
         <!-- Batch Modal -->
         <div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="batchLabel">Add Batch</h5>
@@ -553,7 +711,7 @@
 
         <!-- Facility Modal -->
         <div class="modal fade" id="facilityModal" tabindex="-1" aria-labelledby="facilityLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="facilityLabel">Add Facility</h5>
@@ -598,7 +756,7 @@
 
         <!-- Staff Modal -->
         <div class="modal fade" id="staffModal" tabindex="-1" aria-labelledby="staffLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staffLabel">Add Staff</h5>
@@ -642,338 +800,685 @@
 
        
     </div>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- Bootstrap bundle -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modals
-    const batchModal = new bootstrap.Modal(document.getElementById('batchModal'));
-    const facilityModal = new bootstrap.Modal(document.getElementById('facilityModal'));
-    const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
-    
-    // Modal submit buttons
-    document.getElementById('batchSubmitBtn').addEventListener('click', function() {
-        // Add your batch submission logic here
-        batchModal.hide();
-        alert('Batch added successfully!');
-    });
-    
-    document.getElementById('facilitySubmitBtn').addEventListener('click', function() {
-        // Add your facility submission logic here
-        facilityModal.hide();
-        alert('Facility added successfully!');
-    });
-    
-    document.getElementById('staffSubmitBtn').addEventListener('click', function() {
-        // Add your staff submission logic here
-        staffModal.hide();
-        alert('Staff added successfully!');
-    });
-    
-    // Navigation and form handling
-    const progressBar = document.querySelector('.progress-bar');
-    const steps = document.querySelectorAll('.step');
-    const formSections = document.querySelectorAll('.form-section');
-    const nextButtons = document.querySelectorAll('.btn-next');
-    const prevButtons = document.querySelectorAll('.btn-prev');
-    const roleSelect = document.getElementById('role');
-    const coachAssignment = document.getElementById('coachAssignment');
-    const addAnotherStaffBtn = document.getElementById('addAnotherStaff');
-    const staffForm = document.getElementById('staffForm');
-    const staffList = document.getElementById('staffList');
-    const addAnotherBatchBtn = document.getElementById('addAnotherBatch');
-    const batchForm = document.getElementById('batchForm');
-    const batchList = document.getElementById('batchList');
-    const assignedBatchSelect = document.getElementById('assignedBatch');
-    const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
-    const centreForm = document.getElementById('centreForm');
-    
-    let currentStep = 1;
-    const totalSteps = 4;
-    let staffMembers = [];
-    let facilities = [];
-    let batches = [];
-    
-    // Toggle sidebar on small screens
-    if (toggleSidebarBtn) {
-        toggleSidebarBtn.addEventListener('click', function() {
-            document.body.classList.toggle('show-sidebar');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize modals
+            const batchModal = new bootstrap.Modal(document.getElementById('batchModal'));
+            const facilityModal = new bootstrap.Modal(document.getElementById('facilityModal'));
+            const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
+            
+            // Modal submit buttons
+         document.addEventListener("DOMContentLoaded", function() {
+    const batchSubmitBtn = document.getElementById("batchSubmitBtn");
+    if (batchSubmitBtn) {
+        batchSubmitBtn.addEventListener("click", function() {
+            batchModal.hide();
+            alert("Batch added successfully!");
         });
     }
-    
-    // Show/hide coach assignment fields based on role selection
-    if (roleSelect && coachAssignment) {
-        roleSelect.addEventListener('change', function() {
-            if (this.value === 'coach') {
-                coachAssignment.style.display = 'block';
-                updateBatchDropdown();
-            } else {
-                coachAssignment.style.display = 'none';
-            }
-        });
-    }
-    
-    // Update batch dropdown with added batches
-    function updateBatchDropdown() {
-        if (!assignedBatchSelect) return;
-        
-        assignedBatchSelect.innerHTML = '<option value="">Select Batch</option>';
-        batches.forEach((batch, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = batch.name;
-            assignedBatchSelect.appendChild(option);
-        });
-    }
-    
-    // Add batch functionality
-    if (addAnotherBatchBtn) {
-        addAnotherBatchBtn.addEventListener('click', function() {
-            // Validate form
-            const batchName = document.getElementById('batchName');
-            const batchLevel = document.getElementById('batchLevel');
-            const batchStartTime = document.getElementById('batchStartTime');
-            const batchEndTime = document.getElementById('batchEndTime');
-            const startDate = document.getElementById('startDate');
-            const endDate = document.getElementById('endDate');
-            const duration = document.getElementById('duration');
-            const category = document.getElementById('category');
+});
+
             
-            let isValid = true;
-            
-            if (!batchName.value) {
-                batchName.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                batchName.classList.remove('is-invalid');
-            }
-            
-            if (!batchLevel.value) {
-                batchLevel.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                batchLevel.classList.remove('is-invalid');
-            }
-            
-            if (!batchStartTime.value) {
-                batchStartTime.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                batchStartTime.classList.remove('is-invalid');
-            }
-            
-            if (!batchEndTime.value) {
-                batchEndTime.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                batchEndTime.classList.remove('is-invalid');
-            }
-            
-            if (!startDate.value) {
-                startDate.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                startDate.classList.remove('is-invalid');
-            }
-            
-            if (!endDate.value) {
-                endDate.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                endDate.classList.remove('is-invalid');
-            }
-            
-            if (!duration.value) {
-                duration.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                duration.classList.remove('is-invalid');
-            }
-            
-            if (!category.value) {
-                category.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                category.classList.remove('is-invalid');
-            }
-            
-            if (!isValid) {
-                alert('Please fill all required fields before adding batch.');
-                return;
-            }
-            
-            // Collect batch data
-            const batchData = {
-                name: batchName.value,
-                level: batchLevel.value,
-                startTime: batchStartTime.value,
-                endTime: batchEndTime.value,
-                startDate: startDate.value,
-                endDate: endDate.value,
-                duration: duration.value,
-                category: category.value
-            };
-            
-            // Add to batch list
-            batches.push(batchData);
-            updateBatchList();
-            updateBatchDropdown();
-            
-            // Reset form
-            batchForm.reset();
-        });
-    }
-    
-    // Update batch list
-    function updateBatchList() {
-        if (!batchList) return;
-        
-        if (batches.length === 0) {
-            batchList.innerHTML = '<p class="text-center">No batches added yet</p>';
-            return;
-        }
-        
-        batchList.innerHTML = '';
-        batches.forEach((batch, index) => {
-            const card = document.createElement('div');
-            card.className = 'batch-card';
-            card.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6>${batch.name} (${batch.level})</h6>
-                        <p class="mb-1">Time: ${batch.startTime} - ${batch.endTime}</p>
-                        <p class="mb-1">Dates: ${batch.startDate} to ${batch.endDate}</p>
-                        <p class="mb-0">Duration: ${batch.duration} hours | Category: ${batch.category}</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-batch" data-index="${index}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-batch" data-index="${index}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            batchList.appendChild(card);
-        });
-        
-        // Add event listeners for edit and delete buttons
-        document.querySelectorAll('.edit-batch').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const index = this.getAttribute('data-index');
-                editBatch(index);
+            document.getElementById('facilitySubmitBtn').addEventListener('click', function() {
+                // Add your facility submission logic here
+                facilityModal.hide();
+                alert('Facility added successfully!');
             });
-        });
-        
-        document.querySelectorAll('.delete-batch').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const index = this.getAttribute('data-index');
-                deleteBatch(index);
+            
+            document.getElementById('staffSubmitBtn').addEventListener('click', function() {
+                // Add your staff submission logic here
+                staffModal.hide();
+                alert('Staff added successfully!');
             });
-        });
-    }
-    
-    // Edit batch function
-    function editBatch(index) {
-        const batch = batches[index];
-        
-        // Populate form fields
-        document.getElementById('batchName').value = batch.name;
-        document.getElementById('batchLevel').value = batch.level;
-        document.getElementById('batchStartTime').value = batch.startTime;
-        document.getElementById('batchEndTime').value = batch.endTime;
-        document.getElementById('startDate').value = batch.startDate;
-        document.getElementById('endDate').value = batch.endDate;
-        document.getElementById('duration').value = batch.duration;
-        document.getElementById('category').value = batch.category;
-        
-        // Remove the batch from the list
-        batches.splice(index, 1);
-        updateBatchList();
-        updateBatchDropdown();
-    }
-    
-    // Delete batch function
-    function deleteBatch(index) {
-        if (confirm('Are you sure you want to delete this batch?')) {
-            batches.splice(index, 1);
-            updateBatchList();
-            updateBatchDropdown();
-        }
-    }
-    
-    // Update progress bar and steps
-    function updateProgress() {
-        const progressPercentage = (currentStep / totalSteps) * 100;
-        if (progressBar) progressBar.style.width = progressPercentage + '%';
-        
-        steps.forEach((step, index) => {
-            if (index < currentStep) {
-                step.classList.add('step-active');
-            } else {
-                step.classList.remove('step-active');
+            
+            // Rest of your existing JavaScript code...
+            const progressBar = document.querySelector('.progress-bar');
+            const steps = document.querySelectorAll('.step');
+            const formSections = document.querySelectorAll('.form-section');
+            const nextButtons = document.querySelectorAll('.btn-next');
+            const prevButtons = document.querySelectorAll('.btn-prev');
+            const roleSelect = document.getElementById('role');
+            const coachAssignment = document.getElementById('coachAssignment');
+            const addAnotherStaffBtn = document.getElementById('addAnotherStaff');
+            const staffForm = document.getElementById('staffForm');
+            const staffList = document.getElementById('staffList');
+            const addAnotherFacilityBtn = document.getElementById('addAnotherFacility');
+            const facilityForm = document.getElementById('facilityForm');
+            const facilityList = document.getElementById('facilityList');
+            const addAnotherBatchBtn = document.getElementById('addAnotherBatch');
+            const batchForm = document.getElementById('batchForm');
+            const batchList = document.getElementById('batchList');
+            const assignedBatchSelect = document.getElementById('assignedBatch');
+            const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
+            const CenterForm = document.getElementById('CenterForm');
+            
+            let currentStep = 1;
+            const totalSteps = 4;
+            let staffMembers = [];
+            let facilities = [];
+            let batches = [];
+            
+            // Toggle sidebar on small screens
+            if (toggleSidebarBtn) {
+                toggleSidebarBtn.addEventListener('click', function() {
+                    document.body.classList.toggle('show-sidebar');
+                });
             }
-        });
-    }
-    
-    // Next button functionality
-    nextButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const nextSectionId = this.getAttribute('data-next');
             
-            // Validate current form before proceeding
-            const currentSection = document.querySelector('.form-section.active');
-            const requiredFields = currentSection.querySelectorAll('[required]');
-            let isValid = true;
+            // Show/hide coach assignment fields based on role selection
+            if (roleSelect) {
+                roleSelect.addEventListener('change', function() {
+                    if (this.value === 'coach') {
+                        coachAssignment.style.display = 'block';
+                        updateBatchDropdown();
+                    } else {
+                        coachAssignment.style.display = 'none';
+                    }
+                });
+            }
             
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
+            // Update batch dropdown with added batches
+            function updateBatchDropdown() {
+                if (!assignedBatchSelect) return;
+                
+                assignedBatchSelect.innerHTML = '<option value="">Select Batch</option>';
+                batches.forEach((batch, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = batch.name;
+                    assignedBatchSelect.appendChild(option);
+                });
+            }
+            
+            // Add batch functionality
+            if (addAnotherBatchBtn) {
+                addAnotherBatchBtn.addEventListener('click', function() {
+                    // Validate form
+                    const batchName = document.getElementById('batchName');
+                    const batchLevel = document.getElementById('batchLevel');
+                    const batchStartTime = document.getElementById('batchStartTime');
+                    const batchEndTime = document.getElementById('batchEndTime');
+                    const startDate = document.getElementById('startDate');
+                    const endDate = document.getElementById('endDate');
+                    const duration = document.getElementById('duration');
+                    const category = document.getElementById('category');
+                    
+                    let isValid = true;
+                    
+                    if (!batchName.value) {
+                        batchName.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        batchName.classList.remove('is-invalid');
+                    }
+                    
+                    if (!batchLevel.value) {
+                        batchLevel.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        batchLevel.classList.remove('is-invalid');
+                    }
+                    
+                    if (!batchStartTime.value) {
+                        batchStartTime.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        batchStartTime.classList.remove('is-invalid');
+                    }
+                    
+                    if (!batchEndTime.value) {
+                        batchEndTime.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        batchEndTime.classList.remove('is-invalid');
+                    }
+                    
+                    if (!startDate.value) {
+                        startDate.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        startDate.classList.remove('is-invalid');
+                    }
+                    
+                    if (!endDate.value) {
+                        endDate.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        endDate.classList.remove('is-invalid');
+                    }
+                    
+                    if (!duration.value) {
+                        duration.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        duration.classList.remove('is-invalid');
+                    }
+                    
+                    if (!category.value) {
+                        category.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        category.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Please fill all required fields before adding batch.');
+                        return;
+                    }
+                    
+                    // Collect batch data
+                    const batchData = {
+                        name: batchName.value,
+                        level: batchLevel.value,
+                        startTime: batchStartTime.value,
+                        endTime: batchEndTime.value,
+                        startDate: startDate.value,
+                        endDate: endDate.value,
+                        duration: duration.value,
+                        category: category.value
+                    };
+                    
+                    // Add to batch list
+                    batches.push(batchData);
+                    updateBatchList();
+                    updateBatchDropdown();
+                    
+                    // Reset form
+                    batchForm.reset();
+                });
+            }
+            
+            // Add staff member functionality
+            if (addAnotherStaffBtn) {
+                addAnotherStaffBtn.addEventListener('click', function() {
+                    // Validate form
+                    const staffName = document.getElementById('staffName');
+                    const contactNo = document.getElementById('contactNo');
+                    const role = document.getElementById('role');
+                    const joiningDate = document.getElementById('joiningDate');
+                    
+                    let isValid = true;
+                    
+                    if (!staffName.value) {
+                        staffName.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        staffName.classList.remove('is-invalid');
+                    }
+                    
+                    if (!contactNo.value) {
+                        contactNo.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        contactNo.classList.remove('is-invalid');
+                    }
+                    
+                    if (!role.value) {
+                        role.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        role.classList.remove('is-invalid');
+                    }
+                    
+                    if (!joiningDate.value) {
+                        joiningDate.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        joiningDate.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Please fill all required fields before adding staff.');
+                        return;
+                    }
+                    
+                    // Collect staff data
+                    const staffData = {
+                        name: staffName.value,
+                        contact: contactNo.value,
+                        role: role.value,
+                        joiningDate: joiningDate.value,
+                        assignedBatch: role.value === 'coach' ? document.getElementById('assignedBatch').value : 'N/A',
+                        level: role.value === 'coach' ? document.getElementById('coachLevel').value : 'N/A',
+                        category: role.value === 'coach' ? document.getElementById('coachCategory').value : 'N/A',
+                        duration: role.value === 'coach' ? document.getElementById('coachDuration').value : 'N/A'
+                    };
+                    
+                    // Add to staff list
+                    staffMembers.push(staffData);
+                    updateStaffList();
+                    
+                    // Reset form
+                    staffForm.reset();
+                    if (coachAssignment) coachAssignment.style.display = 'none';
+                });
+            }
+            
+            // Add facility functionality
+            if (addAnotherFacilityBtn) {
+                addAnotherFacilityBtn.addEventListener('click', function() {
+                    // Validate form
+                    const facilityType = document.getElementById('facilityType');
+                    const facilityQuantity = document.getElementById('facilityQuantity');
+                    const facilityCondition = document.getElementById('facilityCondition');
+                    
+                    let isValid = true;
+                    
+                    if (!facilityType.value) {
+                        facilityType.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        facilityType.classList.remove('is-invalid');
+                    }
+                    
+                    if (!facilityQuantity.value) {
+                        facilityQuantity.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        facilityQuantity.classList.remove('is-invalid');
+                    }
+                    
+                    if (!facilityCondition.value) {
+                        facilityCondition.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        facilityCondition.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Please fill all required fields before adding facility.');
+                        return;
+                    }
+                    
+                    // Collect facility data
+                    const facilityData = {
+                        type: facilityType.value,
+                        subType: document.getElementById('subType').value,
+                        printDetails: document.getElementById('printDetails').value,
+                        quantity: facilityQuantity.value,
+                        condition: facilityCondition.value
+                    };
+                    
+                    // Add to facility list
+                    facilities.push(facilityData);
+                    updateFacilityList();
+                    
+                    // Reset form
+                    facilityForm.reset();
+                });
+            }
+            
+            // Update batch list
+            function updateBatchList() {
+                if (!batchList) return;
+                
+                if (batches.length === 0) {
+                    batchList.innerHTML = '<p class="text-Center">No batches added yet</p>';
+                    return;
                 }
-            });
-            
-            if (!isValid) {
-                alert('Please fill all required fields before proceeding.');
-                return;
+                
+                batchList.innerHTML = '';
+                batches.forEach((batch, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'batch-card';
+                    card.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-Center">
+                            <div>
+                                <h6>${batch.name} (${batch.level})</h6>
+                                <p class="mb-1">Time: ${batch.startTime} - ${batch.endTime}</p>
+                                <p class="mb-1">Dates: ${batch.startDate} to ${batch.endDate}</p>
+                                <p class="mb-0">Duration: ${batch.duration} hours | Category: ${batch.category}</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-1 edit-batch" data-index="${index}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-batch" data-index="${index}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    batchList.appendChild(card);
+                });
+                
+                // Add event listeners for edit and delete buttons
+                document.querySelectorAll('.edit-batch').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        editBatch(index);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-batch').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        deleteBatch(index);
+                    });
+                });
             }
             
-            // Update progress
-            currentStep++;
-            updateProgress();
+            // Update staff list table
+            function updateStaffList() {
+                if (!staffList) return;
+                
+                if (staffMembers.length === 0) {
+                    staffList.innerHTML = '<tr><td colspan="6" class="text-Center">No staff members added yet</td></tr>';
+                    return;
+                }
+                
+                staffList.innerHTML = '';
+                staffMembers.forEach((staff, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${staff.name}</td>
+                        <td>${staff.contact}</td>
+                        <td>${staff.role.charAt(0).toUpperCase() + staff.role.slice(1)}</td>
+                        <td>${staff.joiningDate}</td>
+                        <td>${staff.assignedBatch}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1 edit-staff" data-index="${index}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-staff" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    staffList.appendChild(row);
+                });
+                
+                // Add event listeners for edit and delete buttons
+                document.querySelectorAll('.edit-staff').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        editStaff(index);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-staff').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        deleteStaff(index);
+                    });
+                });
+            }
             
-            // Switch to next section
-            formSections.forEach(section => {
-                section.classList.remove('active');
+            // Update facility list
+            function updateFacilityList() {
+                if (!facilityList) return;
+                
+                if (facilities.length === 0) {
+                    facilityList.innerHTML = '<p class="text-Center">No facilities added yet</p>';
+                    return;
+                }
+                
+                facilityList.innerHTML = '';
+                facilities.forEach((facility, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'facility-card';
+                    card.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-Center">
+                            <div>
+                                <h6>${facility.type.charAt(0).toUpperCase() + facility.type.slice(1)}${facility.subType ? ' - ' + facility.subType : ''}</h6>
+                                <p class="mb-1">Quantity: ${facility.quantity} | Condition: ${facility.condition}</p>
+                                ${facility.printDetails ? `<p class="mb-0">Details: ${facility.printDetails}</p>` : ''}
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-1 edit-facility" data-index="${index}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-facility" data-index="${index}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    facilityList.appendChild(card);
+                });
+                
+                // Add event listeners for edit and delete buttons
+                document.querySelectorAll('.edit-facility').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        editFacility(index);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-facility').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        deleteFacility(index);
+                    });
+                });
+            }
+            
+            // Edit batch function
+            function editBatch(index) {
+                const batch = batches[index];
+                
+                // Populate form fields
+                document.getElementById('batchName').value = batch.name;
+                document.getElementById('batchLevel').value = batch.level;
+                document.getElementById('batchStartTime').value = batch.startTime;
+                document.getElementById('batchEndTime').value = batch.endTime;
+                document.getElementById('startDate').value = batch.startDate;
+                document.getElementById('endDate').value = batch.endDate;
+                document.getElementById('duration').value = batch.duration;
+                document.getElementById('category').value = batch.category;
+                
+                // Remove the batch from the list
+                batches.splice(index, 1);
+                updateBatchList();
+                updateBatchDropdown();
+            }
+            
+            // Delete batch function
+            function deleteBatch(index) {
+                if (confirm('Are you sure you want to delete this batch?')) {
+                    batches.splice(index, 1);
+                    updateBatchList();
+                    updateBatchDropdown();
+                }
+            }
+            
+            // Edit staff function
+            function editStaff(index) {
+                const staff = staffMembers[index];
+                
+                // Populate form fields
+                document.getElementById('staffName').value = staff.name;
+                document.getElementById('contactNo').value = staff.contact;
+                document.getElementById('role').value = staff.role;
+                document.getElementById('joiningDate').value = staff.joiningDate;
+                
+                if (staff.role === 'coach') {
+                    document.getElementById('assignedBatch').value = staff.assignedBatch;
+                    document.getElementById('coachLevel').value = staff.level;
+                    document.getElementById('coachCategory').value = staff.category;
+                    document.getElementById('coachDuration').value = staff.duration;
+                    if (coachAssignment) coachAssignment.style.display = 'block';
+                }
+                
+                // Remove the staff from the list
+                staffMembers.splice(index, 1);
+                updateStaffList();
+            }
+            
+            // Delete staff function
+            function deleteStaff(index) {
+                if (confirm('Are you sure you want to delete this staff member?')) {
+                    staffMembers.splice(index, 1);
+                    updateStaffList();
+                }
+            }
+            
+            // Edit facility function
+            function editFacility(index) {
+                const facility = facilities[index];
+                
+                // Populate form fields
+                document.getElementById('facilityType').value = facility.type;
+                document.getElementById('subType').value = facility.subType;
+                document.getElementById('printDetails').value = facility.printDetails;
+                document.getElementById('facilityQuantity').value = facility.quantity;
+                document.getElementById('facilityCondition').value = facility.condition;
+                
+                // Remove the facility from the list
+                facilities.splice(index, 1);
+                updateFacilityList();
+            }
+            
+            // Delete facility function
+            function deleteFacility(index) {
+                if (confirm('Are you sure you want to delete this facility?')) {
+                    facilities.splice(index, 1);
+                    updateFacilityList();
+                }
+            }
+            
+            // Update progress bar and steps
+            function updateProgress() {
+                const progressPercentage = (currentStep / totalSteps) * 100;
+                if (progressBar) progressBar.style.width = progressPercentage + '%';
+                
+                steps.forEach((step, index) => {
+                    if (index < currentStep) {
+                        step.classList.add('step-active');
+                    } else {
+                        step.classList.remove('step-active');
+                    }
+                });
+            }
+            
+            // Next button functionality
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const nextSectionId = this.getAttribute('data-next');
+                    
+                    // Validate current form before proceeding
+                    const currentSection = document.querySelector('.form-section.active');
+                    const requiredFields = currentSection.querySelectorAll('[required]');
+                    let isValid = true;
+                    
+                    requiredFields.forEach(field => {
+                        if (!field.value) {
+                            field.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            field.classList.remove('is-invalid');
+                        }
+                    });
+                    
+                    if (!isValid) {
+                        alert('Please fill all required fields before proceeding.');
+                        return;
+                    }
+                    
+                    // Update progress
+                    currentStep++;
+                    updateProgress();
+                    
+                    // Switch to next section
+                    formSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(nextSectionId).classList.add('active');
+                });
             });
-            document.getElementById(nextSectionId).classList.add('active');
-        });
-    });
-    
-    // Previous button functionality
-    prevButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const prevSectionId = this.getAttribute('data-prev');
             
-            // Update progress
-            currentStep--;
-            updateProgress();
-            
-            // Switch to previous section
-            formSections.forEach(section => {
-                section.classList.remove('active');
+            // Previous button functionality
+            prevButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const prevSectionId = this.getAttribute('data-prev');
+                    
+                    // Update progress
+                    currentStep--;
+                    updateProgress();
+                    
+                    // Switch to previous section
+                    formSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(prevSectionId).classList.add('active');
+                });
             });
-            document.getElementById(prevSectionId).classList.add('active');
+            
+            // Form submission
+            if (facilityForm) {
+                facilityForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Validate form
+                    const requiredFields = this.querySelectorAll('[required]');
+                    let isValid = true;
+                    
+                    requiredFields.forEach(field => {
+                        if (!field.value) {
+                            field.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            field.classList.remove('is-invalid');
+                        }
+                    });
+                    
+                    if (!isValid) {
+                        alert('Please fill all required fields before submitting.');
+                        return;
+                    }
+                    
+                    // Collect all data
+                    const CenterData = {
+                        name: document.getElementById('CenterName').value,
+                        number: document.getElementById('CenterNumber').value,
+                        address: document.getElementById('address').value,
+                        openingTime: document.getElementById('openingTime').value,
+                        closingTime: document.getElementById('closingTime').value,
+                        rentAmount: document.getElementById('center_rent').value || '0',
+                        printDate: document.getElementById('printDate').value,
+                        printPaidDate: document.getElementById('printPaidDate').value,
+                        batches: batches,
+                        staff: staffMembers,
+                        facilities: facilities
+                    };
+                    
+                    // Here you would typically send the data to the server
+                    console.log('Center Data:', CenterData);
+                    alert('Center details saved successfully!');
+                    
+                    // Reset the form and data
+                    CenterForm.reset();
+                    batchForm.reset();
+                    staffForm.reset();
+                    facilityForm.reset();
+                    
+                    batches = [];
+                    staffMembers = [];
+                    facilities = [];
+                    
+                    updateBatchList();
+                    updateStaffList();
+                    updateFacilityList();
+                    
+                    // Reset to first step
+                    currentStep = 1;
+                    updateProgress();
+                    
+                    formSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById('Center-details').classList.add('active');
+                });
+            }
+            
+            // Initialize the progress
+            updateProgress();
         });
-    });
-    
-    // Initialize the progress
-    updateProgress();
-    
-    // Facility form handling
+document.addEventListener("DOMContentLoaded", function () {
     const subTypeContainer = document.getElementById("subTypeContainer");
     const addSubTypeBtn = document.getElementById("addSubTypeRow");
     const facilityList = document.getElementById("facilityList");
@@ -1068,6 +1573,309 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<script>
+    const baseUrl = "<?= base_url(); ?>";
+    let savedCenterId = null; // 🔑 Global variable to store center_id
+
+    // ---------------- Save Center ----------------
+    $("#CenterForm").on("submit", function (e) {
+        e.preventDefault();
+
+      const payload = {
+    name: $("#CenterName").val(),
+    address: $("#address").val(),
+    center_number: $("#CenterNumber").val(),
+    rent_amount: $("#center_rent").val() || "0",   // ✅ only this one
+    rent_paid_date: $("#printPaidDate").val(),
+    center_timing_from: $("#openingTime").val(),
+    center_timing_to: $("#closingTime").val(),
+    password: $("#password").val()
+};
+
+
+        $.ajax({
+            url: baseUrl + "Center/saveCenter",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        savedCenterId = res.center_id; // ✅ Store center_id globally
+                        alert("Center saved successfully! ID: " + savedCenterId);
+
+                        // Go to batch section
+                        $(".form-section").removeClass("active");
+                        $("#batch-details").addClass("active");
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    $(".btn-next[data-next='batch-details']").on("click", function () {
+        $("#CenterForm").trigger("submit");
+    });
+
+    // ---------------- Save Batch ----------------
+    $("#batchForm").on("submit", function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        const payload = {
+            center_id: savedCenterId, // ✅ use stored center_id
+            batch_name: $("#batchName").val(),
+            batch_level: $("#batchLevel").val(),
+            start_time: $("#batchStartTime").val(),
+            end_time: $("#batchEndTime").val(),
+            duration: $("#duration").val(),
+            start_date: $("#startDate").val(),
+            end_date: $("#endDate").val(),
+            category: $("#category").val()
+        };
+
+        $.ajax({
+            url: baseUrl + "Center/saveBatch",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Batch saved successfully! ID: " + res.batch_id);
+
+                        // ✅ Append to batch list table
+                        $("#batchList").append(
+                            `<p><strong>${payload.batch_name}</strong> (${payload.batch_level}) 
+                             - ${payload.start_date} to ${payload.end_date}</p>`
+                        );
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    // Trigger Save Batch on button click
+    $(".btn-next[data-next='staff-details']").on("click", function () {
+        $("#batchForm").trigger("submit");
+    });
+
+    $("#addAnotherBatch").on("click", function () {
+        $("#batchForm").trigger("submit");
+    });
+</script>
+<script>
+    // ---------------- Fetch batches for staff assignment ----------------
+    function loadBatchesForStaff() {
+        if (!savedCenterId) return;
+
+        $.ajax({
+            url: baseUrl + "Center/getBatchesByCenter/" + savedCenterId, // ✅ create this API
+            type: "GET",
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        $("#assignedBatch").empty().append('<option value="">Select Batch</option>');
+                        res.data.forEach(batch => {
+                            $("#assignedBatch").append(
+                                `<option value="${batch.id}">${batch.batch_name} (${batch.batch_level})</option>`
+                            );
+                        });
+                    } else {
+                        console.warn("No batches found for this center");
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error fetching batches:", xhr.responseText);
+            }
+        });
+    }
+
+    // ---------------- Show/hide coach assignment ----------------
+    $("#role").on("change", function () {
+        if ($(this).val() === "coach") {
+            $("#coachAssignment").show();
+            loadBatchesForStaff(); // Load batches dynamically
+        } else {
+            $("#coachAssignment").hide();
+        }
+    });
+
+    // ---------------- Save Staff ----------------
+    $("#staffForm").on("submit", function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        const payload = {
+            center_id: savedCenterId,
+staff_name: $("#staffName").val(),
+            contact_no: $("#contactNo").val(),
+            role: $("#role").val(),
+            joining_date: $("#joiningDate").val()
+        };
+
+        // If role is coach → include assignment details
+        if (payload.role === "coach") {
+            payload.assigned_batch = $("#assignedBatch").val();
+            payload.coach_level = $("#coachLevel").val();
+            payload.coach_category = $("#coachCategory").val();
+            payload.coach_duration = $("#coachDuration").val();
+        }
+
+        $.ajax({
+            url: baseUrl + "Center/saveStaff",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Staff saved successfully! ID: " + res.staff_id);
+
+                        // ✅ Append staff to the table
+                        $("#staffList").append(`
+                            <tr>
+                                <td>${payload.staff_name}</td>
+                                <td>${payload.contact_no}</td>
+                                <td>${payload.role}</td>
+                                <td>${payload.joining_date}</td>
+                                <td>${payload.assigned_batch ? payload.assigned_batch : "-"}</td>
+                                <td><button class="btn btn-sm btn-danger">Delete</button></td>
+                            </tr>
+                        `);
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    // ---------------- Trigger buttons ----------------
+    $("#addAnotherStaff").on("click", function () {
+        $("#staffForm").trigger("submit");
+    });
+
+    $(".btn-next[data-next='facility-details']").on("click", function () {
+        $("#staffForm").trigger("submit");
+    });
+</script>
+<script>
+$(document).ready(function () {
+    // Add Subtype Row
+    $("#addSubTypeRow").click(function () {
+        let newRow = `
+        <div class="row mb-2 subTypeRow">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        </div>`;
+        $("#subTypeContainer").append(newRow);
+    });
+
+    // Remove Subtype Row
+    $(document).on("click", ".removeSubType", function () {
+        $(this).closest(".subTypeRow").remove();
+    });
+
+    // Save Facility (AJAX)
+    $("#facilityForm").submit(function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        // ✅ Collect data using FormData (handles array subType[] & subRent[])
+        let formData = new FormData(this);
+        formData.append("center_id", savedCenterId); // inject global center_id
+
+        $.ajax({
+            url: baseUrl + "Center/saveFacility",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                try {
+                    let res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Facility saved successfully!");
+                        loadFacilities(); // Refresh list
+                        $("#facilityForm")[0].reset();
+                        $("#subTypeContainer").html(""); // Reset subtype rows
+                    } else {
+                        alert(res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error saving facility:", xhr.responseText);
+                alert("Something went wrong while saving facility!");
+            }
+        });
+    });
+
+    // Load Facilities
+    function loadFacilities() {
+        $.get(baseUrl + "Center/getFacilities/" + savedCenterId, function (data) {
+            $("#facilityList").html(data);
+        });
+    }
+
+    // Initial Load
+    loadFacilities();
+});
+</script>
+
+
 
 </body>
 </html>

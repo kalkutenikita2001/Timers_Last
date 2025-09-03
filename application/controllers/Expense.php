@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Expenses extends CI_Controller
+class Expense extends CI_Controller
 {
     public function __construct()
     {
@@ -21,16 +21,19 @@ class Expenses extends CI_Controller
     // Save new expense
     public function add()
     {
+        $dt = $this->input->post();
         $expenseData = [
             'center_id' => $this->input->post('center_id'),
             'title'     => $this->input->post('title'),
             'date'      => $this->input->post('date'),
             'amount'    => $this->input->post('amount'),
             'category'  => $this->input->post('category'),
+            'description' => $this->input->post('description'),
             'type'      => 'manual',
             'status'    => 'pending',
             'created_at' => date('Y-m-d H:i:s')
         ];
+
         $this->Expense_model->insert_expense($expenseData);
         $this->session->set_flashdata('success', 'Expense added successfully!');
         redirect('superadmin/Expenses');
@@ -39,6 +42,9 @@ class Expenses extends CI_Controller
     // Apply filter
     public function filter()
     {
+        $this->load->model('Expense_model');
+        $this->load->model('Center_model'); // if you want centers
+
         $filters = [
             'from_date'  => $this->input->post('from_date'),
             'to_date'    => $this->input->post('to_date'),
@@ -46,10 +52,12 @@ class Expenses extends CI_Controller
             'max_amount' => $this->input->post('max_amount'),
             'category'   => $this->input->post('category')
         ];
+
         $data['expenses'] = $this->Expense_model->filter_expenses($filters);
-        $data['centers']  = $this->db->get('center_details')->result();
+        $data['centers']  = $this->Center_model->get_all_centers();
         $this->load->view('superadmin/Expenses', $data);
     }
+
 
     // Approve Expense
     public function approve($id)
