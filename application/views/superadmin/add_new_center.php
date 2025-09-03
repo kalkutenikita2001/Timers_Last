@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centre Management</title>
+    <title>Center Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -87,8 +90,8 @@
             border-radius: 50%;
             background-color: #e9ecef;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: Center;
+            justify-content: Center;
             margin: 0 auto 10px;
             font-weight: bold;
             color: #6c757d;
@@ -98,7 +101,7 @@
             color: white;
         }
         .step-label {
-            text-align: center;
+            text-align: Center;
             font-size: 14px;
             color: #6c757d;
         }
@@ -165,9 +168,8 @@
     
     <!-- Main Content -->
     <div class="main-content">
-        <div class="header text-center">
-           
-            <p class="lead">Add and manage your sports center details</p>
+        <div class="header text-Center">
+         <p class="lead">Add and manage your sports Center details</p>
         </div>
 
         <div class="container-fluid">
@@ -179,7 +181,7 @@
                 <div class="d-flex justify-content-between mt-3">
                     <div class="step step-active">
                         <div class="step-circle">1</div>
-                        <div class="step-label">Centre Details</div>
+                        <div class="step-label">Center Details</div>
                     </div>
                     <div class="step">
                         <div class="step-circle">2</div>
@@ -196,314 +198,471 @@
                 </div>
             </div>
 
-            <!-- Centre Details Form -->
-            <div class="form-container form-section active" id="centre-details">
-                <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Centre Details</h3>
-                <form id="centreForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="centreName" class="form-label required-field">Centre Name</label>
-                            <input type="text" class="form-control" id="centreName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="centreNumber" class="form-label">Centre Number</label>
-                            <input type="text" class="form-control" id="centreNumber">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label required-field">Address</label>
-                        <textarea class="form-control" id="address" rows="3" ></textarea>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="openingTime" class="form-label required-field">Opening Time</label>
-                            <input type="time" class="form-control" id="openingTime" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="closingTime" class="form-label required-field">Closing Time</label>
-                            <input type="time" class="form-control" id="closingTime" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="printDate" class="form-label"> Date</label>
-                            <input type="date" class="form-control" id="printDate">
-                        </div>
-
-                        
-                        <div class="col-md-6">
-                            <label for="printPaidDate" class="form-label"> Paid Date</label>
-                            <input type="date" class="form-control" id="printPaidDate">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="password" class="form-label"> Password</label>
-                            <input type="password" class="form-control" id="password">
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary btn-next" data-next="batch-details">
-                            Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </form>
+            <!-- Center Details Form -->
+          <div class="form-container form-section active" id="Center-details">
+    <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Center Details</h3>
+    <form id="CenterForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="CenterName" class="form-label required-field">Center Name</label>
+                <input type="text" class="form-control" id="CenterName" required>
+                <div class="invalid-feedback">Center name is required.</div>
             </div>
-
-            <!-- Batch Details Form -->
-            <div class="form-container form-section" id="batch-details">
-                <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
-                <form id="batchForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="batchName" class="form-label required-field">Batch Name</label>
-                            <input type="text" class="form-control" id="batchName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="batchLevel" class="form-label required-field">Level</label>
-                            <select class="form-select" id="batchLevel" >
-                                <option value="">Select Level</option>
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="batchStartTime" class="form-label required-field">Start Time</label>
-                            <input type="time" class="form-control" id="batchStartTime" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="batchEndTime" class="form-label required-field">End Time</label>
-                            <input type="time" class="form-control" id="batchEndTime" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="startDate" class="form-label required-field">Start Date</label>
-                            <input type="date" class="form-control" id="startDate" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="endDate" class="form-label required-field">End Date</label>
-                            <input type="date" class="form-control" id="endDate" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="duration" class="form-label required-field">Duration (hours)</label>
-                            <input type="number" class="form-control" id="duration" min="1" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="category" class="form-label required-field">Category</label>
-                            <select class="form-select" id="category" >
-                                <option value="">Select Category</option>
-                                <option value="corporate">Corporate</option>
-                                <option value="individual">Individual</option>
-                                <option value="group">Group</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="centre-details">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Centre Details
-                        </button>
-                        <div>
-                            <button type="button" class="btn btn-info" id="addAnotherBatch">
-                                <i class="fas fa-plus me-2"></i> Add Another Batch
-                            </button>
-                            <button type="button" class="btn btn-primary btn-next" data-next="staff-details">
-                                Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                
-                <div class="text-right mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
-                        <i class="fas fa-plus"></i> Add Batch
-                    </button>
-                </div>
-
-                <!-- Batch List Table -->
-                <div class="batch-table mt-4">
-                    <h5 class="mb-3">Added Batches</h5>
-                    <div id="batchList">
-                        <p class="text-center">No batches added yet</p>
-                    </div>
-                </div>
+            <div class="col-md-6">
+                <label for="CenterNumber" class="form-label">Center Number</label>
+                <input type="text" class="form-control" id="CenterNumber">
             </div>
-
-            <!-- Staff Details Form -->
-            <div class="form-container form-section" id="staff-details">
-                <h3 class="section-title"><i class="fas fa-users me-2"></i>Staff Details</h3>
-                <form id="staffForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="staffName" class="form-label required-field">Staff Name</label>
-                            <input type="text" class="form-control" id="staffName" >
-                        </div>
-                        <div class="col-md-6">
-                            <label for="contactNo" class="form-label required-field">Contact Number</label>
-                            <input type="tel" class="form-control" id="contactNo" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="role" class="form-label required-field">Role</label>
-                            <select class="form-select" id="role" >
-                                <option value="">Select Role</option>
-                                <option value="admin">Administrator</option>
-                                <option value="manager">Manager</option>
-                                <option value="coach">Coach</option>
-                                <option value="support">Support Staff</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="joiningDate" class="form-label required-field">Joining Date</label>
-                            <input type="date" class="form-control" id="joiningDate" >
-                        </div>
-                    </div>
-                    
-                    <!-- Conditional Coach Assignment Fields -->
-                    <div id="coachAssignment" class="conditional-field">
-                        <h5 class="mt-4 mb-3">Coach Batch Assignment</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="assignedBatch" class="form-label">Assign Batch</label>
-                                <select class="form-select" id="assignedBatch">
-                                    <option value="">Select Batch</option>
-                                    <!-- Batches will be populated dynamically -->
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="coachLevel" class="form-label">Coach Level</label>
-                                <select class="form-select" id="coachLevel">
-                                    <option value="">Select Level</option>
-                                    <option value="beginner">Beginner</option>
-                                    <option value="intermediate">Intermediate</option>
-                                    <option value="advanced">Advanced</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="coachCategory" class="form-label">Category Specialization</label>
-                                <select class="form-select" id="coachCategory">
-                                    <option value="">Select Category</option>
-                                    <option value="corporate">Corporate</option>
-                                    <option value="individual">Individual</option>
-                                    <option value="group">Group</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="coachDuration" class="form-label">Session Duration (hours)</label>
-                                <input type="number" class="form-control" id="coachDuration" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="batch-details">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Batch Details
-                        </button>
-                        <div>
-                            <button type="button" class="btn btn-info" id="addAnotherStaff">
-                                <i class="fas fa-plus me-2"></i> Add Another Staff
-                            </button>
-                            <button type="button" class="btn btn-primary btn-next" data-next="facility-details">
-                                Next: Facility Details <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="text-right mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staffModal">
-                        <i class="fas fa-plus"></i> Add Staff
-                    </button>
-                </div>
-                
-                <!-- Staff List Table -->
-                <div class="staff-table mt-4">
-                    <h5 class="mb-3">Added Staff Members</h5>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Role</th>
-                                    <th>Joining Date</th>
-                                    <th>Assigned Batch</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="staffList">
-                                <tr>
-                                    <td colspan="6" class="text-center">No staff members added yet</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-<!-- Facility Details Form -->
-
-   <div class="form-container form-section" id="facility-details">
-    <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i>Facility Details</h3>
-    <form id="facilityForm">
-        <!-- Facility Name -->
-        <div class="mb-3">
-            <label for="facilityName" class="form-label required-field">Facility Name</label>
-            <input type="text" class="form-control" id="facilityName" placeholder="Enter facility name">
         </div>
-
-        <!-- Subtypes & Rent Section -->
         <div class="mb-3">
-            <label class="form-label">Subtypes & Rent</label>
-            <div id="subTypeContainer">
-                <div class="row mb-2 subTypeRow">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addSubTypeRow">
-                + Add Subtype
-            </button>
+            <label for="address" class="form-label required-field">Address</label>
+            <textarea class="form-control" id="address" rows="3" required></textarea>
+            <div class="invalid-feedback">Address is required.</div>
         </div>
-
-        <!-- Add Facility Button -->
-        <div class="d-flex justify-content-end mt-4">
-            <button type="button" class="btn btn-info" id="addFacility">
-                <i class="fas fa-plus me-2"></i> Add Facility
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="openingTime" class="form-label required-field">Opening Time</label>
+                <input type="time" class="form-control" id="openingTime" required>
+                <div class="invalid-feedback">Opening time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="closingTime" class="form-label required-field">Closing Time</label>
+                <input type="time" class="form-control" id="closingTime" required>
+                <div class="invalid-feedback">Closing time must be after opening time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="printPaidDate" class="form-label">Paid Date</label>
+                <input type="date" class="form-control" id="printPaidDate">
+            </div>
+            <div class="col-md-6">
+                <label for="password" class="form-label required-field">Password</label>
+                <input type="password" class="form-control" id="password" required minlength="8">
+                <div class="invalid-feedback">Password must be at least 8 characters.</div>
+            </div>
+        </div>
+<div class="col-md-6">
+      <label for="center_rent" class="form-label">Rent</label>
+      <input 
+        type="number" 
+        id="center_rent" 
+        name="center_rent" 
+        class="form-control" 
+        placeholder="Enter Rent Amount"
+        required 
+        min="1"
+      />
+      <div class="invalid-feedback">
+        Please enter a valid rent amount greater than 0.
+      </div>
+    </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-next" data-next="batch-details" disabled>
+                Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
             </button>
         </div>
     </form>
+</div>
 
-    <!-- Facility List -->
-    <div class="facility-table mt-4">
-        <h5 class="mb-3">Added Facilities</h5>
-        <div id="facilityList">
-            <p class="text-center">No facilities added yet</p>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("CenterForm");
+    const nextBtn = document.querySelector(".btn-next");
+    const openingTime = document.getElementById("openingTime");
+    const closingTime = document.getElementById("closingTime");
+    const password = document.getElementById("password");
+const rentAmount = document.getElementById("center_rent");
+    function validateForm() {
+        let isValid = form.checkValidity();
+
+        // Check closing vs opening time
+        if (openingTime.value && closingTime.value && closingTime.value <= openingTime.value) {
+            closingTime.setCustomValidity("Closing time must be after opening time.");
+            isValid = false;
+        } else {
+            closingTime.setCustomValidity("");
+        }
+
+        // Bootstrap visual validation
+        form.classList.add("was-validated");
+
+        // Enable/Disable button
+        nextBtn.disabled = !isValid;
+    }
+
+    // Listen for input changes
+    form.querySelectorAll("input, textarea").forEach(input => {
+        input.addEventListener("input", validateForm);
+        input.addEventListener("change", validateForm);
+    });
+});
+</script>
+
+
+            <!-- Batch Details Form -->
+            <div class="form-container form-section" id="batch-details">
+    <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
+    <form id="batchForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchName" class="form-label required-field">Batch Name</label>
+                <input type="text" class="form-control" id="batchName" required>
+                <div class="invalid-feedback">Batch name is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="batchLevel" class="form-label required-field">Level</label>
+                <select class="form-select" id="batchLevel" required>
+                    <option value="">Select Level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <div class="invalid-feedback">Please select a level.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchStartTime" class="form-label required-field">Start Time</label>
+                <input type="time" class="form-control" id="batchStartTime" required>
+                <div class="invalid-feedback">Start time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="batchEndTime" class="form-label required-field">End Time</label>
+                <input type="time" class="form-control" id="batchEndTime" required>
+                <div class="invalid-feedback">End time must be after start time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="startDate" class="form-label required-field">Start Date</label>
+                <input type="date" class="form-control" id="startDate" required>
+                <div class="invalid-feedback">Start date is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="endDate" class="form-label required-field">End Date</label>
+                <input type="date" class="form-control" id="endDate" required>
+                <div class="invalid-feedback">End date must be after start date.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="duration" class="form-label required-field">Duration (hours)</label>
+                <input type="number" class="form-control" id="duration" min="1" required>
+                <div class="invalid-feedback">Duration must be at least 1 hour.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="category" class="form-label required-field">Category</label>
+                <select class="form-select" id="category" required>
+                    <option value="">Select Category</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="individual">Individual</option>
+                    <option value="group">Group</option>
+                </select>
+                <div class="invalid-feedback">Please select a category.</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="Center-details">
+                <i class="fas fa-arrow-left me-2"></i> Back to Center Details
+            </button>
+            <div>
+                <button type="button" class="btn btn-info" id="addAnotherBatch">
+                    <i class="fas fa-plus me-2"></i> Add Another Batch
+                </button>
+                <button type="button" class="btn btn-primary btn-next" data-next="staff-details" disabled>
+                    Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="text-right mt-4">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
+            <i class="fas fa-plus"></i> Add Batch
+        </button>
+    </div>
+
+    <!-- Batch List Table -->
+    <div class="batch-table mt-4">
+        <h5 class="mb-3">Added Batches</h5>
+        <div id="batchList">
+            <p class="text-center">No batches added yet</p>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("batchForm");
+    const nextBtn = form.querySelector(".btn-next");
+
+    const batchStartTime = document.getElementById("batchStartTime");
+    const batchEndTime = document.getElementById("batchEndTime");
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    const duration = document.getElementById("duration");
+
+    function validateForm() {
+        let isValid = form.checkValidity();
+
+        // End time must be after start time
+        if (batchStartTime.value && batchEndTime.value && batchEndTime.value <= batchStartTime.value) {
+            batchEndTime.setCustomValidity("End time must be after start time.");
+            isValid = false;
+        } else {
+            batchEndTime.setCustomValidity("");
+        }
+
+        // End date must be after start date
+        if (startDate.value && endDate.value && endDate.value <= startDate.value) {
+            endDate.setCustomValidity("End date must be after start date.");
+            isValid = false;
+        } else {
+            endDate.setCustomValidity("");
+        }
+
+        // Duration must be >= 1
+        if (duration.value && duration.value < 1) {
+            duration.setCustomValidity("Duration must be at least 1 hour.");
+            isValid = false;
+        } else {
+            duration.setCustomValidity("");
+        }
+
+        // Add Bootstrap validation styling
+        form.classList.add("was-validated");
+
+        // Enable/Disable Next button
+        nextBtn.disabled = !isValid;
+    }
+
+    // Revalidate whenever inputs change
+    form.querySelectorAll("input, select").forEach(input => {
+        input.addEventListener("input", validateForm);
+        input.addEventListener("change", validateForm);
+    });
+});
+</script>
+
+
+            <!-- Staff Details Form -->
+<div class="form-container form-section" id="staff-details">
+    <h3 class="section-title"><i class="fas fa-users me-2"></i>Staff Details</h3>
+    <form id="staffForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="staffName" class="form-label required-field">Staff Name</label>
+                <input type="text" class="form-control" id="staffName" required>
+                <div class="invalid-feedback">Staff name is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="contactNo" class="form-label required-field">Contact Number</label>
+                <input type="tel" class="form-control" id="contactNo" pattern="^[0-9]{10}$" required>
+                <div class="invalid-feedback">Enter a valid 10-digit contact number.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="role" class="form-label required-field">Role</label>
+                <select class="form-select" id="role" required>
+                    <option value="">Select Role</option>
+                    <option value="admin">Administrator</option>
+                    <option value="manager">Manager</option>
+                    <option value="coach">Coach</option>
+                    <option value="support">Support Staff</option>
+                </select>
+                <div class="invalid-feedback">Please select a role.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="joiningDate" class="form-label required-field">Joining Date</label>
+                <input type="date" class="form-control" id="joiningDate" required>
+                <div class="invalid-feedback">Joining date is required.</div>
+            </div>
+        </div>
+
+        <!-- Conditional Coach Assignment Fields -->
+        <div id="coachAssignment" class="conditional-field d-none">
+            <h5 class="mt-4 mb-3">Coach Batch Assignment</h5>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="assignedBatch" class="form-label">Assign Batch</label>
+                    <select class="form-select" id="assignedBatch">
+                        <option value="">Select Batch</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="coachLevel" class="form-label">Coach Level</label>
+                    <select class="form-select" id="coachLevel">
+                        <option value="">Select Level</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="coachCategory" class="form-label">Category Specialization</label>
+                    <select class="form-select" id="coachCategory">
+                        <option value="">Select Category</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="individual">Individual</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="coachDuration" class="form-label">Session Duration (hours)</label>
+                    <input type="number" class="form-control" id="coachDuration" min="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="batch-details">
+                <i class="fas fa-arrow-left me-2"></i> Back to Batch Details
+            </button>
+            <div>
+                <button type="button" class="btn btn-info" id="addAnotherStaff">
+                    <i class="fas fa-plus me-2"></i> Add Another Staff
+                </button>
+                <button type="button" class="btn btn-primary btn-next" data-next="facility-details" disabled>
+                    Next: Facility Details <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const staffForm = document.getElementById("staffForm");
+    const nextBtn = staffForm.querySelector(".btn-next");
+    const role = document.getElementById("role");
+    const coachFields = document.getElementById("coachAssignment");
+
+    function validateStaffForm() {
+        let isValid = staffForm.checkValidity();
+
+        staffForm.classList.add("was-validated");
+        nextBtn.disabled = !isValid;
+    }
+
+    // Role-based display
+    role.addEventListener("change", function () {
+        if (role.value === "coach") {
+            coachFields.classList.remove("d-none");
+        } else {
+            coachFields.classList.add("d-none");
+        }
+        validateStaffForm();
+    });
+
+    staffForm.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("input", validateStaffForm);
+        el.addEventListener("change", validateStaffForm);
+    });
+});
+</script>
+
+
+
+<!-- Facility Details Form -->
+<!-- Facility Details Form -->
+<div class="form-container form-section" id="facility-details">
+    <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i> Facility Details</h3>
+   <form id="facilityForm" novalidate>
+    <input type="hidden" name="center_id" value="<?php echo $this->session->userdata('center_id'); ?>">
+
+    <div class="mb-3">
+        <label for="facilityName" class="form-label required-field">Facility Name</label>
+        <input type="text" class="form-control" id="facilityName" name="facility_name" required>
+        <div class="invalid-feedback">Facility name is required.</div>
+    </div>
+
+    <!-- Subtypes & Rent Section -->
+    <div class="mb-3">
+        <label class="form-label">Subtypes & Rent</label>
+        <div id="subTypeContainer">
+            <div class="row mb-2 subTypeRow">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    <div class="invalid-feedback">Rent must be 0 or more.</div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addSubTypeRow">
+            + Add Subtype
+        </button>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+        <button type="submit" class="btn btn-success" id="saveFacilityBtn" disabled>
+            <i class="fas fa-save me-2"></i> Save Facility
+        </button>
+    </div>
+</form>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const facilityForm = document.getElementById("facilityForm");
+    const saveBtn = document.getElementById("saveFacilityBtn");
+
+    function validateFacilityForm() {
+        let isValid = facilityForm.checkValidity();
+        facilityForm.classList.add("was-validated");
+        saveBtn.disabled = !isValid;
+    }
+
+    // Dynamic subtype rows
+    document.getElementById("addSubTypeRow").addEventListener("click", function () {
+        const container = document.getElementById("subTypeContainer");
+        const row = document.createElement("div");
+        row.className = "row mb-2 subTypeRow";
+        row.innerHTML = `
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                <div class="invalid-feedback">Rent must be 0 or more.</div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        `;
+        container.appendChild(row);
+        row.querySelectorAll("input").forEach(el => {
+            el.addEventListener("input", validateFacilityForm);
+        });
+        row.querySelector(".removeSubType").addEventListener("click", function () {
+            row.remove();
+            validateFacilityForm();
+        });
+    });
+
+    // Attach listeners
+    facilityForm.querySelectorAll("input").forEach(el => {
+        el.addEventListener("input", validateFacilityForm);
+    });
+});
+</script>
+
+
 
 
 
 
         <!-- Batch Modal -->
         <div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="batchLabel">Add Batch</h5>
@@ -544,7 +703,7 @@
 
         <!-- Facility Modal -->
         <div class="modal fade" id="facilityModal" tabindex="-1" aria-labelledby="facilityLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="facilityLabel">Add Facility</h5>
@@ -589,7 +748,7 @@
 
         <!-- Staff Modal -->
         <div class="modal fade" id="staffModal" tabindex="-1" aria-labelledby="staffLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-Centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staffLabel">Add Staff</h5>
@@ -633,7 +792,9 @@
 
        
     </div>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- Bootstrap bundle -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -643,11 +804,16 @@
             const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
             
             // Modal submit buttons
-            document.getElementById('batchSubmitBtn').addEventListener('click', function() {
-                // Add your batch submission logic here
-                batchModal.hide();
-                alert('Batch added successfully!');
-            });
+         document.addEventListener("DOMContentLoaded", function() {
+    const batchSubmitBtn = document.getElementById("batchSubmitBtn");
+    if (batchSubmitBtn) {
+        batchSubmitBtn.addEventListener("click", function() {
+            batchModal.hide();
+            alert("Batch added successfully!");
+        });
+    }
+});
+
             
             document.getElementById('facilitySubmitBtn').addEventListener('click', function() {
                 // Add your facility submission logic here
@@ -680,7 +846,7 @@
             const batchList = document.getElementById('batchList');
             const assignedBatchSelect = document.getElementById('assignedBatch');
             const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
-            const centreForm = document.getElementById('centreForm');
+            const CenterForm = document.getElementById('CenterForm');
             
             let currentStep = 1;
             const totalSteps = 4;
@@ -943,7 +1109,7 @@
                 if (!batchList) return;
                 
                 if (batches.length === 0) {
-                    batchList.innerHTML = '<p class="text-center">No batches added yet</p>';
+                    batchList.innerHTML = '<p class="text-Center">No batches added yet</p>';
                     return;
                 }
                 
@@ -952,7 +1118,7 @@
                     const card = document.createElement('div');
                     card.className = 'batch-card';
                     card.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-Center">
                             <div>
                                 <h6>${batch.name} (${batch.level})</h6>
                                 <p class="mb-1">Time: ${batch.startTime} - ${batch.endTime}</p>
@@ -993,7 +1159,7 @@
                 if (!staffList) return;
                 
                 if (staffMembers.length === 0) {
-                    staffList.innerHTML = '<tr><td colspan="6" class="text-center">No staff members added yet</td></tr>';
+                    staffList.innerHTML = '<tr><td colspan="6" class="text-Center">No staff members added yet</td></tr>';
                     return;
                 }
                 
@@ -1039,7 +1205,7 @@
                 if (!facilityList) return;
                 
                 if (facilities.length === 0) {
-                    facilityList.innerHTML = '<p class="text-center">No facilities added yet</p>';
+                    facilityList.innerHTML = '<p class="text-Center">No facilities added yet</p>';
                     return;
                 }
                 
@@ -1048,7 +1214,7 @@
                     const card = document.createElement('div');
                     card.className = 'facility-card';
                     card.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-Center">
                             <div>
                                 <h6>${facility.type.charAt(0).toUpperCase() + facility.type.slice(1)}${facility.subType ? ' - ' + facility.subType : ''}</h6>
                                 <p class="mb-1">Quantity: ${facility.quantity} | Condition: ${facility.condition}</p>
@@ -1258,12 +1424,13 @@
                     }
                     
                     // Collect all data
-                    const centreData = {
-                        name: document.getElementById('centreName').value,
-                        number: document.getElementById('centreNumber').value,
+                    const CenterData = {
+                        name: document.getElementById('CenterName').value,
+                        number: document.getElementById('CenterNumber').value,
                         address: document.getElementById('address').value,
                         openingTime: document.getElementById('openingTime').value,
                         closingTime: document.getElementById('closingTime').value,
+                        rentAmount: document.getElementById('center_rent').value || '0',
                         printDate: document.getElementById('printDate').value,
                         printPaidDate: document.getElementById('printPaidDate').value,
                         batches: batches,
@@ -1272,11 +1439,11 @@
                     };
                     
                     // Here you would typically send the data to the server
-                    console.log('Centre Data:', centreData);
-                    alert('Centre details saved successfully!');
+                    console.log('Center Data:', CenterData);
+                    alert('Center details saved successfully!');
                     
                     // Reset the form and data
-                    centreForm.reset();
+                    CenterForm.reset();
                     batchForm.reset();
                     staffForm.reset();
                     facilityForm.reset();
@@ -1296,15 +1463,13 @@
                     formSections.forEach(section => {
                         section.classList.remove('active');
                     });
-                    document.getElementById('centre-details').classList.add('active');
+                    document.getElementById('Center-details').classList.add('active');
                 });
             }
             
             // Initialize the progress
             updateProgress();
         });
-    </script>
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     const subTypeContainer = document.getElementById("subTypeContainer");
     const addSubTypeBtn = document.getElementById("addSubTypeRow");
@@ -1394,6 +1559,308 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+<script>
+    const baseUrl = "<?= base_url(); ?>";
+    let savedCenterId = null; // 🔑 Global variable to store center_id
+
+    // ---------------- Save Center ----------------
+    $("#CenterForm").on("submit", function (e) {
+        e.preventDefault();
+
+      const payload = {
+    name: $("#CenterName").val(),
+    address: $("#address").val(),
+    center_number: $("#CenterNumber").val(),
+    rent_amount: $("#center_rent").val() || "0",   // ✅ only this one
+    rent_paid_date: $("#printPaidDate").val(),
+    center_timing_from: $("#openingTime").val(),
+    center_timing_to: $("#closingTime").val(),
+    password: $("#password").val()
+};
+
+
+        $.ajax({
+            url: baseUrl + "Center/saveCenter",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        savedCenterId = res.center_id; // ✅ Store center_id globally
+                        alert("Center saved successfully! ID: " + savedCenterId);
+
+                        // Go to batch section
+                        $(".form-section").removeClass("active");
+                        $("#batch-details").addClass("active");
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    $(".btn-next[data-next='batch-details']").on("click", function () {
+        $("#CenterForm").trigger("submit");
+    });
+
+    // ---------------- Save Batch ----------------
+    $("#batchForm").on("submit", function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        const payload = {
+            center_id: savedCenterId, // ✅ use stored center_id
+            batch_name: $("#batchName").val(),
+            batch_level: $("#batchLevel").val(),
+            start_time: $("#batchStartTime").val(),
+            end_time: $("#batchEndTime").val(),
+            duration: $("#duration").val(),
+            start_date: $("#startDate").val(),
+            end_date: $("#endDate").val(),
+            category: $("#category").val()
+        };
+
+        $.ajax({
+            url: baseUrl + "Center/saveBatch",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Batch saved successfully! ID: " + res.batch_id);
+
+                        // ✅ Append to batch list table
+                        $("#batchList").append(
+                            `<p><strong>${payload.batch_name}</strong> (${payload.batch_level}) 
+                             - ${payload.start_date} to ${payload.end_date}</p>`
+                        );
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    // Trigger Save Batch on button click
+    $(".btn-next[data-next='staff-details']").on("click", function () {
+        $("#batchForm").trigger("submit");
+    });
+
+    $("#addAnotherBatch").on("click", function () {
+        $("#batchForm").trigger("submit");
+    });
+</script>
+<script>
+    // ---------------- Fetch batches for staff assignment ----------------
+    function loadBatchesForStaff() {
+        if (!savedCenterId) return;
+
+        $.ajax({
+            url: baseUrl + "Center/getBatchesByCenter/" + savedCenterId, // ✅ create this API
+            type: "GET",
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        $("#assignedBatch").empty().append('<option value="">Select Batch</option>');
+                        res.data.forEach(batch => {
+                            $("#assignedBatch").append(
+                                `<option value="${batch.id}">${batch.batch_name} (${batch.batch_level})</option>`
+                            );
+                        });
+                    } else {
+                        console.warn("No batches found for this center");
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error fetching batches:", xhr.responseText);
+            }
+        });
+    }
+
+    // ---------------- Show/hide coach assignment ----------------
+    $("#role").on("change", function () {
+        if ($(this).val() === "coach") {
+            $("#coachAssignment").show();
+            loadBatchesForStaff(); // Load batches dynamically
+        } else {
+            $("#coachAssignment").hide();
+        }
+    });
+
+    // ---------------- Save Staff ----------------
+    $("#staffForm").on("submit", function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        const payload = {
+            center_id: savedCenterId,
+staff_name: $("#staffName").val(),
+            contact_no: $("#contactNo").val(),
+            role: $("#role").val(),
+            joining_date: $("#joiningDate").val()
+        };
+
+        // If role is coach → include assignment details
+        if (payload.role === "coach") {
+            payload.assigned_batch = $("#assignedBatch").val();
+            payload.coach_level = $("#coachLevel").val();
+            payload.coach_category = $("#coachCategory").val();
+            payload.coach_duration = $("#coachDuration").val();
+        }
+
+        $.ajax({
+            url: baseUrl + "Center/saveStaff",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Staff saved successfully! ID: " + res.staff_id);
+
+                        // ✅ Append staff to the table
+                        $("#staffList").append(`
+                            <tr>
+                                <td>${payload.staff_name}</td>
+                                <td>${payload.contact_no}</td>
+                                <td>${payload.role}</td>
+                                <td>${payload.joining_date}</td>
+                                <td>${payload.assigned_batch ? payload.assigned_batch : "-"}</td>
+                                <td><button class="btn btn-sm btn-danger">Delete</button></td>
+                            </tr>
+                        `);
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    // ---------------- Trigger buttons ----------------
+    $("#addAnotherStaff").on("click", function () {
+        $("#staffForm").trigger("submit");
+    });
+
+    $(".btn-next[data-next='facility-details']").on("click", function () {
+        $("#staffForm").trigger("submit");
+    });
+</script>
+<script>
+$(document).ready(function () {
+    // Add Subtype Row
+    $("#addSubTypeRow").click(function () {
+        let newRow = `
+        <div class="row mb-2 subTypeRow">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        </div>`;
+        $("#subTypeContainer").append(newRow);
+    });
+
+    // Remove Subtype Row
+    $(document).on("click", ".removeSubType", function () {
+        $(this).closest(".subTypeRow").remove();
+    });
+
+    // Save Facility (AJAX)
+    $("#facilityForm").submit(function (e) {
+        e.preventDefault();
+
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        // ✅ Collect data using FormData (handles array subType[] & subRent[])
+        let formData = new FormData(this);
+        formData.append("center_id", savedCenterId); // inject global center_id
+
+        $.ajax({
+            url: baseUrl + "Center/saveFacility",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                try {
+                    let res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Facility saved successfully!");
+                        loadFacilities(); // Refresh list
+                        $("#facilityForm")[0].reset();
+                        $("#subTypeContainer").html(""); // Reset subtype rows
+                    } else {
+                        alert(res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error saving facility:", xhr.responseText);
+                alert("Something went wrong while saving facility!");
+            }
+        });
+    });
+
+    // Load Facilities
+    function loadFacilities() {
+        $.get(baseUrl + "Center/getFacilities/" + savedCenterId, function (data) {
+            $("#facilityList").html(data);
+        });
+    }
+
+    // Initial Load
+    loadFacilities();
+});
+</script>
+
 
 
 </body>
