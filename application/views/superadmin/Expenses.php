@@ -8,11 +8,17 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #f4f6f8;
             padding-top: 60px;
+        }
+
+        h4 {
+            color: white !important;
+            font-size: 1.2rem;
         }
 
         .content-wrapper {
@@ -23,6 +29,95 @@
 
         .content-wrapper.minimized {
             margin-left: 60px;
+        }
+
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: white !important;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 3px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .thumbs-up {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cross {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* 🔑 Mobile fix: remove sidebar margin */
+        @media (max-width: 767px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 10px;
+            }
+
+            h4 {
+                font-size: 1rem;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .d-flex.justify-content-between>div {
+                width: 100%;
+            }
+
+            .d-flex.justify-content-between button {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            /* Make modal content adjust better */
+            .modal-dialog {
+                margin: 10px;
+            }
+
+            .modal-body .row>div {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .modal-title {
+                font-size: 1rem;
+            }
         }
 
         .card {
@@ -47,13 +142,14 @@
 
         .table th {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: white;
+            color: white !important;
         }
 
         .action-btn {
             padding: 5px 10px;
             margin: 0 3px;
             border-radius: 4px;
+            cursor: pointer;
         }
 
         .thumbs-up {
@@ -90,7 +186,6 @@
                                 <?php foreach ($centers as $c): ?>
                                     <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                 <?php endforeach; ?>
-
                             </select>
                         </div>
                         <div>
@@ -114,6 +209,7 @@
                                     <th>Amount</th>
                                     <th>Category</th>
                                     <th>Description</th>
+                                    <th>Added By</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -128,6 +224,7 @@
                                             <td>₹ <?= number_format($exp->amount, 2) ?></td>
                                             <td><?= $exp->category ?></td>
                                             <td><?= $exp->description ?></td>
+                                            <td><?= $exp->added_by ?></td>
                                             <td>
                                                 <?php if ($exp->status == 'approved'): ?>
                                                     <span class="badge badge-success">Approved</span>
@@ -138,9 +235,19 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="<?= base_url('superadmin/Expenses/approve/' . $exp->id) ?>" class="action-btn thumbs-up"><i class="fas fa-check"></i></a>
-                                                <a href="<?= base_url('superadmin/Expenses/reject/' . $exp->id) ?>" class="action-btn cross"><i class="fas fa-times"></i></a>
+                                                <?php if ($exp->status === 'approved'): ?>
+                                                    <button class="action-btn approved" disabled style="color: #28a745;">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </button>
+
+                                                    <!-- <button class="action-btn cross" disabled><i class="fas fa-times"></i></button> -->
+                                                <?php else: ?>
+                                                    <a href="<?= base_url('Expense/approve/' . $exp->id) ?>" class="action-btn thumbs-up approve-btn"><i class="fas fa-check"></i></a>
+                                                    <a href="<?= base_url('Expense/reject/' . $exp->id) ?>" class="action-btn cross reject-btn"><i class="fas fa-times"></i></a>
+                                                <?php endif; ?>
                                             </td>
+
+
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
@@ -167,50 +274,62 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('Expense/add') ?>">
+                <form method="post" action="<?= base_url('Expense/add') ?>" id="addExpenseForm" novalidate>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="form-group">
+                            <input type="hidden" name="added_by" value="superadmin">
+
+                            <div class="form-group col-md-12">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
                                     <option value="">-- Select Center --</option>
                                     <?php foreach ($centers as $c): ?>
                                         <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                     <?php endforeach; ?>
-
                                 </select>
+                                <div class="invalid-feedback">Please select a center.</div>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label>Title</label>
                                 <input type="text" name="title" class="form-control" required>
+                                <div class="invalid-feedback">Title is required.</div>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label>Date</label>
                                 <input type="date" name="date" class="form-control" required>
+                                <div class="invalid-feedback">Please select a date.</div>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label>Amount (₹)</label>
-                                <input type="number" name="amount" class="form-control" required>
+                                <input type="number" name="amount" class="form-control" required min="1">
+                                <div class="invalid-feedback">Enter a valid amount.</div>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label>Category</label>
-                                <input type="text" name="category" class=" form-control" required>
-
+                                <input type="text" name="category" class="form-control" required>
+                                <div class="invalid-feedback">Category is required.</div>
                             </div>
+
                             <div class="col-12 mb-3">
                                 <label>Description</label>
-                                <textarea name="description" class="form-control" rows="3"></textarea>
+                                <textarea name="description" class="form-control" rows="3" required></textarea>
+                                <div class="invalid-feedback">Description is required.</div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger px-4">Save</button>
+                        <button type="submit" class="btn btn-danger px-4" id="saveBtn" disabled>Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 
     <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
@@ -223,7 +342,6 @@
                     </button>
                 </div>
                 <form method="post" action="<?= base_url('Expense/filter') ?>">
-
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -259,6 +377,155 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Confirm Approve
+        $(document).on('click', '.approve-btn', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to approve this expense!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Confirm Reject
+        $(document).on('click', '.reject-btn', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This expense will be rejected!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Add Expense Success Alert
+        // $('#addExpenseForm').on('submit', function() {
+        //     Swal.fire({
+        //         title: 'Success!',
+        //         text: 'Expense has been added successfully!',
+        //         icon: 'success',
+        //         timer: 2000,
+        //         showConfirmButton: false
+        //     });
+        // });
+    </script>
+    <script>
+        $(document).ready(function() {
+            const form = $('#addExpenseForm');
+            const saveBtn = $('#saveBtn');
+
+            function checkFormValidity() {
+                if (form[0].checkValidity()) {
+                    saveBtn.prop('disabled', false);
+                } else {
+                    saveBtn.prop('disabled', true);
+                }
+            }
+
+            // Check validity on input change
+            form.find('input, select, textarea').on('input change', function() {
+                checkFormValidity();
+            });
+
+            // Bootstrap validation styling
+            form.on('submit', function(event) {
+                if (!form[0].checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.addClass('was-validated');
+            });
+        });
+        // Before submitting, if added_by is superadmin, set status to approved
+        $('#addExpenseForm').on('submit', function() {
+            let addedBy = $('input[name="added_by"]').val();
+            if (addedBy === "superadmin") {
+                $('#statusField').val("approved");
+            }
+
+            Swal.fire({
+                title: 'Success!',
+                text: 'Expense has been added successfully!',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        });
+        // Confirm Approve
+        $(document).on('click', '.approve-btn', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            let btn = $(this); // reference to clicked button
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to approve this expense!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    btn.addClass("disabled").css("pointer-events", "none"); // disable approve
+                    btn.siblings(".reject-btn").addClass("disabled").css("pointer-events", "none"); // disable reject
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Confirm Reject
+        $(document).on('click', '.reject-btn', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            let btn = $(this);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This expense will be rejected!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    btn.addClass("disabled").css("pointer-events", "none"); // disable reject
+                    btn.siblings(".approve-btn").addClass("disabled").css("pointer-events", "none"); // disable approve
+                    window.location.href = url;
+                }
+            });
+        });
+        $(document).ready(function() {
+            // Set date input to only allow today's date
+            let today = new Date().toISOString().split('T')[0];
+            $('input[name="date"]').attr('min', today);
+            $('input[name="date"]').attr('max', today);
+
+            // Optional: auto-fill today's date
+            $('input[name="date"]').val(today);
+        });
+    </script>
+
 </body>
 
 </html>

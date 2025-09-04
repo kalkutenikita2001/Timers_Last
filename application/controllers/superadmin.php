@@ -93,8 +93,27 @@ class superadmin extends CI_Controller
 
 	public function EventAndNotice()
 	{
-		$this->load->view('superadmin/EventAndNotice');
+		$this->load->model('Event_model');
+		$data['events'] = $this->Event_model->get_all_events();
+		$this->load->view('superadmin/EventAndNotice', $data);
 	}
+
+	// Save new event (AJAX)
+	public function saveEvent()
+	{
+		$this->load->model('Event_model');
+		$data = array(
+			'name' => $this->input->post('name'),
+			'description' => $this->input->post('description'),
+			'date' => $this->input->post('date'),
+			'time' => $this->input->post('time'),
+			'fee' => $this->input->post('fee'),
+			'max_participants' => $this->input->post('maxParticipants')
+		);
+		$this->Event_model->insert_event($data);
+		echo json_encode(['status' => 'success']);
+	}
+
 
 	public function view_center_details()
 	{

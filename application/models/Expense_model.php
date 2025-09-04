@@ -13,6 +13,10 @@ class Expense_model extends CI_Model
         $this->db->order_by('expenses.date', 'DESC');
         return $this->db->get()->result();
     }
+    public function insert($data)
+    {
+        return $this->db->insert('expenses', $data);
+    }
 
 
     // Insert new expense
