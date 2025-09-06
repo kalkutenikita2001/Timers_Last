@@ -161,6 +161,14 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+    .btn-delete{
+       background: linear-gradient(135deg, #ff4d4f, #470000);
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
     .btn-edit {
       background: linear-gradient(135deg, #ff4d4f, #470000);
       color: white;
@@ -344,6 +352,8 @@
             <div class="text-right mt-4">
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
                 <i class="fas fa-plus"></i> Add Batch
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
+                <i class="fas fa-plus"></i>
               </button>
             </div>
           </div>
@@ -562,6 +572,7 @@
       </div>
     </div>
   </div>
+  
 
   <!-- Add Facility Modal -->
   <div class="modal fade" id="facilityModal" tabindex="-1" aria-labelledby="facilityLabel" aria-hidden="true">
@@ -967,6 +978,7 @@
               <button class="btn btn-edit" data-center-id="${center.id}">
                 <i class="fas fa-edit"></i> Edit
               </button>
+              
             </div>
           </div>`;
         $('#centerInfoCard').html(centerInfo);
@@ -994,6 +1006,9 @@
                       <button class="btn btn-edit" data-batch-id="${batch.id}">
                         <i class="fas fa-edit"></i> Edit
                       </button>
+                       <button class="btn btn-delete" data-batch-id="${batch.id}">
+                        <i class="fas fa-delete"></i> Delete
+                      </button>
                     </div>
                   </div>`;
                 $('#batchCards').append(batchCard);
@@ -1008,6 +1023,32 @@
           }
         });
       }
+     
+      //  Delete Button Click
+$(document).on("click", ".btn-delete", function () {
+    const batchId = $(this).data("batch-id");
+
+    if (confirm("Are you sure you want to delete this batch?")) {
+        $.ajax({
+            url: baseUrl + "Center/deleteBatch/" + batchId,  
+            method: "POST",   
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert("Batch deleted successfully!");
+                    loadBatchDetails(); 
+                } else {
+                    alert("Failed to delete batch: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Delete Error:", error);
+                alert("Error deleting batch. Please try again.");
+            }
+        });
+    }
+});
+
 
       // Load Facility Details
       function loadFacilityDetails() {
@@ -1028,6 +1069,9 @@
                 <button class="btn btn-edit" data-facility-id="${facility.id}">
                   <i class="fas fa-edit"></i> Edit
                 </button>
+                 <button class="btn btn-delete" data-batch-id="${batch.id}">
+                        <i class="fas fa-delete"></i> Delete
+                 </button>
               </div>
             </div>`;
           $('#facilityCards').append(facilityCard);
@@ -1053,6 +1097,9 @@
                 <button class="btn btn-edit" data-staff-id="${staffMember.id}">
                   <i class="fas fa-edit"></i> Edit
                 </button>
+                 <button class="btn btn-delete" data-batch-id="${batch.id}">
+                        <i class="fas fa-deletet"></i> Delete
+                      </button>
               </div>
             </div>`;
           $('#staffCards').append(staffCard);
