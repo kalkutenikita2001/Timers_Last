@@ -8,6 +8,7 @@ class EventAndNotice extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Event_model');
+        $this->load->model('Participant_model'); // load model
     }
 
     // Show all events
@@ -41,5 +42,17 @@ class EventAndNotice extends CI_Controller
     {
         $this->Event_model->delete_event($id);
         redirect('superadmin/EventAndNotice');
+    }
+
+    public function view_participants($event_id)
+    {
+        $data['event_id'] = $event_id;
+        $data['participants'] = $this->Participant_model->get_by_event($event_id);
+
+        $data['event_name'] = $this->Participant_model->get_event_name($event_id);
+
+
+        // load participants page
+        $this->load->view('superadmin/participants', $data);
     }
 }

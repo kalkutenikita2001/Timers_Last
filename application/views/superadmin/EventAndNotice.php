@@ -366,7 +366,7 @@
               <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                 <div class="card event-card w-100">
                   <div class="event-header fixed-title">
-                    <h3 class="event-title text-truncate"><?= $event->name ?></h3>
+                    <h3 class="event-title text-truncate" data-id="<?= $event->id ?>"><?= $event->name ?></h3>
                   </div>
                   <div class="card-body d-flex flex-column">
                     <div class="event-description fixed-description">
@@ -379,7 +379,9 @@
                   </div>
                   <div class="card-footer text-right mt-auto">
                     <button class="btn btn-primary participate-btn">Send Form</button>
-                    <button class="btn btn-primary participate-btn">View Participant</button>
+                    <button class="btn btn-primary participate-btn view-participants-btn"
+                      data-id="<?= $event->id ?>">View Participant</button>
+
                     <button class="btn btn-danger delete-btn" data-id="<?= $event->id ?>">Delete</button>
                   </div>
                 </div>
@@ -531,38 +533,7 @@
       });
 
       // Button click handlers
-      $(document).on('click', '.participate-btn', function() {
-        const eventTitle = $(this).closest('.event-card').find('.event-title').text();
-        const buttonText = $(this).text();
 
-        if (buttonText === 'Send Form') {
-          Swal.fire({
-            title: `Send Form?`,
-            text: `Do you want to send the form for "${eventTitle}"?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#ff4040',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, send it'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Form Sent!',
-                text: `Form for "${eventTitle}" has been sent.`,
-                confirmButtonColor: '#ff4040'
-              });
-            }
-          });
-        } else if (buttonText === 'View Participant') {
-          Swal.fire({
-            icon: 'info',
-            title: 'Participants',
-            text: `Showing participants for "${eventTitle}".`,
-            confirmButtonColor: '#ff4040'
-          });
-        }
-      });
 
       // JS Validation
       document.addEventListener("DOMContentLoaded", function() {
@@ -707,8 +678,46 @@
         });
       });
     </script>
+    <script>
+      $(document).on('click', '.participate-btn', function() {
+        const buttonText = $(this).text().trim();
+
+        if (buttonText === 'Send Form') {
+          // Get event ID from data-id attribute
+          const eventId = $(this).closest('.event-card').find('.event-title').data('id');
+          const shareLink = "<?= base_url('ParticipantController/form') ?>?event=" + eventId;
 
 
+          Swal.fire({
+            title: 'Share Form',
+            html: `<input type="text" id="shareLinkInput" class="swal2-input" value="${shareLink}" readonly>`,
+            icon: 'info',
+            confirmButtonColor: '#ff4040',
+            showCancelButton: true,
+            cancelButtonText: 'Copy Link',
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+              const copyText = document.getElementById("shareLinkInput");
+              copyText.select();
+              copyText.setSelectionRange(0, 99999);
+              document.execCommand("copy");
+              Swal.fire({
+                icon: 'success',
+                title: 'Copied!',
+                text: 'Link copied to clipboard.',
+                confirmButtonColor: '#ff4040'
+              });
+            }
+          });
+        }
+      });
+    </script>
+    <script>
+      $(document).on('click', '.view-participants-btn', function() {
+        let eventId = $(this).data('id');
+        window.location.href = "<?= base_url('superadmin/EventAndNotice/view_participants/') ?>" + eventId;
+      });
+    </script>
 </body>
 
 </html>
