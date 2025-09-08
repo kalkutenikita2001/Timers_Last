@@ -627,6 +627,28 @@ public function getFacilities()
 //         ->set_output(json_encode($response));
 // }
 
+//Batch data save in table
+     public function save_batch() {
+        $batch_timings = $this->input->post('batch_timing');
+        $start_dates   = $this->input->post('start_date');
+        $categories    = $this->input->post('batch_category');
+
+        if (!empty($batch_timings)) {
+            foreach ($batch_timings as $index => $timing) {
+                $data = [
+                    'batch_timing'   => $timing,
+                    'start_date'     => $start_dates[$index],
+                    'batch_category' => $categories[$index]
+                ];
+                $this->Batch_model->add_batch($data);
+            }
+            
+        // Redirect or send success response
+        $this->session->set_flashdata('success', 'Batches saved successfully!');
+        redirect('CenterManagement');  
+    }
+        }
+//delete batch
 public function deleteBatch($id)
 {
     $this->db->where('id', $id);
@@ -636,12 +658,46 @@ public function deleteBatch($id)
         echo json_encode(["status" => "error", "message" => "Failed to delete batch"]);
     }
 }
+public function add_batch() {
+    $this->load->model('Batch_model');
 
+    // For JSON requests, read raw input
+    $json = $this->input->raw_input_stream;
+    $data = json_decode($json, true);
 
+    // Validate if JSON decoded properly
+    if (json_last_error() !== JSON_ERROR_NONE || empty($data)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid JSON data']);
+        return;
+    }
 
+    // Optional: Map fields if mismatch (e.g., if model expects 'name' not 'batch_name')
+    $mapped_data = [
+        'center_id' => $data['center_id'],
+        'batch_name' => $data['batch_name'],      
+        'batch_level' => $data['batch_level'],  
+        'start_time' => $data['start_time'],
+        'end_time' => $data['end_time'],
+        'start_date' => $data['start_date'],
+        'end_date' => $data['end_date'],
+        'category' => $data['category']
+    ];
 
-
-
-
+    // Call model (use add_batch or saveBatch; ensure it returns ['status' => 'success/error'])
+    if ($this->Batch_model->add_batch($mapped_data)) {  // Or saveBatch($mapped_data)
+        echo json_encode(['status' => 'success', 'message' => 'Batch added successfully']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to add batch']);
+    }
 }
+   
+ }
+
+
+
+
+
+
+
+
 ?>

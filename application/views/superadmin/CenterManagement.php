@@ -500,7 +500,9 @@
           <span>3. Facility Management <i class="fas fa-arrow-right"></i></span>
           <span>4. Staff Management</span>
         </div>
-        <form id="batchForm">
+        <!-- <form id="batchForm"> -->
+          <form id="batchForm" method="post" action="<?= base_url('Center/save_batch') ?>">
+
           <div id="batchEntries">
             <div class="batch-entry">
               <div class="form-row">

@@ -45,5 +45,36 @@ class Batch_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->delete('batches');
     }
+
+
+ public function saveBatch($input) {
+       
+
+        $data = [
+            "center_id" => $input['center_id'],
+            "batch_name" => $input['batch_name'],
+            "batch_level" => $input['batch_level'] ?? null,
+            "start_time" => $input['start_time'] ?? null,
+            "end_time" => $input['end_time'] ?? null,
+            "start_date" => $input['start_date'] ?? null,
+            "end_date" => $input['end_date'] ?? null,
+            "duration" => $input['duration'] ?? null,
+            "category" => $input['category'] ?? null,
+            "created_at" => date("Y-m-d H:i:s")
+        ];
+        // print_r($data); die;
+
+        $this->db->insert("batches", $data);
+        return ["status"=>"success","message"=>"Batch saved"];
+    }
 }
+
+
+
+
+
+
+
+
+
 ?>

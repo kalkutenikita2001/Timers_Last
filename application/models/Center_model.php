@@ -228,6 +228,7 @@ public function getFacilities()
     return $this->db->get()->result();
 }
 
+
  public function get_all_centers() {
         $this->db->select('id, name, center_number, address, rent_amount, rent_paid_date, center_timing_from, center_timing_to, created_at');
         $query = $this->db->get('center_details');
@@ -258,7 +259,7 @@ public function getFacilities()
     public function getFacilitiesByCenter($center_id) {
         return $this->db->get_where('facilities', ['center_id' => $center_id])->result_array();
     }
-       // Update batch by ID
+       
    // Update batch by ID
 public function update_batch($id, $data) {
     if (empty($id) || empty($data)) {
@@ -326,5 +327,5 @@ public function delete_batch_by_id($id)
     $this->db->where('id', $id);
     return $this->db->delete('batches');
 }
+
 }
-?>
