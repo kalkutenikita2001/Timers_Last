@@ -172,10 +172,15 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h2><i class="fas fa-users mr-2"></i>Event Participants</h2>
-                        <p class="mb-0">
+                        <p class="mb-1">
                             Viewing participants for Event:
                             <strong><?= $event_name ? $event_name : 'Unknown Event' ?></strong>
                         </p>
+                        <p class="mb-0">
+                            Total Participants:
+                            <strong><?= count($participants) ?></strong>
+                        </p>
+
 
                     </div>
                     <div class="col-md-6 text-md-right">
