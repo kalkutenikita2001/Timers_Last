@@ -744,6 +744,7 @@
             <label for="editContactNo">Contact Number</label>
             <input type="text" id="editContactNo" name="contact_no" class="form-control" placeholder="Enter Contact Number" />
           </div>
+<<<<<<< HEAD
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -754,6 +755,18 @@
               <option value="coach">Coach</option>
               <option value="co-ordinator">Co-ordinator</option>
             </select>
+=======
+          <div class="form-group col-md-6 d-none" id="batchDropdownWrapper">
+  <label for="editAssignedBatch">Assign Batch <span class="text-danger">*</span></label>
+  <select id="editAssignedBatch" name="assigned_batch" class="form-control">
+    <option value="">Select Batch</option>
+  </select>
+</div>
+
+          <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="editStaffSubmitBtn" disabled>Save Changes</button>
+>>>>>>> 4e9f27e36cc1676cf8d83753e1ca3b2aefccbdbb
           </div>
           <div class="form-group col-md-6">
             <label for="editJoiningDate">Joining Date <span class="text-danger">*</span></label>
@@ -813,6 +826,57 @@
       </div>
     </div>
   </div>
+<script>
+  const baseUrl = "<?= base_url(); ?>";
+  $(document).ready(function () {
+  const centerId = 23; // your center ID
+  const batchWrapper = $("#batchDropdownWrapper");
+  const batchSelect = $("#editAssignedBatch");
+
+  // Handle Role Change
+  $("#editStaffRole").on("change", function () {
+    const role = $(this).val();
+
+    if (role === "coach") {
+      batchWrapper.removeClass("d-none");
+      batchSelect.prop("required", true);
+
+      // Fetch batches for this center
+      $.ajax({
+        url: baseUrl + "Center/getCenterById/" + centerId,
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+          if (response.status === "success" && response.batches.length > 0) {
+            batchSelect.empty().append('<option value="">Select Batch</option>');
+            response.batches.forEach(batch => {
+              batchSelect.append(
+                `<option value="${batch.id}">${batch.batch_name} (${batch.start_time} - ${batch.end_time})</option>`
+              );
+            });
+          } else {
+            batchSelect.empty().append('<option value="">No batches available</option>');
+          }
+        },
+        error: function () {
+          alert("Error fetching batches");
+        }
+      });
+
+    } else {
+      batchWrapper.addClass("d-none");
+      batchSelect.prop("required", false).val("");
+    }
+  });
+
+  // Enable save button when form is valid
+  $("#editStaffForm input, #editStaffForm select").on("input change", function () {
+    const form = $("#editStaffForm")[0];
+    $("#editStaffSubmitBtn").prop("disabled", !form.checkValidity());
+  });
+});
+
+</script>
 
   <!-- Edit Expense Modal -->
   <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseLabel" aria-hidden="true">
@@ -1193,100 +1257,102 @@
               text: 'Failed to load center data'
             });
           }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching center data'
-          });
-        }
+        });
       });
-    });
 
-    // Save Center Changes
-    $('#saveEditBtn').click(function() {
-      const form = $('#editCenterForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editCenterId').val(),
-        name: $('#editName').val(),
-        center_number: $('#editCenterNumber').val(),
-        address: $('#editAddress').val(),
-        rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
-        rent_paid_date: $('#editRentDate').val(),
-        center_timing_from: $('#editTimingFrom').val(),
-        center_timing_to: $('#editTimingTo').val()
-      };
-      $.ajax({
-        url: baseUrl + "Center/updateCenter",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Center updated successfully'
-            });
-            $('#editCenterModal').modal('hide');
-            fetchCenterData();
-          } else {
+      // Save Center Changes
+      $('#saveEditBtn').click(function() {
+        const form = $('#editCenterForm');
+        if (!form[0].checkValidity()) {
+          form[0].reportValidity();
+          return;
+        }
+        const payload = {
+          id: $('#editCenterId').val(),
+          name: $('#editName').val(),
+          center_number: $('#editCenterNumber').val(),
+          address: $('#editAddress').val(),
+          rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
+          rent_paid_date: $('#editRentDate').val(),
+          center_timing_from: $('#editTimingFrom').val(),
+          center_timing_to: $('#editTimingTo').val()
+        };
+        $.ajax({
+          url: baseUrl + "Center/updateCenter",
+          method: "POST",
+          data: JSON.stringify(payload),
+          contentType: "application/json",
+          success: function(response) {
+            if (response.status === "success") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Center updated successfully'
+              });
+              $('#editCenterModal').modal('hide');
+              fetchCenterData();
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update center'
+              });
+            }
+          },
+          error: function() {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Failed to update center'
+              text: 'Error updating center'
             });
           }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating center'
-          });
-        }
+        });
       });
-    });
 
-    // Edit Batch Handler
-    $(document).on('click', '[data-batch-id]', function() {
-      const batchId = $(this).data('batch-id');
-      $.ajax({
-        url: baseUrl + "Center/getBatchesByCenterId/" + batchId,
+      // Edit Batch Handler
+ $(document).on('click', '[data-batch-id]', function() {
+    const batchId = $(this).data('batch-id');
+    $.ajax({
+        url: baseUrl + "Center/getBatchById/" + batchId,
         method: "GET",
         dataType: "json",
         success: function(response) {
-          if (response && response.status === true && Array.isArray(response.data) && response.data.length > 0) {
-            const b = response.data[0];
-            $("#editBatchId").val(b.id || '');
-            $("#editBatchName").val(b.batch_name || '');
-            $("#editBatchTiming").val(b.start_time || '');
-            $("#editEndTime").val(b.end_time || '');
-            $("#editStartDate").val(b.start_date || '');
-            $("#editEndDate").val(b.end_date || '');
-            $("#editBatchCategory").val(b.category || '');
-            $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
-            validateForm('editBatchForm', 'editBatchSubmitBtn');
-            $("#editBatchModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.message || 'Failed to load batch data'
-            });
-          }
+            if (response.status === true && response.data) {
+                const b = response.data;
+                // Safely assign values, defaulting to empty string if null/undefined
+                $("#editBatchId").val(b.id || '');
+                $("#editBatchName").val(b.batch_name || '');
+                $("#editBatchTiming").val(b.start_time || '');
+                $("#editEndTime").val(b.end_time || '');
+                $("#editStartDate").val(b.start_date || '');
+                $("#editEndDate").val(b.end_date || '');
+                $("#editBatchCategory").val(b.category || '');
+                
+                // Normalize batch_level to match select options (e.g., 'intermediate' -> 'Intermediate')
+                const levelMap = {
+                    'beginner': 'Beginner',
+                    'intermediate': 'Intermediate',
+                    'advanced': 'Advanced'
+                };
+                $("#editBatchLevel").val(levelMap[(b.batch_level || '').toLowerCase()] || '');
+                
+                validateForm('editBatchForm', 'editBatchSubmitBtn');
+                $("#editBatchModal").modal("show");
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Failed to load batch data'
+                });
+            }
         },
-        error: function(xhr, status, error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching batch data: ' + (xhr.responseText || 'Unknown error')
-          });
+        error: function(jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error fetching batch data: ' + textStatus
+            });
+            console.error('AJAX Error:', textStatus, errorThrown);
         }
       });
     });

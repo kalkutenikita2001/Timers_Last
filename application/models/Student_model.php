@@ -16,7 +16,7 @@ class Student_model extends CI_Model {
     // }
 
     public function add_student($data) {
-    $this->db->insert('students', $data);
+    $this->db->insert('student_attendencelink', $data);
     return $this->db->insert_id();
 }
 

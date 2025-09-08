@@ -29,7 +29,7 @@ class Student_controller extends CI_Controller
         $token = bin2hex(random_bytes(16));
 
         $data = [
-            'name' => $this->input->post('name'),
+            'name' => $this->input->post('studentName'),
             'contact' => $this->input->post('contact'),
             'parent_name' => $this->input->post('parentName'),
             'emergency_contact' => $this->input->post('emergencyContact'),
@@ -42,7 +42,7 @@ class Student_controller extends CI_Controller
             'coordinator' => $this->input->post('coordinator'),
             'duration' => $this->input->post('duration'),
             'total_fees' => $this->input->post('totalFees'),
-            'amount_paid' => $this->input->post('amountPaid'),
+            'amount_paid' => $this->input->post('paidAmount'),
             'remaining_amount' => $this->input->post('totalFees') - $this->input->post('amountPaid'),
             'payment_method' => $this->input->post('paymentMethod'),
             'plan_expiry' => date('Y-m-d', strtotime('+1 month')),

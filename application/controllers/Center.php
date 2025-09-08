@@ -235,6 +235,30 @@ public function getFacilities()
         echo json_encode(["status" => "error", "message" => "No batches found"]);
     }
 }
+public function getFacilitiesByCenterId($centerId = null)
+{
+    if (!$centerId) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Center ID is required"
+        ]);
+        return;
+    }
+
+    $facilities = $this->Center_model->getFacilitiesByCenterId($centerId);
+
+    if (!empty($facilities)) {
+        echo json_encode([
+            "status" => "success",
+            "data"   => $facilities
+        ]);
+    } else {
+        echo json_encode([
+            "status" => "error",
+            "message" => "No facilities found for this center"
+        ]);
+    }
+}
 
      public function getAllcenters() {
         $centers = $this->Center_model->get_all_centers();
@@ -300,29 +324,33 @@ public function getFacilities()
         ]);
     }
 
-     public function getBatchesByCenterId($center_id = null) {
-        if (empty($center_id)) {
-            echo json_encode([
-                "status" => false,
-                "message" => "Center ID is required"
-            ]);
-            return;
-        }
-
-        $batches = $this->Center_model->getBatchesByCenter($center_id);
-
-        if (!empty($batches)) {
-            echo json_encode([
-                "status" => true,
-                "data" => $batches
-            ]);
-        } else {
-            echo json_encode([
-                "status" => false,
-                "message" => "No batches found for this center"
-            ]);
-        }
+ public function getBatchById($id = null) {
+    // Check if batch ID is provided
+    if (empty($id)) {
+        echo json_encode([
+            "status" => false,
+            "message" => "Batch ID is required"
+        ]);
+        return;
     }
+
+    // Query the database for a single batch by ID
+    $batch = $this->db->get_where('batches', ['id' => $id])->row_array();
+
+    if (!empty($batch)) {
+        echo json_encode([
+            "status" => true,
+            "data" => $batch
+        ]);
+    } else {
+        echo json_encode([
+            "status" => false,
+            "message" => "No batch found with this ID"
+        ]);
+    }
+}
+
+
    public function updateBatch($id = null) {
     header('Content-Type: application/json');
 
@@ -495,32 +523,36 @@ public function getFacilities()
     }
 
     // UPDATE facility by ID
-    public function updateFacilityById($id) {
-        $input = json_decode(file_get_contents("php://input"), true);
+public function updateFacilityById($id) {
+    $rawInput = file_get_contents("php://input");
+    $input = json_decode($rawInput, true);
 
-        if (!$input) {
-            echo json_encode(["status" => "error", "message" => "Invalid input"]);
-            return;
-        }
+    // Debug: Log input
+    error_log("Raw input: " . $rawInput);
+    error_log("Decoded input: " . print_r($input, true));
 
-        // Always update created_at if provided, else leave it as is
-        $data = [
-            "center_id"     => $input["center_id"] ?? null,
-            "facility_name" => $input["facility_name"] ?? null,
-            "subtype_name"  => $input["subtype_name"] ?? null,
-            "rent_amount"   => $input["rent_amount"] ?? 0,
-            "rent_date"     => $input["rent_date"] ?? null,
-            "created_at"    => $input["created_at"] ?? date("Y-m-d H:i:s"),
-        ];
-
-        $updated = $this->Center_model->updateFacilityById($id, $data);
-
-        if ($updated) {
-            echo json_encode(["status" => "success", "message" => "Facility updated successfully"]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Failed to update facility"]);
-        }
+    if (!$input) {
+        echo json_encode(["status" => "error", "message" => "Invalid input"]);
+        return;
     }
+
+    $data = [
+        "center_id"     => isset($input["center_id"]) ? $input["center_id"] : null,
+        "facility_name" => $input["facility_name"] ?? null,
+        "subtype_name"  => $input["subtype_name"] ?? null,
+        "rent_amount"   => $input["rent_amount"] ?? 0,
+        "rent_date"     => $input["rent_date"] ?? null,
+        "created_at"    => $input["created_at"] ?? date("Y-m-d H:i:s"),
+    ];
+
+    $updated = $this->Center_model->updateFacilityById($id, $data);
+
+    if ($updated) {
+        echo json_encode(["status" => "success", "message" => "Facility updated successfully"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Failed to update facility"]);
+    }
+}
 
     // DELETE facility by ID
     public function deleteFacilityById($id) {
