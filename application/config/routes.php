@@ -79,3 +79,6 @@ $route['center/save'] = 'center/save';
 $route['center/get_all'] = 'center/get_all';
 $route['center/get/(:num)'] = 'center/get/$1';
 $route['center/filter'] = 'center/filter';
+
+
+$route['superadmin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_participants/$1';

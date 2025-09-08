@@ -1,89 +1,147 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class superadmin extends CI_Controller {
+class superadmin extends CI_Controller
+{
 
-	public function dashboard(){
+	public function dashboard()
+	{
 		$this->load->view('superadmin/dashboard');
 	}
-	public function Sidebar(){
+	public function Sidebar()
+	{
 		$this->load->view('superadmin/Sidebar');
 	}
-	public function Navbar(){
+	public function Navbar()
+	{
 		$this->load->view('superadmin/Navbar');
 	}
-	public function Login(){
+	public function Login()
+	{
 		$this->load->view('superadmin/Login');
 	}
-public function SignUp(){
+	public function SignUp()
+	{
 		$this->load->view('superadmin/SignUp');
 	}
 
-		public function Superadmin_profile(){
+	public function Superadmin_profile()
+	{
 		$this->load->view('superadmin/Superadmin_profile');
 	}
-		public function CenterManagement(){
+	public function CenterManagement()
+	{
 		$this->load->view('superadmin/CenterManagement');
 	}
-			public function CenterManagement2(){
+	public function CenterManagement2()
+	{
 		$this->load->view('superadmin/CenterManagement2');
 	}
-			public function New_admission(){
+	public function New_admission()
+	{
 		$this->load->view('superadmin/New_admission');
 	}
-		public function receipt(){
+	public function receipt()
+	{
 		$this->load->view('superadmin/receipt');
 	}
-		public function Re_admission(){
+	public function Re_admission()
+	{
 		$this->load->view('superadmin/Re_admission');
 	}
-		public function Students(){
+	public function Students()
+	{
 		$this->load->view('superadmin/Students');
 	}
-	public function Renew_admission(){
+	public function Renew_admission()
+	{
 		$this->load->view('superadmin/Renew_admission');
 	}
-	public function View_Re_Admission(){
+	public function View_Re_Admission()
+	{
 		$this->load->view('superadmin/View_Re_Admission');
 	}
-	public function View_Renew_Students(){
+	public function View_Renew_Students()
+	{
 		$this->load->view('superadmin/View_Renew_Students');
 	}
-	public function EvenetList(){
+	public function EvenetList()
+	{
 		$this->load->view('superadmin/EvenetList');
 	}
-	public function Report(){
+	public function Report()
+	{
 		$this->load->view('superadmin/Report');
 	}
 
-	public function Finance(){
+	public function Finance()
+	{
 		$this->load->view('superadmin/Finance');
 	}
 
-	public function Expenses(){
-		$this->load->view('superadmin/Expenses');
+	public function Expenses()
+	{
+		$this->load->model('Expense_model');
+		$this->load->model('Center_model'); // ✅ Make sure this is loaded
+
+		$data['expenses'] = $this->Expense_model->get_all_expenses();
+		$data['centers']  = $this->Center_model->get_all_centers(); // ✅ Pass centers to view
+
+		$this->load->view('superadmin/Expenses', $data);
 	}
 
-	public function EventAndNotice(){
-		$this->load->view('superadmin/EventAndNotice');
+
+	public function EventAndNotice()
+	{
+		$this->load->model('Event_model');
+		$data['events'] = $this->Event_model->get_all_events();
+		$this->load->view('superadmin/EventAndNotice', $data);
 	}
-	
-   	public function view_center_details(){
+
+	// Save new event (AJAX)
+	public function saveEvent()
+	{
+		$this->load->model('Event_model');
+		$data = array(
+			'name' => $this->input->post('name'),
+			'description' => $this->input->post('description'),
+			'date' => $this->input->post('date'),
+			'time' => $this->input->post('time'),
+			'fee' => $this->input->post('fee'),
+			'max_participants' => $this->input->post('maxParticipants'),
+			'venue' => $this->input->post('venue')
+		);
+		$this->Event_model->insert_event($data);
+		echo json_encode(['status' => 'success']);
+	}
+
+
+	public function view_center_details()
+	{
 		$this->load->view('superadmin/view_center_details');
 	}
 
-	public function add_new_center(){
+	public function partcipant_form()
+	{
+
+		$this->load->view('superadmin/participant_form');
+	}
+
+	public function add_new_center()
+	{
 		$this->load->view('superadmin/add_new_center');
 	}
 
-	public function adminlogin(){
+	public function adminlogin()
+	{
 		$this->load->view('superadmin/adminlogin');
 	}
 
-	public function student_details($student_id = null) {
-        if (!$student_id) {
-            redirect('superadmin/Students');
-        }
-        $this->load->view('superadmin/student_details');
-    }
+	public function student_details($student_id = null)
+	{
+		if (!$student_id) {
+			redirect('superadmin/Students');
+		}
+		$this->load->view('superadmin/student_details');
+	}
 }
