@@ -128,6 +128,8 @@
                     <p><strong>Date:</strong> <span id="receiptDate"><?php echo date('Y-m-d'); ?></span></p>
                     <p><strong>Student Name:</strong> <span id="studentName"></span></p>
                     <p><strong>Contact:</strong> <span id="contact"></span></p>
+                                        <p><strong>Student Level:</strong> <span id="studentLevel"></span></p>
+
                     <p><strong>Parent Name:</strong> <span id="parentName"></span></p>
                     <p><strong>Emergency Contact:</strong> <span id="emergencyContact"></span></p>
                     <p><strong>Email:</strong> <span id="email"></span></p>
@@ -137,7 +139,6 @@
                 <div class="col-md-6">
                     <p><strong>Center:</strong> <span id="center"></span></p>
                     <p><strong>Batch:</strong> <span id="batch"></span></p>
-                    <p><strong>Category:</strong> <span id="category"></span></p>
                     <p><strong>Coach:</strong> <span id="coach"></span></p>
                     <p><strong>Coordinator:</strong> <span id="coordinator"></span></p>
                     <p><strong>Coordinator Phone:</strong> <span id="coordinatorPhone"></span></p>
@@ -159,7 +160,9 @@
                     <tr>
                         <td>Course Fees</td>
                         <td class="text-right" id="courseFees"></td>
+                      
                     </tr>
+                  
                 </tbody>
                 <tfoot>
                     <tr>
@@ -196,26 +199,34 @@
             const studentId = '<?php echo htmlspecialchars($student_id); ?>';
             if (studentId) {
                 $.ajax({
-                    url: '<?= base_url('admission/get_student/') ?>' + studentId,
+                    url: '<?= base_url('Admission/get_student/') ?>' + studentId,
                     method: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         console.log(data); // Debug: Log the response
-                        $('#receiptNo').text(data.student_id || 'N/A');
+                        $('#receiptNo').text(data.id || 'N/A');
                         $('#studentName').text(data.name || 'N/A');
                         $('#contact').text(data.contact || 'N/A');
                         $('#parentName').text(data.parent_name || 'N/A');
+                        
+                                                $('#studentLevel').text(data.student_progress_category || 'N/A');
+
                         $('#emergencyContact').text(data.emergency_contact || 'N/A');
                         $('#email').text(data.email || 'N/A');
                         $('#dob').text(data.dob || 'N/A');
                         $('#address').text(data.address || 'N/A');
                         $('#center').text(data.center_name || 'N/A');
-                        $('#batch').text(data.batch_timing ? `${data.batch_timing} (${data.batch_category})` : 'N/A');
+                        $('#batch').text(data.batch_name || 'N/A');
                         $('#category').text(data.category || 'N/A');
                         $('#coach').text(data.coach || 'N/A');
-                        $('#coordinator').text(data.coordinator || 'N/A');
+                        $('#coordinator').text(data.coordinator_name || 'N/A');
                         $('#coordinatorPhone').text(data.coordinator_phone || 'N/A');
-                        $('#batchTime').text(data.batch_time || 'N/A');
+$('#batchTime').text(
+    (data.batch_start_time && data.batch_end_time) 
+        ? `${data.batch_start_time} - ${data.batch_end_time}` 
+        : 'N/A'
+);
+
                         $('#duration').text(data.duration ? `${data.duration} hours` : 'N/A');
                         $('#joiningDate').text(data.joining_date || 'N/A');
                         $('#courseFees').text(data.course_fees ? `₹${parseFloat(data.course_fees).toLocaleString()}` : '₹0');
@@ -224,16 +235,14 @@
                         $('#remainingAmount').text(data.remaining_amount ? `₹${parseFloat(data.remaining_amount).toLocaleString()}` : '₹0');
                         $('#paymentMethod').text(data.payment_method || 'N/A');
 
-                        if (data.facilities && data.facilities.length > 0) {
-                            data.facilities.forEach(facility => {
-                                $('#feeDetails').append(`
-                                    <tr>
-                                        <td>${facility.name} (${facility.details})</td>
-                                        <td class="text-right">₹${parseFloat(facility.amount).toLocaleString()}</td>
-                                    </tr>
-                                `);
-                            });
-                        }
+                      if (data.additional_fees && parseFloat(data.additional_fees) > 0) {
+    $('#feeDetails').append(`
+        <tr>
+            <td>Facility Charges</td>
+            <td class="text-right">₹${parseFloat(data.additional_fees).toLocaleString()}</td>
+        </tr>
+    `);
+}
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX Error:', status, error); // Debug: Log the error

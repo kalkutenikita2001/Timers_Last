@@ -9,6 +9,7 @@
     <!-- Bootstrap & Font Awesome -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Custom Styles -->
     <style>
@@ -334,6 +335,16 @@
                                                 <input type="email" class="form-control" name="email" placeholder="Enter email address">
                                                 <div class="invalid-feedback">Please enter a valid email address.</div>
                                             </div>
+                                            <div class="mb-3">
+  <label for="studentLevel" class="form-label">Student Level</label>
+  <select class="form-select" id="studentLevel" name="category">
+    <option value="">-- Select Level --</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
+</div>
+
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-alt"></i> Date of Birth *</label>
                                                 <input type="date" class="form-control" name="dob" placeholder="Select date of birth" required max="<?php echo date('Y-m-d'); ?>">
@@ -369,54 +380,18 @@
                                                 </select>
                                                 <div class="invalid-feedback">Please select a batch.</div>
                                             </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <div id="batchTimeInfo" class="batch-time-container">
-                                                    <h6><i class="fas fa-clock"></i> Batch Schedule</h6>
-                                                    <div id="batchTimeSlots"></div>
-                                                    <div class="batch-days" id="batchDays"></div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-layer-group"></i> Category *</label>
-                                                <select class="form-control" id="categorySelect" name="category" required>
-                                                    <option value="">Select Category</option>
-                                                    <!-- Populated by JavaScript -->
-                                                </select>
-                                                <div class="invalid-feedback">Please select a category.</div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-chalkboard-teacher"></i> Coach *</label>
-                                                <input type="text" class="form-control" name="coach" placeholder="Enter coach name" required>
-                                                <div class="invalid-feedback">Please enter a valid coach name.</div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-user-tie"></i> Coordinator *</label>
-                                                <input type="text" class="form-control" name="coordinator" placeholder="Enter coordinator name" required>
-                                                <div class="invalid-feedback">Please enter a valid coordinator name.</div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-user-tie"></i> Coordinator Phone *</label>
-                                                <input type="text" class="form-control" name="coordinatorPhone" placeholder="Enter 10-digit phone number" pattern="[6-9][0-9]{9}" maxlength="10" required>
-                                                <div class="invalid-feedback">Please enter a valid 10-digit Indian phone number starting with 6, 7, 8, or 9.</div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-clock"></i> Batch Time *</label>
-                                                <input type="time" class="form-control" name="batchTime" placeholder="Select batch time" required>
-                                                <div class="invalid-feedback">Please select a valid batch time.</div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-clock"></i> Duration *</label>
-                                                <select class="form-control" name="duration" required>
-                                                    <option value="">Select Duration</option>
-                                                    <option value="1">1 hour</option>
-                                                    <option value="1.5">1.5 hours</option>
-                                                    <option value="2">2 hours</option>
-                                                    <option value="2.5">2.5 hours</option>
-                                                    <option value="3">3 hours</option>
-                                                    <option value="4">4 hours</option>
-                                                </select>
-                                                <div class="invalid-feedback">Please select a duration.</div>
-                                            </div>
+                                           <div class="col-md-12 col-sm-12">
+    <div id="batchTimeInfo" class="batch-time-container">
+        <h6><i class="fas fa-clock"></i> Batch Schedule</h6>
+
+        <!-- All batches will be displayed here -->
+        <div id="batchList"></div>
+    </div>
+</div>
+
+
+
+                                          
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <button type="button" class="btn btn-secondary back1"><i class="fas fa-arrow-left"></i> Back</button>
@@ -431,90 +406,46 @@
                                         </div>
                                         <div class="row" id="facilitiesContainer">
                                             <!-- Locker Facility -->
-                                            <div class="col-md-4 col-sm-12 mb-3">
-                                                <div class="facility-card" data-facility="locker">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input facility-checkbox" type="checkbox" id="lockerCheckbox" data-price="500">
-                                                        <label class="form-check-label" for="lockerCheckbox">
-                                                            <strong><i class="fas fa-lock"></i> Locker</strong>
-                                                        </label>
-                                                        <span class="facility-price float-right">₹500/semester</span>
-                                                    </div>
-                                                    <div class="facility-status mt-1" id="lockerStatus">Checking availability...</div>
-                                                    <div class="facility-details mt-2">
-                                                        <div class="form-group">
-                                                            <label>Locker Size</label>
-                                                            <select class="form-control locker-size">
-                                                                <option value="500">Small (₹500)</option>
-                                                                <option value="750">Medium (₹750)</option>
-                                                                <option value="1000">Large (₹1,000)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Locker Number</label>
-                                                            <select class="form-control locker-number" disabled>
-                                                                <option value="">Select Locker Number</option>
-                                                                <!-- Populated by JavaScript -->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="facility-toggle">Show details <i class="fas fa-chevron-down"></i></div>
-                                                </div>
+                                           <div class="row" id="facilityCards"></div>
+
+                                        </div>
+                                        <div class="card mt-4">
+                                            <div class="card-header">
+                                                <h5 class="mb-0"><i class="fas fa-receipt"></i> Facilities Summary</h5>
                                             </div>
-                                            <!-- Racket Facility -->
-                                            <div class="col-md-4 col-sm-12 mb-3">
-                                                <div class="facility-card" data-facility="racket">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input facility-checkbox" type="checkbox" id="racketCheckbox" data-price="300">
-                                                        <label class="form-check-label" for="racketCheckbox">
-                                                            <strong><i class="fas fa-table-tennis"></i> Racket Rental</strong>
-                                                        </label>
-                                                        <span class="facility-price float-right">₹300/month</span>
-                                                    </div>
-                                                    <div class="facility-details mt-2">
-                                                        <div class="form-group">
-                                                            <label>Racket Type</label>
-                                                            <select class="form-control racket-type">
-                                                                <option value="300">Standard (₹300)</option>
-                                                                <option value="500">Professional (₹500)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Duration (months)</label>
-                                                            <input type="number" class="form-control racket-months" value="1" min="1" placeholder="Enter months" required>
-                                                            <div class="invalid-feedback">Please enter a valid duration (at least 1 month).</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="facility-toggle">Show details <i class="fas fa-chevron-down"></i></div>
-                                                </div>
+                                            <div class="card-body">
+                                                <table class="table table-sm" id="facilitiesSummary">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Facility</th>
+                                                            <th>Details</th>
+                                                            <th class="text-right">Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Populated by JavaScript -->
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="2" class="text-right">Additional Facilities Total:</th>
+                                                            <th class="text-right" id="facilitiesTotal">₹0</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
                                             </div>
-                                            <!-- Shoe Facility -->
-                                            <div class="col-md-4 col-sm-12 mb-3">
-                                                <div class="facility-card" data-facility="shoe">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input facility-checkbox" type="checkbox" id="shoeCheckbox" data-price="200">
-                                                        <label class="form-check-label" for="shoeCheckbox">
-                                                            <strong><i class="fas fa-shoe-prints"></i> Shoe Rental</strong>
-                                                        </label>
-                                                        <span class="facility-price float-right">₹200/month</span>
-                                                    </div>
-                                                    <div class="facility-details mt-2">
-                                                        <div class="form-group">
-                                                            <label>Shoe Size</label>
-                                                            <select class="form-control shoe-size">
-                                                                <option value="200">Standard (₹200)</option>
-                                                                <option value="300">Premium (₹300)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Duration (months)</label>
-                                                            <input type="number" class="form-control shoe-months" value="1" min="1" placeholder="Enter months" required>
-                                                            <div class="invalid-feedback">Please enter a valid duration (at least 1 month).</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="facility-toggle">Show details <i class="fas fa-chevron-down"></i></div>
-                                                </div>
-                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <button type="button" class="btn btn-secondary back2"><i class="fas fa-arrow-left"></i> Back</button>
+                                            <button type="button" class="btn btn-primary next3">Next <i class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>     <div class="tab-pane fade" id="step3">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle"></i> Select additional facilities for the student. These will be added to the total fees.
+                                        </div>
+                                        <div class="row" id="facilitiesContainer">
+                                            <!-- Locker Facility -->
+                                           <div class="row" id="facilityCards"></div>
+
                                         </div>
                                         <div class="card mt-4">
                                             <div class="card-header">
@@ -737,251 +668,358 @@
             fetchCategories();
         });
     </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Fetch Centers, Batches, Categories, and Lockers -->
     <script>
-        function fetchCenters() {
-            $.ajax({
-                url: '<?= base_url('admission/get_centers') ?>',
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    const centerSelect = $('#centerSelect');
-                    centerSelect.empty().append('<option value="">Select Center</option>');
-                    data.forEach(center => {
-                        centerSelect.append(`<option value="${center.id}">${center.name}</option>`);
-                    });
-                },
-                error: function() {
-                    alert('Failed to fetch centers');
-                }
-            });
-        }
+    const baseUrl = "<?= base_url(); ?>"; // CI3 base URL
 
-        function fetchCategories() {
-            $.ajax({
-                url: '<?= base_url('admission/get_categories') ?>',
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    const categorySelect = $('#categorySelect');
-                    categorySelect.empty().append('<option value="">Select Category</option>');
-                    data.forEach(category => {
-                        categorySelect.append(`<option value="${category}">${category}</option>`);
-                    });
-                },
-                error: function() {
-                    alert('Failed to fetch categories');
-                }
-            });
-        }
+    // 🔹 Fetch centers
+    function fetchCenters() {
+        $.ajax({
+            url: baseUrl + "Admission/get_centers",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                const centerSelect = $('#centerSelect');
+                centerSelect.empty().append('<option value="">Select Center</option>');
+                data.forEach(center => {
+                    centerSelect.append(`<option value="${center.id}">${center.name}</option>`);
+                });
+            },
+            error: function() {
+                alert('Failed to fetch centers');
+            }
+        });
+    }
 
-        function fetchLockers(centerId) {
-            $.ajax({
-                url: '<?= base_url('admission/get_lockers/') ?>' + centerId,
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    const lockerSelect = $('.locker-number');
-                    const lockerStatus = $('#lockerStatus');
-                    lockerSelect.empty().append('<option value="">Select Locker Number</option>');
-                    if (data.length === 0) {
-                        lockerStatus.text('No lockers available');
-                        $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
-                    } else {
-                        lockerStatus.text(`${data.filter(l => !l.is_booked).length} lockers available`);
-                        $('#lockerCheckbox').prop('disabled', false).closest('.facility-card').removeClass('facility-unavailable');
-                        data.forEach(locker => {
-                            const status = locker.is_booked ? ' (Booked)' : ' (Available)';
-                            lockerSelect.append(`<option value="${locker.locker_no}" ${locker.is_booked ? 'disabled' : ''}>${locker.locker_no}${status}</option>`);
-                        });
-                    }
-                    lockerSelect.prop('disabled', false);
-                },
-                error: function() {
-                    $('#lockerStatus').text('Error fetching lockers');
+    // 🔹 Fetch categories
+    function fetchCategories() {
+        $.ajax({
+            url: baseUrl + "Admission/get_categories",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                const categorySelect = $('#categorySelect');
+                categorySelect.empty().append('<option value="">Select Category</option>');
+                data.forEach(category => {
+                    categorySelect.append(`<option value="${category}">${category}</option>`);
+                });
+            },
+            error: function() {
+                alert('Failed to fetch categories');
+            }
+        });
+    }
+
+    // 🔹 Fetch lockers
+    function fetchLockers(centerId) {
+        $.ajax({
+            url: baseUrl + "Center/getFacilities/" + centerId,
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                const lockerSelect = $('.locker-number');
+                const lockerStatus = $('#lockerStatus');
+                lockerSelect.empty().append('<option value="">Select Locker Number</option>');
+                if (data.length === 0) {
+                    lockerStatus.text('No lockers available');
                     $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
+                } else {
+                    lockerStatus.text(`${data.filter(l => !l.is_booked).length} lockers available`);
+                    $('#lockerCheckbox').prop('disabled', false).closest('.facility-card').removeClass('facility-unavailable');
+                    data.forEach(locker => {
+                        const status = locker.is_booked ? ' (Booked)' : ' (Available)';
+                        lockerSelect.append(`<option value="${locker.locker_no}" ${locker.is_booked ? 'disabled' : ''}>${locker.locker_no}${status}</option>`);
+                    });
                 }
-            });
-        }
+                lockerSelect.prop('disabled', false);
+            },
+            error: function() {
+                $('#lockerStatus').text('Error fetching lockers');
+                $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
+            }
+        });
+    }
 
-        $('#centerSelect').change(function() {
-            const centerId = $(this).val();
-            const batchSelect = $('#batchSelect');
-            const batchTimeInfo = $('#batchTimeInfo');
-            batchSelect.empty().append('<option value="">Select Batch</option>');
-            batchTimeInfo.hide();
-            $('#lockerStatus').text('Select a center to check locker availability');
-            $('.locker-number').prop('disabled', true);
+    // 🔹 Fetch batches (and update batch select)
+    function fetchBatches(centerId) {
+        const batchSelect = $('#batchSelect');
+        const batchTimeInfo = $('#batchTimeInfo');
+        const batchList = $('#batchList');
 
-            if (centerId) {
-                $.ajax({
-                    url: '<?= base_url('admission/get_batches/') ?>' + centerId,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
+        batchSelect.empty().append('<option value="">Select Batch</option>');
+        batchTimeInfo.hide();
+        batchList.empty();
+
+        if (centerId) {
+            $.ajax({
+                url: baseUrl + "Admission/get_batches/" + centerId,
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.length > 0) {
                         data.forEach(batch => {
-                            batchSelect.append(`<option value="${batch.id}" data-timing="${batch.timing}" data-days="${batch.days}">${batch.timing} (${batch.category})</option>`);
+                            // Add to dropdown
+                            batchSelect.append(`
+                                <option value="${batch.id}" 
+                                    data-batchName="${batch.batch_name}" 
+                                    data-timing="${batch.start_time}-${batch.end_time}" 
+                                    data-startDate="${batch.start_date}"
+                                    data-category="${batch.category}"
+                                    data-days="${batch.days}">
+                                    (${batch.batch_name}) - (${batch.start_time}-${batch.end_time}) (${batch.category})
+                                </option>
+                            `);
+
+                            // Add to detailed batch schedule list
+                            batchList.append(`
+                                <div class="single-batch card p-2 mb-2 shadow-sm">
+                                    <h6 id="batchName_${batch.id}"><strong>${batch.batch_name}</strong></h6>
+                                    <p id="batchTime_${batch.id}">
+                                        <i class="fas fa-clock"></i> ${batch.start_time} - ${batch.end_time}
+                                    </p>
+                                    <p id="batchDate_${batch.id}">
+                                        <i class="fas fa-calendar"></i> Start Date: ${batch.start_date}
+                                    </p>
+                                    <p id="batchCategory_${batch.id}">
+                                        <i class="fas fa-tag"></i> Category: ${batch.category}
+                                    </p>
+                                  
+                                </div>
+                            `);
                         });
                         fetchLockers(centerId);
-                    },
-                    error: function() {
-                        alert('Failed to fetch batches');
+                    } else {
+                        batchSelect.append('<option disabled>No batches available</option>');
+                        batchList.html("<p>No batch schedule available.</p>");
                     }
-                });
-            }
-        });
+                },
+                error: function() {
+                    alert('Failed to fetch batches');
+                }
+            });
+        }
+    }
 
-        $('#batchSelect').change(function() {
-            const batchTimeInfo = $('#batchTimeInfo');
-            const batchTimeSlots = $('#batchTimeSlots');
-            const batchDays = $('#batchDays');
-            batchTimeSlots.empty();
-            batchDays.empty();
-            batchTimeInfo.hide();
+    // 🔹 Event: Center select change
+    $('#centerSelect').change(function() {
+        const centerId = $(this).val();
+        fetchBatches(centerId);
+         loadFacilities(centerId); 
+    });
 
-            const selectedOption = $(this).find('option:selected');
-            const timing = selectedOption.data('timing');
-            const days = selectedOption.data('days') ? selectedOption.data('days').split(',') : [];
+    // 🔹 Event: Batch select change
+    $('#batchSelect').change(function() {
+        const batchTimeInfo = $('#batchTimeInfo');
+        const batchTimeSlots = $('#batchTimeSlots');
+        const batchDays = $('#batchDays');
 
-            if (timing) {
-                batchTimeSlots.append(`
-                    <div class="time-slot">
-                        <i class="fas fa-play-circle text-success"></i>
-                        <span>Timing: ${timing}</span>
+        batchTimeSlots.empty();
+        batchDays.empty();
+        batchTimeInfo.hide();
+
+        const selectedOption = $(this).find('option:selected');
+        const timing = selectedOption.data('timing');
+        const startDate = selectedOption.data('startdate');
+        const category = selectedOption.data('category');
+        const days = selectedOption.data('days') ? selectedOption.data('days').split(',') : [];
+
+        if (timing) {
+            batchTimeSlots.append(`
+                <div class="time-slot">
+                    <i class="fas fa-clock text-success"></i>
+                    <span>Timing: ${timing}</span><br>
+                    <i class="fas fa-calendar"></i> Start Date: ${startDate}<br>
+                    <i class="fas fa-tag"></i> Category: ${category}
+                </div>
+            `);
+
+            batchDays.append('<strong>Days:</strong><br>');
+            days.forEach(day => {
+                batchDays.append(`
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input day-checkbox" type="checkbox" checked disabled>
+                        <label class="form-check-label">${day}</label>
                     </div>
                 `);
-                batchDays.append('<strong>Days:</strong><br>');
-                days.forEach(day => {
-                    batchDays.append(`
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input day-checkbox" type="checkbox" checked disabled>
-                            <label class="form-check-label">${day}</label>
-                        </div>
-                    `);
-                });
-                batchTimeInfo.show();
-            }
+            });
+            batchTimeInfo.show();
+        }
+    });
+
+    // 🔹 Init calls
+    $(document).ready(function() {
+        fetchCenters();
+        fetchCategories();
+    });
+
+    function loadFacilities(centerId) {
+    console.log("Loading facilities for center:", centerId); // ✅ Debug
+    $("#facilityCards").empty();
+  $.ajax({
+    url: baseUrl + "center/getFacilitiesByCenterId/" + centerId,
+    method: "GET",
+    dataType: "json",
+    success: function (response) {
+      if (response.status === "success" && response.data.length > 0) {
+                    console.log("Facilities API response:", response); // ✅ Debug
+
+        // Group facilities by name
+        const grouped = {};
+        response.data.forEach(fac => {
+          if (!grouped[fac.facility_name]) {
+            grouped[fac.facility_name] = [];
+          }
+          grouped[fac.facility_name].push(fac);
         });
-    </script>
 
-    <!-- Facilities Management -->
-    <script>
-        $(document).ready(function() {
-            $('.facility-toggle').click(function() {
-                const details = $(this).siblings('.facility-details');
-                const icon = $(this).find('i');
-                details.slideToggle();
-                if (icon.hasClass('fa-chevron-down')) {
-                    icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                    $(this).html('Hide details <i class="fas fa-chevron-up"></i>');
-                } else {
-                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                    $(this).html('Show details <i class="fas fa-chevron-down"></i>');
-                }
-            });
+        // Build facility cards
+        Object.keys(grouped).forEach(facilityName => {
+          const options = grouped[facilityName]
+            .map(fac => `
+              <option value="${fac.rent_amount}" 
+                      data-id="${fac.id}" 
+                      data-date="${fac.rent_date || '-'}">
+                ${fac.subtype_name || "N/A"} (₹${fac.rent_amount})
+              </option>`)
+            .join("");
 
-            $('.facility-card').click(function(e) {
-                if (!$(e.target).is('input, select, option, .form-control') && !$(this).hasClass('facility-unavailable')) {
-                    const checkbox = $(this).find('.facility-checkbox');
-                    checkbox.prop('checked', !checkbox.prop('checked'));
-                    if (checkbox.prop('checked')) {
-                        $(this).addClass('selected');
-                        $(this).find('.facility-details').slideDown();
-                        $(this).find('.facility-toggle').html('Hide details <i class="fas fa-chevron-up"></i>');
-                    } else {
-                        $(this).removeClass('selected');
-                    }
-                    updateFacilitiesSummary();
-                    calculateTotalFees();
-                }
-            });
+          const facilityId = "facilityCheckbox_" + facilityName.replace(/\s+/g, '_');
 
-            $('.facility-checkbox, .locker-size, .locker-number, .racket-type, .racket-months, .shoe-size, .shoe-months').change(function() {
-                updateFacilitiesSummary();
-                calculateTotalFees();
-            });
+          const facilityCard = `
+            <div class="col-md-4 col-sm-12 mb-3">
+              <div class="facility-card" data-facility="${facilityName}">
+                <div class="form-check">
+                  <input class="form-check-input facility-checkbox" type="checkbox" id="${facilityId}">
+                  <label class="form-check-label" for="${facilityId}">
+                    <strong><i class="fas fa-building"></i> ${facilityName}</strong>
+                  </label>
+                </div>
+                <div class="facility-details mt-2" style="display:none;">
+                  <div class="form-group">
+                    <label>Select Type</label>
+                    <select class="form-control facility-subtype" disabled>
+                      <option value="">-- Select --</option>
+                      ${options}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Rent Date</label>
+                    <input type="text" class="form-control rent-date" readonly>
+                  </div>
+                </div>
+                <div class="facility-toggle">Show details <i class="fas fa-chevron-down"></i></div>
+              </div>
+            </div>
+          `;
 
-            $('#paidAmount').on('input', function() {
-                calculateRemainingAmount();
-            });
-
-            $('#courseFees').on('input', function() {
-                calculateTotalFees();
-            });
-
-            updateFacilitiesSummary();
-
-            function updateFacilitiesSummary() {
-                const summaryBody = $('#facilitiesSummary tbody');
-                summaryBody.empty();
-                let total = 0;
-
-                $('.facility-checkbox:checked').each(function() {
-                    const facilityCard = $(this).closest('.facility-card');
-                    const facilityType = facilityCard.data('facility');
-                    let facilityName = '';
-                    let details = '';
-                    let amount = 0;
-
-                    switch(facilityType) {
-                        case 'locker':
-                            facilityName = 'Locker';
-                            const lockerSize = facilityCard.find('.locker-size option:selected').text();
-                            const lockerNumber = facilityCard.find('.locker-number option:selected').val() || 'Not selected';
-                            const lockerPrice = parseFloat(facilityCard.find('.locker-size').val());
-                            amount = lockerPrice;
-                            details = `${lockerSize}, Locker No: ${lockerNumber}`;
-                            break;
-                        case 'racket':
-                            facilityName = 'Racket Rental';
-                            const racketType = facilityCard.find('.racket-type option:selected').text();
-                            const months = facilityCard.find('.racket-months').val();
-                            const racketPrice = parseFloat(facilityCard.find('.racket-type').val());
-                            amount = racketPrice * months;
-                            details = `${racketType} for ${months} month(s)`;
-                            break;
-                        case 'shoe':
-                            facilityName = 'Shoe Rental';
-                            const shoeSize = facilityCard.find('.shoe-size option:selected').text();
-                            const shoeMonths = facilityCard.find('.shoe-months').val();
-                            const shoePrice = parseFloat(facilityCard.find('.shoe-size').val());
-                            amount = shoePrice * shoeMonths;
-                            details = `${shoeSize} for ${shoeMonths} month(s)`;
-                            break;
-                    }
-
-                    total += amount;
-
-                    summaryBody.append(`
-                        <tr>
-                            <td>${facilityName}</td>
-                            <td>${details}</td>
-                            <td class="text-right">₹${amount.toLocaleString()}</td>
-                        </tr>
-                    `);
-                });
-
-                $('#facilitiesTotal').text('₹' + total.toLocaleString());
-                $('#additionalFees').val(total);
-            }
-
-            function calculateTotalFees() {
-                const courseFees = parseFloat($('#courseFees').val()) || 0;
-                const additionalFees = parseFloat($('#additionalFees').val()) || 0;
-                const totalFees = courseFees + additionalFees;
-                $('#totalFees').val(totalFees);
-                calculateRemainingAmount();
-            }
-
-            function calculateRemainingAmount() {
-                const totalFees = parseFloat($('#totalFees').val()) || 0;
-                const paidAmount = parseFloat($('#paidAmount').val()) || 0;
-                const remainingAmount = totalFees - paidAmount;
-                $('#remainingAmount').val(remainingAmount);
-            }
+          $("#facilityCards").append(facilityCard);
         });
-    </script>
+
+        bindFacilityEvents();
+      } else {
+        $("#facilityCards").html(`<p class="text-danger">No facilities found.</p>`);
+      }
+    }
+  });
+}
+
+function bindFacilityEvents() {
+  // Toggle details
+  $('.facility-toggle').off().on('click', function () {
+    const details = $(this).siblings('.facility-details');
+    details.slideToggle();
+    const icon = $(this).find('i');
+    if (icon.hasClass('fa-chevron-down')) {
+      $(this).html('Hide details <i class="fas fa-chevron-up"></i>');
+    } else {
+      $(this).html('Show details <i class="fas fa-chevron-down"></i>');
+    }
+  });
+
+  // Enable dropdown when checkbox selected
+  $('.facility-checkbox').off().on('change', function () {
+    const facilityCard = $(this).closest('.facility-card');
+    const subtypeSelect = facilityCard.find('.facility-subtype');
+    if ($(this).is(':checked')) {
+      subtypeSelect.prop('disabled', false);
+      facilityCard.addClass('selected');
+    } else {
+      subtypeSelect.prop('disabled', true).val("");
+      facilityCard.removeClass('selected');
+    }
+    updateFacilitiesSummary();
+    calculateTotalFees();
+  });
+
+  // Update summary when subtype changes
+  $('.facility-subtype').off().on('change', function () {
+    const facilityCard = $(this).closest('.facility-card');
+    const rentDate = $(this).find(':selected').data('date') || '-';
+    facilityCard.find('.rent-date').val(rentDate);
+    updateFacilitiesSummary();
+    calculateTotalFees();
+  });
+}
+
+function updateFacilitiesSummary() {
+  const summaryBody = $('#facilitiesSummary tbody');
+  summaryBody.empty();
+  let total = 0;
+
+  $('.facility-checkbox:checked').each(function () {
+    const facilityCard = $(this).closest('.facility-card');
+    const facilityName = facilityCard.data('facility');
+    const subtypeSelect = facilityCard.find('.facility-subtype');
+    const selectedOption = subtypeSelect.find('option:selected');
+    const subtype = selectedOption.text();
+    const rentAmount = parseFloat(selectedOption.val()) || 0;
+
+    if (subtype && rentAmount > 0) {
+      total += rentAmount;
+      summaryBody.append(`
+        <tr>
+          <td>${facilityName}</td>
+          <td>${subtype}</td>
+          <td class="text-right">₹${rentAmount.toLocaleString()}</td>
+        </tr>
+      `);
+    }
+  });
+
+  $('#facilitiesTotal').text('₹' + total.toLocaleString());
+  $('#additionalFees').val(total);
+}
+
+function calculateTotalFees() {
+  const courseFees = parseFloat($('#courseFees').val()) || 0;
+  const additionalFees = parseFloat($('#additionalFees').val()) || 0;
+  const totalFees = courseFees + additionalFees;
+  $('#totalFees').val(totalFees);
+  calculateRemainingAmount();
+}
+
+function calculateRemainingAmount() {
+  const totalFees = parseFloat($('#totalFees').val()) || 0;
+  const paidAmount = parseFloat($('#paidAmount').val()) || 0;
+  const remainingAmount = totalFees - paidAmount;
+  $('#remainingAmount').val(remainingAmount);
+}
+
+$(document).ready(function () {
+  // Hook up course fees & paid amount listeners
+  $('#paidAmount').on('input', calculateRemainingAmount);
+  $('#courseFees').on('input', calculateTotalFees);
+
+  // Initial summary update
+  updateFacilitiesSummary();
+});
+
+</script>
+
+
+
 
     <!-- Form Submission -->
     <script>
@@ -1037,23 +1075,45 @@
                 });
             });
 
+          $.ajax({
+    url: '<?= base_url('Admission/save') ?>',
+    method: 'POST',
+    data: JSON.stringify(formData),
+    contentType: 'application/json',
+    success: function(response) {
+        if (response.success) {
+            // First admission saved
+            // Now call add_student API with same formData
             $.ajax({
-                url: '<?= base_url('admission/save') ?>',
+                url: '<?= base_url('Student_controller/add_student') ?>',
                 method: 'POST',
-                data: JSON.stringify(formData),
-                contentType: 'application/json',
-                success: function(response) {
-                    if (response.success) {
+                data: formData, // send as normal form-data
+                success: function(studentResponse) {
+                    if (studentResponse.status === 'success') {
+                        // Redirect to receipt page after student added
                         window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
                     } else {
-                        alert('Failed to save admission: ' + response.message);
+                        alert('Student API failed: ' + studentResponse.message);
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert('Error submitting form: ' + error);
+                    alert('Error calling student API: ' + error);
                 }
             });
+
+        } else {
+            alert('Failed to save admission: ' + response.message);
+        }
+    },
+    error: function(xhr, status, error) {
+        alert('Error submitting form: ' + error);
+    }
+});
+
         });
+
+
+        
     </script>
 
 </body>

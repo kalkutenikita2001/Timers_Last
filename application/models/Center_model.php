@@ -67,7 +67,7 @@ class Center_model extends CI_Model {
 
 
     public function get_center($id) {
-        $center = $this->db->get_where('centers', ['id' => $id])->row_array();
+        $center = $this->db->get_where('center_details', ['id' => $id])->row_array();
         $batches = $this->db->get_where('batches', ['center_id' => $id])->result_array();
         $facilities = $this->db->get_where('facilities', ['center_id' => $id])->result_array();
         $staff = $this->db->get_where('staff', ['center_id' => $id])->result_array();
@@ -203,6 +203,12 @@ class Center_model extends CI_Model {
         $query = $this->db->get_where($table, $conditions);
         return $query->result_array();
     }
+public function getFacilitiesByCenterId($centerId)
+{
+    return $this->db->where("center_id", $centerId)
+                    ->get("facilities")
+                    ->result_array();
+}
 
     // Optional: get single row
     public function getRow($table, $conditions = []) {
@@ -271,7 +277,7 @@ public function update_batch($id, $data) {
 
 // Get batch by ID
 public function get_batch($id) {
-    return $this->db->where('id', $id)
+    return $this->db->where('center_id', $id)
                     ->get('batches')            // direct table name
                     ->row_array();
 }
@@ -290,11 +296,11 @@ public function getCenterById($id) {
     }
 
     // Update facility by ID
-    public function updateFacilityById($id, $data) {
-        $data['updated_at'] = date('Y-m-d H:i:s');
-        $this->db->where('id', $id);
-        return $this->db->update('facilities', $data);
-    }
+   public function updateFacilityById($id, $data) {
+    $data['updated_at'] = date('Y-m-d H:i:s');
+    $this->db->where('id', $id);
+    return $this->db->update('facilities', $data);
+}
 
     // Delete facility by ID
     public function deleteFacilityById($id) {

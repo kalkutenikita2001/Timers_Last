@@ -5,17 +5,15 @@ class Admission_model extends CI_Model {
     }
 
     public function get_all_centers() {
-        return $this->db->get('centers')->result_array();
+        return $this->db->get('center_details')->result_array();
     }
 
     public function get_batches_by_center($center_id) {
-        $this->db->select('id, timing, category, start_date');
+        $this->db->select('id,batch_name, start_time,end_time, category, start_date');
         $this->db->where('center_id', $center_id);
         $batches = $this->db->get('batches')->result_array();
         
-        foreach ($batches as &$batch) {
-            $batch['days'] = $this->get_batch_days($batch['id']);
-        }
+     
         
         return $batches;
     }
@@ -46,16 +44,17 @@ class Admission_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-  public function get_student_by_id($student_id) {
+  public function get_student_by_idold($student_id) {
     if (!is_numeric($student_id) || $student_id <= 0) {
         log_message('error', 'Invalid student ID provided: ' . $student_id);
         return null;
     }
-    $this->db->select('s.*, c.name as center_name, b.timing as batch_timing, b.category as batch_category');
+    $this->db->select('s.*, c.name as center_name, b.start_time as batch_timing, b.category as batch_category');
     $this->db->from('students s');
-    $this->db->join('centers c', 's.center_id = c.id', 'left');
+    $this->db->join('center_details c', 's.center_id = c.id', 'left');
     $this->db->join('batches b', 's.batch_id = b.id', 'left');
     $this->db->where('s.id', $student_id);
+
     $student = $this->db->get()->row_array();
 
     if ($student) {
@@ -70,10 +69,60 @@ class Admission_model extends CI_Model {
     return $student;
 }
 
-    private function get_batch_days($batch_id) {
-        // Placeholder: Replace with actual logic to fetch days
-        return 'Monday,Wednesday,Friday';
+   public function get_student_by_id($student_id) {
+    if (!is_numeric($student_id) || $student_id <= 0) {
+        log_message('error', 'Invalid student ID provided: ' . $student_id);
+        return null;
     }
+
+    // Get student details with center and batch
+$this->db->select('
+    s.*, 
+    c.name as center_name, 
+    b.start_time as batch_start_time, 
+    b.end_time as batch_end_time, 
+    b.category as batch_category,
+    b.batch_name as batch_name,
+    b.duration as duration,
+');
+$this->db->from('students s');
+$this->db->join('center_details c', 's.center_id = c.id', 'left');
+$this->db->join('batches b', 's.batch_id = b.id', 'left');
+   
+    $this->db->where('s.id', $student_id);
+    
+    $student = $this->db->get()->row_array();
+
+    if ($student) {
+        // Get student facilities
+        $this->db->select('facility_name as name, details, amount');
+        $this->db->from('student_facilities');
+        $this->db->where('student_id', $student_id);
+        $student['facilities'] = $this->db->get()->result_array();
+
+        // Get only the coach for this student's center
+        $this->db->select('staff_name');
+        $this->db->from('staff');
+        $this->db->where('center_id', $student['center_id']);
+        $this->db->where('role', 'coach'); // Only coach
+        $coach = $this->db->get()->row_array();
+
+        $student['coach'] = $coach['staff_name'] ?? null;
+         $this->db->select('name, mobile, email');
+        $this->db->from('coordinator');
+        $coordinator = $this->db->get()->row_array();
+
+        $student['coordinator_name']  = $coordinator['name']  ?? null;
+        $student['coordinator_phone'] = $coordinator['mobile'] ?? null;
+        $student['coordinator_email'] = $coordinator['email'] ?? null;
+
+    } else {
+        log_message('error', 'No student found for ID: ' . $student_id);
+    }
+
+    return $student;
+}
+
 
     public function save_admission($data) {
         $this->db->trans_start();
@@ -89,13 +138,7 @@ class Admission_model extends CI_Model {
             'address' => $data['address'],
             'center_id' => $data['center'],
             'batch_id' => $data['batch'],
-            'category' => $data['category'],
-            'coach' => $data['coach'],
-            'coordinator' => $data['coordinator'],
-            'coordinator_phone' => $data['coordinatorPhone'],
-            'batch_time' => $data['batchTime'],
-            'duration' => $data['duration'],
-            'course_fees' => $data['courseFees'],
+            'student_progress_category' => $data['category'],
             'additional_fees' => $data['additionalFees'],
             'total_fees' => $data['totalFees'],
             'paid_amount' => $data['paidAmount'],
