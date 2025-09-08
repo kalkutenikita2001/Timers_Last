@@ -604,27 +604,44 @@ public function getFacilities()
         ->set_output(json_encode($response));
 }
 
-public function deleteBatchbyId($id)
+// public function deleteBatchbyId($id)
+// {
+//     if (empty($id)) {
+//         return $this->output
+//             ->set_status_header(400)
+//             ->set_content_type('application/json')
+//             ->set_output(json_encode(['status' => false, 'message' => 'Batch ID required']));
+//     }
+
+//     $this->load->model('Batch_model');
+//     $deleted = $this->Center_model->delete_batch_by_id($id);
+
+//     if ($deleted) {
+//         $response = ['status' => true, 'message' => 'Batch deleted successfully'];
+//     } else {
+//         $response = ['status' => false, 'message' => 'Failed to delete batch'];
+//     }
+
+//     return $this->output
+//         ->set_content_type('application/json')
+//         ->set_output(json_encode($response));
+// }
+
+public function deleteBatch($id)
 {
-    if (empty($id)) {
-        return $this->output
-            ->set_status_header(400)
-            ->set_content_type('application/json')
-            ->set_output(json_encode(['status' => false, 'message' => 'Batch ID required']));
-    }
-
-    $this->load->model('Batch_model');
-    $deleted = $this->Center_model->delete_batch_by_id($id);
-
-    if ($deleted) {
-        $response = ['status' => true, 'message' => 'Batch deleted successfully'];
+    $this->db->where('id', $id);
+    if ($this->db->delete('batches')) {  
+        echo json_encode(["status" => "success", "message" => "Batch deleted"]);
     } else {
-        $response = ['status' => false, 'message' => 'Failed to delete batch'];
+        echo json_encode(["status" => "error", "message" => "Failed to delete batch"]);
     }
-
-    return $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode($response));
 }
+
+
+
+
+
+
+
 }
 ?>
