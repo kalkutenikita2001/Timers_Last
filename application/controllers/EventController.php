@@ -25,7 +25,8 @@ class EventController extends CI_Controller
             'date'             => $this->input->post('date'),
             'time'             => $this->input->post('time'),
             'fee'              => $this->input->post('fee'),
-            'max_participants' => $this->input->post('maxParticipants')
+            'max_participants' => $this->input->post('maxParticipants'),
+            'venue' => $this->input->post('venue') // <-- new
         );
 
         if ($this->Event_model->insert_event($data)) {

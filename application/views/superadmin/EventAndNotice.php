@@ -376,14 +376,23 @@
                     <div class="event-detail fixed-field"><i class="fas fa-clock event-icon"></i> <span>Time: <?= $event->time ?></span></div>
                     <div class="event-detail fixed-field"><i class="fas fa-money-bill-wave event-icon"></i> <span>Fee: Rs <?= $event->fee ?></span></div>
                     <div class="event-detail fixed-field"><i class="fas fa-users event-icon"></i> <span>Max Participants: <?= $event->max_participants ?></span></div>
+                    <div class="event-detail fixed-field">
+                      <i class="fas fa-map-marker-alt event-icon"></i>
+                      <span>Venue: <?= $event->venue ?></span>
+                    </div>
                   </div>
-                  <div class="card-footer text-right mt-auto">
-                    <button class="btn btn-primary participate-btn">Send Form</button>
-                    <button class="btn btn-primary participate-btn view-participants-btn"
-                      data-id="<?= $event->id ?>">View Participant</button>
 
-                    <button class="btn btn-danger delete-btn" data-id="<?= $event->id ?>">Delete</button>
+
+                  <div class="card-footer d-flex justify-content-center">
+                    <button class="btn btn-primary participate-btn mx-2">Send Form</button>
+                    <button class="btn btn-primary participate-btn view-participants-btn mx-2" data-id="<?= $event->id ?>">
+                      View Participant
+                    </button>
+                    <button class="btn btn-danger delete-btn mx-2" data-id="<?= $event->id ?>">
+                      Delete
+                    </button>
                   </div>
+
                 </div>
               </div>
             <?php endforeach; ?>
@@ -454,9 +463,18 @@
                   <input type="number" class="form-control" id="maxParticipants" placeholder="Enter maximum participants" min="1" required>
                   <div class="invalid-feedback">Please enter max participants</div>
                 </div>
+
+                <div class="form-group col-md-6">
+                  <label for="eventVenue"><i class="fas fa-map-marker-alt"></i> Venue *</label>
+                  <input type="text" class="form-control" id="eventVenue" placeholder="Enter venue" required>
+                  <div class="invalid-feedback">Please enter venue</div>
+                </div>
+
               </div>
             </form>
           </div>
+
+
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -490,7 +508,9 @@
             date: $('#eventDate').val(),
             time: $('#eventTime').val(),
             fee: $('#eventFee').val(),
-            maxParticipants: $('#maxParticipants').val()
+            maxParticipants: $('#maxParticipants').val(),
+            venue: $('#eventVenue').val() // <-- new
+
           };
 
           $.ajax({
