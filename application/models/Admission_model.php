@@ -198,5 +198,19 @@ public function get_student_by_id($student_id) {
         $query = $this->db->get();
         return $query->result_array();
     }
+     public function get_students_expiring_soon() {
+    $sql = "
+        SELECT 
+            s.*,
+            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date
+        FROM students s
+        WHERE DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY)
+              BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+    ";
+
+    $query = $this->db->query($sql);
+    return $query->result_array();
+}
+
 }
 ?>

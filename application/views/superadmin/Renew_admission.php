@@ -57,86 +57,32 @@
           </form>
         </div>
 
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover mb-0" id="studentsTable">
-              <thead style="background: linear-gradient(135deg, #ff4040 0%, #470000 100%); color: #fff;">
-  <tr>
-    <th style="width: 60px;">ID</th>
-    <th>Name</th>
-    <th>Level</th>
-    <th>Batch</th>
-    <th>Facility</th>
-    <th>Fees</th>
-    <th>Status</th>
-    <th style="min-width: 260px;">Action</th>
-  </tr>
-</thead>
+   <div class="card-body p-0">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover mb-0" id="studentsTable">
+      <thead style="background: linear-gradient(135deg, #ff4040 0%, #470000 100%); color: #fff;">
+        <tr>
+          <th>Sr. No.</th>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Center</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Joining Date</th>
+          <th>Course Duration (Months)</th>
+          <th>Expiring On</th>
+          <th style="min-width: 160px;">Action</th>
+        </tr>
+      </thead>
+      <tbody id="studentsTableBody">
+        <!-- Dynamic rows will be injected here -->
+      </tbody>
+    </table>
+  </div>
+</div>
 
-                
-              <tbody>
-                <!-- STATIC DEMO ROWS -->
-                <tr
-                  data-id="1"
-                  data-name="Rahul Sharma"
-                  data-level="Beginner"
-                  data-batch="Morning"
-                  data-facility="Existing"
-                  data-fees="5000"
-                  data-status="Active"
-                >
-                  <td>1</td>
-                  <td>Rahul Sharma</td>
-                  <td>Beginner</td>
-                  <td>Morning</td>
-                  <td>Existing</td>
-                  <td>₹5000</td>
-                  <td class="status-cell">
-                    <span class="badge badge-success">Active</span>
-                  </td>
-                  <td class="text-nowrap">
-                    <a href="<?= site_url('superadmin/View_Renew_Students/1') ?>" class="btn btn-sm btn-info">
-                      <i class="fas fa-eye"></i> View
-                    </a>
-                  </td>
-                </tr>
-
-                <tr
-                  data-id="2"
-                  data-name="Priya Patil"
-                  data-level="Intermediate"
-                  data-batch="Evening"
-                  data-facility="New"
-                  data-fees="8000"
-                  data-status="Deactive"
-                >
-                  <td>2</td>
-                  <td>Priya Patil</td>
-                  <td>Intermediate</td>
-                  <td>Evening</td>
-                  <td>New</td>
-                  <td>₹8000</td>
-                  <td class="status-cell">
-                    <span class="badge badge-danger">Active</span>
-                  </td>
-                  <td class="text-nowrap">
-                    <a href="<?= site_url('superadmin/View_Renew_Students/2') ?>" class="btn btn-sm btn-info">
-                      <i class="fas fa-eye"></i> View
-                    </a>
-
-                   
-
-                   
-                  </td>
-                </tr>
-                <!-- /STATIC DEMO ROWS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
 
         <div class="card-footer text-muted small">
-          * This list is static for demo purposes. Integrate with DB later via a Model.
         </div>
       </div>
     </div>
@@ -225,5 +171,48 @@
       }
     });
   </script>
+  <script>
+$(document).ready(function () {
+  // Use base_url from CodeIgniter
+  const apiUrl = "<?= base_url('Admission/expiring_students') ?>";
+
+  $.getJSON(apiUrl, function (response) {
+    if (response.status === "success" && response.data.length > 0) {
+      let rows = "";
+      response.data.forEach((student, index) => {
+        rows += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${student.id}</td>
+            <td>${student.name}</td>
+            <td>${student.center_id}</td>
+            <td>${student.contact}</td>
+            <td>${student.email}</td>
+            <td>${student.joining_date}</td>
+            <td>${student.course_duration}</td>
+            <td>${student.expiry_date}</td>
+            <td class="text-nowrap">
+              <a href="<?= site_url('superadmin/View_Renew_Students/') ?>${student.id}" 
+                 class="btn btn-sm btn-info">
+                <i class="fas fa-eye"></i> View
+              </a>
+            </td>
+          </tr>
+        `;
+      });
+
+      $("#studentsTableBody").html(rows);
+    } else {
+      $("#studentsTableBody").html(`
+        <tr>
+          <td colspan="10" class="text-center text-muted">No students expiring soon</td>
+        </tr>
+      `);
+    }
+  });
+});
+</script>
+
+
 </body>
 </html>
