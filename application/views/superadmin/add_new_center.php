@@ -569,7 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<!-- Facility Details Form -->
+
 <!-- Facility Details Form -->
 <div class="form-container form-section" id="facility-details">
     <h3 class="section-title"><i class="fas fa-dumbbell me-2"></i> Facility Details</h3>

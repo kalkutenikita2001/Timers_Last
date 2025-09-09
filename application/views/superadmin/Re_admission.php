@@ -29,9 +29,19 @@
     .table thead th { white-space: nowrap; }
     .form-inline .form-control { width: 240px; }
 
-    .card-header {
-       background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
+    .card-header, .modal-header {
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
+      color: #fff !important;
     }
+
+    /* Fees cell styling */
+    .fees-cell div { margin-bottom: 5px; }
+    .fees-label { font-weight: bold; color: #555; }
+
+    /* Validation error styling */
+    .is-invalid { border-color: #dc3545 !important; }
+    .invalid-feedback { display: none; color: #dc3545; font-size: 12px; }
+    .is-invalid ~ .invalid-feedback { display: block; }
   </style>
 </head>
 <body class="bg-light">
@@ -51,7 +61,7 @@
 
           <!-- Quick search -->
           <form class="form-inline" onsubmit="return false;">
-            <input id="tableSearch" class="form-control form-control-sm" type="text" placeholder="Search name / batch / level"/>
+            <input id="tableSearch" class="form-control form-control-sm" type="text" placeholder="Search by name"/>
           </form>
         </div>
 
@@ -60,230 +70,244 @@
             <table class="table table-bordered table-hover mb-0" id="studentsTable">
               <thead style="background: linear-gradient(135deg, #007bff 0%, #001f54 100%); color: #fff;">
                 <tr>
-                  <th style="width: 60px;">ID</th>
+                  <th style="width: 60px;">Student ID</th>
                   <th>Name</th>
-                  <th>Level</th>
-                  <th>Batch</th>
-                  <th>Facility</th>
-                  <th>Fees</th>
+                  <th>Center</th>
+                  <th>Fees 
+                    <button class="btn btn-sm btn-light ml-2" id="toggleFees">
+                      <i class="fas fa-sync"></i>
+                    </button>
+                  </th>
                   <th>Status</th>
-                  <th style="min-width: 200px;">Action</th>
+                  <th>Joining Date</th>
+                  <th style="min-width: 120px;">Action</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- Example static rows: only Deactive -->
-                <tr data-id="2" data-name="Priya Patil" data-level="Intermediate" data-batch="Evening" data-facility="New" data-fees="8000" data-status="Deactive">
+                <tr data-id="2" data-name="Priya Patil" data-center="Main Center"
+                    data-total="8000" data-paid="4000" data-remaining="4000"
+                    data-status="Deactive" data-joining="2025-08-20">
                   <td>2</td>
                   <td>Priya Patil</td>
-                  <td>Intermediate</td>
-                  <td>Evening</td>
-                  <td>New</td>
-                  <td>₹8000</td>
+                  <td>Main Center</td>
+                  <td class="fees-cell">
+                    <div><span class="fees-label">Total:</span> ₹8000</div>
+                    <div><span class="fees-label">Paid:</span> ₹4000</div>
+                    <div><span class="fees-label">Remaining:</span> ₹4000</div>
+                  </td>
                   <td class="status-cell">
                     <span class="badge badge-danger">Deactive</span>
                   </td>
-                
-                    <td class="text-nowrap">
-  <a href="<?php echo base_url('superadmin/view_re_admission'); ?>" 
-     class="btn btn-sm btn-success">
-    <i class="fas fa-redo"></i> Re-Admit
-  </a>
-</td>
+                  <td class="joining-cell">2025-08-20</td>
+                  <td class="text-nowrap">
+                    <button class="btn btn-sm btn-primary btn-update-date" 
+                            data-id="2" data-name="Priya Patil" data-date="2025-08-20">
+                      <i class="fas fa-calendar-alt"></i> Update Date
+                    </button>
                   </td>
                 </tr>
 
-                <tr data-id="3" data-name="Amit Kumar" data-level="Beginner" data-batch="Morning" data-facility="Existing" data-fees="6000" data-status="Deactive">
+                <tr data-id="3" data-name="Amit Kumar" data-center="Branch Center"
+                    data-total="6000" data-paid="3000" data-remaining="3000"
+                    data-status="Deactive" data-joining="2025-08-22">
                   <td>3</td>
                   <td>Amit Kumar</td>
-                  <td>Beginner</td>
-                  <td>Morning</td>
-                  <td>Existing</td>
-                  <td>₹6000</td>
+                  <td>Branch Center</td>
+                  <td class="fees-cell">
+                    <div><span class="fees-label">Total:</span> ₹6000</div>
+                    <div><span class="fees-label">Paid:</span> ₹3000</div>
+                    <div><span class="fees-label">Remaining:</span> ₹3000</div>
+                  </td>
                   <td class="status-cell">
                     <span class="badge badge-danger">Deactive</span>
                   </td>
-                <td class="text-nowrap">
-  <a href="<?php echo base_url('superadmin/view_re_admission'); ?>" 
-     class="btn btn-sm btn-success">
-    <i class="fas fa-redo"></i> Re-Admit
-  </a>
-</td>
-
-
+                  <td class="joining-cell">2025-08-22</td>
+                  <td class="text-nowrap">
+                    <button class="btn btn-sm btn-primary btn-update-date" 
+                            data-id="3" data-name="Amit Kumar" data-date="2025-08-22">
+                      <i class="fas fa-calendar-alt"></i> Update Date
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
+        <div class="modal fade" id="updateDateModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <form id="updateDateForm" action="<?= site_url('Admission/update_joining_date') ?>" method="POST">
+                <div class="modal-header">
+                  <h5 class="modal-title"><i class="fas fa-calendar-alt"></i> Update Joining Date</h5>
+                  <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                  <input type="hidden" id="updateStudentId" name="student_id">
+                  <div class="form-group">
+                    <label>Student</label>
+                    <input type="text" id="updateStudentName" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>New Joining Date</label>
+                    <input type="date" name="joining_date" id="updateJoiningDate" class="form-control" required>
+                    <div class="invalid-feedback">New joining date must be after the current joining date.</div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <div class="card-footer text-muted small">
-          * Only deactivated students are shown here. Use Re-Admit to renew admission.
+          * Only deactivated students are shown here. Use Update Date to modify joining dates.
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Re-Admission Modal
-  <div class="modal fade" id="renewModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form action="<?= site_url('superadmin/re_admission_submit') ?>" method="POST">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title"><i class="fas fa-redo"></i> Re-Admission</h5>
-            <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="renewStudentId" name="student_id">
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Student</label>
-                  <input type="text" id="renewStudentName" class="form-control" readonly>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Previous Level</label>
-                  <input type="text" id="renewCurrentLevel" class="form-control" readonly>
-                </div>
-              </div>
-            </div>
-
-            <hr/>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>New Level</label>
-                  <select name="level" id="renewLevel" class="form-control" required>
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Batch</label>
-                  <select name="batch_id" id="renewBatch" class="form-control" required>
-                    <option>Morning</option>
-                    <option>Evening</option>
-                    <option>Weekend</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Duration</label>
-                  <select name="duration" class="form-control" required>
-                    <option value="3">3 Months</option>
-                    <option value="6">6 Months</option>
-                    <option value="12">1 Year</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Facility</label>
-                  <select name="facility_type" id="renewFacility" class="form-control" required>
-                    <option value="continue">Continue Existing</option>
-                    <option value="new">New Facility</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <hr/>
-
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Fees Amount (₹)</label>
-                  <input type="number" name="fees_amount" id="renewFeesAmount" class="form-control" required>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Payment Mode</label>
-                  <select name="payment_mode" class="form-control" required>
-                    <option>Cash</option>
-                    <option>UPI</option>
-                    <option>Bank Transfer</option>
-                    <option>Card</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Receipt No.</label>
-                  <input type="text" name="receipt_no" class="form-control" readonly value="RCPT<?= time(); ?>">
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Confirm Re-Admission</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
- -->
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
-    // Client-side search
-    $('#tableSearch').on('input', function () {
-      const q = $(this).val().toLowerCase();
-      $('#studentsTable tbody tr').each(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(q) > -1);
-      });
-    });
+  const baseUrl = '<?= base_url() ?>';
+</script>
 
-    // Fill modal with selected student info
-    $('.btn-open-renew').on('click', function () {
-      const $row = $(this).closest('tr');
-      $('#renewStudentId').val($row.data('id'));
-      $('#renewStudentName').val($row.data('name'));
-      $('#renewCurrentLevel').val($row.data('level'));
-      $('#renewLevel').val($row.data('level'));
-      $('#renewBatch').val($row.data('batch'));
-      $('#renewFacility').val($row.data('facility') === 'Existing' ? 'continue' : 'new');
-      $('#renewFeesAmount').val($row.data('fees'));
-    });
-  </script>
-  <<script>
-     document.addEventListener('DOMContentLoaded', () => {
-      const sidebarToggle = document.getElementById('sidebarToggle');
-      const sidebar = document.getElementById('sidebar');
-      const navbar = document.querySelector('.navbar');
-      const contentWrapper = document.getElementById('contentWrapper');
-
-      if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
-            if (sidebar) {
-              sidebar.classList.toggle('active');
-              if (navbar) navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-            }
-          } else {
-            if (sidebar && contentWrapper) {
-              const isMinimized = sidebar.classList.toggle('minimized');
-              if (navbar) navbar.classList.toggle('sidebar-minimized', isMinimized);
-              contentWrapper.classList.toggle('minimized', isMinimized);
-            }
-          }
-        });
+ <script>
+$(document).ready(function () {
+  let feeMode = 'total';
+  // 🔹 Fetch center name by ID
+function fetchCenterName(centerId, callback) {
+  $.ajax({
+    url: baseUrl + "Center/getCenterById/" + centerId,
+    method: "GET",
+    dataType: "json",
+    success: function (res) {
+      if (res.status === "success" && res.center) {
+        callback(res.center.name);
+      } else {
+        callback("Unknown Center");
       }
+    },
+    error: function () {
+      callback("Error");
+    }
+  });
+}
+
+function loadDeactiveStudents() {
+  $.ajax({
+    url: "<?= base_url('Admission/get_deactive_students') ?>",
+    method: "GET",
+    dataType: "json",
+    success: function (res) {
+      if (res.status === 'success') {
+        $("#studentsTable tbody").html(''); // Clear table first
+
+        res.data.forEach(student => {
+          // Temporary row with center placeholder
+          let rowHtml = `
+            <tr data-id="${student.id}" data-name="${student.name}" data-center="" 
+                data-total="${student.total_fees}" data-paid="${student.paid_amount}" data-remaining="${student.remaining_amount}"
+                data-status="${student.status}" data-joining="${student.joining_date}">
+              <td>${student.id}</td>
+              <td>${student.name}</td>
+              <td class="center-cell">Loading...</td>
+              <td class="fees-cell">
+                <div><span class="fees-label">Total:</span> ₹${student.total_fees}</div>
+                <div><span class="fees-label">Paid:</span> ₹${student.paid_amount}</div>
+                <div><span class="fees-label">Remaining:</span> ₹${student.remaining_amount}</div>
+              </td>
+              <td class="status-cell">
+                <span class="badge badge-danger">${student.status}</span>
+              </td>
+              <td class="joining-cell">${student.joining_date}</td>
+              <td class="text-nowrap">
+                <button class="btn btn-sm btn-primary btn-update-date" 
+                        data-id="${student.id}" data-name="${student.name}" data-date="${student.joining_date}">
+                  <i class="fas fa-calendar-alt"></i> Update Date
+                </button>
+              </td>
+            </tr>
+          `;
+
+          $("#studentsTable tbody").append(rowHtml);
+
+          // 🔹 Fetch center name asynchronously
+          fetchCenterName(student.center_id, function(centerName) {
+            let $tr = $(`#studentsTable tbody tr[data-id='${student.id}']`);
+            $tr.find('.center-cell').text(centerName);
+            $tr.attr('data-center', centerName);
+          });
+        });
+      } else {
+        $("#studentsTable tbody").html(`<tr><td colspan="7" class="text-center text-muted">No deactive students found</td></tr>`);
+      }
+    },
+    error: function () {
+      alert("Error fetching students data.");
+    }
+  });
+}
+
+  // 🔹 Toggle Fees View
+  $('#toggleFees').on('click', function () {
+    feeMode = (feeMode === 'total') ? 'paid' : (feeMode === 'paid') ? 'remaining' : 'total';
+
+    $('#studentsTable tbody tr').each(function () {
+      const $row = $(this);
+      $row.find('.fees-cell').html(`
+        <div><span class="fees-label ${feeMode === 'total' ? 'text-primary' : ''}">Total:</span> ₹${$row.data('total')}</div>
+        <div><span class="fees-label ${feeMode === 'paid' ? 'text-primary' : ''}">Paid:</span> ₹${$row.data('paid')}</div>
+        <div><span class="fees-label ${feeMode === 'remaining' ? 'text-primary' : ''}">Remaining:</span> ₹${$row.data('remaining')}</div>
+      `);
     });
-  </script>
+  });
+
+  // 🔹 Open Modal with selected student
+  $(document).on('click', '.btn-update-date', function () {
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+    const date = $(this).data('date');
+
+    $('#updateStudentId').val(id);
+    $('#updateStudentName').val(name);
+    $('#updateJoiningDate').val(date);
+    $('#updateDateForm').data('current-date', date);
+
+    $('#updateJoiningDate').removeClass('is-invalid');
+    $('#updateDateModal').modal('show');
+  });
+
+  // 🔹 Validate Date Before Submit
+  $('#updateDateForm').on('submit', function (e) {
+    const newDate = $('#updateJoiningDate').val();
+    const currentDate = $(this).data('current-date');
+    if (new Date(newDate) <= new Date(currentDate)) {
+      e.preventDefault();
+      $('#updateJoiningDate').addClass('is-invalid');
+      return false;
+    } else {
+      $('#updateJoiningDate').removeClass('is-invalid');
+    }
+  });
+
+  // 🔹 Search Filter
+  $('#tableSearch').on('input', function () {
+    const q = $(this).val().toLowerCase();
+    $('#studentsTable tbody tr').each(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(q) > -1);
+    });
+  });
+
+  // 🔹 Initial load
+  loadDeactiveStudents();
+});
+</script>
+
 </body>
 </html>

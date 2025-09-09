@@ -373,6 +373,17 @@
                                                 <div class="invalid-feedback">Please select a center.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
+    <label><i class="fas fa-calendar-alt"></i> Course Duration *</label>
+    <select class="form-control" id="courseDuration" name="course_duration" required>
+        <option value="">Select Duration</option>
+        <option value="1">1 Month</option>
+        <option value="2">2 Months</option>
+        <option value="3">3 Months</option>
+    </select>
+    <div class="invalid-feedback">Please select a course duration.</div>
+</div>
+
+                                            <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-users"></i> Batch *</label>
                                                 <select class="form-control" id="batchSelect" name="batch" required>
                                                     <option value="">Select Batch</option>
@@ -1017,11 +1028,7 @@ $(document).ready(function () {
 });
 
 </script>
-
-
-
-
-    <!-- Form Submission -->
+ <!-- Form Submission -->
     <script>
         $('#admissionForm').on('submit', function(e) {
             e.preventDefault();
@@ -1031,6 +1038,18 @@ $(document).ready(function () {
                 obj[item.name] = item.value;
                 return obj;
             }, {});
+
+            formData.course_fees = $('#courseFees').val();
+formData.additionalFees = $('#additionalFees').val();
+formData.totalFees = $('#totalFees').val();
+formData.course_duration = $('#courseDuration').val();
+
+formData.remainingAmount = $('#remainingAmount').val();
+formData.paidAmount = $('#paidAmount').val();
+formData.admissionDate = $('#admissionDate').val();
+formData.joiningDate = $('#joiningDate').val();
+formData.paymentMethod = $('input[name="paymentMethod"]:checked').val();
+
 
             // Add facilities summary
             formData.facilities = [];

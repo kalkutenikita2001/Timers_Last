@@ -252,5 +252,38 @@ class Admission extends CI_Controller {
             echo json_encode(['success' => false, 'message' => 'Failed to save admission']);
         }
     }
+     public function get_deactive_students() {
+        header('Content-Type: application/json');
+
+        $students = $this->Admission_model->get_deactive_students();
+
+        if ($students) {
+            echo json_encode([
+                'status' => 'success',
+                'count'  => count($students),
+                'data'   => $students
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'No deactive students found'
+            ]);
+        }
+    }
+    public function update_joining_date() {
+    $student_id   = $this->input->post('student_id');
+    $joining_date = $this->input->post('joining_date');
+
+    if ($student_id && $joining_date) {
+        $this->db->where('id', $student_id);
+        $this->db->update('students', ['joining_date' => $joining_date]);
+
+        $this->session->set_flashdata('success', 'Joining date updated successfully.');
+    } else {
+        $this->session->set_flashdata('error', 'Invalid data.');
+    }
+    redirect('superadmin/re_admission');
+}
+
 }
 ?>

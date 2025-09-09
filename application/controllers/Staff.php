@@ -73,4 +73,16 @@ class Staff extends CI_Controller {
             echo json_encode(['status' => 'error']);
         }
     }
+    //facilities saved
+    public function store(){
+        $facilities= new Facility_model();
+        $data=[
+            'facility_name'=>$this->request->getPost('facility_name'),
+            'subtype_name'=>$this->request->getPost('subtype_name'),
+            'rent_amount'=>$this->request->getPost('rent_amount')
+        ];
+        $facilities->save($data);
+        return redirect()->to(base_url('view_center_details'))->with('status','Facility Added Successfully');
+
+    }
 }
