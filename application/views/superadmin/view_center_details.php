@@ -598,11 +598,11 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="facility_rent">Rent <span class="text-danger">*</span></label>
-              <input type="number" id="facility_rent" name="facility_rent" class="form-control" min="0" step="0.01" required placeholder="Enter Rent Amount" />
+              <input type="number" id="facility_rent" name="rent_amount" class="form-control" min="0" step="0.01" required placeholder="Enter Rent Amount" />
             </div>
             <div class="form-group col-md-6">
               <label for="facility_rent_date">Rent Date <span class="text-danger">*</span></label>
-              <input type="date" id="facility_rent_date" name="facility_rent_date" class="form-control" required />
+              <input type="date" id="facility_rent_date" name="rent_date" class="form-control" required />
             </div>
           </div>
           <div class="d-flex justify-content-center">
@@ -1014,7 +1014,7 @@ $(document).ready(function() {
     });
   }
 
-  // Delete Button Click
+  //  Batch Deleted
   $(document).on("click", ".btn-delete[data-delete-batch-id]", function () {
     const batchId = $(this).data("delete-batch-id");
     Swal.fire({
@@ -1087,6 +1087,55 @@ $(document).ready(function() {
       $('#facilityCards').append(facilityCard);
     });
   }
+// Facility Delete
+$(document).on("click", ".btn-delete[data-delete-facility-id]", function () {
+  const facilityId = $(this).data("delete-facility-id");
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: baseUrl + "Facility/deleteFacilityById/" + facilityId,
+        method: "POST",
+        dataType: "json",
+        success: function (response) {
+          if (response.status === "success") {
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Facility deleted successfully.'
+            });
+            loadFacilityDetails();
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.message || 'Failed to delete facility.'
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Delete Error:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error deleting facility. Please try again.'
+          });
+        }
+      });
+    }
+  });
+});
+
+
+
+
 
   // Load Staff Details
   function loadStaffDetails() {
@@ -1115,6 +1164,52 @@ $(document).ready(function() {
       $('#staffCards').append(staffCard);
     });
   }
+
+  // Staff Deleted
+$(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
+  const staffId = $(this).data("delete-staff-id");
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: baseUrl + "Staff/deleteStaff/" + staffId,
+        method: "POST",
+        dataType: "json",
+        success: function (response) {
+          if (response.status === "success") {
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Staff deleted successfully.'
+            });
+            loadStaffDetails();
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.message || 'Failed to delete staff.'
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Delete Error:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error deleting staff. Please try again.'
+          });
+        }
+      });
+    }
+  });
+});
 
   // Load Expense Details
   function loadExpenseDetails() {

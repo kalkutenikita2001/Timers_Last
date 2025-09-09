@@ -284,6 +284,23 @@ class Admission extends CI_Controller {
     }
     redirect('superadmin/re_admission');
 }
+public function expiring_students() {
+        $students = $this->Admission_model->get_students_expiring_soon();
 
+        if (!empty($students)) {
+            $response = [
+                "status" => "success",
+                "data" => $students
+            ];
+        } else {
+            $response = [
+                "status" => "success",
+                "data" => [],
+                "message" => "No students expiring within 10 days"
+            ];
+        }
+
+        echo json_encode($response);
+    }
 }
 ?>

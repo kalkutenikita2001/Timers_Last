@@ -8,271 +8,58 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
 
   <style>
-     :root {
-            --primary-color: #ff4040;
-            --secondary-color: #f8f9fa;
-            --accent-color: #007bff;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --info-color: #17a2b8;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .section-content {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        
-        h4 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        
-        h5 {
-            font-weight: 600;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-        
-        .facility-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #fff;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .facility-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .facility-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .facility-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .facility-status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .status-active {
-            background-color: rgba(40, 167, 69, 0.15);
-            color: #28a745;
-        }
-        
-        .status-expired {
-            background-color: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
-        }
-        
-        .status-completed {
-            background-color: rgba(108, 117, 125, 0.15);
-            color: #6c757d;
-        }
-        
-        .facility-actions {
-            margin-bottom: 15px;
-        }
-        
-        .btn-renew {
-            background-color: rgba(255, 64, 64, 0.1);
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            border-radius: 5px;
-            padding: 5px 15px;
-            transition: all 0.3s;
-        }
-        
-        .btn-renew:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .facility-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .facility-detail-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .facility-detail-item i {
-            margin-right: 10px;
-            color: var(--primary-color);
-            width: 20px;
-        }
-        
-        .facility-duration {
-            background-color: var(--secondary-color);
-            padding: 15px;
-            border-radius: 8px;
-        }
-        
-        .duration-bar {
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        
-        .duration-progress {
-            height: 100%;
-            background-color: var(--primary-color);
-            border-radius: 4px;
-        }
-        
-        .duration-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #6c757d;
-        }
-        
-        .required-field::after {
-            content: " *";
-            color: var(--primary-color);
-        }
-        
-        .sub-type-info {
-            background-color: var(--secondary-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .sub-type-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .sub-type-option {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .sub-type-option:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .sub-type-option.selected {
-            border-color: var(--primary-color);
-            background-color: rgba(255, 64, 64, 0.05);
-        }
-        
-        .sub-type-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .sub-type-details {
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 8px;
-        }
-        
-        .amount {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .duration-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .duration-option {
-            padding: 8px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .duration-option:hover {
-            border-color: var(--primary-color);
-        }
-        
-        .duration-option.selected {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: #e03a3a;
-            border-color: #e03a3a;
-        }
-        
-        .modal-header {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .modal-header .close {
-            color: white;
-        }
-
-    /* Facility Section Styles */
-    .facility-section {
-      padding: 20px;
+    :root {
+      --primary-color: #ff4040;
+      --secondary-color: #f8f9fa;
+      --accent-color: #007bff;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Montserrat', serif !important;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: #f9f9f9;
+    }
+    
+    .section-content {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+    
+    h4 {
+      font-weight: 700;
+      font-size: 20px;
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+    
+    h5 {
+      font-weight: 600;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-color);
     }
     
     .facility-card {
-      background: #fff;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      border-left: 4px solid #ff4040;
-      position: relative;
+      background-color: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .facility-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
     
     .facility-header {
@@ -284,8 +71,8 @@
     }
     
     .facility-name {
-      font-weight: 600;
       font-size: 18px;
+      font-weight: 600;
       color: #470000;
     }
     
@@ -337,7 +124,7 @@
     
     .facility-details-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 15px;
       margin-bottom: 15px;
     }
@@ -349,23 +136,22 @@
     
     .facility-detail-item i {
       margin-right: 10px;
-      color: #ff4040;
+      color: var(--primary-color);
       width: 20px;
     }
     
     .facility-duration {
-      background: #f8f9fa;
-      padding: 12px 15px;
-      border-radius: 6px;
-      margin-top: 10px;
+      background-color: var(--secondary-color);
+      padding: 15px;
+      border-radius: 8px;
     }
     
     .duration-bar {
       height: 8px;
-      background: #e9ecef;
+      background-color: #e9ecef;
       border-radius: 4px;
+      margin: 10px 0;
       overflow: hidden;
-      margin-top: 8px;
     }
     
     .duration-progress {
@@ -377,111 +163,114 @@
     .duration-info {
       display: flex;
       justify-content: space-between;
-      margin-top: 5px;
-      font-size: 13px;
-      color: #6c757d;
-    }
-    
-    /* New Facility Form */
-    .sub-type-info {
-      background-color: #f8f9fa;
-      padding: 15px;
-      border-radius: 5px;
-      margin-top: 10px;
-      display: none;
-    }
-    
-    .hostel-option {
-      padding: 12px;
-      border: 1px solid #dee2e6;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .hostel-option:hover {
-      background-color: #e9ecef;
-      border-color: #ff4040;
-    }
-    
-    .hostel-option.selected-hostel {
-      background-color: #e6f7ff;
-      border-left: 3px solid #007bff;
-    }
-    
-    .hostel-name {
-      font-weight: 600;
-      color: #470000;
-    }
-    
-    .hostel-details {
       font-size: 14px;
       color: #6c757d;
-      margin-bottom: 5px;
-    }
-    
-    .rent-amount {
-      color: #28a745;
-      font-weight: 600;
     }
     
     .required-field::after {
       content: " *";
-      color: #ff4040;
+      color: var(--primary-color);
+    }
+    
+    .sub-type-info {
+      background-color: var(--secondary-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .sub-type-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .sub-type-option {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    
+    .sub-type-option:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sub-type-option.selected {
+      border-color: var(--primary-color);
+      background-color: rgba(255, 64, 64, 0.05);
+    }
+    
+    .sub-type-name {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .sub-type-details {
+      font-size: 14px;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+    
+    .amount {
+      font-weight: 600;
+      color: var(--primary-color);
     }
     
     .duration-options {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
       margin-top: 10px;
     }
     
     .duration-option {
       padding: 8px 15px;
-      border: 1px solid #dee2e6;
-      border-radius: 4px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
     }
     
     .duration-option:hover {
-      background-color: #f8f9fa;
+      border-color: var(--primary-color);
     }
     
     .duration-option.selected {
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+      background-color: var(--primary-color);
       color: white;
-      border-color: #470000;
+      border-color: var(--primary-color);
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .facility-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .facility-actions {
-        position: static;
-        margin-top: 10px;
-        align-self: flex-end;
-      }
-      
-      .facility-details-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .duration-options {
-        flex-direction: column;
-      }
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
     }
-    body {
-      font-family: 'Montserrat', serif !important;
-      overflow-x: hidden;
-      min-height: 100vh;
-      background: #f9f9f9;
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #e03a3a;
+      border-color: #e03a3a;
+    }
+    
+    .modal-header {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .modal-header .close {
+      color: white;
     }
 
     .content-wrapper {
@@ -498,28 +287,6 @@
       gap: 20px;
     }
 
-    body {
-      font-family: 'Montserrat', serif !important;
-      overflow-x: hidden;
-      min-height: 100vh;
-      background: #f9f9f9;
-    }
-
-    .content-wrapper {
-      margin-left: 250px;
-      padding: 80px 20px 20px 20px;
-      transition: margin-left 0.3s ease-in-out;
-    }
-    .content-wrapper.minimized {
-      margin-left: 60px;
-    }
-
-    .inner-layout {
-      display: flex;
-      gap: 20px;
-    }
-
-    /* Inner Sidebar */
     .inner-sidebar {
       width: 220px;
       padding: 15px 10px;
@@ -568,7 +335,6 @@
       color: #470000;
     }
 
-    /* Details Area */
     .details-area {
       flex: 1;
       background: #fff;
@@ -584,25 +350,15 @@
       display: block;
     }
 
-    h4 {
-      font-weight: 600;
-      color: #470000;
-      margin-bottom: 15px;
-    }
-
     .section-title {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 16px;
-      color: #ff4040;
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
     }
 
-    .btn-primary {
-      background: #ff4040;
-      border: none;
-    }
-    .btn-primary:hover {
-      background: #cc0000;
-    }
     .btn-success {
       background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       border: none;
@@ -615,24 +371,7 @@
       border: none;
     }
 
-    h4 {
-      font-weight: 700;
-      font-size: 20px;
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 15px;
-    } 
-    .section-title {
-      font-weight: 600;
-      font-size: 16px;
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-    }
-
-    .progress-bar{
+    .progress-bar {
       background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
     }
 
@@ -651,7 +390,6 @@
       color: #333;
     }
     
-    /* Batch cards styling */
     .batch-card {
       border: 1px solid #e0e0e0;
       border-radius: 8px;
@@ -688,17 +426,9 @@
       font-size: 12px;
       font-weight: 600;
     }
-    .status-active {
-      background-color: #e6f7ee;
-      color: #0b8c56;
-    }
-    .status-completed {
+    .status-deactive {
       background-color: #f2f2f2;
       color: #666;
-    }
-    .status-upcoming {
-      background-color: #e6f0ff;
-      color: #0066cc;
     }
     .batch-details-grid {
       display: grid;
@@ -709,6 +439,21 @@
       .batch-details-grid {
         grid-template-columns: 1fr;
       }
+      .facility-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .facility-actions {
+        position: static;
+        margin-top: 10px;
+        align-self: flex-end;
+      }
+      .facility-details-grid {
+        grid-template-columns: 1fr;
+      }
+      .duration-options {
+        flex-direction: column;
+      }
     }
     .batch-detail-item {
       display: flex;
@@ -718,57 +463,6 @@
     .batch-detail-item i {
       color: #ff4040;
       width: 20px;
-    }
-
-     /* Facility selection styles */
-    .facility-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .facility-card:hover {
-      border-color: #ff4040;
-      box-shadow: 0 0 10px rgba(255, 64, 64, 0.2);
-    }
-    .facility-card.selected {
-      border-color: #ff4040;
-      background-color: #fff9f9;
-    }
-    .facility-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .facility-name {
-      font-weight: 600;
-      color: #470000;
-    }
-    .facility-price {
-      font-weight: 600;
-      color: #ff4040;
-    }
-    .facility-description {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-    .facility-details {
-      display: none;
-      margin-top: 10px;
-    }
-    .facility-card.selected .facility-details {
-      display: block;
-    }
-    .date-inputs {
-      display: flex;
-      gap: 10px;
-    }
-    .date-inputs .form-group {
-      flex: 1;
     }
   </style>
 </head>
@@ -795,25 +489,21 @@
         <a href="#" class="menu-item" onclick="showSection(event,'feesDetails')">
           <i class="fas fa-lock"></i> Fees Details 
         </a>
-
-         <a href="#" class="menu-item" onclick="showSection(event,'facilities')">
+        <a href="#" class="menu-item" onclick="showSection(event,'facilities')">
           <i class="fas fa-building"></i> Facilities 
         </a>
-
         <a href="#" class="menu-item" onclick="showSection(event,'Renew_admission')">
           <i class="fas fa-wallet"></i> Renew Admission
         </a>
       </div>
 
-
       <!-- Details Area -->
-      <!-- ================= Details Area ================= -->
       <div class="details-area">
 
         <div class="progress-container mb-4">
           <div class="progress">
-            <div id="progressBar" class="progress-bar " role="progressbar" style="width: 25%;">
-              Step 1 of 4
+            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 20%;">
+              Step 1 of 5
             </div>
           </div>
         </div>
@@ -827,44 +517,37 @@
             <div class="col-md-6">
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-user"></i> Name</div>
-                <div class="detail-value">Rahul Sharma</div>
+                <div class="detail-value" id="studentName"></div>
               </div>
-              
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-user-friends"></i> Parent Name</div>
-                <div class="detail-value">Rajesh Sharma</div>
+                <div class="detail-value" id="parentName"></div>
               </div>
-              
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-envelope"></i> Email</div>
-                <div class="detail-value">rahul.sharma@example.com</div>
+                <div class="detail-value" id="email"></div>
               </div>
-              
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-home"></i> Address</div>
-                <div class="detail-value">123, Main Street, Mumbai, Maharashtra - 400001</div>
+                <div class="detail-value" id="address"></div>
               </div>
             </div>
-            
             <div class="col-md-6">
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-phone-alt"></i> Contact</div>
-                <div class="detail-value">+91 9876543210</div>
+                <div class="detail-value" id="contact"></div>
               </div>
-              
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-phone-alt"></i> Emergency Contact</div>
-                <div class="detail-value">+91 9123456780</div>
+                <div class="detail-value" id="emergencyContact"></div>
               </div>
-              
               <div class="detail-row">
                 <div class="detail-label"><i class="fas fa-calendar-alt"></i> Date of Birth</div>
-                <div class="detail-value">15 June 2005</div>
+                <div class="detail-value" id="dob"></div>
               </div>
-              
               <div class="detail-row">
-                <div class="detail-label"><i class="fas fa-venus-mars"></i> Gender</div>
-                <div class="detail-value">Male</div>
+                <div class="detail-label"><i class="fas fa-calendar"></i> Joining Date</div>
+                <div class="detail-value" id="joiningDate">Not specified</div>
               </div>
             </div>
           </div>
@@ -879,117 +562,22 @@
           <h4>Batch Details</h4>
           <p>Information about the student's current and previous batches.</p>
           
-          <!-- Current Batch -->
           <h5 class="mt-4 mb-3" style="color: #ff4040;">Current Batch</h5>
           
           <div class="batch-card active">
             <div class="batch-header">
-              <div class="batch-name">Advanced Swimming - Group A</div>
-              <div class="batch-status status-active">Active</div>
+              <div class="batch-name" id="batchName"></div>
+              <div class="batch-status" id="batchStatus"></div>
             </div>
-            <div class="batch-details-grid">
-              <div class="batch-detail-item">
-                <i class="fas fa-university"></i>
-                <span><strong>Center:</strong> Mumbai Central Branch</span>
-              </div>
-              <div class="batch-detail-item">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <span><strong>Coach:</strong> Mr. Vikram Singh</span>
-              </div>
-              <div class="batch-detail-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span><strong>Start Date:</strong> 01 Jan 2023</span>
-              </div>
-              <div class="batch-detail-item">
-                <i class="fas fa-calendar-check"></i>
-                <span><strong>End Date:</strong> 31 Dec 2023</span>
-              </div>
-              <div class="batch-detail-item">
-                <i class="fas fa-clock"></i>
-                <span><strong>Timing:</strong> Mon, Wed, Fri - 6:00 PM to 7:30 PM</span>
-              </div>
-              <div class="batch-detail-item">
-                <i class="fas fa-user-tie"></i>
-                <span><strong>Coordinator:</strong> Mrs. Sunita Patel</span>
-              </div>
-            </div>
+            <div class="batch-details-grid" id="batchDetailsGrid"></div>
           </div>
-          
-         <!-- Previous Batches -->
-<h5 class="mt-5 mb-3" style="color: #ff4040;">Previous Batches</h5>
 
-<div class="batch-card">
-  <div class="batch-header">
-    <div class="batch-name">Intermediate Swimming - Group B</div>
-    <div class="batch-status status-completed">Completed</div>
-  </div>
-  <div class="batch-details-grid">
-    <div class="batch-detail-item">
-      <i class="fas fa-university"></i>
-      <span><strong>Center:</strong> Mumbai Central Branch</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-chalkboard-teacher"></i>
-      <span><strong>Coach:</strong> Mrs. Priya Desai</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-calendar-plus"></i>
-      <span><strong>Join Date:</strong> 01 Jun 2022</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-calendar-check"></i>
-      <span><strong>Expiry Date:</strong> 31 Dec 2022</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-clock"></i>
-      <span><strong>Timing:</strong> Tue, Thu, Sat - 5:00 PM to 6:30 PM</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-award"></i>
-      <span><strong>Grade:</strong> A (Excellent Performance)</span>
-    </div>
-  </div>
-</div>
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary back1"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-success next2">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
 
-<div class="batch-card">
-  <div class="batch-header">
-    <div class="batch-name">Beginner Swimming - Group C</div>
-    <div class="batch-status status-completed">Completed</div>
-  </div>
-  <div class="batch-details-grid">
-    <div class="batch-detail-item">
-      <i class="fas fa-university"></i>
-      <span><strong>Center:</strong> Andheri West Branch</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-chalkboard-teacher"></i>
-      <span><strong>Coach:</strong> Mr. Ramesh Kumar</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-calendar-plus"></i>
-      <span><strong>Join Date:</strong> 10 Jan 2022</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-calendar-check"></i>
-      <span><strong>Expiry Date:</strong> 10 May 2022</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-clock"></i>
-      <span><strong>Timing:</strong> Mon, Wed, Fri - 4:00 PM to 5:30 PM</span>
-    </div>
-    <div class="batch-detail-item">
-      <i class="fas fa-award"></i>
-      <span><strong>Grade:</strong> B+ (Good Performance)</span>
-    </div>
-  </div>
-</div>
-
-<div class="d-flex justify-content-between mt-4">
-  <button type="button" class="btn btn-secondary back1"><i class="fas fa-arrow-left"></i> Back</button>
-  <button type="button" class="btn btn-success next2">Next <i class="fas fa-arrow-right"></i></button>
-</div>
-
-  </div>
         <!-- Section: Fees Details -->
         <div class="section-content" id="feesDetails">
           <h4>Fees Details</h4>
@@ -998,461 +586,249 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label><i class="fas fa-wallet"></i> Total Fees *</label>
-              <input type="number" id="totalFees" class="form-control" required>
+              <input type="number" id="totalFees" class="form-control" readonly>
             </div>
             <div class="form-group col-md-6">
               <label><i class="fas fa-money-check-alt"></i> Amount Paid *</label>
-              <input type="number" id="paidAmount" class="form-control" required>
+              <input type="number" id="paidAmount" class="form-control" readonly>
             </div>
             <div class="form-group col-md-6">
               <label><i class="fas fa-balance-scale"></i> Remaining Amount *</label>
               <input type="number" id="remainingAmount" class="form-control" readonly>
             </div>
             <div class="form-group col-md-6">
-              <label><i class="fas fa-credit-card"></i> Payment Method *</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="payment" value="Cash">
-                <label class="form-check-label">Cash</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="payment" value="Online">
-                <label class="form-check-label">Online</label>
-              </div>
+              <label><i class="fas fa-credit-card"></i> Payment Method *</label>
+              <input type="text" id="paymentMethod" class="form-control" readonly>
             </div>
           </div>
 
           <div class="d-flex justify-content-between">
             <button type="button" class="btn btn-secondary back2"><i class="fas fa-arrow-left"></i> Back</button>
-            <div>
-              <button type="button" class="btn btn-success  next3">Next <i class="fas fa-arrow-right"></i></button>
-            </div>
+            <button type="button" class="btn btn-success next3">Next <i class="fas fa-arrow-right"></i></button>
           </div>
         </div>
 
-
-         <!-- Section: Facilities -->
+        <!-- Section: Facilities -->
         <div class="section-content" id="facilities">
-            <!-- Content for the facility section only -->
-            
-                <h4>Facilities</h4>
-                <p>Information about additional facilities availed by the student.</p>
-                
-                <!-- Current Facilities -->
-                <h5 class="mt-4 mb-3" style="color: #ff4040;">Current Facilities</h5>
-                
-                <div class="facility-card">
-                    <div class="facility-header">
-                        <div class="facility-name">Hostel Accommodation</div>
-                        <div class="facility-status status-active">Active</div>
-                    </div>
-                    
-                    <div class="facility-details-grid">
-                        <div class="facility-detail-item">
-                            <i class="fas fa-home"></i>
-                            <span><strong>Room No:</strong> H-102</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-building"></i>
-                            <span><strong>Hostel Type:</strong> Single AC Room</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-plus"></i>
-                            <span><strong>Start Date:</strong> 01 Jan 2023</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-check"></i>
-                            <span><strong>Expiry Date:</strong> 31 Dec 2023</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span><strong>Amount:</strong> ₹15,000/month</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Duration Information -->
-                    <div class="facility-duration">
-                        <div class="d-flex justify-content-between">
-                            <span><strong>Duration:</strong> 12 months</span>
-                            <span><strong>Remaining:</strong> 3 months</span>
-                        </div>
-                        <div class="duration-bar">
-                            <div class="duration-progress" style="width: 75%"></div>
-                        </div>
-                        <div class="duration-info">
-                            <span>Started: Jan 2023</span>
-                            <span>Ends: Dec 2023</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="facility-card">
-                    <div class="facility-header">
-                        <div class="facility-name">Mess Facility</div>
-                        <div class="facility-status status-active">Active</div>
-                    </div>
-                    
-                    <div class="facility-details-grid">
-                        <div class="facility-detail-item">
-                            <i class="fas fa-utensils"></i>
-                            <span><strong>Meal Plan:</strong> Breakfast & Dinner</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-plus"></i>
-                            <span><strong>Start Date:</strong> 01 Jan 2023</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-check"></i>
-                            <span><strong>Expiry Date:</strong> 31 Dec 2023</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span><strong>Amount:</strong> ₹8,000/month</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Duration Information -->
-                    <div class="facility-duration">
-                        <div class="d-flex justify-content-between">
-                            <span><strong>Duration:</strong> 12 months</span>
-                            <span><strong>Remaining:</strong> 3 months</span>
-                        </div>
-                        <div class="duration-bar">
-                            <div class="duration-progress" style="width: 75%"></div>
-                        </div>
-                        <div class="duration-info">
-                            <span>Started: Jan 2023</span>
-                            <span>Ends: Dec 2023</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Previous Facilities -->
-                <h5 class="mt-5 mb-3" style="color: #ff4040;">Previous Facilities</h5>
-                
-                <div class="facility-card">
-                    <div class="facility-header">
-                        <div class="facility-name">Locker</div>
-                        <div class="facility-status status-expired">Expired</div>
-                    </div>
-                    <div class="facility-actions">
-                        <button class="btn btn-renew" data-toggle="modal" data-target="#renewModal" data-facility="Locker">
-                            <i class="fas fa-sync-alt"></i> Renew
-                        </button>
-                    </div>
-                    <div class="facility-details-grid">
-                        <div class="facility-detail-item">
-                            <i class="fas fa-lock"></i>
-                            <span><strong>Locker No:</strong> L-205</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-plus"></i>
-                            <span><strong>Start Date:</strong> 01 Jun 2022</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-check"></i>
-                            <span><strong>Expiry Date:</strong> 31 Dec 2022</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span><strong>Amount:</strong> ₹2,000/month</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Duration Information -->
-                    <div class="facility-duration">
-                        <div class="d-flex justify-content-between">
-                            <span><strong>Duration:</strong> 7 months</span>
-                            <span><strong>Status:</strong> Expired</span>
-                        </div>
-                        <div class="duration-bar">
-                            <div class="duration-progress" style="width: 100%"></div>
-                        </div>
-                        <div class="duration-info">
-                            <span>Started: Jun 2022</span>
-                            <span>Ended: Dec 2022</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="facility-card">
-                    <div class="facility-header">
-                        <div class="facility-name">Transport Service</div>
-                        <div class="facility-status status-completed">Completed</div>
-                    </div>
-                    <div class="facility-actions">
-                        <button class="btn btn-renew" data-toggle="modal" data-target="#renewModal" data-facility="Transport Service">
-                            <i class="fas fa-sync-alt"></i> Renew
-                        </button>
-                    </div>
-                    <div class="facility-details-grid">
-                        <div class="facility-detail-item">
-                            <i class="fas fa-bus"></i>
-                            <span><strong>Route:</strong> Andheri to Campus</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-plus"></i>
-                            <span><strong>Start Date:</strong> 01 Mar 2022</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-calendar-check"></i>
-                            <span><strong>Expiry Date:</strong> 31 May 2022</span>
-                        </div>
-                        <div class="facility-detail-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span><strong>Amount:</strong> ₹3,500/month</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Duration Information -->
-                    <div class="facility-duration">
-                        <div class="d-flex justify-content-between">
-                            <span><strong>Duration:</strong> 3 months</span>
-                            <span><strong>Status:</strong> Completed</span>
-                        </div>
-                        <div class="duration-bar">
-                            <div class="duration-progress" style="width: 100%"></div>
-                        </div>
-                        <div class="duration-info">
-                            <span>Started: Mar 2022</span>
-                            <span>Ended: May 2022</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Add New Facility -->
-                <h5 class="mt-5 mb-3" style="color: #ff4040;">Add New Facility</h5>
-                
-                <form id="facilityForm">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label class="required-field"><i class="fas fa-building"></i> Select Facility</label>
-                            <select id="facilityType" class="form-control" required onchange="showSubTypes()">
-                                <option value="">-- Select Facility --</option>
-                                <option value="hostel">Hostel Accommodation</option>
-                                <option value="mess">Mess Facility</option>
-                                <option value="locker">Locker</option>
-                                <option value="transport">Transport Service</option>
-                                <option value="gym">Gym Membership</option>
-                                <option value="library">Library Access</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="required-field"><i class="fas fa-money-bill-wave"></i> Amount (₹)</label>
-                            <input type="number" id="facilityAmount" class="form-control" placeholder="Enter amount" required>
-                        </div>
-                    </div>
-                    
-                    <!-- Sub-type selection (initially hidden) -->
-                    <div id="subTypeContainer" class="sub-type-info">
-                        <h6 id="subTypeTitle">Select Facility Type</h6>
-                        <div id="subTypeOptions" class="sub-type-options">
-                            <!-- Options will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <!-- Duration Selection -->
-                    <div class="form-group">
-                        <label class="required-field"><i class="fas fa-clock"></i> Select Duration</label>
-                        <div class="duration-options">
-                            <div class="duration-option" onclick="selectDuration(1)">1 Month</div>
-                            <div class="duration-option" onclick="selectDuration(3)">3 Months</div>
-                            <div class="duration-option selected" onclick="selectDuration(6)">6 Months</div>
-                            <div class="duration-option" onclick="selectDuration(12)">1 Year</div>
-                            <div class="duration-option" onclick="selectDuration(0)">Custom</div>
-                        </div>
-                        <input type="hidden" id="selectedDuration" value="6">
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label class="required-field"><i class="fas fa-calendar-plus"></i> Start Date</label>
-                            <input type="date" id="facilityStartDate" class="form-control" required onchange="updateExpiryDate()">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="required-field"><i class="fas fa-calendar-check"></i> Expiry Date</label>
-                            <input type="date" id="facilityExpiryDate" class="form-control" required readonly>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-sticky-note"></i> Additional Notes</label>
-                        <textarea id="facilityNotes" class="form-control" rows="3" placeholder="Any additional information about the facility"></textarea>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="button" class="btn btn-secondary back3"><i class="fas fa-arrow-left"></i> Back</button>
-                        <button type="submit" class="btn btn-primary " id="addFacilityBtn"><i class="fas fa-plus"></i> Add Facility</button>
-                        <button type="button" class="btn btn-success next4">Next <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </form>
-            </div>
+          <h4>Facilities</h4>
+          <p>Information about additional facilities availed by the student.</p>
+          
+          <h5 class="mt-4 mb-3" style="color: #ff4040;">Current Facilities</h5>
+          <div id="currentFacilities"></div>
 
-            <!-- Renew Facility Modal -->
-            <div class="modal fade" id="renewModal" tabindex="-1" role="dialog" aria-labelledby="renewModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="renewModalLabel">Renew Facility</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="renewForm">
-                                <input type="hidden" id="renewFacilityName">
-                                
-                                <div class="form-group">
-                                    <label for="renewAmount">Amount (₹)</label>
-                                    <input type="number" class="form-control" id="renewAmount" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label><i class="fas fa-clock"></i> Select Duration</label>
-                                    <div class="duration-options">
-                                        <div class="duration-option" onclick="selectRenewDuration(1)">1 Month</div>
-                                        <div class="duration-option" onclick="selectRenewDuration(3)">3 Months</div>
-                                        <div class="duration-option selected" onclick="selectRenewDuration(6)">6 Months</div>
-                                        <div class="duration-option" onclick="selectRenewDuration(12)">1 Year</div>
-                                        <div class="duration-option" onclick="selectRenewDuration(0)">Custom</div>
-                                    </div>
-                                    <input type="hidden" id="renewDuration" value="6">
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="renewStartDate">Start Date</label>
-                                        <input type="date" class="form-control" id="renewStartDate" required onchange="updateRenewExpiryDate()">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="renewExpiryDate">Expiry Date</label>
-                                        <input type="date" class="form-control" id="renewExpiryDate" required readonly>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="renewNotes">Additional Notes</label>
-                                    <textarea class="form-control" id="renewNotes" rows="3"></textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-success" id="confirmRenew">Confirm Renewal</button>
-                        </div>
-</div>
-</div>
-</div
-                
+          <!-- Add New Facility -->
+          <h5 class="mt-5 mb-3" style="color: #ff4040;">Add New Facility</h5>
+          
+          <form id="facilityForm">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="required-field"><i class="fas fa-building"></i> Select Facility</label>
+                <select id="facilityType" class="form-control" required onchange="showSubTypes()">
+                  <option value="">-- Select Facility --</option>
+                  <option value="hostel">Hostel Accommodation</option>
+                  <option value="mess">Mess Facility</option>
+                  <option value="locker">Locker</option>
+                  <option value="transport">Transport Service</option>
+                  <option value="gym">Gym Membership</option>
+                  <option value="library">Library Access</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="required-field"><i class="fas fa-money-bill-wave"></i> Amount (₹)</label>
+                <input type="number" id="facilityAmount" class="form-control" placeholder="Enter amount" required>
+              </div>
+            </div>
             
+            <div id="subTypeContainer" class="sub-type-info">
+              <h6 id="subTypeTitle">Select Facility Type</h6>
+              <div id="subTypeOptions" class="sub-type-options"></div>
+            </div>
+            
+            <div class="form-group">
+              <label class="required-field"><i class="fas fa-clock"></i> Select Duration</label>
+              <div class="duration-options">
+                <div class="duration-option" onclick="selectDuration(1)">1 Month</div>
+                <div class="duration-option" onclick="selectDuration(3)">3 Months</div>
+                <div class="duration-option selected" onclick="selectDuration(6)">6 Months</div>
+                <div class="duration-option" onclick="selectDuration(12)">1 Year</div>
+                <div class="duration-option" onclick="selectDuration(0)">Custom</div>
+              </div>
+              <input type="hidden" id="selectedDuration" value="6">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="required-field"><i class="fas fa-calendar-plus"></i> Start Date</label>
+                <input type="date" id="facilityStartDate" class="form-control" required onchange="updateExpiryDate()">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="required-field"><i class="fas fa-calendar-check"></i> Expiry Date</label>
+                <input type="date" id="facilityExpiryDate" class="form-control" required readonly>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-sticky-note"></i> Additional Notes</label>
+              <textarea id="facilityNotes" class="form-control" rows="3" placeholder="Any additional information about the facility"></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-3">
+              <button type="button" class="btn btn-secondary back3"><i class="fas fa-arrow-left"></i> Back</button>
+              <button type="submit" class="btn btn-primary" id="addFacilityBtn"><i class="fas fa-plus"></i> Add Facility</button>
+              <button type="button" class="btn btn-success next4">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+          </form>
+        </div>
 
         <!-- Section: Renew Admission -->
         <div class="section-content" id="Renew_admission">
           <h4>Renew Admission</h4>
           <p>Fill the form to renew the student's admission including details of student, batch, facility and payment.</p>
 
-          <!-- Student Details -->
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-user"></i> Select Student *</label>
-              <select name="student_id" class="form-control" required>
-                <option value="">-- Select Student --</option>
-                <option value="1">Rahul Sharma</option>
-                <option value="2">Priya Patil</option>
-              </select>
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-user"></i> Select Student *</label>
+                <select name="student_id" class="form-control" required>
+                  <option value="" id="renewStudentName"></option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-signal"></i> Level *</label>
+                <select name="level" class="form-control" required>
+                  <option value="">-- Select Level --</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-signal"></i> Level *</label>
-              <select name="level" class="form-control" required>
-                <option value="">-- Select Level --</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-              </select>
-            </div>
-          </div>
 
-          <!-- Batch Details -->
-          <div class="section-title mb-2"><i class="fas fa-layer-group"></i> Batch Details</div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-users"></i> Select Batch *</label>
-              <select name="batch_id" class="form-control" required>
-                <option value="">-- Select Batch --</option>
-                <option value="morning">Morning Batch</option>
-                <option value="evening">Evening Batch</option>
-                <option value="weekend">Weekend Batch</option>
-              </select>
+            <div class="section-title mb-2"><i class="fas fa-layer-group"></i> Batch Details</div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-users"></i> Select Batch *</label>
+                <select name="batch_id" class="form-control" required>
+                  <option value="">-- Select Batch --</option>
+                  <option value="morning">Morning Batch</option>
+                  <option value="evening">Evening Batch</option>
+                  <option value="weekend">Weekend Batch</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-clock"></i> Duration *</label>
+                <select name="duration" id="durationSelect" class="form-control" required>
+                  <option value="">-- Select Duration --</option>
+                  <option value="3">3 Months</option>
+                  <option value="6">6 Months</option>
+                  <option value="12">1 Year</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-clock"></i> Duration *</label>
-              <select name="duration" id="durationSelect" class="form-control" required>
-                <option value="">-- Select Duration --</option>
-                <option value="3">3 Months</option>
-                <option value="6">6 Months</option>
-                <option value="12">1 Year</option>
-              </select>
-            </div>
-          </div>
 
-          <!-- Date Information -->
-          <div class="section-title mb-2"><i class="fas fa-calendar-alt"></i> Date Information</div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-calendar-plus"></i> Join Date *</label>
-              <input type="date" name="join_date" id="joinDate" class="form-control" required>
+            <div class="section-title mb-2"><i class="fas fa-calendar-alt"></i> Date Information</div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-calendar-plus"></i> Join Date *</label>
+                <input type="date" name="join_date" id="joinDate" class="form-control" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label><i class="fas fa-calendar-times"></i> Expiry Date *</label>
+                <input type="date" name="expiry_date" id="expiryDate" class="form-control" readonly>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label><i class="fas fa-calendar-times"></i> Expiry Date *</label>
-              <input type="date" name="expiry_date" id="expiryDate" class="form-control" readonly>
-            </div>
-          </div>
 
-        
-           
-              
-           
-          <!-- Payment Details -->
-          <div class="section-title mb-2"><i class="fas fa-money-bill-wave"></i> Payment Details</div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label><i class="fas fa-rupee-sign"></i> Base Fees Amount (₹) *</label>
-              <input type="number" name="base_fees" id="baseFees" class="form-control" placeholder="Enter amount" required oninput="calculateTotalFees()">
+            <div class="section-title mb-2"><i class="fas fa-money-bill-wave"></i> Payment Details</div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label><i class="fas fa-rupee-sign"></i> Base Fees Amount (₹) *</label>
+                <input type="number" name="base_fees" id="baseFees" class="form-control" placeholder="Enter amount" required oninput="calculateTotalFees()">
+              </div>
+              <div class="form-group col-md-4">
+                <label><i class="fas fa-rupee-sign"></i> Facilities Amount (₹)</label>
+                <input type="number" name="facilities_amount" id="facilitiesAmount" class="form-control" readonly value="0">
+              </div>
+              <div class="form-group col-md-4">
+                <label><i class="fas fa-rupee-sign"></i> Total Amount (₹) *</label>
+                <input type="number" name="total_amount" id="totalAmount" class="form-control" readonly>
+              </div>
+              <div class="form-group col-md-4">
+                <label><i class="fas fa-credit-card"></i> Payment Mode *</label>
+                <select name="payment_mode" class="form-control" required>
+                  <option value="">-- Select Payment Mode --</option>
+                  <option>Cash</option>
+                  <option>UPI</option>
+                  <option>Bank Transfer</option>
+                  <option>Card</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label><i class="fas fa-receipt"></i> Receipt No.</label>
+                <input type="text" name="receipt_no" class="form-control" readonly value="RCPT<?php echo time(); ?>">
+              </div>
             </div>
-            <div class="form-group col-md-4">
-              <label><i class="fas fa-rupee-sign"></i> Facilities Amount (₹)</label>
-              <input type="number" name="facilities_amount" id="facilitiesAmount" class="form-control" readonly value="0">
-            </div>
-            <div class="form-group col-md-4">
-              <label><i class="fas fa-rupee-sign"></i> Total Amount (₹) *</label>
-              <input type="number" name="total_amount" id="totalAmount" class="form-control" readonly>
-            </div>
-            <div class="form-group col-md-4">
-              <label><i class="fas fa-credit-card"></i> Payment Mode *</label>
-              <select name="payment_mode" class="form-control" required>
-                <option value="">-- Select Payment Mode --</option>
-                <option>Cash</option>
-                <option>UPI</option>
-                <option>Bank Transfer</option>
-                <option>Card</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label><i class="fas fa-receipt"></i> Receipt No.</label>
-              <input type="text" name="receipt_no" class="form-control" readonly value="RCPT<?php echo time(); ?>">
-            </div>
-          </div>
 
-          <!-- Navigation -->
-          <div class="d-flex justify-content-between mt-3">
-            <button type="button" class="btn btn-secondary back4"><i class="fas fa-arrow-left"></i> Back</button>
-            <button type="submit" class="btn btn-success">Generate Receipt <i class="fas fa-check"></i></button>
+            <div class="d-flex justify-content-between mt-3">
+              <button type="button" class="btn btn-secondary back4"><i class="fas fa-arrow-left"></i> Back</button>
+              <button type="submit" class="btn btn-success">Generate Receipt <i class="fas fa-check"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Renew Facility Modal -->
+        <div class="modal fade" id="renewModal" tabindex="-1" role="dialog" aria-labelledby="renewModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="renewModalLabel">Renew Facility</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="renewForm">
+                  <input type="hidden" id="renewFacilityName">
+                  <div class="form-group">
+                    <label for="renewAmount">Amount (₹)</label>
+                    <input type="number" class="form-control" id="renewAmount" required>
+                  </div>
+                  <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Select Duration</label>
+                    <div class="duration-options">
+                      <div class="duration-option" onclick="selectRenewDuration(1)">1 Month</div>
+                      <div class="duration-option" onclick="selectRenewDuration(3)">3 Months</div>
+                      <div class="duration-option selected" onclick="selectRenewDuration(6)">6 Months</div>
+                      <div class="duration-option" onclick="selectRenewDuration(12)">1 Year</div>
+                      <div class="duration-option" onclick="selectRenewDuration(0)">Custom</div>
+                    </div>
+                    <input type="hidden" id="renewDuration" value="6">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="renewStartDate">Start Date</label>
+                      <input type="date" class="form-control" id="renewStartDate" required onchange="updateRenewExpiryDate()">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="renewExpiryDate">Expiry Date</label>
+                      <input type="date" class="form-control" id="renewExpiryDate" required readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="renewNotes">Additional Notes</label>
+                    <textarea class="form-control" id="renewNotes" rows="3"></textarea>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmRenew">Confirm Renewal</button>
+              </div>
+            </div>
           </div>
         </div>
 
       </div>
-      <!-- ================= End Details Area ================= -->
-
     </div>
   </div>
 </div>
@@ -1460,16 +836,108 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  // Get student ID from URL
+  const urlSegments = window.location.pathname.split('/');
+  const studentId = urlSegments[urlSegments.length - 1];
+
+  // Fetch student data from API
+  $(document).ready(function() {
+    $.ajax({
+      url: '<?php echo base_url("Admission/get_student/"); ?>' + studentId,
+      method: 'GET',
+      success: function(data) {
+        populateStudentData(data);
+      },
+      error: function() {
+        alert('Failed to fetch student data. Please try again.');
+      }
+    });
+  });
+
+  // Function to populate student data
+  function populateStudentData(data) {
+    // Personal Details
+    $('#studentName').text(data.name || 'Not specified');
+    $('#parentName').text(data.parent_name || 'Not specified');
+    $('#email').text(data.email || 'Not specified');
+    $('#address').text(data.address || 'Not specified');
+    $('#contact').text(data.contact || 'Not specified');
+    $('#emergencyContact').text(data.emergency_contact || 'Not specified');
+    $('#dob').text(data.dob ? new Date(data.dob).toLocaleDateString() : 'Not specified');
+    $('#renewStudentName').val(data.id).text(data.name || 'Not specified');
+    $('#joiningDate').text(data.joining_date ? new Date(data.joining_date).toLocaleDateString() : 'Not specified');
+
+    // Batch Details
+    const batchStatusClass = data.status.toLowerCase() === 'deactive' ? 'status-deactive' : 'status-active';
+    $('#batchName').text(data.batch_name || 'Not specified');
+    $('#batchStatus').text(data.status || 'Not specified').addClass(batchStatusClass);
+    
+    const batchDetailsGrid = $('#batchDetailsGrid');
+    batchDetailsGrid.empty();
+    
+    const batchDetails = [
+      { icon: 'university', label: 'Center', value: data.center_name || 'Not specified' },
+      { icon: 'chalkboard-teacher', label: 'Coach', value: data.coach || 'Not specified' },
+      { icon: 'calendar-alt', label: 'Joining Date', value: data.joining_date ? new Date(data.joining_date).toLocaleDateString() : 'Not specified' },
+      { icon: 'clock', label: 'Timing', value: data.batch_start_time || 'Not specified' },
+      { icon: 'signal', label: 'Level', value: data.student_progress_category || 'Not specified' }
+    ];
+
+    batchDetails.forEach(detail => {
+      batchDetailsGrid.append(`
+        <div class="batch-detail-item">
+          <i class="fas fa-${detail.icon}"></i>
+          <span><strong>${detail.label}:</strong> ${detail.value}</span>
+        </div>
+      `);
+    });
+
+    // Fees Details
+    $('#totalFees').val(data.total_fees || '0.00');
+    $('#paidAmount').val(data.paid_amount || '0.00');
+    $('#remainingAmount').val(data.remaining_amount || '0.00');
+    $('#paymentMethod').val(data.payment_method || 'Not specified');
+
+    // Facilities
+    const facilitiesContainer = $('#currentFacilities');
+    facilitiesContainer.empty();
+    
+    if (data.facilities && data.facilities.length > 0) {
+      data.facilities.forEach(facility => {
+        facilitiesContainer.append(`
+          <div class="facility-card">
+            <div class="facility-header">
+              <div class="facility-name">${facility.name}</div>
+              <div class="facility-status status-active">Active</div>
+            </div>
+            <div class="facility-details-grid">
+              <div class="facility-detail-item">
+                <i class="fas fa-info-circle"></i>
+                <span><strong>Details:</strong> ${facility.details}</span>
+              </div>
+              <div class="facility-detail-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span><strong>Amount:</strong> ₹${parseFloat(facility.amount).toLocaleString()}/month</span>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    } else {
+      facilitiesContainer.append('<p>No facilities assigned.</p>');
+    }
+
+    // Update Renew Admission form
+    $('#renewStudentName').val(data.id).text(data.name);
+    $('select[name="level"]').val(data.student_progress_category || '');
+  }
+
   function showSection(event, sectionId) {
     event.preventDefault();
-
     document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
     event.currentTarget.classList.add('active');
-
     document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
     document.getElementById(sectionId).classList.add('active');
-    
-    // Update progress bar based on active section
     updateProgressBar(sectionId);
   }
 
@@ -1478,26 +946,18 @@
     let step = 1;
     
     switch(sectionId) {
-      case "basicData":
-        step = 1;
-        break;
-      case "batchDetails":
-        step = 2;
-        break;
-      case "feesDetails":
-        step = 3;
-        break;
-      case "Renew_admission":
-        step = 4;
-        break;
+      case "basicData": step = 1; break;
+      case "batchDetails": step = 2; break;
+      case "feesDetails": step = 3; break;
+      case "facilities": step = 4; break;
+      case "Renew_admission": step = 5; break;
     }
     
-    const percentage = (step / 4) * 100;
+    const percentage = (step / 5) * 100;
     progressBar.style.width = percentage + "%";
-    progressBar.innerText = `Step ${step} of 4`;
+    progressBar.innerText = `Step ${step} of 5`;
   }
 
-  // Function to calculate expiry date based on join date and duration
   function calculateExpiryDate() {
     const joinDateInput = document.getElementById('joinDate');
     const durationSelect = document.getElementById('durationSelect');
@@ -1506,14 +966,9 @@
     if (joinDateInput.value && durationSelect.value) {
       const joinDate = new Date(joinDateInput.value);
       const duration = parseInt(durationSelect.value);
-      
-      // Calculate expiry date by adding months to join date
       const expiryDate = new Date(joinDate);
       expiryDate.setMonth(expiryDate.getMonth() + duration);
-      
-      // Format the date as YYYY-MM-DD for the input field
-      const formattedExpiryDate = expiryDate.toISOString().split('T')[0];
-      expiryDateInput.value = formattedExpiryDate;
+      expiryDateInput.value = expiryDate.toISOString().split('T')[0];
     } else {
       expiryDateInput.value = '';
     }
@@ -1541,460 +996,192 @@
         }
       });
     }
-    
-    // Calculate remaining amount when fees or paid amount changes
-    const totalFeesInput = document.getElementById('totalFees');
-    const paidAmountInput = document.getElementById('paidAmount');
-    const remainingAmountInput = document.getElementById('remainingAmount');
-    
-    function calculateRemainingAmount() {
-      if (totalFeesInput && paidAmountInput && remainingAmountInput) {
-        const total = parseFloat(totalFeesInput.value) || 0;
-        const paid = parseFloat(paidAmountInput.value) || 0;
-        remainingAmountInput.value = (total - paid).toFixed(2);
-      }
-    }
-    
-    if (totalFeesInput && paidAmountInput) {
-      totalFeesInput.addEventListener('input', calculateRemainingAmount);
-      paidAmountInput.addEventListener('input', calculateRemainingAmount);
-    }
-    
-    // Set up event listeners for date calculation
+
     const joinDateInput = document.getElementById('joinDate');
     const durationSelect = document.getElementById('durationSelect');
     
     if (joinDateInput && durationSelect) {
       joinDateInput.addEventListener('change', calculateExpiryDate);
       durationSelect.addEventListener('change', calculateExpiryDate);
-      
-      // Set default join date to today
-      const today = new Date().toISOString().split('T')[0];
-      joinDateInput.value = today;
+      joinDateInput.value = new Date().toISOString().split('T')[0];
     }
+
+    // Navigation
+    document.querySelector(".next1")?.addEventListener("click", () => navigateTo("basicData", "batchDetails"));
+    document.querySelector(".next2")?.addEventListener("click", () => navigateTo("batchDetails", "feesDetails"));
+    document.querySelector(".next3")?.addEventListener("click", () => navigateTo("feesDetails", "facilities"));
+    document.querySelector(".next4")?.addEventListener("click", () => navigateTo("facilities", "Renew_admission"));
+    document.querySelector(".back1")?.addEventListener("click", () => navigateTo("batchDetails", "basicData"));
+    document.querySelector(".back2")?.addEventListener("click", () => navigateTo("feesDetails", "batchDetails"));
+    document.querySelector(".back3")?.addEventListener("click", () => navigateTo("facilities", "feesDetails"));
+    document.querySelector(".back4")?.addEventListener("click", () => navigateTo("Renew_admission", "facilities"));
   });
 
-  // Navigation functions
   function navigateTo(currentId, nextId) {
     document.querySelectorAll(".section-content").forEach(sec => sec.classList.remove("active"));
     document.getElementById(nextId).classList.add("active");
-
-    // Update sidebar active state too
     document.querySelectorAll(".menu-item").forEach(item => item.classList.remove("active"));
     document.querySelector(`.menu-item[onclick*='${nextId}']`).classList.add("active");
-    
-    // Update progress bar
     updateProgressBar(nextId);
   }
 
-  // Set up event listeners for navigation
-  document.addEventListener("DOMContentLoaded", () => {
-    // Next1 → from Basic Data to Batch Details
-    document.querySelector(".next1")?.addEventListener("click", () => {
-      navigateTo("basicData", "batchDetails");
-    });
+  // Facility Sub-Types
+  const facilitySubTypes = {
+    hostel: [
+      { id: 'singleNonAC', name: 'Single Seater (Non-AC)', details: 'Private room with attached bathroom', amount: 8000 },
+      { id: 'singleAC', name: 'Single Seater (AC)', details: 'Private AC room with attached bathroom', amount: 12000 },
+      { id: 'doubleNonAC', name: 'Double Seater (Non-AC)', details: 'Shared room with attached bathroom', amount: 6000 },
+      { id: 'doubleAC', name: 'Double Seater (AC)', details: 'Shared AC room with attached bathroom', amount: 9000 },
+      { id: 'tripleNonAC', name: 'Triple Seater (Non-AC)', details: 'Shared room for three students', amount: 5000 }
+    ],
+    mess: [
+      { id: 'breakfastOnly', name: 'Breakfast Only', details: 'Morning meals only', amount: 3000 },
+      { id: 'lunchOnly', name: 'Lunch Only', details: 'Afternoon meals only', amount: 4000 },
+      { id: 'dinnerOnly', name: 'Dinner Only', details: 'Evening meals only', amount: 3500 },
+      { id: 'breakfastDinner', name: 'Breakfast & Dinner', details: 'Morning and evening meals', amount: 6000 },
+      { id: 'fullMeal', name: 'Full Meal Plan', details: 'All three meals included', amount: 9000 }
+    ],
+    locker: [
+      { id: 'small', name: 'Small Locker', details: 'Ideal for books and small items', amount: 1000 },
+      { id: 'medium', name: 'Medium Locker', details: 'Fits a backpack and books', amount: 1500 },
+      { id: 'large', name: 'Large Locker', details: 'Spacious for multiple items', amount: 2000 },
+      { id: 'premium', name: 'Premium Locker', details: 'Extra secure with digital lock', amount: 2500 }
+    ],
+    transport: [
+      { id: 'oneWay', name: 'One Way Service', details: 'Transport to or from campus', amount: 2500 },
+      { id: 'twoWay', name: 'Two Way Service', details: 'Transport to and from campus', amount: 4000 },
+      { id: 'weekend', name: 'Weekend Service', details: 'Weekend transport only', amount: 2000 },
+      { id: 'premiumBus', name: 'Premium Bus Service', details: 'AC bus with guaranteed seating', amount: 5000 }
+    ],
+    gym: [
+      { id: 'basic', name: 'Basic Membership', details: 'Access to cardio and weight areas', amount: 1500 },
+      { id: 'premium', name: 'Premium Membership', details: 'Includes classes and trainer consultation', amount: 3000 },
+      { id: 'pool', name: 'Gym + Pool Access', details: 'Full gym access plus swimming pool', amount: 4000 }
+    ],
+    library: [
+      { id: 'basic', name: 'Basic Access', details: 'Book borrowing and reading area access', amount: 500 },
+      { id: 'research', name: 'Research Access', details: 'Includes journal and database access', amount: 1500 },
+      { id: 'premium', name: 'Premium Access', details: '24/7 access with study rooms', amount: 2500 }
+    ],
+    other: [
+      { id: 'custom', name: 'Custom Facility', details: 'Specify details in notes', amount: 0 }
+    ]
+  };
 
-    // Next2 → from Batch Details to Fees Details
-    document.querySelector(".next2")?.addEventListener("click", () => {
-      navigateTo("batchDetails", "feesDetails");
-    });
+  const facilityTypeLabels = {
+    hostel: 'Hostel Type',
+    mess: 'Meal Plan',
+    locker: 'Locker Size',
+    transport: 'Transport Plan',
+    gym: 'Membership Type',
+    library: 'Access Level',
+    other: 'Facility Type'
+  };
+
+  function showSubTypes() {
+    const facilityType = document.getElementById('facilityType').value;
+    const subTypeContainer = document.getElementById('subTypeContainer');
+    const subTypeOptions = document.getElementById('subTypeOptions');
+    const subTypeTitle = document.getElementById('subTypeTitle');
     
-    // Next3 → from Fees Details to Facilities
-    document.querySelector(".next3")?.addEventListener("click", () => {
-      navigateTo("feesDetails", "facilities");
-    });
-
-    // Next4 → from Facilities to Renew Admission
-    document.querySelector(".next4")?.addEventListener("click", () => {
-      navigateTo("facilities", "Renew_admission");
-    });
-
-
-
-    // Back1 → from Batch Details to Basic Data
-    document.querySelector(".back1")?.addEventListener("click", () => {
-      navigateTo("batchDetails", "basicData");
-    });
-
-    // Back2 → from Fees Details to Batch Details
-    document.querySelector(".back2")?.addEventListener("click", () => {
-      navigateTo("feesDetails", "batchDetails");
-    });
+    subTypeOptions.innerHTML = '';
     
-
-    // Back3 → from Fees Details to Facilities
-    document.querySelector(".back3")?.addEventListener("click", () => {
-      navigateTo("facilities", "feesDetails");
-    });
-
-    // Back3 → from Renew Admission to Fees Details
-    document.querySelector(".back4")?.addEventListener("click", () => {
-      navigateTo("Renew_admission", "facilities");
-
-    });
-  });
-</script>
-
-<<script>
-   // Set default start date to today for all facilities
-  document.addEventListener('DOMContentLoaded', function() {
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelectorAll('.facility-start-date').forEach(input => {
-      input.value = today;
-      calculateFacilityExpiryByDuration(input.closest('.facility-details').querySelector('.facility-duration'));
-    });
-    
-    // Toggle facility details when checkbox is clicked
-    document.querySelectorAll('.facility-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', function() {
-        const card = this.closest('.facility-card');
-        if (this.checked) {
-          card.classList.add('selected');
-        } else {
-          card.classList.remove('selected');
-        }
-        updateFacilitiesSummary();
-      });
-    });
-    
-    // Update summary when facility details change
-    document.querySelectorAll('.hostel-type, .meal-plan, .locker-size, .transport-type, .facility-duration, .facility-start-date').forEach(element => {
-      element.addEventListener('change', updateFacilitiesSummary);
-    });
-    
-    document.querySelectorAll('.facility-duration').forEach(element => {
-      element.addEventListener('input', updateFacilitiesSummary);
-    });
-  });
-  
-  // Update facility price display when type changes
-  function updateFacilityPrice(selectElement) {
-    const selectedOption = selectElement.options[selectElement.selectedIndex];
-    const price = selectedOption.getAttribute('data-price');
-    const card = selectElement.closest('.facility-card');
-    const priceElement = card.querySelector('.facility-price');
-    
-    priceElement.textContent = `₹${parseInt(price).toLocaleString()}/month`;
-    updateFacilitiesSummary();
-  }
-  
-  // Calculate facility expiry date based on start date and duration
-  function calculateFacilityExpiry(dateInput) {
-    const detailsContainer = dateInput.closest('.facility-details');
-    const durationInput = detailsContainer.querySelector('.facility-duration');
-    const expiryInput = detailsContainer.querySelector('.facility-expiry-date');
-    
-    if (dateInput.value && durationInput.value) {
-      const startDate = new Date(dateInput.value);
-      const duration = parseInt(durationInput.value);
+    if (facilityType && facilitySubTypes[facilityType]) {
+      subTypeContainer.style.display = 'block';
+      subTypeTitle.textContent = `Select ${facilityTypeLabels[facilityType]}`;
       
-      const expiryDate = new Date(startDate);
-      expiryDate.setMonth(expiryDate.getMonth() + duration);
-      
-      expiryInput.value = expiryDate.toISOString().split('T')[0];
-    }
-    
-    updateFacilitiesSummary();
-  }
-  
-  // Calculate facility expiry date when duration changes
-  function calculateFacilityExpiryByDuration(durationInput) {
-    const detailsContainer = durationInput.closest('.facility-details');
-    const startDateInput = detailsContainer.querySelector('.facility-start-date');
-    const expiryInput = detailsContainer.querySelector('.facility-expiry-date');
-    
-    if (startDateInput.value && durationInput.value) {
-      const startDate = new Date(startDateInput.value);
-      const duration = parseInt(durationInput.value);
-      
-      const expiryDate = new Date(startDate);
-      expiryDate.setMonth(expiryDate.getMonth() + duration);
-      
-      expiryInput.value = expiryDate.toISOString().split('T')[0];
-    }
-    
-    updateFacilitiesSummary();
-  }
-  
-  function updateFacilitiesSummary() {
-    const summaryContainer = document.getElementById('facilitiesSummary');
-    const facilitiesTotalElement = document.getElementById('facilitiesTotal');
-    const facilitiesAmountInput = document.getElementById('facilitiesAmount');
-    const selectedFacilitiesContainer = document.querySelector('.selected-facilities');
-    
-    let summaryHTML = '';
-    let total = 0;
-    let hasSelectedFacilities = false;
-    
-    // Process each facility card
-    document.querySelectorAll('.facility-card').forEach(card => {
-      const checkbox = card.querySelector('.facility-checkbox');
-      
-      if (checkbox.checked) {
-        hasSelectedFacilities = true;
-        const facilityName = card.dataset.name;
-        
-        // Get selected option and its price
-        let typeSelect, typeText, price;
-        
-        if (card.querySelector('.hostel-type')) {
-          typeSelect = card.querySelector('.hostel-type');
-          const selectedOption = typeSelect.options[typeSelect.selectedIndex];
-          typeText = selectedOption.textContent.split('(')[0].trim();
-          price = parseFloat(selectedOption.getAttribute('data-price'));
-        } else if (card.querySelector('.meal-plan')) {
-          typeSelect = card.querySelector('.meal-plan');
-          const selectedOption = typeSelect.options[typeSelect.selectedIndex];
-          typeText = selectedOption.textContent.split('(')[0].trim();
-          price = parseFloat(selectedOption.getAttribute('data-price'));
-        } else if (card.querySelector('.locker-size')) {
-          typeSelect = card.querySelector('.locker-size');
-          const selectedOption = typeSelect.options[typeSelect.selectedIndex];
-          typeText = selectedOption.textContent.split('(')[0].trim();
-          price = parseFloat(selectedOption.getAttribute('data-price'));
-        } else if (card.querySelector('.transport-type')) {
-          typeSelect = card.querySelector('.transport-type');
-          const selectedOption = typeSelect.options[typeSelect.selectedIndex];
-          typeText = selectedOption.textContent.split('(')[0].trim();
-          price = parseFloat(selectedOption.getAttribute('data-price'));
-        }
-        
-        const duration = parseInt(card.querySelector('.facility-duration').value) || 1;
-        const startDate = card.querySelector('.facility-start-date').value;
-        const expiryDate = card.querySelector('.facility-expiry-date').value;
-        
-        const facilityTotal = price * duration;
-        total += facilityTotal;
-        
-        // Format dates for display
-        const formattedStartDate = startDate ? new Date(startDate).toLocaleDateString() : 'Not set';
-        const formattedExpiryDate = expiryDate ? new Date(expiryDate).toLocaleDateString() : 'Not set';
-        
-        summaryHTML += `
-          <tr>
-            <td>${facilityName}</td>
-            <td>${typeText}</td>
-            <td>${formattedStartDate}</td>
-            <td>${formattedExpiryDate}</td>
-            <td>${duration} month(s)</td>
-            <td>₹${facilityTotal.toLocaleString()}</td>
-          </tr>
+      facilitySubTypes[facilityType].forEach(subType => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'sub-type-option';
+        optionDiv.setAttribute('data-id', subType.id);
+        optionDiv.setAttribute('data-amount', subType.amount);
+        optionDiv.innerHTML = `
+          <div class="sub-type-name">${subType.name}</div>
+          <div class="sub-type-details">${subType.details}</div>
+          <div class="amount">₹${subType.amount.toLocaleString()}/month</div>
         `;
-      }
-    });
-    
-    // Update the summary display
-    summaryContainer.innerHTML = summaryHTML;
-    facilitiesTotalElement.textContent = `₹${total.toLocaleString()}`;
-    facilitiesAmountInput.value = total;
-    
-    // Show/hide the summary section
-    if (hasSelectedFacilities) {
-      selectedFacilitiesContainer.style.display = 'block';
+        
+        optionDiv.addEventListener('click', function() {
+          document.querySelectorAll('.sub-type-option').forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+          document.getElementById('facilityAmount').value = subType.amount;
+        });
+        
+        subTypeOptions.appendChild(optionDiv);
+      });
     } else {
-      selectedFacilitiesContainer.style.display = 'none';
+      subTypeContainer.style.display = 'none';
     }
-    
-    // Update the total fees calculation
-    calculateTotalFees();
   }
-  
+
+  window.onload = function() {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    document.getElementById('facilityStartDate').value = formattedDate;
+    document.getElementById('renewStartDate').value = formattedDate;
+    updateExpiryDate();
+    updateRenewExpiryDate();
+  };
+
+  function selectDuration(months) {
+    document.querySelectorAll('#facilityForm .duration-option').forEach(opt => opt.classList.remove('selected'));
+    event.target.classList.add('selected');
+    document.getElementById('selectedDuration').value = months;
+    updateExpiryDate();
+  }
+
+  function selectRenewDuration(months) {
+    document.querySelectorAll('#renewForm .duration-option').forEach(opt => opt.classList.remove('selected'));
+    event.target.classList.add('selected');
+    document.getElementById('renewDuration').value = months;
+    updateRenewExpiryDate();
+  }
+
+  function updateExpiryDate() {
+    const startDate = new Date(document.getElementById('facilityStartDate').value);
+    const duration = parseInt(document.getElementById('selectedDuration').value);
+    
+    if (!isNaN(startDate.getTime()) && duration > 0) {
+      const expiryDate = new Date(startDate);
+      expiryDate.setMonth(expiryDate.getMonth() + duration);
+      document.getElementById('facilityExpiryDate').value = expiryDate.toISOString().split('T')[0];
+    }
+  }
+
+  function updateRenewExpiryDate() {
+    const startDate = new Date(document.getElementById('renewStartDate').value);
+    const duration = parseInt(document.getElementById('renewDuration').value);
+    
+    if (!isNaN(startDate.getTime()) && duration > 0) {
+      const expiryDate = new Date(startDate);
+      expiryDate.setMonth(expiryDate.getMonth() + duration);
+      document.getElementById('renewExpiryDate').value = expiryDate.toISOString().split('T')[0];
+    }
+  }
+
+  $('#renewModal').on('show.bs.modal', function (event) {
+    const button = $(event.relatedTarget);
+    const facilityName = button.data('facility');
+    const modal = $(this);
+    modal.find('.modal-title').text('Renew ' + facilityName);
+    modal.find('#renewFacilityName').val(facilityName);
+  });
+
+  document.getElementById('facilityForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert('Facility added successfully!');
+  });
+
+  document.getElementById('confirmRenew').addEventListener('click', function() {
+    alert('Facility renewed successfully!');
+    $('#renewModal').modal('hide');
+  });
+
   function calculateTotalFees() {
     const baseFees = parseFloat(document.getElementById('baseFees').value) || 0;
     const facilitiesAmount = parseFloat(document.getElementById('facilitiesAmount').value) || 0;
-    const totalAmount = baseFees + facilitiesAmount;
-    
-    document.getElementById('totalAmount').value = totalAmount;
+    document.getElementById('totalAmount').value = (baseFees + facilitiesAmount).toFixed(2);
   }
 </script>
-<script>
-  // Define sub-types for each facility type
-        const facilitySubTypes = {
-            hostel: [
-                { id: 'singleNonAC', name: 'Single Seater (Non-AC)', details: 'Private room with attached bathroom', amount: 8000 },
-                { id: 'singleAC', name: 'Single Seater (AC)', details: 'Private AC room with attached bathroom', amount: 12000 },
-                { id: 'doubleNonAC', name: 'Double Seater (Non-AC)', details: 'Shared room with attached bathroom', amount: 6000 },
-                { id: 'doubleAC', name: 'Double Seater (AC)', details: 'Shared AC room with attached bathroom', amount: 9000 },
-                { id: 'tripleNonAC', name: 'Triple Seater (Non-AC)', details: 'Shared room for three students', amount: 5000 }
-            ],
-            mess: [
-                { id: 'breakfastOnly', name: 'Breakfast Only', details: 'Morning meals only', amount: 3000 },
-                { id: 'lunchOnly', name: 'Lunch Only', details: 'Afternoon meals only', amount: 4000 },
-                { id: 'dinnerOnly', name: 'Dinner Only', details: 'Evening meals only', amount: 3500 },
-                { id: 'breakfastDinner', name: 'Breakfast & Dinner', details: 'Morning and evening meals', amount: 6000 },
-                { id: 'fullMeal', name: 'Full Meal Plan', details: 'All three meals included', amount: 9000 }
-            ],
-            locker: [
-                { id: 'small', name: 'Small Locker', details: 'Ideal for books and small items', amount: 1000 },
-                { id: 'medium', name: 'Medium Locker', details: 'Fits a backpack and books', amount: 1500 },
-                { id: 'large', name: 'Large Locker', details: 'Spacious for multiple items', amount: 2000 },
-                { id: 'premium', name: 'Premium Locker', details: 'Extra secure with digital lock', amount: 2500 }
-            ],
-            transport: [
-                { id: 'oneWay', name: 'One Way Service', details: 'Transport to or from campus', amount: 2500 },
-                { id: 'twoWay', name: 'Two Way Service', details: 'Transport to and from campus', amount: 4000 },
-                { id: 'weekend', name: 'Weekend Service', details: 'Weekend transport only', amount: 2000 },
-                { id: 'premiumBus', name: 'Premium Bus Service', details: 'AC bus with guaranteed seating', amount: 5000 }
-            ],
-            gym: [
-                { id: 'basic', name: 'Basic Membership', details: 'Access to cardio and weight areas', amount: 1500 },
-                { id: 'premium', name: 'Premium Membership', details: 'Includes classes and trainer consultation', amount: 3000 },
-                { id: 'pool', name: 'Gym + Pool Access', details: 'Full gym access plus swimming pool', amount: 4000 }
-            ],
-            library: [
-                { id: 'basic', name: 'Basic Access', details: 'Book borrowing and reading area access', amount: 500 },
-                { id: 'research', name: 'Research Access', details: 'Includes journal and database access', amount: 1500 },
-                { id: 'premium', name: 'Premium Access', details: '24/7 access with study rooms', amount: 2500 }
-            ],
-            other: [
-                { id: 'custom', name: 'Custom Facility', details: 'Specify details in notes', amount: 0 }
-            ]
-        };
-        
-        // Facility type labels for display
-        const facilityTypeLabels = {
-            hostel: 'Hostel Type',
-            mess: 'Meal Plan',
-            locker: 'Locker Size',
-            transport: 'Transport Plan',
-            gym: 'Membership Type',
-            library: 'Access Level',
-            other: 'Facility Type'
-        };
-        
-        // Show sub-types based on selected facility type
-        function showSubTypes() {
-            const facilityType = document.getElementById('facilityType').value;
-            const subTypeContainer = document.getElementById('subTypeContainer');
-            const subTypeOptions = document.getElementById('subTypeOptions');
-            const subTypeTitle = document.getElementById('subTypeTitle');
-            
-            // Clear previous options
-            subTypeOptions.innerHTML = '';
-            
-            if (facilityType && facilitySubTypes[facilityType]) {
-                // Show the container
-                subTypeContainer.style.display = 'block';
-                
-                // Set the title
-                subTypeTitle.textContent = `Select ${facilityTypeLabels[facilityType]}`;
-                
-                // Add options for the selected facility type
-                facilitySubTypes[facilityType].forEach(subType => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.className = 'sub-type-option';
-                    optionDiv.setAttribute('data-id', subType.id);
-                    optionDiv.setAttribute('data-amount', subType.amount);
-                    optionDiv.innerHTML = `
-                        <div class="sub-type-name">${subType.name}</div>
-                        <div class="sub-type-details">${subType.details}</div>
-                        <div class="amount">₹${subType.amount.toLocaleString()}/month</div>
-                    `;
-                    
-                    optionDiv.addEventListener('click', function() {
-                        // Remove selected class from all options
-                        document.querySelectorAll('.sub-type-option').forEach(opt => {
-                            opt.classList.remove('selected');
-                        });
-                        
-                        // Add selected class to clicked option
-                        this.classList.add('selected');
-                        
-                        // Set the amount in the amount field
-                        document.getElementById('facilityAmount').value = subType.amount;
-                    });
-                    
-                    subTypeOptions.appendChild(optionDiv);
-                });
-            } else {
-                // Hide the container if no facility type selected or no sub-types
-                subTypeContainer.style.display = 'none';
-            }
-        }
-        
-        // Set default start date to today and calculate expiry
-        window.onload = function() {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0];
-            document.getElementById('facilityStartDate').value = formattedDate;
-            updateExpiryDate();
-            
-            // Set renew modal start date to today as well
-            document.getElementById('renewStartDate').value = formattedDate;
-            updateRenewExpiryDate();
-        };
-        
-        // Duration selection for new facility
-        function selectDuration(months) {
-            document.querySelectorAll('#facilityForm .duration-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            event.target.classList.add('selected');
-            document.getElementById('selectedDuration').value = months;
-            updateExpiryDate();
-        }
-        
-        // Duration selection for renew modal
-        function selectRenewDuration(months) {
-            document.querySelectorAll('#renewForm .duration-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            event.target.classList.add('selected');
-            document.getElementById('renewDuration').value = months;
-            updateRenewExpiryDate();
-        }
-        
-        // Update expiry date based on start date and duration
-        function updateExpiryDate() {
-            const startDate = new Date(document.getElementById('facilityStartDate').value);
-            const duration = parseInt(document.getElementById('selectedDuration').value);
-            
-            if (!isNaN(startDate.getTime()) && duration > 0) {
-                const expiryDate = new Date(startDate);
-                expiryDate.setMonth(expiryDate.getMonth() + duration);
-                
-                document.getElementById('facilityExpiryDate').value = expiryDate.toISOString().split('T')[0];
-            }
-        }
-        
-        // Update renew expiry date
-        function updateRenewExpiryDate() {
-            const startDate = new Date(document.getElementById('renewStartDate').value);
-            const duration = parseInt(document.getElementById('renewDuration').value);
-            
-            if (!isNaN(startDate.getTime()) && duration > 0) {
-                const expiryDate = new Date(startDate);
-                expiryDate.setMonth(expiryDate.getMonth() + duration);
-                
-                document.getElementById('renewExpiryDate').value = expiryDate.toISOString().split('T')[0];
-            }
-        }
-        
-        // Set up renew modal with facility data
-        $('#renewModal').on('show.bs.modal', function (event) {
-            const button = $(event.relatedTarget);
-            const facilityName = button.data('facility');
-            const modal = $(this);
-            
-            modal.find('.modal-title').text('Renew ' + facilityName);
-            modal.find('#renewFacilityName').val(facilityName);
-        });
-        
-        // Form submission handling
-        document.getElementById('facilityForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Facility added successfully!');
-            // Here you would typically send the data to a server
-        });
-        
-        document.getElementById('confirmRenew').addEventListener('click', function() {
-            alert('Facility renewed successfully!');
-            $('#renewModal').modal('hide');
-            // Here you would typically send the renewal data to a server
-        });
-</script>
-
 </body>
 </html>
