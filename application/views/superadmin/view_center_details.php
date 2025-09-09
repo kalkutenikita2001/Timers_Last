@@ -837,933 +837,921 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
   <script>
-  $(document).ready(function() {
-    const baseUrl = "<?php echo base_url(); ?>";
-    const urlParams = new URLSearchParams(window.location.search);
-    const centerId = urlParams.get('center_id');
-    let centerData = null;
 
-    // Validation function for forms
-    function validateForm(formId, submitBtnId) {
-      let isValid = true;
-      const form = $(`#${formId}`);
-      
-      // Check required fields
-      form.find('input[required], select[required], textarea[required]').each(function() {
-        if ($(this).val().trim() === '') {
-          isValid = false;
-        }
-      });
+$(document).ready(function() {
+  const baseUrl = "<?php echo base_url(); ?>";
+  const urlParams = new URLSearchParams(window.location.search);
+  const centerId = urlParams.get('center_id');
+  let centerData = null;
 
-      // Check number inputs for negative values
-      form.find('input[type="number"][min]').each(function() {
-        if (parseFloat($(this).val()) < parseFloat($(this).attr('min'))) {
-          isValid = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Invalid Input',
-            text: 'Value cannot be negative or below minimum.'
-          });
-        }
-      });
-
-      // Check time ranges for center and batch
-      if (formId === 'editCenterForm' || formId === 'editBatchForm' || formId === 'batchForm') {
-        const timeFrom = form.find('input[name="start_time"]').val();
-        const timeTo = form.find('input[name="end_time"]').val();
-        if (timeFrom && timeTo && timeFrom >= timeTo) {
-          isValid = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Invalid Time',
-            text: 'Start time must be earlier than end time.'
-          });
-        }
+  // Validation function for forms
+  function validateForm(formId, submitBtnId) {
+    let isValid = true;
+    const form = $(`#${formId}`);
+    
+    // Check required fields
+    form.find('input[required], select[required], textarea[required]').each(function() {
+      if ($(this).val().trim() === '') {
+        isValid = false;
       }
+    });
 
-      // Check date ranges for batch
-      if (formId === 'batchForm' || formId === 'editBatchForm') {
-        const startDate = form.find('input[name="start_date"]').val();
-        const endDate = form.find('input[name="end_date"]').val();
-        if (startDate && endDate && startDate > endDate) {
-          isValid = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Invalid Date',
-            text: 'Start date must be earlier than end date.'
-          });
-        }
+    // Check number inputs for negative values
+    form.find('input[type="number"][min]').each(function() {
+      if (parseFloat($(this).val()) < parseFloat($(this).attr('min'))) {
+        isValid = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Input',
+          text: 'Value cannot be negative or below minimum.'
+        });
       }
+    });
 
-      $(`#${submitBtnId}`).prop('disabled', !isValid);
+    // Check time ranges for center and batch
+    if (formId === 'editCenterForm' || formId === 'editBatchForm' || formId === 'batchForm') {
+      const timeFrom = form.find('input[name="start_time"]').val();
+      const timeTo = form.find('input[name="end_time"]').val();
+      if (timeFrom && timeTo && timeFrom >= timeTo) {
+        isValid = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Time',
+          text: 'Start time must be earlier than end time.'
+        });
+      }
     }
 
-    // Attach validation to all forms
-    $('form input, form select, form textarea').on('input change', function() {
-      const formId = $(this).closest('form').attr('id');
-      let submitBtnId;
-      switch (formId) {
-        case 'editCenterForm': submitBtnId = 'saveEditBtn'; break;
-        case 'batchForm': submitBtnId = 'batchSubmitBtn'; break;
-        case 'editBatchForm': submitBtnId = 'editBatchSubmitBtn'; break;
-        case 'facilityForm': submitBtnId = 'facilitySubmitBtn'; break;
-        case 'editFacilityForm': submitBtnId = 'editFacilitySubmitBtn'; break;
-        case 'staffForm': submitBtnId = 'staffSubmitBtn'; break;
-        case 'editStaffForm': submitBtnId = 'editStaffSubmitBtn'; break;
-        case 'expenseForm': submitBtnId = 'expenseSubmitBtn'; break;
-        case 'editExpenseForm': submitBtnId = 'editExpenseSubmitBtn'; break;
+    // Check date ranges for batch
+    if (formId === 'batchForm' || formId === 'editBatchForm') {
+      const startDate = form.find('input[name="start_date"]').val();
+      const endDate = form.find('input[name="end_date"]').val();
+      if (startDate && endDate && startDate > endDate) {
+        isValid = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Date',
+          text: 'Start date must be earlier than end date.'
+        });
       }
-      if (submitBtnId) validateForm(formId, submitBtnId);
-    });
+    }
 
-    // Clear modal fields on close
-    $('#editBatchModal').on('hidden.bs.modal', function () {
-      $('#editBatchForm')[0].reset();
-      $('#editBatchSubmitBtn').prop('disabled', true);
-    });
+    $(`#${submitBtnId}`).prop('disabled', !isValid);
+  }
 
-    // Fetch Center Data
-    function fetchCenterData() {
-      if (!centerId) {
-        $('#centerInfoCard').html('<p class="text-danger">Center ID missing in URL.</p>');
-        return;
+  // Attach validation to all forms
+  $('form input, form select, form textarea').on('input change', function() {
+    const formId = $(this).closest('form').attr('id');
+    let submitBtnId;
+    switch (formId) {
+      case 'editCenterForm': submitBtnId = 'saveEditBtn'; break;
+      case 'batchForm': submitBtnId = 'batchSubmitBtn'; break;
+      case 'editBatchForm': submitBtnId = 'editBatchSubmitBtn'; break;
+      case 'facilityForm': submitBtnId = 'facilitySubmitBtn'; break;
+      case 'editFacilityForm': submitBtnId = 'editFacilitySubmitBtn'; break;
+      case 'staffForm': submitBtnId = 'staffSubmitBtn'; break;
+      case 'editStaffForm': submitBtnId = 'editStaffSubmitBtn'; break;
+      case 'expenseForm': submitBtnId = 'expenseSubmitBtn'; break;
+      case 'editExpenseForm': submitBtnId = 'editExpenseSubmitBtn'; break;
+    }
+    if (submitBtnId) validateForm(formId, submitBtnId);
+  });
+
+  // Clear modal fields on close
+  $('#editBatchModal').on('hidden.bs.modal', function () {
+    $('#editBatchForm')[0].reset();
+    $('#editBatchSubmitBtn').prop('disabled', true);
+  });
+
+  // Fetch Center Data
+  function fetchCenterData() {
+    if (!centerId) {
+      $('#centerInfoCard').html('<p class="text-danger">Center ID missing in URL.</p>');
+      return;
+    }
+
+    $.ajax({
+      url: baseUrl + "Center/getCenterById/" + centerId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success") {
+          centerData = response;
+          loadCenterInfo();
+          loadBatchDetails();
+          loadFacilityDetails();
+          loadStaffDetails();
+          loadExpenseDetails();
+        } else {
+          $('#centerInfoCard').html('<p class="text-danger">Center not found.</p>');
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("API Error:", error);
+        $('#centerInfoCard').html('<p class="text-danger">Error loading center data.</p>');
       }
+    });
+  }
 
-      $.ajax({
-        url: baseUrl + "Center/getCenterById/" + centerId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success") {
-            centerData = response;
-            loadCenterInfo();
-            loadBatchDetails();
-            loadFacilityDetails();
-            loadStaffDetails();
-            loadExpenseDetails();
-          } else {
-            $('#centerInfoCard').html('<p class="text-danger">Center not found.</p>');
+  // Load Center Information
+  function loadCenterInfo() {
+    const center = centerData.center;
+    const centerInfo = `
+      <div class="center-card">
+        <div class="card-details">
+          <p>${center.name}</p>
+          <p><span>Address:</span> ${center.address}</p>
+          <p><span>Center Number:</span> ${center.center_number}</p>
+          <p><span>Timing:</span> ${center.center_timing_from} - ${center.center_timing_to}</p>
+          <p><span>Rent:</span> ₹${parseFloat(center.rent_amount).toFixed(2)}</p>
+          <p><span>Rent Date:</span> ${center.rent_paid_date}</p>
+          <button class="btn btn-edit" data-center-id="${center.id}">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+        </div>
+      </div>`;
+    $('#centerInfoCard').html(centerInfo);
+  }
+
+  // Load Batch Details
+  function loadBatchDetails() {
+    $('#batchCards').empty();
+    $.ajax({
+      url: baseUrl + "Center/getBatchesByCenter/" + centerId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success" && response.data && response.data.length > 0) {
+          response.data.forEach(batch => {
+            const batchCard = `
+              <div class="batch-card">
+                <div class="card-details">
+                  <p>Batch ${batch.batch_name}</p>
+                  <p><span>Timing:</span> ${batch.start_time} - ${batch.end_time}</p>
+                  <p><span>Start Date:</span> ${batch.start_date}</p>
+                  <p><span>End Date:</span> ${batch.end_date}</p>
+                  <p><span>Level:</span> ${batch.batch_level}</p>
+                  <p><span>Category:</span> ${batch.category}</p>
+                  <button class="btn btn-edit" data-batch-id="${batch.id}">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="btn btn-delete" data-delete-batch-id="${batch.id}">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>`;
+            $('#batchCards').append(batchCard);
+          });
+        } else {
+          $('#batchCards').html('<p class="text-muted">No batches found for this center.</p>');
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("API Error:", error);
+        $('#batchCards').html('<p class="text-danger">Error loading batch data.</p>');
+      }
+    });
+  }
+
+  // Delete Button Click
+  $(document).on("click", ".btn-delete[data-delete-batch-id]", function () {
+    const batchId = $(this).data("delete-batch-id");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: baseUrl + "Center/deleteBatch/" + batchId,
+          method: "POST",
+          dataType: "json",
+          success: function (response) {
+            if (response.status === "success") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Batch deleted successfully.'
+              });
+              loadBatchDetails();
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: response.message || 'Failed to delete batch.'
+              });
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Delete Error:", error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error deleting batch. Please try again.'
+            });
           }
-        },
-        error: function(xhr, status, error) {
-          console.error("API Error:", error);
-          $('#centerInfoCard').html('<p class="text-danger">Error loading center data.</p>');
-        }
-      });
-    }
+        });
+      }
+    });
+  });
 
-    // Load Center Information
-    function loadCenterInfo() {
-      const center = centerData.center;
-      const centerInfo = `
-        <div class="center-card">
+  // Load Facility Details
+  function loadFacilityDetails() {
+    const facilities = centerData.facilities;
+    $('#facilityCards').empty();
+    if (!facilities || facilities.length === 0) {
+      $('#facilityCards').html('<p class="text-muted">No facilities found for this center.</p>');
+      return;
+    }
+    facilities.forEach(facility => {
+      const facilityCard = `
+        <div class="facility-card">
           <div class="card-details">
-            <p>${center.name}</p>
-            <p><span>Address:</span> ${center.address}</p>
-            <p><span>Center Number:</span> ${center.center_number}</p>
-            <p><span>Timing:</span> ${center.center_timing_from} - ${center.center_timing_to}</p>
-            <p><span>Rent:</span> ₹${parseFloat(center.rent_amount).toFixed(2)}</p>
-            <p><span>Rent Date:</span> ${center.rent_paid_date}</p>
-            <button class="btn btn-edit" data-center-id="${center.id}">
+            <p>${facility.facility_name}</p>
+            <p><span>Subtype:</span> ${facility.subtype_name}</p>
+            <p><span>Rent:</span> ₹${parseFloat(facility.rent_amount).toFixed(2)}</p>
+            <p><span>Rent Date:</span> ${facility.rent_date}</p>
+            <button class="btn btn-edit" data-facility-id="${facility.id}">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-delete" data-delete-facility-id="${facility.id}">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>`;
+      $('#facilityCards').append(facilityCard);
+    });
+  }
+
+  // Load Staff Details
+  function loadStaffDetails() {
+    const staff = centerData.staff;
+    $('#staffCards').empty();
+    if (!staff || staff.length === 0) {
+      $('#staffCards').html('<p class="text-muted">No staff found for this center.</p>');
+      return;
+    }
+    staff.forEach(staffMember => {
+      const staffCard = `
+        <div class="staff-card">
+          <div class="card-details">
+            <p>${staffMember.staff_name}</p>
+            <p><span>Role:</span> ${staffMember.role}</p>
+            <p><span>Contact Number:</span> ${staffMember.contact_no}</p>
+            <p><span>Joining Date:</span> ${staffMember.joining_date}</p>
+            <button class="btn btn-edit" data-staff-id="${staffMember.id}">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-delete" data-delete-staff-id="${staffMember.id}">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>`;
+      $('#staffCards').append(staffCard);
+    });
+  }
+
+  // Load Expense Details
+  function loadExpenseDetails() {
+    const expenses = centerData.expenses || [];
+    $('#expenseCards').empty();
+    if (!expenses || expenses.length === 0) {
+      $('#expenseCards').html('<p class="text-muted">No expenses found for this center.</p>');
+      return;
+    }
+    expenses.forEach(expense => {
+      const expenseCard = `
+        <div class="expense-card">
+          <div class="card-details">
+            <p>${expense.category}</p>
+            <p><span>Amount:</span> ₹${parseFloat(expense.amount).toFixed(2)}</p>
+            <p><span>Date:</span> ${expense.date}</p>
+            ${expense.description ? `<p><span>Description:</span> ${expense.description}</p>` : ''}
+            <button class="btn btn-edit" data-expense-id="${expense.id}">
               <i class="fas fa-edit"></i> Edit
             </button>
           </div>
         </div>`;
-      $('#centerInfoCard').html(centerInfo);
-    }
+      $('#expenseCards').append(expenseCard);
+    });
+  }
 
-    // Load Batch Details
-    function loadBatchDetails() {
-      $('#batchCards').empty();
-      $.ajax({
-        url: baseUrl + "Center/getBatchesByCenter/" + centerId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success" && response.data && response.data.length > 0) {
-            response.data.forEach(batch => {
-              const batchCard = `
-                <div class="batch-card">
-                  <div class="card-details">
-                    <p>Batch ${batch.batch_name}</p>
-                    <p><span>Timing:</span> ${batch.start_time} - ${batch.end_time}</p>
-                    <p><span>Start Date:</span> ${batch.start_date}</p>
-                    <p><span>End Date:</span> ${batch.end_date}</p>
-                    <p><span>Level:</span> ${batch.batch_level}</p>
-                    <p><span>Category:</span> ${batch.category}</p>
-                    <button class="btn btn-edit" data-batch-id="${batch.id}">
-                      <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn btn-delete" data-delete-batch-id="${batch.id}">
-                      <i class="fas fa-trash"></i> Delete
-                    </button>
-                  </div>
-                </div>`;
-              $('#batchCards').append(batchCard);
-            });
-          } else {
-            $('#batchCards').html('<p class="text-muted">No batches found for this center.</p>');
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error("API Error:", error);
-          $('#batchCards').html('<p class="text-danger">Error loading batch data.</p>');
-        }
-      });
-    }
+  // Show Section Handler
+  window.showSection = function(event, sectionId) {
+    event.preventDefault();
+    $('.section-content').removeClass('active');
+    $('#' + sectionId).addClass('active');
+    $('.menu-item').removeClass('active');
+    $(event.currentTarget).addClass('active');
+    if (sectionId === 'batchDetails') loadBatchDetails();
+    else if (sectionId === 'facilityDetails') loadFacilityDetails();
+    else if (sectionId === 'staffDetails') loadStaffDetails();
+    else if (sectionId === 'expenseDetails') loadExpenseDetails();
+  };
 
-    // Delete Button Click
-    $(document).on("click", ".btn-delete[data-delete-batch-id]", function () {
-      const batchId = $(this).data("delete-batch-id");
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            url: baseUrl + "Center/deleteBatch/" + batchId,
-            method: "POST",
-            dataType: "json",
-            success: function (response) {
-              if (response.status === "success") {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Deleted!',
-                  text: 'Batch deleted successfully.'
-                });
-                loadBatchDetails();
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: response.message || 'Failed to delete batch.'
-                });
-              }
-            },
-            error: function (xhr, status, error) {
-              console.error("Delete Error:", error);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error deleting batch. Please try again.'
-              });
-            }
+  // Edit Center Handler
+  $(document).on('click', '.btn-edit[data-center-id]', function() {
+    const centerId = $(this).data('center-id');
+    $.ajax({
+      url: baseUrl + "Center/getCenterById/" + centerId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success") {
+          const c = response.center;
+          $("#editCenterId").val(c.id);
+          $("#editName").val(c.name);
+          $("#editCenterNumber").val(c.center_number);
+          $("#editAddress").val(c.address);
+          $("#editRentAmount").val(parseFloat(c.rent_amount).toFixed(2));
+          $("#editRentDate").val(c.rent_paid_date);
+          $("#editTimingFrom").val(c.center_timing_from);
+          $("#editTimingTo").val(c.center_timing_to);
+          validateForm('editCenterForm', 'saveEditBtn');
+          $("#editCenterModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load center data'
           });
         }
-      });
-    });
-
-    // Load Facility Details
-    function loadFacilityDetails() {
-      const facilities = centerData.facilities;
-      $('#facilityCards').empty();
-      if (!facilities || facilities.length === 0) {
-        $('#facilityCards').html('<p class="text-muted">No facilities found for this center.</p>');
-        return;
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching center data'
+        });
       }
-      facilities.forEach(facility => {
-        const facilityCard = `
-          <div class="facility-card">
-            <div class="card-details">
-              <p>${facility.facility_name}</p>
-              <p><span>Subtype:</span> ${facility.subtype_name}</p>
-              <p><span>Rent:</span> ₹${parseFloat(facility.rent_amount).toFixed(2)}</p>
-              <p><span>Rent Date:</span> ${facility.rent_date}</p>
-              <button class="btn btn-edit" data-facility-id="${facility.id}">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-              <button class="btn btn-delete" data-delete-facility-id="${facility.id}">
-                <i class="fas fa-trash"></i> Delete
-              </button>
-            </div>
-          </div>`;
-        $('#facilityCards').append(facilityCard);
-      });
-    }
-
-    // Load Staff Details
-    function loadStaffDetails() {
-      const staff = centerData.staff;
-      $('#staffCards').empty();
-      if (!staff || staff.length === 0) {
-        $('#staffCards').html('<p class="text-muted">No staff found for this center.</p>');
-        return;
-      }
-      staff.forEach(staffMember => {
-        const staffCard = `
-          <div class="staff-card">
-            <div class="card-details">
-              <p>${staffMember.staff_name}</p>
-              <p><span>Role:</span> ${staffMember.role}</p>
-              <p><span>Contact Number:</span> ${staffMember.contact_no}</p>
-              <p><span>Joining Date:</span> ${staffMember.joining_date}</p>
-              <button class="btn btn-edit" data-staff-id="${staffMember.id}">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-              <button class="btn btn-delete" data-delete-staff-id="${staffMember.id}">
-                <i class="fas fa-trash"></i> Delete
-              </button>
-            </div>
-          </div>`;
-        $('#staffCards').append(staffCard);
-      });
-    }
-
-    // Load Expense Details
-    function loadExpenseDetails() {
-      const expenses = centerData.expenses || [];
-      $('#expenseCards').empty();
-      if (!expenses || expenses.length === 0) {
-        $('#expenseCards').html('<p class="text-muted">No expenses found for this center.</p>');
-        return;
-      }
-      expenses.forEach(expense => {
-        const expenseCard = `
-          <div class="expense-card">
-            <div class="card-details">
-              <p>${expense.category}</p>
-              <p><span>Amount:</span> ₹${parseFloat(expense.amount).toFixed(2)}</p>
-              <p><span>Date:</span> ${expense.date}</p>
-              ${expense.description ? `<p><span>Description:</span> ${expense.description}</p>` : ''}
-              <button class="btn btn-edit" data-expense-id="${expense.id}">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-            </div>
-          </div>`;
-        $('#expenseCards').append(expenseCard);
-      });
-    }
-
-    // Show Section Handler
-    window.showSection = function(event, sectionId) {
-      event.preventDefault();
-      $('.section-content').removeClass('active');
-      $('#' + sectionId).addClass('active');
-      $('.menu-item').removeClass('active');
-      $(event.currentTarget).addClass('active');
-      if (sectionId === 'batchDetails') loadBatchDetails();
-      else if (sectionId === 'facilityDetails') loadFacilityDetails();
-      else if (sectionId === 'staffDetails') loadStaffDetails();
-      else if (sectionId === 'expenseDetails') loadExpenseDetails();
-    };
-
-    // Edit Center Handler
-    $(document).on('click', '.btn-edit[data-center-id]', function() {
-      const centerId = $(this).data('center-id');
-      $.ajax({
-        url: baseUrl + "Center/getCenterById/" + centerId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success") {
-            const c = response.center;
-            $("#editCenterId").val(c.id);
-            $("#editName").val(c.name);
-            $("#editCenterNumber").val(c.center_number);
-            $("#editAddress").val(c.address);
-            $("#editRentAmount").val(parseFloat(c.rent_amount).toFixed(2));
-            $("#editRentDate").val(c.rent_paid_date);
-            $("#editTimingFrom").val(c.center_timing_from);
-            $("#editTimingTo").val(c.center_timing_to);
-            validateForm('editCenterForm', 'saveEditBtn');
-            $("#editCenterModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to load center data'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching center data'
-          });
-        }
-      });
     });
-
-    // Save Center Changes
-    $('#saveEditBtn').click(function() {
-      const form = $('#editCenterForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editCenterId').val(),
-        name: $('#editName').val(),
-        center_number: $('#editCenterNumber').val(),
-        address: $('#editAddress').val(),
-        rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
-        rent_paid_date: $('#editRentDate').val(),
-        center_timing_from: $('#editTimingFrom').val(),
-        center_timing_to: $('#editTimingTo').val()
-      };
-      $.ajax({
-        url: baseUrl + "Center/updateCenter",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Center updated successfully'
-            });
-            $('#editCenterModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to update center'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating center'
-          });
-        }
-      });
-    });
-
-    // Edit Batch Handler
-    $(document).on('click', '.btn-edit[data-batch-id]', function() {
-      const batchId = $(this).data('batch-id');
-      console.log('Edit button clicked for batch ID:', batchId); // Debug log
-      $.ajax({
-        url: baseUrl + "Center/getBatchById/" + batchId, // Updated endpoint
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          console.log('AJAX Response:', response); // Debug log
-          if (response.status === "success" && response.batch) {
-            const b = response.batch;
-            $("#editBatchId").val(b.id || '');
-            $("#editBatchName").val(b.batch_name || '');
-            $("#editBatchTiming").val(b.start_time || '');
-            $("#editEndTime").val(b.end_time || '');
-            $("#editStartDate").val(b.start_date || '');
-            $("#editEndDate").val(b.end_date || '');
-            $("#editBatchCategory").val(b.category || '');
-            $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
-            validateForm('editBatchForm', 'editBatchSubmitBtn');
-            $("#editBatchModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.message || 'Failed to load batch data'
-            });
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error('AJAX Error:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching batch data'
-          });
-        }
-      });
-    });
-
-    // Add Batch Handler
-    $('#batchSubmitBtn').click(function() {
-      const form = $('#batchForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        center_id: centerId,
-        batch_name: $('#batch_name').val(),
-        batch_level: $('#batch_level').val(),
-        start_time: $('#batch_timing').val(),
-        end_time: $('#end_time').val(),
-        start_date: $('#start_date').val(),
-        end_date: $('#end_date').val(),
-        category: $('#batch_category').val()
-      };
-      $.ajax({
-        url: baseUrl + "Center/add_batch",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Batch added successfully'
-            });
-            $('#batchModal').modal('hide');
-            loadBatchDetails();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to add batch'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error adding batch'
-          });
-        }
-      });
-    });
-
-    // Save Batch Changes
-    $('#editBatchSubmitBtn').click(function() {
-      const form = $('#editBatchForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editBatchId').val(),
-        batch_name: $('#editBatchName').val(),
-        batch_level: $('#editBatchLevel').val(),
-        start_time: $('#editBatchTiming').val(),
-        end_time: $('#editEndTime').val(),
-        start_date: $('#editStartDate').val(),
-        end_date: $('#editEndDate').val(),
-        category: $('#editBatchCategory').val()
-      };
-      $.ajax({
-        url: baseUrl + "Center/update_Batch",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Batch updated successfully'
-            });
-            $('#editBatchModal').modal('hide');
-            loadBatchDetails();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to update batch'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating batch'
-          });
-        }
-      });
-    });
-
-    // Edit Facility Handler
-    $(document).on('click', '.btn-edit[data-facility-id]', function() {
-      const facilityId = $(this).data('facility-id');
-      $.ajax({
-        url: baseUrl + "Facility/getFacilityById/" + facilityId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success") {
-            const f = response.facility;
-            $("#editFacilityId").val(f.id);
-            $("#editFacilityName").val(f.facility_name);
-            $("#editSubtypeName").val(f.subtype_name);
-            $("#editFacilityRent").val(parseFloat(f.rent_amount).toFixed(2));
-            $("#editFacilityRentDate").val(f.rent_date);
-            validateForm('editFacilityForm', 'editFacilitySubmitBtn');
-            $("#editFacilityModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to load facility data'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching facility data'
-          });
-        }
-      });
-    });
-
-    // Add Facility Handler
-    $('#facilitySubmitBtn').click(function() {
-      const form = $('#facilityForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        center_id: centerId,
-        facility_name: $('#facility_name').val(),
-        subtype_name: $('#subtype_name').val(),
-        rent_amount: parseFloat($('#facility_rent').val()).toFixed(2),
-        rent_date: $('#facility_rent_date').val()
-      };
-      $.ajax({
-        url: baseUrl + "Facility/saveFacility",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Facility added successfully'
-            });
-            $('#facilityModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to add facility'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error adding facility'
-          });
-        }
-      });
-    });
-
-    // Save Facility Changes
-    $('#editFacilitySubmitBtn').click(function() {
-      const form = $('#editFacilityForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editFacilityId').val(),
-        facility_name: $('#editFacilityName').val(),
-        subtype_name: $('#editSubtypeName').val(),
-        rent_amount: parseFloat($('#editFacilityRent').val()).toFixed(2),
-        rent_date: $('#editFacilityRentDate').val()
-      };
-      $.ajax({
-        url: baseUrl + "Facility/updateFacility",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Facility updated successfully'
-            });
-            $('#editFacilityModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to update facility'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating facility'
-          });
-        }
-      });
-    });
-
-    // Edit Staff Handler
-    $(document).on('click', '.btn-edit[data-staff-id]', function() {
-      const staffId = $(this).data('staff-id');
-      $.ajax({
-        url: baseUrl + "Staff/getStaffById/" + staffId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success") {
-            const s = response.staff;
-            $("#editStaffId").val(s.id);
-            $("#editStaffName").val(s.staff_name);
-            $("#editContactNo").val(s.contact_no);
-            $("#editStaffRole").val(s.role);
-            $("#editJoiningDate").val(s.joining_date);
-            validateForm('editStaffForm', 'editStaffSubmitBtn');
-            $("#editStaffModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to load staff data'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching staff data'
-          });
-        }
-      });
-    });
-
-    // Add Staff Handler
-    $('#staffSubmitBtn').click(function() {
-      const form = $('#staffForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        center_id: centerId,
-        staff_name: $('#staff_name').val(),
-        contact_no: $('#contact_no').val(),
-        role: $('#staff_role').val(),
-        joining_date: $('#joining_date').val()
-      };
-      $.ajax({
-        url: baseUrl + "Staff/addStaff",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Staff added successfully'
-            });
-            $('#staffModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to add staff'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error adding staff'
-          });
-        }
-      });
-    });
-
-    // Save Staff Changes
-    $('#editStaffSubmitBtn').click(function() {
-      const form = $('#editStaffForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editStaffId').val(),
-        staff_name: $('#editStaffName').val(),
-        contact_no: $('#editContactNo').val(),
-        role: $('#editStaffRole').val(),
-        joining_date: $('#editJoiningDate').val()
-      };
-      $.ajax({
-        url: baseUrl + "Staff/updateStaff",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Staff updated successfully'
-            });
-            $('#editStaffModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to update staff'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating staff'
-          });
-        }
-      });
-    });
-
-    // Add Expense Handler
-    $('#expenseSubmitBtn').click(function() {
-      const form = $('#expenseForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        center_id: centerId,
-        category: $('#expense_category').val(),
-        amount: parseFloat($('#expense_amount').val()).toFixed(2),
-        date: $('#expense_date').val(),
-        description: $('#expense_description').val()
-      };
-      $.ajax({
-        url: baseUrl + "Expense/addExpense",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Expense added successfully'
-            });
-            $('#expenseModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to add expense'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error adding expense'
-          });
-        }
-      });
-    });
-
-    // Edit Expense Handler
-    $(document).on('click', '.btn-edit[data-expense-id]', function() {
-      const expenseId = $(this).data('expense-id');
-      $.ajax({
-        url: baseUrl + "Expense/getExpenseById/" + expenseId,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-          if (response.status === "success") {
-            const e = response.expense;
-            $("#editExpenseId").val(e.id);
-            $("#editExpenseCategory").val(e.category);
-            $("#editExpenseAmount").val(parseFloat(e.amount).toFixed(2));
-            $("#editExpenseDate").val(e.date);
-            $("#editExpenseDescription").val(e.description);
-            validateForm('editExpenseForm', 'editExpenseSubmitBtn');
-            $("#editExpenseModal").modal("show");
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to load expense data'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error fetching expense data'
-          });
-        }
-      });
-    });
-
-    // Save Expense Changes
-    $('#editExpenseSubmitBtn').click(function() {
-      const form = $('#editExpenseForm');
-      if (!form[0].checkValidity()) {
-        form[0].reportValidity();
-        return;
-      }
-      const payload = {
-        id: $('#editExpenseId').val(),
-        category: $('#editExpenseCategory').val(),
-        amount: parseFloat($('#editExpenseAmount').val()).toFixed(2),
-        date: $('#editExpenseDate').val(),
-        description: $('#editExpenseDescription').val()
-      };
-      $.ajax({
-        url: baseUrl + "Expense/updateExpense",
-        method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
-        success: function(response) {
-          if (response.status === "success") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'Expense updated successfully'
-            });
-            $('#editExpenseModal').modal('hide');
-            fetchCenterData();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to update expense'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error updating expense'
-          });
-        }
-      });
-    });
-
-    // Initialize
-    fetchCenterData();
   });
-  </script>
+
+  // Save Center Changes
+  $('#saveEditBtn').click(function() {
+    const form = $('#editCenterForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      id: $('#editCenterId').val(),
+      name: $('#editName').val(),
+      center_number: $('#editCenterNumber').val(),
+      address: $('#editAddress').val(),
+      rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
+      rent_paid_date: $('#editRentDate').val(),
+      center_timing_from: $('#editTimingFrom').val(),
+      center_timing_to: $('#editTimingTo').val()
+    };
+    $.ajax({
+      url: baseUrl + "Center/updateCenter",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Center updated successfully'
+          });
+          $('#editCenterModal').modal('hide');
+          fetchCenterData();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update center'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error updating center'
+        });
+      }
+    });
+  });
+
+  // Edit Batch Handler
+  $(document).on('click', '.btn-edit[data-batch-id]', function() {
+    const batchId = $(this).data('batch-id');
+    console.log('Edit button clicked for batch ID:', batchId); // Debug log
+    $.ajax({
+      url: baseUrl + "Center/getBatchById/" + batchId, // Updated endpoint
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        console.log('AJAX Response:', response); // Debug log
+        if (response.status === "success" && response.batch) {
+          const b = response.batch;
+          $("#editBatchId").val(b.id || '');
+          $("#editBatchName").val(b.batch_name || '');
+          $("#editBatchTiming").val(b.start_time || '');
+          $("#editEndTime").val(b.end_time || '');
+          $("#editStartDate").val(b.start_date || '');
+          $("#editEndDate").val(b.end_date || '');
+          $("#editBatchCategory").val(b.category || '');
+          $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
+          validateForm('editBatchForm', 'editBatchSubmitBtn');
+          $("#editBatchModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'Failed to load batch data'
+          });
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('AJAX Error:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching batch data'
+        });
+      }
+    });
+  });
+
+  // Add Batch Handler
+  $('#batchSubmitBtn').click(function() {
+    const form = $('#batchForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      center_id: centerId,
+      batch_name: $('#batch_name').val(),
+      batch_level: $('#batch_level').val(),
+      start_time: $('#batch_timing').val(),
+      end_time: $('#end_time').val(),
+      start_date: $('#start_date').val(),
+      end_date: $('#end_date').val(),
+      category: $('#batch_category').val()
+    };
+    $.ajax({
+      url: baseUrl + "Center/add_batch",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Batch added successfully'
+          });
+          $('#batchModal').modal('hide');
+          loadBatchDetails();
+        } else {
+          console.log('Add batch failed:', response.message || 'Unknown error');
+          $('#batchModal').modal('hide');
+          loadBatchDetails();
+        }
+      },
+      error: function() {
+        console.log('Error adding batch');
+        $('#batchModal').modal('hide');
+        loadBatchDetails();
+      }
+    });
+  });
+
+  // Save Batch Changes
+  $('#editBatchSubmitBtn').click(function() {
+    const form = $('#editBatchForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      id: $('#editBatchId').val(),
+      batch_name: $('#editBatchName').val(),
+      batch_level: $('#editBatchLevel').val(),
+      start_time: $('#editBatchTiming').val(),
+      end_time: $('#editEndTime').val(),
+      start_date: $('#editStartDate').val(),
+      end_date: $('#editEndDate').val(),
+      category: $('#editBatchCategory').val()
+    };
+    $.ajax({
+      url: baseUrl + "Center/update_Batch",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Batch updated successfully'
+          });
+          $('#editBatchModal').modal('hide');
+          loadBatchDetails();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update batch'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error updating batch'
+        });
+      }
+    });
+  });
+
+  // Edit Facility Handler
+  $(document).on('click', '.btn-edit[data-facility-id]', function() {
+    const facilityId = $(this).data('facility-id');
+    $.ajax({
+      url: baseUrl + "Facility/getFacilityById/" + facilityId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success") {
+          const f = response.facility;
+          $("#editFacilityId").val(f.id);
+          $("#editFacilityName").val(f.facility_name);
+          $("#editSubtypeName").val(f.subtype_name);
+          $("#editFacilityRent").val(parseFloat(f.rent_amount).toFixed(2));
+          $("#editFacilityRentDate").val(f.rent_date);
+          validateForm('editFacilityForm', 'editFacilitySubmitBtn');
+          $("#editFacilityModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load facility data'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching facility data'
+        });
+      }
+    });
+  });
+
+  // Add Facility Handler
+  $('#facilitySubmitBtn').click(function() {
+    const form = $('#facilityForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      center_id: centerId,
+      facility_name: $('#facility_name').val(),
+      subtype_name: $('#subtype_name').val(),
+      rent_amount: parseFloat($('#facility_rent').val()).toFixed(2),
+      rent_date: $('#facility_rent_date').val()
+    };
+    $.ajax({
+      url: baseUrl + "Facility/saveFacility",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Facility added successfully'
+          });
+          $('#facilityModal').modal('hide');
+          fetchCenterData();
+        } else {
+          console.log('Add facility failed:', response.message || 'Unknown error');
+          $('#facilityModal').modal('hide');
+          fetchCenterData();
+        }
+      },
+      error: function() {
+        console.log('Error adding facility');
+        $('#facilityModal').modal('hide');
+        fetchCenterData();
+      }
+    });
+  });
+
+  // Save Facility Changes
+  $('#editFacilitySubmitBtn').click(function() {
+    const form = $('#editFacilityForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      id: $('#editFacilityId').val(),
+      facility_name: $('#editFacilityName').val(),
+      subtype_name: $('#editSubtypeName').val(),
+      rent_amount: parseFloat($('#editFacilityRent').val()).toFixed(2),
+      rent_date: $('#editFacilityRentDate').val()
+    };
+    $.ajax({
+      url: baseUrl + "Facility/updateFacility",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Facility updated successfully'
+          });
+          $('#editFacilityModal').modal('hide');
+          fetchCenterData();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update facility'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error updating facility'
+        });
+      }
+    });
+  });
+
+  // Edit Staff Handler
+  $(document).on('click', '.btn-edit[data-staff-id]', function() {
+    const staffId = $(this).data('staff-id');
+    $.ajax({
+      url: baseUrl + "Staff/getStaffById/" + staffId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success") {
+          const s = response.staff;
+          $("#editStaffId").val(s.id);
+          $("#editStaffName").val(s.staff_name);
+          $("#editContactNo").val(s.contact_no);
+          $("#editStaffRole").val(s.role);
+          $("#editJoiningDate").val(s.joining_date);
+          validateForm('editStaffForm', 'editStaffSubmitBtn');
+          $("#editStaffModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load staff data'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching staff data'
+        });
+      }
+    });
+  });
+
+  // Add Staff Handler
+  $('#staffSubmitBtn').click(function() {
+    const form = $('#staffForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      center_id: centerId,
+      staff_name: $('#staff_name').val(),
+      contact_no: $('#contact_no').val(),
+      role: $('#staff_role').val(),
+      joining_date: $('#joining_date').val()
+    };
+    $.ajax({
+      url: baseUrl + "Staff/addStaff",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Staff added successfully'
+          });
+          $('#staffModal').modal('hide');
+          fetchCenterData();
+        } else {
+          console.log('Add staff failed:', response.message || 'Unknown error');
+          $('#staffModal').modal('hide');
+          fetchCenterData();
+        }
+      },
+      error: function() {
+        console.log('Error adding staff');
+        $('#staffModal').modal('hide');
+        fetchCenterData();
+      }
+    });
+  });
+
+  // Save Staff Changes
+  $('#editStaffSubmitBtn').click(function() {
+    const form = $('#editStaffForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      id: $('#editStaffId').val(),
+      staff_name: $('#editStaffName').val(),
+      contact_no: $('#editContactNo').val(),
+      role: $('#editStaffRole').val(),
+      joining_date: $('#editJoiningDate').val()
+    };
+    $.ajax({
+      url: baseUrl + "Staff/updateStaff",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Staff updated successfully'
+          });
+          $('#editStaffModal').modal('hide');
+          fetchCenterData();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update staff'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error updating staff'
+        });
+      }
+    });
+  });
+
+  // Add Expense Handler
+  $('#expenseSubmitBtn').click(function() {
+    const form = $('#expenseForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      center_id: centerId,
+      category: $('#expense_category').val(),
+      amount: parseFloat($('#expense_amount').val()).toFixed(2),
+      date: $('#expense_date').val(),
+      description: $('#expense_description').val()
+    };
+    $.ajax({
+      url: baseUrl + "Expense/addExpense",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Expense added successfully'
+          });
+          $('#expenseModal').modal('hide');
+          fetchCenterData();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to add expense'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error adding expense'
+        });
+      }
+    });
+  });
+
+  // Edit Expense Handler
+  $(document).on('click', '.btn-edit[data-expense-id]', function() {
+    const expenseId = $(this).data('expense-id');
+    $.ajax({
+      url: baseUrl + "Expense/getExpenseById/" + expenseId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.status === "success") {
+          const e = response.expense;
+          $("#editExpenseId").val(e.id);
+          $("#editExpenseCategory").val(e.category);
+          $("#editExpenseAmount").val(parseFloat(e.amount).toFixed(2));
+          $("#editExpenseDate").val(e.date);
+          $("#editExpenseDescription").val(e.description);
+          validateForm('editExpenseForm', 'editExpenseSubmitBtn');
+          $("#editExpenseModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load expense data'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching expense data'
+        });
+      }
+    });
+  });
+
+  // Save Expense Changes
+  $('#editExpenseSubmitBtn').click(function() {
+    const form = $('#editExpenseForm');
+    if (!form[0].checkValidity()) {
+      form[0].reportValidity();
+      return;
+    }
+    const payload = {
+      id: $('#editExpenseId').val(),
+      category: $('#editExpenseCategory').val(),
+      amount: parseFloat($('#editExpenseAmount').val()).toFixed(2),
+      date: $('#editExpenseDate').val(),
+      description: $('#editExpenseDescription').val()
+    };
+    $.ajax({
+      url: baseUrl + "Expense/updateExpense",
+      method: "POST",
+      data: JSON.stringify(payload),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.status === "success") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Expense updated successfully'
+          });
+          $('#editExpenseModal').modal('hide');
+          fetchCenterData();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update expense'
+          });
+        }
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error updating expense'
+        });
+      }
+    });
+  });
+
+  // Initialize
+  fetchCenterData();
+});
+</script>
 </body>
 </html>
