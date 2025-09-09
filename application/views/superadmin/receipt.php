@@ -129,6 +129,7 @@
                     <p><strong>Student Name:</strong> <span id="studentName"></span></p>
                     <p><strong>Contact:</strong> <span id="contact"></span></p>
                                         <p><strong>Student Level:</strong> <span id="studentLevel"></span></p>
+                                        <p><strong>Course Duration (in months):</strong> <span id="courseDuration"></span></p>
 
                     <p><strong>Parent Name:</strong> <span id="parentName"></span></p>
                     <p><strong>Emergency Contact:</strong> <span id="emergencyContact"></span></p>
@@ -145,6 +146,8 @@
                     <p><strong>Batch Time:</strong> <span id="batchTime"></span></p>
                     <p><strong>Duration:</strong> <span id="duration"></span></p>
                     <p><strong>Date of Joining:</strong> <span id="joiningDate"></span></p>
+                    <p><strong>Attendance Link:</strong> <span id="AttandanceLink"></span></p>
+
                 </div>
             </div>
 
@@ -208,7 +211,7 @@
                         $('#studentName').text(data.name || 'N/A');
                         $('#contact').text(data.contact || 'N/A');
                         $('#parentName').text(data.parent_name || 'N/A');
-                        
+$('#courseDuration').text(data.course_duration ? data.course_duration + ' months' : 'N/A');
                                                 $('#studentLevel').text(data.student_progress_category || 'N/A');
 
                         $('#emergencyContact').text(data.emergency_contact || 'N/A');
@@ -226,7 +229,7 @@ $('#batchTime').text(
         ? `${data.batch_start_time} - ${data.batch_end_time}` 
         : 'N/A'
 );
-
+$('#AttandanceLink').text(data.attendance_link || 'N/A');
                         $('#duration').text(data.duration ? `${data.duration} hours` : 'N/A');
                         $('#joiningDate').text(data.joining_date || 'N/A');
                         $('#courseFees').text(data.course_fees ? `₹${parseFloat(data.course_fees).toLocaleString()}` : '₹0');
@@ -234,7 +237,7 @@ $('#batchTime').text(
                         $('#paidAmount').text(data.paid_amount ? `₹${parseFloat(data.paid_amount).toLocaleString()}` : '₹0');
                         $('#remainingAmount').text(data.remaining_amount ? `₹${parseFloat(data.remaining_amount).toLocaleString()}` : '₹0');
                         $('#paymentMethod').text(data.payment_method || 'N/A');
-
+                        $('#courseDuration').text(data.course_duration || 'N/A');   
                       if (data.additional_fees && parseFloat(data.additional_fees) > 0) {
     $('#feeDetails').append(`
         <tr>

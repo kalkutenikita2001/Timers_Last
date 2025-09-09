@@ -49,6 +49,7 @@ class Student_controller extends CI_Controller
             'unique_token' => $token,
             'attendace_link' => base_url('Student_controller/mark/' . $token)
         ];
+//$courseFees = $data['courseFees'];  // works now
 
 
         $insert_id = $this->Student_model->add_student($data);

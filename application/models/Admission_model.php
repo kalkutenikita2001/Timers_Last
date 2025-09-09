@@ -69,52 +69,62 @@ class Admission_model extends CI_Model {
     return $student;
 }
 
-   public function get_student_by_id($student_id) {
+public function get_student_by_id($student_id) {
     if (!is_numeric($student_id) || $student_id <= 0) {
         log_message('error', 'Invalid student ID provided: ' . $student_id);
         return null;
     }
 
-    // Get student details with center and batch
-$this->db->select('
-    s.*, 
-    c.name as center_name, 
-    b.start_time as batch_start_time, 
-    b.end_time as batch_end_time, 
-    b.category as batch_category,
-    b.batch_name as batch_name,
-    b.duration as duration,
-');
-$this->db->from('students s');
-$this->db->join('center_details c', 's.center_id = c.id', 'left');
-$this->db->join('batches b', 's.batch_id = b.id', 'left');
-   
+    // Step 1: Get student details with center and batch
+    $this->db->select('
+        s.*, 
+        c.name as center_name, 
+        b.start_time as batch_start_time, 
+        b.end_time as batch_end_time, 
+        b.category as batch_category,
+        b.batch_name as batch_name,
+        b.duration as duration
+    ');
+    $this->db->from('students s');
+    $this->db->join('center_details c', 's.center_id = c.id', 'left');
+    $this->db->join('batches b', 's.batch_id = b.id', 'left');
     $this->db->where('s.id', $student_id);
     
     $student = $this->db->get()->row_array();
 
     if ($student) {
-        // Get student facilities
+        // Step 2: Get student facilities
         $this->db->select('facility_name as name, details, amount');
         $this->db->from('student_facilities');
         $this->db->where('student_id', $student_id);
         $student['facilities'] = $this->db->get()->result_array();
 
-        // Get only the coach for this student's center
+        // Step 3: Get only the coach for this student's center
         $this->db->select('staff_name');
         $this->db->from('staff');
         $this->db->where('center_id', $student['center_id']);
-        $this->db->where('role', 'coach'); // Only coach
+        $this->db->where('role', 'coach');
         $coach = $this->db->get()->row_array();
-
         $student['coach'] = $coach['staff_name'] ?? null;
-         $this->db->select('name, mobile, email');
+
+        // Step 4: Get coordinator details
+        $this->db->select('name, mobile, email');
         $this->db->from('coordinator');
         $coordinator = $this->db->get()->row_array();
-
         $student['coordinator_name']  = $coordinator['name']  ?? null;
         $student['coordinator_phone'] = $coordinator['mobile'] ?? null;
         $student['coordinator_email'] = $coordinator['email'] ?? null;
+
+        // Step 5: Get attendance link using contact (not id)
+        if (!empty($student['contact'])) {
+            $this->db->select('attendace_link');
+            $this->db->from('student_attendencelink');
+            $this->db->where('contact', $student['contact']);
+            $attendance = $this->db->get()->row_array();
+            $student['attendance_link'] = $attendance['attendace_link'] ?? null;
+        } else {
+            $student['attendance_link'] = null;
+        }
 
     } else {
         log_message('error', 'No student found for ID: ' . $student_id);
@@ -122,6 +132,10 @@ $this->db->join('batches b', 's.batch_id = b.id', 'left');
 
     return $student;
 }
+
+
+
+
 
 
     public function save_admission($data) {
@@ -138,6 +152,7 @@ $this->db->join('batches b', 's.batch_id = b.id', 'left');
             'address' => $data['address'],
             'center_id' => $data['center'],
             'batch_id' => $data['batch'],
+            'course_fees' => $data['courseFees'],
             'student_progress_category' => $data['category'],
             'additional_fees' => $data['additionalFees'],
             'total_fees' => $data['totalFees'],
@@ -146,6 +161,8 @@ $this->db->join('batches b', 's.batch_id = b.id', 'left');
             'payment_method' => $data['paymentMethod'],
             'admission_date' => $data['admissionDate'],
             'joining_date' => $data['joiningDate'],
+                    'course_duration'  => $data['course_duration'] ?? null, // NEW
+
             'created_at' => date('Y-m-d H:i:s')
         );
 
@@ -171,6 +188,15 @@ $this->db->join('batches b', 's.batch_id = b.id', 'left');
             return false;
         }
         return $student_id;
+    }
+     public function get_deactive_students() {
+        $this->db->select('id, name, contact, center_id, batch_id, total_fees, paid_amount, remaining_amount, joining_date, status');
+        $this->db->from('students');
+        $this->db->where('status', 'Deactive');
+        $this->db->order_by('id', 'DESC');
+
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 ?>
