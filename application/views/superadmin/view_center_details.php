@@ -161,8 +161,8 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    .btn-delete{
-       background: linear-gradient(135deg, #ff4d4f, #470000);
+    .btn-delete {
+      background: linear-gradient(135deg, #ff4d4f, #470000);
       color: white;
       border: none;
       padding: 5px 12px;
@@ -352,8 +352,6 @@
             <div class="text-right mt-4">
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
                 <i class="fas fa-plus"></i> Add Batch
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
-                <i class="fas fa-plus"></i>
               </button>
             </div>
           </div>
@@ -369,37 +367,16 @@
             </div>
           </div>
           
-         <!-- Section: Staff Details -->
-<div class="section-content" id="staffDetails">
-  <h4>Staff Details</h4>
-
-  <!-- Staff Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped" id="staffTable">
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>staff_name</th>
-          <th>contact_no</th>
-          <th>role</th>
-          <th>joining_date</th>
-          
-        </tr>
-      </thead>
-      <tbody id="staffTableBody">
-        <!-- Data will be loaded dynamically via JS -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Add Staff Button -->
-  <div class="text-right mt-4">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staffModal">
-      <i class="fas fa-plus"></i> Add Staff
-    </button>
-  </div>
-</div>
-
+          <!-- Section: Staff Details -->
+          <div class="section-content" id="staffDetails">
+            <h4>Staff Details</h4>
+            <div id="staffCards"></div>
+            <div class="text-right mt-4">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staffModal">
+                <i class="fas fa-plus"></i> Add Staff
+              </button>
+            </div>
+          </div>
           
           <!-- Section: Expense Details -->
           <div class="section-content" id="expenseDetails">
@@ -594,7 +571,6 @@
     </div>
   </div>
   
-<!-- http://localhost/timersacademy-1/Center/ -->
   <!-- Add Facility Modal -->
   <div class="modal fade" id="facilityModal" tabindex="-1" aria-labelledby="facilityLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -683,105 +659,91 @@
   </div>
 
   <!-- Add Staff Modal -->
-<div class="modal fade" id="staffModal" tabindex="-1" aria-labelledby="staffLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
-        <i class="fas fa-times"></i>
-      </button>
-      <h3 id="staffLabel">Add Staff</h3>
-      <form id="staffForm">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="staff_name">Staff Name</label>
-            <input type="text" id="staff_name" name="staff_name" class="form-control" placeholder="Enter Staff Name" />
+  <div class="modal fade" id="staffModal" tabindex="-1" aria-labelledby="staffLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3 id="staffLabel">Add Staff</h3>
+        <form id="staffForm">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="staff_name">Staff Name</label>
+              <input type="text" id="staff_name" name="staff_name" class="form-control" placeholder="Enter Staff Name" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="contact_no">Contact Number</label>
+              <input type="text" id="contact_no" name="contact_no" class="form-control" placeholder="Enter Contact Number" />
+            </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="contact_no">Contact Number</label>
-            <input type="text" id="contact_no" name="contact_no" class="form-control" placeholder="Enter Contact Number" />
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="staff_role">Role <span class="text-danger">*</span></label>
+              <select id="staff_role" name="staff_role" class="form-control" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="coach">Coach</option>
+                <option value="co-ordinator">Co-ordinator</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="joining_date">Joining Date <span class="text-danger">*</span></label>
+              <input type="date" id="joining_date" name="joining_date" class="form-control" required />
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="staff_role">Role <span class="text-danger">*</span></label>
-            <select id="staff_role" name="staff_role" class="form-control" required>
-              <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="coach">Coach</option>
-              <option value="co-ordinator">Co-ordinator</option>
-            </select>
+          <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="staffSubmitBtn" disabled>Submit</button>
           </div>
-          <div class="form-group col-md-6">
-            <label for="joining_date">Joining Date <span class="text-danger">*</span></label>
-            <input type="date" id="joining_date" name="joining_date" class="form-control" required />
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="staffSubmitBtn" disabled>Submit</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Edit Staff Modal -->
-<div class="modal fade" id="editStaffModal" tabindex="-1" aria-labelledby="editStaffLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
-        <i class="fas fa-times"></i>
-      </button>
-      <h3 id="editStaffLabel">Edit Staff</h3>
-      <form id="editStaffForm">
-        <input type="hidden" id="editStaffId">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="editStaffName">Staff Name</label>
-            <input type="text" id="editStaffName" name="staff_name" class="form-control" placeholder="Enter Staff Name" />
+  <!-- Edit Staff Modal -->
+  <div class="modal fade" id="editStaffModal" tabindex="-1" aria-labelledby="editStaffLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3 id="editStaffLabel">Edit Staff</h3>
+        <form id="editStaffForm">
+          <input type="hidden" id="editStaffId">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="editStaffName">Staff Name</label>
+              <input type="text" id="editStaffName" name="staff_name" class="form-control" placeholder="Enter Staff Name" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="editContactNo">Contact Number</label>
+              <input type="text" id="editContactNo" name="contact_no" class="form-control" placeholder="Enter Contact Number" />
+            </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="editContactNo">Contact Number</label>
-            <input type="text" id="editContactNo" name="contact_no" class="form-control" placeholder="Enter Contact Number" />
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="editStaffRole">Role <span class="text-danger">*</span></label>
+              <select id="editStaffRole" name="staff_role" class="form-control" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="coach">Coach</option>
+                <option value="co-ordinator">Co-ordinator</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="editJoiningDate">Joining Date <span class="text-danger">*</span></label>
+              <input type="date" id="editJoiningDate" name="joining_date" class="form-control" required />
+            </div>
           </div>
-<<<<<<< HEAD
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="editStaffRole">Role <span class="text-danger">*</span></label>
-            <select id="editStaffRole" name="staff_role" class="form-control" required>
-              <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="coach">Coach</option>
-              <option value="co-ordinator">Co-ordinator</option>
-            </select>
-=======
-          <div class="form-group col-md-6 d-none" id="batchDropdownWrapper">
-  <label for="editAssignedBatch">Assign Batch <span class="text-danger">*</span></label>
-  <select id="editAssignedBatch" name="assigned_batch" class="form-control">
-    <option value="">Select Batch</option>
-  </select>
-</div>
-
           <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-primary" id="editStaffSubmitBtn" disabled>Save Changes</button>
->>>>>>> 4e9f27e36cc1676cf8d83753e1ca3b2aefccbdbb
           </div>
-          <div class="form-group col-md-6">
-            <label for="editJoiningDate">Joining Date <span class="text-danger">*</span></label>
-            <input type="date" id="editJoiningDate" name="joining_date" class="form-control" required />
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="editStaffSubmitBtn" disabled>Save Changes</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-
 
   <!-- Add Expense Modal -->
   <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseLabel" aria-hidden="true">
@@ -826,57 +788,6 @@
       </div>
     </div>
   </div>
-<script>
-  const baseUrl = "<?= base_url(); ?>";
-  $(document).ready(function () {
-  const centerId = 23; // your center ID
-  const batchWrapper = $("#batchDropdownWrapper");
-  const batchSelect = $("#editAssignedBatch");
-
-  // Handle Role Change
-  $("#editStaffRole").on("change", function () {
-    const role = $(this).val();
-
-    if (role === "coach") {
-      batchWrapper.removeClass("d-none");
-      batchSelect.prop("required", true);
-
-      // Fetch batches for this center
-      $.ajax({
-        url: baseUrl + "Center/getCenterById/" + centerId,
-        method: "GET",
-        dataType: "json",
-        success: function (response) {
-          if (response.status === "success" && response.batches.length > 0) {
-            batchSelect.empty().append('<option value="">Select Batch</option>');
-            response.batches.forEach(batch => {
-              batchSelect.append(
-                `<option value="${batch.id}">${batch.batch_name} (${batch.start_time} - ${batch.end_time})</option>`
-              );
-            });
-          } else {
-            batchSelect.empty().append('<option value="">No batches available</option>');
-          }
-        },
-        error: function () {
-          alert("Error fetching batches");
-        }
-      });
-
-    } else {
-      batchWrapper.addClass("d-none");
-      batchSelect.prop("required", false).val("");
-    }
-  });
-
-  // Enable save button when form is valid
-  $("#editStaffForm input, #editStaffForm select").on("input change", function () {
-    const form = $("#editStaffForm")[0];
-    $("#editStaffSubmitBtn").prop("disabled", !form.checkValidity());
-  });
-});
-
-</script>
 
   <!-- Edit Expense Modal -->
   <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseLabel" aria-hidden="true">
@@ -926,6 +837,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
   $(document).ready(function() {
     const baseUrl = "<?php echo base_url(); ?>";
@@ -985,20 +897,6 @@
         }
       }
 
-      /* Removed contact number validation
-      if (formId === 'staffForm' || formId === 'editStaffForm') {
-        const contactNo = form.find('input[name="contact_no"]').val();
-        if (contactNo && !/^[0-9]{10}$/.test(contactNo)) {
-          isValid = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Invalid Contact Number',
-            text: 'Contact number must be 10 digits.'
-          });
-        }
-      }
-      */
-
       $(`#${submitBtnId}`).prop('disabled', !isValid);
     }
 
@@ -1018,6 +916,12 @@
         case 'editExpenseForm': submitBtnId = 'editExpenseSubmitBtn'; break;
       }
       if (submitBtnId) validateForm(formId, submitBtnId);
+    });
+
+    // Clear modal fields on close
+    $('#editBatchModal').on('hidden.bs.modal', function () {
+      $('#editBatchForm')[0].reset();
+      $('#editBatchSubmitBtn').prop('disabled', true);
     });
 
     // Fetch Center Data
@@ -1065,7 +969,6 @@
             <button class="btn btn-edit" data-center-id="${center.id}">
               <i class="fas fa-edit"></i> Edit
             </button>
-            
           </div>
         </div>`;
       $('#centerInfoCard').html(centerInfo);
@@ -1093,8 +996,8 @@
                     <button class="btn btn-edit" data-batch-id="${batch.id}">
                       <i class="fas fa-edit"></i> Edit
                     </button>
-                     <button class="btn btn-delete" data-batch-id="${batch.id}">
-                      <i class="fas fa-delete"></i> Delete
+                    <button class="btn btn-delete" data-delete-batch-id="${batch.id}">
+                      <i class="fas fa-trash"></i> Delete
                     </button>
                   </div>
                 </div>`;
@@ -1110,31 +1013,52 @@
         }
       });
     }
-   
-    //  Delete Button Click
-  $(document).on("click", ".btn-delete", function () {
-      const batchId = $(this).data("batch-id");
 
-      if (confirm("Are you sure to delete this batch?")) {
+    // Delete Button Click
+    $(document).on("click", ".btn-delete[data-delete-batch-id]", function () {
+      const batchId = $(this).data("delete-batch-id");
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
           $.ajax({
-              url: baseUrl + "Center/deleteBatch/" + batchId,  
-              method: "POST",   
-              dataType: "json",
-              success: function (response) {
-                  if (response.status === "success") {
-                      alert("Batch deleted successfully!");
-                      loadBatchDetails(); 
-                  } else {
-                      alert("Failed to delete batch: " + response.message);
-                  }
-              },
-              error: function (xhr, status, error) {
-                  console.error("Delete Error:", error);
-                  alert("Error deleting batch. Please try again.");
+            url: baseUrl + "Center/deleteBatch/" + batchId,
+            method: "POST",
+            dataType: "json",
+            success: function (response) {
+              if (response.status === "success") {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Deleted!',
+                  text: 'Batch deleted successfully.'
+                });
+                loadBatchDetails();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: response.message || 'Failed to delete batch.'
+                });
               }
+            },
+            error: function (xhr, status, error) {
+              console.error("Delete Error:", error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error deleting batch. Please try again.'
+              });
+            }
           });
-      }
-  });
+        }
+      });
+    });
 
     // Load Facility Details
     function loadFacilityDetails() {
@@ -1155,9 +1079,9 @@
               <button class="btn btn-edit" data-facility-id="${facility.id}">
                 <i class="fas fa-edit"></i> Edit
               </button>
-               <button class="btn btn-delete" data-batch-id="${batch.id}">
-                      <i class="fas fa-delete"></i> Delete
-               </button>
+              <button class="btn btn-delete" data-delete-facility-id="${facility.id}">
+                <i class="fas fa-trash"></i> Delete
+              </button>
             </div>
           </div>`;
         $('#facilityCards').append(facilityCard);
@@ -1183,9 +1107,9 @@
               <button class="btn btn-edit" data-staff-id="${staffMember.id}">
                 <i class="fas fa-edit"></i> Edit
               </button>
-               <button class="btn btn-delete" data-batch-id="${batch.id}">
-                      <i class="fas fa-deletet"></i> Delete
-                    </button>
+              <button class="btn btn-delete" data-delete-staff-id="${staffMember.id}">
+                <i class="fas fa-trash"></i> Delete
+              </button>
             </div>
           </div>`;
         $('#staffCards').append(staffCard);
@@ -1231,7 +1155,7 @@
     };
 
     // Edit Center Handler
-    $(document).on('click', '[data-center-id]', function() {
+    $(document).on('click', '.btn-edit[data-center-id]', function() {
       const centerId = $(this).data('center-id');
       $.ajax({
         url: baseUrl + "Center/getCenterById/" + centerId,
@@ -1257,102 +1181,103 @@
               text: 'Failed to load center data'
             });
           }
-        });
-      });
-
-      // Save Center Changes
-      $('#saveEditBtn').click(function() {
-        const form = $('#editCenterForm');
-        if (!form[0].checkValidity()) {
-          form[0].reportValidity();
-          return;
+        },
+        error: function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error fetching center data'
+          });
         }
-        const payload = {
-          id: $('#editCenterId').val(),
-          name: $('#editName').val(),
-          center_number: $('#editCenterNumber').val(),
-          address: $('#editAddress').val(),
-          rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
-          rent_paid_date: $('#editRentDate').val(),
-          center_timing_from: $('#editTimingFrom').val(),
-          center_timing_to: $('#editTimingTo').val()
-        };
-        $.ajax({
-          url: baseUrl + "Center/updateCenter",
-          method: "POST",
-          data: JSON.stringify(payload),
-          contentType: "application/json",
-          success: function(response) {
-            if (response.status === "success") {
-              Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'Center updated successfully'
-              });
-              $('#editCenterModal').modal('hide');
-              fetchCenterData();
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to update center'
-              });
-            }
-          },
-          error: function() {
+      });
+    });
+
+    // Save Center Changes
+    $('#saveEditBtn').click(function() {
+      const form = $('#editCenterForm');
+      if (!form[0].checkValidity()) {
+        form[0].reportValidity();
+        return;
+      }
+      const payload = {
+        id: $('#editCenterId').val(),
+        name: $('#editName').val(),
+        center_number: $('#editCenterNumber').val(),
+        address: $('#editAddress').val(),
+        rent_amount: parseFloat($('#editRentAmount').val()).toFixed(2),
+        rent_paid_date: $('#editRentDate').val(),
+        center_timing_from: $('#editTimingFrom').val(),
+        center_timing_to: $('#editTimingTo').val()
+      };
+      $.ajax({
+        url: baseUrl + "Center/updateCenter",
+        method: "POST",
+        data: JSON.stringify(payload),
+        contentType: "application/json",
+        success: function(response) {
+          if (response.status === "success") {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Center updated successfully'
+            });
+            $('#editCenterModal').modal('hide');
+            fetchCenterData();
+          } else {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Error updating center'
+              text: 'Failed to update center'
             });
           }
-        });
+        },
+        error: function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error updating center'
+          });
+        }
       });
+    });
 
-      // Edit Batch Handler
- $(document).on('click', '[data-batch-id]', function() {
-    const batchId = $(this).data('batch-id');
-    $.ajax({
-        url: baseUrl + "Center/getBatchById/" + batchId,
+    // Edit Batch Handler
+    $(document).on('click', '.btn-edit[data-batch-id]', function() {
+      const batchId = $(this).data('batch-id');
+      console.log('Edit button clicked for batch ID:', batchId); // Debug log
+      $.ajax({
+        url: baseUrl + "Center/getBatchById/" + batchId, // Updated endpoint
         method: "GET",
         dataType: "json",
         success: function(response) {
-            if (response.status === true && response.data) {
-                const b = response.data;
-                // Safely assign values, defaulting to empty string if null/undefined
-                $("#editBatchId").val(b.id || '');
-                $("#editBatchName").val(b.batch_name || '');
-                $("#editBatchTiming").val(b.start_time || '');
-                $("#editEndTime").val(b.end_time || '');
-                $("#editStartDate").val(b.start_date || '');
-                $("#editEndDate").val(b.end_date || '');
-                $("#editBatchCategory").val(b.category || '');
-                
-                // Normalize batch_level to match select options (e.g., 'intermediate' -> 'Intermediate')
-                const levelMap = {
-                    'beginner': 'Beginner',
-                    'intermediate': 'Intermediate',
-                    'advanced': 'Advanced'
-                };
-                $("#editBatchLevel").val(levelMap[(b.batch_level || '').toLowerCase()] || '');
-                
-                validateForm('editBatchForm', 'editBatchSubmitBtn');
-                $("#editBatchModal").modal("show");
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'Failed to load batch data'
-                });
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
+          console.log('AJAX Response:', response); // Debug log
+          if (response.status === "success" && response.batch) {
+            const b = response.batch;
+            $("#editBatchId").val(b.id || '');
+            $("#editBatchName").val(b.batch_name || '');
+            $("#editBatchTiming").val(b.start_time || '');
+            $("#editEndTime").val(b.end_time || '');
+            $("#editStartDate").val(b.start_date || '');
+            $("#editEndDate").val(b.end_date || '');
+            $("#editBatchCategory").val(b.category || '');
+            $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
+            validateForm('editBatchForm', 'editBatchSubmitBtn');
+            $("#editBatchModal").modal("show");
+          } else {
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error fetching batch data: ' + textStatus
+              icon: 'error',
+              title: 'Error',
+              text: response.message || 'Failed to load batch data'
             });
-            console.error('AJAX Error:', textStatus, errorThrown);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX Error:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error fetching batch data'
+          });
         }
       });
     });
@@ -1456,7 +1381,7 @@
     });
 
     // Edit Facility Handler
-    $(document).on('click', '[data-facility-id]', function() {
+    $(document).on('click', '.btn-edit[data-facility-id]', function() {
       const facilityId = $(this).data('facility-id');
       $.ajax({
         url: baseUrl + "Facility/getFacilityById/" + facilityId,
@@ -1505,7 +1430,7 @@
         rent_date: $('#facility_rent_date').val()
       };
       $.ajax({
-        url: baseUrl + "Facility/addFacility",
+        url: baseUrl + "Facility/saveFacility",
         method: "POST",
         data: JSON.stringify(payload),
         contentType: "application/json",
@@ -1583,7 +1508,7 @@
     });
 
     // Edit Staff Handler
-    $(document).on('click', '[data-staff-id]', function() {
+    $(document).on('click', '.btn-edit[data-staff-id]', function() {
       const staffId = $(this).data('staff-id');
       $.ajax({
         url: baseUrl + "Staff/getStaffById/" + staffId,
@@ -1756,7 +1681,7 @@
     });
 
     // Edit Expense Handler
-    $(document).on('click', '[data-expense-id]', function() {
+    $(document).on('click', '.btn-edit[data-expense-id]', function() {
       const expenseId = $(this).data('expense-id');
       $.ajax({
         url: baseUrl + "Expense/getExpenseById/" + expenseId,
@@ -1839,6 +1764,6 @@
     // Initialize
     fetchCenterData();
   });
-</script>
+  </script>
 </body>
 </html>
