@@ -588,10 +588,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="subTypeContainer">
             <div class="row mb-2 subTypeRow">
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                    <input type="text" class="form-control" placeholder="Subtype name" name="subtype_name">
                 </div>
                 <div class="col-md-4">
-                    <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                    <input type="number" class="form-control" placeholder="Rent" name="rent" min="0">
                     <div class="invalid-feedback">Rent must be 0 or more.</div>
                 </div>
                 <div class="col-md-2">
@@ -1851,6 +1851,118 @@ $(document).ready(function () {
                         $("#subTypeContainer").html(""); // Reset subtype rows
                     } else {
                         alert(res.message);
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error saving facility:", xhr.responseText);
+                alert("Something went wrong while saving facility!");
+            }
+        });
+    });
+
+    // Load Facilities
+    function loadFacilities() {
+        $.get(baseUrl + "Center/getFacilities/" + savedCenterId, function (data) {
+            $("#facilityList").html(data);
+        });
+    }
+
+    // Initial Load
+    loadFacilities();
+});
+</script>
+
+<script>
+$(document).ready(function () {
+    // Add Subtype Row
+    $("#addSubTypeRow").click(function () {
+        let newRow = `
+        <div class="row mb-2 subTypeRow">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+            </div>
+        </div>`;
+        $("#subTypeContainer").append(newRow);
+    });
+
+    // Remove Subtype Row
+    $(document).on("click", ".removeSubType", function () {
+        $(this).closest(".subTypeRow").remove();
+    });
+
+    // Save Facility on Add Facility Button Click
+    $("#addFacility").click(function () {
+        if (!savedCenterId) {
+            alert("Please save Center details first!");
+            return;
+        }
+
+        // Collect form data
+        const facilityName = $("#facilityName").val();
+        const subTypes = [];
+        $("#subTypeContainer .subTypeRow").each(function () {
+            const subType = $(this).find("input[name='subType[]']").val();
+            const rent = $(this).find("input[name='subRent[]']").val();
+            if (subType) {
+                subTypes.push({ subType, rent: rent || 0 });
+            }
+        });
+
+        if (!facilityName) {
+            alert("Please enter Facility Name.");
+            return;
+        }
+
+        if (subTypes.length === 0) {
+            alert("Please add at least one Subtype with rent.");
+            return;
+        }
+
+        // Prepare payload
+        const payload = {
+            center_id: savedCenterId,
+            facility_name: facilityName,
+            subTypes: subTypes
+        };
+
+        $.ajax({
+            url: baseUrl + "Center/saveFacility",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                try {
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        alert("Facility saved successfully! ID: " + res.facility_id);
+                        // Refresh facility list
+                        loadFacilities();
+                        // Reset form
+                        $("#facilityForm")[0].reset();
+                        $("#subTypeContainer").html(`
+                            <div class="row mb-2 subTypeRow">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Subtype name" name="subType[]">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" placeholder="Rent" name="subRent[]" min="0">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger btn-sm removeSubType">X</button>
+                                </div>
+                            </div>
+                        `);
+                    } else {
+                        alert("Error: " + res.message);
                     }
                 } catch (e) {
                     console.error("Invalid JSON response", response);

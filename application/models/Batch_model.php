@@ -40,6 +40,7 @@ class Batch_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->update('batches', $data);
     }
+    
 
     public function delete_batch($id) {
         $this->db->where('id', $id);

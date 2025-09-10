@@ -398,15 +398,19 @@ public function getFacilitiesByCenterId($centerId = null)
         ]);
         return;
     }
+    ///
+
+
+    
 
     // Auto update timestamp
     $updateData['updated_at'] = date('Y-m-d H:i:s');
 
-    $updated = $this->Center_model->update_batch($id, $updateData);
+    $updated = $this->Batch_model->update_batch($id, $updateData);
 
     if ($updated) {
         // ✅ fetch latest data from DB
-        $batch = $this->Center_model->get_batch($id);
+        $batch = $this->Batch_model->get_batch($id);
 
         echo json_encode([
             "status" => true,
@@ -434,7 +438,7 @@ public function getFacilitiesByCenterId($centerId = null)
             return;
         }
 
-        $batch = $this->Center_model->get_batch($id);
+        $batch = $this->Batch_model->get_batch($id);
 
         if ($batch) {
             echo json_encode([
