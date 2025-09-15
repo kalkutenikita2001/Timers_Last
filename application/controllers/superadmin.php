@@ -143,6 +143,12 @@ class superadmin extends CI_Controller
 		$this->load->view('superadmin/participant_form');
 	}
 
+
+	public function Permission()
+	{
+
+		$this->load->view('superadmin/Permission');
+	}
 	public function add_new_center()
 	{
 		$this->load->view('superadmin/add_new_center');
