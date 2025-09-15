@@ -9,7 +9,7 @@ class superadmin extends CI_Controller
 		parent::__construct();
 		$this->load->model('DashboardModel');
 		$this->load->model('Student_model'); // Load the Student_model
-		$this->load->model('Finance_model');
+
 	}
 
 	public function dashboard()
