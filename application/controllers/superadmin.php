@@ -8,6 +8,7 @@ class superadmin extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('DashboardModel');
+		$this->load->model('Student_model'); // Load the Student_model
 	}
 
 	public function dashboard()
@@ -65,10 +66,23 @@ class superadmin extends CI_Controller
 	{
 		$this->load->view('superadmin/Re_admission');
 	}
+	// public function Students()
+	// {
+	// 	$this->load->view('superadmin/Students');
+	// }
+	// show students list
 	public function Students()
 	{
-		$this->load->view('superadmin/Students');
+		$data['students'] = $this->Student_model->get_all_students();
+		$this->load->view('superadmin/Students', $data);
 	}
+
+	// view student details
+	// public function student_details($id)
+	// {
+	// 	$data['student'] = $this->Student_model->get_student_by_id($id);
+	// 	$this->load->view('superadmin/StudentDetails', $data);
+	// }
 	public function Renew_admission()
 	{
 		$this->load->view('superadmin/Renew_admission');
@@ -158,12 +172,21 @@ class superadmin extends CI_Controller
 	{
 		$this->load->view('superadmin/adminlogin');
 	}
-
-	public function student_details($student_id = null)
+	public function student_details($id = null)
 	{
-		if (!$student_id) {
-			redirect('superadmin/Students');
+		if (!$id) {
+			// if no student id is provided, redirect back to list
+			redirect('superadmin/students');
 		}
-		$this->load->view('superadmin/student_details');
+
+		$data['student'] = $this->Student_model->get_student_by_id($id);
+
+		if (!$data['student']) {
+			// if student not found, you can also redirect or show error
+			$this->session->set_flashdata('error', 'Student not found.');
+			redirect('superadmin/students');
+		}
+
+		$this->load->view('superadmin/student_details', $data);
 	}
 }
