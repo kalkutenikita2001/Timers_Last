@@ -9,6 +9,7 @@ class superadmin extends CI_Controller
 		parent::__construct();
 		$this->load->model('DashboardModel');
 		$this->load->model('Student_model'); // Load the Student_model
+
 	}
 
 	public function dashboard()
@@ -108,6 +109,22 @@ class superadmin extends CI_Controller
 	{
 		$this->load->view('superadmin/Finance');
 	}
+	// API endpoint for AJAX
+	public function getRevenue()
+	{
+		$filters = [
+			'center_id'   => $this->input->post("center_id"),
+			'start_date'  => $this->input->post("start_date"),
+			'end_date'    => $this->input->post("end_date"),
+		];
+
+		$data = $this->Finance_model->getCombinedRevenue($filters);
+
+		echo json_encode([
+			'status' => true,
+			'data'   => $data
+		]);
+	}
 
 	public function Expenses()
 	{
@@ -186,6 +203,10 @@ class superadmin extends CI_Controller
 			$this->session->set_flashdata('error', 'Student not found.');
 			redirect('superadmin/students');
 		}
+		// Load facilities
+		$this->load->model('Facility_model');
+		$data['facilities'] = $this->Facility_model->get_facilities_by_student($id);
+
 
 		$this->load->view('superadmin/student_details', $data);
 	}
