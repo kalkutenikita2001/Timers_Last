@@ -1,113 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Permission Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --danger: #dc3545;
             --muted: #6c757d;
-            --sidebar-full: 250px;
-            /* full sidebar width (adjust if needed) */
-            --sidebar-collapsed: 60px;
-            /* collapsed sidebar width (adjust if needed) */
+            --card-bg: #fff
         }
 
-        /* ===== general page styling (unchanged) ===== */
         body {
-            background: #f8f9fa;
-            font-family: "Segoe UI", Tahoma, sans-serif;
-            color: #333;
+            background: #f5f7fb;
+            font-family: Inter, system-ui, Segoe UI, Roboto, -apple-system
         }
 
-        .header {
+        .hero {
             background: linear-gradient(135deg, var(--danger), #a71d2a);
             color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 0 0 10px 10px;
+            padding: 28px;
+            border-radius: .6rem
         }
 
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, .06);
             border: 0;
+            border-radius: .6rem;
+            box-shadow: 0 6px 20px rgba(25, 40, 60, .06)
         }
 
-        .card-header {
-            background: linear-gradient(45deg, var(--danger), #a71d2a);
-            color: #fff;
-            border-radius: 10px 10px 0 0;
-            font-weight: 600;
-        }
-
-        .module-section {
-            background: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
+        .module {
             border-left: 4px solid var(--danger);
-        }
-
-        .module-title {
-            font-weight: 600;
-            color: var(--danger);
-            margin-bottom: 8px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 4px;
-        }
-
-        .form-check-input:checked {
-            background-color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .toggle-all-btn {
-            font-size: .85rem;
-            padding: .35rem .6rem;
-        }
-
-        .admin-name {
-            font-weight: 600;
-            color: var(--danger);
-            margin: 10px 0;
+            padding: 12px;
+            border-radius: .45rem;
+            background: var(--card-bg)
         }
 
         .center-name {
-            font-weight: 700;
-            font-size: 1.05rem;
+            font-weight: 700
         }
 
-        .accordion-button:not(.collapsed) {
-            background: rgba(220, 53, 69, .06);
+        .admin-name {
             color: var(--danger);
-            font-weight: 600;
+            font-weight: 600
         }
 
-        /* ===== auto-resize wrapper styles =====
-           The script toggles the `minimized` class on the wrapper.
-           Make sure the values match your actual sidebar widths.
-        */
-        /* default (sidebar expanded) */
+        .form-check .form-check-input:checked {
+            background-color: var(--danger);
+            border-color: var(--danger)
+        }
+
         #permissionWrapper {
-            transition: margin-left 0.25s ease, padding 0.25s ease;
-            margin-left: var(--sidebar-full);
-            padding: 0;
-            /* existing padding inside container-fluid remains */
+            transition: margin-left .2s ease;
+            margin-left: 250px
         }
 
-        /* when sidebar minimized */
-        #permissionWrapper.minimized {
-            margin-left: var(--sidebar-collapsed);
+        #permissionWrapper.min {
+            margin-left: 60px
         }
 
-        /* Small-screen: override (mobile layout will not keep large margin) */
-        @media (max-width: 768px) {
+        @media(max-width:768px) {
             #permissionWrapper {
-                margin-left: 0 !important;
+                margin-left: 0 !important
             }
         }
     </style>
@@ -115,272 +72,201 @@
 
 <body>
     <div class="d-flex">
-        <!-- Sidebar -->
+        <!-- Sidebar placeholder (server include in original) -->
         <?php $this->load->view('superadmin/Include/Sidebar') ?>
 
-
-        <!-- Main Content Area -->
-        <!-- NOTE: I added id="permissionWrapper" so the auto-resize script can target this element -->
-        <div id="permissionWrapper" class="main w-100">
-            <!-- Navbar -->
-            <?php $this->load->view('superadmin/Include/Navbar') ?>
-
-            <!-- Page Content -->
+        <main id="permissionWrapper" class="flex-fill">
             <div class="container-fluid p-4">
-
-                <header class="header text-center">
-                    <h1 class="mb-1"><i class="fas fa-user-lock me-2"></i>Permission Management</h1>
-                    <p class="mb-0">Manage access controls for your academy branches</p>
+                <header class="hero text-center mb-4 shadow-sm">
+                    <h1 class="h3 mb-1"><i class="fa fa-user-lock me-2"></i>Permission Management</h1>
+                    <p class="mb-0 small">Manage access controls for your academy branches</p>
                 </header>
 
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-lock me-2"></i>Manage Permissions</span>
-                                <button id="toggleAllBtn" class="btn btn-sm btn-secondary toggle-all-btn" type="button">Toggle All Off</button>
+                            <div class="card-header d-flex align-items-center justify-content-between bg-white">
+                                <div class="d-flex align-items-center gap-2"><i class="fa fa-lock text-danger"></i><strong>Manage Permissions</strong></div>
+                                <div class="btn-group">
+                                    <button id="toggleAllBtn" class="btn btn-sm btn-outline-secondary">Toggle All Off</button>
+                                    <button id="saveBtn" class="btn btn-sm btn-danger"><i class="fa fa-save me-1"></i>Save</button>
+                                </div>
                             </div>
-
                             <div class="card-body">
+
                                 <div class="accordion" id="permissionAccordion">
 
-                                    <!-- Example: Center 1 -->
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading1">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#center1">
-                                                <span class="center-name"><i class="fas fa-building me-2"></i>Center 1</span>
+                                    <!-- center template -->
+                                    <div class="accordion-item" data-center="Center 1">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+                                                <span class="center-name"><i class="fa fa-building me-2"></i>Center 1</span>
                                             </button>
                                         </h2>
-                                        <div id="center1" class="accordion-collapse collapse show" data-bs-parent="#permissionAccordion">
+                                        <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#permissionAccordion">
                                             <div class="accordion-body">
-                                                <p class="admin-name"><i class="fas fa-user me-2"></i>Coach John Doe</p>
-
-                                                <div class="module-section">
-                                                    <h6 class="module-title"><i class="fas fa-database me-2"></i>Database</h6>
-                                                    <div class="form-check form-switch mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="db1" checked>
-                                                        <label class="form-check-label" for="db1">Isha Hai Official</label>
-                                                    </div>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="db2">
-                                                        <label class="form-check-label" for="db2">ChatGPT</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="module-section">
-                                                    <h6 class="module-title"><i class="fas fa-table me-2"></i>Databoard</h6>
-                                                    <div class="form-check form-switch mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="databoard1">
-                                                        <label class="form-check-label" for="databoard1">Center Management</label>
-                                                    </div>
-                                                    <div class="form-check form-switch mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="databoard2" checked>
-                                                        <label class="form-check-label" for="databoard2">Admission Management</label>
-                                                    </div>
-                                                    <div class="form-check form-switch mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="databoard3" checked>
-                                                        <label class="form-check-label" for="databoard3">Students Management</label>
-                                                    </div>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="databoard4">
-                                                        <label class="form-check-label" for="databoard4">Event Management</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Example: Center 2 -->
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading2">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#center2">
-                                                <span class="center-name"><i class="fas fa-building me-2"></i>Center 2</span>
-                                            </button>
-                                        </h2>
-                                        <div id="center2" class="accordion-collapse collapse" data-bs-parent="#permissionAccordion">
-                                            <div class="accordion-body">
-                                                <p class="admin-name"><i class="fas fa-user me-2"></i>Coach Jane Smith</p>
-                                                <div class="module-section">
-                                                    <h6 class="module-title"><i class="fas fa-database me-2"></i>Database</h6>
-                                                    <div class="form-check form-switch mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="center2-db1">
-                                                        <label class="form-check-label" for="center2-db1">Isha Hai Official</label>
-                                                    </div>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="center2-db2" checked>
-                                                        <label class="form-check-label" for="center2-db2">ChatGPT</label>
+                                                <p class="admin-name"><i class="fa fa-user me-2"></i>Coach John Doe</p>
+                                                <div class="module">
+                                                    <h6 class="mb-2"><i class="fa fa-table me-2"></i>Dashboard</h6>
+                                                    <div class="row gy-2">
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="center_mgmt">
+                                                                <label class="form-check-label">Center Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" checked data-key="admission">
+                                                                <label class="form-check-label">Admission Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" checked data-key="students">
+                                                                <label class="form-check-label">Students Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="events">
+                                                                <label class="form-check-label">Event Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="finance">
+                                                                <label class="form-check-label">Finance Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="profile">
+                                                                <label class="form-check-label">Super Admin Profile</label>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                </div><!-- /accordion -->
+                                    <div class="accordion-item" data-center="Center 2">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                                                <span class="center-name"><i class="fa fa-building me-2"></i>Center 2</span>
+                                            </button>
+                                        </h2>
+                                        <div id="c2" class="accordion-collapse collapse" data-bs-parent="#permissionAccordion">
+                                            <div class="accordion-body">
+                                                <p class="admin-name"><i class="fa fa-user me-2"></i>Coach Jane Smith</p>
+                                                <div class="module">
+                                                    <h6 class="mb-2"><i class="fa fa-table me-2"></i>Dashboard</h6>
+                                                    <div class="row gy-2">
+                                                        <!-- reuse same keys for demo, in real app server provides defaults -->
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="center_mgmt">
+                                                                <label class="form-check-label">Center Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" checked data-key="admission">
+                                                                <label class="form-check-label">Admission Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" checked data-key="students">
+                                                                <label class="form-check-label">Students Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="events">
+                                                                <label class="form-check-label">Event Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="finance">
+                                                                <label class="form-check-label">Finance Management</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input perm" type="checkbox" data-key="profile">
+                                                                <label class="form-check-label">Super Admin Profile</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <div class="d-grid gap-2 mt-3">
-                                    <button id="saveBtn" class="btn btn-danger" type="button"><i class="fas fa-save me-2"></i>Save All Permissions</button>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-            </div><!-- /container-fluid -->
-        </div>
+            </div>
+        </main>
     </div>
 
-    <!-- ===== scripts (your original permission logic unchanged) ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         (() => {
             const toggleAllBtn = document.getElementById('toggleAllBtn');
             const saveBtn = document.getElementById('saveBtn');
-
-            function updateToggleButton() {
-                const inputs = [...document.querySelectorAll('.form-check-input')];
-                const allChecked = inputs.length && inputs.every(i => i.checked);
-                toggleAllBtn.textContent = allChecked ? 'Toggle All Off' : 'Toggle All On';
+            const perms = () => [...document.querySelectorAll('.perm')];
+            const updateToggle = () => {
+                const all = perms();
+                toggleAllBtn.textContent = (all.length && all.every(i => i.checked)) ? 'Toggle All Off' : 'Toggle All On'
             }
-
-            toggleAllBtn.addEventListener('click', () => {
-                const inputs = [...document.querySelectorAll('.form-check-input')];
-                const allChecked = inputs.length && inputs.every(i => i.checked);
-                inputs.forEach(i => i.checked = !allChecked);
-                updateToggleButton();
-            });
-
+            toggleAllBtn.onclick = () => {
+                const all = perms();
+                const on = all.length && all.every(i => i.checked);
+                all.forEach(i => i.checked = !on);
+                updateToggle()
+            }
             document.addEventListener('change', e => {
-                if (!e.target.classList.contains('form-check-input')) return;
-                updateToggleButton();
-            });
-
-            saveBtn.addEventListener('click', () => {
+                if (e.target.classList.contains('perm')) updateToggle()
+            })
+            saveBtn.onclick = () => {
                 const payload = [];
                 document.querySelectorAll('.accordion-item').forEach(item => {
-                    const center = item.querySelector('.center-name')?.textContent?.trim();
+                    const center = item.dataset.center || item.querySelector('.center-name')?.textContent?.trim();
                     if (!center) return;
-                    const perms = [];
-                    item.querySelectorAll('.form-check-input').forEach(input => {
-                        const label = input.closest('.form-check')?.querySelector('.form-check-label')?.textContent?.trim();
-                        perms.push({
-                            id: input.id,
+                    const permsArr = [];
+                    item.querySelectorAll('.perm').forEach(input => {
+                        const label = input.closest('.form-check')?.querySelector('.form-check-label')?.textContent?.trim() || input.dataset.key;
+                        permsArr.push({
+                            key: input.dataset.key,
                             label,
                             enabled: !!input.checked
                         });
                     });
                     payload.push({
                         center,
-                        perms
+                        perms: permsArr
                     });
                 });
                 console.log('permissions payload', payload);
-                alert('Permissions ready. Hook this to backend.');
-            });
+                // TODO: send to server with fetch('/save', {method:'POST',body:JSON.stringify(payload)})
+                bootstrap.Toast && new bootstrap.Toast(document.body).show();
+                alert('Permissions ready — check console for payload.');
+            }
+            updateToggle();
 
-            updateToggleButton();
+            // sidebar auto-resize (minimal)
+            const wrapper = document.getElementById('permissionWrapper');
+            document.querySelectorAll('.sidebar-toggle').forEach(btn => btn.addEventListener('click', () => wrapper.classList.toggle('min')));
         })();
     </script>
-
-    <!-- ===== Sidebar auto-resize script (drop-in) ===== -->
-    <script>
-        /*
-          SidebarAutoResize: toggles the wrapper class when sidebar changes,
-          and observes sidebar 'class' attribute changes.
-          It also listens for .sidebar-toggle clicks (if present).
-        */
-        (function() {
-            const options = {
-                wrapperSelector: '#permissionWrapper',
-                sidebarSelector: '.sidebar, #sidebar, .main-sidebar',
-                toggleSelector: '.sidebar-toggle', // keep in sync with your toggle button
-                minimizedClassOnWrapper: 'minimized',
-                sidebarMinimizedClasses: ['minimized', 'collapsed', 'sidebar-collapse']
-            };
-
-            function queryFirst(selector) {
-                try {
-                    return document.querySelector(selector);
-                } catch (e) {
-                    return null;
-                }
-            }
-
-            function checkSidebarClasses(sidebarEl) {
-                if (!sidebarEl) return false;
-                return options.sidebarMinimizedClasses.some(cls => sidebarEl.classList.contains(cls));
-            }
-
-            function setWrapperState(wrapperEl, minimized) {
-                if (!wrapperEl) return;
-                if (minimized) wrapperEl.classList.add(options.minimizedClassOnWrapper);
-                else wrapperEl.classList.remove(options.minimizedClassOnWrapper);
-                // dispatch event for other modules
-                const ev = new CustomEvent('sidebarToggle', {
-                    detail: {
-                        minimized
-                    }
-                });
-                document.dispatchEvent(ev);
-            }
-
-            function observeSidebar(sidebarEl, wrapperEl) {
-                if (!sidebarEl || !wrapperEl || typeof MutationObserver === 'undefined') return null;
-                const observer = new MutationObserver(function(mutations) {
-                    mutations.forEach(function(mutation) {
-                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                            const minimized = checkSidebarClasses(sidebarEl);
-                            setWrapperState(wrapperEl, minimized);
-                        }
-                    });
-                });
-                observer.observe(sidebarEl, {
-                    attributes: true,
-                    attributeFilter: ['class']
-                });
-                return observer;
-            }
-
-            function init() {
-                document.addEventListener('DOMContentLoaded', () => {
-                    const wrapperEl = queryFirst(options.wrapperSelector);
-                    const sidebarEl = queryFirst(options.sidebarSelector);
-                    const toggleEl = queryFirst(options.toggleSelector);
-
-                    if (!wrapperEl) {
-                        console.warn('SidebarAutoResize: wrapper element not found for selector', options.wrapperSelector);
-                        return;
-                    }
-
-                    // initial sync: if sidebar already has minimized classes, set wrapper accordingly
-                    if (checkSidebarClasses(sidebarEl)) setWrapperState(wrapperEl, true);
-                    else setWrapperState(wrapperEl, false);
-
-                    // attach toggle handler if button exists
-                    if (toggleEl) {
-                        toggleEl.addEventListener('click', function() {
-                            // toggle wrapper class
-                            const isMin = wrapperEl.classList.contains(options.minimizedClassOnWrapper);
-                            setWrapperState(wrapperEl, !isMin);
-                        });
-                    }
-
-                    // observe sidebar class changes (keeps things robust)
-                    observeSidebar(sidebarEl, wrapperEl);
-
-                    // optional: respond to programmatic events from other code
-                    document.addEventListener('sidebarToggle', (e) => {
-                        // nothing required here, but other modules can listen to this event
-                        // console.log('sidebarToggle event', e.detail);
-                    });
-                });
-            }
-
-            init();
-        })();
-    </script>
-
-    <!-- make sure Bootstrap JS + icons are included (if not already loaded) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
