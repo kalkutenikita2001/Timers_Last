@@ -21,6 +21,10 @@ class superadmin extends CI_Controller
 		$data['studentDistribution'] = $this->DashboardModel->getStudentDistribution();
 		$data['monthlyRevenue']  = $this->DashboardModel->getMonthlyRevenue();
 
+		// Fetch centers from DB
+		$query = $this->db->get('center_details');
+		$data['centers'] = $query->result(); // this will be an array of objects
+
 		// print_r($data);
 		// die; // Debugging line to check the data before loading the view
 

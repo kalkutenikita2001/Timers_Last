@@ -480,28 +480,26 @@
           </div>
         </div>
         <!-- Right Sidebar Panels -->
+
         <div class="col-lg-3">
-          <!-- Center List -->
           <div class="center-box mb-3" style="background: #f0eaea;">
             <h6 class="fw-bold text-start">Centers</h6>
             <div class="d-grid gap-2 mt-3">
-              <button class="btn center-btn text-start" onclick="selectCenter('center1')">
-                <i class="bi bi-house-door-fill me-2"></i> Center 1
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center2')">
-                <i class="bi bi-building-fill-check me-2"></i> Center 2
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center3')">
-                <i class="bi bi-geo-alt-fill me-2"></i> Center 3
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center4')">
-                <i class="bi bi-diagram-3-fill me-2"></i> Center 4
-              </button>
+              <?php if (!empty($centers)): ?>
+                <?php foreach ($centers as $c): ?>
+                  <button class="btn center-btn text-start"
+                    value="<?= $c->id ?>"
+                    onclick="selectCenter('<?= $c->id ?>')">
+                    <i class="bi bi-house-door-fill me-2"></i>
+                    <?= htmlspecialchars($c->name) ?>
+                  </button>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="text-muted">No centers available.</p>
+              <?php endif; ?>
             </div>
-            <button class="add-center-btn mt-4" data-bs-toggle="modal" data-bs-target="#addCenterModal">
-              <i class="bi bi-plus-circle me-2"></i> Add Center
-            </button>
           </div>
+
           <!-- Student Distribution -->
           <div class="center-box">
             <h6>Student Distribution</h6>
