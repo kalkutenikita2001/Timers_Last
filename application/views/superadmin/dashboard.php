@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
@@ -19,7 +20,6 @@
       font-family: 'Montserrat', serif;
       overflow-x: hidden;
     }
-    
 
     .dashboard-wrapper {
       margin-left: 250px;
@@ -27,13 +27,16 @@
       transition: all 0.3s ease-in-out;
       background-color: #f4f6f8;
     }
+
     .dashboard-wrapper.minimized {
       margin-left: 60px;
     }
+
     .dashboard-wrapper.sidebar-minimized,
     .dashboard-wrapper.sidebar-collapsed {
       margin-left: 60px;
     }
+
     .card-stat {
       background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       color: white;
@@ -50,20 +53,24 @@
       padding: 18px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+
     .card-stat:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
     }
+
     .card-stat h4 {
       margin: 12px 0 4px;
       font-size: 26px;
       font-weight: 700;
       letter-spacing: 0.5px;
     }
+
     .card-stat span {
       font-size: 14px;
       opacity: 0.9;
     }
+
     .card-icon {
       position: absolute;
       top: 12px;
@@ -72,9 +79,11 @@
       opacity: 0.6;
       transition: opacity 0.3s ease;
     }
+
     .card-stat:hover .card-icon {
       opacity: 0.8;
     }
+
     .btn-custom {
       font-size: 14px;
       background: linear-gradient(90deg, #e0e0e0, #d0d0d0);
@@ -89,16 +98,19 @@
       min-width: 140px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
     .btn-custom:hover {
       background: linear-gradient(90deg, #ff4040, #e63939);
       color: white;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
     }
+
     .btn-custom:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
+
     .chart-container {
       background: white;
       border-radius: 12px;
@@ -107,9 +119,11 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: box-shadow 0.3s ease;
     }
+
     .chart-container:hover {
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
+
     .center-box {
       background: white;
       border-radius: 12px;
@@ -117,9 +131,11 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: box-shadow 0.3s ease;
     }
+
     .center-box:hover {
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
+
     .add-center-btn {
       background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       color: white;
@@ -134,14 +150,17 @@
       font-weight: 600;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
     .add-center-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(255, 64, 64, 0.3);
     }
+
     .add-center-btn:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
+
     .center-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -153,15 +172,18 @@
       transition: all 0.3s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
     .center-btn:hover {
       background: #e9ecef;
       transform: translateX(6px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+
     .center-btn:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
+
     .legend-item {
       display: flex;
       align-items: center;
@@ -169,12 +191,14 @@
       margin-top: 10px;
       color: #333;
     }
+
     .legend-color {
       width: 14px;
       height: 14px;
       border-radius: 50%;
       margin-right: 8px;
     }
+
     .filter-btn {
       background: #f8f9fa;
       border: 1px solid #dee2e6;
@@ -186,14 +210,17 @@
       transition: all 0.3s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
     .filter-btn:hover {
       background: #e9ecef;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+
     .filter-btn:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
+
     .modal-content {
       border-radius: 12px;
       padding: 24px;
@@ -202,6 +229,7 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       position: relative;
     }
+
     .modal-close-btn {
       position: absolute;
       top: 12px;
@@ -213,20 +241,24 @@
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
     }
+
     .modal-close-btn:hover {
       color: #ff4040;
       transform: scale(1.2);
     }
+
     .modal-title {
       font-size: 1.5rem;
       font-weight: 700;
       color: #1a1a1a;
     }
+
     .form-label {
       font-weight: 600;
       color: #333;
       font-size: 14px;
     }
+
     .form-control {
       border-radius: 6px;
       border: 1px solid #ced4da;
@@ -234,11 +266,13 @@
       padding: 10px;
       transition: all 0.3s ease;
     }
+
     .form-control:focus {
       border-color: #ff4040;
       box-shadow: 0 0 6px rgba(255, 64, 64, 0.3);
       outline: none;
     }
+
     .btn-primary {
       background: linear-gradient(135deg, #ff4040, #470000);
       border: none;
@@ -247,15 +281,18 @@
       font-weight: 600;
       transition: all 0.3s ease;
     }
+
     .btn-primary:hover {
       background: linear-gradient(135deg, #e63939, #360000);
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
     }
+
     .btn-primary:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
     }
+
     .btn-secondary {
       background: #6c757d;
       border: none;
@@ -264,53 +301,66 @@
       font-weight: 600;
       transition: all 0.3s ease;
     }
+
     .btn-secondary:hover {
       background: #5a6268;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+
     .btn-secondary:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.2);
     }
+
     h6 {
       font-weight: 700 !important;
       color: #1a1a1a;
       font-size: 1.1rem;
     }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .dashboard-wrapper {
         margin-left: 0 !important;
         padding: 15px !important;
       }
+
       .card-stat {
         height: 110px;
       }
+
       .card-stat h4 {
         font-size: 22px;
       }
+
       .card-stat span {
         font-size: 12px;
       }
+
       .btn-custom {
         font-size: 12px;
         padding: 8px 16px;
         min-width: 120px;
       }
+
       .chart-container {
         padding: 15px;
       }
+
       .center-box {
         padding: 15px;
       }
+
       .modal-content {
         padding: 15px;
       }
+
       .modal-title {
         font-size: 1.3rem;
       }
     }
+
     @media (max-width: 576px) {
       .btn-custom {
         font-size: 11px;
@@ -318,210 +368,47 @@
         min-width: 100px;
         margin-bottom: 5px;
       }
+
       .card-stat {
         height: 100px;
       }
+
       .card-stat h4 {
         font-size: 18px;
       }
+
       .card-stat span {
         font-size: 11px;
       }
+
       .modal-content {
         padding: 12px;
       }
+
       .modal-title {
         font-size: 1.2rem;
       }
     }
+
     @media (min-width: 769px) and (max-width: 1024px) {
       .dashboard-wrapper {
         margin-left: 200px;
       }
+
       .dashboard-wrapper.minimized {
         margin-left: 60px;
       }
     }
-
-/* =------------------------------------------------------------------------------------------------------------------- --> */
-
-  /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding-top: 20px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .sidebar.minimized {
-            width: 60px;
-        }
-
-        /* Navbar */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 250px;
-            right: 0;
-            color: white;
-            padding: 10px;
-            transition: left 0.3s ease-in-out;
-        }
-
-        .navbar.sidebar-minimized {
-            left: 60px;
-        }
-
-        /* Content */
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 80px 20px 20px 20px;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        .content-wrapper.minimized {
-            margin-left: 60px;
-        }
-
-        /* Mobile Sidebar Overlay */
-        @media (max-width: 768px) {
-            .sidebar {
-                left: -250px;
-            }
-
-            .sidebar.active {
-                left: 0;
-                z-index: 1000;
-            }
-
-            .navbar {
-                left: 0;
-            }
-
-            .content-wrapper {
-                margin-left: 0;
-                padding: 70px 15px 15px 15px;
-            }
-        }
-
-
-
-    /* Sidebar Responsive Fix */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    left: -250px;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background: #000; /* Adjust to your theme */
-    transition: left 0.3s ease;
-    z-index: 1050;
-  }
-  .sidebar.active {
-    left: 0;
-  }
-  .dashboard-wrapper {
-    margin-left: 0 !important;
-    padding: 15px !important;
-  }
-  .sidebar-toggle {
-    display: inline-block;
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 1100;
-  }
-}
-
   </style>
 </head>
+
 <body>
-<!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
-    <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
-<!-- =------------------------------------------------------------------------------------------------------------------- -->
-
-    <!-- Main Content Wrapper -->
-    <div class="content-wrapper" id="contentWrapper">
-        <div class="content">
-  <!-- <div class="dashboard-wrapper" id="dashboardWrapper"> -->
-    <!-- =------------------------------------------------------------------------------------------------------------------- -->
-
-    <?php
-    // Fetch dynamic data from database
-    // Active Students
-    $active_students_query = $this->db->select('COUNT(id) as count')->from('students')->where('status', 'Active')->get();
-    $active_students = $active_students_query->row()->count ?? 0;
-
-    // Attendance Rate (Hardcoded as no full attendance history provided; can be calculated if 'attendances' table exists)
-    $attendance_rate = 85; // Placeholder; To calculate real: (total attendances / possible attendances) * 100
-
-    // Fee Defaulters (students with remaining_amount > 0)
-    $fee_defaulters_query = $this->db->select('COUNT(id) as count')->from('students')->where('remaining_amount >', 0)->get();
-    $fee_defaulters = $fee_defaulters_query->row()->count ?? 0;
-
-    // Monthly Profits (sum of paid_amount from students + sum of amount from student_facilities for current month)
-    $current_month = date('m');
-    $current_year = date('Y');
-    $student_payments = $this->db->select('SUM(paid_amount) as sum')->from('students')
-        ->where('MONTH(created_at)', $current_month)
-        ->where('YEAR(created_at)', $current_year)
-        ->get()->row()->sum ?? 0;
-    $facility_payments = $this->db->select('SUM(amount) as sum')->from('student_facilities')
-        ->where('MONTH(created_at)', $current_month)
-        ->where('YEAR(created_at)', $current_year)
-        ->get()->row()->sum ?? 0;
-    $monthly_profits = $student_payments + $facility_payments;
-
-    // Centers (real names from centers table)
-    $centers = $this->db->get('centers')->result_array();
-
-    // Student Distribution (counts by category)
-    $beginner_count = $this->db->where('category', 'Beginner')->count_all_results('students') ?? 0;
-    $intermediate_count = $this->db->where('category', 'Intermediate')->count_all_results('students') ?? 0;
-    $advanced_count = $this->db->where('category', 'Advanced')->count_all_results('students') ?? 0;
-    $total_students = $beginner_count + $intermediate_count + $advanced_count;
-    $beginner_pct = $total_students > 0 ? round(($beginner_count / $total_students) * 100) : 0;
-    $intermediate_pct = $total_students > 0 ? round(($intermediate_count / $total_students) * 100) : 0;
-    $advanced_pct = $total_students > 0 ? round(($advanced_count / $total_students) * 100) : 0;
-
-    // Weekly Attendance Data (Assuming 'attendances' table exists with 'attendance_date'; otherwise dummy)
-    // If no attendances table, use dummy data
-    $weekly_attendance = [90, 85, 75, 92, 80, 85, 90]; // Dummy
-    // Real calculation (uncomment if attendances table exists):
-    /*
-    $weekly_attendance = [];
-    $start_of_week = date('Y-m-d', strtotime('monday this week'));
-    for ($i = 0; $i < 7; $i++) {
-        $date = date('Y-m-d', strtotime($start_of_week . " +$i days"));
-        $count = $this->db->where('attendance_date', $date)->count_all_results('attendances') ?? 0;
-        $weekly_attendance[] = $count;
-    }
-    */
-
-    // Revenue Overview (monthly sums for last 8 months, including facilities)
-    $revenue_data = [];
-    for ($m = 1; $m <= 8; $m++) { // Assuming Jan-Aug; adjust as needed
-        $student_sum = $this->db->select('SUM(paid_amount) as sum')->from('students')
-            ->where('MONTH(created_at)', $m)
-            ->where('YEAR(created_at)', $current_year)
-            ->get()->row()->sum ?? 0;
-        $facility_sum = $this->db->select('SUM(amount) as sum')->from('student_facilities')
-            ->where('MONTH(created_at)', $m)
-            ->where('YEAR(created_at)', $current_year)
-            ->get()->row()->sum ?? 0;
-        $revenue_data[] = $student_sum + $facility_sum;
-    }
-    ?>
+  <!-- Sidebar -->
+  <?php $this->load->view('superadmin/Include/Sidebar') ?>
+  <!-- Navbar -->
+  <?php $this->load->view('superadmin/Include/Navbar') ?>
+  <!-- Dashboard Content -->
+  <div class="dashboard-wrapper" id="dashboardWrapper">
 
     <div class="container-fluid px-3">
       <!-- Stats Cards -->
@@ -530,7 +417,7 @@
           <div class="card-stat" onclick="handleStatClick('activeStudents')">
             <i class="bi bi-person-lines-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4><?php echo $active_students; ?></h4>
+              <h4><?= $activeStudents ?? 0 ?></h4>
               <span>Active Students</span>
             </div>
           </div>
@@ -539,7 +426,7 @@
           <div class="card-stat" onclick="handleStatClick('attendanceRate')">
             <i class="bi bi-person-check-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4><?php echo $attendance_rate; ?>%</h4>
+              <h4><?= $attendanceRate ?? 0 ?>%</h4>
               <span>Attendance Rate</span>
             </div>
           </div>
@@ -548,8 +435,8 @@
           <div class="card-stat" onclick="handleStatClick('feeDefaulters')">
             <i class="bi bi-currency-rupee card-icon"></i>
             <div class="d-flex flex-column">
-              <h4><?php echo $fee_defaulters; ?></h4>
-              <span>Fee Defaulters</span>
+              <h4><?= $totalDue ?? 0 ?></h4>
+              <span>Due Amount</span>
             </div>
           </div>
         </div>
@@ -557,8 +444,8 @@
           <div class="card-stat" onclick="handleStatClick('monthlyProfits')">
             <i class="bi bi-bar-chart-line-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4>Rs.<?php echo number_format($monthly_profits, 0); ?></h4>
-              <span>Monthly profits</span>
+              <h4>Rs.<?= number_format($totalIncome ?? 0) ?></h4>
+              <span>Paid Amounts</span>
             </div>
           </div>
         </div>
@@ -598,11 +485,18 @@
           <div class="center-box mb-3" style="background: #f0eaea;">
             <h6 class="fw-bold text-start">Centers</h6>
             <div class="d-grid gap-2 mt-3">
-              <?php foreach ($centers as $center): ?>
-              <button class="btn center-btn text-start" onclick="selectCenter('<?php echo $center['id']; ?>')">
-                <i class="bi bi-house-door-fill me-2"></i> <?php echo $center['name']; ?>
+              <button class="btn center-btn text-start" onclick="selectCenter('center1')">
+                <i class="bi bi-house-door-fill me-2"></i> Center 1
               </button>
-              <?php endforeach; ?>
+              <button class="btn center-btn text-start" onclick="selectCenter('center2')">
+                <i class="bi bi-building-fill-check me-2"></i> Center 2
+              </button>
+              <button class="btn center-btn text-start" onclick="selectCenter('center3')">
+                <i class="bi bi-geo-alt-fill me-2"></i> Center 3
+              </button>
+              <button class="btn center-btn text-start" onclick="selectCenter('center4')">
+                <i class="bi bi-diagram-3-fill me-2"></i> Center 4
+              </button>
             </div>
             <button class="add-center-btn mt-4" data-bs-toggle="modal" data-bs-target="#addCenterModal">
               <i class="bi bi-plus-circle me-2"></i> Add Center
@@ -722,8 +616,8 @@
             const dashboardWrapper = document.getElementById('dashboardWrapper');
             if (sidebar && dashboardWrapper) {
               if (sidebar.classList.contains('minimized') ||
-                  sidebar.classList.contains('collapsed') ||
-                  sidebar.classList.contains('sidebar-collapse')) {
+                sidebar.classList.contains('collapsed') ||
+                sidebar.classList.contains('sidebar-collapse')) {
                 dashboardWrapper.classList.add('minimized');
               } else {
                 dashboardWrapper.classList.remove('minimized');
@@ -735,7 +629,10 @@
 
       const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
       if (sidebar) {
-        observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
+        observer.observe(sidebar, {
+          attributes: true,
+          attributeFilter: ['class']
+        });
       }
     }
 
@@ -766,7 +663,7 @@
           labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           datasets: [{
             label: "Attendance",
-            data: <?php echo json_encode($weekly_attendance); ?>,
+            data: [90, 85, 75, 92, 80, 85, 90],
             backgroundColor: gradient,
             borderRadius: 10,
             barThickness: 30
@@ -775,21 +672,35 @@
         options: {
           responsive: true,
           plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true }
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: true
+            }
           },
           scales: {
             x: {
-              grid: { display: false },
-              ticks: { font: { size: 12 } }
+              grid: {
+                display: false
+              },
+              ticks: {
+                font: {
+                  size: 12
+                }
+              }
             },
             y: {
               beginAtZero: true,
               max: 110,
-              grid: { display: false },
+              grid: {
+                display: false
+              },
               ticks: {
                 stepSize: 25,
-                font: { size: 12 }
+                font: {
+                  size: 12
+                }
               }
             }
           }
@@ -802,7 +713,7 @@
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
           datasets: [{
             label: "Revenue",
-            data: <?php echo json_encode($revenue_data); ?>,
+            data: [20000, 25000, 30000, 40000, 37000, 42000, 38000, 35000],
             borderColor: "#ff4040",
             tension: 0.3,
             fill: false,
@@ -811,48 +722,38 @@
         },
         options: {
           responsive: true,
-          plugins: { legend: { display: false }},
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
           scales: {
             y: {
               beginAtZero: true,
-              grid: { color: "#f0f0f0" },
-              ticks: { font: { size: 12 } }
+              grid: {
+                color: "#f0f0f0"
+              },
+              ticks: {
+                font: {
+                  size: 12
+                }
+              }
             },
             x: {
-              grid: { display: false },
-              ticks: { font: { size: 12 } }
-            }
-          }
-        }
-      });
-
-      new Chart(document.getElementById("studentChart"), {
-        type: "doughnut",
-        data: {
-          labels: ["Basic", "Intermediate", "Advanced"],
-          datasets: [{
-            data: [<?php echo $beginner_pct; ?>, <?php echo $intermediate_pct; ?>, <?php echo $advanced_pct; ?>],
-            backgroundColor: ["#990000", "#000000", "#f4b6b6"],
-            borderRadius: 8,
-            borderWidth: 3,
-            borderColor: "#f0eaea",
-            cutout: "70%"
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return `${context.label}: ${context.parsed}%`;
+              grid: {
+                display: false
+              },
+              ticks: {
+                font: {
+                  size: 12
                 }
               }
             }
           }
         }
       });
+
+
     }
 
     function handleStatClick(statType) {
@@ -877,14 +778,18 @@
     }
 
     function exportToPDF() {
-      const { jsPDF } = window.jspdf;
+      const {
+        jsPDF
+      } = window.jspdf;
       const doc = new jsPDF();
 
       doc.setFontSize(18);
       doc.text("Students Data", 14, 15);
 
       doc.autoTable({
-        head: [["Name", "Contact", "Center", "Batch", "Level", "Category"]],
+        head: [
+          ["Name", "Contact", "Center", "Batch", "Level", "Category"]
+        ],
         body: [
           ["Jane Doe", "9876543210", "ABC", "B1", "Intermediate", "Complete"],
           ["John Smith", "9876543211", "XYZ", "B2", "Advanced", "Pending"],
@@ -904,13 +809,35 @@
     }
 
     function selectCenter(centerId) {
-      // Fetch center data via AJAX or dummy
-      // For real: Use AJAX to fetch from backend
-      const centerData = {}; // Fetch real data
-      // Example dummy
-      centerData[centerId] = { name: "Fetched Center", location: "Location", capacity: 100 };
+      // Dummy data for demonstration (replace with actual data retrieval logic)
+      const centerData = {
+        center1: {
+          name: "Center 1",
+          location: "Mumbai",
+          capacity: 100
+        },
+        center2: {
+          name: "Center 2",
+          location: "Delhi",
+          capacity: 150
+        },
+        center3: {
+          name: "Center 3",
+          location: "Bangalore",
+          capacity: 120
+        },
+        center4: {
+          name: "Center 4",
+          location: "Chennai",
+          capacity: 80
+        }
+      };
 
-      const data = centerData[centerId] || { name: centerId, location: "Unknown", capacity: 100 };
+      const data = centerData[centerId] || {
+        name: centerId,
+        location: "Unknown",
+        capacity: 100
+      };
       document.getElementById('editCenterName').value = data.name;
       document.getElementById('editCenterLocation').value = data.location;
       document.getElementById('editCenterCapacity').value = data.capacity;
@@ -926,7 +853,6 @@
       const centerCapacity = document.getElementById('centerCapacity').value;
 
       if (centerName && centerLocation && centerCapacity) {
-        // Send to backend via AJAX to insert into centers table
         alert(`Center "${centerName}" added successfully!`);
         const modal = bootstrap.Modal.getInstance(document.getElementById('addCenterModal'));
         modal.hide();
@@ -942,7 +868,6 @@
       const centerId = document.getElementById('editCenterId').value;
 
       if (centerName && centerLocation && centerCapacity) {
-        // Send to backend via AJAX to update centers table
         alert(`Center "${centerName}" updated successfully!`);
         const modal = bootstrap.Modal.getInstance(document.getElementById('editCenterModal'));
         modal.hide();
@@ -957,33 +882,89 @@
         dashboardWrapper.classList.toggle('minimized');
       }
     }
+
+    window.toggleDashboard = toggleDashboard;
   </script>
-<!-- =------------------------------------------------------------------------------------------------------------------- -->
 
-<!-- Sidebar Toggle Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.toggle('active');
-                        navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-                    } else {
-                        const isMinimized = sidebar.classList.toggle('minimized');
-                        navbar.classList.toggle('sidebar-minimized', isMinimized);
-                        contentWrapper.classList.toggle('minimized', isMinimized);
-                    }
-                });
-            }
-        });
-    </script>
-<!-- =------------------------------------------------------------------------------------------------------------------- -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+
+    // Create gradient
+    const gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, '#ff4040'); // top color
+    gradient.addColorStop(1, '#470000'); // bottom color
+
+    const revenueChart = new Chart(revenueCtx, {
+      type: 'line',
+      data: {
+        labels: [
+          <?php foreach ($monthlyRevenue as $row) {
+            echo "'" . $row['month'] . "',";
+          } ?>
+        ],
+        datasets: [{
+          label: 'Revenue',
+          data: [
+            <?php foreach ($monthlyRevenue as $row) {
+              echo $row['revenue'] . ",";
+            } ?>
+          ],
+          fill: true,
+          borderColor: '#ff4040',
+          backgroundColor: gradient,
+          tension: 0.3,
+          borderWidth: 2,
+          pointBackgroundColor: '#470000',
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  // Remove this entire block (it's causing the conflict)
+  <script>
+    const ctx = document.getElementById('studentChart').getContext('2d');
+    const studentChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Basic', 'Intermediate', 'Advanced'],
+        datasets: [{
+          data: [
+            <?= $studentDistribution['Beginner'] ?? 0 ?>,
+            <?= $studentDistribution['Intermediate'] ?? 0 ?>,
+            <?= $studentDistribution['Advanced'] ?? 0 ?>
+          ],
+          backgroundColor: ['#990000', '#000000', '#f4b6b6']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

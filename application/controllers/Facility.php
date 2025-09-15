@@ -35,11 +35,13 @@ class Facility extends CI_Controller {
             $facilityName = $input['facility_name'] ?? null;
             $subTypes = $input['subtype_name'] ?? [];
             $subRents = $input['rent_amount'] ?? [];
+             $subRents = $input['rent_date'] ?? [];
         } else {
             $centerId = $this->input->post('center_id');
             $facilityName = $this->input->post('facility_name');
             $subTypes = $this->input->post('subtype_name');
             $subRents = $this->input->post('rent_amount');
+             $subRents = $input['rent_date'] ?? [];
         }
 
         if (is_array($facilityName)) {
