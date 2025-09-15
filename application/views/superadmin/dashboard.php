@@ -399,6 +399,63 @@
         margin-left: 60px;
       }
     }
+
+    .center-btn {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      color: #1a1a1a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .center-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 245, 245, 1), #ffecec);
+      border-color: #ff4040;
+      transform: translateX(4px);
+      box-shadow: 0 4px 10px rgba(255, 64, 64, 0.2);
+    }
+
+    .center-btn i {
+      color: #ff4040;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .center-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.25);
+    }
+
+    /* Left Accent Bar */
+    .center-btn::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 5px;
+      background: #ff4040;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .center-btn:hover::before {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -515,7 +572,7 @@
     </div>
   </div>
 
-  <!-- Add Center Modal -->
+  <!-- 
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -547,7 +604,7 @@
     </div>
   </div>
 
-  <!-- Edit Center Modal -->
+ 
   <div class="modal fade" id="editCenterModal" tabindex="-1" aria-labelledby="editCenterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -578,7 +635,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>  -->
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
