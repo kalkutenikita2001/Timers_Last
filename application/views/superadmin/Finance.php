@@ -12,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Montserrat Font -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background-color: #f4f6f8 !important;
@@ -32,132 +34,57 @@
         .content {
             margin-top: 60px;
         }
-        .option-buttons {
+        .cards-container {
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 20px;
             margin-bottom: 20px;
         }
-        .option-buttons button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            padding: 10px 30px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-        .option-buttons button.active {
-            background: #000;
-            color: #fff;
-            border: 1px solid #fff;
-        }
-        .option-buttons button:hover {
-            background: #333;
-            color: #fff;
-        }
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+        .revenue-card, .summary-card {
             background: #fff;
             border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        .table thead th {
-            background-color: #343a40;
-            color: white;
-            border-bottom: 2px solid #dee2e6;
-            white-space: nowrap;
             padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-            position: relative;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
         }
-        .table thead th:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            background: #343a40;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            z-index: 10;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .table td, .table th {
-            vertical-align: middle;
-            text-align: center;
-            padding: 0.75rem;
-            white-space: nowrap;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 0.9rem;
-        }
-        .table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .table tbody tr:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-        }
-        .table .horizontal-line td {
-            border: none;
-            background-color: #dee2e6;
-            height: 1px;
-            padding: 0;
-        }
-        .action-icon {
-            font-size: 1.2rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .action-icon.info-icon {
-            color: #17a2b8;
-        }
-        .action-btn {
+        .revenue-card p, .summary-card p {
+            margin: 0.4rem 0;
             font-size: 0.85rem;
-            margin: 0 0.3rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.4rem;
         }
-        .action-btn.approve-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
+        .revenue-card p strong, .summary-card p strong {
+            color: #343a40;
+            font-weight: 600;
+            flex: 0 0 40%;
         }
-        .action-btn.reject-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
+        .revenue-card p span, .summary-card p span {
+            color: #495057;
+            flex: 0 0 60%;
+            text-align: right;
         }
-        .action-btn:hover {
-            filter: brightness(90%);
-        }
-        .action-btn:disabled {
-            background-color: #ccc !important;
-            cursor: not-allowed;
-            opacity: 0.6;
+        .chart-container {
+            background: #fff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .btn-custom {
             background: #6c757d;
             color: white;
             border: none;
             border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
@@ -177,7 +104,7 @@
             text-align: center;
             font-weight: 700;
             margin-bottom: 1rem;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: #343a40;
         }
         .modal-header {
@@ -189,7 +116,7 @@
             position: absolute;
             right: 1rem;
             top: 1rem;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: #343a40;
             opacity: 0.7;
         }
@@ -198,14 +125,14 @@
         }
         .form-group label {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-bottom: 0.3rem;
             color: #495057;
         }
         .form-control, .form-control select {
-            height: calc(1.8rem + 2px);
+            height: calc(1.6rem + 2px);
             border-radius: 0.3rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             padding: 0.3rem 0.5rem;
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
             border: 1px solid #ced4da;
@@ -223,7 +150,7 @@
             background-size: 12px;
         }
         .invalid-feedback {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #dc3545;
         }
         .was-validated .form-control:invalid, .form-control.is-invalid {
@@ -243,7 +170,7 @@
             align-items: center;
         }
         .form-note {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #6c757d;
             margin-bottom: 0.8rem;
             text-align: center;
@@ -261,110 +188,11 @@
             margin-bottom: 0.8rem;
         }
         .table-title {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #343a40;
-            margin-bottom: 10px;
-        }
-        .confirmation-modal .modal-content {
-            max-width: 400px;
-            margin: auto;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-        }
-        .confirmation-modal .modal-header {
-            border-bottom: none;
-            padding: 0.5rem 1.5rem;
-        }
-        .confirmation-modal .modal-title {
-            font-size: 1.25rem;
-            color: #343a40;
-            font-weight: 600;
-        }
-        .confirmation-modal .modal-body {
+            margin-bottom: 8px;
             text-align: center;
-            font-size: 1rem;
-            color: #495057;
-            padding: 1rem 1.5rem;
-        }
-        .confirmation-modal .modal-footer {
-            justify-content: center;
-            gap: 15px;
-            padding: 1rem 1.5rem;
-            border-top: none;
-        }
-        .btn-confirm {
-            background: #28a745;
-            color: white;
-            border-radius: 0.25rem;
-            padding: 0.4rem 1.2rem;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-        .btn-confirm:hover {
-            background: #218838;
-            transform: translateY(-1px);
-        }
-        .btn-cancel {
-            background: #dc3545;
-            color: white;
-            border-radius: 0.25rem;
-            padding: 0.4rem 1.2rem;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-        .btn-cancel:hover {
-            background: #c82333;
-            transform: translateY(-1px);
-        }
-        .view-modal .modal-content {
-            max-width: 500px;
-            margin: auto;
-            border-radius: 0.75rem;
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-        }
-        .view-modal .modal-body {
-            padding: 1.5rem;
-        }
-        .receipt-card {
-            background: #fff;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        .receipt-card p {
-            margin: 0.5rem 0;
-            font-size: 0.95rem;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-        .receipt-card p strong {
-            color: #343a40;
-            font-weight: 600;
-            flex: 0 0 40%;
-        }
-        .receipt-card p span {
-            color: #495057;
-            flex: 0 0 60%;
-            text-align: right;
-        }
-        .receipt-card p.status-approved span {
-            color: #28a745;
-            font-weight: 600;
-        }
-        .receipt-card p.status-rejected span {
-            color: #dc3545;
-            font-weight: 600;
-        }
-        .view-modal .modal-footer {
-            justify-content: center;
-            padding: 1rem 1.5rem;
-            border-top: none;
         }
         .filter-modal .modal-content {
             max-width: 500px;
@@ -378,14 +206,6 @@
             .content-wrapper {
                 margin-left: 0 !important;
                 padding: 1rem !important;
-            }
-            .table {
-                font-size: 0.8rem;
-            }
-            .action-icon, .action-btn {
-                margin: 0.1rem;
-                font-size: 0.8rem;
-                padding: 0.2rem 0.4rem;
             }
             .modal-content {
                 padding: 0.8rem;
@@ -403,59 +223,41 @@
                 max-width: 100%;
                 margin-bottom: 0.6rem;
             }
-            .option-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .option-buttons button {
-                width: 100%;
-                font-size: 12px;
-                padding: 8px 20px;
-            }
             .add-btn-container {
                 justify-content: center;
-                gap: 10px;
+                gap: 8px;
             }
             .btn-custom {
-                font-size: 0.875rem;
-                padding: 0.375rem 0.75rem;
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
             }
-            .confirmation-modal .modal-content,
-            .view-modal .modal-content,
             .filter-modal .modal-content {
                 max-width: 90%;
                 padding: 0.8rem;
             }
-            .confirmation-modal .modal-title,
             .filter-modal .modal-title {
-                font-size: 1.1rem;
-            }
-            .confirmation-modal .modal-body {
-                font-size: 0.9rem;
-            }
-            .btn-confirm, .btn-cancel {
-                padding: 0.3rem 1rem;
-                font-size: 0.8rem;
-            }
-            .receipt-card {
-                padding: 1rem;
-            }
-            .receipt-card p {
-                font-size: 0.85rem;
+                font-size: 1rem;
             }
             .form-group label {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             .form-control, .form-control select {
-                height: calc(1.6rem + 2px);
-                font-size: 0.8rem;
+                height: calc(1.5rem + 2px);
+                font-size: 0.75rem;
                 padding: 0.25rem 0.4rem;
             }
             .invalid-feedback {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
             .form-note {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
+            }
+            .chart-container {
+                padding: 1rem;
+            }
+            .revenue-card, .summary-card {
+                min-width: 100%;
+                max-width: 100%;
             }
         }
         @media (min-width: 577px) and (max-width: 768px) {
@@ -466,9 +268,6 @@
             .content-wrapper.minimized {
                 margin-left: 0;
             }
-            .table {
-                font-size: 0.85rem;
-            }
             .modal-content {
                 padding: 0.9rem;
             }
@@ -476,27 +275,26 @@
                 justify-content: center;
                 gap: 8px;
             }
-            .option-buttons {
-                gap: 8px;
-            }
             .btn-custom {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
-            .confirmation-modal .modal-content,
-            .view-modal .modal-content,
             .filter-modal .modal-content {
                 max-width: 95%;
             }
             .form-group label {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
             .form-control, .form-control select {
-                height: calc(1.7rem + 2px);
-                font-size: 0.85rem;
+                height: calc(1.6rem + 2px);
+                font-size: 0.8rem;
                 padding: 0.3rem 0.5rem;
             }
             .invalid-feedback {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
+            }
+            .revenue-card, .summary-card {
+                min-width: 45%;
+                max-width: 48%;
             }
         }
         @media (min-width: 769px) and (max-width: 991px) {
@@ -506,133 +304,31 @@
             .content-wrapper.minimized {
                 margin-left: 60px;
             }
-            .table {
-                font-size: 0.9rem;
-            }
             .modal-content {
                 padding: 1rem;
             }
+            .revenue-card, .summary-card {
+                min-width: 40%;
+                max-width: 45%;
+            }
         }
         @media (min-width: 992px) {
-            .confirmation-modal .modal-content {
-                max-width: 400px;
-            }
-            .view-modal .modal-content {
-                max-width: 500px;
-            }
             .filter-modal .modal-content {
                 max-width: 500px;
             }
+            .revenue-card, .summary-card {
+                min-width: 30%;
+                max-width: 35%;
+            }
         }
         @media (hover: none) {
-            .action-icon:hover,
-            .action-btn:hover,
-            .btn-custom:hover,
-            .option-buttons button:hover,
-            .btn-confirm:hover,
-            .btn-cancel:hover {
+            .btn-custom:hover {
                 transform: none;
-            }
-            .table thead th:hover::after {
-                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Confirmation Modal for Approve/Reject -->
-    <div class="modal fade confirmation-modal" id="confirmActionModal" tabindex="-1" aria-labelledby="confirmActionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="confirmActionLabel" class="modal-title w-100 text-center"></h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="confirmMessage"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-confirm" id="confirmActionBtn">Confirm</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
-    <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
-
-    <div class="content-wrapper" id="contentWrapper">
-        <div class="content">
-            <div class="container-fluid">
-                <!-- Option Buttons -->
-                <div class="option-buttons">
-                    <button class="active" data-option="centerwise">Centerwise Revenue</button>
-                    <button data-option="totalrevenue">Total Revenue</button>
-                </div>
-
-                <!-- Filter Button -->
-                <div class="add-btn-container">
-                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
-                         <i class="bi bi-funnel me-2"></i> Filter
-                    </button>
-                </div>
-
-                <!-- Revenue Table -->
-                <div class="table-container">
-                    <div class="table-title">Revenue Records</div>
-                    <table class="table table-bordered table-hover" id="revenueTable">
-                        <thead class="thead-dark1">
-                            <tr>
-                                <th data-tooltip="Name of the center">Center Name</th>
-                                <th data-tooltip="Revenue for the specific day">Daily Revenue(₹)</th>
-                                <th data-tooltip="Revenue for the week">Weekly Revenue(₹)</th>
-                                <th data-tooltip="Revenue for the month">Monthly Revenue(₹)</th>
-                                <th data-tooltip="Revenue for the year">Yearly Revenue(₹)</th>
-                                <th data-tooltip="View, Approve, or Reject the record">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="revenueTableBody">
-                            <!-- Populated via AJAX -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Revenue Modal -->
-    <div class="modal fade view-modal" id="viewModal" tabindex="-1" aria-labelledby="viewLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="viewLabel" class="modal-title w-100 text-center">Revenue Details</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="receipt-card">
-                        <p><strong>Center Name:</strong> <span id="viewCenterName"></span></p>
-                        <p><strong>Date:</strong> <span id="viewDate"></span></p>
-                        <p><strong>Daily Revenue:</strong> <span id="viewDailyRevenue"></span></p>
-                        <p><strong>Weekly Revenue:</strong> <span id="viewWeeklyRevenue"></span></p>
-                        <p><strong>Monthly Revenue:</strong> <span id="viewMonthlyRevenue"></span></p>
-                        <p><strong>Yearly Revenue:</strong> <span id="viewYearlyRevenue"></span></p>
-                        <p id="statusField"><strong>Status:</strong> <span id="viewStatus"></span></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Filter Revenue Modal -->
     <div class="modal fade filter-modal" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -650,7 +346,6 @@
                             <label for="filterCenterName">Center Name</label>
                             <select id="filterCenterName" name="filterCenterName" class="form-control">
                                 <option value="">All Centers</option>
-                                <!-- Populated dynamically via AJAX -->
                             </select>
                             <div class="invalid-feedback">Please select a valid center.</div>
                         </div>
@@ -676,6 +371,54 @@
         </div>
     </div>
 
+    <!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
+
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <!-- Cards Container -->
+                <div class="cards-container">
+                    <!-- Total Revenue Card -->
+                    <div class="revenue-card">
+                        <h3 class="table-title">Revenue by Center Name</h3>
+                        <p><strong>Daily Revenue:</strong> <span id="totalDailyRevenue">₹0</span></p>
+                        <p><strong>Weekly Revenue:</strong> <span id="totalWeeklyRevenue">₹0</span></p>
+                        <p><strong>Monthly Revenue:</strong> <span id="totalMonthlyRevenue">₹0</span></p>
+                        <p><strong>Yearly Revenue:</strong> <span id="totalYearlyRevenue">₹0</span></p>
+                    </div>
+
+                    <!-- Summary Card with View All Button -->
+                    <div class="summary-card">
+                        <h3 class="table-title"> Total Revenue </h3>
+                        <!-- <p><strong>Daily Revenue:</strong> <span id="summaryDailyRevenue">₹0</span></p>
+                        <p><strong>Weekly Revenue:</strong> <span id="summaryWeeklyRevenue">₹0</span></p>
+                        <p><strong>Monthly Revenue:</strong> <span id="summaryMonthlyRevenue">₹0</span></p>
+                        <p><strong>Yearly Revenue:</strong> <span id="summaryYearlyRevenue">₹0</span></p> -->
+                        <div class="add-btn-container">
+                            <button id="viewAllBtn" class="btn btn-custom">View All</button>
+                        </div>
+                    </div>
+                     <!-- Filter Button -->
+                <div class="add-btn-container">
+                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal">
+                        <i class="fas fa-filter me-2"></i> Filter
+                    </button>
+                </div>
+                </div>
+
+               
+                <!-- Bar Graph -->
+                <!-- <div class="chart-container">
+                    <div class="table-title">Revenue Breakdown</div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div> -->
+        </div>
+    </div> 
+
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -684,99 +427,159 @@
 
     <script>
         $(document).ready(function() {
-            let currentRevenueId = null;
-            let currentAction = null;
-            let currentStatus = null;
+            let revenueChart = null;
 
             // CSRF Token Setup
             const csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
             const csrfToken = '<?php echo $this->security->get_csrf_hash(); ?>';
             const baseUrl = '<?php echo base_url(); ?>';
-            const centerUrl = baseUrl + 'center/get_centers';
+            const centerUrl = baseUrl + 'Center/get_centers';
+            const revenueUrl = '<?php echo base_url('revenue/get_revenues'); ?>';
 
-            // Function to format date for display
-            function formatDateForDisplay(dateStr) {
-                if (!dateStr) return 'N/A';
-                const [year, month, day] = dateStr.split('-');
-                return `${day}/${month}/${year}`;
-            }
-
-            // Function to load centers dynamically
+            // Load centers dynamically into the dropdown
             function loadCenters() {
                 $.ajax({
                     url: centerUrl,
                     method: 'GET',
+                    dataType: 'json',
                     success: function(response) {
-                        if (response.status === 'success') {
-                            const centers = response.data;
-                            const selectElement = $('#filterCenterName');
-                            selectElement.empty();
-                            selectElement.append('<option value="">All Centers</option>');
-                            if (centers.length === 0) {
-                                selectElement.append('<option value="" disabled>No centers available</option>');
-                            } else {
-                                centers.forEach(center => {
-                                    selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
-                                });
-                            }
+                        const selectElement = $('#filterCenterName');
+                        selectElement.empty();
+                        selectElement.append('<option value="">All Centers</option>');
+                        if (response.status === 'success' && response.data.length > 0) {
+                            response.data.forEach(center => {
+                                selectElement.append(`<option value="${center.center_name}">${center.center_name}</option>`);
+                            });
                         } else {
-                            console.error('Error fetching centers:', response.message);
-                            selectElement.append('<option value="" disabled>Error loading centers</option>');
+                            selectElement.append('<option value="" disabled>No centers available</option>');
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('AJAX error:', error);
-                        selectElement.append('<option value="" disabled>Error loading centers</option>');
+                        console.error('Error fetching centers:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load centers.',
+                            showConfirmButton: true,
+                            timer: 3000
+                        });
                     }
                 });
             }
 
-            // Load revenues
-            function loadRevenues(option = 'centerwise', filters = {}) {
-                const url = option === 'totalrevenue' ? '<?php echo base_url('revenue/get_total_revenue'); ?>' : '<?php echo base_url('revenue/get_revenues'); ?>';
+            // Initialize or update bar chart
+            function updateChart(data) {
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                const labels = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
+                const amounts = [
+                    data.totalDaily || 0,
+                    data.totalWeekly || 0,
+                    data.totalMonthly || 0,
+                    data.totalYearly || 0
+                ];
+
+                if (revenueChart) {
+                    revenueChart.data.datasets[0].data = amounts;
+                    revenueChart.update();
+                } else {
+                    revenueChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Revenue (₹)',
+                                data: amounts,
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.6)',
+                                    'rgba(255, 206, 86, 0.6)',
+                                    'rgba(75, 192, 192, 0.6)',
+                                    'rgba(153, 102, 255, 0.6)'
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Revenue (₹)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Time Period'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Load revenues and update both cards and chart
+            function loadRevenues(filters = {}) {
                 $.ajax({
-                    url: url,
+                    url: revenueUrl,
                     type: 'POST',
                     data: { ...filters, [csrfName]: csrfToken },
                     dataType: 'json',
                     success: function(data) {
-                        const tableBody = $('#revenueTableBody');
-                        tableBody.empty();
-                        if (data.length === 0) {
-                            tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
-                            return;
+                        let totalDaily = 0, totalWeekly = 0, totalMonthly = 0, totalYearly = 0;
+
+                        if (!data || data.length === 0) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'No Data',
+                                text: 'No revenue records found for the selected filters.',
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                        } else {
+                            data.forEach(item => {
+                                totalDaily += parseFloat(item.daily_revenue || 0);
+                                totalWeekly += parseFloat(item.weekly_revenue || 0);
+                                totalMonthly += parseFloat(item.monthly_revenue || 0);
+                                totalYearly += parseFloat(item.yearly_revenue || 0);
+                            });
                         }
-                        data.forEach(item => {
-                            const rowClass = item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : '';
-                            const rowStyle = item.status === 'approved' ? 'background-color: #d4edda;' : item.status === 'rejected' ? 'background-color: #f8d7da;' : '';
-                            const approveDisabled = item.status !== 'pending' ? 'disabled' : '';
-                            const rejectDisabled = item.status !== 'pending' ? 'disabled' : '';
-                            const formattedDate = formatDateForDisplay(item.date);
-                            const row = `
-                                <tr class="${rowClass}" style="${rowStyle}">
-                                    <td>${item.center_name}</td>
-                                    <td>₹${parseFloat(item.daily_revenue).toFixed(0)}</td>
-                                    <td>₹${parseFloat(item.weekly_revenue).toFixed(0)}</td>
-                                    <td>₹${parseFloat(item.monthly_revenue).toFixed(0)}</td>
-                                    <td>₹${parseFloat(item.yearly_revenue).toFixed(0)}</td>
-                                    <td>
-                                        <i class="fas fa-info-circle action-icon info-icon" title="View Details" data-toggle="modal" data-target="#viewModal" 
-                                           data-id="${item.id}" data-center="${item.center_name}" data-date="${item.date}" 
-                                           data-daily="${item.daily_revenue}" data-weekly="${item.weekly_revenue}" 
-                                           data-monthly="${item.monthly_revenue}" data-yearly="${item.yearly_revenue}" 
-                                           data-status="${item.status}"></i>
-                                        <button class="action-btn approve-btn" title="Approve" data-id="${item.id}" 
-                                           data-center="${item.center_name}" ${approveDisabled}>Approve</button>
-                                        <button class="action-btn reject-btn" title="Reject" data-id="${item.id}" 
-                                           data-center="${item.center_name}" ${rejectDisabled}>Reject</button>
-                                    </td>
-                                </tr>
-                                <tr class="horizontal-line"><td colspan="6"></td></tr>
-                            `;
-                            tableBody.append(row);
+
+                        // Update total revenue card
+                        $('#totalDailyRevenue').text(`₹${totalDaily.toFixed(0)}`);
+                        $('#totalWeeklyRevenue').text(`₹${totalWeekly.toFixed(0)}`);
+                        $('#totalMonthlyRevenue').text(`₹${totalMonthly.toFixed(0)}`);
+                        $('#totalYearlyRevenue').text(`₹${totalYearly.toFixed(0)}`);
+
+                        // Update summary card
+                        $('#summaryDailyRevenue').text(`₹${totalDaily.toFixed(0)}`);
+                        $('#summaryWeeklyRevenue').text(`₹${totalWeekly.toFixed(0)}`);
+                        $('#summaryMonthlyRevenue').text(`₹${totalMonthly.toFixed(0)}`);
+                        $('#summaryYearlyRevenue').text(`₹${totalYearly.toFixed(0)}`);
+
+                        // Update bar chart
+                        updateChart({
+                            totalDaily,
+                            totalWeekly,
+                            totalMonthly,
+                            totalYearly
                         });
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching revenues:', error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -788,15 +591,28 @@
                 });
             }
 
-            // Load centers when filter modal is shown
+            // Update summary card when "View All" button is clicked
+            function updateSummaryCard() {
+                const daily = $('#totalDailyRevenue').text();
+                const weekly = $('#totalWeeklyRevenue').text();
+                const monthly = $('#totalMonthlyRevenue').text();
+                const yearly = $('#totalYearlyRevenue').text();
+
+                $('#summaryDailyRevenue').text(daily);
+                $('#summaryWeeklyRevenue').text(weekly);
+                $('#summaryMonthlyRevenue').text(monthly);
+                $('#summaryYearlyRevenue').text(yearly);
+            }
+
+            // Load centers when filter modal is opened
             $('#filterModal').on('show.bs.modal', function() {
                 loadCenters();
             });
 
-            // Initial load
+            // Initial revenue load
             loadRevenues();
 
-            // Filter form validation
+            // Form validation
             function validateFilterForm() {
                 const form = document.getElementById('filterForm');
                 form.addEventListener('submit', function(event) {
@@ -808,10 +624,12 @@
                     const centerNameInput = form.querySelector('#filterCenterName');
                     const today = new Date().toISOString().split('T')[0];
 
+                    // Check if at least one field is filled
                     if (startDateInput.value || endDateInput.value || centerNameInput.value) {
                         atLeastOneFilled = true;
                     }
 
+                    // Validate start date
                     if (startDateInput.value && startDateInput.value > today) {
                         startDateInput.setCustomValidity('Start Date must not be a future date.');
                         startDateInput.classList.add('is-invalid');
@@ -823,6 +641,7 @@
                         startDateInput.classList.add('is-valid');
                     }
 
+                    // Validate end date
                     if (endDateInput.value && endDateInput.value > today) {
                         endDateInput.setCustomValidity('End Date must not be a future date.');
                         endDateInput.classList.add('is-invalid');
@@ -839,11 +658,15 @@
                         endDateInput.classList.add('is-valid');
                     }
 
+                    // Ensure at least one filter is applied
                     if (!atLeastOneFilled) {
                         centerNameInput.setCustomValidity('At least one filter field must be filled.');
+                        centerNameInput.classList.add('is-invalid');
                         isValid = false;
                     } else {
                         centerNameInput.setCustomValidity('');
+                        centerNameInput.classList.remove('is-invalid');
+                        centerNameInput.classList.add('is-valid');
                     }
 
                     if (!isValid) {
@@ -901,6 +724,7 @@
                     input.setCustomValidity('');
                     input.classList.remove('is-invalid', 'is-valid');
                 });
+                loadRevenues(); // Reload default data
             });
 
             // Filter form submission
@@ -914,17 +738,14 @@
 
                 const formData = new FormData(this);
                 const filters = {
-                    [csrfName]: csrfToken,
                     center_name: formData.get('filterCenterName'),
                     start_date: formData.get('startDate'),
-                    end_date: formData.get('endDate')
+                    end_date: formData.get('endDate'),
+                    [csrfName]: csrfToken
                 };
 
-                loadRevenues($('.option-buttons button.active').data('option'), filters);
+                loadRevenues(filters);
                 $('#filterModal').modal('hide');
-                $('#filterForm')[0].reset();
-                $('#filterForm').removeClass('was-validated');
-                $('#filterForm').find('input, select').trigger('input');
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -934,138 +755,16 @@
                 });
             });
 
-            // View modal population
-            $('#viewModal').on('show.bs.modal', function(event) {
-                const icon = $(event.relatedTarget);
-                currentRevenueId = icon.data('id');
-                const center = icon.data('center');
-                const date = formatDateForDisplay(icon.data('date'));
-                const daily = icon.data('daily');
-                const weekly = icon.data('weekly');
-                const monthly = icon.data('monthly');
-                const yearly = icon.data('yearly');
-                currentStatus = icon.data('status');
-
-                const modal = $(this);
-                modal.find('#viewLabel').text(`Revenue Details - ${center}`);
-                modal.find('#viewCenterName').text(center);
-                modal.find('#viewDate').text(date);
-                modal.find('#viewDailyRevenue').text(`₹${parseFloat(daily).toFixed(0)}`);
-                modal.find('#viewWeeklyRevenue').text(`₹${parseFloat(weekly).toFixed(0)}`);
-                modal.find('#viewMonthlyRevenue').text(`₹${parseFloat(monthly).toFixed(0)}`);
-                modal.find('#viewYearlyRevenue').text(`₹${parseFloat(yearly).toFixed(0)}`);
-                const statusField = modal.find('#statusField');
-                statusField.removeClass('status-approved status-rejected');
-                if (currentStatus === 'approved') {
-                    statusField.addClass('status-approved');
-                } else if (currentStatus === 'rejected') {
-                    statusField.addClass('status-rejected');
-                }
-                modal.find('#viewStatus').text(currentStatus ? currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1) : 'Pending');
-            });
-
-            // Show confirmation modal for approve/reject
-            $(document).on('click', '.approve-btn, .reject-btn', function(e) {
-                e.preventDefault();
-                const id = $(this).data('id');
-                const center = $(this).data('center');
-                const row = $(this).closest('tr');
-                if (row.hasClass('approved') || row.hasClass('rejected')) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Already Processed',
-                        text: `Revenue for "${center}" has already been processed.`,
-                        showConfirmButton: true,
-                        timer: 3000
-                    });
-                    return;
-                }
-                currentRevenueId = id;
-                currentAction = $(this).hasClass('approve-btn') ? 'approve' : 'reject';
-                const actionText = currentAction === 'approve' ? 'Approve' : 'Reject';
-                $('#confirmActionLabel').text(`${actionText} Revenue`);
-                $('#confirmMessage').text(`Are you sure you want to ${actionText.toLowerCase()} the revenue for "${center}"?`);
-                $('#confirmActionModal').modal('show');
-            });
-
-            // Handle confirmation modal confirm button
-            $('#confirmActionBtn').on('click', function() {
-                const url = currentAction === 'approve' 
-                    ? '<?php echo base_url('revenue/approve_revenue'); ?>/' + currentRevenueId 
-                    : '<?php echo base_url('revenue/reject_revenue'); ?>/' + currentRevenueId;
-                const center = $(`.action-btn[data-id="${currentRevenueId}"]`).data('center');
-                const row = $(`.action-btn[data-id="${currentRevenueId}"]`).closest('tr');
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: { [csrfName]: csrfToken },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            currentStatus = currentAction === 'approve' ? 'approved' : 'rejected';
-                            row.addClass(currentStatus).css('backgroundColor', currentStatus === 'approved' ? '#d4edda' : '#f8d7da');
-                            row.find('.approve-btn').prop('disabled', true);
-                            row.find('.reject-btn').prop('disabled', true);
-                            row.find('.info-icon').data('status', currentStatus);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: `Revenue for "${center}" ${currentAction}d at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
-                                showConfirmButton: true,
-                                timer: 3000
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                                showConfirmButton: true,
-                                timer: 3000
-                            });
-                        }
-                        $('#confirmActionModal').modal('hide');
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: `Error ${currentAction}ing revenue.`,
-                            showConfirmButton: true,
-                            timer: 3000
-                        });
-                        $('#confirmActionModal').modal('hide');
-                    }
+            // View All button click handler
+            $('#viewAllBtn').on('click', function() {
+                updateSummaryCard();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Revenue summary updated.',
+                    showConfirmButton: true,
+                    timer: 2000
                 });
-            });
-
-            // Option switching functionality
-            $('.option-buttons button').on('click', function() {
-                const option = $(this).data('option');
-                $('.option-buttons button').removeClass('active');
-                $(this).addClass('active');
-                loadRevenues(option);
-            });
-
-            // Sidebar toggle functionality
-            $('#sidebarToggle').on('click', function() {
-                if ($(window).width() <= 576) {
-                    $('#sidebar').toggleClass('active');
-                    $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-                } else {
-                    const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-                    $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-                    $('#contentWrapper').toggleClass('minimized', isMinimized);
-                }
-            });
-
-            // Handle window resize
-            $(window).on('resize', function() {
-                if ($(window).width() <= 576) {
-                    $('#sidebar').removeClass('minimized');
-                    $('.navbar').removeClass('sidebar-minimized');
-                    $('#contentWrapper').removeClass('minimized');
-                }
             });
         });
     </script>

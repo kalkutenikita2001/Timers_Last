@@ -334,4 +334,6 @@ public function delete_batch_by_id($id)
     return $this->db->delete('batches');
 }
 
+
+
 }

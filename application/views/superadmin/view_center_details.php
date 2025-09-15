@@ -753,11 +753,11 @@
           <i class="fas fa-times"></i>
         </button>
         <h3 id="expenseLabel">Add Expense</h3>
-        <form id="expenseForm">
+        <form id="expenseForm" action="<?= base_url('superadmin/Expenses') ?>" method="post">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="expense_category">Category <span class="text-danger">*</span></label>
-              <select id="expense_category" name="expense_category" class="form-control" required>
+              <select id="expense_category" name="category" class="form-control" required>
                 <option value="">Select Category</option>
                 <option value="Electricity">Electricity</option>
                 <option value="Water">Water</option>
@@ -767,17 +767,17 @@
             </div>
             <div class="form-group col-md-6">
               <label for="expense_amount">Amount <span class="text-danger">*</span></label>
-              <input type="number" id="expense_amount" name="expense_amount" class="form-control" min="0" step="0.01" required placeholder="Enter Amount" />
+              <input type="number" id="expense_amount" name="amount" class="form-control" min="0" step="0.01" required placeholder="Enter Amount" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="expense_date">Date <span class="text-danger">*</span></label>
-              <input type="date" id="expense_date" name="expense_date" class="form-control" required />
+              <input type="date" id="expense_date" name="date" class="form-control" required />
             </div>
             <div class="form-group col-md-6">
               <label for="expense_description">Description</label>
-              <input type="text" id="expense_description" name="expense_description" class="form-control" placeholder="Enter Description" />
+              <input type="text" id="expense_description" name="description" class="form-control" placeholder="Enter Description" />
             </div>
           </div>
           <div class="d-flex justify-content-center">
@@ -1741,7 +1741,7 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
       description: $('#expense_description').val()
     };
     $.ajax({
-      url: baseUrl + "Expense/addExpense",
+      url: baseUrl + "superadmin/Expenses",
       method: "POST",
       data: JSON.stringify(payload),
       contentType: "application/json",
@@ -1857,5 +1857,6 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   fetchCenterData();
 });
 </script>
+
 </body>
 </html>
