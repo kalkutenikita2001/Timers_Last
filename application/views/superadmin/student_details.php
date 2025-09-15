@@ -746,126 +746,49 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter">Step 1 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot active" data-step="1"></div>
-                                <div class="progress-dot" data-step="2"></div>
-                                <div class="progress-dot" data-step="3"></div>
-                                <div class="progress-dot" data-step="4"></div>
-                                <div class="progress-dot" data-step="5"></div>
-                                <div class="progress-dot" data-step="6"></div>
-                            </div>
-                        </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn">
-                            Next
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Admission Details Section -->
-                <div class="section-content" id="admissionDetails">
-                    <h4><i class="fas fa-file-alt me-2"></i>Admission Details</h4>
-                    <p>Information about the student's admission process and enrollment details.</p>
-
-                    <!-- Current Admission -->
-                    <div class="admission-section">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-star me-2"></i>Current Admission
-                            <span class="admission-type-badge admission-renewal">Renewal Admission</span>
-                        </h5>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-plus"></i>
-                                        Admission Date
-                                    </div>
-                                    <div class="detail-value">15 January 2024</div>
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter">Step 1 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot active" data-step="1"></div>
+                                    <div class="progress-dot" data-step="2"></div>
+                                    <div class="progress-dot" data-step="3"></div>
+                                    <div class="progress-dot" data-step="4"></div>
+                                    <div class="progress-dot" data-step="5"></div>
+                                    <div class="progress-dot" data-step="6"></div>
                                 </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-check"></i>
-                                        Joining Date
-                                    </div>
-                                    <div class="detail-value">20 January 2024</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-clock"></i>
-                                        Duration
-                                    </div>
-                                    <div class="detail-value">6 months</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-times"></i>
-                                        Expiry Date
-                                    </div>
-                                    <div class="detail-value">20 July 2024</div>
-                                </div>
+                                <button class="nav-btn" onclick="nextSection()" id="nextBtn">
+                                    Next
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-signal"></i>
-                                        Level/Category
-                                    </div>
-                                    <div class="detail-value">Intermediate</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-credit-card"></i>
-                                        Payment Method
-                                    </div>
-                                    <div class="detail-value">Online Transfer</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        Last Attendance
-                                    </div>
-                                    <div class="detail-value">15 March 2024</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-clock"></i>
-                                        Session Duration
-                                    </div>
-                                    <div class="detail-value">1.5 hours per session</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Previous Admissions -->
-                    <div class="admission-history">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-history me-2"></i>Previous Admissions
-                        </h5>
 
-                        <div class="admission-history-item">
-                            <div class="admission-history-header">
-                                <span class="admission-type-badge admission-new">New Admission</span>
-                                <span class="admission-period">July 2023 - December 2023</span>
-                            </div>
+
+
+
+                    <!-- Admission Details Section -->
+                    <div class="section-content" id="admissionDetails">
+                        <h4><i class="fas fa-file-alt me-2"></i>Admission Details</h4>
+                        <p>Information about the student's admission process and enrollment details.</p>
+
+                        <!-- Current Admission -->
+                        <div class="admission-section">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-star me-2"></i>Current Admission
+                                <span class="admission-type-badge admission-renewal">
+                                    <?= $student['student_progress_category'] == 'Renewal' ? 'Renewal Admission' : 'New Admission'; ?>
+                                </span>
+                            </h5>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="detail-row">
@@ -873,225 +796,243 @@
                                             <i class="fas fa-calendar-plus"></i>
                                             Admission Date
                                         </div>
-                                        <div class="detail-value">10 July 2023</div>
-                                    </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-signal"></i>
-                                            Level/Category
+                                        <div class="detail-value">
+                                            <?= date('d M Y', strtotime($student['admission_date'])) ?>
                                         </div>
-                                        <div class="detail-value">Beginner</div>
                                     </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-rupee-sign"></i>
-                                            Course Fees
-                                        </div>
-                                        <div class="detail-value">₹6,000</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-calendar-check"></i>
                                             Joining Date
                                         </div>
-                                        <div class="detail-value">15 July 2023</div>
+                                        <div class="detail-value">
+                                            <?= date('d M Y', strtotime($student['joining_date'])) ?>
+                                        </div>
                                     </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-clock"></i>
                                             Duration
                                         </div>
-                                        <div class="detail-value">6 months</div>
+                                        <div class="detail-value">
+                                            <?= $student['duration'] ?> months
+                                        </div>
                                     </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
-                                            <i class="fas fa-check-circle"></i>
-                                            Completion Status
+                                            <i class="fas fa-calendar-times"></i>
+                                            Expiry Date
                                         </div>
                                         <div class="detail-value">
-                                            <span class="status-badge status-active">Completed</span>
+                                            <?= date('d M Y', strtotime($student['joining_date'] . ' +' . $student['duration'] . ' months')) ?>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="admission-history-item">
-                            <div class="admission-history-header">
-                                <span class="admission-type-badge admission-re">Re-Admission</span>
-                                <span class="admission-period">January 2023 - June 2023</span>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6">
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-calendar-plus"></i>
-                                            Admission Date
-                                        </div>
-                                        <div class="detail-value">5 January 2023</div>
-                                    </div>
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-signal"></i>
                                             Level/Category
                                         </div>
-                                        <div class="detail-value">Beginner</div>
+                                        <div class="detail-value">
+                                            <?= $student['student_progress_category'] ?>
+                                        </div>
                                     </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
-                                            <i class="fas fa-rupee-sign"></i>
-                                            Course Fees
+                                            <i class="fas fa-credit-card"></i>
+                                            Payment Method
                                         </div>
-                                        <div class="detail-value">₹5,500</div>
+                                        <div class="detail-value">
+                                            <?= $student['payment_method'] ?>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
+
                                     <div class="detail-row">
                                         <div class="detail-label">
-                                            <i class="fas fa-calendar-check"></i>
-                                            Joining Date
+                                            <i class="fas fa-calendar-alt"></i>
+                                            Last Attendance
                                         </div>
-                                        <div class="detail-value">10 January 2023</div>
+                                        <div class="detail-value">
+                                            <?= $student['last_attendance'] ? date('d M Y', strtotime($student['last_attendance'])) : 'N/A'; ?>
+                                        </div>
                                     </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-clock"></i>
-                                            Duration
-                                        </div>
-                                        <div class="detail-value">6 months</div>
-                                    </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-check-circle"></i>
-                                            Completion Status
+                                            Session Duration
                                         </div>
                                         <div class="detail-value">
-                                            <span class="status-badge status-active">Completed</span>
+                                            <?= $student['course_duration'] ?> hours per session
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn2">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter2">Step 2 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot" data-step="1"></div>
-                                <div class="progress-dot active" data-step="2"></div>
-                                <div class="progress-dot" data-step="3"></div>
-                                <div class="progress-dot" data-step="4"></div>
-                                <div class="progress-dot" data-step="5"></div>
-                                <div class="progress-dot" data-step="6"></div>
+
+                        <!-- Previous Admissions -->
+                        <div class="admission-history">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-history me-2"></i>Previous Admissions
+                            </h5>
+
+                            <div class="admission-history-item">
+                                <div class="admission-history-header">
+                                    <span class="admission-type-badge admission-new">New Admission</span>
+                                    <span class="admission-period">July 2023 - December 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-plus"></i>
+                                                Admission Date
+                                            </div>
+                                            <div class="detail-value">10 July 2023</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-signal"></i>
+                                                Level/Category
+                                            </div>
+                                            <div class="detail-value">Beginner</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-rupee-sign"></i>
+                                                Course Fees
+                                            </div>
+                                            <div class="detail-value">₹6,000</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-check"></i>
+                                                Joining Date
+                                            </div>
+                                            <div class="detail-value">15 July 2023</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-clock"></i>
+                                                Duration
+                                            </div>
+                                            <div class="detail-value">6 months</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-check-circle"></i>
+                                                Completion Status
+                                            </div>
+                                            <div class="detail-value">
+                                                <span class="status-badge status-active">Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="admission-history-item">
+                                <div class="admission-history-header">
+                                    <span class="admission-type-badge admission-re">Re-Admission</span>
+                                    <span class="admission-period">January 2023 - June 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-plus"></i>
+                                                Admission Date
+                                            </div>
+                                            <div class="detail-value">5 January 2023</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-signal"></i>
+                                                Level/Category
+                                            </div>
+                                            <div class="detail-value">Beginner</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-rupee-sign"></i>
+                                                Course Fees
+                                            </div>
+                                            <div class="detail-value">₹5,500</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-check"></i>
+                                                Joining Date
+                                            </div>
+                                            <div class="detail-value">10 January 2023</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-clock"></i>
+                                                Duration
+                                            </div>
+                                            <div class="detail-value">6 months</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-check-circle"></i>
+                                                Completion Status
+                                            </div>
+                                            <div class="detail-value">
+                                                <span class="status-badge status-active">Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn2">
-                            Next
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Batch Details Section -->
-                <div class="section-content" id="batchDetails">
-                    <h4><i class="fas fa-users me-2"></i>Batch Details</h4>
-                    <p>Information about the student's current batch and training schedule.</p>
-
-                    <!-- Current Batch -->
-                    <div class="batch-section">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-star me-2"></i>Current Batch
-                        </h5>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-university"></i>
-                                        Center
-                                    </div>
-                                    <div class="detail-value">Mumbai Central Branch</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-users"></i>
-                                        Batch
-                                    </div>
-                                    <div class="detail-value">Morning Batch - Group A</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-clock"></i>
-                                        Batch Time
-                                    </div>
-                                    <div class="detail-value">6:00 AM - 7:30 AM</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-week"></i>
-                                        Training Days
-                                    </div>
-                                    <div class="detail-value">Monday, Wednesday, Friday</div>
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn2">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter2">Step 2 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot" data-step="1"></div>
+                                    <div class="progress-dot active" data-step="2"></div>
+                                    <div class="progress-dot" data-step="3"></div>
+                                    <div class="progress-dot" data-step="4"></div>
+                                    <div class="progress-dot" data-step="5"></div>
+                                    <div class="progress-dot" data-step="6"></div>
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-chalkboard-teacher"></i>
-                                        Coach
-                                    </div>
-                                    <div class="detail-value">Mr. Vikram Singh</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-user-tie"></i>
-                                        Coordinator
-                                    </div>
-                                    <div class="detail-value">Mrs. Sunita Patel</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-phone"></i>
-                                        Coordinator Phone
-                                    </div>
-                                    <div class="detail-value">+91 98765 43212</div>
-                                </div>
-
-                                <div class="detail-row">
-                                    <div class="detail-label">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Training Venue
-                                    </div>
-                                    <div class="detail-value">Court 1, Ground Floor</div>
-                                </div>
-                            </div>
+                            <button class="nav-btn" onclick="nextSection()" id="nextBtn2">
+                                Next
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Previous Batches -->
-                    <div class="batch-history">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-history me-2"></i>Previous Batches
-                        </h5>
+                    <!-- Batch Details Section -->
+                    <div class="section-content" id="batchDetails">
+                        <h4><i class="fas fa-users me-2"></i>Batch Details</h4>
+                        <p>Information about the student's current batch and training schedule.</p>
 
-                        <div class="batch-history-item">
-                            <div class="batch-history-header">
-                                <span class="batch-period">July 2023 - December 2023</span>
-                            </div>
+                        <!-- Current Batch -->
+                        <div class="batch-section">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-star me-2"></i>Current Batch
+                            </h5>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="detail-row">
@@ -1101,85 +1042,23 @@
                                         </div>
                                         <div class="detail-value">Mumbai Central Branch</div>
                                     </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-users"></i>
-                                            Batch
-                                        </div>
-                                        <div class="detail-value">Evening Batch - Group B</div>
-                                    </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-clock"></i>
-                                            Batch Time
-                                        </div>
-                                        <div class="detail-value">5:00 PM - 6:30 PM</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                            Coach
-                                        </div>
-                                        <div class="detail-value">Mr. Rajesh Kumar</div>
-                                    </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-calendar-week"></i>
-                                            Training Days
-                                        </div>
-                                        <div class="detail-value">Tuesday, Thursday, Saturday</div>
-                                    </div>
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-check-circle"></i>
-                                            Status
-                                        </div>
-                                        <div class="detail-value">
-                                            <span class="status-badge status-active">Completed</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="batch-history-item">
-                            <div class="batch-history-header">
-                                <span class="batch-period">January 2023 - June 2023</span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-university"></i>
-                                            Center
-                                        </div>
-                                        <div class="detail-value">Mumbai West Branch</div>
-                                    </div>
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-users"></i>
                                             Batch
                                         </div>
-                                        <div class="detail-value">Morning Batch - Group C</div>
+                                        <div class="detail-value">Morning Batch - Group A</div>
                                     </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-clock"></i>
                                             Batch Time
                                         </div>
-                                        <div class="detail-value">7:00 AM - 8:30 AM</div>
+                                        <div class="detail-value">6:00 AM - 7:30 AM</div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="detail-row">
-                                        <div class="detail-label">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                            Coach
-                                        </div>
-                                        <div class="detail-value">Ms. Priya Sharma</div>
-                                    </div>
+
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-calendar-week"></i>
@@ -1187,931 +1066,1089 @@
                                         </div>
                                         <div class="detail-value">Monday, Wednesday, Friday</div>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="detail-row">
                                         <div class="detail-label">
-                                            <i class="fas fa-check-circle"></i>
-                                            Status
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                            Coach
                                         </div>
+                                        <div class="detail-value">Mr. Vikram Singh</div>
+                                    </div>
+
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="fas fa-user-tie"></i>
+                                            Coordinator
+                                        </div>
+                                        <div class="detail-value">Mrs. Sunita Patel</div>
+                                    </div>
+
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="fas fa-phone"></i>
+                                            Coordinator Phone
+                                        </div>
+                                        <div class="detail-value">+91 98765 43212</div>
+                                    </div>
+
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            Training Venue
+                                        </div>
+                                        <div class="detail-value">Court 1, Ground Floor</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Previous Batches -->
+                        <div class="batch-history">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-history me-2"></i>Previous Batches
+                            </h5>
+
+                            <div class="batch-history-item">
+                                <div class="batch-history-header">
+                                    <span class="batch-period">July 2023 - December 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-university"></i>
+                                                Center
+                                            </div>
+                                            <div class="detail-value">Mumbai Central Branch</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-users"></i>
+                                                Batch
+                                            </div>
+                                            <div class="detail-value">Evening Batch - Group B</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-clock"></i>
+                                                Batch Time
+                                            </div>
+                                            <div class="detail-value">5:00 PM - 6:30 PM</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                Coach
+                                            </div>
+                                            <div class="detail-value">Mr. Rajesh Kumar</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-week"></i>
+                                                Training Days
+                                            </div>
+                                            <div class="detail-value">Tuesday, Thursday, Saturday</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-check-circle"></i>
+                                                Status
+                                            </div>
+                                            <div class="detail-value">
+                                                <span class="status-badge status-active">Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="batch-history-item">
+                                <div class="batch-history-header">
+                                    <span class="batch-period">January 2023 - June 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-university"></i>
+                                                Center
+                                            </div>
+                                            <div class="detail-value">Mumbai West Branch</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-users"></i>
+                                                Batch
+                                            </div>
+                                            <div class="detail-value">Morning Batch - Group C</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-clock"></i>
+                                                Batch Time
+                                            </div>
+                                            <div class="detail-value">7:00 AM - 8:30 AM</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                Coach
+                                            </div>
+                                            <div class="detail-value">Ms. Priya Sharma</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-calendar-week"></i>
+                                                Training Days
+                                            </div>
+                                            <div class="detail-value">Monday, Wednesday, Friday</div>
+                                        </div>
+                                        <div class="detail-row">
+                                            <div class="detail-label">
+                                                <i class="fas fa-check-circle"></i>
+                                                Status
+                                            </div>
+                                            <div class="detail-value">
+                                                <span class="status-badge status-active">Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn3">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter3">Step 3 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot" data-step="1"></div>
+                                    <div class="progress-dot" data-step="2"></div>
+                                    <div class="progress-dot active" data-step="3"></div>
+                                    <div class="progress-dot" data-step="4"></div>
+                                    <div class="progress-dot" data-step="5"></div>
+                                    <div class="progress-dot" data-step="6"></div>
+                                </div>
+                            </div>
+                            <button class="nav-btn" onclick="nextSection()" id="nextBtn3">
+                                Next
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fees Details Section -->
+                    <div class="section-content" id="feesDetails">
+                        <h4><i class="fas fa-money-bill-wave me-2"></i>Fees Details</h4>
+                        <p>Complete breakdown of fees, payments, and outstanding amounts.</p>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-rupee-sign"></i>
+                                        Course Fees
+                                    </div>
+                                    <div class="detail-value">
+                                        ₹<?= number_format($student['course_fees'], 2) ?>
+                                    </div>
+                                </div>
+
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-plus-circle"></i>
+                                        Additional Fees
+                                    </div>
+                                    <div class="detail-value">
+                                        ₹<?= number_format($student['additional_fees'], 2) ?>
+                                    </div>
+                                </div>
+
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-calculator"></i>
+                                        Total Fees
+                                    </div>
+                                    <div class="detail-value">
+                                        ₹<?= number_format($student['total_fees'], 2) ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-check-circle"></i>
+                                        Amount Paid
+                                    </div>
+                                    <div class="detail-value">
+                                        ₹<?= number_format($student['paid_amount'], 2) ?>
+                                    </div>
+                                </div>
+
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Remaining Amount
+                                    </div>
+                                    <div class="detail-value">
+                                        ₹<?= number_format($student['remaining_amount'], 2) ?>
+                                    </div>
+                                </div>
+
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-percentage"></i>
+                                        Payment Progress
+                                    </div>
+                                    <div class="detail-value">
+                                        <?php
+                                        $progress = 0;
+                                        if ($student['total_fees'] > 0) {
+                                            $progress = ($student['paid_amount'] / $student['total_fees']) * 100;
+                                        }
+                                        ?>
                                         <div class="detail-value">
-                                            <span class="status-badge status-active">Completed</span>
+                                            <strong><?= round($progress) ?>%</strong>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn4">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter4">Step 4 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot" data-step="1"></div>
+                                    <div class="progress-dot" data-step="2"></div>
+                                    <div class="progress-dot" data-step="3"></div>
+                                    <div class="progress-dot active" data-step="4"></div>
+                                    <div class="progress-dot" data-step="5"></div>
+                                    <div class="progress-dot" data-step="6"></div>
+                                </div>
+                            </div>
+                            <button class="nav-btn" onclick="nextSection()" id="nextBtn4">
+                                Next
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Facilities Section -->
+                    <div class="section-content" id="facilities">
+                        <h4><i class="fas fa-building me-2"></i>Facilities</h4>
+                        <p>Additional facilities and services availed by the student.</p>
+
+                        <div class="section-content" id="facilities">
+                            <h4><i class="fas fa-building me-2"></i>Facilities</h4>
+                            <p>Additional facilities and services availed by the student.</p>
+
+                            <!-- Current Facilities -->
+                            <div class="facilities-section">
+                                <h5 class="section-subtitle">
+                                    <i class="fas fa-star me-2"></i>Current Facilities
+                                </h5>
+
+                                <div class="row">
+                                    <?php if (!empty($facilities)) : ?>
+                                        <?php foreach ($facilities as $facility) : ?>
+                                            <div class="col-md-6">
+                                                <div class="facility-card">
+                                                    <div class="facility-header d-flex justify-content-between">
+                                                        <div class="facility-name">
+                                                            <i class="fas fa-check me-2"></i>
+                                                            <?= ucfirst($facility['facility_name']) ?> <?= $facility['subtype_name'] ? '(' . $facility['subtype_name'] . ')' : '' ?>
+                                                        </div>
+                                                        <div class="facility-amount">₹<?= number_format($facility['rent_amount'], 2) ?></div>
+                                                    </div>
+                                                    <div class="facility-details">
+                                                        <strong>Details:</strong> <?= $facility['subtype_name'] ?: 'Standard' ?><br>
+                                                        <strong>Duration:</strong> <?= $facility['rent_date'] ? date('d M Y', strtotime($facility['rent_date'])) : 'N/A' ?><br>
+                                                        <strong>Status:</strong> <span class="status-badge status-active">Active</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <div class="col-12">
+                                            <p>No facilities availed by this student.</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Previous Facilities -->
+                        <div class="facilities-history">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-history me-2"></i>Previous Facilities
+                            </h5>
+
+                            <div class="facility-history-item">
+                                <div class="facility-history-header">
+                                    <span class="facility-period">July 2023 - December 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="facility-card">
+                                            <div class="facility-header">
+                                                <div class="facility-name">
+                                                    <i class="fas fa-lock me-2"></i>Locker Facility
+                                                </div>
+                                                <div class="facility-amount">₹400</div>
+                                            </div>
+                                            <div class="facility-details">
+                                                <strong>Details:</strong> Small locker (Locker No: B-12)<br>
+                                                <strong>Duration:</strong> 6 months<br>
+                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="facility-card">
+                                            <div class="facility-header">
+                                                <div class="facility-name">
+                                                    <i class="fas fa-tshirt me-2"></i>Sports Kit
+                                                </div>
+                                                <div class="facility-amount">₹800</div>
+                                            </div>
+                                            <div class="facility-details">
+                                                <strong>Details:</strong> Complete sports kit<br>
+                                                <strong>Duration:</strong> 6 months<br>
+                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="facility-history-item">
+                                <div class="facility-history-header">
+                                    <span class="facility-period">January 2023 - June 2023</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="facility-card">
+                                            <div class="facility-header">
+                                                <div class="facility-name">
+                                                    <i class="fas fa-table-tennis me-2"></i>Racket Rental
+                                                </div>
+                                                <div class="facility-amount">₹250</div>
+                                            </div>
+                                            <div class="facility-details">
+                                                <strong>Details:</strong> Basic racket<br>
+                                                <strong>Duration:</strong> 6 months<br>
+                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="facility-card">
+                                            <div class="facility-header">
+                                                <div class="facility-name">
+                                                    <i class="fas fa-shoe-prints me-2"></i>Shoe Rental
+                                                </div>
+                                                <div class="facility-amount">₹200</div>
+                                            </div>
+                                            <div class="facility-details">
+                                                <strong>Details:</strong> Sports shoes<br>
+                                                <strong>Duration:</strong> 3 months<br>
+                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn5">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter5">Step 5 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot" data-step="1"></div>
+                                    <div class="progress-dot" data-step="2"></div>
+                                    <div class="progress-dot" data-step="3"></div>
+                                    <div class="progress-dot" data-step="4"></div>
+                                    <div class="progress-dot active" data-step="5"></div>
+                                    <div class="progress-dot" data-step="6"></div>
+                                </div>
+                            </div>
+                            <button class="nav-btn" onclick="nextSection()" id="nextBtn5">
+                                Next
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn3">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter3">Step 3 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot" data-step="1"></div>
-                                <div class="progress-dot" data-step="2"></div>
-                                <div class="progress-dot active" data-step="3"></div>
-                                <div class="progress-dot" data-step="4"></div>
-                                <div class="progress-dot" data-step="5"></div>
-                                <div class="progress-dot" data-step="6"></div>
+                    <!-- Attendance Section -->
+                    <div class="section-content" id="attendance">
+                        <h4><i class="fas fa-calendar-check me-2"></i>Attendance</h4>
+                        <p>Student's attendance records and statistics.</p>
+
+                        <!-- Attendance Statistics -->
+                        <div class="attendance-stats">
+                            <div class="stat-card">
+                                <div class="stat-number">85%</div>
+                                <div class="stat-label">Overall Attendance</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">24</div>
+                                <div class="stat-label">Sessions Attended</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">Sessions Missed</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Late Arrivals</div>
                             </div>
                         </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn3">
-                            Next
-                            <i class="fas fa-chevron-right"></i>
+
+                        <!-- Attendance Table -->
+                        <div class="attendance-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Coach</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>15 March 2024</td>
+                                        <td>Friday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-present">Present</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>Good performance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>13 March 2024</td>
+                                        <td>Wednesday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-present">Present</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>Improved technique</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11 March 2024</td>
+                                        <td>Monday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-late">Late</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>Arrived 15 mins late</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8 March 2024</td>
+                                        <td>Friday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-absent">Absent</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>No prior notice</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6 March 2024</td>
+                                        <td>Wednesday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-present">Present</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>Excellent progress</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4 March 2024</td>
+                                        <td>Monday</td>
+                                        <td>6:00 AM - 7:30 AM</td>
+                                        <td><span class="attendance-status status-present">Present</span></td>
+                                        <td>Mr. Vikram Singh</td>
+                                        <td>Regular attendance</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Attendance Link -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-link"></i>
+                                        Attendance Link
+                                    </div>
+                                    <div class="detail-value">
+                                        <a href="#" class="text-primary">https://academy.com/attendance/rahul-sharma-123</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-row">
+                                    <div class="detail-label">
+                                        <i class="fas fa-qrcode"></i>
+                                        QR Code
+                                    </div>
+                                    <div class="detail-value">
+                                        <i class="fas fa-qrcode fa-2x text-muted"></i>
+                                        <small class="d-block text-muted">Scan for attendance</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="previousSection()" id="prevBtn6">
+                                <i class="fas fa-chevron-left"></i>
+                                Previous
+                            </button>
+                            <div class="progress-indicator">
+                                <span id="stepCounter6">Step 6 of 6</span>
+                                <div class="progress-dots">
+                                    <div class="progress-dot" data-step="1"></div>
+                                    <div class="progress-dot" data-step="2"></div>
+                                    <div class="progress-dot" data-step="3"></div>
+                                    <div class="progress-dot" data-step="4"></div>
+                                    <div class="progress-dot" data-step="5"></div>
+                                    <div class="progress-dot active" data-step="6"></div>
+                                </div>
+                            </div>
+                            <button class="nav-btn" onclick="nextSection()" id="nextBtn6" disabled>
+                                Next
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="action-buttons">
+                        <button type="button" class="btn-edit" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                            <i class="fas fa-edit me-2"></i>
+                            Edit Student
+                        </button>
+                        <button type="button" class="btn-renew" onclick="renewAdmission()">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Renew Admission
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- </div> -->
 
-                <!-- Fees Details Section -->
-                <div class="section-content" id="feesDetails">
-                    <h4><i class="fas fa-money-bill-wave me-2"></i>Fees Details</h4>
-                    <p>Complete breakdown of fees, payments, and outstanding amounts.</p>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-rupee-sign"></i>
-                                    Course Fees
-                                </div>
-                                <div class="detail-value">₹8,000</div>
-                            </div>
-
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-plus-circle"></i>
-                                    Additional Fees
-                                </div>
-                                <div class="detail-value">₹1,000</div>
-                            </div>
-
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-calculator"></i>
-                                    Total Fees
-                                </div>
-                                <div class="detail-value">₹9,000</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-check-circle"></i>
-                                    Amount Paid
-                                </div>
-                                <div class="detail-value">₹6,000</div>
-                            </div>
-
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Remaining Amount
-                                </div>
-                                <div class="detail-value">₹3,000</div>
-                            </div>
-
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-percentage"></i>
-                                    Payment Progress
-                                </div>
-                                <div class="detail-value">
-                                    <div class="progress-container">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 67%">67%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn4">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter4">Step 4 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot" data-step="1"></div>
-                                <div class="progress-dot" data-step="2"></div>
-                                <div class="progress-dot" data-step="3"></div>
-                                <div class="progress-dot active" data-step="4"></div>
-                                <div class="progress-dot" data-step="5"></div>
-                                <div class="progress-dot" data-step="6"></div>
-                            </div>
-                        </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn4">
-                            Next
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Facilities Section -->
-                <div class="section-content" id="facilities">
-                    <h4><i class="fas fa-building me-2"></i>Facilities</h4>
-                    <p>Additional facilities and services availed by the student.</p>
-
-                    <!-- Current Facilities -->
-                    <div class="facilities-section">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-star me-2"></i>Current Facilities
+        <!-- Edit Student Modal -->
+        <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editStudentModalLabel">
+                            <i class="fas fa-edit me-2"></i>Edit Student Details
                         </h5>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="facility-card">
-                                    <div class="facility-header">
-                                        <div class="facility-name">
-                                            <i class="fas fa-lock me-2"></i>Locker Facility
-                                        </div>
-                                        <div class="facility-amount">₹500</div>
-                                    </div>
-                                    <div class="facility-details">
-                                        <strong>Details:</strong> Small locker (Locker No: A-15)<br>
-                                        <strong>Duration:</strong> 6 months<br>
-                                        <strong>Status:</strong> <span class="status-badge status-active">Active</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="facility-card">
-                                    <div class="facility-header">
-                                        <div class="facility-name">
-                                            <i class="fas fa-table-tennis me-2"></i>Racket Rental
-                                        </div>
-                                        <div class="facility-amount">₹300</div>
-                                    </div>
-                                    <div class="facility-details">
-                                        <strong>Details:</strong> Standard racket<br>
-                                        <strong>Duration:</strong> 1 month<br>
-                                        <strong>Status:</strong> <span class="status-badge status-active">Active</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
-                    <!-- Previous Facilities -->
-                    <div class="facilities-history">
-                        <h5 class="section-subtitle">
-                            <i class="fas fa-history me-2"></i>Previous Facilities
-                        </h5>
-
-                        <div class="facility-history-item">
-                            <div class="facility-history-header">
-                                <span class="facility-period">July 2023 - December 2023</span>
-                            </div>
+                    <div class="modal-body">
+                        <form id="editStudentForm">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="facility-card">
-                                        <div class="facility-header">
-                                            <div class="facility-name">
-                                                <i class="fas fa-lock me-2"></i>Locker Facility
-                                            </div>
-                                            <div class="facility-amount">₹400</div>
-                                        </div>
-                                        <div class="facility-details">
-                                            <strong>Details:</strong> Small locker (Locker No: B-12)<br>
-                                            <strong>Duration:</strong> 6 months<br>
-                                            <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="studentName" class="form-label">Student Name</label>
+                                        <input type="text" class="form-control" id="studentName" value="Rahul Sharma" required>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
-                                    <div class="facility-card">
-                                        <div class="facility-header">
-                                            <div class="facility-name">
-                                                <i class="fas fa-tshirt me-2"></i>Sports Kit
-                                            </div>
-                                            <div class="facility-amount">₹800</div>
-                                        </div>
-                                        <div class="facility-details">
-                                            <strong>Details:</strong> Complete sports kit<br>
-                                            <strong>Duration:</strong> 6 months<br>
-                                            <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="parentName" class="form-label">Parent Name</label>
+                                        <input type="text" class="form-control" id="parentName" value="Rajesh Sharma" required>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="facility-history-item">
-                            <div class="facility-history-header">
-                                <span class="facility-period">January 2023 - June 2023</span>
-                            </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="facility-card">
-                                        <div class="facility-header">
-                                            <div class="facility-name">
-                                                <i class="fas fa-table-tennis me-2"></i>Racket Rental
-                                            </div>
-                                            <div class="facility-amount">₹250</div>
-                                        </div>
-                                        <div class="facility-details">
-                                            <strong>Details:</strong> Basic racket<br>
-                                            <strong>Duration:</strong> 6 months<br>
-                                            <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="emailAddress" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="emailAddress" value="rahul.sharma@example.com" required>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
-                                    <div class="facility-card">
-                                        <div class="facility-header">
-                                            <div class="facility-name">
-                                                <i class="fas fa-shoe-prints me-2"></i>Shoe Rental
-                                            </div>
-                                            <div class="facility-amount">₹200</div>
-                                        </div>
-                                        <div class="facility-details">
-                                            <strong>Details:</strong> Sports shoes<br>
-                                            <strong>Duration:</strong> 3 months<br>
-                                            <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="contactNumber" class="form-label">Contact Number</label>
+                                        <input type="tel" class="form-control" id="contactNumber" value="+91 98765 43210" required>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn5">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter5">Step 5 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot" data-step="1"></div>
-                                <div class="progress-dot" data-step="2"></div>
-                                <div class="progress-dot" data-step="3"></div>
-                                <div class="progress-dot" data-step="4"></div>
-                                <div class="progress-dot active" data-step="5"></div>
-                                <div class="progress-dot" data-step="6"></div>
-                            </div>
-                        </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn5">
-                            Next
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Attendance Section -->
-                <div class="section-content" id="attendance">
-                    <h4><i class="fas fa-calendar-check me-2"></i>Attendance</h4>
-                    <p>Student's attendance records and statistics.</p>
-
-                    <!-- Attendance Statistics -->
-                    <div class="attendance-stats">
-                        <div class="stat-card">
-                            <div class="stat-number">85%</div>
-                            <div class="stat-label">Overall Attendance</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">24</div>
-                            <div class="stat-label">Sessions Attended</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">4</div>
-                            <div class="stat-label">Sessions Missed</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">2</div>
-                            <div class="stat-label">Late Arrivals</div>
-                        </div>
-                    </div>
-
-                    <!-- Attendance Table -->
-                    <div class="attendance-table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Day</th>
-                                    <th>Time</th>
-                                    <th>Status</th>
-                                    <th>Coach</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>15 March 2024</td>
-                                    <td>Friday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-present">Present</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>Good performance</td>
-                                </tr>
-                                <tr>
-                                    <td>13 March 2024</td>
-                                    <td>Wednesday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-present">Present</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>Improved technique</td>
-                                </tr>
-                                <tr>
-                                    <td>11 March 2024</td>
-                                    <td>Monday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-late">Late</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>Arrived 15 mins late</td>
-                                </tr>
-                                <tr>
-                                    <td>8 March 2024</td>
-                                    <td>Friday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-absent">Absent</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>No prior notice</td>
-                                </tr>
-                                <tr>
-                                    <td>6 March 2024</td>
-                                    <td>Wednesday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-present">Present</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>Excellent progress</td>
-                                </tr>
-                                <tr>
-                                    <td>4 March 2024</td>
-                                    <td>Monday</td>
-                                    <td>6:00 AM - 7:30 AM</td>
-                                    <td><span class="attendance-status status-present">Present</span></td>
-                                    <td>Mr. Vikram Singh</td>
-                                    <td>Regular attendance</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Attendance Link -->
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-link"></i>
-                                    Attendance Link
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                        <input type="date" class="form-control" id="dateOfBirth" value="2005-03-15" required>
+                                    </div>
                                 </div>
-                                <div class="detail-value">
-                                    <a href="#" class="text-primary">https://academy.com/attendance/rahul-sharma-123</a>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="emergencyContact" class="form-label">Emergency Contact</label>
+                                        <input type="tel" class="form-control" id="emergencyContact" value="+91 98765 43211" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="detail-row">
-                                <div class="detail-label">
-                                    <i class="fas fa-qrcode"></i>
-                                    QR Code
-                                </div>
-                                <div class="detail-value">
-                                    <i class="fas fa-qrcode fa-2x text-muted"></i>
-                                    <small class="d-block text-muted">Scan for attendance</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="nav-buttons">
-                        <button class="nav-btn" onclick="previousSection()" id="prevBtn6">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous
-                        </button>
-                        <div class="progress-indicator">
-                            <span id="stepCounter6">Step 6 of 6</span>
-                            <div class="progress-dots">
-                                <div class="progress-dot" data-step="1"></div>
-                                <div class="progress-dot" data-step="2"></div>
-                                <div class="progress-dot" data-step="3"></div>
-                                <div class="progress-dot" data-step="4"></div>
-                                <div class="progress-dot" data-step="5"></div>
-                                <div class="progress-dot active" data-step="6"></div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="3" required>123, Main Street, Mumbai, Maharashtra - 400001</textarea>
                             </div>
-                        </div>
-                        <button class="nav-btn" onclick="nextSection()" id="nextBtn6" disabled>
-                            Next
-                            <i class="fas fa-chevron-right"></i>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="batchCenter" class="form-label">Center</label>
+                                        <select class="form-control" id="batchCenter" required>
+                                            <option value="mumbai-central" selected>Mumbai Central Branch</option>
+                                            <option value="mumbai-west">Mumbai West Branch</option>
+                                            <option value="mumbai-south">Mumbai South Branch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="batchTime" class="form-label">Batch</label>
+                                        <select class="form-control" id="batchTime" required>
+                                            <option value="morning-a" selected>Morning Batch - Group A</option>
+                                            <option value="morning-b">Morning Batch - Group B</option>
+                                            <option value="evening-a">Evening Batch - Group A</option>
+                                            <option value="evening-b">Evening Batch - Group B</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="studentStatus" class="form-label">Status</label>
+                                        <select class="form-control" id="studentStatus" required>
+                                            <option value="active" selected>Active</option>
+                                            <option value="inactive">Inactive</option>
+                                            <option value="pending">Pending</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="courseFees" class="form-label">Course Fees</label>
+                                        <input type="number" class="form-control" id="courseFees" value="8000" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn-save" onclick="saveStudentChanges()">
+                            <i class="fas fa-save me-2"></i>Save Changes
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="action-buttons">
-                    <button type="button" class="btn-edit" data-bs-toggle="modal" data-bs-target="#editStudentModal">
-                        <i class="fas fa-edit me-2"></i>
-                        Edit Student
-                    </button>
-                    <button type="button" class="btn-renew" onclick="renewAdmission()">
-                        <i class="fas fa-sync-alt me-2"></i>
-                        Renew Admission
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+        <!-- Bootstrap & jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Edit Student Modal -->
-    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editStudentModalLabel">
-                        <i class="fas fa-edit me-2"></i>Edit Student Details
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editStudentForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="studentName" class="form-label">Student Name</label>
-                                    <input type="text" class="form-control" id="studentName" value="Rahul Sharma" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="parentName" class="form-label">Parent Name</label>
-                                    <input type="text" class="form-control" id="parentName" value="Rajesh Sharma" required>
-                                </div>
-                            </div>
-                        </div>
+        <script>
+            // Sections array for navigation
+            const sections = [
+                'personalDetails',
+                'admissionDetails',
+                'batchDetails',
+                'feesDetails',
+                'facilities',
+                'attendance'
+            ];
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="emailAddress" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="emailAddress" value="rahul.sharma@example.com" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="contactNumber" class="form-label">Contact Number</label>
-                                    <input type="tel" class="form-control" id="contactNumber" value="+91 98765 43210" required>
-                                </div>
-                            </div>
-                        </div>
+            let currentSectionIndex = 0;
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="dateOfBirth" value="2005-03-15" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="emergencyContact" class="form-label">Emergency Contact</label>
-                                    <input type="tel" class="form-control" id="emergencyContact" value="+91 98765 43211" required>
-                                </div>
-                            </div>
-                        </div>
+            // Show section
+            function showSection(event, sectionId) {
+                event.preventDefault();
 
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control" id="address" rows="3" required>123, Main Street, Mumbai, Maharashtra - 400001</textarea>
-                        </div>
+                // Find section index
+                const sectionIndex = sections.indexOf(sectionId);
+                if (sectionIndex !== -1) {
+                    currentSectionIndex = sectionIndex;
+                }
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="batchCenter" class="form-label">Center</label>
-                                    <select class="form-control" id="batchCenter" required>
-                                        <option value="mumbai-central" selected>Mumbai Central Branch</option>
-                                        <option value="mumbai-west">Mumbai West Branch</option>
-                                        <option value="mumbai-south">Mumbai South Branch</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="batchTime" class="form-label">Batch</label>
-                                    <select class="form-control" id="batchTime" required>
-                                        <option value="morning-a" selected>Morning Batch - Group A</option>
-                                        <option value="morning-b">Morning Batch - Group B</option>
-                                        <option value="evening-a">Evening Batch - Group A</option>
-                                        <option value="evening-b">Evening Batch - Group B</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                // Hide all sections
+                $('.section-content').removeClass('active');
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="studentStatus" class="form-label">Status</label>
-                                    <select class="form-control" id="studentStatus" required>
-                                        <option value="active" selected>Active</option>
-                                        <option value="inactive">Inactive</option>
-                                        <option value="pending">Pending</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="courseFees" class="form-label">Course Fees</label>
-                                    <input type="number" class="form-control" id="courseFees" value="8000" required>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-save" onclick="saveStudentChanges()">
-                        <i class="fas fa-save me-2"></i>Save Changes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+                // Show selected section
+                $('#' + sectionId).addClass('active');
 
-    <!-- Bootstrap & jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                // Update menu items
+                $('.menu-item').removeClass('active');
+                $(event.target).addClass('active');
 
-    <script>
-        // Sections array for navigation
-        const sections = [
-            'personalDetails',
-            'admissionDetails',
-            'batchDetails',
-            'feesDetails',
-            'facilities',
-            'attendance'
-        ];
-
-        let currentSectionIndex = 0;
-
-        // Show section
-        function showSection(event, sectionId) {
-            event.preventDefault();
-
-            // Find section index
-            const sectionIndex = sections.indexOf(sectionId);
-            if (sectionIndex !== -1) {
-                currentSectionIndex = sectionIndex;
+                // Update navigation buttons
+                updateNavigationButtons();
             }
 
-            // Hide all sections
-            $('.section-content').removeClass('active');
+            // Next section
+            function nextSection() {
+                if (currentSectionIndex < sections.length - 1) {
+                    currentSectionIndex++;
+                    const nextSectionId = sections[currentSectionIndex];
 
-            // Show selected section
-            $('#' + sectionId).addClass('active');
+                    // Hide all sections
+                    $('.section-content').removeClass('active');
 
-            // Update menu items
-            $('.menu-item').removeClass('active');
-            $(event.target).addClass('active');
+                    // Show next section
+                    $('#' + nextSectionId).addClass('active');
+
+                    // Update menu items
+                    $('.menu-item').removeClass('active');
+                    $('.menu-item').eq(currentSectionIndex).addClass('active');
+
+                    // Update navigation buttons
+                    updateNavigationButtons();
+                }
+            }
+
+            // Previous section
+            function previousSection() {
+                if (currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                    const prevSectionId = sections[currentSectionIndex];
+
+                    // Hide all sections
+                    $('.section-content').removeClass('active');
+
+                    // Show previous section
+                    $('#' + prevSectionId).addClass('active');
+
+                    // Update menu items
+                    $('.menu-item').removeClass('active');
+                    $('.menu-item').eq(currentSectionIndex).addClass('active');
+
+                    // Update navigation buttons
+                    updateNavigationButtons();
+                }
+            }
 
             // Update navigation buttons
-            updateNavigationButtons();
-        }
-
-        // Next section
-        function nextSection() {
-            if (currentSectionIndex < sections.length - 1) {
-                currentSectionIndex++;
-                const nextSectionId = sections[currentSectionIndex];
-
-                // Hide all sections
-                $('.section-content').removeClass('active');
-
-                // Show next section
-                $('#' + nextSectionId).addClass('active');
-
-                // Update menu items
-                $('.menu-item').removeClass('active');
-                $('.menu-item').eq(currentSectionIndex).addClass('active');
-
-                // Update navigation buttons
-                updateNavigationButtons();
-            }
-        }
-
-        // Previous section
-        function previousSection() {
-            if (currentSectionIndex > 0) {
-                currentSectionIndex--;
-                const prevSectionId = sections[currentSectionIndex];
-
-                // Hide all sections
-                $('.section-content').removeClass('active');
-
-                // Show previous section
-                $('#' + prevSectionId).addClass('active');
-
-                // Update menu items
-                $('.menu-item').removeClass('active');
-                $('.menu-item').eq(currentSectionIndex).addClass('active');
-
-                // Update navigation buttons
-                updateNavigationButtons();
-            }
-        }
-
-        // Update navigation buttons
-        function updateNavigationButtons() {
-            // Update prev button
-            if (currentSectionIndex === 0) {
-                $('#prevBtn, #prevBtn2, #prevBtn3, #prevBtn4, #prevBtn5, #prevBtn6').prop('disabled', true);
-            } else {
-                $('#prevBtn, #prevBtn2, #prevBtn3, #prevBtn4, #prevBtn5, #prevBtn6').prop('disabled', false);
-            }
-
-            // Update next button
-            if (currentSectionIndex === sections.length - 1) {
-                $('#nextBtn, #nextBtn2, #nextBtn3, #nextBtn4, #nextBtn5, #nextBtn6').prop('disabled', true);
-            } else {
-                $('#nextBtn, #nextBtn2, #nextBtn3, #nextBtn4, #nextBtn5, #nextBtn6').prop('disabled', false);
-            }
-
-            // Update step counter
-            const stepText = `Step ${currentSectionIndex + 1} of ${sections.length}`;
-            $('#stepCounter, #stepCounter2, #stepCounter3, #stepCounter4, #stepCounter5, #stepCounter6').text(stepText);
-
-            // Update progress dots
-            $('.progress-dot').removeClass('active');
-            $(`.progress-dot[data-step="${currentSectionIndex + 1}"]`).addClass('active');
-        }
-
-        // Save student changes
-        function saveStudentChanges() {
-            // Get form data
-            const formData = {
-                studentName: $('#studentName').val(),
-                parentName: $('#parentName').val(),
-                emailAddress: $('#emailAddress').val(),
-                contactNumber: $('#contactNumber').val(),
-                dateOfBirth: $('#dateOfBirth').val(),
-                emergencyContact: $('#emergencyContact').val(),
-                address: $('#address').val(),
-                batchCenter: $('#batchCenter').val(),
-                batchTime: $('#batchTime').val(),
-                studentStatus: $('#studentStatus').val(),
-                courseFees: $('#courseFees').val()
-            };
-
-            // Validate form
-            if (!formData.studentName || !formData.parentName || !formData.emailAddress || !formData.contactNumber) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Please fill in all required fields.',
-                    confirmButtonColor: '#ff4040'
-                });
-                return;
-            }
-
-            // Simulate API call
-            Swal.fire({
-                title: 'Saving Changes...',
-                html: 'Please wait while we update the student details.',
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
+            function updateNavigationButtons() {
+                // Update prev button
+                if (currentSectionIndex === 0) {
+                    $('#prevBtn, #prevBtn2, #prevBtn3, #prevBtn4, #prevBtn5, #prevBtn6').prop('disabled', true);
+                } else {
+                    $('#prevBtn, #prevBtn2, #prevBtn3, #prevBtn4, #prevBtn5, #prevBtn6').prop('disabled', false);
                 }
-            }).then(() => {
-                // Success message
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Student Updated!',
-                    text: 'Student details have been successfully updated.',
-                    confirmButtonColor: '#28a745'
-                }).then(() => {
-                    // Hide modal
-                    $('#editStudentModal').modal('hide');
 
-                    // Update the displayed data (you can implement this based on your needs)
-                    updateDisplayedData(formData);
-                });
-            });
-        }
+                // Update next button
+                if (currentSectionIndex === sections.length - 1) {
+                    $('#nextBtn, #nextBtn2, #nextBtn3, #nextBtn4, #nextBtn5, #nextBtn6').prop('disabled', true);
+                } else {
+                    $('#nextBtn, #nextBtn2, #nextBtn3, #nextBtn4, #nextBtn5, #nextBtn6').prop('disabled', false);
+                }
 
-        // Update displayed data after edit
-        function updateDisplayedData(formData) {
-            // This function would update the displayed data on the page
-            // Implementation depends on your specific requirements
-            console.log('Updated data:', formData);
-        }
+                // Update step counter
+                const stepText = `Step ${currentSectionIndex + 1} of ${sections.length}`;
+                $('#stepCounter, #stepCounter2, #stepCounter3, #stepCounter4, #stepCounter5, #stepCounter6').text(stepText);
 
-        // Renew admission
-        function renewAdmission() {
-            Swal.fire({
-                title: 'Renew Admission',
-                text: 'Are you sure you want to renew this student\'s admission?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, Renew',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Simulate renewal process
+                // Update progress dots
+                $('.progress-dot').removeClass('active');
+                $(`.progress-dot[data-step="${currentSectionIndex + 1}"]`).addClass('active');
+            }
+
+            // Save student changes
+            function saveStudentChanges() {
+                // Get form data
+                const formData = {
+                    studentName: $('#studentName').val(),
+                    parentName: $('#parentName').val(),
+                    emailAddress: $('#emailAddress').val(),
+                    contactNumber: $('#contactNumber').val(),
+                    dateOfBirth: $('#dateOfBirth').val(),
+                    emergencyContact: $('#emergencyContact').val(),
+                    address: $('#address').val(),
+                    batchCenter: $('#batchCenter').val(),
+                    batchTime: $('#batchTime').val(),
+                    studentStatus: $('#studentStatus').val(),
+                    courseFees: $('#courseFees').val()
+                };
+
+                // Validate form
+                if (!formData.studentName || !formData.parentName || !formData.emailAddress || !formData.contactNumber) {
                     Swal.fire({
-                        title: 'Processing Renewal...',
-                        html: 'Please wait while we process the admission renewal.',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    }).then(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Admission Renewed!',
-                            text: 'Student admission has been successfully renewed.',
-                            confirmButtonColor: '#28a745'
-                        });
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please fill in all required fields.',
+                        confirmButtonColor: '#ff4040'
                     });
+                    return;
                 }
+
+                // Simulate API call
+                Swal.fire({
+                    title: 'Saving Changes...',
+                    html: 'Please wait while we update the student details.',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                }).then(() => {
+                    // Success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Student Updated!',
+                        text: 'Student details have been successfully updated.',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+                        // Hide modal
+                        $('#editStudentModal').modal('hide');
+
+                        // Update the displayed data (you can implement this based on your needs)
+                        updateDisplayedData(formData);
+                    });
+                });
+            }
+
+            // Update displayed data after edit
+            function updateDisplayedData(formData) {
+                // This function would update the displayed data on the page
+                // Implementation depends on your specific requirements
+                console.log('Updated data:', formData);
+            }
+
+            // Renew admission
+            function renewAdmission() {
+                Swal.fire({
+                    title: 'Renew Admission',
+                    text: 'Are you sure you want to renew this student\'s admission?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Renew',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Simulate renewal process
+                        Swal.fire({
+                            title: 'Processing Renewal...',
+                            html: 'Please wait while we process the admission renewal.',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        }).then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Admission Renewed!',
+                                text: 'Student admission has been successfully renewed.',
+                                confirmButtonColor: '#28a745'
+                            });
+                        });
+                    }
+                });
+            }
+
+            // Initialize navigation buttons on page load
+            $(document).ready(function() {
+                updateNavigationButtons();
             });
-        }
+        </script>
 
-        // Initialize navigation buttons on page load
-        $(document).ready(function() {
-            updateNavigationButtons();
-        });
-    </script>
-
-    <style>
-        /* Navigation Buttons */
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding: 20px 0;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .nav-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
-            color: white;
-            text-decoration: none;
-        }
-
-        .nav-btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .nav-btn:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Progress Indicator */
-        .progress-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .progress-dots {
-            display: flex;
-            gap: 5px;
-        }
-
-        .progress-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        .progress-dot.active {
-            background: var(--primary-color);
-        }
-
-        /* Modal Styles */
-        .modal-content {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            background: var(--primary-gradient);
-            color: white;
-            border-radius: 15px 15px 0 0;
-            border: none;
-        }
-
-        .modal-body {
-            padding: 30px;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            padding: 12px 15px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
-        }
-
-        .modal-footer {
-            border-top: 1px solid #e0e0e0;
-            padding: 20px 30px;
-        }
-
-        .btn-save {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-cancel:hover {
-            background: #5a6268;
-            color: white;
-        }
-
-        /* Responsive Design for Navigation */
-        @media (max-width: 768px) {
+        <style>
+            /* Navigation Buttons */
             .nav-buttons {
-                flex-direction: column;
-                gap: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 30px;
+                padding: 20px 0;
+                border-top: 1px solid #e0e0e0;
             }
 
-            .progress-indicator {
-                order: -1;
+            .nav-btn {
+                background: var(--primary-gradient);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
             }
-        }
-    </style>
+
+            .nav-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
+                color: white;
+                text-decoration: none;
+            }
+
+            .nav-btn:disabled {
+                background: #6c757d;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+            .nav-btn:disabled:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            /* Progress Indicator */
+            .progress-indicator {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #666;
+                font-weight: 500;
+            }
+
+            .progress-dots {
+                display: flex;
+                gap: 5px;
+            }
+
+            .progress-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #e0e0e0;
+                transition: all 0.3s ease;
+            }
+
+            .progress-dot.active {
+                background: var(--primary-color);
+            }
+
+            /* Modal Styles */
+            .modal-content {
+                border-radius: 15px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            .modal-header {
+                background: var(--primary-gradient);
+                color: white;
+                border-radius: 15px 15px 0 0;
+                border: none;
+            }
+
+            .modal-body {
+                padding: 30px;
+            }
+
+            .form-label {
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+
+            .form-control {
+                border-radius: 8px;
+                border: 1px solid #e0e0e0;
+                padding: 12px 15px;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.25);
+            }
+
+            .modal-footer {
+                border-top: 1px solid #e0e0e0;
+                padding: 20px 30px;
+            }
+
+            .btn-save {
+                background: var(--primary-gradient);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-save:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
+                color: white;
+            }
+
+            .btn-cancel {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-cancel:hover {
+                background: #5a6268;
+                color: white;
+            }
+
+            /* Responsive Design for Navigation */
+            @media (max-width: 768px) {
+                .nav-buttons {
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .progress-indicator {
+                    order: -1;
+                }
+            }
+        </style>
 </body>
 
 </html>
