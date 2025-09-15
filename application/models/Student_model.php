@@ -88,5 +88,10 @@ public function check_today($student_id) {
         $query = $this->db->get('students');
         return $query->result_array();
     }
+    public function add_student_facility($data)
+{
+    return $this->db->insert('student_facilities', $data);
+}
+
 }
 ?>

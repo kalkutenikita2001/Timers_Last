@@ -836,25 +836,25 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // Get student ID from URL
-  const urlSegments = window.location.pathname.split('/');
-  const studentId = urlSegments[urlSegments.length - 1];
+  // =================== Fetch Student Data ===================
+  $(document).ready(function () {
+    const urlSegments = window.location.pathname.split('/');
+    const studentId = urlSegments[urlSegments.length - 1];
 
-  // Fetch student data from API
-  $(document).ready(function() {
+    // Fetch student details
     $.ajax({
       url: '<?php echo base_url("Admission/get_student/"); ?>' + studentId,
       method: 'GET',
-      success: function(data) {
+      success: function (data) {
         populateStudentData(data);
+        fetchStudentFacilities(studentId); // Fetch facilities separately
       },
-      error: function() {
+      error: function () {
         alert('Failed to fetch student data. Please try again.');
       }
     });
   });
 
-  // Function to populate student data
   function populateStudentData(data) {
     // Personal Details
     $('#studentName').text(data.name || 'Not specified');
@@ -868,13 +868,13 @@
     $('#joiningDate').text(data.joining_date ? new Date(data.joining_date).toLocaleDateString() : 'Not specified');
 
     // Batch Details
-    const batchStatusClass = data.status.toLowerCase() === 'deactive' ? 'status-deactive' : 'status-active';
+    const batchStatusClass = data.status?.toLowerCase() === 'deactive' ? 'status-deactive' : 'status-active';
     $('#batchName').text(data.batch_name || 'Not specified');
     $('#batchStatus').text(data.status || 'Not specified').addClass(batchStatusClass);
-    
+
     const batchDetailsGrid = $('#batchDetailsGrid');
     batchDetailsGrid.empty();
-    
+
     const batchDetails = [
       { icon: 'university', label: 'Center', value: data.center_name || 'Not specified' },
       { icon: 'chalkboard-teacher', label: 'Coach', value: data.coach || 'Not specified' },
@@ -898,82 +898,83 @@
     $('#remainingAmount').val(data.remaining_amount || '0.00');
     $('#paymentMethod').val(data.payment_method || 'Not specified');
 
-    // Facilities
-    const facilitiesContainer = $('#currentFacilities');
-    facilitiesContainer.empty();
-    
-    if (data.facilities && data.facilities.length > 0) {
-      data.facilities.forEach(facility => {
-        facilitiesContainer.append(`
-          <div class="facility-card">
-            <div class="facility-header">
-              <div class="facility-name">${facility.name}</div>
-              <div class="facility-status status-active">Active</div>
-            </div>
-            <div class="facility-details-grid">
-              <div class="facility-detail-item">
-                <i class="fas fa-info-circle"></i>
-                <span><strong>Details:</strong> ${facility.details}</span>
-              </div>
-              <div class="facility-detail-item">
-                <i class="fas fa-money-bill-wave"></i>
-                <span><strong>Amount:</strong> ₹${parseFloat(facility.amount).toLocaleString()}/month</span>
-              </div>
-            </div>
-          </div>
-        `);
-      });
-    } else {
-      facilitiesContainer.append('<p>No facilities assigned.</p>');
-    }
-
-    // Update Renew Admission form
+    // Renew Admission
     $('#renewStudentName').val(data.id).text(data.name);
     $('select[name="level"]').val(data.student_progress_category || '');
   }
 
-  function showSection(event, sectionId) {
-    event.preventDefault();
-    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    updateProgressBar(sectionId);
-  }
+  // =================== Fetch Facilities ===================
+ function fetchStudentFacilities(studentId) {
+  $.ajax({
+    url: '<?php echo base_url("Admission/get_facility_by_student_id/"); ?>' + studentId,
+    method: 'GET',
+    dataType: 'json',
+    success: function (response) {
+      const facilitiesContainer = $('#currentFacilities');
+      facilitiesContainer.empty();
 
-  function updateProgressBar(sectionId) {
-    const progressBar = document.getElementById("progressBar");
-    let step = 1;
-    
-    switch(sectionId) {
-      case "basicData": step = 1; break;
-      case "batchDetails": step = 2; break;
-      case "feesDetails": step = 3; break;
-      case "facilities": step = 4; break;
-      case "Renew_admission": step = 5; break;
+      if (response.status === "success" && response.data && response.data.length > 0) {
+        response.data.forEach(facility => {
+          facilitiesContainer.append(`
+            <div class="facility-card">
+              <div class="facility-header">
+                <div class="facility-name">${facility.facility_name}</div>
+                <div class="facility-status status-active">Active</div>
+              </div>
+              <div class="facility-details-grid">
+                
+                <div class="facility-detail-item">
+                  <i class="fas fa-money-bill-wave"></i>
+                  <span><strong>Amount:</strong> ₹${parseFloat(facility.amount).toLocaleString()}</span>
+                </div>
+                
+              </div>
+            </div>
+          `);
+        });
+      } else {
+        facilitiesContainer.append('<p>No facilities assigned.</p>');
+      }
+    },
+    error: function () {
+      alert('Failed to fetch facilities. Please try again.');
     }
-    
-    const percentage = (step / 5) * 100;
-    progressBar.style.width = percentage + "%";
-    progressBar.innerText = `Step ${step} of 5`;
-  }
-
-  function calculateExpiryDate() {
-    const joinDateInput = document.getElementById('joinDate');
-    const durationSelect = document.getElementById('durationSelect');
-    const expiryDateInput = document.getElementById('expiryDate');
-    
-    if (joinDateInput.value && durationSelect.value) {
-      const joinDate = new Date(joinDateInput.value);
-      const duration = parseInt(durationSelect.value);
-      const expiryDate = new Date(joinDate);
-      expiryDate.setMonth(expiryDate.getMonth() + duration);
-      expiryDateInput.value = expiryDate.toISOString().split('T')[0];
-    } else {
-      expiryDateInput.value = '';
+  });
+}
+  // Fetch and render facilities for a student
+function loadFacilities(studentId) {
+  $.ajax({
+    url: base_url + "Admission/get_facilities/" + studentId, // your API route
+    type: "GET",
+    dataType: "json",
+    success: function (response) {
+      if (response && response.length > 0) {
+        let html = "";
+        response.forEach(facility => {
+          html += `
+            <div class="card mb-2 shadow-sm p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <strong>${facility.name}</strong>
+                <span class="badge badge-success">₹${facility.amount}</span>
+              </div>
+             
+            </div>
+          `;
+        });
+        $("#currentFacilities").html(html);
+      } else {
+        $("#currentFacilities").html(`<p class="text-muted">No facilities added yet.</p>`);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("Error loading facilities:", error);
+      $("#currentFacilities").html(`<p class="text-danger">Failed to load facilities.</p>`);
     }
-  }
+  });
+}
 
+
+  // =================== Sidebar & Navigation ===================
   document.addEventListener('DOMContentLoaded', () => {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
@@ -997,15 +998,6 @@
       });
     }
 
-    const joinDateInput = document.getElementById('joinDate');
-    const durationSelect = document.getElementById('durationSelect');
-    
-    if (joinDateInput && durationSelect) {
-      joinDateInput.addEventListener('change', calculateExpiryDate);
-      durationSelect.addEventListener('change', calculateExpiryDate);
-      joinDateInput.value = new Date().toISOString().split('T')[0];
-    }
-
     // Navigation
     document.querySelector(".next1")?.addEventListener("click", () => navigateTo("basicData", "batchDetails"));
     document.querySelector(".next2")?.addEventListener("click", () => navigateTo("batchDetails", "feesDetails"));
@@ -1017,6 +1009,15 @@
     document.querySelector(".back4")?.addEventListener("click", () => navigateTo("Renew_admission", "facilities"));
   });
 
+  function showSection(event, sectionId) {
+    event.preventDefault();
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    updateProgressBar(sectionId);
+  }
+
   function navigateTo(currentId, nextId) {
     document.querySelectorAll(".section-content").forEach(sec => sec.classList.remove("active"));
     document.getElementById(nextId).classList.add("active");
@@ -1025,100 +1026,28 @@
     updateProgressBar(nextId);
   }
 
-  // Facility Sub-Types
-  const facilitySubTypes = {
-    hostel: [
-      { id: 'singleNonAC', name: 'Single Seater (Non-AC)', details: 'Private room with attached bathroom', amount: 8000 },
-      { id: 'singleAC', name: 'Single Seater (AC)', details: 'Private AC room with attached bathroom', amount: 12000 },
-      { id: 'doubleNonAC', name: 'Double Seater (Non-AC)', details: 'Shared room with attached bathroom', amount: 6000 },
-      { id: 'doubleAC', name: 'Double Seater (AC)', details: 'Shared AC room with attached bathroom', amount: 9000 },
-      { id: 'tripleNonAC', name: 'Triple Seater (Non-AC)', details: 'Shared room for three students', amount: 5000 }
-    ],
-    mess: [
-      { id: 'breakfastOnly', name: 'Breakfast Only', details: 'Morning meals only', amount: 3000 },
-      { id: 'lunchOnly', name: 'Lunch Only', details: 'Afternoon meals only', amount: 4000 },
-      { id: 'dinnerOnly', name: 'Dinner Only', details: 'Evening meals only', amount: 3500 },
-      { id: 'breakfastDinner', name: 'Breakfast & Dinner', details: 'Morning and evening meals', amount: 6000 },
-      { id: 'fullMeal', name: 'Full Meal Plan', details: 'All three meals included', amount: 9000 }
-    ],
-    locker: [
-      { id: 'small', name: 'Small Locker', details: 'Ideal for books and small items', amount: 1000 },
-      { id: 'medium', name: 'Medium Locker', details: 'Fits a backpack and books', amount: 1500 },
-      { id: 'large', name: 'Large Locker', details: 'Spacious for multiple items', amount: 2000 },
-      { id: 'premium', name: 'Premium Locker', details: 'Extra secure with digital lock', amount: 2500 }
-    ],
-    transport: [
-      { id: 'oneWay', name: 'One Way Service', details: 'Transport to or from campus', amount: 2500 },
-      { id: 'twoWay', name: 'Two Way Service', details: 'Transport to and from campus', amount: 4000 },
-      { id: 'weekend', name: 'Weekend Service', details: 'Weekend transport only', amount: 2000 },
-      { id: 'premiumBus', name: 'Premium Bus Service', details: 'AC bus with guaranteed seating', amount: 5000 }
-    ],
-    gym: [
-      { id: 'basic', name: 'Basic Membership', details: 'Access to cardio and weight areas', amount: 1500 },
-      { id: 'premium', name: 'Premium Membership', details: 'Includes classes and trainer consultation', amount: 3000 },
-      { id: 'pool', name: 'Gym + Pool Access', details: 'Full gym access plus swimming pool', amount: 4000 }
-    ],
-    library: [
-      { id: 'basic', name: 'Basic Access', details: 'Book borrowing and reading area access', amount: 500 },
-      { id: 'research', name: 'Research Access', details: 'Includes journal and database access', amount: 1500 },
-      { id: 'premium', name: 'Premium Access', details: '24/7 access with study rooms', amount: 2500 }
-    ],
-    other: [
-      { id: 'custom', name: 'Custom Facility', details: 'Specify details in notes', amount: 0 }
-    ]
-  };
+  function updateProgressBar(sectionId) {
+    const progressBar = document.getElementById("progressBar");
+    let step = 1;
 
-  const facilityTypeLabels = {
-    hostel: 'Hostel Type',
-    mess: 'Meal Plan',
-    locker: 'Locker Size',
-    transport: 'Transport Plan',
-    gym: 'Membership Type',
-    library: 'Access Level',
-    other: 'Facility Type'
-  };
-
-  function showSubTypes() {
-    const facilityType = document.getElementById('facilityType').value;
-    const subTypeContainer = document.getElementById('subTypeContainer');
-    const subTypeOptions = document.getElementById('subTypeOptions');
-    const subTypeTitle = document.getElementById('subTypeTitle');
-    
-    subTypeOptions.innerHTML = '';
-    
-    if (facilityType && facilitySubTypes[facilityType]) {
-      subTypeContainer.style.display = 'block';
-      subTypeTitle.textContent = `Select ${facilityTypeLabels[facilityType]}`;
-      
-      facilitySubTypes[facilityType].forEach(subType => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'sub-type-option';
-        optionDiv.setAttribute('data-id', subType.id);
-        optionDiv.setAttribute('data-amount', subType.amount);
-        optionDiv.innerHTML = `
-          <div class="sub-type-name">${subType.name}</div>
-          <div class="sub-type-details">${subType.details}</div>
-          <div class="amount">₹${subType.amount.toLocaleString()}/month</div>
-        `;
-        
-        optionDiv.addEventListener('click', function() {
-          document.querySelectorAll('.sub-type-option').forEach(opt => opt.classList.remove('selected'));
-          this.classList.add('selected');
-          document.getElementById('facilityAmount').value = subType.amount;
-        });
-        
-        subTypeOptions.appendChild(optionDiv);
-      });
-    } else {
-      subTypeContainer.style.display = 'none';
+    switch (sectionId) {
+      case "basicData": step = 1; break;
+      case "batchDetails": step = 2; break;
+      case "feesDetails": step = 3; break;
+      case "facilities": step = 4; break;
+      case "Renew_admission": step = 5; break;
     }
+
+    const percentage = (step / 5) * 100;
+    progressBar.style.width = percentage + "%";
+    progressBar.innerText = `Step ${step} of 5`;
   }
 
-  window.onload = function() {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    document.getElementById('facilityStartDate').value = formattedDate;
-    document.getElementById('renewStartDate').value = formattedDate;
+  // =================== Facility Expiry Date ===================
+  window.onload = function () {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('facilityStartDate').value = today;
+    document.getElementById('renewStartDate').value = today;
     updateExpiryDate();
     updateRenewExpiryDate();
   };
@@ -1140,7 +1069,7 @@
   function updateExpiryDate() {
     const startDate = new Date(document.getElementById('facilityStartDate').value);
     const duration = parseInt(document.getElementById('selectedDuration').value);
-    
+
     if (!isNaN(startDate.getTime()) && duration > 0) {
       const expiryDate = new Date(startDate);
       expiryDate.setMonth(expiryDate.getMonth() + duration);
@@ -1151,7 +1080,7 @@
   function updateRenewExpiryDate() {
     const startDate = new Date(document.getElementById('renewStartDate').value);
     const duration = parseInt(document.getElementById('renewDuration').value);
-    
+
     if (!isNaN(startDate.getTime()) && duration > 0) {
       const expiryDate = new Date(startDate);
       expiryDate.setMonth(expiryDate.getMonth() + duration);
@@ -1159,6 +1088,7 @@
     }
   }
 
+  // =================== Renew Facility ===================
   $('#renewModal').on('show.bs.modal', function (event) {
     const button = $(event.relatedTarget);
     const facilityName = button.data('facility');
@@ -1167,21 +1097,23 @@
     modal.find('#renewFacilityName').val(facilityName);
   });
 
-  document.getElementById('facilityForm').addEventListener('submit', function(event) {
+  document.getElementById('facilityForm').addEventListener('submit', function (event) {
     event.preventDefault();
     alert('Facility added successfully!');
   });
 
-  document.getElementById('confirmRenew').addEventListener('click', function() {
+  document.getElementById('confirmRenew').addEventListener('click', function () {
     alert('Facility renewed successfully!');
     $('#renewModal').modal('hide');
   });
 
+  // =================== Fees Calculation ===================
   function calculateTotalFees() {
     const baseFees = parseFloat(document.getElementById('baseFees').value) || 0;
     const facilitiesAmount = parseFloat(document.getElementById('facilitiesAmount').value) || 0;
     document.getElementById('totalAmount').value = (baseFees + facilitiesAmount).toFixed(2);
   }
 </script>
+
 </body>
 </html>

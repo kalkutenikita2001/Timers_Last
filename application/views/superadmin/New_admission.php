@@ -1030,107 +1030,81 @@ $(document).ready(function () {
 </script>
  <!-- Form Submission -->
     <script>
-        $('#admissionForm').on('submit', function(e) {
-            e.preventDefault();
-            if (!validateStep(4)) return;
+     $('#admissionForm').on('submit', function(e) {
+    e.preventDefault();
+    if (!validateStep(4)) return;
 
-            const formData = $(this).serializeArray().reduce((obj, item) => {
-                obj[item.name] = item.value;
-                return obj;
-            }, {});
+    // Use FormData
+    let formData = new FormData(this);
 
-            formData.course_fees = $('#courseFees').val();
-formData.additionalFees = $('#additionalFees').val();
-formData.totalFees = $('#totalFees').val();
-formData.course_duration = $('#courseDuration').val();
+    // Append extra fields manually (if not inside form)
+    formData.append('course_fees', $('#courseFees').val());
+    formData.append('additional_fees', $('#additionalFees').val());
+    formData.append('total_fees', $('#totalFees').val());
+    formData.append('course_duration', $('#courseDuration').val());
+    formData.append('remaining_amount', $('#remainingAmount').val());
+    formData.append('paid_amount', $('#paidAmount').val());
+    formData.append('admission_date', $('#admissionDate').val());
+    formData.append('joining_date', $('#joiningDate').val());
+    formData.append('payment_method', $('input[name="paymentMethod"]:checked').val());
 
-formData.remainingAmount = $('#remainingAmount').val();
-formData.paidAmount = $('#paidAmount').val();
-formData.admissionDate = $('#admissionDate').val();
-formData.joiningDate = $('#joiningDate').val();
-formData.paymentMethod = $('input[name="paymentMethod"]:checked').val();
+    // Add facilities
+    $('.facility-checkbox:checked').each(function(i) {
+        const facilityCard = $(this).closest('.facility-card');
+        const facilityType = facilityCard.data('facility');
+            const amount = parseFloat($('#additionalFees').val()) || 0;
 
+        let details = '';
+       // let amount = 0;
 
-            // Add facilities summary
-            formData.facilities = [];
-            $('.facility-checkbox:checked').each(function() {
-                const facilityCard = $(this).closest('.facility-card');
-                const facilityType = facilityCard.data('facility');
-                let facilityName = '';
-                let details = '';
-                let amount = 0;
-
-                switch(facilityType) {
-                    case 'locker':
-                        facilityName = 'Locker';
-                        const lockerSize = facilityCard.find('.locker-size option:selected').text();
-                        const lockerNumber = facilityCard.find('.locker-number option:selected').val() || 'Not selected';
-                        const lockerPrice = parseFloat(facilityCard.find('.locker-size').val());
-                        amount = lockerPrice;
-                        details = `${lockerSize}, Locker No: ${lockerNumber}`;
-                        break;
-                    case 'racket':
-                        facilityName = 'Racket Rental';
-                        const racketType = facilityCard.find('.racket-type option:selected').text();
-                        const months = facilityCard.find('.racket-months').val();
-                        const racketPrice = parseFloat(facilityCard.find('.racket-type').val());
-                        amount = racketPrice * months;
-                        details = `${racketType} for ${months} month(s)`;
-                        break;
-                    case 'shoe':
-                        facilityName = 'Shoe Rental';
-                        const shoeSize = facilityCard.find('.shoe-size option:selected').text();
-                        const shoeMonths = facilityCard.find('.shoe-months').val();
-                        const shoePrice = parseFloat(facilityCard.find('.shoe-size').val());
-                        amount = shoePrice * shoeMonths;
-                        details = `${shoeSize} for ${shoeMonths} month(s)`;
-                        break;
-                }
-
-                formData.facilities.push({
-                    name: facilityName,
-                    details: details,
-                    amount: amount
-                });
-            });
-
-          $.ajax({
-    url: '<?= base_url('Admission/save') ?>',
-    method: 'POST',
-    data: JSON.stringify(formData),
-    contentType: 'application/json',
-    success: function(response) {
-        if (response.success) {
-            // First admission saved
-            // Now call add_student API with same formData
-            $.ajax({
-                url: '<?= base_url('Student_controller/add_student') ?>',
-                method: 'POST',
-                data: formData, // send as normal form-data
-                success: function(studentResponse) {
-                    if (studentResponse.status === 'success') {
-                        // Redirect to receipt page after student added
-                        window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
-                    } else {
-                        alert('Student API failed: ' + studentResponse.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('Error calling student API: ' + error);
-                }
-            });
-
-        } else {
-            alert('Failed to save admission: ' + response.message);
+        switch(facilityType) {
+            case 'locker':
+                details = facilityCard.find('.locker-number option:selected').text();
+                amount = facilityCard.find('.locker-size').val() || 0;
+                break;
+            case 'racket':
+                details = facilityCard.find('.racket-type option:selected').text();
+                amount = facilityCard.find('.racket-type').val() || 0;
+                break;
+            case 'shoe':
+                details = facilityCard.find('.shoe-size option:selected').text();
+                amount = facilityCard.find('.shoe-size').val() || 0;
+                break;
         }
-    },
-    error: function(xhr, status, error) {
-        alert('Error submitting form: ' + error);
-    }
+
+        formData.append(`facilities[${i}][name]`, facilityType);
+        formData.append(`facilities[${i}][details]`, details);
+        formData.append(`facilities[${i}][amount]`, amount);
+    });
+
+    $.ajax({
+        url: '<?= base_url('Admission/save') ?>',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                $.ajax({
+                    url: '<?= base_url('Student_controller/add_student') ?>',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(studentResponse) {
+                        if (studentResponse.status === 'success') {
+                            window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
+                        } else {
+                            alert('Student API failed: ' + studentResponse.message);
+                        }
+                    }
+                });
+            } else {
+                alert('Failed to save admission: ' + response.message);
+            }
+        }
+    });
 });
-
-        });
-
 
         
     </script>

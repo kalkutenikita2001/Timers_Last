@@ -231,7 +231,7 @@ class Admission extends CI_Controller {
         echo json_encode($students);
     }
 
-    public function save() {
+    public function saveold() {
         $this->output->set_content_type('application/json');
         log_message('debug', 'Save admission called with data: ' . $this->input->raw_input_stream);
         $data = json_decode($this->input->raw_input_stream, true);
@@ -252,6 +252,33 @@ class Admission extends CI_Controller {
             echo json_encode(['success' => false, 'message' => 'Failed to save admission']);
         }
     }
+    public function save() {
+    $this->output->set_content_type('application/json');
+
+    // Grab form-data (POST)
+    $data = $this->input->post();
+
+    log_message('debug', 'Save admission called with form-data: ' . print_r($data, true));
+
+    if (empty($data)) {
+        $this->output->set_status_header(400);
+        echo json_encode(['success' => false, 'message' => 'No form data received']);
+        return;
+    }
+
+    // Save admission
+    $student_id = $this->Admission_model->save_admission($data);
+
+    if ($student_id) {
+        log_message('debug', 'Admission saved successfully with student ID: ' . $student_id);
+        echo json_encode(['success' => true, 'student_id' => $student_id]);
+    } else {
+        $this->output->set_status_header(500);
+        log_message('error', 'Failed to save admission');
+        echo json_encode(['success' => false, 'message' => 'Failed to save admission']);
+    }
+}
+
      public function get_deactive_students() {
         header('Content-Type: application/json');
 
@@ -301,6 +328,32 @@ public function expiring_students() {
         }
 
         echo json_encode($response);
+    }
+
+     public function get_facility_by_student_id($student_id = null) {
+        if (!$student_id || !is_numeric($student_id)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Invalid or missing student_id'
+            ]);
+            return;
+        }
+
+        $data = $this->Admission_model->get_facility_by_student_id($student_id);
+
+        if ($data) {
+            echo json_encode([
+                'status' => 'success',
+                'student_id' => $student_id,
+                'data' => $data
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'success',
+                'student_id' => $student_id,
+                'data' => []
+            ]);
+        }
     }
 }
 ?>

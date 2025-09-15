@@ -24,7 +24,7 @@ class Student_controller extends CI_Controller
             ->set_output(json_encode($response));
     }
 
-    public function add_student()
+    public function add_studentold()
     {
         $token = bin2hex(random_bytes(16));
 
@@ -73,6 +73,76 @@ class Student_controller extends CI_Controller
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
     }
+public function add_student()
+{
+    // Generate unique token for attendance link
+    $token = bin2hex(random_bytes(16));
+
+    // ✅ Read normal form-data (from FormData frontend)
+    $data = [
+        'name'              => $this->input->post('studentName'),
+        'contact'           => $this->input->post('contact'),
+        'parent_name'       => $this->input->post('parentName'),
+        'emergency_contact' => $this->input->post('emergencyContact'),
+        'email'             => $this->input->post('email'),
+        'address'           => $this->input->post('address'),
+        'center'            => $this->input->post('center'),
+        'batch'             => $this->input->post('batch'),
+        'category'          => $this->input->post('category'),
+        'coach'             => $this->input->post('coach'),
+        'coordinator'       => $this->input->post('coordinator'),
+        'total_fees'        => $this->input->post('totalFees'),
+        'amount_paid'       => $this->input->post('paidAmount'),
+        'remaining_amount'  => $this->input->post('remainingAmount'),
+        'payment_method'    => $this->input->post('paymentMethod'),
+      
+        'plan_expiry'       => date('Y-m-d', strtotime('+1 month')),
+        'unique_token'      => $token,
+        'attendace_link'   => base_url('Student_controller/mark/' . $token),
+        'created_at'        => date('Y-m-d H:i:s')
+    ];
+
+    // Save student
+    $insert_id = $this->Student_model->add_student($data);
+
+    if ($insert_id) {
+        // ✅ Handle facilities (formdata array)
+        $facilities = $this->input->post('facilities'); // FormData sends facilities[][]
+        
+        if (!empty($facilities) && is_array($facilities)) {
+            foreach ($facilities as $facility) {
+                $facilityData = [
+                    'student_id'    => $insert_id,
+                    'facility_name' => isset($facility['name']) ? $facility['name'] : '',
+                    'details'       => isset($facility['details']) ? $facility['details'] : '',
+                    'amount'        => isset($facility['additional_fees']) ? $facility['additional_fees'] : 0,
+                    'created_at'    => date('Y-m-d H:i:s')
+                ];
+                $this->Student_model->add_student_facility($facilityData);
+            }
+        }
+
+        $response = [
+            'status'          => 'success',
+            'message'         => 'Student added successfully',
+            'student_id'      => $insert_id,
+            'attendance_link' => base_url('Student_controller/mark/' . $token),
+            'data'            => $data
+        ];
+    } else {
+        $response = [
+            'status'  => 'error',
+            'message' => 'Failed to add student'
+        ];
+    }
+
+    return $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+}
+
+
+
 
    
     public function mark($token)

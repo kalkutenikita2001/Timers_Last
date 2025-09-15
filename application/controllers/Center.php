@@ -259,6 +259,10 @@ public function getFacilitiesByCenterId($centerId = null)
         ]);
     }
 }
+public function add_student_facility($data)
+{
+    return $this->db->insert('student_facilities', $data);
+}
 
      public function getAllcenters() {
         $centers = $this->Center_model->get_all_centers();

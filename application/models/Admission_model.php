@@ -211,6 +211,12 @@ public function get_student_by_id($student_id) {
     $query = $this->db->query($sql);
     return $query->result_array();
 }
-
+ public function get_facility_by_student_id($student_id) {
+        return $this->db
+            ->where('student_id', $student_id)
+            ->order_by('id', 'ASC')
+            ->get('student_facilities')
+            ->result_array();
+    }
 }
 ?>
