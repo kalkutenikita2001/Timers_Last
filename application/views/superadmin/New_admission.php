@@ -9,7 +9,7 @@
     <!-- Bootstrap & Font Awesome -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Custom Styles -->
     <style>
@@ -257,7 +257,7 @@
             font-size: 12px;
         }
 
-        .is-invalid ~ .invalid-feedback {
+        .is-invalid~.invalid-feedback {
             display: block;
         }
     </style>
@@ -336,14 +336,14 @@
                                                 <div class="invalid-feedback">Please enter a valid email address.</div>
                                             </div>
                                             <div class="mb-3">
-  <label for="studentLevel" class="form-label">Student Level</label>
-  <select class="form-select" id="studentLevel" name="category">
-    <option value="">-- Select Level --</option>
-    <option value="Beginner">Beginner</option>
-    <option value="Intermediate">Intermediate</option>
-    <option value="Advanced">Advanced</option>
-  </select>
-</div>
+                                                <label for="studentLevel" class="form-label">Student Level</label>
+                                                <select class="form-select" id="studentLevel" name="category">
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="Beginner">Beginner</option>
+                                                    <option value="Intermediate">Intermediate</option>
+                                                    <option value="Advanced">Advanced</option>
+                                                </select>
+                                            </div>
 
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-alt"></i> Date of Birth *</label>
@@ -373,15 +373,15 @@
                                                 <div class="invalid-feedback">Please select a center.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
-    <label><i class="fas fa-calendar-alt"></i> Course Duration *</label>
-    <select class="form-control" id="courseDuration" name="course_duration" required>
-        <option value="">Select Duration</option>
-        <option value="1">1 Month</option>
-        <option value="2">2 Months</option>
-        <option value="3">3 Months</option>
-    </select>
-    <div class="invalid-feedback">Please select a course duration.</div>
-</div>
+                                                <label><i class="fas fa-calendar-alt"></i> Course Duration *</label>
+                                                <select class="form-control" id="courseDuration" name="course_duration" required>
+                                                    <option value="">Select Duration</option>
+                                                    <option value="1">1 Month</option>
+                                                    <option value="2">2 Months</option>
+                                                    <option value="3">3 Months</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please select a course duration.</div>
+                                            </div>
 
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-users"></i> Batch *</label>
@@ -391,18 +391,18 @@
                                                 </select>
                                                 <div class="invalid-feedback">Please select a batch.</div>
                                             </div>
-                                           <div class="col-md-12 col-sm-12">
-    <div id="batchTimeInfo" class="batch-time-container">
-        <h6><i class="fas fa-clock"></i> Batch Schedule</h6>
+                                            <div class="col-md-12 col-sm-12">
+                                                <div id="batchTimeInfo" class="batch-time-container">
+                                                    <h6><i class="fas fa-clock"></i> Batch Schedule</h6>
 
-        <!-- All batches will be displayed here -->
-        <div id="batchList"></div>
-    </div>
-</div>
+                                                    <!-- All batches will be displayed here -->
+                                                    <div id="batchList"></div>
+                                                </div>
+                                            </div>
 
 
 
-                                          
+
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <button type="button" class="btn btn-secondary back1"><i class="fas fa-arrow-left"></i> Back</button>
@@ -417,7 +417,7 @@
                                         </div>
                                         <div class="row" id="facilitiesContainer">
                                             <!-- Locker Facility -->
-                                           <div class="row" id="facilityCards"></div>
+                                            <div class="row" id="facilityCards"></div>
 
                                         </div>
                                         <div class="card mt-4">
@@ -449,13 +449,14 @@
                                             <button type="button" class="btn btn-secondary back2"><i class="fas fa-arrow-left"></i> Back</button>
                                             <button type="button" class="btn btn-primary next3">Next <i class="fas fa-arrow-right"></i></button>
                                         </div>
-                                    </div>     <div class="tab-pane fade" id="step3">
+                                    </div>
+                                    <div class="tab-pane fade" id="step3">
                                         <div class="alert alert-info">
                                             <i class="fas fa-info-circle"></i> Select additional facilities for the student. These will be added to the total fees.
                                         </div>
                                         <div class="row" id="facilitiesContainer">
                                             <!-- Locker Facility -->
-                                           <div class="row" id="facilityCards"></div>
+                                            <div class="row" id="facilityCards"></div>
 
                                         </div>
                                         <div class="card mt-4">
@@ -679,100 +680,100 @@
             fetchCategories();
         });
     </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Fetch Centers, Batches, Categories, and Lockers -->
     <script>
-    const baseUrl = "<?= base_url(); ?>"; // CI3 base URL
+        const baseUrl = "<?= base_url(); ?>"; // CI3 base URL
 
-    // 🔹 Fetch centers
-    function fetchCenters() {
-        $.ajax({
-            url: baseUrl + "Admission/get_centers",
-            method: "GET",
-            dataType: "json",
-            success: function(data) {
-                const centerSelect = $('#centerSelect');
-                centerSelect.empty().append('<option value="">Select Center</option>');
-                data.forEach(center => {
-                    centerSelect.append(`<option value="${center.id}">${center.name}</option>`);
-                });
-            },
-            error: function() {
-                alert('Failed to fetch centers');
-            }
-        });
-    }
-
-    // 🔹 Fetch categories
-    function fetchCategories() {
-        $.ajax({
-            url: baseUrl + "Admission/get_categories",
-            method: "GET",
-            dataType: "json",
-            success: function(data) {
-                const categorySelect = $('#categorySelect');
-                categorySelect.empty().append('<option value="">Select Category</option>');
-                data.forEach(category => {
-                    categorySelect.append(`<option value="${category}">${category}</option>`);
-                });
-            },
-            error: function() {
-                alert('Failed to fetch categories');
-            }
-        });
-    }
-
-    // 🔹 Fetch lockers
-    function fetchLockers(centerId) {
-        $.ajax({
-            url: baseUrl + "Center/getFacilities/" + centerId,
-            method: "GET",
-            dataType: "json",
-            success: function(data) {
-                const lockerSelect = $('.locker-number');
-                const lockerStatus = $('#lockerStatus');
-                lockerSelect.empty().append('<option value="">Select Locker Number</option>');
-                if (data.length === 0) {
-                    lockerStatus.text('No lockers available');
-                    $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
-                } else {
-                    lockerStatus.text(`${data.filter(l => !l.is_booked).length} lockers available`);
-                    $('#lockerCheckbox').prop('disabled', false).closest('.facility-card').removeClass('facility-unavailable');
-                    data.forEach(locker => {
-                        const status = locker.is_booked ? ' (Booked)' : ' (Available)';
-                        lockerSelect.append(`<option value="${locker.locker_no}" ${locker.is_booked ? 'disabled' : ''}>${locker.locker_no}${status}</option>`);
-                    });
-                }
-                lockerSelect.prop('disabled', false);
-            },
-            error: function() {
-                $('#lockerStatus').text('Error fetching lockers');
-                $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
-            }
-        });
-    }
-
-    // 🔹 Fetch batches (and update batch select)
-    function fetchBatches(centerId) {
-        const batchSelect = $('#batchSelect');
-        const batchTimeInfo = $('#batchTimeInfo');
-        const batchList = $('#batchList');
-
-        batchSelect.empty().append('<option value="">Select Batch</option>');
-        batchTimeInfo.hide();
-        batchList.empty();
-
-        if (centerId) {
+        // 🔹 Fetch centers
+        function fetchCenters() {
             $.ajax({
-                url: baseUrl + "Admission/get_batches/" + centerId,
+                url: baseUrl + "Admission/get_centers",
                 method: "GET",
                 dataType: "json",
                 success: function(data) {
-                    if (data.length > 0) {
-                        data.forEach(batch => {
-                            // Add to dropdown
-                            batchSelect.append(`
+                    const centerSelect = $('#centerSelect');
+                    centerSelect.empty().append('<option value="">Select Center</option>');
+                    data.forEach(center => {
+                        centerSelect.append(`<option value="${center.id}">${center.name}</option>`);
+                    });
+                },
+                error: function() {
+                    alert('Failed to fetch centers');
+                }
+            });
+        }
+
+        // 🔹 Fetch categories
+        function fetchCategories() {
+            $.ajax({
+                url: baseUrl + "Admission/get_categories",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    const categorySelect = $('#categorySelect');
+                    categorySelect.empty().append('<option value="">Select Category</option>');
+                    data.forEach(category => {
+                        categorySelect.append(`<option value="${category}">${category}</option>`);
+                    });
+                },
+                error: function() {
+                    alert('Failed to fetch categories');
+                }
+            });
+        }
+
+        // 🔹 Fetch lockers
+        function fetchLockers(centerId) {
+            $.ajax({
+                url: baseUrl + "Center/getFacilities/" + centerId,
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    const lockerSelect = $('.locker-number');
+                    const lockerStatus = $('#lockerStatus');
+                    lockerSelect.empty().append('<option value="">Select Locker Number</option>');
+                    if (data.length === 0) {
+                        lockerStatus.text('No lockers available');
+                        $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
+                    } else {
+                        lockerStatus.text(`${data.filter(l => !l.is_booked).length} lockers available`);
+                        $('#lockerCheckbox').prop('disabled', false).closest('.facility-card').removeClass('facility-unavailable');
+                        data.forEach(locker => {
+                            const status = locker.is_booked ? ' (Booked)' : ' (Available)';
+                            lockerSelect.append(`<option value="${locker.locker_no}" ${locker.is_booked ? 'disabled' : ''}>${locker.locker_no}${status}</option>`);
+                        });
+                    }
+                    lockerSelect.prop('disabled', false);
+                },
+                error: function() {
+                    $('#lockerStatus').text('Error fetching lockers');
+                    $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
+                }
+            });
+        }
+
+        // 🔹 Fetch batches (and update batch select)
+        function fetchBatches(centerId) {
+            const batchSelect = $('#batchSelect');
+            const batchTimeInfo = $('#batchTimeInfo');
+            const batchList = $('#batchList');
+
+            batchSelect.empty().append('<option value="">Select Batch</option>');
+            batchTimeInfo.hide();
+            batchList.empty();
+
+            if (centerId) {
+                $.ajax({
+                    url: baseUrl + "Admission/get_batches/" + centerId,
+                    method: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.length > 0) {
+                            data.forEach(batch => {
+                                // Add to dropdown
+                                batchSelect.append(`
                                 <option value="${batch.id}" 
                                     data-batchName="${batch.batch_name}" 
                                     data-timing="${batch.start_time}-${batch.end_time}" 
@@ -783,8 +784,8 @@
                                 </option>
                             `);
 
-                            // Add to detailed batch schedule list
-                            batchList.append(`
+                                // Add to detailed batch schedule list
+                                batchList.append(`
                                 <div class="single-batch card p-2 mb-2 shadow-sm">
                                     <h6 id="batchName_${batch.id}"><strong>${batch.batch_name}</strong></h6>
                                     <p id="batchTime_${batch.id}">
@@ -799,45 +800,45 @@
                                   
                                 </div>
                             `);
-                        });
-                        fetchLockers(centerId);
-                    } else {
-                        batchSelect.append('<option disabled>No batches available</option>');
-                        batchList.html("<p>No batch schedule available.</p>");
+                            });
+                            fetchLockers(centerId);
+                        } else {
+                            batchSelect.append('<option disabled>No batches available</option>');
+                            batchList.html("<p>No batch schedule available.</p>");
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to fetch batches');
                     }
-                },
-                error: function() {
-                    alert('Failed to fetch batches');
-                }
-            });
+                });
+            }
         }
-    }
 
-    // 🔹 Event: Center select change
-    $('#centerSelect').change(function() {
-        const centerId = $(this).val();
-        fetchBatches(centerId);
-         loadFacilities(centerId); 
-    });
+        // 🔹 Event: Center select change
+        $('#centerSelect').change(function() {
+            const centerId = $(this).val();
+            fetchBatches(centerId);
+            loadFacilities(centerId);
+        });
 
-    // 🔹 Event: Batch select change
-    $('#batchSelect').change(function() {
-        const batchTimeInfo = $('#batchTimeInfo');
-        const batchTimeSlots = $('#batchTimeSlots');
-        const batchDays = $('#batchDays');
+        // 🔹 Event: Batch select change
+        $('#batchSelect').change(function() {
+            const batchTimeInfo = $('#batchTimeInfo');
+            const batchTimeSlots = $('#batchTimeSlots');
+            const batchDays = $('#batchDays');
 
-        batchTimeSlots.empty();
-        batchDays.empty();
-        batchTimeInfo.hide();
+            batchTimeSlots.empty();
+            batchDays.empty();
+            batchTimeInfo.hide();
 
-        const selectedOption = $(this).find('option:selected');
-        const timing = selectedOption.data('timing');
-        const startDate = selectedOption.data('startdate');
-        const category = selectedOption.data('category');
-        const days = selectedOption.data('days') ? selectedOption.data('days').split(',') : [];
+            const selectedOption = $(this).find('option:selected');
+            const timing = selectedOption.data('timing');
+            const startDate = selectedOption.data('startdate');
+            const category = selectedOption.data('category');
+            const days = selectedOption.data('days') ? selectedOption.data('days').split(',') : [];
 
-        if (timing) {
-            batchTimeSlots.append(`
+            if (timing) {
+                batchTimeSlots.append(`
                 <div class="time-slot">
                     <i class="fas fa-clock text-success"></i>
                     <span>Timing: ${timing}</span><br>
@@ -846,59 +847,59 @@
                 </div>
             `);
 
-            batchDays.append('<strong>Days:</strong><br>');
-            days.forEach(day => {
-                batchDays.append(`
+                batchDays.append('<strong>Days:</strong><br>');
+                days.forEach(day => {
+                    batchDays.append(`
                     <div class="form-check form-check-inline">
                         <input class="form-check-input day-checkbox" type="checkbox" checked disabled>
                         <label class="form-check-label">${day}</label>
                     </div>
                 `);
-            });
-            batchTimeInfo.show();
-        }
-    });
-
-    // 🔹 Init calls
-    $(document).ready(function() {
-        fetchCenters();
-        fetchCategories();
-    });
-
-    function loadFacilities(centerId) {
-    console.log("Loading facilities for center:", centerId); // ✅ Debug
-    $("#facilityCards").empty();
-  $.ajax({
-    url: baseUrl + "center/getFacilitiesByCenterId/" + centerId,
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-      if (response.status === "success" && response.data.length > 0) {
-                    console.log("Facilities API response:", response); // ✅ Debug
-
-        // Group facilities by name
-        const grouped = {};
-        response.data.forEach(fac => {
-          if (!grouped[fac.facility_name]) {
-            grouped[fac.facility_name] = [];
-          }
-          grouped[fac.facility_name].push(fac);
+                });
+                batchTimeInfo.show();
+            }
         });
 
-        // Build facility cards
-        Object.keys(grouped).forEach(facilityName => {
-          const options = grouped[facilityName]
-            .map(fac => `
+        // 🔹 Init calls
+        $(document).ready(function() {
+            fetchCenters();
+            fetchCategories();
+        });
+
+        function loadFacilities(centerId) {
+            console.log("Loading facilities for center:", centerId); // ✅ Debug
+            $("#facilityCards").empty();
+            $.ajax({
+                url: baseUrl + "center/getFacilitiesByCenterId/" + centerId,
+                method: "GET",
+                dataType: "json",
+                success: function(response) {
+                    if (response.status === "success" && response.data.length > 0) {
+                        console.log("Facilities API response:", response); // ✅ Debug
+
+                        // Group facilities by name
+                        const grouped = {};
+                        response.data.forEach(fac => {
+                            if (!grouped[fac.facility_name]) {
+                                grouped[fac.facility_name] = [];
+                            }
+                            grouped[fac.facility_name].push(fac);
+                        });
+
+                        // Build facility cards
+                        Object.keys(grouped).forEach(facilityName => {
+                            const options = grouped[facilityName]
+                                .map(fac => `
               <option value="${fac.rent_amount}" 
                       data-id="${fac.id}" 
                       data-date="${fac.rent_date || '-'}">
                 ${fac.subtype_name || "N/A"} (₹${fac.rent_amount})
               </option>`)
-            .join("");
+                                .join("");
 
-          const facilityId = "facilityCheckbox_" + facilityName.replace(/\s+/g, '_');
+                            const facilityId = "facilityCheckbox_" + facilityName.replace(/\s+/g, '_');
 
-          const facilityCard = `
+                            const facilityCard = `
             <div class="col-md-4 col-sm-12 mb-3">
               <div class="facility-card" data-facility="${facilityName}">
                 <div class="form-check">
@@ -925,188 +926,185 @@
             </div>
           `;
 
-          $("#facilityCards").append(facilityCard);
-        });
+                            $("#facilityCards").append(facilityCard);
+                        });
 
-        bindFacilityEvents();
-      } else {
-        $("#facilityCards").html(`<p class="text-danger">No facilities found.</p>`);
-      }
-    }
-  });
-}
+                        bindFacilityEvents();
+                    } else {
+                        $("#facilityCards").html(`<p class="text-danger">No facilities found.</p>`);
+                    }
+                }
+            });
+        }
 
-function bindFacilityEvents() {
-  // Toggle details
-  $('.facility-toggle').off().on('click', function () {
-    const details = $(this).siblings('.facility-details');
-    details.slideToggle();
-    const icon = $(this).find('i');
-    if (icon.hasClass('fa-chevron-down')) {
-      $(this).html('Hide details <i class="fas fa-chevron-up"></i>');
-    } else {
-      $(this).html('Show details <i class="fas fa-chevron-down"></i>');
-    }
-  });
+        function bindFacilityEvents() {
+            // Toggle details
+            $('.facility-toggle').off().on('click', function() {
+                const details = $(this).siblings('.facility-details');
+                details.slideToggle();
+                const icon = $(this).find('i');
+                if (icon.hasClass('fa-chevron-down')) {
+                    $(this).html('Hide details <i class="fas fa-chevron-up"></i>');
+                } else {
+                    $(this).html('Show details <i class="fas fa-chevron-down"></i>');
+                }
+            });
 
-  // Enable dropdown when checkbox selected
-  $('.facility-checkbox').off().on('change', function () {
-    const facilityCard = $(this).closest('.facility-card');
-    const subtypeSelect = facilityCard.find('.facility-subtype');
-    if ($(this).is(':checked')) {
-      subtypeSelect.prop('disabled', false);
-      facilityCard.addClass('selected');
-    } else {
-      subtypeSelect.prop('disabled', true).val("");
-      facilityCard.removeClass('selected');
-    }
-    updateFacilitiesSummary();
-    calculateTotalFees();
-  });
+            // Enable dropdown when checkbox selected
+            $('.facility-checkbox').off().on('change', function() {
+                const facilityCard = $(this).closest('.facility-card');
+                const subtypeSelect = facilityCard.find('.facility-subtype');
+                if ($(this).is(':checked')) {
+                    subtypeSelect.prop('disabled', false);
+                    facilityCard.addClass('selected');
+                } else {
+                    subtypeSelect.prop('disabled', true).val("");
+                    facilityCard.removeClass('selected');
+                }
+                updateFacilitiesSummary();
+                calculateTotalFees();
+            });
 
-  // Update summary when subtype changes
-  $('.facility-subtype').off().on('change', function () {
-    const facilityCard = $(this).closest('.facility-card');
-    const rentDate = $(this).find(':selected').data('date') || '-';
-    facilityCard.find('.rent-date').val(rentDate);
-    updateFacilitiesSummary();
-    calculateTotalFees();
-  });
-}
+            // Update summary when subtype changes
+            $('.facility-subtype').off().on('change', function() {
+                const facilityCard = $(this).closest('.facility-card');
+                const rentDate = $(this).find(':selected').data('date') || '-';
+                facilityCard.find('.rent-date').val(rentDate);
+                updateFacilitiesSummary();
+                calculateTotalFees();
+            });
+        }
 
-function updateFacilitiesSummary() {
-  const summaryBody = $('#facilitiesSummary tbody');
-  summaryBody.empty();
-  let total = 0;
+        function updateFacilitiesSummary() {
+            const summaryBody = $('#facilitiesSummary tbody');
+            summaryBody.empty();
+            let total = 0;
 
-  $('.facility-checkbox:checked').each(function () {
-    const facilityCard = $(this).closest('.facility-card');
-    const facilityName = facilityCard.data('facility');
-    const subtypeSelect = facilityCard.find('.facility-subtype');
-    const selectedOption = subtypeSelect.find('option:selected');
-    const subtype = selectedOption.text();
-    const rentAmount = parseFloat(selectedOption.val()) || 0;
+            $('.facility-checkbox:checked').each(function() {
+                const facilityCard = $(this).closest('.facility-card');
+                const facilityName = facilityCard.data('facility');
+                const subtypeSelect = facilityCard.find('.facility-subtype');
+                const selectedOption = subtypeSelect.find('option:selected');
+                const subtype = selectedOption.text();
+                const rentAmount = parseFloat(selectedOption.val()) || 0;
 
-    if (subtype && rentAmount > 0) {
-      total += rentAmount;
-      summaryBody.append(`
+                if (subtype && rentAmount > 0) {
+                    total += rentAmount;
+                    summaryBody.append(`
         <tr>
           <td>${facilityName}</td>
           <td>${subtype}</td>
           <td class="text-right">₹${rentAmount.toLocaleString()}</td>
         </tr>
       `);
-    }
-  });
+                }
+            });
 
-  $('#facilitiesTotal').text('₹' + total.toLocaleString());
-  $('#additionalFees').val(total);
-}
+            $('#facilitiesTotal').text('₹' + total.toLocaleString());
+            $('#additionalFees').val(total);
+        }
 
-function calculateTotalFees() {
-  const courseFees = parseFloat($('#courseFees').val()) || 0;
-  const additionalFees = parseFloat($('#additionalFees').val()) || 0;
-  const totalFees = courseFees + additionalFees;
-  $('#totalFees').val(totalFees);
-  calculateRemainingAmount();
-}
+        function calculateTotalFees() {
+            const courseFees = parseFloat($('#courseFees').val()) || 0;
+            const additionalFees = parseFloat($('#additionalFees').val()) || 0;
+            const totalFees = courseFees + additionalFees;
+            $('#totalFees').val(totalFees);
+            calculateRemainingAmount();
+        }
 
-function calculateRemainingAmount() {
-  const totalFees = parseFloat($('#totalFees').val()) || 0;
-  const paidAmount = parseFloat($('#paidAmount').val()) || 0;
-  const remainingAmount = totalFees - paidAmount;
-  $('#remainingAmount').val(remainingAmount);
-}
+        function calculateRemainingAmount() {
+            const totalFees = parseFloat($('#totalFees').val()) || 0;
+            const paidAmount = parseFloat($('#paidAmount').val()) || 0;
+            const remainingAmount = totalFees - paidAmount;
+            $('#remainingAmount').val(remainingAmount);
+        }
 
-$(document).ready(function () {
-  // Hook up course fees & paid amount listeners
-  $('#paidAmount').on('input', calculateRemainingAmount);
-  $('#courseFees').on('input', calculateTotalFees);
+        $(document).ready(function() {
+            // Hook up course fees & paid amount listeners
+            $('#paidAmount').on('input', calculateRemainingAmount);
+            $('#courseFees').on('input', calculateTotalFees);
 
-  // Initial summary update
-  updateFacilitiesSummary();
-});
-
-</script>
- <!-- Form Submission -->
+            // Initial summary update
+            updateFacilitiesSummary();
+        });
+    </script>
+    <!-- Form Submission -->
     <script>
-     $('#admissionForm').on('submit', function(e) {
-    e.preventDefault();
-    if (!validateStep(4)) return;
+        $('#admissionForm').on('submit', function(e) {
+            e.preventDefault();
+            if (!validateStep(4)) return;
 
-    // Use FormData
-    let formData = new FormData(this);
+            // Use FormData
+            let formData = new FormData(this);
 
-    // Append extra fields manually (if not inside form)
-    formData.append('course_fees', $('#courseFees').val());
-    formData.append('additional_fees', $('#additionalFees').val());
-    formData.append('total_fees', $('#totalFees').val());
-    formData.append('course_duration', $('#courseDuration').val());
-    formData.append('remaining_amount', $('#remainingAmount').val());
-    formData.append('paid_amount', $('#paidAmount').val());
-    formData.append('admission_date', $('#admissionDate').val());
-    formData.append('joining_date', $('#joiningDate').val());
-    formData.append('payment_method', $('input[name="paymentMethod"]:checked').val());
+            // Append extra fields manually (if not inside form)
+            formData.append('course_fees', $('#courseFees').val());
+            formData.append('additional_fees', $('#additionalFees').val());
+            formData.append('total_fees', $('#totalFees').val());
+            formData.append('course_duration', $('#courseDuration').val());
+            formData.append('remaining_amount', $('#remainingAmount').val());
+            formData.append('paid_amount', $('#paidAmount').val());
+            formData.append('admission_date', $('#admissionDate').val());
+            formData.append('joining_date', $('#joiningDate').val());
+            formData.append('payment_method', $('input[name="paymentMethod"]:checked').val());
 
-    // Add facilities
-    $('.facility-checkbox:checked').each(function(i) {
-        const facilityCard = $(this).closest('.facility-card');
-        const facilityType = facilityCard.data('facility');
-            const amount = parseFloat($('#additionalFees').val()) || 0;
+            // Add facilities
+            $('.facility-checkbox:checked').each(function(i) {
+                const facilityCard = $(this).closest('.facility-card');
+                const facilityType = facilityCard.data('facility');
+                const amount = parseFloat($('#additionalFees').val()) || 0;
 
-        let details = '';
-       // let amount = 0;
+                let details = '';
+                // let amount = 0;
 
-        switch(facilityType) {
-            case 'locker':
-                details = facilityCard.find('.locker-number option:selected').text();
-                amount = facilityCard.find('.locker-size').val() || 0;
-                break;
-            case 'racket':
-                details = facilityCard.find('.racket-type option:selected').text();
-                amount = facilityCard.find('.racket-type').val() || 0;
-                break;
-            case 'shoe':
-                details = facilityCard.find('.shoe-size option:selected').text();
-                amount = facilityCard.find('.shoe-size').val() || 0;
-                break;
-        }
+                switch (facilityType) {
+                    case 'locker':
+                        details = facilityCard.find('.locker-number option:selected').text();
+                        amount = facilityCard.find('.locker-size').val() || 0;
+                        break;
+                    case 'racket':
+                        details = facilityCard.find('.racket-type option:selected').text();
+                        amount = facilityCard.find('.racket-type').val() || 0;
+                        break;
+                    case 'shoe':
+                        details = facilityCard.find('.shoe-size option:selected').text();
+                        amount = facilityCard.find('.shoe-size').val() || 0;
+                        break;
+                }
 
-        formData.append(`facilities[${i}][name]`, facilityType);
-        formData.append(`facilities[${i}][details]`, details);
-        formData.append(`facilities[${i}][amount]`, amount);
-    });
+                formData.append(`facilities[${i}][name]`, facilityType);
+                formData.append(`facilities[${i}][details]`, details);
+                formData.append(`facilities[${i}][amount]`, amount);
+            });
 
-    $.ajax({
-        url: '<?= base_url('Admission/save') ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.success) {
-                $.ajax({
-                    url: '<?= base_url('Student_controller/add_student') ?>',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(studentResponse) {
-                        if (studentResponse.status === 'success') {
-                            window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
-                        } else {
-                            alert('Student API failed: ' + studentResponse.message);
-                        }
+            $.ajax({
+                url: '<?= base_url('Admission/save') ?>',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        $.ajax({
+                            url: '<?= base_url('Student_controller/add_student') ?>',
+                            method: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(studentResponse) {
+                                if (studentResponse.status === 'success') {
+                                    window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
+                                } else {
+                                    alert('Student API failed: ' + studentResponse.message);
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Failed to save admission: ' + response.message);
                     }
-                });
-            } else {
-                alert('Failed to save admission: ' + response.message);
-            }
-        }
-    });
-});
-
-        
+                }
+            });
+        });
     </script>
 
 </body>

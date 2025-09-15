@@ -49,4 +49,9 @@ class Auth_model extends CI_Model {
         ];
         $this->db->insert('activity_logs', $data);
     }
+    
+    public function get_user($username)
+    {
+        return $this->db->where('username', $username)->get('users')->row();
+    }
 }
