@@ -274,12 +274,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('Expense/add') ?>" id="addExpenseForm" novalidate>
+                <form method="post" action="<?= base_url('Admin/add_expense') ?>" id="addExpenseForm" novalidate>
+
                     <div class="modal-body">
                         <div class="row">
-                            <input type="hidden" name="added_by" value="superadmin">
+                            <input type="hidden" name="added_by" value="admin">
 
-                            <div class="form-group col-md-12">
+                            <!-- <div class="form-group col-md-12">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
                                     <option value="">-- Select Center --</option>
@@ -288,7 +289,8 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">Please select a center.</div>
-                            </div>
+                            </div> -->
+                            <input type="hidden" name="center_id" value="<?= $this->session->userdata('id'); ?>">
 
                             <div class="col-md-6 mb-3">
                                 <label>Title</label>

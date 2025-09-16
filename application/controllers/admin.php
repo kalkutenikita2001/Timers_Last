@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
+
     public function Dashboard()
     {
         $this->load->view('admin/Dashboard');
@@ -43,11 +44,36 @@ class Admin extends CI_Controller
     public function Expenses()
     {
         $this->load->model('Expense_model');
-        $this->load->model('Center_model'); // ✅ Make sure this is loaded
+        $this->load->model('Center_model');
 
-        $data['expenses'] = $this->Expense_model->get_all_expenses();
-        $data['centers']  = $this->Center_model->get_all_centers(); // ✅ Pass centers to view
+        // logged-in admin’s center id from session
+        $center_id = $this->session->userdata('id');
+
+        $data['expenses'] = $this->Expense_model->get_expenses_by_center($center_id);
+
+        // if you want admins to add expenses only for their own center → remove dropdown
+        $data['centers'] = [$this->Center_model->get_center_by_id($center_id)];
 
         $this->load->view('admin/Expenses', $data);
+    }
+    public function add_expense()
+    {
+        $this->load->model('Expense_model');
+
+        $data = [
+            'center_id'   => $this->session->userdata('id'), // only his center
+            'title'       => $this->input->post('title'),
+            'date'        => $this->input->post('date'),
+            'amount'      => $this->input->post('amount'),
+            'category'    => $this->input->post('category'),
+            'description' => $this->input->post('description'),
+            'status'      => 'pending', // admin added → pending approval
+            'added_by'    => 'admin',
+            'created_at'  => date('Y-m-d H:i:s'),
+        ];
+
+        $this->Expense_model->insert($data);
+
+        redirect('Admin/Expenses'); // ✅ redirect back to Admin expenses page
     }
 }
