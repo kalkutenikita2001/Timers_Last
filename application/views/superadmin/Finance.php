@@ -1,341 +1,412 @@
-<!DOCTYPE html>
+<?php
+// Finance.php
+// Clean UI: Weekly/Monthly/Yearly windows + Facility Total + All-time Total (Student+Facility).
+// Student Total column hidden (keeps logic intact).
+// Responsive + animated, integrates with existing sidebar/navbar includes.
+// Update DB credentials if needed.
+
+$host = '127.0.0.1';
+$port = 3306;
+$db   = 'mybadmintondb';
+$user = 'root';     // <-- change if needed
+$pass = '';         // <-- change if needed
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host={$host};port={$port};dbname={$db};charset={$charset}";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    // Friendly error for debugging in dev; in production show a simple message.
+    die("DB connection failed: " . htmlspecialchars($e->getMessage()));
+}
+
+/*
+ SQL: get per-center student & facility aggregates.
+ - Students: use COALESCE(created_at, admission_date, joining_date) for date
+ - Facilities: student_facilities.amount joined to students for center_id
+ - Left join center_details so every center shows (even with zero revenue)
+*/
+$sql = "
+SELECT
+  cd.id AS center_id,
+  cd.name AS center_name,
+
+  COALESCE(s.stu_weekly,0)  AS stu_weekly,
+  COALESCE(s.stu_monthly,0) AS stu_monthly,
+  COALESCE(s.stu_yearly,0)  AS stu_yearly,
+  COALESCE(s.stu_total,0)   AS stu_total,
+
+  COALESCE(f.fac_weekly,0)  AS fac_weekly,
+  COALESCE(f.fac_monthly,0) AS fac_monthly,
+  COALESCE(f.fac_yearly,0)  AS fac_yearly,
+  COALESCE(f.fac_total,0)   AS fac_total
+
+FROM center_details cd
+
+LEFT JOIN (
+  SELECT
+    s.center_id,
+    SUM(CASE WHEN YEARWEEK(COALESCE(s.created_at, s.admission_date, s.joining_date),1) = YEARWEEK(CURDATE(),1) THEN COALESCE(s.paid_amount,0) ELSE 0 END) AS stu_weekly,
+    SUM(CASE WHEN YEAR(COALESCE(s.created_at, s.admission_date, s.joining_date)) = YEAR(CURDATE()) AND MONTH(COALESCE(s.created_at, s.admission_date, s.joining_date)) = MONTH(CURDATE()) THEN COALESCE(s.paid_amount,0) ELSE 0 END) AS stu_monthly,
+    SUM(CASE WHEN YEAR(COALESCE(s.created_at, s.admission_date, s.joining_date)) = YEAR(CURDATE()) THEN COALESCE(s.paid_amount,0) ELSE 0 END) AS stu_yearly,
+    SUM(COALESCE(s.paid_amount,0)) AS stu_total
+  FROM students s
+  GROUP BY s.center_id
+) s ON s.center_id = cd.id
+
+LEFT JOIN (
+  SELECT
+    st.center_id,
+    SUM(CASE WHEN YEARWEEK(sf.created_at,1) = YEARWEEK(CURDATE(),1) THEN COALESCE(sf.amount,0) ELSE 0 END) AS fac_weekly,
+    SUM(CASE WHEN YEAR(sf.created_at) = YEAR(CURDATE()) AND MONTH(sf.created_at) = MONTH(CURDATE()) THEN COALESCE(sf.amount,0) ELSE 0 END) AS fac_monthly,
+    SUM(CASE WHEN YEAR(sf.created_at) = YEAR(CURDATE()) THEN COALESCE(sf.amount,0) ELSE 0 END) AS fac_yearly,
+    SUM(COALESCE(sf.amount,0)) AS fac_total
+  FROM student_facilities sf
+  JOIN students st ON st.id = sf.student_id
+  GROUP BY st.center_id
+) f ON f.center_id = cd.id
+
+ORDER BY (COALESCE(s.stu_total,0) + COALESCE(f.fac_total,0)) DESC, cd.name ASC
+";
+
+$stmt = $pdo->query($sql);
+$rows = $stmt->fetchAll();
+
+// Compute grand totals separately for student and facility, then combine.
+$grand = [
+    'week' => 0.0,
+    'month' => 0.0,
+    'year' => 0.0,
+    'stu_alltime' => 0.0,
+    'fac_alltime' => 0.0,
+];
+
+foreach ($rows as $r) {
+    $sw = (float)$r['stu_weekly']; $fw = (float)$r['fac_weekly']; $week = $sw + $fw;
+    $sm = (float)$r['stu_monthly']; $fm = (float)$r['fac_monthly']; $month = $sm + $fm;
+    $sy = (float)$r['stu_yearly']; $fy = (float)$r['fac_yearly']; $year = $sy + $fy;
+    $stot = (float)$r['stu_total']; $ftot = (float)$r['fac_total'];
+
+    $grand['week'] += $week;
+    $grand['month'] += $month;
+    $grand['year'] += $year;
+
+    $grand['stu_alltime'] += $stot;
+    $grand['fac_alltime'] += $ftot;
+}
+
+$grand_alltime = $grand['stu_alltime'] + $grand['fac_alltime'];
+
+function money($n) { return number_format((float)$n, 2); }
+?>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Management</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f6f8 !important;
-            margin: 0;
-            font-family: 'Montserrat', serif !important;
-            overflow-x: hidden;
-        }
+  <meta charset="utf-8">
+  <title>Finance — Revenue Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --accent1: #ff5a5a;
+      --accent2: #8b0000;
+      --muted: #6b7280;
+      --radius: 12px;
+      --shadow: 0 12px 30px rgba(12, 12, 14, 0.06);
+      --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;padding-top: 0px !important;color:#111;background:var(--bg);-webkit-font-smoothing:antialiased}
+    .page{display:grid;grid-template-columns:250px 1fr;gap:18px;padding: 18px;;align-items:start;min-height:100vh}
+    /* adapt to your app sidebar - toggle via .sidebar-collapsed on .page */
+    .page.sidebar-collapsed{grid-template-columns:72px 1fr}
+    @media (max-width:980px){ .page{grid-template-columns:1fr;padding:12px} .sidebar-area{display:none} }
 
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            min-height: 100vh;
-        }
+    /* Sidebar area: included from your template if present */
+    .sidebar-area{padding:6px}
 
-        .content-wrapper.minimized {
-            margin-left: 60px;
-        }
+    .main{display:flex;flex-direction:column;gap:14px;min-width:0}
 
-        .content {
-            margin-top: 60px;
-        }
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px;height: 45px;border-radius:10px;background:var(--card);box-shadow:var(--shadow)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width: 249px;height: 219px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800}
+    .page-title{font-weight:700;font-size:1.05rem}
+    .subtitle{color:var(--muted);font-size:0.9rem}
 
-        .option-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    /* card */
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .controls{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .left-controls{display:flex;gap:8px;align-items:center}
+    .select{padding:8px 10px;border-radius:10px;border:1px solid #e6e6e6;background:#fff;font-weight:600}
+    .btn{padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(139,0,0,0.12)}
+    .meta{color:var(--muted);font-size:0.92rem;margin-top:6px}
 
-        .option-buttons button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            padding: 10px 30px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
+    /* table */
+    .table-wrap{overflow:auto;margin-top:12px;border-radius:10px}
+    table{width:100%;border-collapse:collapse;min-width:880px}
+    thead th{position:sticky;top:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;padding:12px;text-align:left;font-weight:700;z-index:2}
+    tbody td{padding:12px;border-bottom:1px solid #f0f0f0;vertical-align:middle;background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0));}
+    tbody tr{transition:transform .18s ease, box-shadow .18s ease, background .18s ease;transform:translateY(0);opacity:0;animation:rowEnter .32s ease forwards}
+    tbody tr:hover{transform:translateY(-6px);box-shadow:0 18px 34px rgba(12,12,14,0.06)}
+    @keyframes rowEnter { from { transform: translateY(6px); opacity:0 } to { transform: translateY(0); opacity:1 } }
 
-        .option-buttons button.active {
-            background: #000;
-            color: #fff;
-            border: 1px solid #fff;
-        }
+    .right{ text-align:right; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace; }
+    tfoot td{padding:12px;background:#fafafa;border-top:2px solid #eee;font-weight:800}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,90,90,0.12);color:var(--accent2);font-weight:700}
 
-        .option-buttons button:hover {
-            background: #333;
-            color: #fff;
-        }
+    /* responsive tweaks */
+    @media (max-width:1100px){ table{min-width:760px} }
+    @media (max-width:820px){ table{min-width:700px} .page{grid-template-columns:1fr} .sidebar-area{display:none} }
 
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+    /* small helper */
+    .small{color:var(--muted);font-size:0.92rem}
+    a.btn-sm{display:inline-block;padding:6px 10px;border-radius:8px;background:transparent;color:var(--accent2);border:1px solid rgba(0,0,0,0.06);text-decoration:none;font-weight:700}
 
-        .table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: #fff;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
-        .table thead th {
-            background-color: #343a40;
-            color: white;
-            border-bottom: 2px solid #dee2e6;
-            white-space: nowrap;
-            padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .table td,
-        .table th {
-            vertical-align: middle;
-            text-align: center;
-            padding: 0.75rem;
-            white-space: nowrap;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 0.9rem;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .table tbody tr:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-        }
-
-        .action-icon {
-            font-size: 1.2rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            color: #17a2b8;
-        }
-
-        .action-btn {
-            font-size: 0.85rem;
-            margin: 0 0.3rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn.approve-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-        }
-
-        .action-btn.reject-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-        }
-
-        .btn-custom {
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            border: none;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            margin-top: 65px;
-        }
-
-        .add-btn-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .table-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #343a40;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 576px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 1rem !important;
-            }
-
-            .option-buttons {
-                flex-direction: column;
-            }
-
-            .add-btn-container {
-                justify-content: center;
-            }
-        }
-    </style>
+  </style>
 </head>
-
 <body>
-    <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
-    <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
-    <div class="modal fade" id="confirmActionModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="confirmActionLabel" class="modal-title w-100 text-center"></h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p id="confirmMessage"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirm</button>
-                </div>
+
+<!-- Sidebar -->
+<?php $this->load->view('superadmin/Include/Sidebar') ?>
+<!-- Navbar -->
+<?php $this->load->view('superadmin/Include/Navbar') ?>
+
+
+  <div class="page" id="pageRoot">
+    <div class="sidebar-area" id="sidebarArea">
+      <?php
+      // Try to load your CI view if it exists; otherwise render a small fallback sidebar
+      if (defined('APPPATH') && is_file(APPPATH . 'views/superadmin/Include/Sidebar.php')) {
+          $this->load->view('superadmin/Include/Sidebar');
+      } else {
+          // Fallback sidebar so page remains usable in standalone contexts
+          ?>
+          <aside class="sidebar" id="fallbackSidebar" style="width:250px;background:linear-gradient(180deg,#470000,#ff4040);color:#fff;padding:14px;border-radius:10px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:42px;height:42px;border-radius:8px;background:#fff2f2;display:grid;place-items:center;color:#8b0000;font-weight:800;">FM</div>
+              <div>
+                <div style="font-weight:800;">My Academy</div>
+                <div style="font-size:12px;opacity:0.9;">Finance</div>
+              </div>
             </div>
-        </div>
+            <nav style="display:flex;flex-direction:column;gap:8px;">
+              <a href="#" style="color:#fff;text-decoration:none;padding:8px;border-radius:6px;">Dashboard</a>
+              <a href="#" style="color:#fff;text-decoration:none;padding:8px;border-radius:6px;">Centers</a>
+              <a href="#" style="color:#fff;text-decoration:none;padding:8px;border-radius:6px;">Students</a>
+              <a href="#" style="color:#fff;text-decoration:none;padding:8px;border-radius:6px;">Settings</a>
+            </nav>
+          </aside>
+      <?php } ?>
     </div>
 
-    <div class="content-wrapper" id="contentWrapper">
-        <div class="content">
-            <div class="container-fluid">
-                <div class="option-buttons">
-                    <button class="active" data-option="centerwise">Centerwise Revenue</button>
-                    <button data-option="totalrevenue">Total Revenue</button>
-                </div>
-                <div class="add-btn-container">
-                    <button class="btn btn-custom" data-toggle="modal" data-target="#filterModal"><i class="fas fa-filter me-2"></i> Filter</button>
-                </div>
-                <div class="table-container">
-                    <div class="table-title">Revenue Records</div>
-                    <table class="table table-bordered table-hover" id="revenueTable">
-                        <thead>
-                            <tr>
-                                <th>Center Name</th>
-                                <th>Daily Revenue(₹)</th>
-                                <th>Weekly Revenue(₹)</th>
-                                <th>Monthly Revenue(₹)</th>
-                                <th>Yearly Revenue(₹)</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="revenueTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="main">
+      <div class="topbar" role="navigation" aria-label="Page topbar">
+        <div class="brand">
+          <div class="logo">FM</div>
+          <div>
+            <div class="page-title">Finance — Center Revenue</div>
+            <div class="subtitle">Weekly · Monthly · Yearly · Facility totals · All-time</div>
+          </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title w-100 text-center">Revenue Details</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="receipt-card">
-                        <p><strong>Center Name:</strong> <span id="viewCenterName"></span></p>
-                        <p><strong>Date:</strong> <span id="viewDate"></span></p>
-                        <p><strong>Daily Revenue:</strong> <span id="viewDailyRevenue"></span></p>
-                        <p><strong>Weekly Revenue:</strong> <span id="viewWeeklyRevenue"></span></p>
-                        <p><strong>Monthly Revenue:</strong> <span id="viewMonthlyRevenue"></span></p>
-                        <p><strong>Yearly Revenue:</strong> <span id="viewYearlyRevenue"></span></p>
-                        <p><strong>Status:</strong> <span id="viewStatus"></span></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <?php if(function_exists('view')): ?>
+            <?php $this->load->view('superadmin/Include/Navbar') ?>
+          <?php endif; ?>
         </div>
-    </div>
+      </div>
 
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title w-100 text-center">Filter Revenue</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
-                </div>
-                <form id="filterForm">
-                    <div class="form-note">Fill at least one field to apply a filter.</div>
-                    <div class="form-group">
-                        <label for="filterCenterName">Center Name</label>
-                        <select id="filterCenterName" name="filterCenterName" class="form-control">
-                            <option value="">All Centers</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="startDate">Start Date</label>
-                            <input type="date" id="startDate" name="startDate" class="form-control">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="endDate">End Date</label>
-                            <input type="date" id="endDate" name="endDate" class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Clear</button>
-                        <button type="submit" class="btn btn-primary">Apply Filter</button>
-                    </div>
-                </form>
+      <div class="card" role="region" aria-label="Revenue summary card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <div style="font-weight:800;font-size:1.02rem">Revenue overview</div>
+            <div class="meta">Shows weekly/monthly/yearly (windowed) and all-time facility & total amounts.</div>
+          </div>
+
+          <div class="controls" style="flex:0 0 auto;">
+            <div class="left-controls">
+              <select id="centerFilter" class="select" aria-label="Filter by center">
+                <option value="">— All centers —</option>
+<?php
+// Build dropdown from centers result set (unique)
+$seen = [];
+foreach ($rows as $r) {
+    $cid = (int)$r['center_id'];
+    if (isset($seen[$cid])) continue;
+    $seen[$cid] = true;
+    $cname = htmlspecialchars($r['center_name'] ?: "Center {$cid}");
+    echo "                  <option value=\"{$cid}\">{$cname}</option>\n";
+}
+?>
+              </select>
+
+              <button id="filterBtn" class="btn" title="Filter">Filter</button>
             </div>
+
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="small">Showing <strong><?= count($rows) ?></strong> centers</div>
+              <a class="btn-sm" href="#" id="exportCsv">Export CSV</a>
+            </div>
+          </div>
         </div>
+
+        <div class="table-wrap" style="margin-top:14px;">
+          <table role="table" aria-label="Center revenue table">
+            <thead>
+              <tr>
+                <th>Center</th>
+                <th class="right">Weekly (₹)</th>
+                <th class="right">Monthly (₹)</th>
+                <th class="right">Yearly (₹)</th>
+
+                <!-- Student Total column intentionally removed for simplified UI -->
+                <!-- Facility Total -->
+                <th class="right">Facility Total (All-time) (₹)</th>
+
+                <!-- All-time includes both student + facility -->
+                <th class="right">All-time Total (₹)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="table-body">
+<?php if (count($rows) === 0): ?>
+              <tr><td colspan="7" class="small">No centers found.</td></tr>
+<?php else:
+  foreach ($rows as $r):
+    $cid = (int)$r['center_id'];
+    $cname = htmlspecialchars($r['center_name'] ?: "Center {$cid}");
+    $sw = (float)$r['stu_weekly']; $fw = (float)$r['fac_weekly']; $week = $sw + $fw;
+    $sm = (float)$r['stu_monthly']; $fm = (float)$r['fac_monthly']; $month = $sm + $fm;
+    $sy = (float)$r['stu_yearly']; $fy = (float)$r['fac_yearly']; $year = $sy + $fy;
+    $stot = (float)$r['stu_total']; $ftot = (float)$r['fac_total']; $alltime = $stot + $ftot;
+?>
+              <tr data-center-id="<?= $cid ?>">
+                <td>
+                  <div style="font-weight:700;"><?= $cname ?></div>
+                  <div class="small">ID: <?= $cid ?></div>
+                </td>
+
+                <td class="right">₹ <?= money($week) ?></td>
+                <td class="right">₹ <?= money($month) ?></td>
+                <td class="right">₹ <?= money($year) ?></td>
+
+                <td class="right">₹ <?= money($ftot) ?></td>
+                <td class="right">₹ <?= money($alltime) ?></td>
+
+                <td><a class="btn-sm" href="finance_details.php?center_id=<?= urlencode($cid) ?>">Details</a></td>
+              </tr>
+<?php endforeach; endif; ?>
+            </tbody>
+
+            <tfoot>
+              <tr>
+                <td style="font-weight:800">Grand Totals</td>
+                <td class="right">₹ <?= money($grand['week']) ?></td>
+                <td class="right">₹ <?= money($grand['month']) ?></td>
+                <td class="right">₹ <?= money($grand['year']) ?></td>
+
+                <td class="right">₹ <?= money($grand['fac_alltime']) ?></td>
+                <td class="right">₹ <?= money($grand_alltime) ?></td>
+
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+          <div class="small">Data: <span style="color:#333">students.paid_amount</span> + <span style="color:#333">student_facilities.amount</span>. Windows: weekly/monthly/yearly use student/facility dates as discussed.</div>
+          <div class="small">Last updated: <?= date('Y-m-d H:i:s') ?></div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function loadRevenues(option = 'centerwise', filters = {}) {
-            $('#revenueTableBody').html('<tr><td colspan="6" class="text-center">Loading...</td></tr>');
+  <script>
+    // Client filtering, CSV export and small UI behaviors
+    (function(){
+      const tableBody = document.getElementById('table-body');
+      const centerSelect = document.getElementById('centerFilter');
+      const filterBtn = document.getElementById('filterBtn');
+      const exportCsvBtn = document.getElementById('exportCsv');
+      const pageRoot = document.getElementById('pageRoot');
 
-            $.ajax({
-                url: "<?php echo base_url('Finance/getRevenue'); ?>",
-                type: "POST",
-                data: filters,
-                dataType: "json",
-                success: function(response) {
-                    if (response.status && response.data.length > 0) {
-                        let rows = "";
-                        response.data.forEach(r => {
-                            rows += `
-                        <tr>
-                            <td>${r.center_name}</td>
-                            <td>₹${r.student_income}</td>
-                            <td>₹${r.facility_income}</td>
-                            <td>₹${r.total_income}</td>
-                            <td>
-                                <i class="fas fa-info-circle action-icon" title="View Details" data-toggle="modal" data-target="#viewModal"></i>
-                            </td>
-                        </tr>
-                    `;
-                        });
-                        $('#revenueTableBody').html(rows);
-                    } else {
-                        $('#revenueTableBody').html('<tr><td colspan="6" class="text-center">No data found</td></tr>');
-                    }
-                }
-            });
+      function filterByCenter(id){
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        if (!id) {
+          rows.forEach(r => r.style.display = '');
+          return;
         }
-    </script>
-</body>
+        rows.forEach(r => {
+          if (r.dataset.centerId === id) r.style.display = '';
+          else r.style.display = 'none';
+        });
+      }
 
+      if (filterBtn) filterBtn.addEventListener('click', () => filterByCenter(centerSelect.value));
+      if (centerSelect) centerSelect.addEventListener('change', (e) => filterByCenter(e.target.value));
+
+      // Export visible rows to CSV
+      function tableToCSV(){
+        const headers = ['Center','Weekly (₹)','Monthly (₹)','Yearly (₹)','Facility Total (All-time) (₹)','All-time Total (₹)'];
+        const rows = Array.from(tableBody.querySelectorAll('tr')).filter(r => r.style.display !== 'none');
+        const data = [headers];
+        rows.forEach(r => {
+          const cols = Array.from(r.querySelectorAll('td'));
+          if(cols.length === 0) return;
+          const row = [
+            cols[0].innerText.trim().replace(/\s+ID:.*/,'').trim(),
+            cols[1].innerText.replace(/₹/g,'').trim(),
+            cols[2].innerText.replace(/₹/g,'').trim(),
+            cols[3].innerText.replace(/₹/g,'').trim(),
+            cols[4].innerText.replace(/₹/g,'').trim(),
+            cols[5].innerText.replace(/₹/g,'').trim()
+          ];
+          data.push(row);
+        });
+        return data.map(r => r.map(c => `"${(c+'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      }
+
+      if (exportCsvBtn) exportCsvBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        const csv = tableToCSV();
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'finance_centers_<?= date('Ymd_His') ?>.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // Sidebar keyboard toggle for accessibility (press 'm' to toggle collapsed)
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'm' && !e.metaKey && !e.ctrlKey && !e.altKey){
+          pageRoot.classList.toggle('sidebar-collapsed');
+        }
+      });
+
+      // Subtle staggered entrance for rows: add slight delay
+      Array.from(tableBody.querySelectorAll('tr')).forEach((tr, i) => {
+        tr.style.animationDelay = (i * 0.03) + 's';
+      });
+
+    })();
+
+
+    
+  </script>
+
+  <!-- Optional: If you have an auto-resize script that measures .sidebar width, it will now find .sidebar (or the fallback). -->
+</body>
 </html>
