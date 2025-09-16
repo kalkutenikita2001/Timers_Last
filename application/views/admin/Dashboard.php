@@ -38,6 +38,8 @@
     .loading-row { text-align:center; padding:18px; color:#666; }
     .search-controls .input-group .form-control { height:36px; }
     .students-info { font-size:13px; color:#666; }
+    /* Ensure chart area has a height so Chart.js can render nicely */
+    #studentChart { width:100% !important; height:200px !important; }
   </style>
 </head>
 <body>
@@ -147,9 +149,11 @@
               <h6 class="mb-2">Total Students</h6>
               <canvas id="studentChart" style="max-height:200px"></canvas>
               <div class="mt-2">
-                <small><span class="me-3"><i class="bi bi-square-fill" style="color:#ff6b6b"></i> Beginner (30%)</span>
-                <span class="me-3"><i class="bi bi-square-fill" style="color:#ffeb3b"></i> Intermediate (40%)</span>
-                <span><i class="bi bi-square-fill" style="color:#4ecdc4"></i> Advanced (30%)</span></small>
+                <small>
+                  <span class="me-3"><i class="bi bi-square-fill" style="color:#ff6b6b"></i> <span id="lbl-beginner">Beginner (0%)</span></span>
+                  <span class="me-3"><i class="bi bi-square-fill" style="color:#ffeb3b"></i> <span id="lbl-intermediate">Intermediate (0%)</span></span>
+                  <span><i class="bi bi-square-fill" style="color:#4ecdc4"></i> <span id="lbl-advanced">Advanced (0%)</span></span>
+                </small>
               </div>
             </div>
           </div>
@@ -215,9 +219,6 @@
   <script>
     // ---------- existing minimal data & functions (trimmed) ----------
     const studentData = {
-      jane:{name:'Jane Doe',contact:'9876543210',center:'ABC',batch:'B1',level:'Intermediate',category:'Complete'},
-      john:{name:'John Smith',contact:'9876543211',center:'XYZ',batch:'B2',level:'Advanced',category:'Pending'},
-      sarah:{name:'Sarah Wilson',contact:'9876543212',center:'PQR',batch:'B3',level:'Beginner',category:'Complete'}
     };
     const attendanceData = {...studentData};
     function renderTables(){
@@ -289,12 +290,131 @@
 
     // simple helpers & exports
     function handleStat(t){ Swal.fire({icon:'info',title:`Clicked ${t}`}) }
-    function exportToExcel(){ const arr=Object.values(studentData).map(s=>({Name:s.name,Contact:s.contact,Center:s.center,Batch:s.batch,Level:s.level,Category:s.category})); const ws=XLSX.utils.json_to_sheet(arr); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Students'); XLSX.writeFile(wb,'students_data.xlsx'); }
-    function exportToPDF(){ const { jsPDF } = window.jspdf; const doc=new jsPDF(); doc.text('Students Data',14,18); const body=Object.values(studentData).map(s=>[s.name,s.contact,s.center,s.batch,s.level,s.category]); doc.autoTable({head:[['Name','Contact','Center','Batch','Level','Category']],body,startY:24}); doc.save('students_data.pdf'); }
+
+    // ===== Export functions: export currently visible "Recently Added Students" table =====
+    function exportToExcel(){
+      const rows = [];
+      $('#studentsTableBody tr').each(function(){
+        const cols = $(this).find('td');
+        if(cols.length){
+          rows.push({
+            Name: $(cols[0]).text().trim(),
+            Contact: $(cols[1]).text().trim(),
+            Center: $(cols[2]).text().trim(),
+            Batch: $(cols[3]).text().trim(),
+            Level: $(cols[4]).text().trim(),
+            Category: $(cols[5]).text().trim()
+          });
+        }
+      });
+      if(rows.length === 0){ Swal.fire('No data to export'); return; }
+
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Recently Added');
+      XLSX.writeFile(wb, 'recent_students.xlsx');
+    }
+
+    function exportToPDF(){
+      const rows = [];
+      $('#studentsTableBody tr').each(function(){
+        const cols = $(this).find('td');
+        if(cols.length){
+          rows.push([
+            $(cols[0]).text().trim(),
+            $(cols[1]).text().trim(),
+            $(cols[2]).text().trim(),
+            $(cols[3]).text().trim(),
+            $(cols[4]).text().trim(),
+            $(cols[5]).text().trim()
+          ]);
+        }
+      });
+      if(rows.length === 0){ Swal.fire('No data to export'); return; }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text('Recently Added Students', 14, 18);
+      doc.autoTable({
+        head: [['Name','Contact','Center','Batch','Level','Category']],
+        body: rows,
+        startY: 24,
+        styles: { fontSize: 10 }
+      });
+      doc.save('recent_students.pdf');
+    }
 
     // chart
-    function initChart(){
-      const ctx=document.getElementById('studentChart'); new Chart(ctx,{type:'doughnut',data:{labels:['Beginner','Intermediate','Advanced'],datasets:[{data:[30,40,30],backgroundColor:['#ff6b6b','#ffeb3b','#4ecdc4'],cutout:'70%'}]},options:{plugins:{legend:{display:false}}}});
+    // live-data initChart - replaces static chart initialization
+    let __studentLevelChart = null;
+
+    function initChart() {
+      const canvas = document.getElementById('studentChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // AJAX to fetch level counts from server
+      $.ajax({
+        url: '/timersacademy-1/index.php/admin/get_student_levels', // <-- adjust if your base path differs
+        method: 'GET',
+        dataType: 'json'
+      }).done(function(res){
+        if(!res || !res.success) {
+          console.warn('Could not load level counts:', res && res.message ? res.message : res);
+          updateChartAndLabels([0,0,0], ctx);
+          return;
+        }
+
+        const levels = res.levels || {};
+        const beginner = parseInt(levels['Beginner'] || levels['beginner'] || 0, 10);
+        const intermediate = parseInt(levels['Intermediate'] || levels['intermediate'] || 0, 10);
+        const advanced = parseInt(levels['Advanced'] || levels['advanced'] || 0, 10);
+
+        updateChartAndLabels([beginner, intermediate, advanced], ctx);
+      }).fail(function(err){
+        console.error('Failed to fetch student level counts:', err);
+        updateChartAndLabels([0,0,0], ctx);
+      });
+    }
+
+    // helper that creates or updates the Chart.js doughnut and updates legend text (percentages)
+    function updateChartAndLabels(dataArr, ctx) {
+      const total = (dataArr[0] || 0) + (dataArr[1] || 0) + (dataArr[2] || 0);
+
+      function pct(n) { return total ? Math.round((n / total) * 100) : 0; }
+
+      // update legend labels in DOM
+      $('#lbl-beginner').text(`Beginner (${pct(dataArr[0])}%)`);
+      $('#lbl-intermediate').text(`Intermediate (${pct(dataArr[1])}%)`);
+      $('#lbl-advanced').text(`Advanced (${pct(dataArr[2])}%)`);
+
+      const chartData = {
+        labels: ['Beginner','Intermediate','Advanced'],
+        datasets: [{
+          data: dataArr,
+          backgroundColor: ['#ff6b6b','#ffeb3b','#4ecdc4'],
+          cutout: '70%'
+        }]
+      };
+
+      const opts = {
+        plugins: { legend: { display: false } },
+        maintainAspectRatio: false,
+        responsive: true,
+        animation: { duration: 400 }
+      };
+
+      if (__studentLevelChart) {
+        __studentLevelChart.data = chartData;
+        __studentLevelChart.options = opts;
+        __studentLevelChart.update();
+      } else {
+        __studentLevelChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: chartData,
+          options: opts
+        });
+      }
     }
 
     // ---------- New: AJAX for center stats and paginated students ----------
