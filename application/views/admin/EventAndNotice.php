@@ -737,7 +737,7 @@
     <script>
       $(document).on('click', '.view-participants-btn', function() {
         let eventId = $(this).data('id');
-        window.location.href = "<?= base_url('admin/EventAndNotice/view_participants_1/') ?>" + eventId;
+        window.location.href = "<?= base_url('admin/EventAndNotice/view_participants/') ?>" + eventId;
       });
     </script>
 </body>

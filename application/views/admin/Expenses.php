@@ -166,9 +166,9 @@
 
 <body>
     <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <?php $this->load->view('admin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <?php $this->load->view('admin/Include/Navbar') ?>
 
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid">
@@ -211,7 +211,7 @@
                                     <th>Description</th>
                                     <th>Added By</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -234,18 +234,16 @@
                                                     <span class="badge badge-warning">Pending</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td>
-                                                <?php if ($exp->status === 'approved'): ?>
-                                                    <button class="action-btn approved" disabled style="color: #28a745;">
-                                                        <i class="fas fa-check-circle"></i>
-                                                    </button>
-
-                                                    <!-- <button class="action-btn cross" disabled><i class="fas fa-times"></i></button> -->
+                                            <!-- <td>
+                                                <?php if ($exp->status == 'approved'): ?>
+                                                    <span class="badge badge-success">Approved</span>
+                                                <?php elseif ($exp->status == 'rejected'): ?>
+                                                    <span class="badge badge-danger">Rejected</span>
                                                 <?php else: ?>
-                                                    <a href="<?= base_url('Expense/approve/' . $exp->id) ?>" class="action-btn thumbs-up approve-btn"><i class="fas fa-check"></i></a>
-                                                    <a href="<?= base_url('Expense/reject/' . $exp->id) ?>" class="action-btn cross reject-btn"><i class="fas fa-times"></i></a>
+                                                    <span class="badge badge-warning">Pending</span>
                                                 <?php endif; ?>
-                                            </td>
+                                            </td> -->
+
 
 
                                         </tr>
@@ -274,12 +272,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('Expense/add') ?>" id="addExpenseForm" novalidate>
+                <form method="post" action="<?= base_url('Admin/add_expense') ?>" id="addExpenseForm" novalidate>
+
                     <div class="modal-body">
                         <div class="row">
-                            <input type="hidden" name="added_by" value="superadmin">
+                            <input type="hidden" name="added_by" value="admin">
 
-                            <div class="form-group col-md-12">
+                            <!-- <div class="form-group col-md-12">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
                                     <option value="">-- Select Center --</option>
@@ -288,7 +287,8 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">Please select a center.</div>
-                            </div>
+                            </div> -->
+                            <input type="hidden" name="center_id" value="<?= $this->session->userdata('id'); ?>">
 
                             <div class="col-md-6 mb-3">
                                 <label>Title</label>
@@ -525,6 +525,17 @@
             $('input[name="date"]').val(today);
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('table tbody tr').each(function() {
+                let addedBy = $(this).find('td:nth-child(7)').text().trim().toLowerCase();
+                if (addedBy !== 'admin') {
+                    $(this).hide();
+                }
+            });
+        });
+    </script>
+
 
 </body>
 

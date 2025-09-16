@@ -86,3 +86,5 @@ $route['superadmin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/v
 $route['admin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_participants/$1';
 
 $route['superadmin/view_center_details'] = 'superadmin/view_center_details';
+
+$route['admin/get_center_stats'] = 'admin/get_center_stats';
