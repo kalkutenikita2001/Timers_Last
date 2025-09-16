@@ -142,4 +142,8 @@ class Admin extends CI_Controller
                 'deactive_students' => $deactive
             ]));
     }
+    public function Leave()
+    {
+        $this->load->view('admin/Leave');
+    }
 } // end of Admin class
