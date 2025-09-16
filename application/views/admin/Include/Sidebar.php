@@ -8,7 +8,7 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Dashboard'; ?>">
             <i class="bi bi-house-door"></i><span>Dashboard</span>
         </a>
-        
+
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
             <i class="bi bi-stack"></i><span>Batch</span>
         </a> -->
@@ -22,7 +22,7 @@
             <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
         </a>
 
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'IncomeAndExpenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/IncomeAndExpenses'; ?>">
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Expenses'; ?>">
             <i class="bi bi-cash"></i><span>Add Expenses</span>
         </a>
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
@@ -43,7 +43,7 @@
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Report') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Report'; ?>">
             <i class="bi bi-clipboard-data"></i><span>Report</span>
         </a> -->
-        <a class="nav-link" href="<?php echo base_url('base/adminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
     </nav>
 </div>
 
@@ -58,8 +58,10 @@
         left: 0;
         z-index: 1000;
         overflow-y: auto;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
         transition: width 0.3s ease-in-out;
         height: 100vh;
         padding-top: 28px;
@@ -67,7 +69,8 @@
     }
 
     .sidebar::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, and other Webkit browsers */
+        display: none;
+        /* Chrome, Safari, and other Webkit browsers */
     }
 
     .sidebar.minimized {
@@ -109,7 +112,8 @@
 
     .sidebar.minimized .nav-link i {
         margin-right: 0;
-        font-size: 18px; /* Slightly larger for better visibility */
+        font-size: 18px;
+        /* Slightly larger for better visibility */
     }
 
     .sidebar .logo {
@@ -137,6 +141,7 @@
         .sidebar {
             transform: translateX(-250px);
         }
+
         .sidebar.active {
             transform: translateX(0);
         }
@@ -152,6 +157,7 @@
         .sidebar {
             width: 200px;
         }
+
         .sidebar.minimized {
             width: 60px;
         }

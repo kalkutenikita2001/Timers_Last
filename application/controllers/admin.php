@@ -40,4 +40,14 @@ class Admin extends CI_Controller
 
         $this->load->view('admin/participants', $data);
     }
+    public function Expenses()
+    {
+        $this->load->model('Expense_model');
+        $this->load->model('Center_model'); // ✅ Make sure this is loaded
+
+        $data['expenses'] = $this->Expense_model->get_all_expenses();
+        $data['centers']  = $this->Center_model->get_all_centers(); // ✅ Pass centers to view
+
+        $this->load->view('admin/Expenses', $data);
+    }
 }
