@@ -1,3 +1,4 @@
+<!-- application/views/admin/Dashboard.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +29,13 @@
     .status-complete{background:#d4edda;color:#155724}
     .status-pending{background:#f8d7da;color:#721c24}
     @media(max-width:992px){.stat-grid{grid-template-columns:repeat(2,1fr)}.dashboard{margin-left:0}}
+
+    /* New styles for scrollable students list and search */
+    .students-table-container { max-height: 360px; overflow:auto; background:#fff; border-radius:8px; padding:8px; }
+    .students-table thead th { position: sticky; top: 0; background:#333; color:#fff; z-index: 2; }
+    .loading-row { text-align:center; padding:18px; color:#666; }
+    .search-controls .input-group .form-control { height:36px; }
+    .students-info { font-size:13px; color:#666; }
   </style>
 </head>
 <body>
@@ -85,14 +93,32 @@
                 <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button>
               </div>
             </div>
-            <div class="table-responsive">
-              <table class="table students-table table-striped">
+
+            <!-- Search + info + load more -->
+            <div class="d-flex align-items-center justify-content-between mb-2 search-controls">
+              <div class="input-group w-50">
+                <input id="studentSearch" class="form-control form-control-sm" placeholder="Search by name or contact..." aria-label="Search students">
+                <button id="studentSearchBtn" class="btn btn-sm btn-dark" type="button"><i class="bi bi-search"></i></button>
+                <button id="studentClearBtn" class="btn btn-sm btn-secondary" type="button">Clear</button>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <small id="studentsInfo" class="students-info">Loading…</small>
+                <button id="loadMoreBtn" class="btn btn-sm btn-outline-primary">Load more</button>
+              </div>
+            </div>
+
+            <!-- Scrollable students table -->
+            <div class="students-table-container">
+              <table class="table students-table table-striped mb-0">
                 <thead>
                   <tr>
                     <th>Name</th><th>Contact</th><th>Center</th><th>Batch</th><th>Level</th><th>Category</th><th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="studentsTableBody"></tbody>
+                <tbody id="studentsTableBody">
+                  <!-- initial fallback (will be replaced by AJAX) -->
+                  <tr><td colspan="7" class="loading-row">Loading students…</td></tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -183,8 +209,9 @@
   </div> <!-- /dashboard -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // minimal data & functions (trimmed)
+    // ---------- existing minimal data & functions (trimmed) ----------
     const studentData = {
       jane:{name:'Jane Doe',contact:'9876543210',center:'ABC',batch:'B1',level:'Intermediate',category:'Complete'},
       john:{name:'John Smith',contact:'9876543211',center:'XYZ',batch:'B2',level:'Advanced',category:'Pending'},
@@ -241,7 +268,7 @@
     }
     function viewAttendance(id){ const r=attendanceData[id]; if(!r) return Swal.fire('Not found'); Swal.fire({title:'Attendance',html:`<p>${r.name}</p><p>${r.batch} • ${r.level}</p>`}); }
 
-    // form handlers
+    // form handlers (demo behavior left intact)
     document.getElementById('addStudentForm').addEventListener('submit',function(e){
       e.preventDefault();
       const name=document.getElementById('addStudentName').value.trim(); if(!name) return;
@@ -268,35 +295,159 @@
       const ctx=document.getElementById('studentChart'); new Chart(ctx,{type:'doughnut',data:{labels:['Beginner','Intermediate','Advanced'],datasets:[{data:[30,40,30],backgroundColor:['#ff6b6b','#ffeb3b','#4ecdc4'],cutout:'70%'}]},options:{plugins:{legend:{display:false}}}});
     }
 
-    // initialize (placeholder center/batch load)
-    $(function(){ $('#addStudentCenter').append('<option>Downtown Academy</option>'); $('#addStudentBatch').append('<option>B1</option><option>B2</option>'); renderTables(); initChart(); });
-  
-  
-  
-  (function fetchCenterStats(){
-    $.ajax({
-      url: '/timersacademy-1/index.php/admin/get_center_stats', // change if your base differs
-      method: 'GET',
-      dataType: 'json'
-    }).done(function(res){
-      console.log('center stats:', res);
-      if(res && res.success){
-        $('#centerName').text(res.center_name);
-        $('#totalCount').text(res.total_students);
-        if(typeof res.active_students !== 'undefined') $('#activeCount').text(res.active_students);
-        if(typeof res.deactive_students !== 'undefined') $('#deactiveCount').text(res.deactive_students);
-      } else {
-        console.warn('Center stats not available:', res && res.message ? res.message : res);
+    // ---------- New: AJAX for center stats and paginated students ----------
+    (function initDynamic() {
+      // change this base if your app doesn't use /timersacademy-1/index.php/
+      const BASE_STATS_URL = '/timersacademy-1/index.php/admin/get_center_stats';
+      const BASE_STUDENTS_URL = '/timersacademy-1/index.php/admin/get_students_ajax';
+
+      // fetch center stats and update UI
+      function fetchCenterStats() {
+        $.ajax({
+          url: BASE_STATS_URL,
+          method: 'GET',
+          dataType: 'json'
+        }).done(function(res){
+          console.log('center stats:', res);
+          if(res && res.success){
+            $('#centerName').text(res.center_name);
+            $('#totalCount').text(res.total_students);
+            if(typeof res.active_students !== 'undefined') $('#activeCount').text(res.active_students);
+            if(typeof res.deactive_students !== 'undefined') $('#deactiveCount').text(res.deactive_students);
+          } else {
+            console.warn('Could not load center stats:', res && res.message ? res.message : res);
+          }
+        }).fail(function(xhr){
+          console.error('Request failed:', xhr.statusText);
+        });
       }
-    }).fail(function(xhr){
-      console.error('Request failed:', xhr.statusText);
-    });
-  })();
-</script>
 
+      // Students pagination + search + infinite scroll
+      const perPage = 10;
+      let page = 1;
+      let loading = false;
+      let noMore = false;
+      let currentSearch = '';
 
-  
-  
+      const $container = $('.students-table-container');
+      const $tbody = $('#studentsTableBody');
+      const $info = $('#studentsInfo');
+      const $loadMore = $('#loadMoreBtn');
+      const $searchInp = $('#studentSearch');
+      const $searchBtn = $('#studentSearchBtn');
+      const $clearBtn = $('#studentClearBtn');
+
+      function esc(t){ return $('<div/>').text(t||'').html(); }
+
+      function renderStudents(rows, append = true){
+        if(!append) $tbody.empty();
+        if(rows.length === 0 && !append){
+          $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+          return;
+        }
+        const html = rows.map(s => {
+          const category = s.category || s.status || '';
+          const badgeClass = category === 'Complete' ? 'status-complete' : 'status-pending';
+          return `<tr>
+            <td>${esc(s.name)}</td>
+            <td>${esc(s.contact)}</td>
+            <td>${esc(s.center)}</td>
+            <td>${esc(s.batch)}</td>
+            <td>${esc(s.level)}</td>
+            <td><span class="status-badge ${badgeClass}">${esc(category)}</span></td>
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-secondary" onclick="viewStudent('${s.id}')" data-bs-toggle="modal" data-bs-target="#viewStudentModal"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-sm btn-outline-success" onclick="editStudent('${s.id}')" data-bs-toggle="modal" data-bs-target="#editStudentModal"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent('${s.id}')"><i class="bi bi-trash"></i></button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+        $tbody.append(html);
+      }
+
+      function fetchPage(p, opts = {append:true}){
+        if(loading || noMore) return;
+        loading = true;
+        $info.text('Loading...');
+        $loadMore.prop('disabled', true).text('Loading...');
+
+        $.ajax({
+          url: BASE_STUDENTS_URL,
+          method: 'GET',
+          dataType: 'json',
+          data: { page: p, per_page: perPage, search: currentSearch }
+        }).done(function(res){
+          if(!res || !res.success){
+            if(p===1) $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+            $info.text(res && res.message ? res.message : 'Error loading');
+            noMore = true;
+            return;
+          }
+          const total = res.total || 0;
+          const students = res.students || [];
+          const showed = (p-1)*perPage + students.length;
+          renderStudents(students, opts.append);
+
+          // update flags
+          if(showed >= total) { noMore = true; $loadMore.hide(); $info.text(`${showed} of ${total}`); }
+          else { noMore = false; $loadMore.show(); $info.text(`${showed} of ${total}`); }
+
+          if(p === 1 && students.length === 0){
+            $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+          }
+        }).fail(function(){
+          $info.text('Request failed');
+        }).always(function(){
+          loading = false;
+          $loadMore.prop('disabled', false).text('Load more');
+        });
+      }
+
+      function resetAndLoad(){
+        page = 1; noMore = false; $tbody.empty();
+        fetchPage(page, {append:true});
+      }
+
+      $loadMore.on('click', function(){
+        if(noMore || loading) return;
+        page += 1;
+        fetchPage(page, {append:true});
+      });
+
+      $container.on('scroll', function(){
+        const el = this;
+        if(noMore || loading) return;
+        if (el.scrollHeight - el.scrollTop - el.clientHeight < 200) {
+          page += 1;
+          fetchPage(page, {append:true});
+        }
+      });
+
+      // search debounce
+      let debounceTimer = null;
+      function doSearch(q){
+        currentSearch = q || '';
+        page = 1; noMore = false; $tbody.empty();
+        fetchPage(page, {append:true});
+      }
+      function debounceSearch(q){
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(()=> doSearch(q), 300);
+      }
+
+      $searchInp.on('input', function(){ debounceSearch($(this).val()); });
+      $searchBtn.on('click', function(){ doSearch($searchInp.val()); });
+      $clearBtn.on('click', function(){ $searchInp.val(''); doSearch(''); });
+
+      // initial fetches
+      fetchCenterStats();
+      resetAndLoad();
+      initChart();
+      renderTables(); // keeps demo data for attendance & exports working
+
+    })();
   </script>
 </body>
 </html>
