@@ -270,6 +270,33 @@
 
     // initialize (placeholder center/batch load)
     $(function(){ $('#addStudentCenter').append('<option>Downtown Academy</option>'); $('#addStudentBatch').append('<option>B1</option><option>B2</option>'); renderTables(); initChart(); });
+  
+  
+  
+  (function fetchCenterStats(){
+    $.ajax({
+      url: '/timersacademy-1/index.php/admin/get_center_stats', // change if your base differs
+      method: 'GET',
+      dataType: 'json'
+    }).done(function(res){
+      console.log('center stats:', res);
+      if(res && res.success){
+        $('#centerName').text(res.center_name);
+        $('#totalCount').text(res.total_students);
+        if(typeof res.active_students !== 'undefined') $('#activeCount').text(res.active_students);
+        if(typeof res.deactive_students !== 'undefined') $('#deactiveCount').text(res.deactive_students);
+      } else {
+        console.warn('Center stats not available:', res && res.message ? res.message : res);
+      }
+    }).fail(function(xhr){
+      console.error('Request failed:', xhr.statusText);
+    });
+  })();
+</script>
+
+
+  
+  
   </script>
 </body>
 </html>
