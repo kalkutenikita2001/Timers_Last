@@ -55,4 +55,16 @@ class EventAndNotice extends CI_Controller
         // load participants page
         $this->load->view('superadmin/participants', $data);
     }
+
+    public function participants($event_id)
+    {
+        $data['event_id'] = $event_id;
+        $data['participants'] = $this->Participant_model->get_by_event($event_id);
+
+        $data['event_name'] = $this->Participant_model->get_event_name($event_id);
+
+
+        // load participants page
+        $this->load->view('superadmin/participants', $data);
+    }
 }

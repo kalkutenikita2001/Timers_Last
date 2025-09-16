@@ -8,29 +8,34 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Dashboard'; ?>">
             <i class="bi bi-house-door"></i><span>Dashboard</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
+
+        <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
             <i class="bi bi-stack"></i><span>Batch</span>
+        </a> -->
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
+            <i class="bi bi-person-plus"></i><span>Admission Management</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
+            <i class="bi bi-person-plus"></i><span>Student Management</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
             <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
-            <i class="bi bi-person-plus"></i><span>Admission</span>
+
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Expenses'; ?>">
+            <i class="bi bi-cash"></i><span>Add Expenses</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'IncomeAndExpenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/IncomeAndExpenses'; ?>">
-            <i class="bi bi-cash"></i><span>IncomeAndExpenses</span>
-        </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
+        <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
             <i class="bi bi-check-circle"></i><span>Attendance</span>
-        </a>
+        </a> -->
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
+        <!-- <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
             <i class="bi bi-plus-circle"></i><span>AddOnfacility</span>
-        </a>
-        <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/venues' || $this->router->fetch_class() == 'venues') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venues'; ?>">
-            <i class="bi bi-geo-alt"></i><span>Venues</span>
+        </a> -->
+        <!-- <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/venues' || $this->router->fetch_class() == 'venues') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venues'; ?>">
+            <i class="bi bi-geo-alt"></i><span>Venues</span> -->
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
@@ -38,7 +43,7 @@
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Report') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Report'; ?>">
             <i class="bi bi-clipboard-data"></i><span>Report</span>
         </a> -->
-        <a class="nav-link" href="<?php echo base_url('base/adminlogin'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
     </nav>
 </div>
 
@@ -53,8 +58,10 @@
         left: 0;
         z-index: 1000;
         overflow-y: auto;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
         transition: width 0.3s ease-in-out;
         height: 100vh;
         padding-top: 28px;
@@ -62,7 +69,8 @@
     }
 
     .sidebar::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, and other Webkit browsers */
+        display: none;
+        /* Chrome, Safari, and other Webkit browsers */
     }
 
     .sidebar.minimized {
@@ -104,7 +112,8 @@
 
     .sidebar.minimized .nav-link i {
         margin-right: 0;
-        font-size: 18px; /* Slightly larger for better visibility */
+        font-size: 18px;
+        /* Slightly larger for better visibility */
     }
 
     .sidebar .logo {
@@ -132,6 +141,7 @@
         .sidebar {
             transform: translateX(-250px);
         }
+
         .sidebar.active {
             transform: translateX(0);
         }
@@ -147,6 +157,7 @@
         .sidebar {
             width: 200px;
         }
+
         .sidebar.minimized {
             width: 60px;
         }

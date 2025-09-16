@@ -60,7 +60,7 @@ class Auth extends CI_Controller
                     'role' => 'admin',
                     'logged_in' => TRUE
                 ]);
-                redirect('superadmin/CenterManagement2');
+                redirect('admin/dashboard');
             } else {
                 $this->show_error('Invalid Username or Password!');
             }

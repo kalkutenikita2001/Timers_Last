@@ -83,7 +83,6 @@ $route['center/filter'] = 'center/filter';
 
 $route['superadmin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_participants/$1';
 
- $route['superadmin/view_center_details'] = 'superadmin/view_center_details';
+$route['admin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_participants/$1';
 
-
-
+$route['superadmin/view_center_details'] = 'superadmin/view_center_details';
