@@ -8,29 +8,34 @@
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Dashboard'; ?>">
             <i class="bi bi-house-door"></i><span>Dashboard</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
+        
+        <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
             <i class="bi bi-stack"></i><span>Batch</span>
+        </a> -->
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
+            <i class="bi bi-person-plus"></i><span>Admission Management</span>
+        </a>
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
+            <i class="bi bi-person-plus"></i><span>Student Management</span>
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
             <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
-            <i class="bi bi-person-plus"></i><span>Admission</span>
-        </a>
+
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'IncomeAndExpenses') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/IncomeAndExpenses'; ?>">
-            <i class="bi bi-cash"></i><span>IncomeAndExpenses</span>
+            <i class="bi bi-cash"></i><span>Add Expenses</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
+        <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
             <i class="bi bi-check-circle"></i><span>Attendance</span>
-        </a>
+        </a> -->
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
-        <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
+        <!-- <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
             <i class="bi bi-plus-circle"></i><span>AddOnfacility</span>
-        </a>
-        <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/venues' || $this->router->fetch_class() == 'venues') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venues'; ?>">
-            <i class="bi bi-geo-alt"></i><span>Venues</span>
+        </a> -->
+        <!-- <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/venues' || $this->router->fetch_class() == 'venues') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/venues'; ?>">
+            <i class="bi bi-geo-alt"></i><span>Venues</span> -->
         </a>
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Profile') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Profile'; ?>">
             <i class="bi bi-person-circle"></i><span>Profile</span>
