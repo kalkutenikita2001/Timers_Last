@@ -7,4 +7,37 @@ class Admin extends CI_Controller
     {
         $this->load->view('admin/Dashboard');
     }
+    public function EventAndNotice()
+    {
+        $this->load->model('Event_model');
+        $data['events'] = $this->Event_model->get_all_events();
+        $this->load->view('admin/EventAndNotice', $data);
+    }
+
+    // Save new event (AJAX)
+    public function saveEvent()
+    {
+        $this->load->model('Event_model');
+        $data = array(
+            'name' => $this->input->post('name'),
+            'description' => $this->input->post('description'),
+            'date' => $this->input->post('date'),
+            'time' => $this->input->post('time'),
+            'fee' => $this->input->post('fee'),
+            'max_participants' => $this->input->post('maxParticipants'),
+            'venue' => $this->input->post('venue')
+        );
+        $this->Event_model->insert_event($data);
+        echo json_encode(['status' => 'success']);
+    }
+    public function view_participants($event_id)
+    {
+        $this->load->model('Participant_model');
+
+        $data['event_id'] = $event_id;
+        $data['participants'] = $this->Participant_model->get_by_event($event_id);
+        $data['event_name'] = $this->Participant_model->get_event_name($event_id);
+
+        $this->load->view('admin/participants', $data);
+    }
 }
