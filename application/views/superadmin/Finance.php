@@ -108,9 +108,11 @@ function money($n) { return number_format((float)$n, 2); }
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Finance — Revenue Dashboard</title>
+  <title>Finance Management</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
   <style>
     :root{
       --bg: #f4f6f8;
@@ -403,6 +405,17 @@ foreach ($rows as $r) {
 
     })();
 
+      // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });
 
     
   </script>

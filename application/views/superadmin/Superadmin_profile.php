@@ -4,9 +4,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Super Admin Profile - Change Password</title>
+  <title>Forget Password</title>
 
   <!-- Bootstrap + fonts + icons (CDN) -->
+       <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -694,6 +696,22 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initOnce);
       else initOnce();
     })();
+
+
+      // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });
+
+
+
   </script>
 </body>
 
