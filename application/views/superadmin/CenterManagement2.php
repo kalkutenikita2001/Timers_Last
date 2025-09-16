@@ -188,18 +188,18 @@
 <div class="content-wrapper" id="contentWrapper">
   <div class="container">
     <h4>Center Management</h4>
-    <div class="filter-wrapper mb-4">
+
+    <div class="filter-wrapper mb-4 d-flex justify-content-between align-items-center">
       <button class="filter-btn btn" data-toggle="modal" data-target="#filterModal">
         <i class="fas fa-filter mr-2"></i> Filter
       </button>
-    </div>
-    <div class="row" id="centerCards">
-      <!-- Centers will be loaded here -->
-    </div>
-    <div class="text-center mt-4">
       <a href="<?php echo base_url('superadmin/add_new_center'); ?>" class="btn btn-primary">
         <i class="fas fa-plus mr-2"></i> Add Center
       </a>
+    </div>
+
+    <div class="row" id="centerCards">
+      <!-- Centers will be loaded here -->
     </div>
   </div>
 </div>
