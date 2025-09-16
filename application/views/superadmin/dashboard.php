@@ -399,6 +399,63 @@
         margin-left: 60px;
       }
     }
+
+    .center-btn {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      color: #1a1a1a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .center-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 245, 245, 1), #ffecec);
+      border-color: #ff4040;
+      transform: translateX(4px);
+      box-shadow: 0 4px 10px rgba(255, 64, 64, 0.2);
+    }
+
+    .center-btn i {
+      color: #ff4040;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .center-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.25);
+    }
+
+    /* Left Accent Bar */
+    .center-btn::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 5px;
+      background: #ff4040;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .center-btn:hover::before {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -480,28 +537,26 @@
           </div>
         </div>
         <!-- Right Sidebar Panels -->
+
         <div class="col-lg-3">
-          <!-- Center List -->
           <div class="center-box mb-3" style="background: #f0eaea;">
             <h6 class="fw-bold text-start">Centers</h6>
             <div class="d-grid gap-2 mt-3">
-              <button class="btn center-btn text-start" onclick="selectCenter('center1')">
-                <i class="bi bi-house-door-fill me-2"></i> Center 1
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center2')">
-                <i class="bi bi-building-fill-check me-2"></i> Center 2
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center3')">
-                <i class="bi bi-geo-alt-fill me-2"></i> Center 3
-              </button>
-              <button class="btn center-btn text-start" onclick="selectCenter('center4')">
-                <i class="bi bi-diagram-3-fill me-2"></i> Center 4
-              </button>
+              <?php if (!empty($centers)): ?>
+                <?php foreach ($centers as $c): ?>
+                  <button class="btn center-btn text-start"
+                    value="<?= $c->id ?>"
+                    onclick="selectCenter('<?= $c->id ?>')">
+                    <i class="bi bi-house-door-fill me-2"></i>
+                    <?= htmlspecialchars($c->name) ?>
+                  </button>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="text-muted">No centers available.</p>
+              <?php endif; ?>
             </div>
-            <button class="add-center-btn mt-4" data-bs-toggle="modal" data-bs-target="#addCenterModal">
-              <i class="bi bi-plus-circle me-2"></i> Add Center
-            </button>
           </div>
+
           <!-- Student Distribution -->
           <div class="center-box">
             <h6>Student Distribution</h6>
@@ -517,7 +572,7 @@
     </div>
   </div>
 
-  <!-- Add Center Modal -->
+  <!-- 
   <div class="modal fade" id="addCenterModal" tabindex="-1" aria-labelledby="addCenterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -549,7 +604,7 @@
     </div>
   </div>
 
-  <!-- Edit Center Modal -->
+ 
   <div class="modal fade" id="editCenterModal" tabindex="-1" aria-labelledby="editCenterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -580,7 +635,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>  -->
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

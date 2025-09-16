@@ -1,550 +1,700 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Profile</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Super Admin Profile - Change Password</title>
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #e9ecef !important;
-            color: #fff;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
+  <!-- Bootstrap + fonts + icons (CDN) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
 
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 10px;
-            transition: all 0.3s ease-in-out;
-        }
+  <!-- SweetAlert CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-        .content-wrapper.minimized {
-            margin-left: 60px;
-        }
+  <style>
+    :root {
+      --accent: #d32f2f;
+      --card-bg: #ffffff;
+      --input-bg: #fff;
 
-        .container {
-            max-width: 1200px;
-            margin: 70px auto 0;
-            width: 100%;
-        }
+      /* make sure these match your real sidebar actual widths */
+      --sidebar-full: 250px;
+      /* full sidebar width (adjust to your sidebar) */
+      --sidebar-collapsed: 60px;
+      /* collapsed sidebar width (adjust to your sidebar) */
+    }
 
-        .tab-buttons-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: #e9ecef;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        .tab-button {
-            flex: 1;
-            padding: 12px;
-            background: #e0e0e0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #000;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    /* ---------- NOTE: Sidebar & Navbar are loaded by your PHP includes above.
+       This file assumes the sidebar element will match one of these selectors:
+       '.sidebar', '#sidebar', '.main-sidebar' or '#siteSidebar'.
+       The toggle button should have class 'sidebar-toggle' (or update toggleSelectors below).
+    ---------- */
 
-        .tab-button.active {
-            background: #fff;
-            color: #d32f2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+    /* ---------- top navbar mock styling kept only to visually align margins if your real navbar expects it ---------- */
+    .navbar-mock {
+      margin-left: var(--sidebar-full);
+      transition: margin-left .25s ease;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
 
-        .tab-button:hover {
-            background: #d3d3d3;
-            transform: translateY(-1px);
-        }
+    .navbar-mock.minimized {
+      margin-left: var(--sidebar-collapsed);
+    }
 
-        .profile-form {
-            background: #f5f5f5;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 20px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+    /* ---------- content wrapper responds to sidebar ---------- */
+    .content-wrapper {
+      margin-left: var(--sidebar-full);
+      padding: 18px;
+      transition: margin-left .28s ease, padding .28s ease;
+      min-height: calc(100vh - 150px);
+    }
 
-        .profile-form h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-            font-weight: 600;
-        }
+    .content-wrapper.minimized {
+      margin-left: var(--sidebar-collapsed);
+    }
 
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-        }
+    /* ---------- header & card (your original styles) ---------- */
+    .top-header {
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
+      height: 150px;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      box-shadow: 0 8px 30px rgba(71, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
+    .top-header .content {
+      position: relative;
+      z-index: 2;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
+    .top-header .title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.3px
+    }
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            background: white;
-            color: #333;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    .top-header .subtitle {
+      font-size: 14px;
+      margin-top: 6px;
+      opacity: .9
+    }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #d32f2f;
-            box-shadow: 0 0 5px rgba(211, 47, 47, 0.2);
-        }
+    .header-decor {
+      position: absolute;
+      right: -80px;
+      top: -40px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      filter: blur(20px);
+    }
 
-        .save-btn {
-            color: black;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            width: 140px;
-            font-size: 15px;
-            margin: 25px auto;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        }
+    .container {
+      max-width: 600px;
+      margin: -60px auto 30px;
+    }
 
-        .save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+    .profile-card {
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(2, 6, 23, 0.06);
+      animation: fadeUp .45s ease both
+    }
 
-        .error {
-            color: #d32f2f;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
 
-        .form-group.invalid input,
-        .form-group.invalid select {
-            border-color: #d32f2f;
-            background: #ffeaea;
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
 
-        .form-group.invalid .error {
-            display: block;
-        }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #222;
+      font-weight: 700;
+      text-align: center
+    }
 
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 5px !important;
-            }
+    .muted-panel {
+      background: rgba(233, 236, 239, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      color: #222;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center
+    }
 
-            .container {
-                margin-top: 60px;
-            }
+    .form-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px
+    }
 
-            .tab-buttons-container {
-                flex-direction: column;
-            }
+    .form-group {
+      flex: 1;
+      margin-bottom: 0;
+      position: relative
+    }
 
-            .tab-button {
-                width: 100%;
-            }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #333
+    }
 
-            .profile-form {
-                padding: 15px;
-                max-width: 100%;
-            }
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 9px;
+      border: 1px solid #e6e6e6;
+      background: var(--input-bg);
+      font-size: 14px
+    }
 
-            .form-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
+    input::placeholder {
+      color: #a5a5a5
+    }
 
-        @media (max-width: 480px) {
-            .profile-form {
-                padding: 10px;
-            }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 8px 22px rgba(211, 47, 47, 0.09)
+    }
 
-            .form-group label {
-                font-size: 12px;
-            }
+    .error {
+      font-size: 12px;
+      color: var(--accent);
+      display: none;
+      margin-top: 6px
+    }
 
-            .form-group input,
-            .form-group select {
-                padding: 8px;
-                font-size: 12px;
-            }
+    .form-group.invalid input {
+      border-color: var(--accent);
+      background: #fff6f6
+    }
 
-            .save-btn {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-        }
+    .form-group.invalid .error {
+      display: block
+    }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .content-wrapper {
-                margin-left: 200px;
-            }
-        }
-    </style>
+    .actions {
+      text-align: center;
+      margin-top: 18px
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(211, 47, 47, 0.14);
+      transition: transform .15s
+    }
+
+    .btn-save:hover {
+      transform: translateY(-3px)
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 38px;
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 14px;
+      cursor: pointer
+    }
+
+    .strength {
+      height: 7px;
+      border-radius: 6px;
+      background: #eee;
+      margin-top: 8px;
+      overflow: hidden
+    }
+
+    .strength>i {
+      display: block;
+      height: 100%;
+      width: 0;
+      transition: width .28s
+    }
+
+    .strength.weak>i {
+      width: 33%;
+      background: #ff6b6b
+    }
+
+    .strength.ok>i {
+      width: 66%;
+      background: #ffb86b
+    }
+
+    .strength.strong>i {
+      width: 100%;
+      background: #2ecc71
+    }
+
+    @media(max-width:768px) {
+
+      /* on small screens we don't keep a big left margin */
+      .content-wrapper {
+        margin-left: 0 !important;
+        padding: 12px
+      }
+
+      .form-row {
+        flex-direction: column
+      }
+
+      .container {
+        margin-top: 10px
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
-    <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
+  <!-- ========== ORIGINAL SIDEBAR (kept exactly as you had it) ========== -->
+  <?php $this->load->view('superadmin/Include/Sidebar') ?>
 
-    <div class="content-wrapper" id="contentWrapper">
-        <div class="container">
-            <!-- Tab Buttons -->
-            <div class="tab-buttons-container">
-                <button class="tab-button active" onclick="showTab('changePassword')">Change Password</button>
-                <button class="tab-button" onclick="showTab('superAdminDetails')">Super Admin Details</button>
-                <button class="tab-button" onclick="showTab('systemSettings')">System Settings</button>
+  <!-- ========== ORIGINAL NAVBAR (kept exactly as you had it) ========== -->
+  <?php $this->load->view('superadmin/Include/Navbar') ?>
+
+  <!-- ===== Content wrapper: THIS element will get .minimized toggled ===== -->
+  <div class="content-wrapper" id="contentWrapper">
+    <header class="top-header">
+      <div class="header-decor" aria-hidden="true"></div>
+      <div class="content">
+        <div class="title">Super Admin — Account</div>
+        <div class="subtitle">Secure settings — change password for superadmin or admin</div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Change Password -->
+      <section class="profile-card" id="changePasswordSection">
+        <div class="muted-panel">Use a strong, unique password. Minimum 8 characters recommended.</div>
+        <form id="changePasswordForm" novalidate>
+          <h2>Change Password</h2>
+
+          <div class="form-row">
+            <div class="form-group" id="g-userType">
+              <label for="userType">User Type</label>
+              <select id="userType" class="form-control" required>
+                <option value="">Select User Type</option>
+                <option value="superadmin">Super Admin</option>
+                <option value="admin">Admin</option>
+              </select>
+              <div class="error">Please select a user type</div>
             </div>
 
-            <!-- Change Password Form -->
-            <div id="changePasswordTab" class="profile-form">
-                <h2>Super Admin Profile</h2>
-                <form id="changePasswordForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="username">Username :</label>
-                            <input type="text" id="username" name="username" class="form-control" required>
-                            <div class="error">Username is required</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="currentPassword">Current Password :</label>
-                            <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
-                            <div class="error">Current Password is required</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newPassword">New Password :</label>
-                            <input type="password" id="newPassword" name="newPassword" class="form-control" required>
-                            <div class="error">New Password is required</div>
-                        </div>
-                        <div class="form-group text-center">
-                            <button type="submit" class="save-btn mt-3">Change</button>
-                        </div>
-                    </div>
-                </form>
+            <div class="form-group" id="g-username">
+              <label for="username">Username</label>
+              <input id="username" placeholder="e.g. superadmin or admin username" required autocomplete="username" />
+              <div class="error">Username is required</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" id="g-currentPassword">
+              <label for="currentPassword">Current Password</label>
+              <input id="currentPassword" type="password" placeholder="Enter current password" required autocomplete="current-password" />
+              <button type="button" class="pw-toggle" data-target="currentPassword" aria-label="Toggle current password"><i class="fas fa-eye"></i></button>
+              <div class="error">Current password is required</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" id="g-newPassword">
+              <label for="newPassword">New Password</label>
+              <input id="newPassword" type="password" placeholder="New password (min 8 characters)" required autocomplete="new-password" />
+              <button type="button" class="pw-toggle" data-target="newPassword" aria-label="Toggle new password"><i class="fas fa-eye"></i></button>
+              <div class="strength" id="pwStrength" aria-hidden="true"><i></i></div>
+              <div class="error">New password must be at least 8 chars and different</div>
             </div>
 
-            <!-- Super Admin Details Form -->
-            <div id="superAdminDetailsTab" class="profile-form" style="display: none;">
-                <h2>Super Admin Details</h2>
-                <form id="superAdminDetailsForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="fullName">Full Name :</label>
-                            <input type="text" id="fullName" name="fullName" class="form-control" required>
-                            <div class="error">Full Name is required</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email :</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                            <div class="error">Valid email is required</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">Phone Number :</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" pattern="[0-9]{10}" required>
-                            <div class="error">Valid 10-digit phone number is required</div>
-                        </div>
-                        <div class="form-group text-center">
-                            <button type="submit" class="save-btn mt-3">Save Changes</button>
-                        </div>
-                    </div>
-                </form>
+            <div class="form-group" id="g-confirmPassword">
+              <label for="confirmPassword">Confirm New Password</label>
+              <input id="confirmPassword" type="password" placeholder="Re-type new password" required autocomplete="new-password" />
+              <div class="error">Passwords do not match</div>
             </div>
+          </div>
 
-            <!-- System Settings Form -->
-            <div id="systemSettingsTab" class="profile-form" style="display: none;">
-                <h2>System Settings</h2>
-                <form id="systemSettingsForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="systemName">System Name :</label>
-                            <input type="text" id="systemName" name="systemName" class="form-control" required>
-                            <div class="error">System Name is required</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="adminRole">Admin Role :</label>
-                            <select id="adminRole" name="adminRole" class="form-control custom-select" required>
-                                <option value="">Select Role</option>
-                                <option value="superAdmin">Super Admin</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                            <div class="error">Admin Role is required</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="systemAccess">System Access Level :</label>
-                            <select id="systemAccess" name="systemAccess" class="form-control custom-select" required>
-                                <option value="">Select Access Level</option>
-                                <option value="full">Full Access</option>
-                                <option value="restricted">Restricted Access</option>
-                            </select>
-                            <div class="error">System Access Level is required</div>
-                        </div>
-                        <div class="form-group text-center">
-                            <button type="submit" class="save-btn mt-3">Save Changes</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+          <div class="actions">
+            <button type="submit" class="btn-save">Change Password</button>
+          </div>
+        </form>
+      </section>
     </div>
+  </div>
 
-    <!-- Bootstrap + Font Awesome + jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- JS libs (keep or replace with your own versions) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        // Tab functionality
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.profile-form').forEach(tab => tab.style.display = 'none');
-            document.getElementById(tabName + 'Tab').style.display = 'block';
-            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+  <!-- SweetAlert JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Password & form logic -->
+  <script>
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.pw-toggle');
+      if (!btn) return;
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type = 'password';
+        if (icon) icon.className = 'fas fa-eye';
+      }
+      input.focus();
+    });
+
+    (function() {
+      const newPwd = document.getElementById('newPassword');
+      const pwStrength = document.getElementById('pwStrength');
+      if (!newPwd || !pwStrength) return;
+      newPwd.addEventListener('input', () => {
+        const v = newPwd.value || '';
+        const score = (v.length >= 8 ? 1 : 0) + ((/[A-Z]/.test(v) && /[a-z]/.test(v)) ? 1 : 0) + ((/[0-9]/.test(v) || /[\W_]/.test(v)) ? 1 : 0);
+        pwStrength.className = 'strength ' + (score <= 1 ? 'weak' : score === 2 ? 'ok' : 'strong');
+      });
+    })();
+
+    function markInvalid(el, msg) {
+      if (!el) return;
+      el.classList.add('invalid');
+      if (msg) el.querySelector('.error').textContent = msg;
+    }
+
+    function clearInvalid(el) {
+      if (!el) return;
+      el.classList.remove('invalid');
+    }
+
+    function validateForm() {
+      let ok = true;
+      const userType = document.getElementById('userType');
+      const u = document.getElementById('username'),
+        c = document.getElementById('currentPassword'),
+        n = document.getElementById('newPassword'),
+        cf = document.getElementById('confirmPassword');
+
+      [userType, u, c, n, cf].forEach(i => {
+        const g = i.closest('.form-group');
+        if (g) clearInvalid(g);
+      });
+
+      if (!userType.value) {
+        markInvalid(userType.closest('.form-group'), 'Please select a user type');
+        ok = false;
+      }
+
+      if (!u.value.trim()) {
+        markInvalid(u.closest('.form-group'), 'Username is required');
+        ok = false;
+      }
+
+      if (!c.value.trim()) {
+        markInvalid(c.closest('.form-group'), 'Current password is required');
+        ok = false;
+      }
+
+      if (!n.value.trim()) {
+        markInvalid(n.closest('.form-group'), 'New password required');
+        ok = false;
+      } else if (n.value.length < 8) {
+        markInvalid(n.closest('.form-group'), 'Must be at least 8 characters');
+        ok = false;
+      } else if (n.value === c.value) {
+        markInvalid(n.closest('.form-group'), 'Cannot be same as current');
+        ok = false;
+      }
+
+      if (!cf.value.trim() || cf.value !== n.value) {
+        markInvalid(cf.closest('.form-group'), 'Passwords do not match');
+        ok = false;
+      }
+
+      return ok;
+    }
+
+    document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (validateForm()) {
+        const userType = document.getElementById('userType').value;
+        const username = document.getElementById('username').value;
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+
+        // Prepare data for AJAX request
+        const formData = new FormData();
+        formData.append('userType', userType);
+        formData.append('username', username);
+        formData.append('currentPassword', currentPassword);
+        formData.append('newPassword', newPassword);
+
+        // Show loading alert
+        Swal.fire({
+          title: 'Changing Password',
+          text: 'Please wait...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // Send AJAX request to server
+        fetch('<?php echo base_url("superadmin/change_password"); ?>', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            Swal.close();
+
+            if (data.success) {
+              // Success message
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: data.message || 'Password changed successfully!',
+                confirmButtonColor: '#d32f2f'
+              }).then(() => {
+                // Reset form
+                document.getElementById('changePasswordForm').reset();
+                const pw = document.getElementById('pwStrength');
+                if (pw) pw.className = 'strength';
+              });
+            } else {
+              // Error message
+              Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data.message || 'Failed to change password. Please try again.',
+                confirmButtonColor: '#d32f2f'
+              });
+            }
+          })
+          .catch(error => {
+            Swal.close();
+            console.error('Error:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'An error occurred. Please try again.',
+              confirmButtonColor: '#d32f2f'
+            });
+          });
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Validation Error',
+          text: 'Please fix the errors in the form',
+          confirmButtonColor: '#d32f2f'
+        });
+      }
+    });
+
+    document.querySelectorAll('#changePasswordForm input, #changePasswordForm select').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const group = inp.closest('.form-group');
+        if (group) clearInvalid(group);
+      });
+    });
+
+    // Sidebar auto-resize script (keeps original sidebar/nav includes intact)
+    (function() {
+      const cfg = {
+        // element that should shift
+        wrapperSelector: '#contentWrapper',
+        // list of selectors to try for the sidebar element (your include must match one)
+        sidebarSelectors: ['.sidebar', '#sidebar', '.main-sidebar', '#siteSidebar'],
+        // list of selectors to try for the toggle button (keep your toggle's class)
+        toggleSelectors: ['.sidebar-toggle', '#sidebarToggle', '[data-sidebar-toggle]'],
+        // class we toggle on wrapper to reduce left margin
+        minimizedClassOnWrapper: 'minimized',
+        // a class toggled on sidebar for visual collapsed state by button
+        sidebarToggleClass: 'minimized',
+        // classes your server might set on the sidebar when collapsed
+        sidebarMinimizedClasses: ['minimized', 'collapsed', 'sidebar-collapse', 'mini', 'closed']
+      };
+
+      function q(sel) {
+        try {
+          return document.querySelector(sel);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function findFirst(selectors) {
+        for (let s of selectors) {
+          if (!s) continue;
+          s = s.trim();
+          const el = q(s);
+          if (el) return el;
+        }
+        return null;
+      }
+
+      function sidebarHasMinimized(sidebarEl) {
+        if (!sidebarEl) return false;
+        return cfg.sidebarMinimizedClasses.some(c => sidebarEl.classList.contains(c));
+      }
+
+      function setWrapper(wrapperEl, minimized) {
+        if (!wrapperEl) return;
+        wrapperEl.classList.toggle(cfg.minimizedClassOnWrapper, !!minimized);
+        // if your navbar needs margin adjusted, add a selector for it (example uses .navbar-mock)
+        const navbar = q('.navbar-mock');
+        if (navbar) navbar.classList.toggle('minimized', !!minimized);
+        document.dispatchEvent(new CustomEvent('sidebarToggle', {
+          detail: {
+            minimized: !!minimized
+          }
+        }));
+      }
+
+      function observeSidebar(sidebarEl, wrapperEl) {
+        if (!sidebarEl || !wrapperEl || typeof MutationObserver === 'undefined') return null;
+        const obs = new MutationObserver(muts => {
+          muts.forEach(m => {
+            if (m.type === 'attributes' && m.attributeName === 'class') {
+              const min = sidebarHasMinimized(sidebarEl) || sidebarEl.classList.contains(cfg.sidebarToggleClass);
+              setWrapper(wrapperEl, min);
+            }
+          });
+        });
+        obs.observe(sidebarEl, {
+          attributes: true,
+          attributeFilter: ['class']
+        });
+        return obs;
+      }
+
+      function attachToggle(toggleEl, sidebarEl, wrapperEl) {
+        if (!toggleEl) return;
+        toggleEl.addEventListener('click', function() {
+          if (sidebarEl) sidebarEl.classList.toggle(cfg.sidebarToggleClass);
+          const minimized = sidebarHasMinimized(sidebarEl) || (sidebarEl && sidebarEl.classList.contains(cfg.sidebarToggleClass));
+          setWrapper(wrapperEl, minimized);
+          toggleEl.setAttribute('aria-pressed', String(!!minimized));
+        });
+      }
+
+      function initOnce() {
+        const wrapper = q(cfg.wrapperSelector);
+        if (!wrapper) {
+          console.warn('SidebarAutoResize: wrapper element not found:', cfg.wrapperSelector);
+          return;
         }
 
-        // Form validation and submission
-        const changePasswordForm = document.getElementById('changePasswordForm');
-        const superAdminDetailsForm = document.getElementById('superAdminDetailsForm');
-        const systemSettingsForm = document.getElementById('systemSettingsForm');
+        let sidebar = findFirst(cfg.sidebarSelectors);
+        let toggle = findFirst(cfg.toggleSelectors);
 
-        function clearValidationErrors(form) {
-            const formGroups = form.querySelectorAll('.form-group');
-            formGroups.forEach(group => {
-                group.classList.remove('invalid');
-            });
+        // short retry if includes load later
+        if (!sidebar || !toggle) {
+          let attempts = 0;
+          const maxAttempts = 40;
+          const retry = setInterval(() => {
+            attempts++;
+            sidebar = sidebar || findFirst(cfg.sidebarSelectors);
+            toggle = toggle || findFirst(cfg.toggleSelectors);
+            if (sidebar && toggle) {
+              clearInterval(retry);
+              _setup(wrapper, sidebar, toggle);
+            } else if (attempts >= maxAttempts) {
+              clearInterval(retry);
+              if (sidebar) _setup(wrapper, sidebar, toggle);
+              else console.warn('SidebarAutoResize: could not find sidebar or toggle within timeout.');
+            }
+          }, 100);
+        } else {
+          _setup(wrapper, sidebar, toggle);
         }
+      }
 
-        function validateChangePassword() {
-            const username = document.getElementById('username');
-            const currentPassword = document.getElementById('currentPassword');
-            const newPassword = document.getElementById('newPassword');
-            let isValid = true;
+      function _setup(wrapper, sidebar, toggle) {
+        const initialMin = sidebar ? (sidebarHasMinimized(sidebar) || sidebar.classList.contains(cfg.sidebarToggleClass)) : wrapper.classList.contains(cfg.minimizedClassOnWrapper);
+        setWrapper(wrapper, initialMin);
+        attachToggle(toggle, sidebar, wrapper);
+        observeSidebar(sidebar, wrapper);
 
-            clearValidationErrors(changePasswordForm);
-
-            if (!username.value.trim()) {
-                username.closest('.form-group').classList.add('invalid');
-                isValid = false;
+        // watch for late changes (defensive)
+        const bodyObs = new MutationObserver((muts, obs) => {
+          const s = findFirst(cfg.sidebarSelectors);
+          const t = findFirst(cfg.toggleSelectors);
+          if (s && t) {
+            obs.disconnect();
+            if (s !== sidebar || t !== toggle) {
+              sidebar = s;
+              toggle = t;
+              attachToggle(toggle, sidebar, wrapper);
+              observeSidebar(sidebar, wrapper);
+              setWrapper(wrapper, sidebarHasMinimized(sidebar) || sidebar.classList.contains(cfg.sidebarToggleClass));
             }
-            if (!currentPassword.value.trim()) {
-                currentPassword.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-            if (!newPassword.value.trim()) {
-                newPassword.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            } else if (newPassword.value.length < 8) {
-                newPassword.closest('.form-group').classList.add('invalid');
-                newPassword.nextElementSibling.textContent = 'New Password must be at least 8 characters';
-                isValid = false;
-            } else if (newPassword.value === currentPassword.value) {
-                newPassword.closest('.form-group').classList.add('invalid');
-                newPassword.nextElementSibling.textContent = 'New Password cannot be the same as Current Password';
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        function validateSuperAdminDetails() {
-            const fullName = document.getElementById('fullName');
-            const email = document.getElementById('email');
-            const phone = document.getElementById('phone');
-            let isValid = true;
-
-            clearValidationErrors(superAdminDetailsForm);
-
-            if (!fullName.value.trim()) {
-                fullName.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-            if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-                email.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-            if (!phone.value.trim() || !/^[0-9]{10}$/.test(phone.value)) {
-                phone.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        function validateSystemSettings() {
-            const systemName = document.getElementById('systemName');
-            const adminRole = document.getElementById('adminRole');
-            const systemAccess = document.getElementById('systemAccess');
-            let isValid = true;
-
-            clearValidationErrors(systemSettingsForm);
-
-            if (!systemName.value.trim()) {
-                systemName.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-            if (!adminRole.value) {
-                adminRole.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-            if (!systemAccess.value) {
-                systemAccess.closest('.form-group').classList.add('invalid');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        changePasswordForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateChangePassword()) {
-                alert('Password changed successfully!');
-                changePasswordForm.reset();
-            }
+          }
         });
-
-        superAdminDetailsForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateSuperAdminDetails()) {
-                alert('Super Admin details saved successfully!');
-                superAdminDetailsForm.reset();
-            }
+        bodyObs.observe(document.body, {
+          childList: true,
+          subtree: true
         });
+        setTimeout(() => bodyObs.disconnect(), 5000);
+      }
 
-        systemSettingsForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (validateSystemSettings()) {
-                alert('System settings saved successfully!');
-                systemSettingsForm.reset();
-            }
-        });
-
-        // Real-time validation
-        ['username', 'currentPassword', 'newPassword'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.closest('.form-group').classList.remove('invalid');
-                } else {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-                if (id === 'newPassword' && this.value.trim()) {
-                    if (this.value.length < 8) {
-                        this.closest('.form-group').classList.add('invalid');
-                        this.nextElementSibling.textContent = 'New Password must be at least 8 characters';
-                    } else if (this.value === document.getElementById('currentPassword').value) {
-                        this.closest('.form-group').classList.add('invalid');
-                        this.nextElementSibling.textContent = 'New Password cannot be the same as Current Password';
-                    }
-                }
-            });
-        });
-
-        ['fullName', 'email', 'phone'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.closest('.form-group').classList.remove('invalid');
-                } else {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-                if (id === 'email' && this.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-                if (id === 'phone' && this.value.trim() && !/^[0-9]{10}$/.test(this.value)) {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-            });
-        });
-
-        ['systemName'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.closest('.form-group').classList.remove('invalid');
-                } else {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-            });
-        });
-
-        ['adminRole', 'systemAccess'].forEach(id => {
-            document.getElementById(id).addEventListener('change', function() {
-                if (this.value) {
-                    this.closest('.form-group').classList.remove('invalid');
-                } else {
-                    this.closest('.form-group').classList.add('invalid');
-                }
-            });
-        });
-
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const navbar = document.querySelector('.navbar');
-            const contentWrapper = document.getElementById('contentWrapper');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        if (sidebar) {
-                            sidebar.classList.toggle('active');
-                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
-                        }
-                    } else {
-                        if (sidebar && contentWrapper) {
-                            const isMinimized = sidebar.classList.toggle('minimized');
-                            navbar.classList.toggle('sidebar-minimized', isMinimized);
-                            contentWrapper.classList.toggle('minimized', isMinimized);
-                        }
-                    }
-                });
-            }
-        });
-
-        // Initialize with change password tab active
-        showTab('changePassword');
-    </script>
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initOnce);
+      else initOnce();
+    })();
+  </script>
 </body>
+
 </html>
