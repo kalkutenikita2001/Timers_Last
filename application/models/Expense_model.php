@@ -72,4 +72,13 @@ class Expense_model extends CI_Model
         $this->db->order_by('expenses.date', 'DESC');
         return $this->db->get()->result();
     }
+    public function get_by_center($center_id)
+    {
+        $this->db->select('expenses.*, centers.name as center_name');
+        $this->db->from('expenses');
+        $this->db->join('centers', 'centers.id = expenses.center_id');
+        $this->db->where('expenses.center_id', $center_id);
+        $this->db->order_by('expenses.date', 'DESC');
+        return $this->db->get()->result();
+    }
 }
