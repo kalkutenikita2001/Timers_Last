@@ -996,7 +996,7 @@
       }
     });
   </script>
-  // Remove this entire block (it's causing the conflict)
+  
   <script>
     const ctx = document.getElementById('studentChart').getContext('2d');
     const studentChart = new Chart(ctx, {
