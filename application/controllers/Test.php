@@ -11,5 +11,5 @@ class Test extends CI_Controller
 }
 
 
-///Superadmin password hash for "superadmin":
-///Admin password hash for "password"
+///Superadmin password hash for "superadmin":  //superadmin
+///Admin password hash for "password"     //Admin@123
