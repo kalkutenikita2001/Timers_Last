@@ -216,4 +216,8 @@ public function get_students_ajax()
 
 
     
+    public function Leave()
+    {
+        $this->load->view('admin/Leave');
+    }
 } // end of Admin class
