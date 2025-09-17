@@ -89,8 +89,8 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="mb-0">Recently Added Students</h6>
               <div>
-                <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button>
+                <!-- <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal"><i class="bi bi-funnel"></i> Filter</button>
+                <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button> -->
               </div>
             </div>
 
