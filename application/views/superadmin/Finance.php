@@ -125,7 +125,7 @@ function money($n) { return number_format((float)$n, 2); }
       --glass: rgba(255,255,255,0.6);
     }
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;padding-top: 0px !important;color:#111;background:var(--bg);-webkit-font-smoothing:antialiased}
+    html,body{height:100%;margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;padding-top: 60px !important;color:#111;background:var(--bg);-webkit-font-smoothing:antialiased}
     .page{display:grid;grid-template-columns:250px 1fr;gap:18px;padding: 18px;;align-items:start;min-height:100vh}
     /* adapt to your app sidebar - toggle via .sidebar-collapsed on .page */
     .page.sidebar-collapsed{grid-template-columns:72px 1fr}

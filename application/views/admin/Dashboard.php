@@ -1,9 +1,12 @@
+<!-- application/views/admin/Dashboard.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard</title>
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"/>
@@ -28,6 +31,15 @@
     .status-complete{background:#d4edda;color:#155724}
     .status-pending{background:#f8d7da;color:#721c24}
     @media(max-width:992px){.stat-grid{grid-template-columns:repeat(2,1fr)}.dashboard{margin-left:0}}
+
+    /* New styles for scrollable students list and search */
+    .students-table-container { max-height: 360px; overflow:auto; background:#fff; border-radius:8px; padding:8px; }
+    .students-table thead th { position: sticky; top: 0; background:#333; color:#fff; z-index: 2; }
+    .loading-row { text-align:center; padding:18px; color:#666; }
+    .search-controls .input-group .form-control { height:36px; }
+    .students-info { font-size:13px; color:#666; }
+    /* Ensure chart area has a height so Chart.js can render nicely */
+    #studentChart { width:100% !important; height:200px !important; }
   </style>
 </head>
 <body>
@@ -85,14 +97,32 @@
                 <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button>
               </div>
             </div>
-            <div class="table-responsive">
-              <table class="table students-table table-striped">
+
+            <!-- Search + info + load more -->
+            <div class="d-flex align-items-center justify-content-between mb-2 search-controls">
+              <div class="input-group w-50">
+                <input id="studentSearch" class="form-control form-control-sm" placeholder="Search by name or contact..." aria-label="Search students">
+                <button id="studentSearchBtn" class="btn btn-sm btn-dark" type="button"><i class="bi bi-search"></i></button>
+                <button id="studentClearBtn" class="btn btn-sm btn-secondary" type="button">Clear</button>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <small id="studentsInfo" class="students-info">Loading…</small>
+                <button id="loadMoreBtn" class="btn btn-sm btn-outline-primary">Load more</button>
+              </div>
+            </div>
+
+            <!-- Scrollable students table -->
+            <div class="students-table-container">
+              <table class="table students-table table-striped mb-0">
                 <thead>
                   <tr>
                     <th>Name</th><th>Contact</th><th>Center</th><th>Batch</th><th>Level</th><th>Category</th><th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="studentsTableBody"></tbody>
+                <tbody id="studentsTableBody">
+                  <!-- initial fallback (will be replaced by AJAX) -->
+                  <tr><td colspan="7" class="loading-row">Loading students…</td></tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -119,9 +149,11 @@
               <h6 class="mb-2">Total Students</h6>
               <canvas id="studentChart" style="max-height:200px"></canvas>
               <div class="mt-2">
-                <small><span class="me-3"><i class="bi bi-square-fill" style="color:#ff6b6b"></i> Beginner (30%)</span>
-                <span class="me-3"><i class="bi bi-square-fill" style="color:#ffeb3b"></i> Intermediate (40%)</span>
-                <span><i class="bi bi-square-fill" style="color:#4ecdc4"></i> Advanced (30%)</span></small>
+                <small>
+                  <span class="me-3"><i class="bi bi-square-fill" style="color:#ff6b6b"></i> <span id="lbl-beginner">Beginner (0%)</span></span>
+                  <span class="me-3"><i class="bi bi-square-fill" style="color:#ffeb3b"></i> <span id="lbl-intermediate">Intermediate (0%)</span></span>
+                  <span><i class="bi bi-square-fill" style="color:#4ecdc4"></i> <span id="lbl-advanced">Advanced (0%)</span></span>
+                </small>
               </div>
             </div>
           </div>
@@ -183,12 +215,10 @@
   </div> <!-- /dashboard -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // minimal data & functions (trimmed)
+    // ---------- existing minimal data & functions (trimmed) ----------
     const studentData = {
-      jane:{name:'Jane Doe',contact:'9876543210',center:'ABC',batch:'B1',level:'Intermediate',category:'Complete'},
-      john:{name:'John Smith',contact:'9876543211',center:'XYZ',batch:'B2',level:'Advanced',category:'Pending'},
-      sarah:{name:'Sarah Wilson',contact:'9876543212',center:'PQR',batch:'B3',level:'Beginner',category:'Complete'}
     };
     const attendanceData = {...studentData};
     function renderTables(){
@@ -241,7 +271,7 @@
     }
     function viewAttendance(id){ const r=attendanceData[id]; if(!r) return Swal.fire('Not found'); Swal.fire({title:'Attendance',html:`<p>${r.name}</p><p>${r.batch} • ${r.level}</p>`}); }
 
-    // form handlers
+    // form handlers (demo behavior left intact)
     document.getElementById('addStudentForm').addEventListener('submit',function(e){
       e.preventDefault();
       const name=document.getElementById('addStudentName').value.trim(); if(!name) return;
@@ -260,43 +290,286 @@
 
     // simple helpers & exports
     function handleStat(t){ Swal.fire({icon:'info',title:`Clicked ${t}`}) }
-    function exportToExcel(){ const arr=Object.values(studentData).map(s=>({Name:s.name,Contact:s.contact,Center:s.center,Batch:s.batch,Level:s.level,Category:s.category})); const ws=XLSX.utils.json_to_sheet(arr); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Students'); XLSX.writeFile(wb,'students_data.xlsx'); }
-    function exportToPDF(){ const { jsPDF } = window.jspdf; const doc=new jsPDF(); doc.text('Students Data',14,18); const body=Object.values(studentData).map(s=>[s.name,s.contact,s.center,s.batch,s.level,s.category]); doc.autoTable({head:[['Name','Contact','Center','Batch','Level','Category']],body,startY:24}); doc.save('students_data.pdf'); }
 
-    // chart
-    function initChart(){
-      const ctx=document.getElementById('studentChart'); new Chart(ctx,{type:'doughnut',data:{labels:['Beginner','Intermediate','Advanced'],datasets:[{data:[30,40,30],backgroundColor:['#ff6b6b','#ffeb3b','#4ecdc4'],cutout:'70%'}]},options:{plugins:{legend:{display:false}}}});
+    // ===== Export functions: export currently visible "Recently Added Students" table =====
+    function exportToExcel(){
+      const rows = [];
+      $('#studentsTableBody tr').each(function(){
+        const cols = $(this).find('td');
+        if(cols.length){
+          rows.push({
+            Name: $(cols[0]).text().trim(),
+            Contact: $(cols[1]).text().trim(),
+            Center: $(cols[2]).text().trim(),
+            Batch: $(cols[3]).text().trim(),
+            Level: $(cols[4]).text().trim(),
+            Category: $(cols[5]).text().trim()
+          });
+        }
+      });
+      if(rows.length === 0){ Swal.fire('No data to export'); return; }
+
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Recently Added');
+      XLSX.writeFile(wb, 'recent_students.xlsx');
     }
 
-    // initialize (placeholder center/batch load)
-    $(function(){ $('#addStudentCenter').append('<option>Downtown Academy</option>'); $('#addStudentBatch').append('<option>B1</option><option>B2</option>'); renderTables(); initChart(); });
-  
-  
-  
-  (function fetchCenterStats(){
-    $.ajax({
-      url: '/timersacademy-1/index.php/admin/get_center_stats', // change if your base differs
-      method: 'GET',
-      dataType: 'json'
-    }).done(function(res){
-      console.log('center stats:', res);
-      if(res && res.success){
-        $('#centerName').text(res.center_name);
-        $('#totalCount').text(res.total_students);
-        if(typeof res.active_students !== 'undefined') $('#activeCount').text(res.active_students);
-        if(typeof res.deactive_students !== 'undefined') $('#deactiveCount').text(res.deactive_students);
+    function exportToPDF(){
+      const rows = [];
+      $('#studentsTableBody tr').each(function(){
+        const cols = $(this).find('td');
+        if(cols.length){
+          rows.push([
+            $(cols[0]).text().trim(),
+            $(cols[1]).text().trim(),
+            $(cols[2]).text().trim(),
+            $(cols[3]).text().trim(),
+            $(cols[4]).text().trim(),
+            $(cols[5]).text().trim()
+          ]);
+        }
+      });
+      if(rows.length === 0){ Swal.fire('No data to export'); return; }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text('Recently Added Students', 14, 18);
+      doc.autoTable({
+        head: [['Name','Contact','Center','Batch','Level','Category']],
+        body: rows,
+        startY: 24,
+        styles: { fontSize: 10 }
+      });
+      doc.save('recent_students.pdf');
+    }
+
+    // chart
+    // live-data initChart - replaces static chart initialization
+    let __studentLevelChart = null;
+
+    function initChart() {
+      const canvas = document.getElementById('studentChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // AJAX to fetch level counts from server
+      $.ajax({
+        url: '/timersacademy-1/index.php/admin/get_student_levels', // <-- adjust if your base path differs
+        method: 'GET',
+        dataType: 'json'
+      }).done(function(res){
+        if(!res || !res.success) {
+          console.warn('Could not load level counts:', res && res.message ? res.message : res);
+          updateChartAndLabels([0,0,0], ctx);
+          return;
+        }
+
+        const levels = res.levels || {};
+        const beginner = parseInt(levels['Beginner'] || levels['beginner'] || 0, 10);
+        const intermediate = parseInt(levels['Intermediate'] || levels['intermediate'] || 0, 10);
+        const advanced = parseInt(levels['Advanced'] || levels['advanced'] || 0, 10);
+
+        updateChartAndLabels([beginner, intermediate, advanced], ctx);
+      }).fail(function(err){
+        console.error('Failed to fetch student level counts:', err);
+        updateChartAndLabels([0,0,0], ctx);
+      });
+    }
+
+    // helper that creates or updates the Chart.js doughnut and updates legend text (percentages)
+    function updateChartAndLabels(dataArr, ctx) {
+      const total = (dataArr[0] || 0) + (dataArr[1] || 0) + (dataArr[2] || 0);
+
+      function pct(n) { return total ? Math.round((n / total) * 100) : 0; }
+
+      // update legend labels in DOM
+      $('#lbl-beginner').text(`Beginner (${pct(dataArr[0])}%)`);
+      $('#lbl-intermediate').text(`Intermediate (${pct(dataArr[1])}%)`);
+      $('#lbl-advanced').text(`Advanced (${pct(dataArr[2])}%)`);
+
+      const chartData = {
+        labels: ['Beginner','Intermediate','Advanced'],
+        datasets: [{
+          data: dataArr,
+          backgroundColor: ['#ff6b6b','#ffeb3b','#4ecdc4'],
+          cutout: '70%'
+        }]
+      };
+
+      const opts = {
+        plugins: { legend: { display: false } },
+        maintainAspectRatio: false,
+        responsive: true,
+        animation: { duration: 400 }
+      };
+
+      if (__studentLevelChart) {
+        __studentLevelChart.data = chartData;
+        __studentLevelChart.options = opts;
+        __studentLevelChart.update();
       } else {
-        console.warn('Center stats not available:', res && res.message ? res.message : res);
+        __studentLevelChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: chartData,
+          options: opts
+        });
       }
-    }).fail(function(xhr){
-      console.error('Request failed:', xhr.statusText);
-    });
-  })();
-</script>
+    }
 
+    // ---------- New: AJAX for center stats and paginated students ----------
+    (function initDynamic() {
+      // change this base if your app doesn't use /timersacademy-1/index.php/
+      const BASE_STATS_URL = '/timersacademy-1/index.php/admin/get_center_stats';
+      const BASE_STUDENTS_URL = '/timersacademy-1/index.php/admin/get_students_ajax';
 
-  
-  
+      // fetch center stats and update UI
+      function fetchCenterStats() {
+        $.ajax({
+          url: BASE_STATS_URL,
+          method: 'GET',
+          dataType: 'json'
+        }).done(function(res){
+          console.log('center stats:', res);
+          if(res && res.success){
+            $('#centerName').text(res.center_name);
+            $('#totalCount').text(res.total_students);
+            if(typeof res.active_students !== 'undefined') $('#activeCount').text(res.active_students);
+            if(typeof res.deactive_students !== 'undefined') $('#deactiveCount').text(res.deactive_students);
+          } else {
+            console.warn('Could not load center stats:', res && res.message ? res.message : res);
+          }
+        }).fail(function(xhr){
+          console.error('Request failed:', xhr.statusText);
+        });
+      }
+
+      // Students pagination + search + infinite scroll
+      const perPage = 10;
+      let page = 1;
+      let loading = false;
+      let noMore = false;
+      let currentSearch = '';
+
+      const $container = $('.students-table-container');
+      const $tbody = $('#studentsTableBody');
+      const $info = $('#studentsInfo');
+      const $loadMore = $('#loadMoreBtn');
+      const $searchInp = $('#studentSearch');
+      const $searchBtn = $('#studentSearchBtn');
+      const $clearBtn = $('#studentClearBtn');
+
+      function esc(t){ return $('<div/>').text(t||'').html(); }
+
+      function renderStudents(rows, append = true){
+        if(!append) $tbody.empty();
+        if(rows.length === 0 && !append){
+          $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+          return;
+        }
+        const html = rows.map(s => {
+          const category = s.category || s.status || '';
+          const badgeClass = category === 'Complete' ? 'status-complete' : 'status-pending';
+          return `<tr>
+            <td>${esc(s.name)}</td>
+            <td>${esc(s.contact)}</td>
+            <td>${esc(s.center)}</td>
+            <td>${esc(s.batch)}</td>
+            <td>${esc(s.level)}</td>
+            <td><span class="status-badge ${badgeClass}">${esc(category)}</span></td>
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-secondary" onclick="viewStudent('${s.id}')" data-bs-toggle="modal" data-bs-target="#viewStudentModal"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-sm btn-outline-success" onclick="editStudent('${s.id}')" data-bs-toggle="modal" data-bs-target="#editStudentModal"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent('${s.id}')"><i class="bi bi-trash"></i></button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+        $tbody.append(html);
+      }
+
+      function fetchPage(p, opts = {append:true}){
+        if(loading || noMore) return;
+        loading = true;
+        $info.text('Loading...');
+        $loadMore.prop('disabled', true).text('Loading...');
+
+        $.ajax({
+          url: BASE_STUDENTS_URL,
+          method: 'GET',
+          dataType: 'json',
+          data: { page: p, per_page: perPage, search: currentSearch }
+        }).done(function(res){
+          if(!res || !res.success){
+            if(p===1) $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+            $info.text(res && res.message ? res.message : 'Error loading');
+            noMore = true;
+            return;
+          }
+          const total = res.total || 0;
+          const students = res.students || [];
+          const showed = (p-1)*perPage + students.length;
+          renderStudents(students, opts.append);
+
+          // update flags
+          if(showed >= total) { noMore = true; $loadMore.hide(); $info.text(`${showed} of ${total}`); }
+          else { noMore = false; $loadMore.show(); $info.text(`${showed} of ${total}`); }
+
+          if(p === 1 && students.length === 0){
+            $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>');
+          }
+        }).fail(function(){
+          $info.text('Request failed');
+        }).always(function(){
+          loading = false;
+          $loadMore.prop('disabled', false).text('Load more');
+        });
+      }
+
+      function resetAndLoad(){
+        page = 1; noMore = false; $tbody.empty();
+        fetchPage(page, {append:true});
+      }
+
+      $loadMore.on('click', function(){
+        if(noMore || loading) return;
+        page += 1;
+        fetchPage(page, {append:true});
+      });
+
+      $container.on('scroll', function(){
+        const el = this;
+        if(noMore || loading) return;
+        if (el.scrollHeight - el.scrollTop - el.clientHeight < 200) {
+          page += 1;
+          fetchPage(page, {append:true});
+        }
+      });
+
+      // search debounce
+      let debounceTimer = null;
+      function doSearch(q){
+        currentSearch = q || '';
+        page = 1; noMore = false; $tbody.empty();
+        fetchPage(page, {append:true});
+      }
+      function debounceSearch(q){
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(()=> doSearch(q), 300);
+      }
+
+      $searchInp.on('input', function(){ debounceSearch($(this).val()); });
+      $searchBtn.on('click', function(){ doSearch($searchInp.val()); });
+      $clearBtn.on('click', function(){ $searchInp.val(''); doSearch(''); });
+
+      // initial fetches
+      fetchCenterStats();
+      resetAndLoad();
+      initChart();
+      renderTables(); // keeps demo data for attendance & exports working
+
+    })();
   </script>
 </body>
 </html>

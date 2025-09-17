@@ -29,4 +29,67 @@ class Student_model extends CI_Model
         $this->db->where('center_id', $center_id);
         return (int) $this->db->count_all_results('students');
     }
+
+    /**
+ * Paginated fetch for students of a center with optional search.
+ *
+ * @param int $center_id
+ * @param int $limit
+ * @param int $offset
+ * @param string|null $search  // searches name, contact, parent_name
+ * @return array
+ */
+public function get_students_by_center_paginated($center_id, $limit = 10, $offset = 0, $search = null)
+{
+    if (empty($center_id)) return [];
+
+    $this->db->from('students');
+    $this->db->where('center_id', (int)$center_id);
+
+    if (!empty($search)) {
+        $s = trim($search);
+        $this->db->group_start();
+        $this->db->like('name', $s);
+        $this->db->or_like('contact', $s);
+        $this->db->or_like('parent_name', $s);
+        $this->db->group_end();
+    }
+
+    $this->db->order_by('created_at', 'DESC'); // latest first
+    if ((int)$limit > 0) $this->db->limit((int)$limit, (int)$offset);
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+/**
+ * Count students for a center with optional search filter.
+ *
+ * @param int $center_id
+ * @param string|null $search
+ * @return int
+ */
+public function count_students_by_center($center_id, $search = null)
+{
+    if (empty($center_id)) return 0;
+
+    $this->db->from('students');
+    $this->db->where('center_id', (int)$center_id);
+
+    if (!empty($search)) {
+        $s = trim($search);
+        $this->db->group_start();
+        $this->db->like('name', $s);
+        $this->db->or_like('contact', $s);
+        $this->db->or_like('parent_name', $s);
+        $this->db->group_end();
+    }
+
+    return (int)$this->db->count_all_results();
+}
+
+
+
+
+
 }
