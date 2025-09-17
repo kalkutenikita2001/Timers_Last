@@ -89,5 +89,5 @@ $route['superadmin/view_center_details'] = 'superadmin/view_center_details';
 
 $route['admin/get_center_stats'] = 'admin/get_center_stats';
 
-$route['admin/Leave'] = 'Leave';        // Admin URL
-$route['superadmin/Leave'] = 'Leave';   // Superadmin URL
+$route['admin/Leave'] = 'Leave/index';        // Admin URL
+$route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL

@@ -96,9 +96,9 @@
 <body>
 
     <!-- Sidebar -->
-    <?php $this->load->view('admin/Include/Sidebar') ?>
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('admin/Include/Navbar') ?>
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
 
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid">
@@ -111,9 +111,9 @@
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
                         <div>
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
+                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
-                            </button>
+                            </button> -->
                             <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
                                 <i class="fas fa-plus mr-1"></i> Apply Leave
                             </button>
@@ -125,7 +125,8 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Applicant Name</th>
+                                    <th>Center Name</th>
                                     <th>Role</th>
                                     <th>Leave Type</th>
                                     <th>From Date</th>
@@ -138,6 +139,7 @@
                                 <?php if (!empty($leaves)): ?>
                                     <?php foreach ($leaves as $lv): ?>
                                         <tr>
+                                            <td><?= $lv->applicant_name ?></td>
                                             <td><?= $lv->user_name ?></td>
                                             <td><?= $lv->role ?></td>
                                             <td><?= $lv->leave_type ?></td>
@@ -192,8 +194,13 @@
                         <div class="row">
                             <!-- Admin ID -->
                             <input type="hidden" name="user_id" value="<?= $this->session->userdata('id'); ?>">
+                            <div class="col-md-12 mb-3">
+                                <label>Applicant Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter applicant name" required>
+                                <div class="invalid-feedback">Applicant name is required.</div>
+                            </div>
 
-                            <!-- Designation -->
+
                             <!-- Designation -->
                             <div class="col-md-6 mb-3">
                                 <label>Designation</label>
@@ -269,7 +276,7 @@
     </div>
 
     <!-- Filter Modal -->
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <!-- <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg border-0 rounded-lg">
                 <div class="modal-header bg-danger text-white">
@@ -311,7 +318,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
