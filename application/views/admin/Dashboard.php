@@ -213,9 +213,7 @@
   <script>
     // ---------- existing minimal data & functions (trimmed) ----------
     const studentData = {
-      jane:{name:'Jane Doe',contact:'9876543210',center:'ABC',batch:'B1',level:'Intermediate',category:'Complete'},
-      john:{name:'John Smith',contact:'9876543211',center:'XYZ',batch:'B2',level:'Advanced',category:'Pending'},
-      sarah:{name:'Sarah Wilson',contact:'9876543212',center:'PQR',batch:'B3',level:'Beginner',category:'Complete'}
+     
     };
     const attendanceData = {...studentData};
     function renderTables(){
