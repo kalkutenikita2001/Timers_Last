@@ -111,9 +111,9 @@
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
                         <div>
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
+                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
-                            </button>
+                            </button> -->
                             <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
                                 <i class="fas fa-plus mr-1"></i> Apply Leave
                             </button>
@@ -189,7 +189,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('admin/add_leave') ?>" id="addLeaveForm" novalidate>
+                <form method="post" action="<?= base_url('Leave/add_leave') ?>" id="addLeaveForm" novalidate>
                     <div class="modal-body">
                         <div class="row">
                             <!-- Admin ID -->
@@ -276,7 +276,7 @@
     </div>
 
     <!-- Filter Modal -->
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <!-- <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg border-0 rounded-lg">
                 <div class="modal-header bg-danger text-white">
@@ -318,7 +318,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

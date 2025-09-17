@@ -28,7 +28,7 @@
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Attendance'; ?>">
             <i class="bi bi-check-circle"></i><span>Attendance</span>
         </a> -->
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Leave'; ?>">
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url() . 'Leave'; ?>">
             <i class="bi bi-calendar-x"></i><span>Leave</span>
         </a>
         <!-- <a class="nav-link <?php echo ($this->uri->uri_string() == 'admin/add-on-facilities' || $this->router->fetch_class() == 'Add_on_facilities') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/add-on-facilities'; ?>">
