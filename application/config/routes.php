@@ -88,3 +88,6 @@ $route['admin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_p
 $route['superadmin/view_center_details'] = 'superadmin/view_center_details';
 
 $route['admin/get_center_stats'] = 'admin/get_center_stats';
+
+$route['Admin/Leave'] = 'Leave/index';        // Admin URL
+$route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL
