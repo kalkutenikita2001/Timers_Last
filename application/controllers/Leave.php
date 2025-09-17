@@ -19,12 +19,13 @@ class Leave extends CI_Controller
     // Leave list
     public function index()
     {
-        $user_role = $this->session->userdata('role'); // admin or superadmin
+        $user_role = $this->session->userdata('role');
+        $center_name = $this->session->userdata('username'); // center name stored in session
 
-        // Fetch leaves based on role
-        $data['leaves'] = $this->Leave_model->get_leaves($user_role);
+        // Fetch leaves
+        $data['leaves'] = $this->Leave_model->get_leaves($user_role, $center_name);
 
-        // Load views based on role
+        // Load views
         if ($user_role == 'admin') {
             $this->load->view('admin/Leave', $data);
         } elseif ($user_role == 'superadmin') {

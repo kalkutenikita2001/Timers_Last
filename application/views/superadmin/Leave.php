@@ -114,9 +114,9 @@
                             <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
                             </button> -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
+                            <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
                                 <i class="fas fa-plus mr-1"></i> Apply Leave
-                            </button>
+                            </button> -->
                         </div>
                     </div>
 
