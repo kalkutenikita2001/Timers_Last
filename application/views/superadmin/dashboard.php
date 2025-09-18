@@ -7,7 +7,7 @@
   <title>Dashboard</title>
   <!-- <link rel="icon" type="image/x-icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>"> -->
   <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
-
+  
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
