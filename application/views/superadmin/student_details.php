@@ -1669,121 +1669,209 @@
         <!-- </div> -->
 
         <!-- Edit Student Modal -->
-        <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editStudentModalLabel">
-                            <i class="fas fa-edit me-2"></i>Edit Student Details
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editStudentForm">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="studentName" class="form-label">Student Name</label>
-                                        <input type="text" class="form-control" id="studentName" value="Rahul Sharma" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="parentName" class="form-label">Parent Name</label>
-                                        <input type="text" class="form-control" id="parentName" value="Rajesh Sharma" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="emailAddress" class="form-label">Email Address</label>
-                                        <input type="email" class="form-control" id="emailAddress" value="rahul.sharma@example.com" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="contactNumber" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contactNumber" value="+91 98765 43210" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                        <input type="date" class="form-control" id="dateOfBirth" value="2005-03-15" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="emergencyContact" class="form-label">Emergency Contact</label>
-                                        <input type="tel" class="form-control" id="emergencyContact" value="+91 98765 43211" required>
-                                    </div>
-                                </div>
-                            </div>
-
+<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStudentModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit Student Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editStudentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" rows="3" required>123, Main Street, Mumbai, Maharashtra - 400001</textarea>
+                                <label for="studentName" class="form-label">Student Name</label>
+                                <input type="text" class="form-control" id="studentName" placeholder="Enter student name" required>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="batchCenter" class="form-label">Center</label>
-                                        <select class="form-control" id="batchCenter" required>
-                                            <option value="mumbai-central" selected>Mumbai Central Branch</option>
-                                            <option value="mumbai-west">Mumbai West Branch</option>
-                                            <option value="mumbai-south">Mumbai South Branch</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="batchTime" class="form-label">Batch</label>
-                                        <select class="form-control" id="batchTime" required>
-                                            <option value="morning-a" selected>Morning Batch - Group A</option>
-                                            <option value="morning-b">Morning Batch - Group B</option>
-                                            <option value="evening-a">Evening Batch - Group A</option>
-                                            <option value="evening-b">Evening Batch - Group B</option>
-                                        </select>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="parentName" class="form-label">Parent Name</label>
+                                <input type="text" class="form-control" id="parentName" placeholder="Enter parent name" required>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="studentStatus" class="form-label">Status</label>
-                                        <select class="form-control" id="studentStatus" required>
-                                            <option value="active" selected>Active</option>
-                                            <option value="inactive">Inactive</option>
-                                            <option value="pending">Pending</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="courseFees" class="form-label">Course Fees</label>
-                                        <input type="number" class="form-control" id="courseFees" value="8000" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-save" onclick="saveStudentChanges()">
-                            <i class="fas fa-save me-2"></i>Save Changes
-                        </button>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="emailAddress" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contactNumber" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="contactNumber" placeholder="Enter contact number" required>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dateOfBirth" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="emergencyContact" class="form-label">Emergency Contact</label>
+                                <input type="tel" class="form-control" id="emergencyContact" placeholder="Enter emergency contact" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" rows="3" placeholder="Enter address" required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="batchCenter" class="form-label">Center</label>
+                                <select class="form-control" id="batchCenter" required>
+                                    <option value="" disabled selected>Select Center</option>
+                                    <option value="mumbai-central">Mumbai Central Branch</option>
+                                    <option value="mumbai-west">Mumbai West Branch</option>
+                                    <option value="mumbai-south">Mumbai South Branch</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="batchTime" class="form-label">Batch</label>
+                                <select class="form-control" id="batchTime" required>
+                                    <option value="" disabled selected>Select Batch</option>
+                                    <option value="morning-a">Morning Batch - Group A</option>
+                                    <option value="morning-b">Morning Batch - Group B</option>
+                                    <option value="evening-a">Evening Batch - Group A</option>
+                                    <option value="evening-b">Evening Batch - Group B</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="studentStatus" class="form-label">Status</label>
+                                <select class="form-control" id="studentStatus" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="courseFees" class="form-label">Course Fees</label>
+                                <input type="number" class="form-control" id="courseFees" placeholder="Enter course fees" min="0" step="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="admissionDate" class="form-label">Admission Date</label>
+                                <input type="date" class="form-control" id="admissionDate" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="joiningDate" class="form-label">Joining Date</label>
+                                <input type="date" class="form-control" id="joiningDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="duration" class="form-label">Duration (Months)</label>
+                                <input type="number" class="form-control" id="duration" placeholder="Enter duration in months" min="1" step="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="progressCategory" class="form-label">Progress Category</label>
+                                <select class="form-control" id="progressCategory" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="new">New Admission</option>
+                                    <option value="renewal">Renewal</option>
+                                    <option value="re">Re-Admission</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method</label>
+                                <select class="form-control" id="paymentMethod" required>
+                                    <option value="" disabled selected>Select Payment Method</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="card">Card</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lastAttendance" class="form-label">Last Attendance</label>
+                                <input type="date" class="form-control" id="lastAttendance" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="courseDuration" class="form-label">Session Duration (Hours)</label>
+                                <input type="number" class="form-control" id="courseDuration" placeholder="Enter session duration" min="0.5" step="0.5" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="additionalFees" class="form-label">Additional Fees</label>
+                                <input type="number" class="form-control" id="additionalFees" placeholder="Enter additional fees" min="0" step="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="paidAmount" class="form-label">Amount Paid</label>
+                                <input type="number" class="form-control" id="paidAmount" placeholder="Enter amount paid" min="0" step="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="remainingAmount" class="form-label">Remaining Amount</label>
+                                <input type="number" class="form-control" id="remainingAmount" placeholder="Enter remaining amount" min="0" step="1" required readonly>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-save" onclick="saveStudentChanges()">
+                    <i class="fas fa-save me-2"></i>Save Changes
+                </button>
             </div>
         </div>
-
+    </div>
+</div>
         <!-- Bootstrap & jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1994,6 +2082,13 @@
                 updateNavigationButtons();
             });
         </script>
+
+
+
+
+
+
+        
 
         <style>
             /* Navigation Buttons */
