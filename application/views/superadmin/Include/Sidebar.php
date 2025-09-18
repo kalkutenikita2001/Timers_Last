@@ -182,7 +182,7 @@
     <!-- Sidebar Component -->
     <div class="sidebar" id="sidebar">
         <div class="logo">
-            <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
+            <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
         </div>
 
         <nav class="nav flex-column">
