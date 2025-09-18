@@ -19,7 +19,7 @@ class Auth extends CI_Controller
             if ($role === 'superadmin') {
                 redirect('superadmin/dashboard');
             } else {
-                redirect('superadmin/CenterManagement2');
+                redirect('admin/dashboard');
             }
         }
         $this->load->view('admin/adminlogin');

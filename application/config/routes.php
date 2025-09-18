@@ -73,10 +73,10 @@ $route['EvenetList'] = 'admission/EvenetList';
 $route['View_Re_Admission'] = 'admission/Report';
 
 // base module
-$route['adminlogin'] = 'base/adminlogin';
-$route['superadminlogin'] = 'base/superadminlogin';
+// $route['adminlogin'] = 'base/adminlogin';
+// $route['superadminlogin'] = 'base/superadminlogin';
 
-// SuperAdmin
+// SuperAdmin                                                                                               
 // Center Management
 $route['center'] = 'center/index';
 $route['center/save'] = 'center/save';
@@ -95,3 +95,6 @@ $route['admin/get_center_stats'] = 'admin/get_center_stats';
 
 $route['admin/Leave'] = 'Leave/index';        // Admin URL
 $route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL
+
+
+$route['superadmin/finance'] = 'finance';
