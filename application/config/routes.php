@@ -49,11 +49,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'Auth/login';
 $route['translate_uri_dashes'] = FALSE;
 $route['404_override'] = '';
 
-//SuperAdmin
+//superadmin
+
+
+
+$route['dashboard'] = 'DashboardController/dashboard';
 $route['dashboard'] = 'Superadmin/dashboard';
 $route['Sidebar'] = 'Superadmin/Include/Sidebar';
 $route['Navbar'] = 'Superadmin/Include/Navbar';
@@ -88,3 +92,6 @@ $route['admin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_p
 $route['superadmin/view_center_details'] = 'superadmin/view_center_details';
 
 $route['admin/get_center_stats'] = 'admin/get_center_stats';
+
+$route['admin/Leave'] = 'Leave/index';        // Admin URL
+$route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL

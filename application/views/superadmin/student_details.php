@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Details - Super Admin</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+     <!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -607,6 +608,14 @@
                 margin-top: 5px;
             }
         }
+       .modal {
+  z-index: 2000; /* higher than navbar/sidebar */
+}
+.modal-backdrop {
+  z-index: 1999;
+}
+
+
     </style>
 </head>
 
@@ -1670,213 +1679,159 @@
 
         <!-- Edit Student Modal -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editStudentModalLabel">
-                    <i class="fas fa-edit me-2"></i>Edit Student Details
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content shadow-lg rounded-3">
+      
+      <!-- Header -->
+      <div class="modal-header bg-gradient bg-primary text-white">
+        <h5 class="modal-title" id="editStudentModalLabel">
+          <i class="fas fa-user-edit me-2"></i> Edit Student Details
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form id="editStudentForm" novalidate>
+          <input type="hidden" id="studentId">
+
+          <!-- Student & Parent -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Student Name</label>
+              <input type="text" class="form-control" id="studentName" placeholder="Enter full name" required>
+              <div class="invalid-feedback">Please enter student name.</div>
             </div>
-            <div class="modal-body">
-                <form id="editStudentForm">
-                    <input type="hidden" id="studentId">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="studentName" class="form-label">Student Name</label>
-                                <input type="text" class="form-control" id="studentName" placeholder="Enter student name" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="parentName" class="form-label">Parent Name</label>
-                                <input type="text" class="form-control" id="parentName" placeholder="Enter parent name" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="emailAddress" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="contactNumber" class="form-label">Contact Number</label>
-                                <input type="tel" class="form-control" id="contactNumber" placeholder="Enter contact number" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="dateOfBirth" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="emergencyContact" class="form-label">Emergency Contact</label>
-                                <input type="tel" class="form-control" id="emergencyContact" placeholder="Enter emergency contact" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" rows="3" placeholder="Enter address" required></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="batchCenter" class="form-label">Center</label>
-                                <select class="form-control" id="batchCenter" required>
-                                    <option value="" disabled selected>Select Center</option>
-                                    <option value="mumbai-central">Mumbai Central Branch</option>
-                                    <option value="mumbai-west">Mumbai West Branch</option>
-                                    <option value="mumbai-south">Mumbai South Branch</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="batchTime" class="form-label">Batch</label>
-                                <select class="form-control" id="batchTime" required>
-                                    <option value="" disabled selected>Select Batch</option>
-                                    <option value="morning-a">Morning Batch - Group A</option>
-                                    <option value="morning-b">Morning Batch - Group B</option>
-                                    <option value="evening-a">Evening Batch - Group A</option>
-                                    <option value="evening-b">Evening Batch - Group B</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="studentStatus" class="form-label">Status</label>
-                                <select class="form-control" id="studentStatus" required>
-                                    <option value="" disabled selected>Select Status</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                    <option value="pending">Pending</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="courseFees" class="form-label">Course Fees</label>
-                                <input type="number" class="form-control" id="courseFees" placeholder="Enter course fees" min="0" step="1" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="admissionDate" class="form-label">Admission Date</label>
-                                <input type="date" class="form-control" id="admissionDate" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="joiningDate" class="form-label">Joining Date</label>
-                                <input type="date" class="form-control" id="joiningDate" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="duration" class="form-label">Duration (Months)</label>
-                                <input type="number" class="form-control" id="duration" placeholder="Enter duration in months" min="1" step="1" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="progressCategory" class="form-label">Progress Category</label>
-                                <select class="form-control" id="progressCategory" required>
-                                    <option value="" disabled selected>Select Category</option>
-                                    <option value="new">New Admission</option>
-                                    <option value="renewal">Renewal</option>
-                                    <option value="re">Re-Admission</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="paymentMethod" class="form-label">Payment Method</label>
-                                <select class="form-control" id="paymentMethod" required>
-                                    <option value="" disabled selected>Select Payment Method</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="card">Card</option>
-                                    <option value="online">Online</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="lastAttendance" class="form-label">Last Attendance</label>
-                                <input type="date" class="form-control" id="lastAttendance" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="courseDuration" class="form-label">Session Duration (Hours)</label>
-                                <input type="number" class="form-control" id="courseDuration" placeholder="Enter session duration" min="0.5" step="0.5" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="additionalFees" class="form-label">Additional Fees</label>
-                                <input type="number" class="form-control" id="additionalFees" placeholder="Enter additional fees" min="0" step="1" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="paidAmount" class="form-label">Amount Paid</label>
-                                <input type="number" class="form-control" id="paidAmount" placeholder="Enter amount paid" min="0" step="1" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="remainingAmount" class="form-label">Remaining Amount</label>
-                                <input type="number" class="form-control" id="remainingAmount" placeholder="Enter remaining amount" min="0" step="1" required readonly>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <div class="col-md-6">
+              <label class="form-label">Parent Name</label>
+              <input type="text" class="form-control" id="parentName" placeholder="Enter parent/guardian name" required>
+              <div class="invalid-feedback">Please enter parent name.</div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn-save" onclick="saveStudentChanges()">
-                    <i class="fas fa-save me-2"></i>Save Changes
-                </button>
+          </div>
+
+          <!-- Email & Contact -->
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="emailAddress" placeholder="example@email.com" required>
+              <div class="invalid-feedback">Enter a valid email.</div>
             </div>
-        </div>
+            <div class="col-md-6">
+              <label class="form-label">Contact Number</label>
+              <input type="tel" class="form-control" id="contactNumber" placeholder="10-digit number" pattern="[0-9]{10}" required>
+              <div class="invalid-feedback">Enter a valid 10-digit number.</div>
+            </div>
+          </div>
+
+          <!-- Fees -->
+          <div class="row g-3 mt-3">
+            <div class="col-md-6">
+              <label class="form-label">Course Fees</label>
+              <input type="number" class="form-control" id="courseFees" placeholder="Enter total fees" min="0" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Amount Paid</label>
+              <input type="number" class="form-control" id="paidAmount" placeholder="Enter paid amount" min="0" required>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <label class="form-label">Remaining Amount</label>
+              <input type="text" class="form-control fw-bold" id="remainingAmount" readonly>
+              <small id="remainingHint" class="text-muted"></small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Payment Method</label>
+              <select class="form-select" id="paymentMethod" required>
+                <option value="">Select method</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="online">Online</option>
+              </select>
+              <div class="invalid-feedback">Please select payment method.</div>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="mt-3">
+            <label class="form-label">Address</label>
+            <textarea class="form-control" id="address" rows="2" placeholder="Enter student address" required></textarea>
+            <div class="invalid-feedback">Please enter address.</div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cancel
+        </button>
+        <button class="btn btn-success" onclick="saveStudentChanges()">
+          <i class="fas fa-save me-1"></i> Save Changes
+        </button>
+      </div>
+
     </div>
+  </div>
 </div>
+<!-- Bootstrap 5 JS (needs Popper included) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Interactivity Script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(() => {
+  'use strict';
+  const form = document.getElementById('editStudentForm');
+  const courseFees = document.getElementById('courseFees');
+  const paidAmount = document.getElementById('paidAmount');
+  const remainingAmount = document.getElementById('remainingAmount');
+  const remainingHint = document.getElementById('remainingHint');
+
+  function calculateRemaining() {
+    const fees = parseFloat(courseFees.value) || 0;
+    const paid = parseFloat(paidAmount.value) || 0;
+    const remaining = fees - paid;
+    remainingAmount.value = remaining >= 0 ? `₹ ${remaining}` : "Overpaid!";
+    remainingAmount.classList.toggle('is-invalid', remaining < 0);
+    remainingAmount.classList.toggle('text-danger', remaining < 0);
+    remainingAmount.classList.toggle('text-success', remaining >= 0);
+    remainingHint.textContent = remaining < 0 ? "⚠ Overpayment detected!" : "";
+  }
+
+  courseFees.addEventListener('input', calculateRemaining);
+  paidAmount.addEventListener('input', calculateRemaining);
+
+  // Form validation on save
+  window.saveStudentChanges = function() {
+    if (!form.checkValidity()) {
+      form.classList.add('was-validated');
+      Swal.fire('Error', 'Please fix the highlighted errors.', 'error');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Saving...',
+      text: 'Student details are being updated.',
+      icon: 'info',
+      showConfirmButton: false,
+      timer: 1500
+    }).then(() => {
+      Swal.fire('Success!', 'Student details updated successfully.', 'success');
+      bootstrap.Modal.getInstance(document.getElementById('editStudentModal')).hide();
+    });
+  };
+})();
+</script>
+
+
+
         <!-- Bootstrap & jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
         <!-- SweetAlert2 -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
         <script>
             // Sections array for navigation

@@ -3,6 +3,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Leave_model'); // <---- ADD THIS
+        $this->load->library('session');
+        $this->load->helper('url');
+    }
+
 
     public function Dashboard()
     {
@@ -144,80 +152,134 @@ class Admin extends CI_Controller
     }
 
 
-/**
- * AJAX endpoint: return paginated students for a center (with search)
- * GET params:
- *  - page (1-based)
- *  - per_page (default 10)
- *  - search (optional)
- *
- * URL: /admin/get_students_ajax
- */
-public function get_students_ajax()
-{
-    $this->load->library('session');
-    $this->load->model('Center_model');
-    $this->load->model('Student_model');
+    /**
+     * AJAX endpoint: return paginated students for a center (with search)
+     * GET params:
+     *  - page (1-based)
+     *  - per_page (default 10)
+     *  - search (optional)
+     *
+     * URL: /admin/get_students_ajax
+     */
+    public function get_students_ajax()
+    {
+        $this->load->library('session');
+        $this->load->model('Center_model');
+        $this->load->model('Student_model');
 
-    // Resolve center_id (same logic used earlier)
-    $center_id = $this->session->userdata('center_id');
-    if (!$center_id) {
-        $alt_keys = ['center_name','username','name','center','user_name','id'];
-        foreach ($alt_keys as $k) {
-            $val = $this->session->userdata($k);
-            if (!$val) continue;
-            if ($k === 'id' && is_numeric($val)) { $center_id = (int)$val; break; }
-            $row = $this->db->where('name', $val)->or_where('center_number', $val)->get('center_details')->row();
-            if ($row) { $center_id = (int)$row->id; break; }
+        // Resolve center_id (same logic used earlier)
+        $center_id = $this->session->userdata('center_id');
+        if (!$center_id) {
+            $alt_keys = ['center_name', 'username', 'name', 'center', 'user_name', 'id'];
+            foreach ($alt_keys as $k) {
+                $val = $this->session->userdata($k);
+                if (!$val) continue;
+                if ($k === 'id' && is_numeric($val)) {
+                    $center_id = (int)$val;
+                    break;
+                }
+                $row = $this->db->where('name', $val)->or_where('center_number', $val)->get('center_details')->row();
+                if ($row) {
+                    $center_id = (int)$row->id;
+                    break;
+                }
+            }
         }
-    }
 
-    if (!$center_id) {
+        if (!$center_id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Admin not logged in or center not found']));
+        }
+
+        $page = max(1, (int)$this->input->get('page'));
+        $per_page = (int)$this->input->get('per_page');
+        if ($per_page <= 0) $per_page = 10;
+        $search = $this->input->get('search', TRUE); // XSS filtered by CI
+
+        $offset = ($page - 1) * $per_page;
+
+        $students = $this->Student_model->get_students_by_center_paginated($center_id, $per_page, $offset, $search);
+        $total = $this->Student_model->count_students_by_center($center_id, $search);
+
+        // prepare simple payload
+        $payload = [];
+        foreach ($students as $s) {
+            $payload[] = [
+                'id' => $s->id,
+                'name' => $s->name,
+                'contact' => $s->contact,
+                'center' => $s->center_id,
+                'batch' => $s->batch_id ?? $s->batch ?? '',
+                'level' => $s->student_progress_category ?? $s->level ?? '',
+                'category' => $s->student_progress_category ?? ($s->category ?? ''),
+                'status' => $s->status ?? '',
+                'created_at' => $s->created_at ?? ''
+            ];
+        }
+
         return $this->output->set_content_type('application/json')
-            ->set_output(json_encode(['success'=>false,'message'=>'Admin not logged in or center not found']));
+            ->set_output(json_encode([
+                'success' => true,
+                'students' => $payload,
+                'total' => (int)$total,
+                'page' => (int)$page,
+                'per_page' => (int)$per_page
+            ]));
     }
 
-    $page = max(1, (int)$this->input->get('page'));
-    $per_page = (int)$this->input->get('per_page');
-    if ($per_page <= 0) $per_page = 10;
-    $search = $this->input->get('search', TRUE); // XSS filtered by CI
-
-    $offset = ($page - 1) * $per_page;
-
-    $students = $this->Student_model->get_students_by_center_paginated($center_id, $per_page, $offset, $search);
-    $total = $this->Student_model->count_students_by_center($center_id, $search);
-
-    // prepare simple payload
-    $payload = [];
-    foreach ($students as $s) {
-        $payload[] = [
-            'id' => $s->id,
-            'name' => $s->name,
-            'contact' => $s->contact,
-            'center' => $s->center_id,
-            'batch' => $s->batch_id ?? $s->batch ?? '',
-            'level' => $s->student_progress_category ?? $s->level ?? '',
-            'category' => $s->student_progress_category ?? ($s->category ?? ''),
-            'status' => $s->status ?? '',
-            'created_at' => $s->created_at ?? ''
-        ];
-    }
-
-    return $this->output->set_content_type('application/json')
-        ->set_output(json_encode([
-            'success' => true,
-            'students' => $payload,
-            'total' => (int)$total,
-            'page' => (int)$page,
-            'per_page' => (int)$per_page
-        ]));
-}
 
 
 
-    
     public function Leave()
     {
         $this->load->view('admin/Leave');
+    }
+    public function add_leave()
+    {
+
+        $data = [
+            'user_id'    => $this->input->post('user_id'),
+            'user_name'  => $this->session->userdata('username'), // use 'username'
+            'role'       => $this->input->post('designation'),
+            'leave_type' => $this->input->post('leave_type') == 'Other' ? $this->input->post('leave_type_other') : $this->input->post('leave_type'),
+            'from_date'  => $this->input->post('from_date'),
+            'to_date'    => $this->input->post('to_date'),
+            'reason'     => $this->input->post('reason'),
+            'status'     => 'pending'
+        ];
+
+
+        if ($this->Leave_model->add_leave($data)) {
+            $this->session->set_flashdata('message', 'success');
+            $this->session->set_flashdata('msg_text', 'Leave applied successfully!');
+        } else {
+            $this->session->set_flashdata('message', 'error');
+            $this->session->set_flashdata('msg_text', 'Something went wrong. Please try again.');
+        }
+
+        redirect('admin/Leave');
+    }
+
+
+
+    // Approve or reject leave
+    public function change_status($leave_id, $action)
+    {
+        $user_role = $this->session->userdata('role');
+        $leave = $this->Leave_model->get_leave($leave_id);
+
+        // Check if user has authority
+        if (($user_role == 'admin' && $leave->role != 'Student') || ($user_role == 'superadmin' && $leave->role != 'Staff')) {
+            show_error('You do not have permission to change this leave status.', 403);
+            return;
+        }
+
+        if (!in_array($action, ['approved', 'rejected'])) {
+            show_error('Invalid action.', 400);
+            return;
+        }
+
+        $this->Leave_model->update_status($leave_id, $action);
+        redirect('admin/Leave');
     }
 } // end of Admin class

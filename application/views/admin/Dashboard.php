@@ -91,8 +91,8 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="mb-0">Recently Added Students</h6>
               <div>
-                <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button>
+                <!-- <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal" data-bs-target="#studentsFilterModal"><i class="bi bi-funnel"></i> Filter</button>
+                <button class="btn btn-sm" style="background:#ff4040;color:#fff" data-bs-toggle="modal" data-bs-target="#addStudentModal"><i class="fas fa-plus"></i> Add</button> -->
               </div>
             </div>
 
@@ -215,9 +215,7 @@
   <script>
     // ---------- existing minimal data & functions (trimmed) ----------
     const studentData = {
-      jane:{name:'Jane Doe',contact:'9876543210',center:'ABC',batch:'B1',level:'Intermediate',category:'Complete'},
-      john:{name:'John Smith',contact:'9876543211',center:'XYZ',batch:'B2',level:'Advanced',category:'Pending'},
-      sarah:{name:'Sarah Wilson',contact:'9876543212',center:'PQR',batch:'B3',level:'Beginner',category:'Complete'}
+     
     };
     const attendanceData = {...studentData};
     function renderTables(){

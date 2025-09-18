@@ -7,9 +7,9 @@
     <title>Sidebar with Smooth Submenu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
     <style>
@@ -182,7 +182,7 @@
     <!-- Sidebar Component -->
     <div class="sidebar" id="sidebar">
         <div class="logo">
-            <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
+            <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
         </div>
 
         <nav class="nav flex-column">
@@ -251,11 +251,14 @@
                 <i class="bi bi-person-circle"></i><span> Expenses Management</span>
             </a>
 
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Superadmin_profile') ? 'active' : ''; ?>"
-                href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
-                <i class="fa-solid fa-lock"></i><span>Forget Password</span>
-            </a>
-            
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>"
+                href="<?php echo base_url('superadmin/Leave'); ?>">
+                <i class="bi bi-calendar-x"></i><span>Leave Management</span>
+
+                <a class="nav-link <?php echo ($this->uri->segment(2) == 'Superadmin_profile') ? 'active' : ''; ?>"
+                    href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
+                    <i class="fa-solid fa-lock"></i><span>Forget Password</span>
+                </a>
 
 
 
@@ -263,10 +266,11 @@
 
 
 
-            <!-- Logout -->
-            <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>" id="logout-link">
-                <i class="bi bi-box-arrow-right"></i><span>Logout</span>
-            </a>
+
+                <!-- Logout -->
+                <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>" id="logout-link">
+                    <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+                </a>
 
         </nav>
     </div>

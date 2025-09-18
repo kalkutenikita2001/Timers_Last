@@ -114,9 +114,9 @@
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
                         <div>
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
+                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
-                            </button>
+                            </button> -->
                             <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
                                 <i class="fas fa-plus mr-1"></i> Apply Leave
                             </button>
@@ -128,7 +128,8 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Applicant Name</th>
+                                    <th>Center Name</th>
                                     <th>Role</th>
                                     <th>Leave Type</th>
                                     <th>From Date</th>
@@ -141,6 +142,7 @@
                                 <?php if (!empty($leaves)): ?>
                                     <?php foreach ($leaves as $lv): ?>
                                         <tr>
+                                            <td><?= $lv->applicant_name ?></td>
                                             <td><?= $lv->user_name ?></td>
                                             <td><?= $lv->role ?></td>
                                             <td><?= $lv->leave_type ?></td>
@@ -154,8 +156,15 @@
                                                     <span class="badge badge-danger">Rejected</span>
                                                 <?php else: ?>
                                                     <span class="badge badge-warning">Pending</span>
+                                                    <?php
+                                                    $user_role = $this->session->userdata('role');
+                                                    if (($user_role == 'admin' && $lv->role == 'Student') || ($user_role == 'superadmin' && $lv->role == 'Staff')): ?>
+                                                        <a href="<?= base_url("Leave/change_status/$lv->id/approved") ?>" class="btn btn-sm btn-success">Approve</a>
+                                                        <a href="<?= base_url("Leave/change_status/$lv->id/rejected") ?>" class="btn btn-sm btn-danger">Reject</a>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
                                             </td>
+
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
@@ -183,11 +192,17 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('Admin/add_leave') ?>" id="addLeaveForm" novalidate>
+                <form method="post" action="<?= base_url('Leave/add_leave') ?>" id="addLeaveForm" novalidate>
                     <div class="modal-body">
                         <div class="row">
                             <!-- Admin ID -->
                             <input type="hidden" name="user_id" value="<?= $this->session->userdata('id'); ?>">
+                            <div class="col-md-12 mb-3">
+                                <label>Applicant Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter applicant name" required>
+                                <div class="invalid-feedback">Applicant name is required.</div>
+                            </div>
+
 
                             <!-- Designation -->
                             <div class="col-md-6 mb-3">
@@ -195,12 +210,8 @@
                                 <select name="designation" id="designationSelect" class="form-control" required>
                                     <option value="">-- Select Designation --</option>
                                     <option value="Student">Student</option>
-                                    <option value="Coach">Coach</option>
-                                    <option value="Admin">Admin</option>
                                     <option value="Staff">Staff</option>
-                                    <option value="Other">Other</option>
                                 </select>
-                                <input type="text" id="designationOther" name="designation_other" class="form-control mt-2" placeholder="Enter designation" style="display:none;">
                                 <div class="invalid-feedback">Designation is required.</div>
                             </div>
 
@@ -243,9 +254,18 @@
                             <!-- Center Name (Autofill & readonly) -->
                             <div class="col-md-6 mb-3">
                                 <label>Center Name</label>
-                                <input type="text" name="center_name" class="form-control"
-                                    value="<?= $this->session->userdata('center_name'); ?>" readonly>
+                                <input
+                                    type="text"
+                                    name="center_name"
+                                    class="form-control"
+                                    placeholder="Enter Center Name"
+                                    value="<?= $this->session->userdata('username'); ?>"
+                                    required>
+                                <div class="invalid-feedback">Center Name is required.</div>
                             </div>
+
+
+
                         </div>
                     </div>
 
@@ -259,7 +279,7 @@
     </div>
 
     <!-- Filter Modal -->
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <!-- <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg border-0 rounded-lg">
                 <div class="modal-header bg-danger text-white">
@@ -301,7 +321,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -348,6 +368,22 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            <?php if ($this->session->flashdata('message')): ?>
+                let type = "<?= $this->session->flashdata('message'); ?>";
+                let msg = "<?= $this->session->flashdata('msg_text'); ?>";
+
+                Swal.fire({
+                    icon: type === 'success' ? 'success' : 'error',
+                    title: type === 'success' ? 'Success' : 'Error',
+                    text: msg,
+                    confirmButtonColor: '#d33'
+                });
+            <?php endif; ?>
+        });
+    </script>
+
 </body>
 
 </html>
