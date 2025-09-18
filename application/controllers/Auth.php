@@ -17,9 +17,9 @@ class Auth extends CI_Controller
         if ($this->session->userdata('logged_in')) {
             $role = $this->session->userdata('role');
             if ($role === 'superadmin') {
-                redirect('superadmin/Students');
+                redirect('superadmin/dashboard');
             } else {
-                redirect('superadmin/CenterManagement2');
+                redirect('admin/dashboard');
             }
         }
         $this->load->view('admin/adminlogin');
@@ -43,7 +43,7 @@ class Auth extends CI_Controller
                     'role' => $user->role,
                     'logged_in' => TRUE
                 ]);
-                redirect('superadmin/Students');
+                redirect('superadmin/dashboard');
             } else {
                 $this->show_error('Invalid Username or Password!');
             }

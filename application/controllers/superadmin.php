@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class superadmin extends CI_Controller
+class Superadmin extends CI_Controller
 {
 
 	public function __construct()
@@ -9,7 +9,12 @@ class superadmin extends CI_Controller
 		parent::__construct();
 		$this->load->model('DashboardModel');
 		$this->load->model('Student_model'); // Load the Student_model
+		$this->load->database();
 
+		// ✅ Block access if not logged in
+		if (!$this->session->userdata('logged_in')) {
+			redirect('auth/login');
+		}
 	}
 
 	public function dashboard()

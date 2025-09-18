@@ -150,7 +150,7 @@
     <div class="login">
         <div class="login__content">
             <div class="login__img">
-                <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
+                <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
             </div>
             <div class="login__forms">
                 <form action="<?php echo base_url('auth/handle_login'); ?>" method="post" class="login__form" id="login-form">
