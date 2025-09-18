@@ -91,3 +91,6 @@ $route['admin/get_center_stats'] = 'admin/get_center_stats';
 
 $route['admin/Leave'] = 'Leave/index';        // Admin URL
 $route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL
+
+
+$route['superadmin/finance'] = 'finance';
