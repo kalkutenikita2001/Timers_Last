@@ -54,25 +54,25 @@ $route['translate_uri_dashes'] = FALSE;
 $route['404_override'] = '';
 
 //SuperAdmin
-$route['dashboard'] = 'Superadmin/dashboard';
-$route['Sidebar'] = 'Superadmin/Include/Sidebar';
-$route['Navbar'] = 'Superadmin/Include/Navbar';
-$route['CenterManagement2'] = 'Superadmin/Include/CenterManagement2';
-$route['New_admission'] = 'Superadmin/Include/New_admission';
-$route['receipt'] = 'admission/receipt';
-$route['Re_admission'] = 'admission/Re_admission';
-$route['Students'] = 'admission/Students';
-$route['Renew_admission'] = 'admission/Renew_admission';
-$route['View_Renew_Students'] = 'admission/View_Renew_Students';
-$route['View_Re_Admission'] = 'admission/View_Re_Admission';
-$route['EvenetList'] = 'admission/EvenetList';
-$route['View_Re_Admission'] = 'admission/Report';
+// $route['dashboard'] = 'Superadmin/dashboard';
+// $route['Sidebar'] = 'Superadmin/Include/Sidebar';
+// $route['Navbar'] = 'Superadmin/Include/Navbar';
+// $route['CenterManagement2'] = 'Superadmin/Include/CenterManagement2';
+// $route['New_admission'] = 'Superadmin/Include/New_admission';
+// $route['receipt'] = 'admission/receipt';
+// $route['Re_admission'] = 'admission/Re_admission';
+// $route['Students'] = 'admission/Students';
+// $route['Renew_admission'] = 'admission/Renew_admission';
+// $route['View_Renew_Students'] = 'admission/View_Renew_Students';
+// $route['View_Re_Admission'] = 'admission/View_Re_Admission';
+// $route['EvenetList'] = 'admission/EvenetList';
+// $route['View_Re_Admission'] = 'admission/Report';
 
 // base module
-$route['adminlogin'] = 'base/adminlogin';
-$route['superadminlogin'] = 'base/superadminlogin';
+// $route['adminlogin'] = 'base/adminlogin';
+// $route['superadminlogin'] = 'base/superadminlogin';
 
-// SuperAdmin
+// SuperAdmin                                                                                               
 // Center Management
 $route['center'] = 'center/index';
 $route['center/save'] = 'center/save';

@@ -9,6 +9,11 @@ class Admin extends CI_Controller
         $this->load->model('Leave_model'); // <---- ADD THIS
         $this->load->library('session');
         $this->load->helper('url');
+
+        // ✅ Block access if not logged in
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth/login');
+        }
     }
 
 
