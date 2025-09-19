@@ -9,6 +9,7 @@ class Admin extends CI_Controller
         $this->load->model('Leave_model'); // <---- ADD THIS
         $this->load->library('session');
         $this->load->helper('url');
+        $this->load->model('Student_model'); // Load the Student_model
 
         // ✅ Block access if not logged in
         if (!$this->session->userdata('logged_in')) {
@@ -287,4 +288,38 @@ class Admin extends CI_Controller
         $this->Leave_model->update_status($leave_id, $action);
         redirect('admin/Leave');
     }
-} // end of Admin class
+    public function CenterManagement2()
+    {
+        $this->load->view('admin/CenterManagement2');
+    }
+    public function New_admission()
+    {
+        $this->load->view('admin/New_admission');
+    }
+    public function Re_admission()
+    {
+        $this->load->view('admin/Re_admission');
+    }
+    public function Students()
+    {
+        $this->load->model('Student_model');
+
+        $role = $this->session->userdata('role');
+        $center_id = $this->session->userdata('center_id');
+
+        if ($role === 'superadmin') {
+            // superadmin sees all students
+            $data['students'] = $this->Student_model->get_all_students();
+        } else {
+            // admin sees only their center students
+            $data['students'] = $this->Student_model->get_students_by_center_paginated($center_id, 0, 0);
+        }
+
+        $this->load->view('admin/Students', $data);
+    }
+
+    public function Renew_admission()
+    {
+        $this->load->view('admin/Renew_admission');
+    }
+}
