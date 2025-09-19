@@ -11,13 +11,15 @@ class DashboardModel extends CI_Model
     public function getActiveStudentsCount()
     {
         return $this->db
-            ->where('status', 'Active') // makes it case-insensitive
+            ->where('status', 'Active')
             ->count_all_results('students');
     }
+
     public function getTotalStudentsCount()
     {
         return $this->db->count_all('students');
     }
+
     public function getTotalIncome()
     {
         return $this->db
@@ -26,6 +28,7 @@ class DashboardModel extends CI_Model
             ->row()
             ->paid_amount ?? 0;
     }
+
     public function getTotalDueAmount()
     {
         return $this->db
@@ -34,6 +37,7 @@ class DashboardModel extends CI_Model
             ->row()
             ->remaining_amount ?? 0;
     }
+
     public function getStudentDistribution()
     {
         $query = $this->db
@@ -51,7 +55,7 @@ class DashboardModel extends CI_Model
         ];
 
         foreach ($result as $row) {
-            if (isset($distribution[$row['student_progress_category']])) {
+            if (!empty($row['student_progress_category']) && isset($distribution[$row['student_progress_category']])) {
                 $distribution[$row['student_progress_category']] = (int)$row['count'];
             }
         }
@@ -59,8 +63,7 @@ class DashboardModel extends CI_Model
         return $distribution;
     }
 
-
-    //sum of paid_amount grouped by month
+    // sum of paid_amount grouped by month
     public function getMonthlyRevenue()
     {
         $query = $this->db->select("DATE_FORMAT(admission_date, '%Y-%m') as month, SUM(paid_amount) as revenue")
@@ -70,5 +73,73 @@ class DashboardModel extends CI_Model
             ->get();
 
         return $query->result_array();
+    }
+
+    /**
+     * Returns all centers from center_details table.
+     * Each center row is returned as an object (to match how view used $c->id / $c->name).
+     */
+    public function getCenters()
+    {
+        $query = $this->db
+            ->select('id, name')
+            ->from('center_details')
+            ->order_by('name', 'ASC')
+            ->get();
+
+        return $query->result(); // returns array of objects -> $c->id, $c->name in view
+    }
+
+    /**
+     * Get aggregated stats for a center (or all centers when $center_id is null).
+     * Returns:
+     *  - total_students
+     *  - active_students
+     *  - attendance_rate (percentage, fallback using students.last_attendance within last 7 days)
+     *  - total_due (sum of remaining_amount)
+     *  - total_paid (sum of paid_amount)
+     */
+    public function getCenterStats($center_id = null)
+    {
+        // Build base SQL
+        $sql = "SELECT
+                    COUNT(*) AS total_students,
+                    SUM(CASE WHEN status = 'Active' THEN 1 ELSE 0 END) AS active_students,
+                    SUM(CASE WHEN remaining_amount IS NOT NULL THEN remaining_amount ELSE 0 END) AS total_due,
+                    SUM(CASE WHEN paid_amount IS NOT NULL THEN paid_amount ELSE 0 END) AS total_paid,
+                    SUM(CASE WHEN last_attendance IS NOT NULL AND last_attendance != '' AND DATE(last_attendance) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 ELSE 0 END) AS recent_attendance_count
+                FROM students
+                WHERE 1=1";
+
+        $params = array();
+        if (!empty($center_id)) {
+            $sql .= " AND center_id = ?";
+            $params[] = $center_id;
+        }
+
+        $query = $this->db->query($sql, $params);
+        $row = $query->row_array();
+
+        // Normalize values
+        $total_students = isset($row['total_students']) ? (int)$row['total_students'] : 0;
+        $active_students = isset($row['active_students']) ? (int)$row['active_students'] : 0;
+        $total_due = isset($row['total_due']) ? (float)$row['total_due'] : 0.0;
+        $total_paid = isset($row['total_paid']) ? (float)$row['total_paid'] : 0.0;
+        $recent_attendance_count = isset($row['recent_attendance_count']) ? (int)$row['recent_attendance_count'] : 0;
+
+        // Attendance rate fallback calculation:
+        $attendance_rate = 0.0;
+        if ($active_students > 0) {
+            $attendance_rate = round(($recent_attendance_count / $active_students) * 100, 2);
+            if ($attendance_rate > 100) $attendance_rate = 100;
+        }
+
+        return array(
+            'total_students'  => $total_students,
+            'active_students' => $active_students,
+            'attendance_rate' => $attendance_rate, // like 45.67
+            'total_due'       => $total_due,
+            'total_paid'      => $total_paid,
+        );
     }
 }
