@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Center Management </title>
-    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -181,7 +181,7 @@
   </style>
 </head>
 <body>
-  
+
 <!-- Sidebar -->
 <?php $this->load->view('superadmin/Include/Sidebar') ?>
 <!-- Navbar -->
@@ -206,7 +206,7 @@
   </div>
 </div>
 
-<!-- New Center Modal -->
+<!-- New Center Modal (kept as-is) -->
 <div class="modal fade" id="newCenterModal" tabindex="-1" aria-labelledby="newCenterLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -268,6 +268,62 @@
   </div>
 </div>
 
+<!-- Edit Center Modal -->
+<div class="modal fade" id="editCenterModal" tabindex="-1" aria-labelledby="editCenterLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <button type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 id="editCenterLabel">Edit Center Details</h3>
+      <form id="editCenterForm">
+        <input type="hidden" id="edit_center_id" name="id" />
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="edit_center_name">Center Name <span class="text-danger">*</span></label>
+            <input type="text" id="edit_center_name" name="name" class="form-control" required />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="edit_center_number">Center Number</label>
+            <input type="text" id="edit_center_number" name="center_number" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="edit_center_address">Address</label>
+            <input type="text" id="edit_center_address" name="address" class="form-control" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="edit_center_rent">Center Rent</label>
+            <input type="number" id="edit_center_rent" name="rent_amount" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="edit_center_rent_date">Rent Date</label>
+            <input type="date" id="edit_center_rent_date" name="rent_paid_date" class="form-control" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="edit_center_timing_from">Timing From</label>
+            <input type="time" id="edit_center_timing_from" name="center_timing_from" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="edit_center_timing_to">Timing To</label>
+            <input type="time" id="edit_center_timing_to" name="center_timing_to" class="form-control" />
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="editCenterSubmitBtn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -275,7 +331,7 @@
 <script>
   $(document).ready(function() {
 
-    // ✅ Load Centers from API
+    // Load Centers from API
     function loadCenters() {
       $.ajax({
         url: "<?php echo base_url('Center/getAllcenters'); ?>",
@@ -287,14 +343,25 @@
           if (response.status && response.data.length > 0) {
             response.data.forEach(center => {
               let card = `
-                <div class="col-md-4">
+                <div class="col-md-4" id="centerCard_${center.id}">
                   <div class="center-card">
                     <div class="card-details">
-                      <p><b>${center.name}</b></p>
-                      <p><span>Timing:</span> ${center.center_timing_from} - ${center.center_timing_to}</p>
-                      <p><span>Rent:</span> ₹${center.rent_amount}</p>
-                      <p><span>Rent Date:</span> ${center.rent_paid_date}</p>
-                      <button class="btn btn-primary view-btn" data-center-id="${center.id}">View Details</button>
+                      <p><b>${escapeHtml(center.name)}</b></p>
+                      <p><span>Timing:</span> ${center.center_timing_from || ''} - ${center.center_timing_to || ''}</p>
+                      <p><span>Rent:</span> ₹${center.rent_amount || '0'}</p>
+                      <p><span>Rent Date:</span> ${center.rent_paid_date || ''}</p>
+
+                      <div class="mt-3 d-flex" style="gap:8px;">
+                        <button class="btn btn-primary view-btn" data-center-id="${center.id}">View Details</button>
+
+                        <button class="btn btn-outline-secondary edit-center-btn" data-center-id="${center.id}">
+                          <i class="fas fa-edit"></i> Edit
+                        </button>
+
+                        <button class="btn btn-danger delete-center-btn" data-center-id="${center.id}">
+                          <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>`;
@@ -310,13 +377,24 @@
       });
     }
 
-    // ✅ Redirect to Center Details
+    // Escape helper to avoid HTML injection
+    function escapeHtml(text) {
+      if (text === null || text === undefined) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Redirect to Center Details
     $(document).on('click', '.view-btn', function() {
       const centerId = $(this).data('center-id');
       window.location.href = '<?php echo base_url("superadmin/view_center_details"); ?>?center_id=' + centerId;
     });
 
-    // ✅ Submit new center (demo only, replace with POST API later)
+    // Submit new center (demo only — kept original behavior)
     $('#centerSubmitBtn').click(function(e) {
       e.preventDefault();
       const form = $('#centerForm')[0];
@@ -337,7 +415,7 @@
       });
     });
 
-    // ✅ Filter Centers
+    // Filter Centers (client-side)
     $('#filterForm').on('submit', function(e) {
       e.preventDefault();
       let filterName = $('#filterCenterName').val().toLowerCase();
@@ -354,23 +432,154 @@
       $('#filterModal').modal('hide');
     });
 
+    // DELETE center
+    $(document).on('click', '.delete-center-btn', function() {
+      const centerId = $(this).data('center-id');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        html: 'Deleting this center will <b>also delete all related student records</b>. This action is irreversible.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'Cancel',
+        focusCancel: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "<?php echo base_url('Center/deleteCenterbyId/'); ?>" + centerId,
+            method: "POST",
+            dataType: "json",
+            success: function(res) {
+              if (res.status) {
+                // remove card from UI
+                $('#centerCard_' + centerId).fadeOut(300, function() { $(this).remove(); });
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Deleted!',
+                  text: res.message || 'Center and related students deleted successfully.'
+                });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'Could not delete center.' });
+              }
+            },
+            error: function() {
+              Swal.fire({ icon: 'error', title: 'Error', text: 'Server error while deleting center.' });
+            }
+          });
+        }
+      });
+    });
+
+    // EDIT center - open modal and populate via GET to /Center/getCenterById/{id}
+    $(document).on('click', '.edit-center-btn', function() {
+      const centerId = $(this).data('center-id');
+      $.ajax({
+        url: "<?php echo base_url('Center/getCenterById/'); ?>" + centerId,
+        method: "GET",
+        dataType: "json",
+        success: function(res) {
+          if (res.status === 'success' || res.status === true) {
+            // your controller sometimes returns {status: "success", center: {...}} or {status:true, data:...}
+            // Normalize:
+            const c = res.center || res.data || res;
+            // if res contains the center object nested as 'center' or 'data'
+            const centerObj = c.center || c.data || c;
+            // but your controller returns {status:true, data: centerArray} in some endpoints
+            // handle common shapes:
+            let centerData = null;
+            if (res.center) centerData = res.center;
+            else if (res.data && typeof res.data === 'object' && !Array.isArray(res.data)) centerData = res.data;
+            else if (res.data && Array.isArray(res.data) && res.data.length > 0) centerData = res.data[0];
+            else if (res.name || res.id) centerData = res;
+            else if (c && c.name) centerData = c;
+
+            if (!centerData) {
+              // try fallback: if response itself has center keys
+              centerData = res;
+            }
+
+            // Populate fields (guard undefined)
+            $('#edit_center_id').val(centerData.id || '');
+            $('#edit_center_name').val(centerData.name || '');
+            $('#edit_center_number').val(centerData.center_number || '');
+            $('#edit_center_address').val(centerData.address || '');
+            $('#edit_center_rent').val(centerData.rent_amount || '');
+            let rentDate = centerData.rent_paid_date && centerData.rent_paid_date !== '0000-00-00' ? centerData.rent_paid_date : '';
+            $('#edit_center_rent_date').val(rentDate);
+            $('#edit_center_timing_from').val(centerData.center_timing_from || '');
+            $('#edit_center_timing_to').val(centerData.center_timing_to || '');
+            $('#editCenterModal').modal('show');
+          } else {
+            // handle other shapes where status:false
+            Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'Could not fetch center details.' });
+          }
+        },
+        error: function() {
+          Swal.fire({ icon: 'error', title: 'Error', text: 'Server error while fetching center details.' });
+        }
+      });
+    });
+
+    // Save edit (sends JSON to updateCenter)
+    $('#editCenterSubmitBtn').click(function(e) {
+      e.preventDefault();
+      const form = $('#editCenterForm')[0];
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const payload = {
+        id: $('#edit_center_id').val(),
+        name: $('#edit_center_name').val(),
+        center_number: $('#edit_center_number').val(),
+        address: $('#edit_center_address').val(),
+        rent_amount: $('#edit_center_rent').val(),
+        rent_paid_date: $('#edit_center_rent_date').val(),
+        center_timing_from: $('#edit_center_timing_from').val(),
+        center_timing_to: $('#edit_center_timing_to').val()
+      };
+
+      $.ajax({
+        url: "<?php echo base_url('Center/updateCenter'); ?>",
+        method: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(payload),
+        success: function(res) {
+          // your updateCenter returns {status:'success', message:...} or similar
+          if (res.status === 'success' || res.status === true) {
+            $('#editCenterModal').modal('hide');
+            Swal.fire({ icon: 'success', title: 'Saved', text: res.message || 'Center updated.' }).then(()=>{
+              loadCenters(); // refresh list
+            });
+          } else {
+            Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'Could not update center.' });
+          }
+        },
+        error: function() {
+          Swal.fire({ icon: 'error', title: 'Error', text: 'Server error while updating center.' });
+        }
+      });
+    });
+
     // Initialize
     loadCenters();
   });
 
-
-  
-      // Sidebar toggle functionality
-      $('#sidebarToggle').on('click', function () {
-        if ($(window).width() <= 576) {
-          $('#sidebar').toggleClass('active');
-          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-        } else {
-          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-          $('#contentWrapper').toggleClass('minimized', isMinimized);
-        }
-      });
+  // Sidebar toggle functionality (kept as-is)
+  $('#sidebarToggle').on('click', function () {
+    if ($(window).width() <= 576) {
+      $('#sidebar').toggleClass('active');
+      $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+    } else {
+      const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+      $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+      $('#contentWrapper').toggleClass('minimized', isMinimized);
+    }
+  });
 </script>
 
 </body>
