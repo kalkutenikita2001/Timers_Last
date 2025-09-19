@@ -142,4 +142,55 @@ class DashboardModel extends CI_Model
             'total_paid'      => $total_paid,
         );
     }
+
+    /**
+     * Fetch students matching a given filter and optional center.
+     * $filter: 'active' | 'attendance' | 'due' | 'paid' | 'all'
+     * $center_id: center id or null for all centers
+     *
+     * Returns array of rows with fields:
+     * id, name, contact, parent_name, remaining_amount, paid_amount, status, last_attendance, batch_id, student_progress_category
+     */
+    public function getStudentsByFilter($filter = 'all', $center_id = null)
+    {
+        $this->db->select('id, name, contact, parent_name, remaining_amount, paid_amount, status, last_attendance, batch_id, student_progress_category, admission_date');
+        $this->db->from('students');
+
+        // apply center filter if provided
+        if (!empty($center_id)) {
+            $this->db->where('center_id', $center_id);
+        }
+
+        // apply filter conditions
+        switch ($filter) {
+            case 'active':
+                $this->db->where('status', 'Active');
+                break;
+
+            case 'attendance':
+                // students whose last_attendance falls within last 7 days
+                $this->db->where("DATE(last_attendance) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)");
+                break;
+
+            case 'due':
+                // remaining_amount > 0 (or not null and > 0)
+                $this->db->where('remaining_amount >', 0);
+                break;
+
+            case 'paid':
+                // paid_amount > 0
+                $this->db->where('paid_amount >', 0);
+                break;
+
+            case 'all':
+            default:
+                // no extra where
+                break;
+        }
+
+        $this->db->order_by('name', 'ASC');
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
