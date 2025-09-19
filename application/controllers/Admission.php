@@ -355,5 +355,162 @@ public function expiring_students() {
             ]);
         }
     }
+
+
+    
+
+    public function renewaddmission()
+    {
+
+
+      
+        $student_id = $this->input->post('student_id');
+
+        if (empty($student_id)) {
+            echo json_encode(["status" => "error", "message" => "Invalid Student ID"]);
+            return;
+        }
+
+
+        $studentData = $this->db->get_where("students", ["id" => $student_id])->row_array();
+
+        if ($studentData) {
+
+            $historyData = $studentData;
+            unset($historyData['id']);
+            $historyData['student_id'] = $student_id;
+            $historyData['purpose'] = 'renew';
+            $historyData['updated_at'] = date("Y-m-d H:i:s");
+
+
+            $this->db->insert("student_addmission_history", $historyData);
+        }
+
+
+        $updateData = [];
+
+        
+
+        if ($this->input->post('studentName'))
+            $updateData["name"] = $this->input->post('studentName');
+        if ($this->input->post('parentName'))
+            $updateData["parent_name"] = $this->input->post('parentName');
+        if ($this->input->post('email'))
+            $updateData["email"] = $this->input->post('email');
+        if ($this->input->post('address'))
+            $updateData["address"] = $this->input->post('address');
+        if ($this->input->post('contact'))
+            $updateData["contact"] = $this->input->post('contact');
+        if ($this->input->post('center_id'))
+            $updateData["center_id"] = $this->input->post('center_id');
+        // if ($this->input->post('branch_id'))
+        //     $updateData["branch_id"] = $this->input->post('branch_id');
+
+
+        if ($this->input->post('batch_id'))
+            $updateData["batch_id"] = $this->input->post('batch_id');
+        
+        if ($this->input->post('course_duration'))
+            $updateData["course_duration"] = $this->input->post('course_duration');
+
+        $updateData["remaining_amount"] = $this->input->post('newRemaining');
+
+
+        if ($this->input->post('level'))
+            $updateData["student_progress_category"] = $this->input->post('level');
+
+        if ($this->input->post('baseFees'))
+            $updateData["course_fees"] = $this->input->post('baseFees');
+
+
+        if ($this->input->post('facilities_amount'))
+            $updateData["additional_fees"] = $this->input->post('facilities_amount');
+
+
+        if ($this->input->post('total_amount'))
+            $updateData["total_fees"] = $this->input->post('total_amount');
+
+        if ($this->input->post('paid_fees'))
+            $updateData["paid_amount"] = $this->input->post('paid_fees');
+
+
+
+
+
+
+        if ($this->input->post('payment_mode'))
+            $updateData["payment_method"] = $this->input->post('payment_mode');
+        if ($this->input->post('join_date'))
+            $updateData["joining_date"] = $this->input->post('join_date');
+
+        
+            $updateData["status"] = "Deactive";
+
+
+        // if ($this->input->post('expiry_date'))
+        //     $updateData["admission_date"] = $this->input->post('expiry_date');
+
+       
+
+        $this->db->where("id", $student_id);
+        $success = $this->db->update("students", $updateData);
+
+        if ($success) {
+
+            $facilities = $this->input->post('facilities');
+
+
+            $existingFacilities = $this->db->get_where("student_facilities", ["student_id" => $student_id])->result_array();
+
+            if (!empty($existingFacilities)) {
+                foreach ($existingFacilities as $facility) {
+                    // Prepare history entry
+                    $historyFacility = [
+                        "student_id" => $student_id,
+                        "facility_name" => $facility['facility_name'],
+                        "details" => $facility['details'],
+                        "amount" => $facility['amount'],
+                        "created_at" => $facility['created_at'],
+                        "purpose" => 'renew',
+                        "history_created_at" => date("Y-m-d H:i:s")
+                    ];
+
+                    $this->db->insert("student_facilities_history", $historyFacility);
+                }
+
+                // Delete old facilities
+                $this->db->where("student_id", $student_id)->delete("student_facilities");
+            }
+
+            // Insert new facilities
+            if (!empty($facilities) && is_array($facilities)) {
+                foreach ($facilities as $facility) {
+                    if (!empty($facility['name']) && !empty($facility['amount'])) {
+                        $facilityData = [
+                            "student_id" => $student_id,
+                            "facility_name" => $facility['name'],
+                            "details" => $facility['subtype'] ?? "N/A",
+                            "amount" => $facility['amount'],
+                            "created_at" => date("Y-m-d H:i:s")
+                        ];
+                        $this->db->insert("student_facilities", $facilityData);
+                    }
+                }
+            }
+
+            echo json_encode([
+                "status" => "success",
+                "message" => "Student details updated and facilities history recorded successfully."
+            ]);
+        } else {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Failed to update student."
+            ]);
+        }
+    }
+
+
+
 }
 ?>
