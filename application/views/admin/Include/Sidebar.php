@@ -5,19 +5,54 @@
         <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
     </div>
     <nav class="nav flex-column">
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Dashboard'; ?>">
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Dashboard') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/dashboard'; ?>">
             <i class="bi bi-house-door"></i><span>Dashboard</span>
         </a>
+        <!-- Center Management -->
+
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'CenterManagement2') ? 'active' : ''; ?>"
+            href="<?php echo base_url('admin/CenterManagement2'); ?>">
+            <i class="bi bi-credit-card"></i><span>Center Management</span>
+        </a>
+
+        <!-- Admission Management (Parent with Submenu) -->
+        <div class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center"
+                data-bs-toggle="collapse" href="#admissionMenu" role="button"
+                aria-expanded="false" aria-controls="admissionMenu">
+                <span><i class="bi bi-person-lines-fill"></i> <span>Admission Management</span></span>
+                <i class="bi bi-chevron-down"></i>
+            </a>
+            <div class="collapse" id="admissionMenu">
+                <nav class="nav flex-column ms-3">
+                    <a class="nav-link <?php echo ($this->uri->segment(2) == 'New_admission') ? 'active' : ''; ?>"
+                        href="<?php echo base_url('admin/New_admission'); ?>">
+                        <i class="bi bi-plus-circle"></i><span> New Admission</span>
+                    </a>
+                    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>"
+                        href="<?php echo base_url('admin/Re_admission'); ?>">
+                        <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
+                    </a>
+                    <a class="nav-link <?php echo ($this->uri->segment(2) == 'Renew_admission') ? 'active' : ''; ?>"
+                        href="<?php echo base_url('admin/Renew_admission'); ?>">
+                        <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
+                    </a>
+
+                </nav>
+            </div>
+        </div>
+
+        <!-- Students -->
+        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>"
+            href="<?php echo base_url('admin/Students'); ?>">
+            <i class="bi bi-mortarboard"></i><span> Students Management</span>
+        </a>
+
 
         <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Batch') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Batch'; ?>">
             <i class="bi bi-stack"></i><span>Batch</span>
         </a> -->
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
-            <i class="bi bi-person-plus"></i><span>Admission Management</span>
-        </a>
-        <a class="nav-link <?php echo ($this->uri->segment(2) == 'Admission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/Admission'; ?>">
-            <i class="bi bi-person-plus"></i><span>Student Management</span>
-        </a>
+
         <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url() . 'admin/EventAndNotice'; ?>">
             <i class="bi bi-calendar-event"></i><span>EventAndNotice</span>
         </a>

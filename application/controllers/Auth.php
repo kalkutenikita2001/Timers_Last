@@ -58,6 +58,7 @@ class Auth extends CI_Controller
                     'id' => $admin->id,
                     'username' => $admin->name,
                     'role' => 'admin',
+                    'center_id' => $admin->center_id,
                     'logged_in' => TRUE
                 ]);
                 redirect('admin/dashboard');
