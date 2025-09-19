@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class superadmin extends CI_Controller
+class Superadmin extends CI_Controller
 {
 
 	public function __construct()
@@ -9,7 +9,12 @@ class superadmin extends CI_Controller
 		parent::__construct();
 		$this->load->model('DashboardModel');
 		$this->load->model('Student_model'); // Load the Student_model
+		$this->load->database();
 
+		// ✅ Block access if not logged in
+		if (!$this->session->userdata('logged_in')) {
+			redirect('auth/login');
+		}
 	}
 
 	public function dashboard()
@@ -20,6 +25,10 @@ class superadmin extends CI_Controller
 		$data['totalDue']        = $this->DashboardModel->getTotalDueAmount();
 		$data['studentDistribution'] = $this->DashboardModel->getStudentDistribution();
 		$data['monthlyRevenue']  = $this->DashboardModel->getMonthlyRevenue();
+
+		// Fetch centers from DB
+		$query = $this->db->get('center_details');
+		$data['centers'] = $query->result(); // this will be an array of objects
 
 		// print_r($data);
 		// die; // Debugging line to check the data before loading the view
@@ -46,6 +55,75 @@ class superadmin extends CI_Controller
 	public function Superadmin_profile()
 	{
 		$this->load->view('superadmin/Superadmin_profile');
+	}
+	public function change_password()
+	{
+		header('Content-Type: application/json');
+
+		$userType = $this->input->post('userType');
+		$username = $this->input->post('username');
+		$currentPassword = $this->input->post('currentPassword');
+		$newPassword = $this->input->post('newPassword');
+
+		// Validate input
+		if (empty($userType) || empty($username) || empty($currentPassword) || empty($newPassword)) {
+			echo json_encode(['success' => false, 'message' => 'All fields are required']);
+			return;
+		}
+
+		if (strlen($newPassword) < 8) {
+			echo json_encode(['success' => false, 'message' => 'New password must be at least 8 characters']);
+			return;
+		}
+
+		// Check user type and update accordingly
+		if ($userType === 'superadmin') {
+			// Verify current password for superadmin
+			$this->db->where('username', $username);
+			$this->db->where('role', 'superadmin');
+			$user = $this->db->get('users')->row();
+
+			if (!$user) {
+				echo json_encode(['success' => false, 'message' => 'User not found']);
+				return;
+			}
+
+			// Verify current password (assuming you're using password_hash with PASSWORD_DEFAULT)
+			if (!password_verify($currentPassword, $user->password)) {
+				echo json_encode(['success' => false, 'message' => 'Current password is incorrect']);
+				return;
+			}
+
+			// Update password
+			$hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+			$this->db->where('id', $user->id);
+			$this->db->update('users', ['password' => $hashedPassword]);
+		} elseif ($userType === 'admin') {
+			// Verify current password for admin
+			$this->db->where('name', $username); // Assuming center_details.name is the admin username
+			$admin = $this->db->get('center_details')->row();
+
+			if (!$admin) {
+				echo json_encode(['success' => false, 'message' => 'Admin not found']);
+				return;
+			}
+
+			// Verify current password
+			if (!password_verify($currentPassword, $admin->password)) {
+				echo json_encode(['success' => false, 'message' => 'Current password is incorrect']);
+				return;
+			}
+
+			// Update password
+			$hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+			$this->db->where('id', $admin->id);
+			$this->db->update('center_details', ['password' => $hashedPassword]);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Invalid user type']);
+			return;
+		}
+
+		echo json_encode(['success' => true, 'message' => 'Password changed successfully']);
 	}
 	public function CenterManagement()
 	{

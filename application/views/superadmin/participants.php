@@ -235,7 +235,6 @@
                     <div class="empty-state">
                         <i class="fas fa-users-slash"></i>
                         <h3>No Participants Found</h3>
-                        <p class="text-muted"> <?= $event->description ?></p>
                     </div>
                 <?php endif; ?>
             </div>

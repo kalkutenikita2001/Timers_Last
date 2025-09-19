@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin1 Login</title>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
-    <title>Admin Login</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 
@@ -150,14 +150,11 @@
     <div class="login">
         <div class="login__content">
             <div class="login__img">
-                <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
+                <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" alt="Logo">
             </div>
             <div class="login__forms">
                 <form action="<?php echo base_url('auth/handle_login'); ?>" method="post" class="login__form" id="login-form">
                     <h1 class="login__title">Login Page</h1>
-                    <?php if (isset($error)): ?>
-                        <div style="color: red; margin-bottom: 1rem;"><?php echo $error; ?></div>
-                    <?php endif; ?>
                     <div class="login__box">
                         <i class='bx bx-user login__icon'></i>
                         <input type="text" name="username" placeholder="Username" class="login__input" required>
@@ -174,7 +171,6 @@
     </div>
 
     <script>
-        // Toggle password visibility
         document.querySelector('.login__toggle-password').addEventListener('click', function() {
             const passwordInput = this.previousElementSibling;
             if (passwordInput.type === 'password') {
@@ -187,7 +183,6 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <?php if (isset($error)): ?>
         <script>
             Swal.fire({
@@ -198,7 +193,6 @@
             });
         </script>
     <?php endif; ?>
-
 </body>
 
 </html>

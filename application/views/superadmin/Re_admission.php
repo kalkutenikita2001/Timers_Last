@@ -8,6 +8,8 @@
   <!-- Bootstrap & Icons -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
 
   <style>
     body {
@@ -307,6 +309,20 @@ function loadDeactiveStudents() {
   // 🔹 Initial load
   loadDeactiveStudents();
 });
+
+
+
+      // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });
 </script>
 
 </body>

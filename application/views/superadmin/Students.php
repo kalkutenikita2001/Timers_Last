@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List - Super Admin</title>
+    <title>Students Management</title>
+        <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -306,6 +308,20 @@
                 updateRowNumbers();
             });
         });
+
+
+
+        // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });      
     </script>
 
 </body>

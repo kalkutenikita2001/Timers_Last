@@ -1336,56 +1336,67 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
     });
   });
 
-  // Edit Batch Handler
+  // Edit Batch Handler (robust success/data handling)
   $(document).on('click', '.btn-edit[data-batch-id]', function() {
-  const batchId = $(this).data('batch-id');
-  console.log('Edit button clicked for batch ID:', batchId); // Debug log
+    const batchId = $(this).data('batch-id');
+    console.log('Edit button clicked for batch ID:', batchId); // Debug log
 
-  if (!batchId) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Invalid batch ID'
-    });
-    return;
-  }
-
-  $.ajax({
-    url: baseUrl + "Center/getBatchById/" + batchId,
-    method: "GET",
-    dataType: "json",
-    success: function(response) {
-      console.log('AJAX Response:', response); // Debug log
-      if (response.status === true && response.data) { // Adjusted to match boolean status and data key
-        const b = response.data;
-        $("#editBatchId").val(b.id || '');
-        $("#editBatchName").val(b.batch_name || '');
-        $("#editBatchTiming").val(b.start_time || '');
-        $("#editEndTime").val(b.end_time || '');
-        $("#editStartDate").val(b.start_date || '');
-        $("#editEndDate").val(b.end_date || '');
-        $("#editBatchCategory").val(b.category || '');
-        $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
-        validateForm('editBatchForm', 'editBatchSubmitBtn');
-        $("#editBatchModal").modal("show");
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: response.message || 'Failed to load batch data'
-        });
-      }
-    },
-    error: function(xhr, status, error) {
-      console.error('AJAX Error:', status, error, xhr.responseText); // Detailed error log
+    if (!batchId) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error fetching batch data'
+        text: 'Invalid batch ID'
       });
+      return;
     }
+
+    $.ajax({
+      url: baseUrl + "Center/getBatchById/" + batchId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        console.log('AJAX Response:', response); // Debug log
+        // Accept either boolean true or "success" or other truthy statuses
+        const ok = (response && (response.status === true || response.status === "success" || response.status === "ok"));
+        // Try common places where the batch object may be sent
+        const b = (response && (response.data || response.batch || response)) ? (response.data || response.batch || response) : null;
+
+        if (ok && b) {
+          // If response.data contains wrapper keys, ensure we get actual object
+          const batchObj = (b && b.id) ? b : (b.data || b.batch || b);
+          const item = batchObj || b;
+
+          $("#editBatchId").val(item.id || '');
+          $("#editBatchName").val(item.batch_name || '');
+          $("#editBatchTiming").val(item.start_time || '');
+          $("#editEndTime").val(item.end_time || '');
+          $("#editStartDate").val(item.start_date || '');
+          $("#editEndDate").val(item.end_date || '');
+          // Normalize batch_level casing to match select options (First letter uppercase)
+          const lvl = item.batch_level || item.level || '';
+          $("#editBatchCategory").val(item.category || '');
+          $("#editBatchLevel").val(lvl ? (lvl.charAt(0).toUpperCase() + lvl.slice(1)) : '');
+          validateForm('editBatchForm', 'editBatchSubmitBtn');
+          $("#editBatchModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'Failed to load batch data'
+          });
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('AJAX Error:', status, error, xhr && xhr.responseText); // Detailed error log
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching batch data'
+        });
+      }
+    });
   });
-});
+
   // Add Batch Handler
   $('#batchSubmitBtn').click(function() {
     const form = $('#batchForm');
