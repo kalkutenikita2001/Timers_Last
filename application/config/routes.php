@@ -24,18 +24,23 @@ $route['404_override'] = '';
 | Ensure dashboard URL maps to the correct controller. Your controller
 | class is DashboardController, so route 'dashboard' to that.
 |
-| Also expose the AJAX endpoint center_stats at both:
+| Also expose the AJAX endpoint center_stats and students_list at both:
 |  - dashboard/center_stats
 |  - superadmin/dashboard/center_stats
+|  - dashboard/students_list
+|  - superadmin/dashboard/students_list
 | so the view JS can call either path depending on your previous code.
 */
 
 $route['dashboard'] = 'DashboardController/dashboard';
 $route['superadmin/dashboard'] = 'DashboardController/dashboard';
 
-// AJAX endpoint for stats per center
+// AJAX endpoints for stats and student lists per center
 $route['dashboard/center_stats'] = 'DashboardController/center_stats';
 $route['superadmin/dashboard/center_stats'] = 'DashboardController/center_stats';
+
+$route['dashboard/students_list'] = 'DashboardController/students_list';
+$route['superadmin/dashboard/students_list'] = 'DashboardController/students_list';
 
 /*
 | -------------------------------------------------------------------------
@@ -58,9 +63,12 @@ $route['Re_admission'] = 'admission/Re_admission';
 $route['Students'] = 'admission/Students';
 $route['Renew_admission'] = 'admission/Renew_admission';
 $route['View_Renew_Students'] = 'admission/View_Renew_Students';
-$route['View_Re_Admission'] = 'admission/View_Re_Admission';
+$route['View_Re_Admission'] = 'admission/View_Re_Admission'; // kept original mapping
 $route['EvenetList'] = 'admission/EvenetList';
-$route['View_Re_Admission'] = 'admission/Report';
+
+// NOTE: you previously had View_Re_Admission mapped twice. The second mapping to 'admission/Report' was removed to avoid conflict.
+// If you intended to route a different URL to admission/Report, add it with a different key here, eg:
+// $route['admission/report'] = 'admission/Report';
 
 /*
 | -------------------------------------------------------------------------
