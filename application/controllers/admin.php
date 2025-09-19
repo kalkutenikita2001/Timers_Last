@@ -302,6 +302,11 @@ class Admin extends CI_Controller
     }
     public function Students()
     {
+        // 🔍 Debug session first
+        // echo "<pre>";
+        // print_r($this->session->userdata());
+        // echo "</pre>";
+        // exit;
         $this->load->model('Student_model');
 
         $role = $this->session->userdata('role');
@@ -312,10 +317,10 @@ class Admin extends CI_Controller
             $data['students'] = $this->Student_model->get_all_students();
         } else {
             // admin sees only their center students
-            $data['students'] = $this->Student_model->get_students_by_center_paginated($center_id, 0, 0);
+            $data['students'] = $this->Student_model->get_students_by_center($center_id);
         }
 
-        $this->load->view('admin/Students', $data);
+        $this->load->view('admin/Students', $data); // your view file name
     }
 
     public function Renew_admission()
