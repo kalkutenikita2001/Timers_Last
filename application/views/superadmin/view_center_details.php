@@ -753,7 +753,7 @@
           <i class="fas fa-times"></i>
         </button>
         <h3 id="expenseLabel">Add Expense</h3>
-        <form id="expenseForm" action="<?= base_url('superadmin/Expenses') ?>" method="post">
+        <form id="expenseForm"  method="post">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="expense_category">Category <span class="text-danger">*</span></label>
@@ -1727,50 +1727,51 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   });
 
   // Add Expense Handler
-  $('#expenseSubmitBtn').click(function() {
+ $('#expenseSubmitBtn').click(function() {
     const form = $('#expenseForm');
     if (!form[0].checkValidity()) {
-      form[0].reportValidity();
-      return;
+        form[0].reportValidity();
+        return;
     }
     const payload = {
-      center_id: centerId,
-      category: $('#expense_category').val(),
-      amount: parseFloat($('#expense_amount').val()).toFixed(2),
-      date: $('#expense_date').val(),
-      description: $('#expense_description').val()
+        center_id: centerId,
+        category: $('#expense_category').val(),
+        amount: parseFloat($('#expense_amount').val()).toFixed(2),
+        date: $('#expense_date').val(),
+        description: $('#expense_description').val()
     };
     $.ajax({
-      url: baseUrl + "superadmin/Expenses",
-      method: "POST",
-      data: JSON.stringify(payload),
-      contentType: "application/json",
-      success: function(response) {
-        if (response.status === "success") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Expense added successfully'
-          });
-          $('#expenseModal').modal('hide');
-          fetchCenterData();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to add expense'
-          });
+        url: baseUrl + "superadmin/Expenses",
+        method: "POST",
+        data: JSON.stringify(payload),
+        contentType: "application/json",
+        success: function(response) {
+            if (response.status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Expense added successfully'
+                });
+                $('#expenseModal').modal('hide');
+                fetchCenterData();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Failed to add expense'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', status, error, xhr.responseText);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error adding expense. Check console for details.'
+            });
         }
-      },
-      error: function() {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error adding expense'
-        });
-      }
     });
-  });
+});
 
   // Edit Expense Handler
   $(document).on('click', '.btn-edit[data-expense-id]', function() {

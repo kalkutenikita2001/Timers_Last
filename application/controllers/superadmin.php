@@ -8,6 +8,8 @@ class superadmin extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('DashboardModel');
+		$this->load->model('Student_model'); // Load the Student_model
+
 	}
 
 	public function dashboard()
@@ -65,10 +67,23 @@ class superadmin extends CI_Controller
 	{
 		$this->load->view('superadmin/Re_admission');
 	}
+	// public function Students()
+	// {
+	// 	$this->load->view('superadmin/Students');
+	// }
+	// show students list
 	public function Students()
 	{
-		$this->load->view('superadmin/Students');
+		$data['students'] = $this->Student_model->get_all_students();
+		$this->load->view('superadmin/Students', $data);
 	}
+
+	// view student details
+	// public function student_details($id)
+	// {
+	// 	$data['student'] = $this->Student_model->get_student_by_id($id);
+	// 	$this->load->view('superadmin/StudentDetails', $data);
+	// }
 	public function Renew_admission()
 	{
 		$this->load->view('superadmin/Renew_admission');
@@ -93,6 +108,22 @@ class superadmin extends CI_Controller
 	public function Finance()
 	{
 		$this->load->view('superadmin/Finance');
+	}
+	// API endpoint for AJAX
+	public function getRevenue()
+	{
+		$filters = [
+			'center_id'   => $this->input->post("center_id"),
+			'start_date'  => $this->input->post("start_date"),
+			'end_date'    => $this->input->post("end_date"),
+		];
+
+		$data = $this->Finance_model->getCombinedRevenue($filters);
+
+		echo json_encode([
+			'status' => true,
+			'data'   => $data
+		]);
 	}
 
 	public function Expenses()
@@ -143,6 +174,12 @@ class superadmin extends CI_Controller
 		$this->load->view('superadmin/participant_form');
 	}
 
+
+	public function Permission()
+	{
+
+		$this->load->view('superadmin/Permission');
+	}
 	public function add_new_center()
 	{
 		$this->load->view('superadmin/add_new_center');
@@ -152,12 +189,25 @@ class superadmin extends CI_Controller
 	{
 		$this->load->view('superadmin/adminlogin');
 	}
-
-	public function student_details($student_id = null)
+	public function student_details($id = null)
 	{
-		if (!$student_id) {
-			redirect('superadmin/Students');
+		if (!$id) {
+			// if no student id is provided, redirect back to list
+			redirect('superadmin/students');
 		}
-		$this->load->view('superadmin/student_details');
+
+		$data['student'] = $this->Student_model->get_student_by_id($id);
+
+		if (!$data['student']) {
+			// if student not found, you can also redirect or show error
+			$this->session->set_flashdata('error', 'Student not found.');
+			redirect('superadmin/students');
+		}
+		// Load facilities
+		$this->load->model('Facility_model');
+		$data['facilities'] = $this->Facility_model->get_facilities_by_student($id);
+
+
+		$this->load->view('superadmin/student_details', $data);
 	}
 }
