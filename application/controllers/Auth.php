@@ -55,11 +55,13 @@ class Auth extends CI_Controller
 
             if ($admin && password_verify($password, $admin->password)) {
                 $this->session->set_userdata([
-                    'id' => $admin->id,
-                    'username' => $admin->name,
-                    'role' => 'admin',
+                    'id'        => $admin->id,
+                    'username'  => $admin->name,
+                    'role'      => 'admin',
+                    'center_id' => $admin->id,   // ✅ center’s primary key
                     'logged_in' => TRUE
                 ]);
+
                 redirect('admin/dashboard');
             } else {
                 $this->show_error('Invalid Username or Password!');

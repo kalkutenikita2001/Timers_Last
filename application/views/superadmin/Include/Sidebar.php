@@ -255,6 +255,10 @@
                 href="<?php echo base_url('superadmin/Leave'); ?>">
                 <i class="bi bi-calendar-x"></i><span>Leave Management</span>
 
+                <a class="nav-link <?php echo ($this->uri->segment(2) == 'Permission') ? 'active' : ''; ?>" href="<?php echo base_url() . 'superadmin/Permission'; ?>">
+                    <i class="bi bi-person-circle"></i><span>Permission</span>
+                </a>
+
                 <a class="nav-link <?php echo ($this->uri->segment(2) == 'Superadmin_profile') ? 'active' : ''; ?>"
                     href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
                     <i class="fa-solid fa-lock"></i><span>Forget Password</span>

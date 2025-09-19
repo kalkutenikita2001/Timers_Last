@@ -753,11 +753,11 @@
           <i class="fas fa-times"></i>
         </button>
         <h3 id="expenseLabel">Add Expense</h3>
-        <form id="expenseForm">
+        <form id="expenseForm"  method="post">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="expense_category">Category <span class="text-danger">*</span></label>
-              <select id="expense_category" name="expense_category" class="form-control" required>
+              <select id="expense_category" name="category" class="form-control" required>
                 <option value="">Select Category</option>
                 <option value="Electricity">Electricity</option>
                 <option value="Water">Water</option>
@@ -767,17 +767,17 @@
             </div>
             <div class="form-group col-md-6">
               <label for="expense_amount">Amount <span class="text-danger">*</span></label>
-              <input type="number" id="expense_amount" name="expense_amount" class="form-control" min="0" step="0.01" required placeholder="Enter Amount" />
+              <input type="number" id="expense_amount" name="amount" class="form-control" min="0" step="0.01" required placeholder="Enter Amount" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="expense_date">Date <span class="text-danger">*</span></label>
-              <input type="date" id="expense_date" name="expense_date" class="form-control" required />
+              <input type="date" id="expense_date" name="date" class="form-control" required />
             </div>
             <div class="form-group col-md-6">
               <label for="expense_description">Description</label>
-              <input type="text" id="expense_description" name="expense_description" class="form-control" placeholder="Enter Description" />
+              <input type="text" id="expense_description" name="description" class="form-control" placeholder="Enter Description" />
             </div>
           </div>
           <div class="d-flex justify-content-center">
@@ -1336,56 +1336,67 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
     });
   });
 
-  // Edit Batch Handler
+  // Edit Batch Handler (robust success/data handling)
   $(document).on('click', '.btn-edit[data-batch-id]', function() {
-  const batchId = $(this).data('batch-id');
-  console.log('Edit button clicked for batch ID:', batchId); // Debug log
+    const batchId = $(this).data('batch-id');
+    console.log('Edit button clicked for batch ID:', batchId); // Debug log
 
-  if (!batchId) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Invalid batch ID'
-    });
-    return;
-  }
-
-  $.ajax({
-    url: baseUrl + "Center/getBatchById/" + batchId,
-    method: "GET",
-    dataType: "json",
-    success: function(response) {
-      console.log('AJAX Response:', response); // Debug log
-      if (response.status === true && response.data) { // Adjusted to match boolean status and data key
-        const b = response.data;
-        $("#editBatchId").val(b.id || '');
-        $("#editBatchName").val(b.batch_name || '');
-        $("#editBatchTiming").val(b.start_time || '');
-        $("#editEndTime").val(b.end_time || '');
-        $("#editStartDate").val(b.start_date || '');
-        $("#editEndDate").val(b.end_date || '');
-        $("#editBatchCategory").val(b.category || '');
-        $("#editBatchLevel").val(b.batch_level ? b.batch_level.charAt(0).toUpperCase() + b.batch_level.slice(1) : '');
-        validateForm('editBatchForm', 'editBatchSubmitBtn');
-        $("#editBatchModal").modal("show");
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: response.message || 'Failed to load batch data'
-        });
-      }
-    },
-    error: function(xhr, status, error) {
-      console.error('AJAX Error:', status, error, xhr.responseText); // Detailed error log
+    if (!batchId) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error fetching batch data'
+        text: 'Invalid batch ID'
       });
+      return;
     }
+
+    $.ajax({
+      url: baseUrl + "Center/getBatchById/" + batchId,
+      method: "GET",
+      dataType: "json",
+      success: function(response) {
+        console.log('AJAX Response:', response); // Debug log
+        // Accept either boolean true or "success" or other truthy statuses
+        const ok = (response && (response.status === true || response.status === "success" || response.status === "ok"));
+        // Try common places where the batch object may be sent
+        const b = (response && (response.data || response.batch || response)) ? (response.data || response.batch || response) : null;
+
+        if (ok && b) {
+          // If response.data contains wrapper keys, ensure we get actual object
+          const batchObj = (b && b.id) ? b : (b.data || b.batch || b);
+          const item = batchObj || b;
+
+          $("#editBatchId").val(item.id || '');
+          $("#editBatchName").val(item.batch_name || '');
+          $("#editBatchTiming").val(item.start_time || '');
+          $("#editEndTime").val(item.end_time || '');
+          $("#editStartDate").val(item.start_date || '');
+          $("#editEndDate").val(item.end_date || '');
+          // Normalize batch_level casing to match select options (First letter uppercase)
+          const lvl = item.batch_level || item.level || '';
+          $("#editBatchCategory").val(item.category || '');
+          $("#editBatchLevel").val(lvl ? (lvl.charAt(0).toUpperCase() + lvl.slice(1)) : '');
+          validateForm('editBatchForm', 'editBatchSubmitBtn');
+          $("#editBatchModal").modal("show");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'Failed to load batch data'
+          });
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('AJAX Error:', status, error, xhr && xhr.responseText); // Detailed error log
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching batch data'
+        });
+      }
+    });
   });
-});
+
   // Add Batch Handler
   $('#batchSubmitBtn').click(function() {
     const form = $('#batchForm');
@@ -1727,50 +1738,51 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   });
 
   // Add Expense Handler
-  $('#expenseSubmitBtn').click(function() {
+ $('#expenseSubmitBtn').click(function() {
     const form = $('#expenseForm');
     if (!form[0].checkValidity()) {
-      form[0].reportValidity();
-      return;
+        form[0].reportValidity();
+        return;
     }
     const payload = {
-      center_id: centerId,
-      category: $('#expense_category').val(),
-      amount: parseFloat($('#expense_amount').val()).toFixed(2),
-      date: $('#expense_date').val(),
-      description: $('#expense_description').val()
+        center_id: centerId,
+        category: $('#expense_category').val(),
+        amount: parseFloat($('#expense_amount').val()).toFixed(2),
+        date: $('#expense_date').val(),
+        description: $('#expense_description').val()
     };
     $.ajax({
-      url: baseUrl + "Expense/addExpense",
-      method: "POST",
-      data: JSON.stringify(payload),
-      contentType: "application/json",
-      success: function(response) {
-        if (response.status === "success") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Expense added successfully'
-          });
-          $('#expenseModal').modal('hide');
-          fetchCenterData();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to add expense'
-          });
+        url: baseUrl + "superadmin/Expenses",
+        method: "POST",
+        data: JSON.stringify(payload),
+        contentType: "application/json",
+        success: function(response) {
+            if (response.status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Expense added successfully'
+                });
+                $('#expenseModal').modal('hide');
+                fetchCenterData();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Failed to add expense'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', status, error, xhr.responseText);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error adding expense. Check console for details.'
+            });
         }
-      },
-      error: function() {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error adding expense'
-        });
-      }
     });
-  });
+});
 
   // Edit Expense Handler
   $(document).on('click', '.btn-edit[data-expense-id]', function() {
@@ -1857,5 +1869,6 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   fetchCenterData();
 });
 </script>
+
 </body>
 </html>
