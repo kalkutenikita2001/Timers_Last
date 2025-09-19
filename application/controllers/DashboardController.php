@@ -64,4 +64,35 @@ class DashboardController extends CI_Controller
             ->set_content_type('application/json')
             ->set_output(json_encode($output));
     }
+
+    /**
+     * AJAX endpoint: returns JSON list of student rows for the requested filter and center.
+     * GET params:
+     *  - filter: 'active' | 'attendance' | 'due' | 'paid' | 'all' (default 'all')
+     *  - center_id: optional center id
+     *
+     * Example: /dashboard/students_list?filter=active&center_id=21
+     */
+    public function students_list()
+    {
+        $filter = $this->input->get('filter', true) ?? 'all';
+        $center_id = $this->input->get('center_id', true);
+
+        if ($center_id === '') $center_id = null;
+
+        // sanitize filter - allow only expected values
+        $allowed = ['active', 'attendance', 'due', 'paid', 'all'];
+        if (!in_array($filter, $allowed)) $filter = 'all';
+
+        $rows = $this->DashboardModel->getStudentsByFilter($filter, $center_id);
+
+        $output = array(
+            'status' => 'success',
+            'data' => $rows
+        );
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($output));
+    }
 }

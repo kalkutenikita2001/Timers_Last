@@ -279,7 +279,7 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #ff4040, #470000);
+      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
       border: none;
       border-radius: 6px;
       padding: 10px 20px;
@@ -461,6 +461,18 @@
     .center-btn:hover::before {
       opacity: 1;
     }
+
+    /* Modal table small fixes */
+    .stat-table th, .stat-table td {
+      font-size: 13px;
+      vertical-align: middle;
+    }
+    .stat-modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
   </style>
 </head>
 
@@ -476,40 +488,36 @@
       <!-- Stats Cards -->
       <div class="row g-3 mb-4 text-center">
         <div class="col-6 col-md-3">
-          <div class="card-stat" onclick="handleStatClick('activeStudents')">
+          <div class="card-stat" onclick="openStatList('active')">
             <i class="bi bi-person-lines-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <!-- added id activeStudentsCard -->
               <h4 id="activeStudentsCard"><?= isset($activeStudents) ? $activeStudents : 0 ?></h4>
               <span>Active Students</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="card-stat" onclick="handleStatClick('attendanceRate')">
+          <div class="card-stat" onclick="openStatList('attendance')">
             <i class="bi bi-person-check-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <!-- added id attendanceRateCard -->
               <h4 id="attendanceRateCard"><?= isset($attendanceRate) ? $attendanceRate : 0 ?>%</h4>
               <span>Attendance Rate</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="card-stat" onclick="handleStatClick('feeDefaulters')">
+          <div class="card-stat" onclick="openStatList('due')">
             <i class="bi bi-currency-rupee card-icon"></i>
             <div class="d-flex flex-column">
-              <!-- added id dueAmountCard -->
               <h4 id="dueAmountCard"><?= isset($totalDue) ? $totalDue : 0 ?></h4>
               <span>Due Amount</span>
             </div>
           </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="card-stat" onclick="handleStatClick('monthlyProfits')">
+          <div class="card-stat" onclick="openStatList('paid')">
             <i class="bi bi-bar-chart-line-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <!-- added id paidAmountCard -->
               <h4 id="paidAmountCard">Rs.<?= isset($totalIncome) ? number_format($totalIncome) : '0' ?></h4>
               <span>Paid Amounts</span>
             </div>
@@ -555,7 +563,7 @@
                 <?php foreach ($centers as $c): ?>
                   <button class="btn center-btn text-start"
                     value="<?= $c->id ?>"
-                    onclick="selectCenter('<?= $c->id ?>')">
+                    onclick="selectCenter('<?= $c->id ?>', this)">
                     <i class="bi bi-house-door-fill me-2"></i>
                     <?= htmlspecialchars($c->name) ?>
                   </button>
@@ -581,9 +589,54 @@
     </div>
   </div>
 
-  <!-- NOTE: your add/edit center modals are commented out in original. JS will check for elements before setting values. -->
+  <!-- Modal: stat list -->
+  <div class="modal fade" id="statListModal" tabindex="-1" aria-labelledby="statListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-body">
+          <div class="stat-modal-header mb-3">
+            <h5 class="modal-title" id="statListModalLabel">Students</h5>
+            <div>
+              <small class="text-muted" id="statListSubLabel">Showing results</small>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped stat-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Parent</th>
+                  <th>Batch</th>
+                  <th>Level</th>
+                  <th>Paid</th>
+                  <th>Remaining</th>
+                  <th>Status</th>
+                  <th>Last Attendance</th>
+                </tr>
+              </thead>
+              <tbody id="statListTableBody">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
+    // track currently selected center (null = all centers)
+    window.selectedCenterId = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       initializeCharts();
       setupSidebarToggle();
@@ -641,7 +694,7 @@
     }
 
     function setupModalBlur() {
-      const modals = ['addCenterModal', 'editCenterModal'];
+      const modals = ['addCenterModal', 'editCenterModal', 'statListModal'];
       modals.forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         if (modalEl) {
@@ -760,9 +813,209 @@
 
     }
 
-    function handleStatClick(statType) {
-      console.log(`Clicked on ${statType}`);
-      alert(`You clicked on ${statType.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+    /**
+     * Fetch stats for a center (or all centers when centerId is null)
+     * and update the 4 stat cards.
+     */
+    function fetchCenterStats(centerId) {
+      let url = '<?= base_url("dashboard/center_stats") ?>';
+      if (centerId !== null && centerId !== undefined) {
+        url += '?center_id=' + encodeURIComponent(centerId);
+      }
+
+      fetch(url, { credentials: 'same-origin' })
+        .then(resp => {
+          if (!resp.ok) throw new Error('Network response was not ok');
+          return resp.json();
+        })
+        .then(json => {
+          if (!json || json.status !== 'success' || !json.data) {
+            console.warn('Invalid stats response:', json);
+            return;
+          }
+          const d = json.data;
+          const activeEl = document.getElementById('activeStudentsCard');
+          const attendanceEl = document.getElementById('attendanceRateCard');
+          const dueEl = document.getElementById('dueAmountCard');
+          const paidEl = document.getElementById('paidAmountCard');
+
+          if (activeEl) activeEl.innerText = (d.active_students !== undefined) ? d.active_students : 0;
+          if (attendanceEl) attendanceEl.innerText = (d.attendance_rate !== undefined) ? (d.attendance_rate + '%') : '0%';
+          if (dueEl) dueEl.innerText = (d.total_due !== undefined) ? formatNumber(d.total_due) : 0;
+          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? ('Rs.' + formatNumber(d.total_paid)) : 'Rs.0';
+        })
+        .catch(err => {
+          console.error('Error fetching center stats:', err);
+        });
+    }
+
+    // helper to format number with 2 decimals or thousand separators
+    function formatNumber(n) {
+      if (n === null || n === undefined) return '0';
+      if (Number(n) === Math.floor(n)) {
+        return Number(n).toLocaleString('en-IN');
+      } else {
+        return Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+
+    /**
+     * Called when clicking a center button.
+     * We set the global selectedCenterId and fetch stats for that center.
+     * This preserves previous behavior and also allows the stat-popups to filter by center.
+     */
+    function selectCenter(centerId, btnEl = null) {
+      // update selected center global
+      window.selectedCenterId = centerId;
+
+      // Fetch new stats for the selected center (existing behavior)
+      fetchCenterStats(centerId);
+
+      // Optionally show edit modal (only if present); keep previous behavior
+      const editName = document.getElementById('editCenterName');
+      const editLocation = document.getElementById('editCenterLocation');
+      const editCapacity = document.getElementById('editCenterCapacity');
+      const editId = document.getElementById('editCenterId');
+
+      // Dummy fallback data for UI — keep as before
+      const centerData = {
+        center1: {
+          name: "Center 1",
+          location: "Mumbai",
+          capacity: 100
+        },
+        center2: {
+          name: "Center 2",
+          location: "Delhi",
+          capacity: 150
+        },
+        center3: {
+          name: "Center 3",
+          location: "Bangalore",
+          capacity: 120
+        },
+        center4: {
+          name: "Center 4",
+          location: "Chennai",
+          capacity: 80
+        }
+      };
+
+      const data = centerData[centerId] || {
+        name: centerId,
+        location: "Unknown",
+        capacity: 100
+      };
+
+      if (editName) editName.value = data.name;
+      if (editLocation) editLocation.value = data.location;
+      if (editCapacity) editCapacity.value = data.capacity;
+      if (editId) editId.value = centerId;
+
+      const editModalEl = document.getElementById('editCenterModal');
+      if (editModalEl) {
+        const modal = new bootstrap.Modal(editModalEl);
+        modal.show();
+      }
+
+      // Update selected button highlight (visual)
+      // Remove .active from other center buttons and add to clicked one
+      try {
+        document.querySelectorAll('.center-btn').forEach(b => b.classList.remove('selected-center'));
+        if (btnEl) btnEl.classList.add('selected-center');
+      } catch (e) {}
+    }
+
+    /**
+     * Open the stat list modal for a given filter:
+     * 'active' | 'attendance' | 'due' | 'paid'
+     * Uses window.selectedCenterId (null = all centers)
+     */
+    function openStatList(filter) {
+      const centerId = window.selectedCenterId || null;
+      const url = '<?= base_url("dashboard/students_list") ?>?filter=' + encodeURIComponent(filter) + (centerId ? '&center_id=' + encodeURIComponent(centerId) : '');
+
+      // Update modal title/sub
+      const modalTitle = {
+        active: 'Active Students',
+        attendance: 'Recently Attended (7 days)',
+        due: 'Students with Due Amount',
+        paid: 'Students who Paid'
+      }[filter] || 'Students';
+
+      document.getElementById('statListModalLabel').innerText = modalTitle;
+      const subLabel = centerId ? ('Center ID: ' + centerId) : 'All centers';
+      document.getElementById('statListSubLabel').innerText = subLabel;
+
+      // Clear previous rows and show spinner row
+      const tbody = document.getElementById('statListTableBody');
+      tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4">Loading...</td></tr>';
+
+      fetch(url, { credentials: 'same-origin' })
+        .then(resp => {
+          if (!resp.ok) throw new Error('Network response was not ok');
+          return resp.json();
+        })
+        .then(json => {
+          if (!json || json.status !== 'success' || !Array.isArray(json.data)) {
+            tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">No data available</td></tr>';
+            return;
+          }
+
+          const rows = json.data;
+          if (rows.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="10" class="text-center">No students found.</td></tr>';
+          } else {
+            tbody.innerHTML = '';
+            rows.forEach((r, idx) => {
+              const tr = document.createElement('tr');
+
+              const name = r.name || '';
+              const contact = r.contact || '';
+              const parent = r.parent_name || '';
+              const batch = r.batch_id || '';
+              const level = r.student_progress_category || '';
+              const paid = (r.paid_amount !== null && r.paid_amount !== undefined) ? Number(r.paid_amount).toLocaleString('en-IN') : '0';
+              const remaining = (r.remaining_amount !== null && r.remaining_amount !== undefined) ? Number(r.remaining_amount).toLocaleString('en-IN') : '0';
+              const status = r.status || '';
+              const last_att = r.last_attendance ? r.last_attendance.split(' ')[0] : '';
+
+              tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td>${escapeHtml(name)}</td>
+                <td>${escapeHtml(contact)}</td>
+                <td>${escapeHtml(parent)}</td>
+                <td>${escapeHtml(batch)}</td>
+                <td>${escapeHtml(level)}</td>
+                <td>${paid}</td>
+                <td>${remaining}</td>
+                <td>${escapeHtml(status)}</td>
+                <td>${escapeHtml(last_att)}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching student list:', err);
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Failed to load data</td></tr>';
+        });
+
+      // show modal
+      const modalEl = document.getElementById('statListModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+
+    // simple HTML escape for insertion into table cells
+    function escapeHtml(unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     function exportToExcel() {
@@ -812,116 +1065,6 @@
       alert('Attendance filter functionality would be implemented here');
     }
 
-    /**
-     * Fetch stats for a center (or all centers when centerId is null)
-     * and update the 4 stat cards.
-     */
-    function fetchCenterStats(centerId) {
-      // build url; endpoint in controller: superadmin/dashboard/center_stats
-      let url = '<?= base_url("superadmin/dashboard/center_stats") ?>';
-      if (centerId !== null && centerId !== undefined) {
-        url += '?center_id=' + encodeURIComponent(centerId);
-      }
-
-      // fetch JSON
-      fetch(url, { credentials: 'same-origin' })
-        .then(resp => {
-          if (!resp.ok) throw new Error('Network response was not ok');
-          return resp.json();
-        })
-        .then(json => {
-          if (!json || json.status !== 'success' || !json.data) {
-            console.warn('Invalid stats response:', json);
-            return;
-          }
-          const d = json.data;
-          // Update DOM elements safely
-          const activeEl = document.getElementById('activeStudentsCard');
-          const attendanceEl = document.getElementById('attendanceRateCard');
-          const dueEl = document.getElementById('dueAmountCard');
-          const paidEl = document.getElementById('paidAmountCard');
-
-          if (activeEl) activeEl.innerText = (d.active_students !== undefined) ? d.active_students : 0;
-          if (attendanceEl) attendanceEl.innerText = (d.attendance_rate !== undefined) ? (d.attendance_rate + '%') : '0%';
-          if (dueEl) dueEl.innerText = (d.total_due !== undefined) ? formatNumber(d.total_due) : 0;
-          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? ('Rs.' + formatNumber(d.total_paid)) : 'Rs.0';
-        })
-        .catch(err => {
-          console.error('Error fetching center stats:', err);
-        });
-    }
-
-    // helper to format number with 2 decimals or thousand separators
-    function formatNumber(n) {
-      if (n === null || n === undefined) return '0';
-      // if integer-like, show no decimals for cleanliness
-      if (Number(n) === Math.floor(n)) {
-        return Number(n).toLocaleString('en-IN');
-      } else {
-        return Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
-    }
-
-    /**
-     * selectCenter now:
-     * - fetches stats for the clicked center
-     * - then tries to keep the existing behavior of opening edit modal *only if it exists*
-     * (this avoids JS errors if modals are commented out).
-     */
-    function selectCenter(centerId) {
-      // fetch & update stat cards
-      fetchCenterStats(centerId);
-
-      // Original behavior: populate edit modal fields & show modal.
-      // We'll do this only if those elements exist in DOM.
-      const editName = document.getElementById('editCenterName');
-      const editLocation = document.getElementById('editCenterLocation');
-      const editCapacity = document.getElementById('editCenterCapacity');
-      const editId = document.getElementById('editCenterId');
-
-      // Dummy fallback data for UI — keep as before
-      const centerData = {
-        center1: {
-          name: "Center 1",
-          location: "Mumbai",
-          capacity: 100
-        },
-        center2: {
-          name: "Center 2",
-          location: "Delhi",
-          capacity: 150
-        },
-        center3: {
-          name: "Center 3",
-          location: "Bangalore",
-          capacity: 120
-        },
-        center4: {
-          name: "Center 4",
-          location: "Chennai",
-          capacity: 80
-        }
-      };
-
-      const data = centerData[centerId] || {
-        name: centerId,
-        location: "Unknown",
-        capacity: 100
-      };
-
-      if (editName) editName.value = data.name;
-      if (editLocation) editLocation.value = data.location;
-      if (editCapacity) editCapacity.value = data.capacity;
-      if (editId) editId.value = centerId;
-
-      // Show edit modal only if it exists
-      const editModalEl = document.getElementById('editCenterModal');
-      if (editModalEl) {
-        const modal = new bootstrap.Modal(editModalEl);
-        modal.show();
-      }
-    }
-
     function submitCenterForm() {
       const centerName = document.getElementById('centerName').value;
       const centerLocation = document.getElementById('centerLocation').value;
@@ -963,7 +1106,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const revenueCtx = document.getElementById('revenueChart').getContext('2d');
