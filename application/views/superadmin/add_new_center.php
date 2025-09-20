@@ -301,10 +301,8 @@
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
 
-                        console.log("hello"
-                        );
                         const form = document.getElementById("centerForm");
-                        console.log("hello");
+                        
                         const nextBtn = form.querySelector(".btn-next");
 
 
@@ -1569,7 +1567,7 @@
                             };
 
                             // Here you would typically send the data to the server
-                            console.log('Center Data:', CenterData);
+                           
                             alert('Center details saved successfully!');
 
                             // Reset the form and data
@@ -1701,14 +1699,14 @@
 
             <script>
 
-                console.log("hello world333333333");
+               
                 const baseUrl = "<?= base_url(); ?>";
                 let savedCenterId = null; // 🔑 Global variable to store center_id
 
                 // ---------------- Save Center ----------------
                 $("#centerForm").on("submit", function (e) {
 
-                     console.log("hello world");
+                     
                     e.preventDefault();
 
                     const payload = {
