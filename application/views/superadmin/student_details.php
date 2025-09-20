@@ -1218,61 +1218,7 @@
 
                             <?php endforeach; ?>
 
-                            <div class="batch-history-item">
-                                <div class="batch-history-header">
-                                    <span class="batch-period">January 2023 - June 2023</span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-university"></i>
-                                                Center
-                                            </div>
-                                            <div class="detail-value">Mumbai West Branch</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-users"></i>
-                                                Batch
-                                            </div>
-                                            <div class="detail-value">Morning Batch - Group C</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-clock"></i>
-                                                Batch Time
-                                            </div>
-                                            <div class="detail-value">7:00 AM - 8:30 AM</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-chalkboard-teacher"></i>
-                                                Coach
-                                            </div>
-                                            <div class="detail-value">Ms. Priya Sharma</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-calendar-week"></i>
-                                                Training Days
-                                            </div>
-                                            <div class="detail-value">Monday, Wednesday, Friday</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-check-circle"></i>
-                                                Status
-                                            </div>
-                                            <div class="detail-value">
-                                                <span class="status-badge status-active">Completed</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <!-- Navigation Buttons -->
