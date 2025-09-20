@@ -154,8 +154,7 @@ public function saveFacility()
         // JSON payload
         $centerId     = $input['center_id'] ?? null;
         $facilityName = $input['facility_name'] ?? null;
-        $subTypes     = $input['subTypes'] ?? [];  // ✅ correct key
-    } else {
+        $subTypes     = $input['subTypes'] ?? [];     } else {
         // Form-data / x-www-form-urlencoded
         $centerId     = $this->input->post('center_id');
         $facilityName = $this->input->post('facility_name');
