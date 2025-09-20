@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Add Expenses</title>
-      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -163,6 +163,111 @@
             background-color: #dc3545;
             color: white;
         }
+
+        /* 📱 Mobile First Approach */
+
+        /* Extra Small Devices (Phones, <576px) */
+        @media (max-width: 575.98px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 10px;
+            }
+
+            .card,
+            .table {
+                font-size: 0.8rem;
+            }
+
+            .table th,
+            .table td {
+                white-space: nowrap;
+            }
+
+            .modal-dialog {
+                margin: 10px;
+                max-width: 95%;
+            }
+
+            .navbar .navbar-brand {
+                font-size: 1rem;
+            }
+
+            /* Sidebar collapsed on mobile */
+            #sidebar {
+                position: fixed;
+                left: -250px;
+                width: 250px;
+                top: 0;
+                height: 100%;
+                background: #470000;
+                transition: all 0.3s ease;
+                z-index: 1050;
+            }
+
+            #sidebar.active {
+                left: 0;
+            }
+
+            #contentWrapper {
+                margin-left: 0 !important;
+            }
+
+            /* Overlay when sidebar opens */
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1049;
+            }
+
+            .overlay.active {
+                display: block;
+            }
+        }
+
+        /* Small Devices (≥576px and <768px) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Medium Devices (≥768px and <992px) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .content-wrapper {
+                margin-left: 200px;
+            }
+
+            #sidebar {
+                width: 200px;
+            }
+        }
+
+        /* Large Devices (≥992px and <1200px) */
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .content-wrapper {
+                margin-left: 220px;
+            }
+
+            #sidebar {
+                width: 220px;
+            }
+        }
+
+        /* Extra Large Devices (≥1200px) */
+        @media (min-width: 1200px) {
+            .content-wrapper {
+                margin-left: 250px;
+            }
+
+            #sidebar {
+                width: 250px;
+            }
+        }
     </style>
 </head>
 
@@ -191,9 +296,9 @@
                             </select>
                         </div>
                         <div>
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
+                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
-                            </button>
+                            </button> -->
                             <button class="btn btn-primary" data-toggle="modal" data-target="#expenseModal">
                                 <i class="fas fa-plus mr-1"></i> Add Expense
                             </button>

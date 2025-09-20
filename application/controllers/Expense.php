@@ -25,59 +25,104 @@ class Expense extends CI_Controller
         $this->load->view('superadmin/Expenses', $data);
     }
 
-    //Save new expense
+    //Save new expense old
+    // public function add()
+    // {
+    //     $dt = $this->input->post();
+    //     $expenseData = [
+    //         'center_id' => $this->input->post('center_id'),
+    //         'title'     => $this->input->post('title'),
+    //         'date'      => $this->input->post('date'),
+    //         'amount'    => $this->input->post('amount'),
+    //         'category'  => $this->input->post('category'),
+    //         'description' => $this->input->post('description'),
+    //         'type'      => 'manual',
+    //         'status'    => 'pending',
+    //         'added_by'    => $this->input->post('added_by'),
+    //         'created_at' => date('Y-m-d H:i:s')
+
+    //     ];
+
+    //     $this->Expense_model->insert_expense($expenseData);
+    //     $this->session->set_flashdata('success', 'Expense added successfully!');
+    //     redirect('superadmin/Expenses');
+    // }
     public function add()
     {
-        $dt = $this->input->post();
-        $expenseData = [
-            'center_id' => $this->input->post('center_id'),
-            'title'     => $this->input->post('title'),
-            'date'      => $this->input->post('date'),
-            'amount'    => $this->input->post('amount'),
-            'category'  => $this->input->post('category'),
-            'description' => $this->input->post('description'),
-            'type'      => 'manual',
-            'status'    => 'pending',
-            'added_by'    => $this->input->post('added_by'),
-            'created_at' => date('Y-m-d H:i:s')
+        // Get POST data
+        $center_id   = $this->input->post('center_id');
+        $title       = $this->input->post('title');
+        $date        = $this->input->post('date');
+        $amount      = $this->input->post('amount');
+        $category    = $this->input->post('category');
+        $description = $this->input->post('description');
+        $added_by    = $this->input->post('added_by');
 
+        // Optional: validate required fields
+        if (!$center_id || !$title || !$date || !$amount || !$category || !$description) {
+            $this->session->set_flashdata('error', 'Please fill all required fields.');
+            redirect('superadmin/Expenses');
+        }
+
+        // Prepare data array
+        $expenseData = [
+            'center_id'   => $center_id,
+            'title'       => $title,
+            'date'        => $date,
+            'amount'      => $amount,
+            'category'    => $category,
+            'description' => $description,
+            'type'        => 'manual',
+            'status'      => 'approved', // ✅ Always approved
+            'added_by'    => $added_by,
+            'created_at'  => date('Y-m-d H:i:s')
         ];
 
-        $this->Expense_model->insert_expense($expenseData);
-        $this->session->set_flashdata('success', 'Expense added successfully!');
+        // Insert into database
+        if ($this->Expense_model->insert_expense($expenseData)) {
+            $this->session->set_flashdata('success', 'Expense added successfully!');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to add expense. Please try again.');
+        }
+
         redirect('superadmin/Expenses');
     }
-//    public function add()
-// {
-//     // Get raw input data (JSON)
-//     $input = json_decode(file_get_contents('php://input'), true);
 
-//     $addedBy = $input['added_by'] ?: $this->session->userdata('user_role'); // Fallback to session
-//     $status = ($addedBy === 'superadmin') ? 'approved' : 'pending';
 
-//     $expenseData = [
-//         'center_id'   => $input['center_id'] ?: $this->session->userdata('center_id'), // Fallback
-//         'title'       => '', // Add logic or remove if not needed
-//         'date'        => $input['date'],
-//         'amount'      => $input['amount'],
-//         'category'    => $input['category'],
-//         'description' => $input['description'],
-//         'type'        => 'manual',
-//         'status'      => $status,
-//         'added_by'    => $addedBy,
-//         'created_at'  => date('Y-m-d H:i:s')
-//     ];
 
-//     $response = ['status' => 'error', 'message' => 'Failed to add expense'];
-//     if ($this->Expense_model->insert_expense($expenseData)) {
-//         $response = ['status' => 'success', 'message' => 'Expense added successfully'];
-//     }
 
-//     // Return JSON response
-//     header('Content-Type: application/json');
-//     echo json_encode($response);
-//     exit;
-// }
+
+    //    public function add()
+    // {
+    //     // Get raw input data (JSON)
+    //     $input = json_decode(file_get_contents('php://input'), true);
+
+    //     $addedBy = $input['added_by'] ?: $this->session->userdata('user_role'); // Fallback to session
+    //     $status = ($addedBy === 'superadmin') ? 'approved' : 'pending';
+
+    //     $expenseData = [
+    //         'center_id'   => $input['center_id'] ?: $this->session->userdata('center_id'), // Fallback
+    //         'title'       => '', // Add logic or remove if not needed
+    //         'date'        => $input['date'],
+    //         'amount'      => $input['amount'],
+    //         'category'    => $input['category'],
+    //         'description' => $input['description'],
+    //         'type'        => 'manual',
+    //         'status'      => $status,
+    //         'added_by'    => $addedBy,
+    //         'created_at'  => date('Y-m-d H:i:s')
+    //     ];
+
+    //     $response = ['status' => 'error', 'message' => 'Failed to add expense'];
+    //     if ($this->Expense_model->insert_expense($expenseData)) {
+    //         $response = ['status' => 'success', 'message' => 'Expense added successfully'];
+    //     }
+
+    //     // Return JSON response
+    //     header('Content-Type: application/json');
+    //     echo json_encode($response);
+    //     exit;
+    // }
     // Apply filter
     public function filter()
     {

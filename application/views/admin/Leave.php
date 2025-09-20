@@ -5,8 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leave Management</title>
-    
-      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -93,6 +100,105 @@
                 white-space: nowrap;
             }
         }
+
+        /* ================== RESPONSIVE DESIGN ================== */
+
+        /* Tablets (<= 1024px) */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                margin-left: 180px;
+                padding: 15px;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Small tablets & large phones (<= 768px) */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0 !important;
+                padding: 12px;
+            }
+
+            h4 {
+                font-size: 1rem;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .modal-dialog {
+                max-width: 95% !important;
+                margin: 20px auto;
+            }
+        }
+
+        /* Phones (<= 576px) */
+        @media (max-width: 576px) {
+            body {
+                padding-top: 40px;
+            }
+
+            .card-header h4 {
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+
+            #globalSearch {
+                font-size: 0.85rem;
+                padding: 6px 8px;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.7rem;
+                padding: 6px;
+            }
+
+            .modal-body .col-md-6,
+            .modal-body .col-md-12 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Extra small devices (<= 400px) */
+        @media (max-width: 400px) {
+            .card-header h4 {
+                font-size: 0.8rem;
+            }
+
+            .btn {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.65rem;
+            }
+
+            textarea,
+            input,
+            select {
+                font-size: 0.8rem !important;
+            }
+        }
     </style>
 </head>
 
@@ -117,10 +223,16 @@
                             <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
                             </button> -->
+
+
                             <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
                                 <i class="fas fa-plus mr-1"></i> Apply Leave
                             </button>
                         </div>
+                        <div class="mb-3">
+                            <input type="text" id="globalSearch" class="form-control" placeholder="🔍 Search leaves...">
+                        </div>
+
                     </div>
 
                     <!-- Leaves Table -->
@@ -199,7 +311,25 @@
                             <input type="hidden" name="user_id" value="<?= $this->session->userdata('id'); ?>">
                             <div class="col-md-12 mb-3">
                                 <label>Applicant Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter applicant name" required>
+                                <select name="name" id="applicantSelect" class="form-control" required>
+                                    <option value="">-- Select Applicant --</option>
+
+                                    <optgroup label="Students">
+                                        <?php foreach ($students as $student): ?>
+                                            <option value="<?= $student['name'] ?>" data-role="Student">
+                                                <?= $student['name'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </optgroup>
+
+                                    <optgroup label="Staff">
+                                        <?php foreach ($staff as $st): ?>
+                                            <option value="<?= $st['staff_name'] ?>" data-role="Staff">
+                                                <?= $st['staff_name'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </optgroup>
+                                </select>
                                 <div class="invalid-feedback">Applicant name is required.</div>
                             </div>
 
@@ -381,6 +511,35 @@
                     confirmButtonColor: '#d33'
                 });
             <?php endif; ?>
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Make dropdown searchable
+            $('#applicantSelect').select2({
+                placeholder: "Select Applicant",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Auto-fill designation when applicant chosen
+            $('#applicantSelect').on('change', function() {
+                let role = $(this).find(':selected').data('role');
+                if (role) {
+                    $('#designationSelect').val(role);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Global search for table
+            $("#globalSearch").on("keyup", function() {
+                let value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
         });
     </script>
 

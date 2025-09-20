@@ -8,10 +8,11 @@ class Leave_model extends CI_Model
         if ($user_role == 'admin') {
             // Admin sees ALL leaves (students + staff) of their center
             $this->db->where('center_name', $center_name);
-        } elseif ($user_role == 'superadmin') {
-            // Superadmin sees only staff leaves globally
-            $this->db->where('role', 'Staff');
         }
+        //  elseif ($user_role == 'superadmin') {
+        //     // Superadmin sees only staff leaves globally
+        //     $this->db->where('role', 'Staff');
+        // }
 
         $this->db->order_by('from_date', 'DESC');
         return $this->db->get('leaves')->result();

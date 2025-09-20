@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expenses Management</title>
-        <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -280,7 +280,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <input type="hidden" name="added_by" value="superadmin">
-
+                            <input type="hidden" name="status" id="statusField" value="approved"> <!-- ✅ Hardcoded -->
                             <div class="form-group col-md-12">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
@@ -366,6 +366,8 @@
                                 <label>Category</label>
                                 <input type="text" name="category" class="form-control">
                             </div>
+                            <input type="hidden" name="status" id="statusField" value="pending">
+
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -529,18 +531,27 @@
 
 
         // Sidebar toggle functionality
-      $('#sidebarToggle').on('click', function () {
-        if ($(window).width() <= 576) {
-          $('#sidebar').toggleClass('active');
-          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-        } else {
-          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-          $('#contentWrapper').toggleClass('minimized', isMinimized);
-        }
-      });       
+        $('#sidebarToggle').on('click', function() {
+            if ($(window).width() <= 576) {
+                $('#sidebar').toggleClass('active');
+                $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+            } else {
+                const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+                $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+                $('#contentWrapper').toggleClass('minimized', isMinimized);
+            }
+        });
     </script>
-
+    <script>
+        $('#addExpenseForm').on('submit', function() {
+            let addedBy = $('input[name="added_by"]').val();
+            if (addedBy === "superadmin") {
+                $('#statusField').val("approved");
+            } else {
+                $('#statusField').val("pending");
+            }
+        });
+    </script>
 </body>
 
 </html>
