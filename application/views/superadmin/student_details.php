@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Details - Super Admin</title>
-    
-     <!-- Bootstrap 5 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -608,14 +608,15 @@
                 margin-top: 5px;
             }
         }
-       .modal {
-  z-index: 2000; /* higher than navbar/sidebar */
-}
-.modal-backdrop {
-  z-index: 1999;
-}
 
+        .modal {
+            z-index: 2000;
+            /* higher than navbar/sidebar */
+        }
 
+        .modal-backdrop {
+            z-index: 1999;
+        }
     </style>
 </head>
 
@@ -748,7 +749,8 @@
                                         Status
                                     </div>
                                     <div class="detail-value">
-                                        <span class="status-badge <?= strtolower($student['status']) == 'active' ? 'status-active' : 'status-inactive' ?>">
+                                        <span
+                                            class="status-badge <?= strtolower($student['status']) == 'active' ? 'status-active' : 'status-inactive' ?>">
                                             <?= $student['status'] ?>
                                         </span>
                                     </div>
@@ -892,64 +894,78 @@
                                 <i class="fas fa-history me-2"></i>Previous Admissions
                             </h5>
 
-                            <div class="admission-history-item">
-                                <div class="admission-history-header">
-                                    <span class="admission-type-badge admission-new">New Admission</span>
-                                    <span class="admission-period">July 2023 - December 2023</span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-calendar-plus"></i>
-                                                Admission Date
-                                            </div>
-                                            <div class="detail-value">10 July 2023</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-signal"></i>
-                                                Level/Category
-                                            </div>
-                                            <div class="detail-value">Beginner</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-rupee-sign"></i>
-                                                Course Fees
-                                            </div>
-                                            <div class="detail-value">₹6,000</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-calendar-check"></i>
-                                                Joining Date
-                                            </div>
-                                            <div class="detail-value">15 July 2023</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-clock"></i>
-                                                Duration
-                                            </div>
-                                            <div class="detail-value">6 months</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-check-circle"></i>
-                                                Completion Status
-                                            </div>
-                                            <div class="detail-value">
-                                                <span class="status-badge status-active">Completed</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php foreach ($student_history as $student_addmission_data): ?>
 
-                            <div class="admission-history-item">
+                                <div class="admission-history-item">
+                                    <div class="admission-history-header">
+                                        <span
+                                            class="admission-type-badge admission-new"><?php print_r($student_addmission_data["purpose"]) ?></span>
+                                        <span class="admission-period">
+                                            <?php print_r($student_addmission_data["joining_date"]) ?> </span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-calendar-plus"></i>
+                                                    Admission Date
+                                                </div>
+                                                <div class="detail-value">10 July 2023</div>
+                                            </div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-signal"></i>
+                                                    Level/Category
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_data["student_progress_category"]) ?>
+                                                </div>
+                                            </div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                    Course Fees
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_data["course_fees"]) ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                    Joining Date
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_data["joining_date"]) ?>
+                                                </div>
+                                            </div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-clock"></i>
+                                                    Duration
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_data["course_duration"]) ?> months
+                                                </div>
+                                            </div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Completion Status
+                                                </div>
+                                                <div class="detail-value">
+                                                    <span class="status-badge status-active">Completed</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <?php endforeach; ?>
+
+                            <!-- <div class="admission-history-item">
                                 <div class="admission-history-header">
                                     <span class="admission-type-badge admission-re">Re-Admission</span>
                                     <span class="admission-period">January 2023 - June 2023</span>
@@ -1004,7 +1020,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
 
                         <!-- Navigation Buttons -->
@@ -1049,7 +1065,9 @@
                                             <i class="fas fa-university"></i>
                                             Center
                                         </div>
-                                        <div class="detail-value">Mumbai Central Branch</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["center_name"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1057,7 +1075,9 @@
                                             <i class="fas fa-users"></i>
                                             Batch
                                         </div>
-                                        <div class="detail-value">Morning Batch - Group A</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["batch_name"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1065,7 +1085,10 @@
                                             <i class="fas fa-clock"></i>
                                             Batch Time
                                         </div>
-                                        <div class="detail-value">6:00 AM - 7:30 AM</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["start_time"]) ?> -
+                                            <?php print_r($student_get_current_batch[0]["end_time"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1083,7 +1106,9 @@
                                             <i class="fas fa-chalkboard-teacher"></i>
                                             Coach
                                         </div>
-                                        <div class="detail-value">Mr. Vikram Singh</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["coach"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1091,7 +1116,9 @@
                                             <i class="fas fa-user-tie"></i>
                                             Coordinator
                                         </div>
-                                        <div class="detail-value">Mrs. Sunita Patel</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["coordinator"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1099,7 +1126,9 @@
                                             <i class="fas fa-phone"></i>
                                             Coordinator Phone
                                         </div>
-                                        <div class="detail-value">+91 98765 43212</div>
+                                        <div class="detail-value">
+                                            <?php print_r($student_get_current_batch[0]["coordinator_phone"]) ?>
+                                        </div>
                                     </div>
 
                                     <div class="detail-row">
@@ -1119,61 +1148,75 @@
                                 <i class="fas fa-history me-2"></i>Previous Batches
                             </h5>
 
-                            <div class="batch-history-item">
-                                <div class="batch-history-header">
-                                    <span class="batch-period">July 2023 - December 2023</span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-university"></i>
-                                                Center
+                            <?php foreach ($student_history_batch as $student_addmission_batch_data): ?>
+
+                                <div class="batch-history-item">
+                                    <div class="batch-history-header">
+                                        <span
+                                            class="batch-period"><?php print_r($student_addmission_batch_data["start_date"]) ?></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-university"></i>
+                                                    Center
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_batch_data["center_name"]) ?>
+                                                </div>
                                             </div>
-                                            <div class="detail-value">Mumbai Central Branch</div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-users"></i>
+                                                    Batch
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_batch_data["batch_name"]) ?>
+                                                </div>
+                                            </div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-clock"></i>
+                                                    Batch Time
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_batch_data["start_time"]) ?> -
+                                                    <?php print_r($student_addmission_batch_data["end_time"]) ?>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-users"></i>
-                                                Batch
+                                        <div class="col-md-6">
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-chalkboard-teacher"></i>
+                                                    Coach
+                                                </div>
+                                                <div class="detail-value">
+                                                    <?php print_r($student_addmission_batch_data["coach"]) ?>
+                                                </div>
                                             </div>
-                                            <div class="detail-value">Evening Batch - Group B</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-clock"></i>
-                                                Batch Time
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-calendar-week"></i>
+                                                    Training Days
+                                                </div>
+                                                <div class="detail-value">Tuesday, Thursday, Saturday</div>
                                             </div>
-                                            <div class="detail-value">5:00 PM - 6:30 PM</div>
+                                            <div class="detail-row">
+                                                <div class="detail-label">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Status
+                                                </div>
+                                                <div class="detail-value">
+                                                    <span class="status-badge status-active">Completed</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-chalkboard-teacher"></i>
-                                                Coach
-                                            </div>
-                                            <div class="detail-value">Mr. Rajesh Kumar</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-calendar-week"></i>
-                                                Training Days
-                                            </div>
-                                            <div class="detail-value">Tuesday, Thursday, Saturday</div>
-                                        </div>
-                                        <div class="detail-row">
-                                            <div class="detail-label">
-                                                <i class="fas fa-check-circle"></i>
-                                                Status
-                                            </div>
-                                            <div class="detail-value">
-                                                <span class="status-badge status-active">Completed</span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
+
+                            <?php endforeach; ?>
 
                             <div class="batch-history-item">
                                 <div class="batch-history-header">
@@ -1377,21 +1420,26 @@
                                 </h5>
 
                                 <div class="row">
-                                    <?php if (!empty($facilities)) : ?>
-                                        <?php foreach ($facilities as $facility) : ?>
+                                    <?php if (!empty($facilities)): ?>
+                                        <?php foreach ($facilities as $facility): ?>
                                             <div class="col-md-6">
                                                 <div class="facility-card">
                                                     <div class="facility-header d-flex justify-content-between">
                                                         <div class="facility-name">
                                                             <i class="fas fa-check me-2"></i>
-                                                            <?= ucfirst($facility['facility_name']) ?> <?= $facility['subtype_name'] ? '(' . $facility['subtype_name'] . ')' : '' ?>
+                                                            <?= ucfirst($facility['facility_name']) ?>
+                                                            <?= $facility['subtype_name'] ? '(' . $facility['subtype_name'] . ')' : '' ?>
                                                         </div>
-                                                        <div class="facility-amount">₹<?= number_format($facility['rent_amount'], 2) ?></div>
+                                                        <div class="facility-amount">
+                                                            ₹<?= number_format($facility['rent_amount'], 2) ?></div>
                                                     </div>
                                                     <div class="facility-details">
-                                                        <strong>Details:</strong> <?= $facility['subtype_name'] ?: 'Standard' ?><br>
-                                                        <strong>Duration:</strong> <?= $facility['rent_date'] ? date('d M Y', strtotime($facility['rent_date'])) : 'N/A' ?><br>
-                                                        <strong>Status:</strong> <span class="status-badge status-active">Active</span>
+                                                        <strong>Details:</strong>
+                                                        <?= $facility['subtype_name'] ?: 'Standard' ?><br>
+                                                        <strong>Duration:</strong>
+                                                        <?= $facility['rent_date'] ? date('d M Y', strtotime($facility['rent_date'])) : 'N/A' ?><br>
+                                                        <strong>Status:</strong> <span
+                                                            class="status-badge status-active">Active</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1412,84 +1460,36 @@
                                 <i class="fas fa-history me-2"></i>Previous Facilities
                             </h5>
 
-                            <div class="facility-history-item">
-                                <div class="facility-history-header">
-                                    <span class="facility-period">July 2023 - December 2023</span>
-                                </div>
-                                <div class="row">
+                            <div class="row">
+                                <?php foreach ($facilities_history as $index => $facilities_history_data): ?>
                                     <div class="col-md-6">
                                         <div class="facility-card">
                                             <div class="facility-header">
                                                 <div class="facility-name">
-                                                    <i class="fas fa-lock me-2"></i>Locker Facility
+                                                    <i
+                                                        class="fas fa-lock me-2"></i><?php echo $facilities_history_data["facility_name"]; ?>
                                                 </div>
-                                                <div class="facility-amount">₹400</div>
+                                                <div class="facility-amount">
+                                                    ₹<?php echo $facilities_history_data["amount"]; ?></div>
                                             </div>
                                             <div class="facility-details">
-                                                <strong>Details:</strong> Small locker (Locker No: B-12)<br>
-                                                <strong>Duration:</strong> 6 months<br>
-                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
+                                                <strong>Details:</strong> <?php echo $facilities_history_data["details"]; ?>
+                                                <br>
+                                                <!-- <strong>Duration:</strong> 6 months<br> -->
+                                                <strong>Status:</strong>
+                                                <span class="status-badge status-deactive">Expired</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="facility-card">
-                                            <div class="facility-header">
-                                                <div class="facility-name">
-                                                    <i class="fas fa-tshirt me-2"></i>Sports Kit
-                                                </div>
-                                                <div class="facility-amount">₹800</div>
-                                            </div>
-                                            <div class="facility-details">
-                                                <strong>Details:</strong> Complete sports kit<br>
-                                                <strong>Duration:</strong> 6 months<br>
-                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                            </div>
-                                        </div>
+                                    <?php if (($index + 1) % 2 == 0): ?>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="facility-history-item">
-                                <div class="facility-history-header">
-                                    <span class="facility-period">January 2023 - June 2023</span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="facility-card">
-                                            <div class="facility-header">
-                                                <div class="facility-name">
-                                                    <i class="fas fa-table-tennis me-2"></i>Racket Rental
-                                                </div>
-                                                <div class="facility-amount">₹250</div>
-                                            </div>
-                                            <div class="facility-details">
-                                                <strong>Details:</strong> Basic racket<br>
-                                                <strong>Duration:</strong> 6 months<br>
-                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="facility-card">
-                                            <div class="facility-header">
-                                                <div class="facility-name">
-                                                    <i class="fas fa-shoe-prints me-2"></i>Shoe Rental
-                                                </div>
-                                                <div class="facility-amount">₹200</div>
-                                            </div>
-                                            <div class="facility-details">
-                                                <strong>Details:</strong> Sports shoes<br>
-                                                <strong>Duration:</strong> 3 months<br>
-                                                <strong>Status:</strong> <span class="status-badge status-deactive">Expired</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <div class="row"> <!-- close and start new row after 2 cards -->
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
+
 
                         <!-- Navigation Buttons -->
                         <div class="nav-buttons">
@@ -1541,7 +1541,7 @@
                         </div>
 
                         <!-- Attendance Table -->
-                        <div class="attendance-table">
+                        <!-- <div class="attendance-table">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -1604,7 +1604,49 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div> -->
+
+                        <div class="attendance-table">
+                            <?php if (!empty($student_attendace)): ?>
+                                <?php foreach ($student_attendace as $month => $records): ?>
+                                    <h5 class="mt-4 mb-3" style="color:#d9534f;"><?php echo $month; ?></h5>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Day</th>
+                                                <th>Time</th>
+                                                <th>Status</th>
+                                                <th>Coach</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($records as $row): ?>
+                                                <tr>
+                                                    <td><?php echo date("d F Y", strtotime($row['date'])); ?></td>
+                                                    <td><?php echo date("l", strtotime($row['date'])); ?></td>
+                                                    <td><?php echo $row['time']; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $statusClass = strtolower($row['status']);
+                                                        ?>
+                                                        <span class="attendance-status status-<?php echo $statusClass; ?>">
+                                                            <?php echo $row['status']; ?>
+                                                        </span>
+                                                    </td>
+                                                    <td>Mr. Vikram Singh</td>
+                                                    <td>Regular attendance</td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>No attendance records found.</p>
+                            <?php endif; ?>
                         </div>
+
 
                         <!-- Attendance Link -->
                         <div class="row mt-4">
@@ -1615,7 +1657,8 @@
                                         Attendance Link
                                     </div>
                                     <div class="detail-value">
-                                        <a href="#" class="text-primary"><?php  print_r($student["attendace_link"])  ?></a>
+                                        <a href="#"
+                                            class="text-primary"><?php print_r($student["attendace_link"]) ?></a>
                                     </div>
                                 </div>
                             </div>
@@ -1663,7 +1706,8 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="action-buttons">
-                        <button type="button" class="btn-edit" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                        <button type="button" class="btn-edit" data-bs-toggle="modal"
+                            data-bs-target="#editStudentModal">
                             <i class="fas fa-edit me-2"></i>
                             Edit Student
                         </button>
@@ -1678,152 +1722,160 @@
         <!-- </div> -->
 
         <!-- Edit Student Modal -->
-<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content shadow-lg rounded-3">
-      
-      <!-- Header -->
-      <div class="modal-header bg-gradient bg-primary text-white">
-        <h5 class="modal-title" id="editStudentModalLabel">
-          <i class="fas fa-user-edit me-2"></i> Edit Student Details
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
+        <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content shadow-lg rounded-3">
 
-      <!-- Body -->
-      <div class="modal-body">
-        <form id="editStudentForm" novalidate>
-          <input type="hidden" id="studentId">
+                    <!-- Header -->
+                    <div class="modal-header bg-gradient bg-primary text-white">
+                        <h5 class="modal-title" id="editStudentModalLabel">
+                            <i class="fas fa-user-edit me-2"></i> Edit Student Details
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
 
-          <!-- Student & Parent -->
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Student Name</label>
-              <input type="text" class="form-control" id="studentName" placeholder="Enter full name" required>
-              <div class="invalid-feedback">Please enter student name.</div>
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <form id="editStudentForm" novalidate>
+                            <input type="hidden" id="studentId">
+
+                            <!-- Student & Parent -->
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Student Name</label>
+                                    <input type="text" class="form-control" id="studentName"
+                                        placeholder="Enter full name" required>
+                                    <div class="invalid-feedback">Please enter student name.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Parent Name</label>
+                                    <input type="text" class="form-control" id="parentName"
+                                        placeholder="Enter parent/guardian name" required>
+                                    <div class="invalid-feedback">Please enter parent name.</div>
+                                </div>
+                            </div>
+
+                            <!-- Email & Contact -->
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="emailAddress"
+                                        placeholder="example@email.com" required>
+                                    <div class="invalid-feedback">Enter a valid email.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Contact Number</label>
+                                    <input type="tel" class="form-control" id="contactNumber"
+                                        placeholder="10-digit number" pattern="[0-9]{10}" required>
+                                    <div class="invalid-feedback">Enter a valid 10-digit number.</div>
+                                </div>
+                            </div>
+
+                            <!-- Fees -->
+                            <div class="row g-3 mt-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Course Fees</label>
+                                    <input type="number" class="form-control" id="courseFees"
+                                        placeholder="Enter total fees" min="0" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Amount Paid</label>
+                                    <input type="number" class="form-control" id="paidAmount"
+                                        placeholder="Enter paid amount" min="0" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Remaining Amount</label>
+                                    <input type="text" class="form-control fw-bold" id="remainingAmount" readonly>
+                                    <small id="remainingHint" class="text-muted"></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Payment Method</label>
+                                    <select class="form-select" id="paymentMethod" required>
+                                        <option value="">Select method</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="card">Card</option>
+                                        <option value="online">Online</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select payment method.</div>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mt-3">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="2" placeholder="Enter student address"
+                                    required></textarea>
+                                <div class="invalid-feedback">Please enter address.</div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </button>
+                        <button class="btn btn-success" onclick="saveStudentChanges()">
+                            <i class="fas fa-save me-1"></i> Save Changes
+                        </button>
+                    </div>
+
+                </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Parent Name</label>
-              <input type="text" class="form-control" id="parentName" placeholder="Enter parent/guardian name" required>
-              <div class="invalid-feedback">Please enter parent name.</div>
-            </div>
-          </div>
+        </div>
+        <!-- Bootstrap 5 JS (needs Popper included) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Interactivity Script -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            (() => {
+                'use strict';
+                const form = document.getElementById('editStudentForm');
+                const courseFees = document.getElementById('courseFees');
+                const paidAmount = document.getElementById('paidAmount');
+                const remainingAmount = document.getElementById('remainingAmount');
+                const remainingHint = document.getElementById('remainingHint');
 
-          <!-- Email & Contact -->
-          <div class="row g-3 mt-2">
-            <div class="col-md-6">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" id="emailAddress" placeholder="example@email.com" required>
-              <div class="invalid-feedback">Enter a valid email.</div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Contact Number</label>
-              <input type="tel" class="form-control" id="contactNumber" placeholder="10-digit number" pattern="[0-9]{10}" required>
-              <div class="invalid-feedback">Enter a valid 10-digit number.</div>
-            </div>
-          </div>
+                function calculateRemaining() {
+                    const fees = parseFloat(courseFees.value) || 0;
+                    const paid = parseFloat(paidAmount.value) || 0;
+                    const remaining = fees - paid;
+                    remainingAmount.value = remaining >= 0 ? `₹ ${remaining}` : "Overpaid!";
+                    remainingAmount.classList.toggle('is-invalid', remaining < 0);
+                    remainingAmount.classList.toggle('text-danger', remaining < 0);
+                    remainingAmount.classList.toggle('text-success', remaining >= 0);
+                    remainingHint.textContent = remaining < 0 ? "⚠ Overpayment detected!" : "";
+                }
 
-          <!-- Fees -->
-          <div class="row g-3 mt-3">
-            <div class="col-md-6">
-              <label class="form-label">Course Fees</label>
-              <input type="number" class="form-control" id="courseFees" placeholder="Enter total fees" min="0" required>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Amount Paid</label>
-              <input type="number" class="form-control" id="paidAmount" placeholder="Enter paid amount" min="0" required>
-            </div>
-          </div>
+                courseFees.addEventListener('input', calculateRemaining);
+                paidAmount.addEventListener('input', calculateRemaining);
 
-          <div class="row g-3 mt-2">
-            <div class="col-md-6">
-              <label class="form-label">Remaining Amount</label>
-              <input type="text" class="form-control fw-bold" id="remainingAmount" readonly>
-              <small id="remainingHint" class="text-muted"></small>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Payment Method</label>
-              <select class="form-select" id="paymentMethod" required>
-                <option value="">Select method</option>
-                <option value="cash">Cash</option>
-                <option value="card">Card</option>
-                <option value="online">Online</option>
-              </select>
-              <div class="invalid-feedback">Please select payment method.</div>
-            </div>
-          </div>
+                // Form validation on save
+                window.saveStudentChanges = function () {
+                    if (!form.checkValidity()) {
+                        form.classList.add('was-validated');
+                        Swal.fire('Error', 'Please fix the highlighted errors.', 'error');
+                        return;
+                    }
 
-          <!-- Address -->
-          <div class="mt-3">
-            <label class="form-label">Address</label>
-            <textarea class="form-control" id="address" rows="2" placeholder="Enter student address" required></textarea>
-            <div class="invalid-feedback">Please enter address.</div>
-          </div>
-
-        </form>
-      </div>
-
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="fas fa-times me-1"></i> Cancel
-        </button>
-        <button class="btn btn-success" onclick="saveStudentChanges()">
-          <i class="fas fa-save me-1"></i> Save Changes
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
-<!-- Bootstrap 5 JS (needs Popper included) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Interactivity Script -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-(() => {
-  'use strict';
-  const form = document.getElementById('editStudentForm');
-  const courseFees = document.getElementById('courseFees');
-  const paidAmount = document.getElementById('paidAmount');
-  const remainingAmount = document.getElementById('remainingAmount');
-  const remainingHint = document.getElementById('remainingHint');
-
-  function calculateRemaining() {
-    const fees = parseFloat(courseFees.value) || 0;
-    const paid = parseFloat(paidAmount.value) || 0;
-    const remaining = fees - paid;
-    remainingAmount.value = remaining >= 0 ? `₹ ${remaining}` : "Overpaid!";
-    remainingAmount.classList.toggle('is-invalid', remaining < 0);
-    remainingAmount.classList.toggle('text-danger', remaining < 0);
-    remainingAmount.classList.toggle('text-success', remaining >= 0);
-    remainingHint.textContent = remaining < 0 ? "⚠ Overpayment detected!" : "";
-  }
-
-  courseFees.addEventListener('input', calculateRemaining);
-  paidAmount.addEventListener('input', calculateRemaining);
-
-  // Form validation on save
-  window.saveStudentChanges = function() {
-    if (!form.checkValidity()) {
-      form.classList.add('was-validated');
-      Swal.fire('Error', 'Please fix the highlighted errors.', 'error');
-      return;
-    }
-
-    Swal.fire({
-      title: 'Saving...',
-      text: 'Student details are being updated.',
-      icon: 'info',
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {
-      Swal.fire('Success!', 'Student details updated successfully.', 'success');
-      bootstrap.Modal.getInstance(document.getElementById('editStudentModal')).hide();
-    });
-  };
-})();
-</script>
+                    Swal.fire({
+                        title: 'Saving...',
+                        text: 'Student details are being updated.',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        Swal.fire('Success!', 'Student details updated successfully.', 'success');
+                        bootstrap.Modal.getInstance(document.getElementById('editStudentModal')).hide();
+                    });
+                };
+            })();
+        </script>
 
 
 
@@ -2033,7 +2085,7 @@
             }
 
             // Initialize navigation buttons on page load
-            $(document).ready(function() {
+            $(document).ready(function () {
                 updateNavigationButtons();
             });
         </script>
@@ -2043,7 +2095,7 @@
 
 
 
-        
+
 
         <style>
             /* Navigation Buttons */
