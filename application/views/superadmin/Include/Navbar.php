@@ -180,7 +180,7 @@
             </div>
              <div class="profile-icon ms-3">
     <a href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
-        <img src="<?php echo base_url('assets/images/timeersbadmintonacademy_logo.png'); ?>" 
+        <img src="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.png'); ?>" 
              class="rounded-circle" 
              alt="Profile" 
              width="32" 
