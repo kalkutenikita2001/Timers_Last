@@ -236,230 +236,269 @@
                 </div>
 
                 <!-- Center Details Form -->
-                <div class="form-container form-section active" id="center-details">
-                    <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Center Details</h3>
-                    <form id="centerForm" novalidate>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="centerName" class="form-label required-field">Center Name</label>
-                                <input type="text" class="form-control" id="centerName" required>
-                                <div class="invalid-feedback">Center name is required.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="centerNumber" class="form-label required-field">Center Number</label>
-                                <input type="text" class="form-control" id="centerNumber" readonly required>
-                                <div class="invalid-feedback">Center number is required.</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label required-field">Address</label>
-                            <textarea class="form-control" id="address" rows="3" required></textarea>
-                            <div class="invalid-feedback">Address is required.</div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="openingTime" class="form-label required-field">Opening Time</label>
-                                <input type="time" class="form-control" id="openingTime" required>
-                                <div class="invalid-feedback">Opening time is required.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="closingTime" class="form-label required-field">Closing Time</label>
-                                <input type="time" class="form-control" id="closingTime" required>
-                                <div class="invalid-feedback">Closing time must be after opening time.</div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="printPaidDate" class="form-label">Paid Date</label>
-                                <input type="date" class="form-control" id="printPaidDate">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="password" class="form-label required-field">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="password" required minlength="8">
-                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <div class="invalid-feedback">Password must be at least 8 characters.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="center_rent" class="form-label required-field">Rent</label>
-                            <input type="number" id="center_rent" name="center_rent" class="form-control"
-                                placeholder="Enter Rent Amount" required min="1" />
-                            <div class="invalid-feedback">Please enter a valid rent amount greater than 0.</div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary btn-next" data-next="batch-details">
-                                Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                    </form>
+<div class="form-container form-section active" id="center-details">
+    <h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Center Details</h3>
+    <form id="centerForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="centerName" class="form-label required-field">Center Name</label>
+                <input type="text" class="form-control" id="centerName" required>
+                <div class="invalid-feedback">Center name is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="centerNumber" class="form-label required-field">Center Number</label>
+                <input type="text" class="form-control" id="centerNumber" readonly required>
+                <div class="invalid-feedback">Center number is required.</div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label required-field">Address</label>
+            <textarea class="form-control" id="address" rows="3" required></textarea>
+            <div class="invalid-feedback">Address is required.</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="latitude" class="form-label required-field">Latitude</label>
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="latitude" 
+                    name="latitude" 
+                    step="0.000001" 
+                    placeholder="Enter latitude (e.g., 19.0760)" 
+                    required
+                >
+                <div class="invalid-feedback">Latitude must be between -90 and 90.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="longitude" class="form-label required-field">Longitude</label>
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="longitude" 
+                    name="longitude" 
+                    step="0.000001" 
+                    placeholder="Enter longitude (e.g., 72.8777)" 
+                    required
+                >
+                <div class="invalid-feedback">Longitude must be between -180 and 180.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="openingTime" class="form-label required-field">Opening Time</label>
+                <input type="time" class="form-control" id="openingTime" required>
+                <div class="invalid-feedback">Opening time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="closingTime" class="form-label required-field">Closing Time</label>
+                <input type="time" class="form-control" id="closingTime" required>
+                <div class="invalid-feedback">Closing time must be after opening time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="printPaidDate" class="form-label">Paid Date</label>
+                <input type="date" class="form-control" id="printPaidDate">
+            </div>
+            <div class="col-md-6">
+                <label for="password" class="form-label required-field">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" required minlength="8">
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <div class="invalid-feedback">Password must be at least 8 characters.</div>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="center_rent" class="form-label required-field">Rent</label>
+            <input type="number" id="center_rent" name="center_rent" class="form-control"
+                placeholder="Enter Rent Amount" required min="1" />
+            <div class="invalid-feedback">Please enter a valid rent amount greater than 0.</div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-next" data-next="batch-details">
+                Next: Batch Details <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </form>
+</div>
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("centerForm");
+    const nextBtn = form.querySelector(".btn-next");
+    const centerNumber = document.getElementById("centerNumber");
+    const openingTime = document.getElementById("openingTime");
+    const closingTime = document.getElementById("closingTime");
+    const password = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const latitude = document.getElementById("latitude");
+    const longitude = document.getElementById("longitude");
 
-                        const form = document.getElementById("centerForm");
-                        
-                        const nextBtn = form.querySelector(".btn-next");
+    // Auto-generate Center Number
+    function generateCenterNumber() {
+        const timestamp = Date.now().toString().slice(-8); // Last 8 digits of timestamp
+        const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+        centerNumber.value = `CTR-${timestamp}-${random}`;
+        validateForm(); // Revalidate after setting center number
+    }
+
+    // Toggle Password Visibility
+    togglePassword.addEventListener("click", function () {
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+        this.querySelector("i").classList.toggle("fa-eye");
+        this.querySelector("i").classList.toggle("fa-eye-slash");
+    });
+
+    // Validate form and update button state
+    function validateForm() {
+        let isValid = form.checkValidity();
+
+        // Custom validation for closing time
+        if (openingTime.value && closingTime.value) {
+            if (closingTime.value <= openingTime.value) {
+                closingTime.setCustomValidity("Closing time must be after opening time.");
+                isValid = false;
+            } else {
+                closingTime.setCustomValidity("");
+            }
+        }
+
+        // Custom validation for latitude
+        if (latitude.value) {
+            const latValue = parseFloat(latitude.value);
+            if (latValue < -90 || latValue > 90) {
+                latitude.setCustomValidity("Latitude must be between -90 and 90.");
+                isValid = false;
+            } else {
+                latitude.setCustomValidity("");
+            }
+        }
+
+        // Custom validation for longitude
+        if (longitude.value) {
+            const lonValue = parseFloat(longitude.value);
+            if (lonValue < -180 || lonValue > 180) {
+                longitude.setCustomValidity("Longitude must be between -180 and 180.");
+                isValid = false;
+            } else {
+                longitude.setCustomValidity("");
+            }
+        }
+
+        // Apply Bootstrap validation styles
+        form.classList.add("was-validated");
+
+        // Enable/disable Next button
+        nextBtn.disabled = !isValid;
+    }
+
+    // Attach event listeners to inputs
+    form.querySelectorAll("input, textarea, select").forEach((input) => {
+        input.addEventListener("input", validateForm);
+        input.addEventListener("change", validateForm);
+    });
+
+    // Generate center number on form load
+    generateCenterNumber();
+
+    // Initial validation
+    validateForm();
+});
+</script>
 
 
-                        const centerNumber = document.getElementById("centerNumber");
-                        const openingTime = document.getElementById("openingTime");
-                        const closingTime = document.getElementById("closingTime");
-                        const password = document.getElementById("password");
-                        const togglePassword = document.getElementById("togglePassword");
+               <!-- Batch Details Form -->
+<div class="form-container form-section" id="batch-details">
+    <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
+    <form id="batchForm" novalidate>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchName" class="form-label required-field">Batch Name</label>
+                <input type="text" class="form-control" id="batchName" required>
+                <div class="invalid-feedback">Batch name is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="batchLevel" class="form-label required-field">Level</label>
+                <select class="form-select" id="batchLevel" required>
+                    <option value="">Select Level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <div class="invalid-feedback">Please select a level.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="batchStartTime" class="form-label required-field">Start Time</label>
+                <input type="time" class="form-control" id="batchStartTime" required>
+                <div class="invalid-feedback">Start time is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="batchEndTime" class="form-label required-field">End Time</label>
+                <input type="time" class="form-control" id="batchEndTime" required>
+                <div class="invalid-feedback">End time must be after start time.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="startDate" class="form-label required-field">Start Date</label>
+                <input type="date" class="form-control" id="startDate" required>
+                <div class="invalid-feedback">Start date is required.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="endDate" class="form-label required-field">End Date</label>
+                <input type="date" class="form-control" id="endDate" required>
+                <div class="invalid-feedback">End date must be after start date.</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="duration" class="form-label required-field">Duration (Months)</label>
+                <input type="number" class="form-control" id="duration" min="1" readonly required>
+                <div class="invalid-feedback">Duration must be at least 1 month.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="category" class="form-label required-field">Category</label>
+                <input type="text" class="form-control" id="category" required placeholder="Enter category">
+                <div class="invalid-feedback">Category is required.</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="center-details">
+                <i class="fas fa-arrow-left me-2"></i> Back to Center Details
+            </button>
+            <div>
+                <button type="button" class="btn btn-info" id="addAnotherBatch">
+                    <i class="fas fa-plus me-2"></i> Add Another Batch
+                </button>
+                <button type="button" class="btn btn-primary btn-next" data-next="staff-details">
+                    Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </form>
 
+    <div class="text-right mt-4">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#batchModal">
+            <i class="fas fa-plus"></i> Add Batch
+        </button>
+    </div>
 
-
-                        // Auto-generate Center Number
-                        function generateCenterNumber() {
-                            const timestamp = Date.now().toString().slice(-8); // Last 8 digits of timestamp
-                            const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
-                            centerNumber.value = `CTR-${timestamp}-${random}`;
-                            validateForm(); // Revalidate after setting center number
-
-                            
-                        }
-
-                        // Toggle Password Visibility
-                        togglePassword.addEventListener("click", function () {
-                            const type = password.getAttribute("type") === "password" ? "text" : "password";
-                            password.setAttribute("type", type);
-                            this.querySelector("i").classList.toggle("fa-eye");
-                            this.querySelector("i").classList.toggle("fa-eye-slash");
-                        });
-
-                        // Validate form and update button state
-                        function validateForm() {
-                            let isValid = form.checkValidity();
-
-                            // Custom validation for closing time
-                            if (openingTime.value && closingTime.value) {
-                                if (closingTime.value <= openingTime.value) {
-                                    closingTime.setCustomValidity("Closing time must be after opening time.");
-                                    isValid = false;
-                                } else {
-                                    closingTime.setCustomValidity("");
-                                }
-                            }
-
-                            // Apply Bootstrap validation styles
-                            form.classList.add("was-validated");
-
-                            // Enable/disable Next button
-                            nextBtn.disabled = !isValid;
-                        }
-
-                        // Attach event listeners to inputs
-                        form.querySelectorAll("input, textarea, select").forEach((input) => {
-                            input.addEventListener("input", validateForm);
-                            input.addEventListener("change", validateForm);
-                        });
-
-                        // Generate center number on form load
-                        generateCenterNumber();
-
-                        // Initial validation
-                        validateForm();
-                    });
-                </script>
-
-
-                <!-- Batch Details Form -->
-                <div class="form-container form-section" id="batch-details">
-                    <h3 class="section-title"><i class="fas fa-layer-group me-2"></i>Batch Details</h3>
-                    <form id="batchForm" novalidate>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="batchName" class="form-label required-field">Batch Name</label>
-                                <input type="text" class="form-control" id="batchName" required>
-                                <div class="invalid-feedback">Batch name is required.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="batchLevel" class="form-label required-field">Level</label>
-                                <select class="form-select" id="batchLevel" required>
-                                    <option value="">Select Level</option>
-                                    <option value="beginner">Beginner</option>
-                                    <option value="intermediate">Intermediate</option>
-                                    <option value="advanced">Advanced</option>
-                                </select>
-                                <div class="invalid-feedback">Please select a level.</div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="batchStartTime" class="form-label required-field">Start Time</label>
-                                <input type="time" class="form-control" id="batchStartTime" required>
-                                <div class="invalid-feedback">Start time is required.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="batchEndTime" class="form-label required-field">End Time</label>
-                                <input type="time" class="form-control" id="batchEndTime" required>
-                                <div class="invalid-feedback">End time must be after start time.</div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="startDate" class="form-label required-field">Start Date</label>
-                                <input type="date" class="form-control" id="startDate" required>
-                                <div class="invalid-feedback">Start date is required.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="endDate" class="form-label required-field">End Date</label>
-                                <input type="date" class="form-control" id="endDate" required>
-                                <div class="invalid-feedback">End date must be after start date.</div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="duration" class="form-label required-field">Duration (Months)</label>
-                                <input type="number" class="form-control" id="duration" min="1" readonly required>
-                                <div class="invalid-feedback">Duration must be at least 1 month.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="category" class="form-label required-field">Category</label>
-                                <select class="form-select" id="category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="corporate">Corporate</option>
-                                    <option value="individual">Individual</option>
-                                    <option value="group">Group</option>
-                                </select>
-                                <div class="invalid-feedback">Please select a category.</div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="center-details">
-                                <i class="fas fa-arrow-left me-2"></i> Back to Center Details
-                            </button>
-                            <div>
-                                <button type="button" class="btn btn-info" id="addAnotherBatch">
-                                    <i class="fas fa-plus me-2"></i> Add Another Batch
-                                </button>
-                                <button type="button" class="btn btn-primary btn-next" data-next="staff-details">
-                                    Next: Staff Details <i class="fas fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="text-right mt-4">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#batchModal">
-                            <i class="fas fa-plus"></i> Add Batch
-                        </button>
-                    </div>
-
-                    <!-- Batch List Table -->
-                    <div class="batch-table mt-4">
-                        <h5 class="mb-3">Added Batches</h5>
-                        <div id="batchList">
-                            <p class="text-center">No batches added yet</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Batch List Table -->
+    <div class="batch-table mt-4">
+        <h5 class="mb-3">Added Batches</h5>
+        <div id="batchList">
+            <p class="text-center">No batches added yet</p>
+        </div>
+    </div>
+</div>
 
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
@@ -717,7 +756,7 @@
                         <!-- Add Facility Button -->
                         <div class="d-flex justify-content-end mt-4">
                             <button type="button" class="btn btn-info" id="addFacility">
-                                <i class="fas fa-plus me-2"></i> Add Facility
+                                <i class="fas fa-plus me-2"></i>Save Center
                             </button>
                         </div>
                     </form>

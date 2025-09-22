@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Center Details</title>
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -1527,46 +1529,49 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   });
 
   // Add Facility Handler
-  $('#facilitySubmitBtn').click(function() {
-    const form = $('#facilityForm');
-    if (!form[0].checkValidity()) {
-      form[0].reportValidity();
-      return;
-    }
-    const payload = {
-      center_id: centerId,
-      facility_name: $('#facility_name').val(),
-      subtype_name: $('#subtype_name').val(),
-      rent_amount: parseFloat($('#facility_rent').val()).toFixed(2),
-      rent_date: $('#facility_rent_date').val()
-    };
-    $.ajax({
-      url: baseUrl + "Facility/saveFacility",
-      method: "POST",
-      data: JSON.stringify(payload),
-      contentType: "application/json",
-      success: function(response) {
-        if (response.status === "success") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Facility added successfully'
-          });
-          $('#facilityModal').modal('hide');
-          fetchCenterData();
-        } else {
-          console.log('Add facility failed:', response.message || 'Unknown error');
-          $('#facilityModal').modal('hide');
-          fetchCenterData();
-        }
-      },
-      error: function() {
-        console.log('Error adding facility');
+ $('#facilitySubmitBtn').click(function() {
+  const form = $('#facilityForm');
+  if (!form[0].checkValidity()) {
+    form[0].reportValidity();
+    return;
+  }
+
+  const payload = {
+    center_id: centerId,
+    facility_name: $('#facility_name').val(),
+    subTypes: [
+      {
+        subType: $('#subtype_name').val(),
+        rent: parseFloat($('#facility_rent').val()).toFixed(2),
+        rent_date: $('#facility_rent_date').val()
+      }
+    ]
+  };
+
+  $.ajax({
+    url: baseUrl + "Center/saveFacility",   // ✅ corrected controller
+    method: "POST",
+    data: JSON.stringify(payload),
+    contentType: "application/json",
+    success: function(response) {
+      if (response.status === "success") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Facility added successfully'
+        });
         $('#facilityModal').modal('hide');
         fetchCenterData();
+      } else {
+        console.log('Add facility failed:', response.message || 'Unknown error');
       }
-    });
+    },
+    error: function() {
+      console.log('Error adding facility');
+    }
   });
+});
+
 
   // Save Facility Changes
   $('#editFacilitySubmitBtn').click(function() {
@@ -1737,41 +1742,72 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
     });
   });
 
-  // Add Expense Handler
- $('#expenseSubmitBtn').click(function() {
+//   // Add Expense Handler
+//  $('#expenseSubmitBtn').click(function() {
+//     const form = $('#expenseForm');
+//     if (!form[0].checkValidity()) {
+//         form[0].reportValidity();
+//         return;
+//     }
+//     const payload = {
+//         center_id: centerId,
+//         category: $('#expense_category').val(),
+//         amount: parseFloat($('#expense_amount').val()).toFixed(2),
+//         date: $('#expense_date').val(),
+//         description: $('#expense_description').val()
+//     };
+//     $.ajax({
+//         url: baseUrl + "superadmin/Expenses",
+//         method: "POST",
+//         data: JSON.stringify(payload),
+//         contentType: "application/json",
+//         success: function(response) {
+//             if (response.status === "success") {
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Success',
+//                     text: 'Expense added successfully'
+//                 });
+//                 $('#expenseModal').modal('hide');
+//                 fetchCenterData();
+//             } else {
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Error',
+//                     text: response.message || 'Failed to add expense'
+//                 });
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('AJAX Error:', status, error, xhr.responseText);
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Error',
+//                 text: 'Error adding expense. Check console for details.'
+//             });
+//         }
+//     });
+// });
+
+$('#expenseSubmitBtn').click(function() {
     const form = $('#expenseForm');
     if (!form[0].checkValidity()) {
         form[0].reportValidity();
         return;
     }
-    const payload = {
-        center_id: centerId,
-        category: $('#expense_category').val(),
-        amount: parseFloat($('#expense_amount').val()).toFixed(2),
-        date: $('#expense_date').val(),
-        description: $('#expense_description').val()
-    };
+
     $.ajax({
         url: baseUrl + "superadmin/Expenses",
         method: "POST",
-        data: JSON.stringify(payload),
-        contentType: "application/json",
+        data: form.serialize(), // ✅ sends as normal form-data
         success: function(response) {
-            if (response.status === "success") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Expense added successfully'
-                });
-                $('#expenseModal').modal('hide');
-                fetchCenterData();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'Failed to add expense'
-                });
-            }
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Expense added successfully'
+            });
+            $('#expenseModal').modal('hide');
+            fetchCenterData();
         },
         error: function(xhr, status, error) {
             console.error('AJAX Error:', status, error, xhr.responseText);
@@ -1783,6 +1819,13 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
         }
     });
 });
+
+
+
+
+
+
+
 
   // Edit Expense Handler
   $(document).on('click', '.btn-edit[data-expense-id]', function() {
@@ -1869,6 +1912,19 @@ $(document).on("click", ".btn-delete[data-delete-staff-id]", function () {
   fetchCenterData();
 });
 </script>
+
+<script>
+// Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });   </script>
 
 </body>
 </html>
