@@ -147,21 +147,29 @@ class Center extends CI_Controller {
     // Save Facility + Subtypes into facilities table
 public function saveFacility()
 {
-    // Detect if JSON is sent
+    // Try to decode JSON input
     $input = json_decode($this->input->raw_input_stream, true);
 
     if ($input) {
         // JSON payload
         $centerId     = $input['center_id'] ?? null;
         $facilityName = $input['facility_name'] ?? null;
-        $subTypes     = $input['subType'] ?? [];
-        $subRents     = $input['subRent'] ?? [];
-    } else {
+        $subTypes     = $input['subTypes'] ?? [];     } else {
         // Form-data / x-www-form-urlencoded
         $centerId     = $this->input->post('center_id');
         $facilityName = $this->input->post('facility_name');
-        $subTypes     = $this->input->post('subType');
-        $subRents     = $this->input->post('subRent');
+        
+        // Subtypes come as two separate arrays: subType[] and subRent[]
+        $subTypesRaw  = $this->input->post('subType') ?? [];
+        $subRentsRaw  = $this->input->post('subRent') ?? [];
+
+        $subTypes = [];
+        foreach ($subTypesRaw as $i => $s) {
+            $subTypes[] = [
+                "subType" => $s,
+                "rent"    => $subRentsRaw[$i] ?? 0
+            ];
+        }
     }
 
     // Handle array issues
@@ -177,21 +185,21 @@ public function saveFacility()
         return;
     }
 
-    // If there are subtypes, insert multiple rows
+    // Insert data
     if (!empty($subTypes) && is_array($subTypes)) {
-        foreach ($subTypes as $i => $subType) {
+        foreach ($subTypes as $row) {
             $data = [
                 "center_id"     => $centerId,
                 "facility_name" => $facilityName,
-                "subtype_name"  => !empty($subType) ? $subType : null,
-                "rent_amount"   => isset($subRents[$i]) ? $subRents[$i] : 0,
+                "subtype_name"  => $row['subType'] ?? null,
+                "rent_amount"   => $row['rent'] ?? 0,
                 "rent_date"     => date("Y-m-d"),
                 "created_at"    => date("Y-m-d H:i:s")
             ];
             $this->Center_model->insertFacility($data);
         }
     } else {
-        // If no subtypes, insert one row
+        // If no subtypes, insert single row
         $data = [
             "center_id"     => $centerId,
             "facility_name" => $facilityName,
@@ -205,6 +213,7 @@ public function saveFacility()
 
     echo json_encode(["status" => "success", "message" => "Facility added successfully"]);
 }
+
 
 
 public function getFacilities()

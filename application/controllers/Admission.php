@@ -393,20 +393,45 @@ class Admission extends CI_Controller
             return;
         }
 
-
         $studentData = $this->db->get_where("students", ["id" => $student_id])->row_array();
 
         if ($studentData) {
-
-            $historyData = $studentData;
-            unset($historyData['id']);
-            $historyData['student_id'] = $student_id;
-            $historyData['purpose'] = 'renew';
-            $historyData['updated_at'] = date("Y-m-d H:i:s");
-
+            $historyData = [
+                'student_id' => $student_id,
+                'purpose' => 'renew',
+                'name' => $studentData['name'] ?? null,
+                'contact' => $studentData['contact'] ?? null,
+                'parent_name' => $studentData['parent_name'] ?? null,
+                'emergency_contact' => $studentData['emergency_contact'] ?? null,
+                'email' => $studentData['email'] ?? null,
+                'dob' => $studentData['dob'] ?? null,
+                'address' => $studentData['address'] ?? null,
+                'center_id' => $studentData['center_id'] ?? null,
+                'batch_id' => $studentData['batch_id'] ?? null,
+                'course_duration' => $studentData['course_duration'] ?? null,
+                'student_progress_category' => $studentData['student_progress_category'] ?? null,
+                'coach' => $studentData['coach'] ?? null,
+                'coordinator' => $studentData['coordinator'] ?? null,
+                'coordinator_phone' => $studentData['coordinator_phone'] ?? null,
+                'batch_time' => $studentData['batch_time'] ?? null,
+                'duration' => $studentData['duration'] ?? null,
+                'course_fees' => $studentData['course_fees'] ?? null,
+                'additional_fees' => $studentData['additional_fees'] ?? null,
+                'total_fees' => $studentData['total_fees'] ?? null,
+                'paid_amount' => $studentData['paid_amount'] ?? null,
+                'remaining_amount' => $studentData['remaining_amount'] ?? null,
+                'payment_method' => $studentData['payment_method'] ?? null,
+                'admission_date' => $studentData['admission_date'] ?? null,
+                'joining_date' => $studentData['joining_date'] ?? null,
+                'created_at' => date("Y-m-d H:i:s"),
+                'status' => $studentData['status'] ?? 'active',
+                'last_attendance' => $studentData['last_attendance'] ?? null,
+                'updated_at' => date("Y-m-d H:i:s"),
+            ];
 
             $this->db->insert("student_addmission_history", $historyData);
         }
+
 
 
         $updateData = [];
