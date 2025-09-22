@@ -11,6 +11,14 @@ class Admission_model extends CI_Model
         return $this->db->get('center_details')->result_array();
     }
 
+       public function get_all_centers_in_admin_side($center_id)
+    {
+        $this->db->where("id",$center_id);
+        return $this->db->get('center_details')->result_array();
+    }
+
+ 
+
     public function get_batches_by_center($center_id)
     {
         $this->db->select('id,batch_name, start_time,end_time, category, start_date');

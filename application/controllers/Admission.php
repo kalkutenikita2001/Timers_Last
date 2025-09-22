@@ -33,6 +33,15 @@ class Admission extends CI_Controller
         echo json_encode($centers);
     }
 
+    public function get_centers_in_admin_side()
+    {
+        $center_id = $this->session->userdata('center_id');
+        $this->output->set_content_type('application/json');
+        log_message('debug', 'get_centers method called');
+        $centers = $this->Admission_model->get_all_centers_in_admin_side($center_id);
+        echo json_encode($centers);
+    }
+
     public function get_batches($center_id)
     {
         $this->output->set_content_type('application/json');
