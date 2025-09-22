@@ -691,7 +691,7 @@
         // 🔹 Fetch centers
         function fetchCenters() {
             $.ajax({
-                url: baseUrl + "Admission/get_centers",
+                url: baseUrl + "Admission/get_centers_in_admin_side/",
                 method: "GET",
                 dataType: "json",
                 success: function(data) {
