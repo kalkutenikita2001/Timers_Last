@@ -5,90 +5,108 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <!-- <link rel="icon" type="image/x-icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>"> -->
   <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
-  
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- SINGLE Chart.js include -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
+
   <style>
-    /* --- your styles (unchanged except a few additions for carousel) --- */
+    :root {
+      --accent-1: #ff4040;
+      --accent-2: #470000;
+      --card-bg: #ffffff;
+      --muted-bg: #f4f6f8;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
     body {
-      background-color: #f4f6f8 !important;
+      background-color: var(--muted-bg) !important;
       color: #1a1a1a;
       font-family: 'Montserrat', serif;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Dashboard wrapper */
     .dashboard-wrapper {
       margin-left: 250px;
       padding: 24px;
-      transition: all 0.3s ease-in-out;
-      background-color: #f4f6f8;
+      transition: all 0.25s ease-in-out;
+      background-color: var(--muted-bg);
+      min-height: 100vh;
     }
 
     .dashboard-wrapper.minimized {
       margin-left: 60px;
     }
 
-    .dashboard-wrapper.sidebar-minimized,
-    .dashboard-wrapper.sidebar-collapsed {
-      margin-left: 60px;
-    }
-
+    /* Stat cards */
     .card-stat {
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
       color: white;
       border-radius: 12px;
       text-align: left;
       height: 130px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       font-size: 14px;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
       position: relative;
-      padding: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 18px 18px 18px 18px;
+      padding-right: 58px; /* reserve space for icon to avoid overlap */
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      overflow: visible;
     }
 
     .card-stat:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(255, 64, 64, 0.3);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    }
+
+    .card-stat h4,
+    .card-stat span {
+      margin: 0;
+      word-break: break-word;
+      white-space: normal;
     }
 
     .card-stat h4 {
-      margin: 12px 0 4px;
-      font-size: 26px;
+      margin: 6px 0 4px;
+      font-size: 24px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
+      line-height: 1;
     }
 
     .card-stat span {
-      font-size: 14px;
-      opacity: 0.9;
+      font-size: 13px;
+      opacity: 0.95;
     }
 
+    /* icon on card */
     .card-icon {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 26px;
-      opacity: 0.6;
-      transition: opacity 0.3s ease;
+      top: 14px;
+      right: 14px;
+      font-size: 28px;
+      opacity: 0.7;
+      pointer-events: none;
     }
 
-    .card-stat:hover .card-icon {
-      opacity: 0.8;
-    }
-
+    /* Buttons */
     .btn-custom {
       font-size: 14px;
       background: linear-gradient(90deg, #e0e0e0, #d0d0d0);
@@ -101,219 +119,83 @@
       cursor: pointer;
       transition: all 0.3s ease;
       min-width: 140px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     }
 
     .btn-custom:hover {
-      background: linear-gradient(90deg, #ff4040, #e63939);
+      background: linear-gradient(90deg, var(--accent-1), #e63939);
       color: white;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
-    }
-
-    .btn-custom:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
+      box-shadow: 0 8px 18px rgba(255, 64, 64, 0.14);
     }
 
     .chart-container {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
       transition: box-shadow 0.3s ease;
-    }
-
-    .chart-container:hover {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      min-height: 220px; /* helps Chart.js layout */
     }
 
     .center-box {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
     }
 
-    .center-box:hover {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    /* Center list default layout (desktop) */
+    .center-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 6px; /* room for scrollbar */
+      -webkit-overflow-scrolling: touch;
     }
 
-    .add-center-btn {
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-      color: white;
-      border: none;
-      width: 100%;
-      margin-top: 12px;
-      padding: 12px;
-      font-size: 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .add-center-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(255, 64, 64, 0.3);
-    }
-
-    .add-center-btn:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
-    }
-
-    .center-btn {
-      background: #ffffff;
-      border: 1px solid #e0e0e0;
-      color: #1a1a1a;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      text-align: left;
-      display: inline-flex;
+    .center-list .center-btn {
+      display: flex;
       align-items: center;
       gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid #e9e9e9;
+      border-radius: 8px;
+      color: #1a1a1a;
+      font-weight: 600;
+      font-size: 15px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      position: relative;
+      text-align: left;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      min-width: 200px;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.03);
     }
 
-    .center-btn:hover {
-      background: linear-gradient(135deg, rgba(255, 245, 245, 1), #ffecec);
-      border-color: #ff4040;
-      transform: translateX(4px);
-      box-shadow: 0 4px 10px rgba(255, 64, 64, 0.2);
+    .center-list .center-btn .bi {
+      min-width: 20px;
+      text-align: center;
+      opacity: 0.85;
     }
 
-    .center-btn i {
-      color: #ff4040;
-      font-size: 18px;
-      flex-shrink: 0;
+    .center-list .center-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      background: #fbfbfb;
     }
 
-    .center-btn:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.25);
+    .center-list .center-btn.selected-center {
+      background: linear-gradient(135deg, rgba(255, 64, 64, 0.06), rgba(255,64,64,0.02));
+      border-color: var(--accent-1);
+      box-shadow: 0 10px 22px rgba(255,64,64,0.06);
     }
 
-    /* Left Accent Bar */
-    .center-btn::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 5px;
-      background: #ff4040;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      border-radius: 8px 0 0 8px;
-    }
-
-    .center-btn:hover::before {
-      opacity: 1;
-    }
-
-    /* Selected center highlight */
-    .center-btn.selected-center {
-      background: linear-gradient(135deg, rgba(255, 64, 64, 0.08), rgba(255, 64, 64, 0.03));
-      border-color: #ff4040;
-      box-shadow: 0 6px 12px rgba(255, 64, 64, 0.08);
-    }
-
-    /* Carousel-specific styles */
-    .center-carousel-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .center-carousel {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 6px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.12) transparent;
-      padding-left: 6px;
-      padding-right: 6px;
-      flex: 1 1 auto;
-    }
-
-    .center-carousel::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .center-carousel::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.12);
-      border-radius: 8px;
-    }
-
-    .carousel-arrow {
-      background: white;
-      border: 1px solid #e6e6e6;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      flex: 0 0 auto;
-    }
-
-    .carousel-arrow:active {
-      transform: scale(0.98);
-    }
-
-    .carousel-arrow i {
-      font-size: 16px;
-      color: #444;
-    }
-
-    /* show subtle left/right fade to indicate scrollable content */
-    .center-carousel-wrap::before,
-    .center-carousel-wrap::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 36px;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .center-carousel-wrap::before {
-      left: 0;
-      background: linear-gradient(90deg, rgba(244,246,248,1) 0%, rgba(244,246,248,0) 100%);
-    }
-    .center-carousel-wrap::after {
-      right: 0;
-      background: linear-gradient(-90deg, rgba(244,246,248,1) 0%, rgba(244,246,248,0) 100%);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .center-btn { min-width: 160px; font-size: 14px; padding: 10px 12px; }
-      .carousel-arrow { width: 32px; height: 32px; }
-    }
-
-    /* rest of your styles (unchanged) */
     .legend-item {
       display: flex;
       align-items: center;
@@ -338,25 +220,15 @@
       font-size: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .filter-btn:hover {
-      background: #e9ecef;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .filter-btn:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
     }
 
     .modal-content {
       border-radius: 12px;
       padding: 24px;
       border: 2px solid transparent;
-      background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #ff4040, #470000) border-box;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(white, white) padding-box, linear-gradient(135deg, var(--accent-1), var(--accent-2)) border-box;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
       position: relative;
     }
 
@@ -369,61 +241,110 @@
       font-size: 1.5rem;
       color: #333;
       cursor: pointer;
-      transition: color 0.3s ease, transform 0.2s ease;
+      transition: color 0.2s ease, transform 0.12s ease;
     }
 
     .modal-close-btn:hover {
-      color: #ff4040;
-      transform: scale(1.2);
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1a1a1a;
-    }
-
-    .form-label {
-      font-weight: 600;
-      color: #333;
-      font-size: 14px;
-    }
-
-    .form-control {
-      border-radius: 6px;
-      border: 1px solid #ced4da;
-      font-size: 14px;
-      padding: 10px;
-      transition: all 0.3s ease;
+      color: var(--accent-1);
+      transform: scale(1.05);
     }
 
     .form-control:focus {
-      border-color: #ff4040;
-      box-shadow: 0 0 6px rgba(255, 64, 64, 0.3);
+      border-color: var(--accent-1);
+      box-shadow: 0 0 6px rgba(255, 64, 64, 0.16);
       outline: none;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-      border: none;
+    .h6 {
+      font-weight: 700 !important;
+      color: #1a1a1a;
+      font-size: 1.05rem;
+    }
+
+    /* Responsive rules */
+    @media (max-width: 991.98px) {
+      .dashboard-wrapper {
+        margin-left: 0 !important;
+        padding: 16px;
+      }
+
+      .card-stat {
+        height: auto;
+        padding: 14px;
+        border-radius: 10px;
+      }
+
+      .chart-container {
+        padding: 16px;
+      }
+
+      .center-list {
+        max-height: 260px;
+      }
+    }
+
+    /* Mobile overlay sidebar and center-list improvements */
+    @media (max-width: 575.98px) {
+      /* make sidebar act as overlay if included in markup */
+      .sidebar, #sidebar, .main-sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 260px;
+        transform: translateX(-100%);
+        z-index: 1080;
+        background: #fff;
+        box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+        transition: transform .28s ease;
+      }
+      .sidebar.active, #sidebar.active, .main-sidebar.active {
+        transform: translateX(0);
+      }
+
+      .sidebar-backdrop {
+        display: none;
+      }
+      body.sidebar-open .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.42);
+        z-index: 1070;
+      }
+
+      .dashboard-wrapper {
+        margin-left: 0 !important;
+        padding: 12px;
+      }
+
+      /* center-list on mobile: allow multi-line names, larger max-height based on viewport */
+      .center-list {
+        max-height: calc(100vh - 260px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 10px;
+      }
+      .center-list .center-btn {
+        white-space: normal; /* allow wrapping on mobile */
+        align-items: flex-start;
+        padding: 12px;
+      }
+
+      .card-stat h4 { font-size: 20px; }
+      .card-stat span { font-size: 12px; }
+      .card-stat { padding-right: 48px; } /* keep room for icon on mobile */
+    }
+
+    /* Smooth small scrollbars for webkit */
+    .center-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .center-list::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.07);
       border-radius: 6px;
-      padding: 10px 20px;
-      font-weight: 600;
-      transition: all 0.3s ease;
     }
 
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #e63939, #360000);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(255, 64, 64, 0.3);
-    }
-
-    .btn-primary:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 64, 64, 0.2);
-    }
-
-    .h6 { font-weight: 700 !important; color: #1a1a1a; font-size: 1.1rem; }
   </style>
 </head>
 
@@ -434,7 +355,6 @@
   <?php $this->load->view('superadmin/Include/Navbar') ?>
   <!-- Dashboard Content -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
-
     <div class="container-fluid px-3">
       <!-- Stats Cards -->
       <div class="row g-3 mb-4 text-center">
@@ -469,87 +389,59 @@
           <div class="card-stat" onclick="openStatList('paid')">
             <i class="bi bi-bar-chart-line-fill card-icon"></i>
             <div class="d-flex flex-column">
-              <h4 id="paidAmountCard">Rs.<?= isset($totalIncome) ? number_format($totalIncome) : '0' ?></h4>
+              <!-- padding-right in .card-stat prevents overlap with icon -->
+              <h4 id="paidAmountCard"><?= isset($totalIncome) ? number_format($totalIncome) : '0' ?></h4>
               <span>Paid Amounts</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="d-flex justify-content-center gap-3 my-4">
-        <div class="bg-gray px-3 py-2 rounded d-flex align-items-center">
-          <button class="btn btn-sm btn-custom" onclick="exportToExcel()">
-            <i class="bi bi-download me-1"></i> Export Excel
-          </button>
-        </div>
-        <div class="bg-gray px-3 py-2 rounded d-flex align-items-center">
-          <button class="btn btn-sm btn-custom" onclick="exportToPDF()">
-            <i class="bi bi-download me-1"></i> Export PDF
-          </button>
-        </div>
-      </div>
-
       <!-- Charts & Side Panel -->
       <div class="row">
         <div class="col-lg-9">
-          <!-- Weekly Attendance -->
           <div class="chart-container">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="mb-0">Weekly Attendance</h6>
               <button class="btn filter-btn" onclick="filterAttendance()">Filter</button>
             </div>
-            <canvas id="attendanceChart" height="100"></canvas>
-          </div>
-          <!-- Revenue Overview -->
-          <div class="chart-container">
-            <h6>Revenue Overview</h6>
-            <canvas id="revenueChart" height="100"></canvas>
-          </div>
-        </div>
-        <!-- Right Sidebar Panels -->
-<div class="col-lg-3">
-  <div class="center-box mb-3" style="background: #f0eaea;">
-    <h6 class="fw-bold text-start">Centers</h6>
-    <!-- Scrollable container -->
-    <div class="d-grid gap-2 mt-3" style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
-      <?php if (!empty($centers)): ?>
-        <?php foreach ($centers as $c): ?>
-          <button class="btn center-btn text-start"
-            value="<?= $c->id ?>"
-            onclick="selectCenter('<?= $c->id ?>', this)">
-            <i class="bi bi-house-door-fill me-2"></i>
-            <?= htmlspecialchars($c->name) ?>
-          </button>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p class="text-muted">No centers available.</p>
-      <?php endif; ?>
-    </div>
-  </div>
-
-  <!-- Student Distribution -->
-  <div class="center-box">
-    <h6>Student Distribution</h6>
-    <canvas id="studentChart" height="180"></canvas>
-    <div class="mt-3">
-      <div class="legend-item"><span class="legend-color" style="background:#990000"></span> Basic</div>
-      <div class="legend-item"><span class="legend-color" style="background:#000000"></span> Intermediate</div>
-      <div class="legend-item"><span class="legend-color" style="background:#f4b6b6"></span> Advanced</div>
-    </div>
-  </div>
-</div>
-
-
-            <!-- Optional: small hint -->
-            <div class="mt-2">
-              <small class="text-muted">Click a center to filter stats</small>
+            <div style="position:relative; height:220px;">
+              <canvas id="attendanceChart"></canvas>
             </div>
           </div>
 
-          <!-- Student Distribution -->
+          <div class="chart-container">
+            <h6>Revenue Overview</h6>
+            <div style="position:relative; height:337px;">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="center-box mb-3" style="background: #f7efef;">
+            <h6 class="fw-bold text-start">Centers</h6>
+            <div class="center-list mt-3">
+              <?php if (!empty($centers)): ?>
+                <?php foreach ($centers as $c): ?>
+                  <button class="center-btn" value="<?= $c->id ?>" onclick="selectCenter('<?= $c->id ?>', this)">
+                    <i class="bi bi-house-door-fill"></i>
+                    <div style="flex:1; overflow:hidden; text-align:left;">
+                      <?= htmlspecialchars($c->name) ?>
+                    </div>
+                  </button>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="text-muted">No centers available.</p>
+              <?php endif; ?>
+            </div>
+          </div>
+
           <div class="center-box">
             <h6>Student Distribution</h6>
-            <canvas id="studentChart" height="180"></canvas>
+            <div style="position:relative; height:180px;">
+              <canvas id="studentChart"></canvas>
+            </div>
             <div class="mt-3">
               <div class="legend-item"><span class="legend-color" style="background:#990000"></span> Basic</div>
               <div class="legend-item"><span class="legend-color" style="background:#000000"></span> Intermediate</div>
@@ -561,7 +453,7 @@
     </div>
   </div>
 
-  <!-- Modal: stat list (unchanged) -->
+  <!-- Modal: stat list -->
   <div class="modal fade" id="statListModal" tabindex="-1" aria-labelledby="statListModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
@@ -605,118 +497,107 @@
     </div>
   </div>
 
+  <!-- Sidebar backdrop (used for mobile overlay) -->
+  <div class="sidebar-backdrop" aria-hidden="true" style="display:none;"></div>
+
   <script>
     // track currently selected center (null = all centers)
     window.selectedCenterId = null;
 
+    // keep chart instances global to avoid double-creation
+    window.attendanceChart = null;
+    window.revenueChart = null;
+    window.studentChart = null;
+
     document.addEventListener('DOMContentLoaded', () => {
-      initializeCharts();
       setupSidebarToggle();
       setupModalBlur();
-
-      // center carousel init
-      initCenterCarousel();
-
-      // on load, fetch global stats (no center filter)
+      initOrUpdateCharts();
       fetchCenterStats(null);
+
+      // wire backdrop click to close mobile sidebar
+      const backdrop = document.querySelector('.sidebar-backdrop');
+      if (backdrop) {
+        backdrop.addEventListener('click', () => {
+          document.body.classList.remove('sidebar-open');
+          document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
+          backdrop.style.display = 'none';
+          document.body.style.overflow = '';
+        });
+      }
     });
 
-    // initialize center carousel behavior (buttons & drag)
-    function initCenterCarousel() {
-      const carousel = document.getElementById('centerCarousel');
-      const leftBtn = document.getElementById('centerScrollLeft');
-      const rightBtn = document.getElementById('centerScrollRight');
-      if (!carousel) return;
-
-      const scrollAmount = 300; // px per click - adjust if needed
-
-      leftBtn && leftBtn.addEventListener('click', () => {
-        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-      });
-      rightBtn && rightBtn.addEventListener('click', () => {
-        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      });
-
-      // enable dragging to scroll (desktop)
-      let isDown = false;
-      let startX, scrollLeft;
-      carousel.addEventListener('mousedown', (e) => {
-        isDown = true;
-        carousel.classList.add('dragging');
-        startX = e.pageX - carousel.offsetLeft;
-        scrollLeft = carousel.scrollLeft;
-      });
-      carousel.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.classList.remove('dragging');
-      });
-      carousel.addEventListener('mouseleave', () => {
-        isDown = false;
-        carousel.classList.remove('dragging');
-      });
-      carousel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - carousel.offsetLeft;
-        const walk = (x - startX) * 1; // scroll-fast multiplier
-        carousel.scrollLeft = scrollLeft - walk;
-      });
-
-      // keyboard accessibility: left/right arrow scroll when carousel is focused
-      carousel.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') {
-          carousel.scrollBy({ left: 200, behavior: 'smooth' });
-        } else if (e.key === 'ArrowLeft') {
-          carousel.scrollBy({ left: -200, behavior: 'smooth' });
-        }
-      });
-    }
-
     function setupSidebarToggle() {
-      const toggleBtn = document.querySelector('.sidebar-toggle');
-      const dashboardWrapper = document.getElementById('dashboardWrapper');
-      if (toggleBtn && dashboardWrapper) {
-        toggleBtn.addEventListener('click', function() {
-          dashboardWrapper.classList.toggle('minimized');
-        });
+      const toggleBtn = document.querySelector('.sidebar-toggle') || document.getElementById('sidebarToggle') || document.querySelector('[data-sidebar-toggle]');
+      const wrapper = document.getElementById('dashboardWrapper');
+
+      function isMobile() {
+        return window.matchMedia('(max-width: 575.98px)').matches;
       }
 
-      document.addEventListener('sidebarToggle', function(e) {
-        const dashboardWrapper = document.getElementById('dashboardWrapper');
-        if (dashboardWrapper) {
-          if (e.detail && e.detail.minimized) {
-            dashboardWrapper.classList.add('minimized');
-          } else {
-            dashboardWrapper.classList.remove('minimized');
-          }
+      function openMobileSidebar() {
+        document.body.classList.add('sidebar-open');
+        document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.add('active'));
+        const bd = document.querySelector('.sidebar-backdrop');
+        if (bd) bd.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileSidebar() {
+        document.body.classList.remove('sidebar-open');
+        document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
+        const bd = document.querySelector('.sidebar-backdrop');
+        if (bd) bd.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      function toggleHandler() {
+        if (isMobile()) {
+          if (document.body.classList.contains('sidebar-open')) closeMobileSidebar(); else openMobileSidebar();
+        } else {
+          const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
+          if (!sidebar) return;
+          const isMin = sidebar.classList.toggle('minimized');
+          if (wrapper) wrapper.classList.toggle('minimized', isMin);
+          setTimeout(() => window.dispatchEvent(new Event('resize')), 220);
+        }
+      }
+
+      if (toggleBtn) toggleBtn.addEventListener('click', toggleHandler);
+      else {
+        // add fallback toggle in navbar if none found
+        const navbar = document.querySelector('.navbar, header, .main-header, .topbar');
+        if (navbar) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn btn-sm btn-light sidebar-toggle ms-2';
+          btn.style.display = 'inline-flex';
+          btn.innerHTML = '<i class="bi bi-list"></i>';
+          btn.title = 'Toggle sidebar';
+          btn.addEventListener('click', toggleHandler);
+          navbar.prepend(btn);
+        }
+      }
+
+      document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+          document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
+          document.body.classList.remove('sidebar-open');
+          const bd = document.querySelector('.sidebar-backdrop');
+          if (bd) bd.style.display = 'none';
+          document.body.style.overflow = '';
         }
       });
 
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'class') {
-            const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
-            const dashboardWrapper = document.getElementById('dashboardWrapper');
-            if (sidebar && dashboardWrapper) {
-              if (sidebar.classList.contains('minimized') ||
-                sidebar.classList.contains('collapsed') ||
-                sidebar.classList.contains('sidebar-collapse')) {
-                dashboardWrapper.classList.add('minimized');
-              } else {
-                dashboardWrapper.classList.remove('minimized');
-              }
-            }
-          }
-        });
+      window.addEventListener('resize', () => {
+        if (!isMobile()) {
+          const bd = document.querySelector('.sidebar-backdrop');
+          if (bd) bd.style.display = 'none';
+          document.body.classList.remove('sidebar-open');
+          document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
+          document.body.style.overflow = '';
+        }
       });
-
-      const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
-      if (sidebar) {
-        observer.observe(sidebar, {
-          attributes: true,
-          attributeFilter: ['class']
-        });
-      }
     }
 
     function setupModalBlur() {
@@ -736,115 +617,122 @@
       });
     }
 
-    function initializeCharts() {
-      const ctx = document.getElementById("attendanceChart").getContext("2d");
-      const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-      gradient.addColorStop(0, "#D9D9D9");
-      gradient.addColorStop(0.5, "#ff4040");
-      gradient.addColorStop(1, "#470000");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-          datasets: [{
-            label: "Attendance",
-            data: [90, 85, 75, 92, 80, 85, 90],
-            backgroundColor: gradient,
-            borderRadius: 10,
-            barThickness: 30
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              enabled: true
-            }
-          },
-          scales: {
-            x: {
-              grid: {
-                display: false
-              },
-              ticks: {
-                font: {
-                  size: 12
-                }
-              }
-            },
-            y: {
-              beginAtZero: true,
-              max: 110,
-              grid: {
-                display: false
-              },
-              ticks: {
-                stepSize: 25,
-                font: {
-                  size: 12
-                }
-              }
-            }
-          }
+    /* Charts (unchanged logic) */
+    function initOrUpdateCharts() {
+      const attCtx = document.getElementById("attendanceChart").getContext("2d");
+      const attGradient = attCtx.createLinearGradient(0, 0, 0, 200);
+      attGradient.addColorStop(0, "#D9D9D9");
+      attGradient.addColorStop(0.5, "#ff4040");
+      attGradient.addColorStop(1, "#470000");
+
+      const attData = {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [{
+          label: "Attendance",
+          data: [90, 85, 75, 92, 80, 85, 90],
+          backgroundColor: attGradient,
+          borderRadius: 10,
+          barThickness: 30
+        }]
+      };
+
+      const attOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: true } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 12 } } },
+          y: { beginAtZero: true, max: 110, grid: { display: false }, ticks: { stepSize: 25, font: { size: 12 } } }
         }
-      });
+      };
 
-      new Chart(document.getElementById("revenueChart"), {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
-          datasets: [{
-            label: "Revenue",
-            data: [20000, 25000, 30000, 40000, 37000, 42000, 38000, 35000],
-            borderColor: "#ff4040",
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: "#f0f0f0"
-              },
-              ticks: {
-                font: {
-                  size: 12
-                }
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              },
-              ticks: {
-                font: {
-                  size: 12
-                }
-              }
-            }
-          }
-        }
-      });
+      if (window.attendanceChart) {
+        window.attendanceChart.data = attData;
+        window.attendanceChart.options = attOptions;
+        window.attendanceChart.update();
+      } else {
+        window.attendanceChart = new Chart(attCtx, { type: "bar", data: attData, options: attOptions });
+      }
 
+      const revCtx = document.getElementById('revenueChart').getContext('2d');
+      const revGradient = revCtx.createLinearGradient(0, 0, 0, 400);
+      revGradient.addColorStop(0, '#ff4040');
+      revGradient.addColorStop(1, '#470000');
 
+      const revenueLabels = [
+        <?php foreach ($monthlyRevenue as $row) { echo "'" . $row['month'] . "',"; } ?>
+      ];
+      const revenueDataValues = [
+        <?php foreach ($monthlyRevenue as $row) { echo $row['revenue'] . ","; } ?>
+      ];
+
+      const revData = {
+        labels: revenueLabels,
+        datasets: [{
+          label: 'Revenue',
+          data: revenueDataValues,
+          fill: true,
+          borderColor: '#ff4040',
+          backgroundColor: revGradient,
+          tension: 0.3,
+          borderWidth: 2,
+          pointBackgroundColor: '#470000',
+          pointRadius: 4
+        }]
+      };
+
+      const revOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } };
+
+      if (window.revenueChart) {
+        window.revenueChart.data = revData;
+        window.revenueChart.options = revOptions;
+        window.revenueChart.update();
+      } else {
+        window.revenueChart = new Chart(revCtx, { type: 'line', data: revData, options: revOptions });
+      }
+
+      const stuCtx = document.getElementById('studentChart').getContext('2d');
+      const studentDistributionData = [
+        <?= $studentDistribution['Beginner'] ?? 0 ?>,
+        <?= $studentDistribution['Intermediate'] ?? 0 ?>,
+        <?= $studentDistribution['Advanced'] ?? 0 ?>
+      ];
+
+      const stuData = {
+        labels: ['Basic', 'Intermediate', 'Advanced'],
+        datasets: [{
+          data: studentDistributionData,
+          backgroundColor: ['#990000', '#000000', '#f4b6b6']
+        }]
+      };
+
+      const stuOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
+
+      if (window.studentChart) {
+        window.studentChart.data = stuData;
+        window.studentChart.options = stuOptions;
+        window.studentChart.update();
+      } else {
+        window.studentChart = new Chart(stuCtx, { type: 'doughnut', data: stuData, options: stuOptions });
+      }
     }
 
-    /**
-     * Fetch stats for a center (or all centers when centerId is null)
-     * and update the 4 stat cards.
-     */
+    window.updateCharts = function({ attendance = null, revenue = null, studentDist = null }) {
+      if (attendance && window.attendanceChart) {
+        window.attendanceChart.data.datasets[0].data = attendance;
+        window.attendanceChart.update();
+      }
+      if (revenue && window.revenueChart) {
+        window.revenueChart.data.labels = revenue.labels;
+        window.revenueChart.data.datasets[0].data = revenue.data;
+        window.revenueChart.update();
+      }
+      if (studentDist && window.studentChart) {
+        window.studentChart.data.datasets[0].data = studentDist;
+        window.studentChart.update();
+      }
+    };
+
     function fetchCenterStats(centerId) {
       let url = '<?= base_url("dashboard/center_stats") ?>';
       if (centerId !== null && centerId !== undefined) {
@@ -870,14 +758,24 @@
           if (activeEl) activeEl.innerText = (d.active_students !== undefined) ? d.active_students : 0;
           if (attendanceEl) attendanceEl.innerText = (d.attendance_rate !== undefined) ? (d.attendance_rate + '%') : '0%';
           if (dueEl) dueEl.innerText = (d.total_due !== undefined) ? formatNumber(d.total_due) : 0;
-          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? ('Rs.' + formatNumber(d.total_paid)) : 'Rs.0';
+          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? (formatNumber(d.total_paid)) : 'Rs.0';
+
+          if (d.weekly_attendance && Array.isArray(d.weekly_attendance)) {
+            const a = d.weekly_attendance;
+            window.updateCharts({ attendance: a });
+          }
+          if (d.revenue && Array.isArray(d.revenue.labels) && Array.isArray(d.revenue.data)) {
+            window.updateCharts({ revenue: { labels: d.revenue.labels, data: d.revenue.data } });
+          }
+          if (d.student_distribution && Array.isArray(d.student_distribution)) {
+            window.updateCharts({ studentDist: d.student_distribution });
+          }
         })
         .catch(err => {
           console.error('Error fetching center stats:', err);
         });
     }
 
-    // helper to format number with 2 decimals or thousand separators
     function formatNumber(n) {
       if (n === null || n === undefined) return '0';
       if (Number(n) === Math.floor(n)) {
@@ -887,82 +785,20 @@
       }
     }
 
-    /**
-     * Called when clicking a center button.
-     * We set the global selectedCenterId and fetch stats for that center.
-     * This preserves previous behavior and also allows the stat-popups to filter by center.
-     */
     function selectCenter(centerId, btnEl = null) {
-      // update selected center global
       window.selectedCenterId = centerId;
-
-      // Fetch new stats for the selected center (existing behavior)
       fetchCenterStats(centerId);
 
-      // Optional: original edit modal population (only if those elements exist)
-      const editName = document.getElementById('editCenterName');
-      const editLocation = document.getElementById('editCenterLocation');
-      const editCapacity = document.getElementById('editCenterCapacity');
-      const editId = document.getElementById('editCenterId');
-
-      // Dummy fallback data for UI — keep as before
-      const centerData = {
-        center1: {
-          name: "Center 1",
-          location: "Mumbai",
-          capacity: 100
-        },
-        center2: {
-          name: "Center 2",
-          location: "Delhi",
-          capacity: 150
-        },
-        center3: {
-          name: "Center 3",
-          location: "Bangalore",
-          capacity: 120
-        },
-        center4: {
-          name: "Center 4",
-          location: "Chennai",
-          capacity: 80
-        }
-      };
-
-      const data = centerData[centerId] || {
-        name: centerId,
-        location: "Unknown",
-        capacity: 100
-      };
-
-      if (editName) editName.value = data.name;
-      if (editLocation) editLocation.value = data.location;
-      if (editCapacity) editCapacity.value = data.capacity;
-      if (editId) editId.value = centerId;
-
-      const editModalEl = document.getElementById('editCenterModal');
-      if (editModalEl) {
-        const modal = new bootstrap.Modal(editModalEl);
-        modal.show();
-      }
-
-      // Update selected button highlight (visual)
       try {
         document.querySelectorAll('.center-btn').forEach(b => b.classList.remove('selected-center'));
         if (btnEl) btnEl.classList.add('selected-center');
       } catch (e) {}
     }
 
-    /**
-     * Open the stat list modal for a given filter:
-     * 'active' | 'attendance' | 'due' | 'paid'
-     * Uses window.selectedCenterId (null = all centers)
-     */
     function openStatList(filter) {
       const centerId = window.selectedCenterId || null;
       const url = '<?= base_url("dashboard/students_list") ?>?filter=' + encodeURIComponent(filter) + (centerId ? '&center_id=' + encodeURIComponent(centerId) : '');
 
-      // Update modal title/sub
       const modalTitle = {
         active: 'Active Students',
         attendance: 'Recently Attended (7 days)',
@@ -974,7 +810,6 @@
       const subLabel = centerId ? ('Center ID: ' + centerId) : 'All centers';
       document.getElementById('statListSubLabel').innerText = subLabel;
 
-      // Clear previous rows and show spinner row
       const tbody = document.getElementById('statListTableBody');
       tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4">Loading...</td></tr>';
 
@@ -996,7 +831,6 @@
             tbody.innerHTML = '';
             rows.forEach((r, idx) => {
               const tr = document.createElement('tr');
-
               const name = r.name || '';
               const contact = r.contact || '';
               const parent = r.parent_name || '';
@@ -1028,21 +862,14 @@
           tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Failed to load data</td></tr>';
         });
 
-      // show modal
       const modalEl = document.getElementById('statListModal');
       const modal = new bootstrap.Modal(modalEl);
       modal.show();
     }
 
-    // simple HTML escape for insertion into table cells
     function escapeHtml(unsafe) {
       if (unsafe === null || unsafe === undefined) return '';
-      return String(unsafe)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      return String(unsafe).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
     function exportToExcel() {
@@ -1062,18 +889,14 @@
     }
 
     function exportToPDF() {
-      const {
-        jsPDF
-      } = window.jspdf;
+      const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
       doc.setFontSize(18);
       doc.text("Students Data", 14, 15);
 
       doc.autoTable({
-        head: [
-          ["Name", "Contact", "Center", "Batch", "Level", "Category"]
-        ],
+        head: [["Name", "Contact", "Center", "Batch", "Level", "Category"]],
         body: [
           ["Jane Doe", "9876543210", "ABC", "B1", "Intermediate", "Complete"],
           ["John Smith", "9876543211", "XYZ", "B2", "Advanced", "Pending"],
@@ -1123,92 +946,188 @@
 
     function toggleDashboard() {
       const dashboardWrapper = document.getElementById('dashboardWrapper');
-      if (dashboardWrapper) {
-        dashboardWrapper.classList.toggle('minimized');
-      }
+      if (dashboardWrapper) dashboardWrapper.classList.toggle('minimized');
     }
-
     window.toggleDashboard = toggleDashboard;
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-
-    // Create gradient
-    const gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, '#ff4040'); // top color
-    gradient.addColorStop(1, '#470000'); // bottom color
-
-    const revenueChart = new Chart(revenueCtx, {
-      type: 'line',
-      data: {
-        labels: [
-          <?php foreach ($monthlyRevenue as $row) {
-            echo "'" . $row['month'] . "',";
-          } ?>
-        ],
-        datasets: [{
-          label: 'Revenue',
-          data: [
-            <?php foreach ($monthlyRevenue as $row) {
-              echo $row['revenue'] . ",";
-            } ?>
-          ],
-          fill: true,
-          borderColor: '#ff4040',
-          backgroundColor: gradient,
-          tension: 0.3,
-          borderWidth: 2,
-          pointBackgroundColor: '#470000',
-          pointRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  </script>
-  
-  <script>
-    const ctx = document.getElementById('studentChart').getContext('2d');
-    const studentChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Basic', 'Intermediate', 'Advanced'],
-        datasets: [{
-          data: [
-            <?= $studentDistribution['Beginner'] ?? 0 ?>,
-            <?= $studentDistribution['Intermediate'] ?? 0 ?>,
-            <?= $studentDistribution['Advanced'] ?? 0 ?>
-          ],
-          backgroundColor: ['#990000', '#000000', '#f4b6b6']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false
-          }
-        }
-      }
-    });
-  </script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+(function () {
+  // --- Configuration ---
+  const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
+  const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
+  const WRAPPER_IDS = ['dashboardWrapper', 'financeWrap'];
+  const DESKTOP_WIDTH_CUTOFF = 576;
+  const SIDEBAR_OPEN_CLASS = 'active';
+  const SIDEBAR_MIN_CLASS = 'minimized';
+  const BODY_OVERLAY_CLASS = 'sidebar-open';
+  const CSS_VAR = '--sidebar-width';
+  const SIDEBAR_WIDTH_OPEN = '250px';
+  const SIDEBAR_WIDTH_MIN = '60px';
+
+  // --- Helpers ---
+  const qs = s => document.querySelector(s);
+  const qsa = s => Array.from(document.querySelectorAll(s));
+  const sidebarEl = () => qs('#sidebar') || qs('.sidebar') || qs('.main-sidebar');
+  const wrapperEl = () => WRAPPER_IDS.map(id => document.getElementById(id)).find(Boolean) || qs('.wrap') || qs('.dashboard-wrapper');
+
+  function isMobile() { return window.innerWidth <= DESKTOP_WIDTH_CUTOFF; }
+
+  // Ensure single backdrop exists
+  let backdrop = qs('.sidebar-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'sidebar-backdrop';
+    backdrop.style.position = 'fixed';
+    backdrop.style.inset = '0';
+    backdrop.style.background = 'rgba(0,0,0,0.42)';
+    backdrop.style.zIndex = '1070';
+    backdrop.style.display = 'none';
+    backdrop.style.opacity = '0';
+    backdrop.style.transition = 'opacity .18s ease';
+    document.body.appendChild(backdrop);
+  }
+
+  // Prevent double-toggles
+  let lock = false;
+  function lockFor(ms=320) { lock = true; clearTimeout(lock._t); lock._t = setTimeout(()=> lock=false, ms); }
+
+  // Track last touch/pointer time to avoid handling the follow-up synthetic click
+  let lastTouchAt = 0;
+  const TOUCH_CLICK_GAP = 700; // ms
+
+  function openMobileSidebar() {
+    const s = sidebarEl(); if (!s) return;
+    s.classList.add(SIDEBAR_OPEN_CLASS);
+    document.body.classList.add(BODY_OVERLAY_CLASS);
+    document.body.style.overflow = 'hidden';
+    backdrop.style.display = 'block';
+    requestAnimationFrame(()=> backdrop.style.opacity = '1');
+  }
+
+  function closeMobileSidebar() {
+    const s = sidebarEl(); if (s) s.classList.remove(SIDEBAR_OPEN_CLASS);
+    document.body.classList.remove(BODY_OVERLAY_CLASS);
+    document.body.style.overflow = '';
+    backdrop.style.opacity = '0';
+    setTimeout(()=> { if (!document.body.classList.contains(BODY_OVERLAY_CLASS)) backdrop.style.display = 'none'; }, 220);
+  }
+
+  function toggleDesktopSidebar() {
+    const s = sidebarEl(); if (!s) return;
+    const isMin = s.classList.toggle(SIDEBAR_MIN_CLASS);
+    const w = wrapperEl(); if (w) w.classList.toggle('minimized', isMin);
+    const nav = qs('.navbar'); if (nav) nav.classList.toggle('sidebar-minimized', isMin);
+    document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
+    document.dispatchEvent(new CustomEvent('sidebarToggle', { detail: { minimized: isMin } }));
+    setTimeout(()=> window.dispatchEvent(new Event('resize')), 220);
+  }
+
+  function handleToggleEvent(e) {
+    // If this is a click that immediately follows a touch, ignore it
+    if (e && e.type === 'click' && (Date.now() - lastTouchAt) < TOUCH_CLICK_GAP) {
+      return;
+    }
+
+    if (lock) return;
+    if (isMobile()) {
+      lockFor(260);
+      if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); else openMobileSidebar();
+    } else {
+      lockFor(260);
+      toggleDesktopSidebar();
+    }
+  }
+
+  // Prefer pointerdown for touch responsiveness, but dedupe with subsequent click
+  document.addEventListener('pointerdown', function (ev) {
+    // Only treat actual touch/pen as immediate triggers (ignore mouse pointerdown)
+    if (ev.pointerType === 'touch' || ev.pointerType === 'pen') {
+      const toggle = ev.target.closest(TOGGLE_SELECTORS);
+      if (toggle) {
+        lastTouchAt = Date.now();
+        // call handler - create a synthetic event-like object to pass
+        handleToggleEvent(ev);
+      }
+    }
+  }, { passive: true });
+
+  // Click handler for mouse/keyboard OR synthetic click (ignored when recent touch)
+  document.addEventListener('click', function (ev) {
+    const toggle = ev.target.closest(TOGGLE_SELECTORS);
+    if (toggle) {
+      handleToggleEvent(ev);
+    }
+  });
+
+  // Backdrop click closes mobile sidebar
+  backdrop.addEventListener('click', function () {
+    if (!document.body.classList.contains(BODY_OVERLAY_CLASS)) return;
+    closeMobileSidebar();
+  });
+
+  // Close overlay when clicking a link inside sidebar on mobile (common UX)
+  document.addEventListener('click', function (e) {
+    if (!isMobile()) return;
+    const inside = e.target.closest(SIDEBAR_SELECTORS);
+    if (!inside) return;
+    const anchor = e.target.closest('a');
+    if (anchor && anchor.getAttribute('href') && anchor.getAttribute('href') !== '#') {
+      setTimeout(closeMobileSidebar, 160);
+    }
+  });
+
+  // ESC closes overlay
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && document.body.classList.contains(BODY_OVERLAY_CLASS)) {
+      closeMobileSidebar();
+    }
+  });
+
+  // Resize handling
+  let resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (!isMobile()) {
+        closeMobileSidebar();
+        const s = sidebarEl();
+        const isMin = s && s.classList.contains(SIDEBAR_MIN_CLASS);
+        document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
+      }
+    }, 120);
+  });
+
+  // If page initially had sidebar-open, ensure backdrop visible
+  if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
+    backdrop.style.display = 'block';
+    backdrop.style.opacity = '1';
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Provide fallback toggle button if none exists
+  (function ensureFallbackToggle() {
+    if (qs(TOGGLE_SELECTORS)) return;
+    const navbar = qs('.navbar, header, .main-header, .topbar');
+    if (!navbar) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'sidebarToggle';
+    btn.className = 'btn btn-sm btn-light sidebar-toggle';
+    btn.setAttribute('aria-label', 'Toggle sidebar');
+    btn.style.marginRight = '8px';
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    navbar.prepend(btn);
+  })();
+
+})();
+</script>
+
+
+
 </body>
 
 </html>
