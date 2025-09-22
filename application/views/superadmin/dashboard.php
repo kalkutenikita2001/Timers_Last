@@ -758,7 +758,7 @@
           if (activeEl) activeEl.innerText = (d.active_students !== undefined) ? d.active_students : 0;
           if (attendanceEl) attendanceEl.innerText = (d.attendance_rate !== undefined) ? (d.attendance_rate + '%') : '0%';
           if (dueEl) dueEl.innerText = (d.total_due !== undefined) ? formatNumber(d.total_due) : 0;
-          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? (formatNumber(d.total_paid)) : 'Rs.0';
+          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? ('Rs.' + formatNumber(d.total_paid)) : 'Rs.0';
 
           if (d.weekly_attendance && Array.isArray(d.weekly_attendance)) {
             const a = d.weekly_attendance;
