@@ -1,4 +1,5 @@
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <?php $perms = $this->session->userdata('permissions'); ?>
@@ -19,18 +20,23 @@
         <!-- Admission Management -->
         <?php if (!empty($perms['admission'])): ?>
             <div class="nav-item">
-                <a class="nav-link d-flex justify-content-between align-items-center"
-                    data-bs-toggle="collapse" href="#admissionMenu" role="button"
-                    aria-expanded="false" aria-controls="admissionMenu">
+                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                    href="#admissionMenu" role="button" aria-expanded="false" aria-controls="admissionMenu">
                     <span><i class="bi bi-person-lines-fill"></i> <span>Admission Management</span></span>
                     <i class="bi bi-chevron-down"></i>
                 </a>
                 <div class="collapse" id="admissionMenu">
                     <nav class="nav flex-column ms-3">
+
+                    
                         <a class="nav-link <?php echo ($this->uri->segment(2) == 'New_admission') ? 'active' : ''; ?>"
                             href="<?php echo base_url('admin/New_admission'); ?>">
-                            <i class="bi bi-plus-circle"></i><span> New Admission</span>
+                            <i class="bi bi-plus-circle"></i><span> New Admissionddd</span>
                         </a>
+
+
+                       
+
                         <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>"
                             href="<?php echo base_url('admin/Re_admission'); ?>">
                             <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
