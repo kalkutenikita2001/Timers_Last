@@ -59,11 +59,11 @@
 <body class="bg-light">
 
   <!-- Sidebar -->
-  <?php $this->load->view('admin/Include/Sidebar') ?>
+ 
 
-  <!-- Navbar -->
+
+   <?php $this->load->view('admin/Include/Sidebar') ?>
   <?php $this->load->view('admin/Include/Navbar') ?>
-
   <!-- Main Content -->
   <div class="content-wrapper" id="contentWrapper">
     <div class="container-fluid mt-4">
@@ -194,7 +194,7 @@
   <script>
     $(document).ready(function() {
       // Use base_url from CodeIgniter
-      const apiUrl = "<?= base_url('Admission/expiring_students') ?>";
+      const apiUrl = "<?= base_url('Admission/expiring_students_center') ?>";
 
       $.getJSON(apiUrl, function(response) {
         if (response.status === "success" && response.data.length > 0) {
@@ -212,7 +212,7 @@
             <td>${student.course_duration}</td>
             <td>${student.expiry_date}</td>
             <td class="text-nowrap">
-              <a href="<?= site_url('superadmin/View_Renew_Students/') ?>${student.id}" 
+              <a href="<?= site_url('admin/View_Renew_Students/') ?>${student.id}" 
                  class="btn btn-sm btn-info">
                 <i class="fas fa-eye"></i> View
               </a>

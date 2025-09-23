@@ -360,6 +360,28 @@ class Admission extends CI_Controller
         echo json_encode($response);
     }
 
+    public function expiring_students_center()
+    {
+
+         $center_id = $this->session->userdata('center_id');
+        $students = $this->Admission_model->get_students_expiring_soon_center($center_id);
+
+        if (!empty($students)) {
+            $response = [
+                "status" => "success",
+                "data" => $students
+            ];
+        } else {
+            $response = [
+                "status" => "success",
+                "data" => [],
+                "message" => "No students expiring within 10 days"
+            ];
+        }
+
+        echo json_encode($response);
+    }
+
     public function get_facility_by_student_id($student_id = null)
     {
         if (!$student_id || !is_numeric($student_id)) {

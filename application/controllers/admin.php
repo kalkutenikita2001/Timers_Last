@@ -20,7 +20,7 @@ class Admin extends CI_Controller
 
     public function Dashboard()
     {
-       
+
 
 
         $this->load->view('admin/Dashboard');
@@ -38,13 +38,13 @@ class Admin extends CI_Controller
     {
         $this->load->model('Event_model');
         $data = array(
-            'name'             => $this->input->post('name'),
-            'description'      => $this->input->post('description'),
-            'date'             => $this->input->post('date'),
-            'time'             => $this->input->post('time'),
-            'fee'              => $this->input->post('fee'),
+            'name' => $this->input->post('name'),
+            'description' => $this->input->post('description'),
+            'date' => $this->input->post('date'),
+            'time' => $this->input->post('time'),
+            'fee' => $this->input->post('fee'),
             'max_participants' => $this->input->post('maxParticipants'),
-            'venue'            => $this->input->post('venue')
+            'venue' => $this->input->post('venue')
         );
         $this->Event_model->insert_event($data);
         echo json_encode(['status' => 'success']);
@@ -54,9 +54,9 @@ class Admin extends CI_Controller
     {
         $this->load->model('Participant_model');
 
-        $data['event_id']     = $event_id;
-        $data['participants']  = $this->Participant_model->get_by_event($event_id);
-        $data['event_name']    = $this->Participant_model->get_event_name($event_id);
+        $data['event_id'] = $event_id;
+        $data['participants'] = $this->Participant_model->get_by_event($event_id);
+        $data['event_name'] = $this->Participant_model->get_event_name($event_id);
 
         $this->load->view('admin/participants', $data);
     }
@@ -81,15 +81,15 @@ class Admin extends CI_Controller
         $this->load->model('Expense_model');
 
         $data = [
-            'center_id'   => $this->session->userdata('id'), // only his center
-            'title'       => $this->input->post('title'),
-            'date'        => $this->input->post('date'),
-            'amount'      => $this->input->post('amount'),
-            'category'    => $this->input->post('category'),
+            'center_id' => $this->session->userdata('id'), // only his center
+            'title' => $this->input->post('title'),
+            'date' => $this->input->post('date'),
+            'amount' => $this->input->post('amount'),
+            'category' => $this->input->post('category'),
             'description' => $this->input->post('description'),
-            'status'      => 'pending', // admin added → pending approval
-            'added_by'    => 'admin',
-            'created_at'  => date('Y-m-d H:i:s'),
+            'status' => 'pending', // admin added → pending approval
+            'added_by' => 'admin',
+            'created_at' => date('Y-m-d H:i:s'),
         ];
 
         $this->Expense_model->insert($data);
@@ -117,13 +117,13 @@ class Admin extends CI_Controller
                 if ($val) {
                     // if 'id' style numeric is stored as center id
                     if ($k === 'id' && is_numeric($val)) {
-                        $center_id = (int)$val;
+                        $center_id = (int) $val;
                         break;
                     }
                     // try to find center by name or center_number
                     $center_row = $this->db->where('name', $val)->or_where('center_number', $val)->get('center_details')->row();
                     if ($center_row) {
-                        $center_id = (int)$center_row->id;
+                        $center_id = (int) $center_row->id;
                         break;
                     }
                 }
@@ -152,10 +152,10 @@ class Admin extends CI_Controller
 
         return $this->output->set_content_type('application/json')
             ->set_output(json_encode([
-                'success'          => true,
-                'center_name'      => $center->name,
-                'total_students'   => (int)$total,
-                'active_students'  => $active,
+                'success' => true,
+                'center_name' => $center->name,
+                'total_students' => (int) $total,
+                'active_students' => $active,
                 'deactive_students' => $deactive
             ]));
     }
@@ -182,14 +182,15 @@ class Admin extends CI_Controller
             $alt_keys = ['center_name', 'username', 'name', 'center', 'user_name', 'id'];
             foreach ($alt_keys as $k) {
                 $val = $this->session->userdata($k);
-                if (!$val) continue;
+                if (!$val)
+                    continue;
                 if ($k === 'id' && is_numeric($val)) {
-                    $center_id = (int)$val;
+                    $center_id = (int) $val;
                     break;
                 }
                 $row = $this->db->where('name', $val)->or_where('center_number', $val)->get('center_details')->row();
                 if ($row) {
-                    $center_id = (int)$row->id;
+                    $center_id = (int) $row->id;
                     break;
                 }
             }
@@ -200,9 +201,10 @@ class Admin extends CI_Controller
                 ->set_output(json_encode(['success' => false, 'message' => 'Admin not logged in or center not found']));
         }
 
-        $page = max(1, (int)$this->input->get('page'));
-        $per_page = (int)$this->input->get('per_page');
-        if ($per_page <= 0) $per_page = 10;
+        $page = max(1, (int) $this->input->get('page'));
+        $per_page = (int) $this->input->get('per_page');
+        if ($per_page <= 0)
+            $per_page = 10;
         $search = $this->input->get('search', TRUE); // XSS filtered by CI
 
         $offset = ($page - 1) * $per_page;
@@ -230,9 +232,9 @@ class Admin extends CI_Controller
             ->set_output(json_encode([
                 'success' => true,
                 'students' => $payload,
-                'total' => (int)$total,
-                'page' => (int)$page,
-                'per_page' => (int)$per_page
+                'total' => (int) $total,
+                'page' => (int) $page,
+                'per_page' => (int) $per_page
             ]));
     }
 
@@ -247,14 +249,14 @@ class Admin extends CI_Controller
     {
 
         $data = [
-            'user_id'    => $this->input->post('user_id'),
-            'user_name'  => $this->session->userdata('username'), // use 'username'
-            'role'       => $this->input->post('designation'),
+            'user_id' => $this->input->post('user_id'),
+            'user_name' => $this->session->userdata('username'), // use 'username'
+            'role' => $this->input->post('designation'),
             'leave_type' => $this->input->post('leave_type') == 'Other' ? $this->input->post('leave_type_other') : $this->input->post('leave_type'),
-            'from_date'  => $this->input->post('from_date'),
-            'to_date'    => $this->input->post('to_date'),
-            'reason'     => $this->input->post('reason'),
-            'status'     => 'pending'
+            'from_date' => $this->input->post('from_date'),
+            'to_date' => $this->input->post('to_date'),
+            'reason' => $this->input->post('reason'),
+            'status' => 'pending'
         ];
 
 
@@ -330,4 +332,61 @@ class Admin extends CI_Controller
     {
         $this->load->view('admin/Renew_admission');
     }
+
+    public function student_details($id = null)
+    {
+        if (!$id) {
+            // if no student id is provided, redirect back to list
+            redirect('superadmin/students');
+        }
+
+        $data['student'] = $this->Student_model->get_student_by_id($id);
+
+        if (!$data['student']) {
+            // if student not found, you can also redirect or show error
+            $this->session->set_flashdata('error', 'Student not found.');
+            redirect('superadmin/students');
+        }
+
+
+        $data['student_get_current_batch'] = $this->Student_model->get_student_by_id_batch($id);
+
+
+        $data['student_history'] = $this->Student_model->get_student_by_id_history($id);
+
+
+
+        $data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
+
+
+        $data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
+
+
+
+
+        // Load facilities
+        $this->load->model('Facility_model');
+        $data['facilities'] = $this->Facility_model->get_facilities_by_student($id);
+
+
+        $data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
+
+
+
+
+
+
+
+        $data['student_attendace'] = $this->Student_model->get_student_attendace($id);
+
+        // print_r($data['student_attendace'] );
+
+
+        $this->load->view('admin/student_details', $data);
+    }
+
+    	public function View_Renew_Students()
+	{
+		$this->load->view('admin/View_Renew_Students');
+	}
 }

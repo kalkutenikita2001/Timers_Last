@@ -233,7 +233,7 @@
                                                     </td>
                                                     <td data-label="Action" class="action-cell">
                                                         <div class="action-buttons">
-                                                            <a href="<?= base_url('superadmin/student_details/' . $stu['id']); ?>" class="btn btn-sm btn-info">
+                                                            <a href="<?= base_url('admin/student_details/' . $stu['id']); ?>" class="btn btn-sm btn-info">
                                                                 <i class="fas fa-eye"></i> View
                                                             </a>
                                                         </div>

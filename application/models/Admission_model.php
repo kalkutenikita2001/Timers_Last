@@ -11,13 +11,13 @@ class Admission_model extends CI_Model
         return $this->db->get('center_details')->result_array();
     }
 
-       public function get_all_centers_in_admin_side($center_id)
+    public function get_all_centers_in_admin_side($center_id)
     {
-        $this->db->where("id",$center_id);
+        $this->db->where("id", $center_id);
         return $this->db->get('center_details')->result_array();
     }
 
- 
+
 
     public function get_batches_by_center($center_id)
     {
@@ -247,6 +247,24 @@ class Admission_model extends CI_Model
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function get_students_expiring_soon_center($center_id)
+    {
+
+
+        $sql = "
+        SELECT 
+            s.*,
+            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date
+        FROM students s
+        WHERE s.center_id = ?
+          AND DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+    ";
+
+        $query = $this->db->query($sql, [$center_id]);
+        return $query->result_array();
+    }
+
     public function get_facility_by_student_id($student_id)
     {
         return $this->db
