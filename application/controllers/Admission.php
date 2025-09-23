@@ -641,36 +641,41 @@ class Admission extends CI_Controller
                 $message = "⚠️ Location access required.";
             } else {
 
-                // $center = $this->db->get_where('centers', ['id' => $student->center_id])->row();
 
-                // if ($center) {
-                $distance = $this->calculate_distance($user_lat, $user_lng, 18.6060, 73.7527);
+                $center = $this->db->get_where('center_details', ['id' => $student->center_id])->row();
 
 
 
-                if ($distance > 0.4) {
-                    $message = "⚠️ Too far from center (" . round($distance * 1000) . "m).";
-                } else {
 
-                    $existing = $this->db->get_where('attendance', [
-                        'student_id' => $student->id,
-                        'date' => $today
-                    ])->row();
+                if ($center) {
+                    $distance = $this->calculate_distance($user_lat, $user_lng, $center->latitude, $center->longitude);
 
-                    if ($existing) {
-                        $message = "⚠️ Already marked today for <b>{$student->name}</b>";
+
+
+
+                    if ($distance > 0.2) {
+                        $message = "⚠️ Too far from center (" . round($distance * 1000) . "m).";
                     } else {
-                        $this->db->insert('attendance', [
+
+                        $existing = $this->db->get_where('attendance', [
                             'student_id' => $student->id,
-                            'date' => $today,
-                            'time' => date('H:i:s'),
-                            'status' => 'present'
-                        ]);
-                        $message = "✅ Attendance marked successfully for <b>{$student->name}</b>  <b>(" . round($distance * 1000) . "m)</b> ";
-                        $type = "success";
+                            'date' => $today
+                        ])->row();
+
+                        if ($existing) {
+                            $message = "⚠️ Already marked today for <b>{$student->name}</b>";
+                        } else {
+                            $this->db->insert('attendance', [
+                                'student_id' => $student->id,
+                                'date' => $today,
+                                'time' => date('H:i:s'),
+                                'status' => 'present'
+                            ]);
+                            $message = "✅ Attendance marked successfully for <b>{$student->name}</b>  <b>(" . round($distance * 1000) . "m)</b> ";
+                            $type = "success";
+                        }
                     }
                 }
-                // }
             }
         }
 
