@@ -89,6 +89,8 @@
                 font-size: 0.8rem;
                 white-space: nowrap;
             }
+
+
         }
     </style>
 </head>
@@ -401,6 +403,41 @@
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle'); // Button to toggle
+            const sidebar = document.getElementById('sidebar'); // Sidebar element
+            const contentWrapper = document.getElementById('contentWrapper'); // Main content wrapper
+            const navbar = document.querySelector('.navbar'); // Navbar
+
+            if (!sidebarToggle || !sidebar || !contentWrapper || !navbar) return;
+
+            sidebarToggle.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    // Mobile: show/hide sidebar
+                    sidebar.classList.toggle('active');
+                    navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                } else {
+                    // Desktop: minimize/maximize sidebar
+                    const isMinimized = sidebar.classList.toggle('minimized');
+                    contentWrapper.classList.toggle('minimized', isMinimized);
+                    navbar.classList.toggle('sidebar-minimized', isMinimized);
+                }
+            });
+
+            // Close sidebar on mobile when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 &&
+                    sidebar.classList.contains('active') &&
+                    !sidebar.contains(e.target) &&
+                    e.target !== sidebarToggle &&
+                    !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.add('sidebar-hidden');
                 }
             });
         });

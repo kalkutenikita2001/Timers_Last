@@ -182,14 +182,18 @@
 
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
-                        <div class="center-select-container" id="centerSelectContainer">
+                        <!-- <div class="center-select-container" id="centerSelectContainer">
                             <select class="form-control form-control-sm" style="width: 200px;">
                                 <option value="">-- Select Center --</option>
                                 <?php foreach ($centers as $c): ?>
                                     <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        </div> -->
+                        <div class="mb-3">
+                            <input type="text" id="globalSearch" class="form-control" placeholder="🔍 Search leaves...">
                         </div>
+
                         <div>
                             <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
@@ -520,26 +524,26 @@
             });
         });
         $(document).ready(function() {
-            // Set date input to only allow today's date
-            let today = new Date().toISOString().split('T')[0];
-            $('input[name="date"]').attr('min', today);
-            $('input[name="date"]').attr('max', today);
+        // Set date input to only allow today's date
+        let today = new Date().toISOString().split('T')[0];
+        $('input[name="date"]').attr('min', today);
+        $('input[name="date"]').attr('max', today);
 
-            // Optional: auto-fill today's date
-            $('input[name="date"]').val(today);
+        // Optional: auto-fill today's date
+        $('input[name="date"]').val(today);
         });
 
 
         // Sidebar toggle functionality
-        $('#sidebarToggle').on('click', function() {
-            if ($(window).width() <= 576) {
-                $('#sidebar').toggleClass('active');
-                $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-            } else {
-                const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-                $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-                $('#contentWrapper').toggleClass('minimized', isMinimized);
-            }
+        // $('#sidebarToggle').on('click', function() {
+        //     if ($(window).width() <= 576) {
+        //         $('#sidebar').toggleClass('active');
+        //         $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        //     } else {
+        //         const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+        //         $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+        //         $('#contentWrapper').toggleClass('minimized', isMinimized);
+        //     }
         });
     </script>
     <script>
@@ -552,6 +556,62 @@
             }
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Global search for table
+            $("#globalSearch").on("keyup", function() {
+                let value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const contentWrapper = document.getElementById('contentWrapper');
+            const navbar = document.querySelector('.navbar');
+
+            if (!sidebarToggle || !sidebar || !contentWrapper || !navbar) return;
+
+            sidebarToggle.addEventListener('click', () => {
+                const windowWidth = window.innerWidth;
+
+                if (windowWidth <= 768) {
+                    // Mobile: show/hide sidebar overlay
+                    sidebar.classList.toggle('active');
+                    navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                } else {
+                    // Desktop: minimize/maximize sidebar
+                    const isMinimized = sidebar.classList.toggle('minimized');
+                    contentWrapper.classList.toggle('minimized', isMinimized);
+                    navbar.classList.toggle('sidebar-minimized', isMinimized);
+                }
+            });
+
+            // Close sidebar when clicking outside (mobile only)
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 &&
+                    !sidebar.contains(e.target) &&
+                    e.target !== sidebarToggle &&
+                    !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.remove('sidebar-hidden');
+                }
+            });
+
+            // Reset sidebar classes on resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.remove('sidebar-hidden');
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

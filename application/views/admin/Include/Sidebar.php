@@ -202,7 +202,7 @@
         }
 
         .sidebar.minimized {
-            width: 60px;
+            width: 60px !important;
         }
     }
 </style>
