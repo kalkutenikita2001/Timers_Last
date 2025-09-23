@@ -437,10 +437,13 @@ if (!isset($grand_alltime)) {
     <!-- Navbar -->
     <?php $this->load->view('superadmin/Include/Navbar') ?>
 
-    <div class="wrap" id="financeWrap" role="main">
+    <div class="wrap" id="financeWrap" role="main">  
         <div class="content">
             <div class="card" role="region" aria-label="Revenue summary">
                 <h1 style="margin:0 0 8px 0;font-size:1.05rem">Revenue — Weekly / Monthly / Yearly</h1>
+                <div class="mb-3" style="max-width:250px; margin:0 10 12px 0" >
+    <input type="text" id="globalSearch" class="form-control" placeholder="🔍 Search Centers...">
+</div>
 
                 <?php if (!empty($db_error_message)): ?>
                     <div class="error" role="alert">
@@ -799,6 +802,17 @@ if (!isset($grand_alltime)) {
       }
     })();
     </script>
+    <script>
+$(document).ready(function () {
+    // Global search for table
+    $("#globalSearch").on("keyup", function () {
+        let value = $(this).val().toLowerCase();
+        $("table tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+</script>
 
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
