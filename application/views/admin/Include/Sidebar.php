@@ -78,6 +78,16 @@
             </a>
         <?php endif; ?>
 
+        <!-- Events -->
+        <?php if (!empty($perms['expenses'])): ?>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>"
+                href="<?php echo base_url() . 'admin/Expenses'; ?>">
+                <i class="bi bi-calendar-event"></i><span>Expense Management</span>
+            </a>
+        <?php endif; ?>
+
+
+
         <!-- Logout (Always visible) -->
         <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>">
             <i class="bi bi-box-arrow-right"></i><span>Logout</span>
@@ -192,7 +202,7 @@
         }
 
         .sidebar.minimized {
-            width: 60px;
+            width: 60px !important;
         }
     }
 </style>

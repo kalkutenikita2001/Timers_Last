@@ -20,6 +20,8 @@
         body {
             background: #f5f7fb;
             font-family: Inter, system-ui, Segoe UI, Roboto, -apple-system, sans-serif;
+            padding-top: 0px !important;
+
         }
 
         .hero {
@@ -179,89 +181,98 @@
 </head>
 
 <body>
-    <div class="d-flex">
-        <!-- Sidebar placeholder (server include in original) -->
-        <?php $this->load->view('superadmin/Include/Sidebar') ?>
 
-        <main id="permissionWrapper" class="flex-fill">
-            <div class="container-fluid p-4">
-                <header class="hero text-center mb-4 shadow-sm">
-                    <h1 class="h3 mb-1"><i class="fa fa-user-lock me-2"></i>Permission Management</h1>
-                    <p class="mb-0 small">Manage access controls for your academy branches</p>
-                </header>
+    <!-- Sidebar placeholder (server include in original) -->
 
-                <div class="row justify-content-center">
-                    <div class="col-lg-11">
-                        <div class="card permission-card">
-                            <div class="card-header d-flex align-items-center justify-content-between permission-header">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa fa-lock text-danger"></i>
-                                    <strong>Manage Permissions</strong>
-                                </div>
-                                <div class="btn-group">
-                                    <button id="toggleAllBtn" class="btn btn-sm btn-outline-danger">
-                                        <i class="fa fa-toggle-off me-1"></i>Toggle All Off
-                                    </button>
-                                    <button id="saveAllBtn" class="btn btn-sm btn-danger save-btn">
-                                        <i class="fa fa-save me-1"></i>Save All
-                                    </button>
-                                </div>
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+
+
+    <main id="permissionWrapper" class="flex-fill">
+        <div class="container-fluid mt-0">
+            <header class="hero text-center mb-4 shadow-sm">
+                <h1 class="h3 mb-1"><i class="fa fa-user-lock me-2"></i>Permission Management</h1>
+                <p class="mb-0 small">Manage access controls for your academy branches</p>
+            </header>
+            <div class="row justify-content-center mb-3">
+                <div class="col-lg-11">
+                    <input type="text" id="globalSearch" class="form-control" placeholder="Search centers or modules...">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-11">
+                    <div class="card permission-card">
+                        <div class="card-header d-flex align-items-center justify-content-between permission-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa fa-lock text-danger"></i>
+                                <strong>Manage Permissions</strong>
                             </div>
+                            <div class="btn-group">
+                                <button id="toggleAllBtn" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa fa-toggle-off me-1"></i>Toggle All Off
+                                </button>
+                                <button id="saveAllBtn" class="btn btn-sm btn-danger save-btn">
+                                    <i class="fa fa-save me-1"></i>Save All
+                                </button>
+                            </div>
+                        </div>
 
-                            <div class="card-body p-0">
-                                <?php foreach ($centers as $center): ?>
-                                    <div class="center-permissions mb-4">
-                                        <div class="px-4 pt-4 pb-2">
-                                            <h5 class="center-name mb-1">
-                                                <i class="fa fa-building text-danger me-2"></i>
-                                                <?= $center['name']; ?>
-                                            </h5>
-                                            <p class="text-muted small mb-0">Manage permissions for this center</p>
+
+
+                        <div class="card-body p-0">
+                            <?php foreach ($centers as $center): ?>
+                                <div class="center-permissions mb-4">
+                                    <div class="px-4 pt-4 pb-2">
+                                        <h5 class="center-name mb-1">
+                                            <i class="fa fa-building text-danger me-2"></i>
+                                            <?= $center['name']; ?>
+                                        </h5>
+                                        <p class="text-muted small mb-0">Manage permissions for this center</p>
+                                    </div>
+
+                                    <form method="post" action="<?= base_url('superadmin/save_permissions/' . $center['id']) ?>" class="center-form">
+                                        <div class="permissions-grid">
+                                            <?php foreach ($modules as $key => $label): ?>
+                                                <div class="permission-item d-flex align-items-center">
+                                                    <div class="form-check flex-grow-1 mb-0">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="permissions[<?= $key ?>]"
+                                                            value="1"
+                                                            id="perm-<?= $center['id'] ?>-<?= $key ?>"
+                                                            <?= !empty($center['permissions'][$key]) && $center['permissions'][$key] ? 'checked' : '' ?>>
+                                                        <label class="form-check-label w-100" for="perm-<?= $center['id'] ?>-<?= $key ?>">
+                                                            <?= $label ?>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
 
-                                        <form method="post" action="<?= base_url('superadmin/save_permissions/' . $center['id']) ?>" class="center-form">
-                                            <div class="permissions-grid">
-                                                <?php foreach ($modules as $key => $label): ?>
-                                                    <div class="permission-item d-flex align-items-center">
-                                                        <div class="form-check flex-grow-1 mb-0">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="permissions[<?= $key ?>]"
-                                                                value="1"
-                                                                id="perm-<?= $center['id'] ?>-<?= $key ?>"
-                                                                <?= !empty($center['permissions'][$key]) && $center['permissions'][$key] ? 'checked' : '' ?>>
-                                                            <label class="form-check-label w-100" for="perm-<?= $center['id'] ?>-<?= $key ?>">
-                                                                <?= $label ?>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
-
-                                            <div class="toggle-all-container d-flex justify-content-between align-items-center">
-                                                <div class="form-check form-switch">
+                                        <div class="toggle-all-container d-flex justify-content-between align-items-center">
+                                            <!-- <div class="form-check form-switch">
                                                     <input class="form-check-input center-toggle" type="checkbox"
                                                         id="toggle-<?= $center['id'] ?>" data-center="<?= $center['id'] ?>">
                                                     <label class="form-check-label small" for="toggle-<?= $center['id'] ?>">
                                                         Toggle all for <?= $center['name'] ?>
                                                     </label>
-                                                </div>
-                                                <button type="submit" class="btn btn-sm btn-danger save-btn">
-                                                    <i class="fa fa-save me-1"></i>Save Center
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                                </div>  -->
+                                            <button type="submit" class="btn btn-sm btn-danger save-btn">
+                                                <i class="fa fa-save me-1"></i>Save Center
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
 
-                                    <?php if (next($centers)): ?>
-                                        <hr class="mx-4 my-4">
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </div>
+                                <?php if (next($centers)): ?>
+                                    <hr class="mx-4 my-4">
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+    </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -372,6 +383,35 @@
                         }
                     });
                 });
+            });
+        });
+    </script>
+    <script>
+        // Global search filter
+        document.getElementById('globalSearch').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const centers = document.querySelectorAll('.center-permissions');
+
+            centers.forEach(center => {
+                const centerName = center.querySelector('.center-name').innerText.toLowerCase();
+                let anyModuleMatch = false;
+
+                center.querySelectorAll('.permission-item').forEach(item => {
+                    const label = item.querySelector('.form-check-label').innerText.toLowerCase();
+                    if (label.includes(query)) {
+                        item.style.display = '';
+                        anyModuleMatch = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Show the center if either the center name or any module matches
+                if (centerName.includes(query) || anyModuleMatch) {
+                    center.style.display = '';
+                } else {
+                    center.style.display = 'none';
+                }
             });
         });
     </script>

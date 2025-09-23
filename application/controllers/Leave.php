@@ -24,6 +24,11 @@ class Leave extends CI_Controller
 
         // Fetch leaves
         $data['leaves'] = $this->Leave_model->get_leaves($user_role, $center_name);
+        $this->load->model('Student_model');
+        $this->load->model('Staff_model');
+
+        $data['students'] = $this->Student_model->get_all_students();
+        $data['staff'] = $this->Staff_model->get_all_staff();
 
         // Load views
         if ($user_role == 'admin') {
@@ -70,9 +75,13 @@ class Leave extends CI_Controller
         $leave = $this->Leave_model->get_leave($leave_id);
 
         // Role-based permission
-        if (($user_role == 'admin' && $leave->role != 'Student') || ($user_role == 'superadmin' && $leave->role != 'Staff')) {
-            show_error('You do not have permission to change this leave status.', 403);
-            return;
+        // if (($user_role == 'admin' && $leave->role != 'Student') || ($user_role == 'superadmin' && $leave->role != 'Staff')) {
+        //     show_error('You do not have permission to change this leave status.', 403);
+        //     return;
+        // }
+
+        if ($user_role == 'admin' && $leave->role != 'Student') {
+            show_error('You do not have permission', 403);
         }
 
         if (!in_array($action, ['approved', 'rejected'])) {

@@ -1,14 +1,17 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Staff_model extends CI_Model {
-    public function __construct() {
+class Staff_model extends CI_Model
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->database();
     }
 
     // Get all staff with optional filters
-    public function get_staff($filters = []) {
+    public function get_staff($filters = [])
+    {
         $this->db->select('*');
         $this->db->from('staff');
 
@@ -42,33 +45,44 @@ class Staff_model extends CI_Model {
     }
 
     // Get a single staff member by ID
-    public function get_staff_by_id($id) {
+    public function get_staff_by_id($id)
+    {
         $query = $this->db->get_where('staff', ['id' => $id]);
         return $query->row_array();
     }
 
     // Add a new staff member
-    public function add_staff($data) {
+    public function add_staff($data)
+    {
         return $this->db->insert('staff', $data);
     }
 
     // Update an existing staff member
-    public function update_staff($id, $data) {
+    public function update_staff($id, $data)
+    {
         $this->db->where('id', $id);
         return $this->db->update('staff', $data);
     }
 
     // Delete a staff member
-    public function delete_staff($id) {
+    public function delete_staff($id)
+    {
         $this->db->where('id', $id);
         return $this->db->delete('staff');
     }
 
     // Get all center names for dropdown
-    public function get_centers() {
+    public function get_centers()
+    {
         $this->db->select('center_name');
         $this->db->from('centers');
         $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_all_staff()
+    {
+        $query = $this->db->get('staff'); // SELECT * FROM staff
         return $query->result_array();
     }
 }

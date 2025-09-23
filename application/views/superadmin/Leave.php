@@ -89,6 +89,8 @@
                 font-size: 0.8rem;
                 white-space: nowrap;
             }
+
+
         }
     </style>
 </head>
@@ -111,12 +113,15 @@
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
                         <div>
-                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
-                                <i class="fas fa-filter mr-1"></i> Filter
-                            </button> -->
-                            <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal">
-                                <i class="fas fa-plus mr-1"></i> Apply Leave
-                            </button> -->
+                            <div class="mb-3">
+                                <label for="roleFilter"><strong>Filter by Role:</strong></label>
+                                <select id="roleFilter" class="form-control" style="width:200px; display:inline-block; margin-left:10px;">
+                                    <option value="all">All</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Staff">Staff</option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
 
@@ -155,7 +160,9 @@
                                                     <span class="badge badge-warning">Pending</span>
                                                     <?php
                                                     $user_role = $this->session->userdata('role');
-                                                    if (($user_role == 'admin' && $lv->role == 'Student') || ($user_role == 'superadmin' && $lv->role == 'Staff')): ?>
+
+                                                    if (($user_role == 'admin' && $lv->role == 'Student') || ($user_role == 'superadmin')): ?>
+
                                                         <a href="<?= base_url("Leave/change_status/$lv->id/approved") ?>" class="btn btn-sm btn-success">Approve</a>
                                                         <a href="<?= base_url("Leave/change_status/$lv->id/rejected") ?>" class="btn btn-sm btn-danger">Reject</a>
                                                     <?php endif; ?>
@@ -378,6 +385,61 @@
                     confirmButtonColor: '#d33'
                 });
             <?php endif; ?>
+        });
+    </script>
+    <script>
+        const roleFilter = document.getElementById('roleFilter');
+        const table = document.querySelector('.table tbody');
+        const rows = table.querySelectorAll('tr');
+
+        roleFilter.addEventListener('change', function() {
+            const selectedRole = this.value;
+
+            rows.forEach(row => {
+                const roleCell = row.cells[2]; // Role column (0-indexed)
+                if (!roleCell) return;
+
+                if (selectedRole === 'all' || roleCell.textContent === selectedRole) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle'); // Button to toggle
+            const sidebar = document.getElementById('sidebar'); // Sidebar element
+            const contentWrapper = document.getElementById('contentWrapper'); // Main content wrapper
+            const navbar = document.querySelector('.navbar'); // Navbar
+
+            if (!sidebarToggle || !sidebar || !contentWrapper || !navbar) return;
+
+            sidebarToggle.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    // Mobile: show/hide sidebar
+                    sidebar.classList.toggle('active');
+                    navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                } else {
+                    // Desktop: minimize/maximize sidebar
+                    const isMinimized = sidebar.classList.toggle('minimized');
+                    contentWrapper.classList.toggle('minimized', isMinimized);
+                    navbar.classList.toggle('sidebar-minimized', isMinimized);
+                }
+            });
+
+            // Close sidebar on mobile when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 &&
+                    sidebar.classList.contains('active') &&
+                    !sidebar.contains(e.target) &&
+                    e.target !== sidebarToggle &&
+                    !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.add('sidebar-hidden');
+                }
+            });
         });
     </script>
 

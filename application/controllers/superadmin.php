@@ -264,7 +264,8 @@ class Superadmin extends CI_Controller
 			'admission' => 'Admission Management',
 			'students' => 'Students Management',
 			'events' => 'Event Management',
-			'leave' => 'Leave Management'
+			'leave' => 'Leave Management',
+			'expenses' => 'Expense Management'
 		];
 
 		foreach ($data['centers'] as &$center) {
@@ -287,6 +288,7 @@ class Superadmin extends CI_Controller
 			'students',
 			'events',
 			'leave',
+			'expenses'
 
 		];
 
@@ -360,5 +362,22 @@ class Superadmin extends CI_Controller
 
 
 		$this->load->view('superadmin/student_details', $data);
+	}
+	public function ViewPassword()
+	{
+		$center_data = $this->db->get('center_details')->result_array();
+		$user_data   = $this->db->get('users')->result_array();
+
+		$data = [
+			'page_title'  => 'View Passwords',
+			'center_data' => $center_data,
+			'user_data'   => $user_data
+		];
+
+		$this->load->view('superadmin/ViewPassword', $data);
+	}
+	public function overall_report()
+	{
+		$this->load->view('superadmin/overall_report');
 	}
 }
