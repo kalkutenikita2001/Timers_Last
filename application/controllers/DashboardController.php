@@ -103,54 +103,14 @@ class DashboardController extends CI_Controller
             $present_count = $present_query->num_rows();
             $attendance_rate = ($total_students > 0) ? round(($present_count / $total_students) * 100, 2) : 0;
 
-            // --- weekly attendance: counts per day for last 7 days (Mon..Sun expected by view) ---
-            // We'll produce an array ordered as the existing chart labels: Mon,Tue,...Sun
-            $this->db->reset_query();
-            $daily_counts = array_fill(0, 7, 0); // default
-
-            // Build 7-day window (from 6 days ago to today)
-            $days = [];
-            for ($i = 6; $i >= 0; $i--) {
-                $d = date('Y-m-d', strtotime("-{$i} days"));
-                $days[] = $d;
+            // --- weekly attendance: use model method (returns Mon..Sun array) ---
+            $weekOrdered = $this->DashboardModel->getWeeklyAttendance($center_id);
+            // if model unexpectedly returned something else, ensure 7 elements
+            if (!is_array($weekOrdered) || count($weekOrdered) !== 7) {
+                $weekOrdered = array_fill(0, 7, 0);
             }
-            // Query attendance grouped by date (use COALESCE(attendance.date, attendance.created_at))
-            $this->db->select("DATE(COALESCE(attendance.date, attendance.created_at)) as att_date, COUNT(DISTINCT attendance.student_id) as cnt", false);
-            $this->db->from('attendance');
-            $this->db->where("DATE(COALESCE(attendance.date, attendance.created_at)) >= ", $days[0]);
-            $this->db->where("attendance.status", "present");
-            if (!empty($center_id) && is_numeric($center_id)) {
-                $this->db->join('students', 'students.id = attendance.student_id', 'inner');
-                $this->db->where('students.center_id', (int)$center_id);
-            }
-            $this->db->group_by('att_date');
-            $this->db->order_by('att_date', 'ASC');
-            $att_q = $this->db->get();
-            if ($att_q === false) {
-                $dbErr = $this->db->error();
-                throw new Exception('DB error (attendance daily): ' . ($dbErr['message'] ?? 'unknown'));
-            }
-            $att_rows = $att_q->result_array();
-            $map = [];
-            foreach ($att_rows as $r) {
-                $map[$r['att_date']] = (int)$r['cnt'];
-            }
-            // The front-end expects Mon..Sun labels; compute weekday order for the last 7 days in Mon..Sun order
-            // We'll map the days[] array (which is chronological) into Mon..Sun index.
-            // Build an array where index 0 = Monday
-            $weekOrdered = array_fill(0, 7, 0); // Monday index 0
-            foreach ($days as $d) {
-                $ts = strtotime($d);
-                // PHP: N returns 1 (Mon) .. 7 (Sun)
-                $weekdayN = (int)date('N', $ts);
-                $idx = $weekdayN - 1; // 0-6
-                $weekOrdered[$idx] = isset($map[$d]) ? (int)$map[$d] : 0;
-            }
-            // Now weekOrdered is Mon..Sun counts for the last 7 calendar days (possibly spanning weeks)
 
             // --- revenue: last 8 months (center filtered) using students.paid_amount sums by month ---
-            // fallback if paid amounts are not per month in your schema: this uses students.paid_amount aggregated by MONTH of created/updated date is not available
-            // We will aggregate using students.created_at if available; else aggregate by payment_date not present — use existing monthlyRevenue fallback
             $months_back = 8;
             $labels = [];
             $data_vals = [];
@@ -163,7 +123,6 @@ class DashboardController extends CI_Controller
 
             // We'll attempt to sum students.paid_amount grouped by YEAR-MONTH of created_at (or admission_date if created_at missing)
             $this->db->reset_query();
-            // The expression will try COALESCE(students.created_at, students.admission_date, students.joining_date)
             $dateExpr = "DATE_FORMAT(COALESCE(students.created_at, students.admission_date, students.joining_date), '%Y-%m')";
             $this->db->select("$dateExpr as ym, COALESCE(SUM(students.paid_amount),0) as total", false);
             $this->db->from('students');
@@ -175,10 +134,7 @@ class DashboardController extends CI_Controller
             $this->db->group_by('ym');
             $this->db->order_by('ym', 'ASC');
             $rev_q = $this->db->get();
-            if ($rev_q === false) {
-                $dbErr = $this->db->error();
-                // If this fails because date columns are missing, we still return zeroed months
-            } else {
+            if ($rev_q !== false) {
                 foreach ($rev_q->result_array() as $r) {
                     $ym = $r['ym'];
                     if (isset($data_vals[$ym])) $data_vals[$ym] = (float)$r['total'];
