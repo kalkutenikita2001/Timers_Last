@@ -385,8 +385,213 @@ class Admin extends CI_Controller
         $this->load->view('admin/student_details', $data);
     }
 
-    	public function View_Renew_Students()
-	{
-		$this->load->view('admin/View_Renew_Students');
-	}
+    public function View_Renew_Students()
+    {
+        $this->load->view('admin/View_Renew_Students');
+    }
+
+    // ---------- Attendance endpoint (center filtered) ----------
+    //Yash Sir Changes 
+
+    public function get_attendance_ajax()
+    {
+        $center_id = $this->session->userdata('center_id');
+        if (!$center_id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'attendance' => []]));
+        }
+
+        $this->db->select('attendance.id, attendance.student_id, attendance.date, attendance.time, attendance.status,
+                           students.name, students.batch_id AS batch, students.student_progress_category AS level');
+        $this->db->from('attendance');
+        $this->db->join('students', 'attendance.student_id = students.id', 'left');
+        $this->db->where('students.center_id', $center_id);
+        $this->db->order_by('attendance.date', 'DESC');
+        $this->db->order_by('attendance.time', 'DESC');
+        $this->db->limit(200);
+        $rows = $this->db->get()->result();
+
+        return $this->output->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'attendance' => $rows]));
+    }
+
+    // ---------- Chart data endpoint (center filtered) ----------
+
+    public function get_students_chart()
+    {
+        $center_id = $this->session->userdata('center_id');
+        if (!$center_id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'labels' => [], 'data' => []]));
+        }
+
+        $this->db->select('student_progress_category, COUNT(*) as total');
+        $this->db->from('students');
+        $this->db->where('center_id', $center_id);
+        $this->db->group_by('student_progress_category');
+        $rows = $this->db->get()->result();
+
+        $counts = [];
+        foreach ($rows as $row) {
+            $key = $row->student_progress_category ?: 'Unknown';
+            $counts[$key] = (int) $row->total;
+        }
+
+        $labels = ['Beginner', 'Intermediate', 'Advanced'];
+        $data = [];
+        foreach ($labels as $lbl) {
+            $data[] = $counts[$lbl] ?? 0;
+        }
+
+        return $this->output->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'labels' => $labels, 'data' => $data]));
+    }
+
+
+    /**
+     * AJAX: return single student by id (center-scoped)
+     * GET /admin/get_student_by_id/{id}
+     */
+
+    public function get_student_by_id($id = null)
+    {
+        if (!$id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Missing id']));
+        }
+
+        $center_id = $this->session->userdata('center_id');
+        $role = $this->session->userdata('role');
+
+        $student = $this->db->get_where('students', ['id' => (int) $id])->row_array();
+        if (!$student) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Student not found']));
+        }
+
+        // center scoping for non-superadmin users
+        if ($role !== 'superadmin' && $center_id && isset($student['center_id']) && ((int) $student['center_id'] !== (int) $center_id)) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Access denied']));
+        }
+
+        return $this->output->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'student' => $student]));
+    }
+
+
+    /**
+     * AJAX: update student (basic server-side update)
+     * POST /admin/update_student_ajax
+     */
+    public function update_student_ajax()
+    {
+        $id = $this->input->post('id', TRUE);
+        if (!$id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Missing id']));
+        }
+
+        // allowed fields to update (whitelist)
+        $allowed = [
+            'name',
+            'contact',
+            'parent_name',
+            'emergency_contact',
+            'email',
+            'dob',
+            'address',
+            'center_id',
+            'batch_id',
+            'student_progress_category',
+            'coach',
+            'coordinator',
+            'coordinator_phone',
+            'batch_time',
+            'course_fees',
+            'total_fees',
+            'paid_amount',
+            'remaining_amount',
+            'payment_method',
+            'admission_date',
+            'joining_date',
+            'status'
+        ];
+
+        $update = [];
+        foreach ($allowed as $f) {
+            $val = $this->input->post($f, TRUE);
+            if ($val !== null)
+                $update[$f] = $val;
+        }
+
+        if (empty($update)) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Nothing to update']));
+        }
+
+        $center_id = $this->session->userdata('center_id');
+        $role = $this->session->userdata('role');
+
+        $student = $this->db->get_where('students', ['id' => (int) $id])->row();
+        if (!$student) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Student not found']));
+        }
+
+        if ($role !== 'superadmin' && $center_id && (int) $student->center_id !== (int) $center_id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Access denied']));
+        }
+
+        $this->db->where('id', (int) $id);
+        $ok = $this->db->update('students', $update);
+
+        if ($ok) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => true, 'message' => 'Saved']));
+        }
+
+        return $this->output->set_content_type('application/json')
+            ->set_output(json_encode(['success' => false, 'message' => 'Update failed']));
+    }
+
+
+    /**
+     * AJAX: delete student by id (center-scoped)
+     * POST /admin/delete_student_ajax/{id}
+     */
+    public function delete_student_ajax($id = null)
+    {
+        if (!$id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Missing id']));
+        }
+
+        $center_id = $this->session->userdata('center_id');
+        $role = $this->session->userdata('role');
+
+        $student = $this->db->get_where('students', ['id' => (int) $id])->row();
+        if (!$student) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Student not found']));
+        }
+
+        if ($role !== 'superadmin' && $center_id && (int) $student->center_id !== (int) $center_id) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'message' => 'Access denied']));
+        }
+
+        $this->db->where('id', (int) $id);
+        $ok = $this->db->delete('students');
+
+        if ($ok) {
+            return $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['success' => true, 'message' => 'Deleted']));
+        }
+
+        return $this->output->set_content_type('application/json')
+            ->set_output(json_encode(['success' => false, 'message' => 'Delete failed']));
+    }
+
 }
