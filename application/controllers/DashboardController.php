@@ -7,12 +7,15 @@ class DashboardController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('DashboardModel');
-        $this->load->model('Student_model'); // if used elsewhere
+        $this->load->model('Student_model'); // optional
         $this->load->database();
+        // Helpful: ensure DB errors throw exceptions so we return JSON errors instead of HTML
+        $this->db->db_debug = false;
     }
 
     public function dashboard()
     {
+        // existing data used by view
         $data['activeStudents']  = $this->DashboardModel->getActiveStudentsCount();
         $data['totalStudents']   = $this->DashboardModel->getTotalStudentsCount();
         $data['totalIncome']     = $this->DashboardModel->getTotalIncome();
@@ -20,7 +23,7 @@ class DashboardController extends CI_Controller
         $data['studentDistribution'] = $this->DashboardModel->getStudentDistribution();
         $data['monthlyRevenue']  = $this->DashboardModel->getMonthlyRevenue();
 
-        // fetch centers for right sidebar (same as Superadmin controller did)
+        // fetch centers for right sidebar
         $query = $this->db->get('center_details');
         $data['centers'] = $query->result();
 
@@ -29,48 +32,59 @@ class DashboardController extends CI_Controller
 
     /**
      * AJAX: center_stats
-     * Returns aggregated numbers used on top stat cards.
-     * GET param: center_id (optional). If not provided, returns global stats.
-     * Response: { status: 'success', data: { active_students, total_students, total_paid, total_due, attendance_rate } }
+     * returns JSON structure:
+     * { status:'success', data: {
+     *    total_students,
+     *    active_students,
+     *    total_paid,
+     *    total_due,
+     *    attendance_rate,
+     *    weekly_attendance: [nMon..nSun],   // 7 integers - counts of present students per day
+     *    revenue: { labels: ['Aug 2025', ...], data: [1234, ...] }, // last 8 months
+     *    student_distribution: [beginner, intermediate, advanced],
+     *    debug_center_id: <center id> (optional)
+     * } }
      */
     public function center_stats()
     {
+        // allow either GET param or none
         $center_id = $this->input->get('center_id', true);
 
         try {
-            // base where
+            // --- totals (reuse logic you had) ---
             $where = [];
             if (!empty($center_id) && is_numeric($center_id)) {
                 $where['center_id'] = (int)$center_id;
             }
 
             // total students
-            if (!empty($where)) {
-                $this->db->where($where);
-            }
+            $this->db->reset_query();
+            if (!empty($where)) $this->db->where($where);
             $total_students = (int) $this->db->count_all_results('students');
 
             // active students
+            $this->db->reset_query();
             if (!empty($where)) $this->db->where($where);
             $this->db->where('status', 'Active');
             $active_students = (int) $this->db->count_all_results('students');
 
             // total paid
+            $this->db->reset_query();
             if (!empty($where)) $this->db->where($where);
             $this->db->select('COALESCE(SUM(paid_amount),0) AS total_paid', false);
             $paid_row = $this->db->get('students')->row();
             $total_paid = floatval($paid_row->total_paid ?? 0);
 
             // total due
+            $this->db->reset_query();
             if (!empty($where)) $this->db->where($where);
             $this->db->select('COALESCE(SUM(remaining_amount),0) AS total_due', false);
             $due_row = $this->db->get('students')->row();
             $total_due = floatval($due_row->total_due ?? 0);
 
-            // attendance rate: percentage of distinct students who were present at least once in last 7 days
-            // vs total_students (if total_students == 0 => 0)
-            $seven_days_ago = date('Y-m-d', strtotime('-6 days')); // include today -> 7-day window
-            // build attendance query - use attendance.date OR attendance.created_at if present
+            // --- attendance rate (distinct students present in last 7 days) ---
+            $this->db->reset_query();
+            $seven_days_ago = date('Y-m-d', strtotime('-6 days')); // include today -> 7 day window
             $this->db->distinct();
             $this->db->select('attendance.student_id');
             $this->db->where("DATE(COALESCE(attendance.date, attendance.created_at)) >= ", $seven_days_ago);
@@ -81,40 +95,101 @@ class DashboardController extends CI_Controller
                 $this->db->where('students.center_id', (int)$center_id);
             }
             $present_query = $this->db->get('attendance');
+            if ($present_query === false) {
+                // DB error - surface message
+                $dbErr = $this->db->error();
+                throw new Exception('DB error (attendance distinct): ' . ($dbErr['message'] ?? 'unknown'));
+            }
             $present_count = $present_query->num_rows();
+            $attendance_rate = ($total_students > 0) ? round(($present_count / $total_students) * 100, 2) : 0;
 
-            $attendance_rate = 0;
-            if ($total_students > 0) {
-                $attendance_rate = round(($present_count / $total_students) * 100, 2);
+            // --- weekly attendance: use model method (returns Mon..Sun array) ---
+            $weekOrdered = $this->DashboardModel->getWeeklyAttendance($center_id);
+            // if model unexpectedly returned something else, ensure 7 elements
+            if (!is_array($weekOrdered) || count($weekOrdered) !== 7) {
+                $weekOrdered = array_fill(0, 7, 0);
             }
 
-            $data = [
+            // --- revenue: last 8 months (center filtered) using students.paid_amount sums by month ---
+            $months_back = 8;
+            $labels = [];
+            $data_vals = [];
+            // build months list from oldest -> newest
+            for ($i = $months_back - 1; $i >= 0; $i--) {
+                $m = date('Y-m', strtotime("-{$i} months"));
+                $labels[] = date('M Y', strtotime("-{$i} months"));
+                $data_vals[$m] = 0.0;
+            }
+
+            // We'll attempt to sum students.paid_amount grouped by YEAR-MONTH of created_at (or admission_date if created_at missing)
+            $this->db->reset_query();
+            $dateExpr = "DATE_FORMAT(COALESCE(students.created_at, students.admission_date, students.joining_date), '%Y-%m')";
+            $this->db->select("$dateExpr as ym, COALESCE(SUM(students.paid_amount),0) as total", false);
+            $this->db->from('students');
+            if (!empty($center_id) && is_numeric($center_id)) {
+                $this->db->where('students.center_id', (int)$center_id);
+            }
+            // only consider last N months
+            $this->db->where("$dateExpr >=", date('Y-m', strtotime("-" . ($months_back - 1) . " months")));
+            $this->db->group_by('ym');
+            $this->db->order_by('ym', 'ASC');
+            $rev_q = $this->db->get();
+            if ($rev_q !== false) {
+                foreach ($rev_q->result_array() as $r) {
+                    $ym = $r['ym'];
+                    if (isset($data_vals[$ym])) $data_vals[$ym] = (float)$r['total'];
+                }
+            }
+            // convert associative to numeric array in same label order
+            $revenue_data = array_values($data_vals);
+
+            // --- student distribution (Beginner / Intermediate / Advanced) ---
+            $this->db->reset_query();
+            $this->db->select("COALESCE(SUM(CASE WHEN student_progress_category='Beginner' THEN 1 ELSE 0 END),0) as b,
+                               COALESCE(SUM(CASE WHEN student_progress_category='Intermediate' THEN 1 ELSE 0 END),0) as i,
+                               COALESCE(SUM(CASE WHEN student_progress_category='Advanced' THEN 1 ELSE 0 END),0) as a", false);
+            $this->db->from('students');
+            if (!empty($center_id) && is_numeric($center_id)) {
+                $this->db->where('center_id', (int)$center_id);
+            }
+            $dist_row = $this->db->get()->row_array();
+            $student_distribution = [
+                isset($dist_row['b']) ? (int)$dist_row['b'] : 0,
+                isset($dist_row['i']) ? (int)$dist_row['i'] : 0,
+                isset($dist_row['a']) ? (int)$dist_row['a'] : 0
+            ];
+
+            // Build response
+            $response = [
                 'total_students' => $total_students,
                 'active_students' => $active_students,
                 'total_paid' => $total_paid,
                 'total_due' => $total_due,
-                'attendance_rate' => $attendance_rate
+                'attendance_rate' => $attendance_rate,
+                'weekly_attendance' => $weekOrdered, // Mon..Sun
+                'revenue' => [
+                    'labels' => $labels,
+                    'data' => $revenue_data
+                ],
+                'student_distribution' => $student_distribution,
+                'debug_center_id' => !empty($center_id) ? (int)$center_id : null
             ];
 
             return $this->output
                 ->set_content_type('application/json')
-                ->set_output(json_encode(['status' => 'success', 'data' => $data]));
+                ->set_output(json_encode(['status' => 'success', 'data' => $response]));
         } catch (Exception $e) {
+            // log and return JSON error
             log_message('error', 'DashboardController::center_stats error: ' . $e->getMessage());
             return $this->output
                 ->set_status_header(500)
                 ->set_content_type('application/json')
-                ->set_output(json_encode(['status' => 'error', 'message' => 'Server error']));
+                ->set_output(json_encode(['status' => 'error', 'message' => 'Server error', 'detail' => $e->getMessage()]));
         }
     }
 
     /**
-     * AJAX: students_list
-     * Params:
-     *  - filter: 'active'|'attendance'|'due'|'paid'  (required)
-     *  - center_id: optional numeric center id
-     *
-     * Response: { status: 'success', data: [ {id, name, contact, parent_name, batch_id, student_progress_category, paid_amount, remaining_amount, status, last_attendance, attendance_count_last_7_days } ] }
+     * students_list remains the same as before (works fine)
      */
     public function students_list()
     {
@@ -129,57 +204,44 @@ class DashboardController extends CI_Controller
         }
 
         try {
-            // base students query
+            $this->db->reset_query();
             $this->db->select('students.*');
             $this->db->from('students');
-
             if (!empty($center_id) && is_numeric($center_id)) {
                 $this->db->where('students.center_id', (int)$center_id);
             }
 
-            // apply filter
             switch ($filter) {
                 case 'active':
                     $this->db->where('students.status', 'Active');
                     break;
-
                 case 'attendance':
-                    // students who have attendance in last 7 days (distinct student ids)
-                    $seven_days_ago = date('Y-m-d', strtotime('-6 days')); // include today
+                    $seven_days_ago = date('Y-m-d', strtotime('-6 days'));
                     $this->db->join('attendance', 'attendance.student_id = students.id', 'inner');
                     $this->db->where("DATE(COALESCE(attendance.date, attendance.created_at)) >= ", $seven_days_ago);
                     $this->db->where('attendance.status', 'present');
                     $this->db->group_by('students.id');
                     break;
-
                 case 'due':
                     $this->db->where('students.remaining_amount >', 0);
                     break;
-
                 case 'paid':
                     $this->db->where('students.paid_amount >', 0);
                     break;
-
                 default:
-                    // unknown filter, return empty
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output(json_encode(['status' => 'success', 'data' => []]));
+                    return $this->output->set_content_type('application/json')->set_output(json_encode(['status' => 'success', 'data' => []]));
             }
 
             $students = $this->db->get()->result_array();
 
-            // enrich each student with last_attendance and attendance_count_last_7_days
             $result = [];
             if (!empty($students)) {
-                // collect student ids
                 $student_ids = array_column($students, 'id');
 
-                // fetch last attendance per student (use created_at fallback)
-                $ids_chunk = $student_ids; // small sets expected; adjust chunking if very large
+                $this->db->reset_query();
                 $this->db->select("a.student_id, MAX(CONCAT(COALESCE(a.date,''),' ',COALESCE(a.time,''))) AS last_attendance, COUNT(CASE WHEN a.status='present' AND DATE(COALESCE(a.date,a.created_at)) >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) THEN 1 END) AS attendance_count_last_7_days", false);
                 $this->db->from('attendance a');
-                $this->db->where_in('a.student_id', $ids_chunk);
+                $this->db->where_in('a.student_id', $student_ids);
                 $this->db->group_by('a.student_id');
                 $att_q = $this->db->get();
                 $att_rows = $att_q->result_array();

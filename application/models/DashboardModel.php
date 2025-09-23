@@ -193,4 +193,61 @@ class DashboardModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    /**
+     * NEW: Get weekly attendance counts for the last 7 days.
+     * Returns a 7-element numeric array ordered Mon..Sun.
+     *
+     * @param int|null $center_id
+     * @return array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+     */
+    public function getWeeklyAttendance($center_id = null)
+    {
+        // Build date window: from 6 days ago to today (inclusive)
+        $days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $days[] = date('Y-m-d', strtotime("-{$i} days"));
+        }
+        $startDate = $days[0];
+
+        // Prepare query: count DISTINCT students present per date
+        $this->db->reset_query();
+        $this->db->select("DATE(COALESCE(attendance.date, attendance.created_at)) as att_date, COUNT(DISTINCT attendance.student_id) as cnt", false);
+        $this->db->from('attendance');
+        $this->db->where("DATE(COALESCE(attendance.date, attendance.created_at)) >= ", $startDate);
+        $this->db->where("attendance.status", "present");
+
+        if (!empty($center_id) && is_numeric($center_id)) {
+            // join students to filter by center
+            $this->db->join('students', 'students.id = attendance.student_id', 'inner');
+            $this->db->where('students.center_id', (int)$center_id);
+        }
+
+        $this->db->group_by('att_date');
+        $this->db->order_by('att_date', 'ASC');
+
+        $q = $this->db->get();
+        if ($q === false) {
+            // On DB error, return zeroed week (so front-end continues to work)
+            return array_fill(0, 7, 0);
+        }
+
+        $rows = $q->result_array();
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['att_date']] = (int)$r['cnt'];
+        }
+
+        // Build Mon..Sun array (index 0 = Monday)
+        $weekOrdered = array_fill(0, 7, 0);
+        foreach ($days as $d) {
+            $ts = strtotime($d);
+            // PHP date('N'): 1 (Mon) .. 7 (Sun)
+            $weekdayN = (int)date('N', $ts);
+            $idx = $weekdayN - 1; // 0..6
+            $weekOrdered[$idx] = isset($map[$d]) ? $map[$d] : 0;
+        }
+
+        return $weekOrdered;
+    }
 }

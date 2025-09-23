@@ -283,67 +283,108 @@
       }
     }
 
-    /* Mobile overlay sidebar and center-list improvements */
-    @media (max-width: 575.98px) {
-      /* make sidebar act as overlay if included in markup */
-      .sidebar, #sidebar, .main-sidebar {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 260px;
-        transform: translateX(-100%);
-        z-index: 1080;
-        background: #fff;
-        box-shadow: 0 14px 40px rgba(0,0,0,0.18);
-        transition: transform .28s ease;
-      }
-      .sidebar.active, #sidebar.active, .main-sidebar.active {
-        transform: translateX(0);
-      }
+    /* Mobile overlay sidebar and center-list improvements (REPLACEMENT for the existing mobile block) */
+@media (max-width: 575.98px) {
+  /* sidebar overlay */
+  .sidebar, #sidebar, .main-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    transform: translateX(-100%);
+    z-index: 1080;
+    background: #fff;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+    transition: transform .28s ease;
+  }
+  .sidebar.active, #sidebar.active, .main-sidebar.active {
+    transform: translateX(0);
+  }
 
-      .sidebar-backdrop {
-        display: none;
-      }
-      body.sidebar-open .sidebar-backdrop {
-        display: block;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.42);
-        z-index: 1070;
-      }
+  .sidebar-backdrop {
+    display: none;
+  }
+  body.sidebar-open .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.42);
+    z-index: 1070;
+  }
 
-      .dashboard-wrapper {
-        margin-left: 0 !important;
-        padding: 12px;
-      }
+  /* make the dashboard content use less padding on mobile */
+  .dashboard-wrapper {
+    margin-left: 0 !important;
+    padding: 10px;
+  }
 
-      /* center-list on mobile: allow multi-line names, larger max-height based on viewport */
-      .center-list {
-        max-height: calc(100vh - 260px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-right: 10px;
-      }
-      .center-list .center-btn {
-        white-space: normal; /* allow wrapping on mobile */
-        align-items: flex-start;
-        padding: 12px;
-      }
+  /* compact center-box padding */
+  .center-box {
+    padding: 12px;
+  }
 
-      .card-stat h4 { font-size: 20px; }
-      .card-stat span { font-size: 12px; }
-      .card-stat { padding-right: 48px; } /* keep room for icon on mobile */
-    }
+  /* center-list on mobile: compact, denser items */
+  .center-list {
+    max-height: calc(100vh - 220px); /* leave room for header/footer */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px; /* tighter padding */
+    gap: 8px; /* smaller gap */
+  }
 
-    /* Smooth small scrollbars for webkit */
-    .center-list::-webkit-scrollbar {
-      width: 8px;
-    }
-    .center-list::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.07);
-      border-radius: 6px;
-    }
+  /* compact center buttons: full width, smaller padding and radius */
+  .center-list .center-btn {
+    white-space: normal; /* allow wrapping if needed */
+    align-items: center;  /* vertically center icon + text */
+    padding: 8px 10px;    /* smaller vertical padding */
+    background: #fff;     /* keep but subtle */
+    border: 1px solid #eee;
+    border-radius: 8px;   /* smaller radius so not pill-like */
+    font-size: 14px;      /* slightly smaller text */
+    line-height: 1.2;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    height: auto;
+    min-height: 40px;     /* compact min height */
+  }
+
+  /* icon alignment */
+  .center-list .center-btn .bi {
+    min-width: 20px;
+    text-align: center;
+    opacity: 0.9;
+    font-size: 16px;
+  }
+
+  /* avoid huge left indent on the name container */
+  .center-list .center-btn > div {
+    flex: 1;
+    overflow: hidden;
+    text-align: left;
+    padding: 0; /* remove internal padding if any */
+  }
+
+  /* visually indicate selection without huge visual weight */
+  .center-list .center-btn.selected-center {
+    background: linear-gradient(135deg, rgba(255,64,64,0.06), rgba(255,64,64,0.02));
+    border-color: var(--accent-1);
+    box-shadow: 0 6px 12px rgba(255,64,64,0.06);
+  }
+
+  /* slightly reduce card-stat font sizes on mobile too */
+  .card-stat h4 { font-size: 20px; }
+  .card-stat span { font-size: 12px; }
+  .card-stat { padding-right: 44px; }
+
+  /* Reduce chart container paddings on very small screens so charts get more space */
+  .chart-container { padding: 14px; }
+
+  /* Scrollbar adjustments (thin overlay feel) */
+  .center-list::-webkit-scrollbar { width: 8px; }
+  .center-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 6px; }
+}
+
 
   </style>
 </head>
@@ -424,7 +465,8 @@
             <div class="center-list mt-3">
               <?php if (!empty($centers)): ?>
                 <?php foreach ($centers as $c): ?>
-                  <button class="center-btn" value="<?= $c->id ?>" onclick="selectCenter('<?= $c->id ?>', this)">
+                  <!-- Added type="button" and data-center-id to avoid accidental form submits and to aid debug -->
+                  <button type="button" class="center-btn" data-center-id="<?= htmlspecialchars($c->id) ?>" value="<?= htmlspecialchars($c->id) ?>" onclick="selectCenter('<?= htmlspecialchars($c->id) ?>', this)">
                     <i class="bi bi-house-door-fill"></i>
                     <div style="flex:1; overflow:hidden; text-align:left;">
                       <?= htmlspecialchars($c->name) ?>
@@ -617,7 +659,7 @@
       });
     }
 
-    /* Charts (unchanged logic) */
+    /* Charts (unchanged logic except updateCharts guard improvements) */
     function initOrUpdateCharts() {
       const attCtx = document.getElementById("attendanceChart").getContext("2d");
       const attGradient = attCtx.createLinearGradient(0, 0, 0, 200);
@@ -629,6 +671,7 @@
         labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [{
           label: "Attendance",
+          // placeholder values; will be replaced by AJAX data when available
           data: [90, 85, 75, 92, 80, 85, 90],
           backgroundColor: attGradient,
           borderRadius: 10,
@@ -717,31 +760,35 @@
       }
     }
 
+    // Improved guard: ensure arrays update even if all zeros; coerce to numbers
     window.updateCharts = function({ attendance = null, revenue = null, studentDist = null }) {
-      if (attendance && window.attendanceChart) {
-        window.attendanceChart.data.datasets[0].data = attendance;
+      if (Array.isArray(attendance) && window.attendanceChart) {
+        window.attendanceChart.data.datasets[0].data = attendance.map(v => Number(v) || 0);
         window.attendanceChart.update();
       }
-      if (revenue && window.revenueChart) {
+      if (revenue && Array.isArray(revenue.labels) && Array.isArray(revenue.data) && window.revenueChart) {
         window.revenueChart.data.labels = revenue.labels;
-        window.revenueChart.data.datasets[0].data = revenue.data;
+        window.revenueChart.data.datasets[0].data = revenue.data.map(v => Number(v) || 0);
         window.revenueChart.update();
       }
-      if (studentDist && window.studentChart) {
-        window.studentChart.data.datasets[0].data = studentDist;
+      if (Array.isArray(studentDist) && window.studentChart) {
+        window.studentChart.data.datasets[0].data = studentDist.map(v => Number(v) || 0);
         window.studentChart.update();
       }
     };
 
     function fetchCenterStats(centerId) {
       let url = '<?= base_url("dashboard/center_stats") ?>';
-      if (centerId !== null && centerId !== undefined) {
+      if (centerId !== null && centerId !== undefined && String(centerId) !== '') {
         url += '?center_id=' + encodeURIComponent(centerId);
       }
 
+      // debug helper - check browser console when clicking centers
+      console.debug('fetchCenterStats ->', url);
+
       fetch(url, { credentials: 'same-origin' })
         .then(resp => {
-          if (!resp.ok) throw new Error('Network response was not ok');
+          if (!resp.ok) throw new Error('Network response was not ok: ' + resp.status);
           return resp.json();
         })
         .then(json => {
@@ -758,17 +805,29 @@
           if (activeEl) activeEl.innerText = (d.active_students !== undefined) ? d.active_students : 0;
           if (attendanceEl) attendanceEl.innerText = (d.attendance_rate !== undefined) ? (d.attendance_rate + '%') : '0%';
           if (dueEl) dueEl.innerText = (d.total_due !== undefined) ? formatNumber(d.total_due) : 0;
-          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? (formatNumber(d.total_paid)) : 'Rs.0';
+          if (paidEl) paidEl.innerText = (d.total_paid !== undefined) ? ('Rs.' + formatNumber(d.total_paid)) : 'Rs.0';
 
-          if (d.weekly_attendance && Array.isArray(d.weekly_attendance)) {
-            const a = d.weekly_attendance;
-            window.updateCharts({ attendance: a });
+          // Weekly attendance
+          if (Array.isArray(d.weekly_attendance)) {
+            // ensure chart exists
+            if (!window.attendanceChart) initOrUpdateCharts();
+            window.updateCharts({ attendance: d.weekly_attendance });
           }
+
+          // Revenue
           if (d.revenue && Array.isArray(d.revenue.labels) && Array.isArray(d.revenue.data)) {
+            if (!window.revenueChart) initOrUpdateCharts();
             window.updateCharts({ revenue: { labels: d.revenue.labels, data: d.revenue.data } });
           }
-          if (d.student_distribution && Array.isArray(d.student_distribution)) {
+
+          // Student distribution
+          if (Array.isArray(d.student_distribution)) {
+            if (!window.studentChart) initOrUpdateCharts();
             window.updateCharts({ studentDist: d.student_distribution });
+          }
+
+          if (d.debug_center_id !== undefined) {
+            console.debug('center_stats returned debug_center_id:', d.debug_center_id);
           }
         })
         .catch(err => {
@@ -785,14 +844,25 @@
       }
     }
 
+    // normalize center id and reliably trigger fetch + UI selection
     function selectCenter(centerId, btnEl = null) {
-      window.selectedCenterId = centerId;
-      fetchCenterStats(centerId);
+      // normalize center id to either numeric-string or null
+      if (centerId === '' || centerId === undefined || centerId === null) {
+        window.selectedCenterId = null;
+      } else {
+        window.selectedCenterId = (String(centerId).match(/^\d+$/)) ? String(centerId) : centerId;
+      }
 
+      // UI selection class
       try {
         document.querySelectorAll('.center-btn').forEach(b => b.classList.remove('selected-center'));
-        if (btnEl) btnEl.classList.add('selected-center');
-      } catch (e) {}
+        if (btnEl && btnEl.classList) btnEl.classList.add('selected-center');
+      } catch (e) {
+        console.warn('selectCenter UI update failed', e);
+      }
+
+      // fetch stats
+      fetchCenterStats(window.selectedCenterId);
     }
 
     function openStatList(filter) {
