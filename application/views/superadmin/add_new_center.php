@@ -338,14 +338,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const latitude = document.getElementById("latitude");
     const longitude = document.getElementById("longitude");
 
-    // Auto-generate Center Number
+    
+// Auto-generate Center Number
     function generateCenterNumber() {
         const timestamp = Date.now().toString().slice(-8); // Last 8 digits of timestamp
         const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
         centerNumber.value = `CTR-${timestamp}-${random}`;
         validateForm(); // Revalidate after setting center number
     }
-
     // Toggle Password Visibility
     togglePassword.addEventListener("click", function () {
         const type = password.getAttribute("type") === "password" ? "text" : "password";
@@ -1749,15 +1749,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     e.preventDefault();
 
                     const payload = {
-                        name: $("#centerName").val(),
-                        address: $("#address").val(),
-                        center_number: $("#centerNumber").val(),
-                        rent_amount: $("#center_rent").val() || "0", // ✅ only this one
-                        rent_paid_date: $("#printPaidDate").val(),
-                        center_timing_from: $("#openingTime").val(),
-                        center_timing_to: $("#closingTime").val(),
-                        password: $("#password").val()
-                    };
+    name: $("#centerName").val(),
+    address: $("#address").val(),
+    center_number: $("#centerNumber").val(),
+    rent_amount: $("#center_rent").val() || "0",
+    rent_paid_date: $("#printPaidDate").val(),
+    center_timing_from: $("#openingTime").val(),
+    center_timing_to: $("#closingTime").val(),
+    latitude: $("#latitude").val(),        // ✅ Added
+    longitude: $("#longitude").val(),      // ✅ Added
+    password: $("#password").val()
+};
+
 
 
                     $.ajax({
@@ -2154,10 +2157,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Initial Load
                     loadFacilities();
                 });
-            </script>
 
-            <script>
-                const startDate = document.getElementById("startDate");
+
+
+ const startDate = document.getElementById("startDate");
                 const endDate = document.getElementById("endDate");
                 const duration = document.getElementById("duration");
 
@@ -2184,9 +2187,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 startDate.addEventListener("change", calculateDuration);
                 endDate.addEventListener("change", calculateDuration);
+
+
+                
+                
             </script>
 
-
+           
 
 </body>
 
