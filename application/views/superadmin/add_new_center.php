@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const togglePassword = document.getElementById("togglePassword");
     const latitude = document.getElementById("latitude");
     const longitude = document.getElementById("longitude");
-
+/*
     
 // Auto-generate Center Number
     function generateCenterNumber() {
@@ -345,7 +345,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
         centerNumber.value = `CTR-${timestamp}-${random}`;
         validateForm(); // Revalidate after setting center number
-    }
+    }*/
+
+// Auto-generate shorter Center Number
+function generateCenterNumber() {
+    const date = new Date();
+    const yy = date.getFullYear().toString().slice(-2); // last 2 digits of year
+    const mm = String(date.getMonth() + 1).padStart(2, "0"); // month
+    const dd = String(date.getDate()).padStart(2, "0"); // day
+    const random = Math.floor(100 + Math.random() * 900); // 3-digit random number
+
+    centerNumber.value = `CTR-${yy}${mm}${dd}-${random}`;
+    validateForm(); // Revalidate after setting center number
+}
+
+
+
     // Toggle Password Visibility
     togglePassword.addEventListener("click", function () {
         const type = password.getAttribute("type") === "password" ? "text" : "password";
