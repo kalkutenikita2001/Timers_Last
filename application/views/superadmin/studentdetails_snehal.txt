@@ -1483,7 +1483,10 @@
                                 <div class="stat-number">4</div>
                                 <div class="stat-label">Sessions Missed</div>
                             </div>
-                            
+                            <div class="stat-card">
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Late Arrivals</div>
+                            </div>
                         </div>
 
                         <!-- Attendance Table -->
@@ -1608,7 +1611,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="detail-row">
                                     <div class="detail-label">
                                         <i class="fas fa-qrcode"></i>
@@ -1619,7 +1622,7 @@
                                         <small class="d-block text-muted">Scan for attendance</small>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
 
                         <!-- Navigation Buttons -->

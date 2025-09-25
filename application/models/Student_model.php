@@ -151,11 +151,13 @@ public function add_student_facility($data)
         b.duration,
         b.category,
         b.created_at as batch_created_at,
-        b.updated_at as batch_updated_at
+        b.updated_at as batch_updated_at,
+         st.staff_name as coach_name
     ");
         $this->db->from("students sah");
         $this->db->join("center_details c", "c.id = sah.center_id", "left");
         $this->db->join("batches b", "b.id = sah.batch_id", "left");
+        $this->db->join("staff st", "st.assigned_batch = sah.batch_id", "left"); 
         $this->db->where("sah.id", $id);
 
         $query = $this->db->get();
