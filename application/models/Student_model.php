@@ -231,5 +231,46 @@ public function add_student_facility($data)
     }
 
 
+   public function get_overrall_attendance_of_std($student_id)
+{
+    // ✅ Step 1: Get student's joining date
+    $this->db->select('joining_date');
+    $this->db->where('id', $student_id);
+    $student = $this->db->get('students')->row();
+
+    if (!$student) {
+        return null; // Student not found
+    }
+
+    $joining_date = $student->joining_date;
+    $today = date('Y-m-d');
+
+    // ✅ Step 2: Count total possible days (from joining_date to today)
+    $total_days = $this->db->query("
+        SELECT DATEDIFF(?, ?) + 1 AS total_days
+    ", [$today, $joining_date])->row()->total_days;
+
+    // ✅ Step 3: Count present days from attendance table
+    $present_days = $this->db->where('student_id', $student_id)
+                             ->where('status', 'present')
+                             ->where('date >=', $joining_date)
+                             ->where('date <=', $today)
+                             ->count_all_results('attendance');
+
+    // ✅ Step 4: Calculate attendance percentage
+    $attendance_percentage = 0;
+    if ($total_days > 0) {
+        $attendance_percentage = ($present_days / $total_days) * 100;
+    }
+
+    return [
+        'student_id' => $student_id,
+        'joining_date' => $joining_date,
+        'total_days' => $total_days,
+        'present_days' => $present_days,
+        'attendance_percentage' => round($attendance_percentage, 2)
+    ];
+}
+
 
 }

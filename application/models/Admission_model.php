@@ -234,36 +234,45 @@ class Admission_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
-    public function get_students_expiring_soon()
-    {
-        $sql = "
+   public function get_students_expiring_soon()
+{
+    $sql = "
         SELECT 
             s.*,
-            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date
+            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date,
+            CASE 
+                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) < CURDATE() THEN 'Expired'
+                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 20 DAY) THEN 'Expiring Soon'
+                ELSE 'Active'
+            END AS status
         FROM students s
-        WHERE DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 20 DAY)
+        WHERE DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
     ";
 
-        $query = $this->db->query($sql);
-        return $query->result_array();
-    }
-
-    public function get_students_expiring_soon_center($center_id)
-    {
+    $query = $this->db->query($sql);
+    return $query->result_array();
+}
 
 
-        $sql = "
+   public function get_students_expiring_soon_center($center_id)
+{
+    $sql = "
         SELECT 
             s.*,
-            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date
+            DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date,
+            CASE 
+                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) < CURDATE() THEN 'Expired'
+                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 10 DAY) THEN 'Expiring Soon'
+                ELSE 'Active'
+            END AS status
         FROM students s
         WHERE s.center_id = ?
           AND DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
     ";
 
-        $query = $this->db->query($sql, [$center_id]);
-        return $query->result_array();
-    }
+    $query = $this->db->query($sql, [$center_id]);
+    return $query->result_array();
+}
 
     public function get_facility_by_student_id($student_id)
     {

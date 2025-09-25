@@ -86,6 +86,15 @@ class Facility_model extends CI_Model
     }
 
 
+     public function get_facilities_of_student($student_id)
+    {
+        // Adjust column name according to your DB schema linking facilities to students
+        $this->db->where('student_id', $student_id);
+        $query = $this->db->get('student_facilities');
+        return $query->result_array();
+    }
+
+
      public function get_facilities_history_by_student($id){
         return $this->db->get_where('student_facilities_history', ['student_id' => $id])->result_array();
     }

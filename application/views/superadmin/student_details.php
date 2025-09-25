@@ -1356,18 +1356,15 @@
                     <!-- Facilities Section -->
                     <div class="section-content" id="facilities">
                         <h4><i class="fas fa-building me-2"></i>Facilities</h4>
-                        <p>Additional facilities and services availed by the student.</p>
+                        <p>Additional facilities and services availed by the student</p>
 
-                        <div class="section-content" id="facilities">
-                            <h4><i class="fas fa-building me-2"></i>Facilities</h4>
-                            <p>Additional facilities and services availed by the student.</p>
-
+                        
                             <!-- Current Facilities -->
                             <div class="facilities-section">
                                 <h5 class="section-subtitle">
                                     <i class="fas fa-star me-2"></i>Current Facilities
                                 </h5>
-
+                             
                                 <div class="row">
                                     <?php if (!empty($facilities)): ?>
                                         <?php foreach ($facilities as $facility): ?>
@@ -1377,19 +1374,19 @@
                                                         <div class="facility-name">
                                                             <i class="fas fa-check me-2"></i>
                                                             <?= ucfirst($facility['facility_name']) ?>
-                                                            <?= $facility['subtype_name'] ? '(' . $facility['subtype_name'] . ')' : '' ?>
+                                                            <?= $facility['facility_name'] ? '(' . $facility['details'] . ')' : '' ?>
                                                         </div>
                                                         <div class="facility-amount">
-                                                            ₹<?= number_format($facility['rent_amount'], 2) ?></div>
+                                                            ₹<?= number_format($facility['amount'], 2) ?></div>
                                                     </div>
-                                                    <div class="facility-details">
+                                                    <!-- <div class="facility-details">
                                                         <strong>Details:</strong>
                                                         <?= $facility['subtype_name'] ?: 'Standard' ?><br>
                                                         <strong>Duration:</strong>
                                                         <?= $facility['rent_date'] ? date('d M Y', strtotime($facility['rent_date'])) : 'N/A' ?><br>
                                                         <strong>Status:</strong> <span
                                                             class="status-badge status-active">Active</span>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -1400,7 +1397,7 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
-                        </div>
+                       
 
 
                         <!-- Previous Facilities -->
@@ -1472,15 +1469,15 @@
                         <!-- Attendance Statistics -->
                         <div class="attendance-stats">
                             <div class="stat-card">
-                                <div class="stat-number">85%</div>
+                                <div class="stat-number"><?php print_r($get_overrall_attendance["attendance_percentage"]) ?></div>
                                 <div class="stat-label">Overall Attendance</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">24</div>
+                                <div class="stat-number"><?php print_r($get_overrall_attendance["present_days"]) ?></div>
                                 <div class="stat-label">Sessions Attended</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">4</div>
+                                <div class="stat-number"><?php print_r($get_overrall_attendance["total_days"] - $get_overrall_attendance["present_days"]) ?></div>
                                 <div class="stat-label">Sessions Missed</div>
                             </div>
                             
