@@ -15,6 +15,7 @@
 
         .content-wrapper {
             padding: 20px;
+            transition: margin-left 0.3s ease;
         }
 
         .page-header {
@@ -26,16 +27,16 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .page-header h2 {
-            font-size: 1.8rem;
-        }
-
         .participants-table-container {
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             overflow: hidden;
             margin-bottom: 30px;
+        }
+
+        .table-responsive {
+            border-radius: 8px;
         }
 
         .table thead th {
@@ -46,8 +47,17 @@
             padding: 15px 12px;
         }
 
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
         .table tbody tr:hover {
             background-color: rgba(255, 64, 64, 0.05);
+        }
+
+        .table tbody td {
+            padding: 12px;
+            vertical-align: middle;
         }
 
         .badge-participant {
@@ -58,8 +68,7 @@
             border-radius: 20px;
         }
 
-        .back-button,
-        #exportBtn {
+        .back-button {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: white;
             border: none;
@@ -69,16 +78,10 @@
             transition: all 0.3s;
         }
 
-        #exportBtn {
-            background: white;
-            color: #ff4040;
-            border: 2px solid #ff4040;
-        }
-
-        .back-button:hover,
-        #exportBtn:hover {
+        .back-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            color: white;
         }
 
         .empty-state {
@@ -90,6 +93,53 @@
             font-size: 5rem;
             color: #dee2e6;
             margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .table-responsive {
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+            }
+
+            .page-header {
+                padding: 15px;
+            }
+
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+            }
+
+            .table tbody td {
+                display: block;
+                text-align: right;
+                padding: 10px 15px;
+                position: relative;
+                border-top: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .table tbody td:last-child {
+                border-bottom: none;
+            }
+
+            .table tbody td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: 600;
+                color: #495057;
+            }
         }
 
         .participant-avatar {
@@ -108,63 +158,13 @@
         .participant-name-cell {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        /* RESPONSIVE TABLE */
-        @media (max-width: 992px) {
-            .page-header h2 {
-                font-size: 1.4rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                padding: 15px;
-            }
-
-            .table thead {
-                display: none;
-            }
-
-            .table tbody tr {
-                display: block;
-                margin-bottom: 15px;
-                border: 1px solid #dee2e6;
-                border-radius: 8px;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            }
-
-            .table tbody td {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px 15px;
-                border-bottom: 1px solid #dee2e6;
-                text-align: left;
-                font-size: 0.95rem;
-                word-break: break-word;
-            }
-
-            .table tbody td:last-child {
-                border-bottom: none;
-            }
-
-            .table tbody td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #495057;
-            }
-
-            .back-button,
-            #exportBtn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
         }
     </style>
 </head>
 
 <body>
+
+
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid">
             <!-- Page Header -->
@@ -180,8 +180,10 @@
                             Total Participants:
                             <strong><?= count($participants) ?></strong>
                         </p>
+
+
                     </div>
-                    <div class="col-md-6 text-md-right mt-3 mt-md-0">
+                    <div class="col-md-6 text-md-right">
                         <button class="back-button" onclick="history.back()">
                             <i class="fas fa-arrow-left mr-2"></i>Back to Events
                         </button>
@@ -207,7 +209,7 @@
                             <tbody>
                                 <?php foreach ($participants as $i => $p): ?>
                                     <tr>
-                                        <td data-label="Sr.No">
+                                        <td data-label="#">
                                             <span class="badge badge-participant"><?= $i + 1 ?></span>
                                         </td>
                                         <td data-label="Name" class="participant-name-cell">
@@ -237,7 +239,7 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Summary + Export -->
+            <!-- Summary Card -->
             <div class="row">
                 <div class="col-md-4">
                     <div class="card bg-white text-danger text-center mb-4 shadow-sm">
@@ -247,15 +249,40 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 d-flex justify-content-md-end">
-                    <button id="exportBtn" class="btn btn-lg">
-                        <i class="fas fa-download mr-1"></i> Export List
-                    </button>
+
+                <div class="col-md-8">
+                    <div class="d-flex justify-content-end mb-4">
+                        <button id="exportBtn" class="btn btn-lg btn-outline-primary">
+                            <i class="fas fa-download mr-1"></i> Export List
+                        </button>
+                    </div>
                 </div>
+
+
             </div>
+
+
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add responsiveness to table on small screens
+        document.addEventListener("DOMContentLoaded", function() {
+            function adjustTableForMobile() {
+                if (window.innerWidth < 768) {
+                    document.querySelectorAll('tbody td').forEach(td => {
+                        const headerText = document.querySelectorAll('th')[td.cellIndex].textContent;
+                        td.setAttribute('data-label', headerText);
+                    });
+                }
+            }
+
+            adjustTableForMobile();
+            window.addEventListener('resize', adjustTableForMobile);
+        });
+    </script>
     <script>
         document.getElementById("exportBtn").addEventListener("click", function() {
             let table = document.querySelector(".participants-table-container table");
@@ -271,13 +298,16 @@
                 let cols = row.querySelectorAll("th, td");
                 let rowData = [];
                 cols.forEach(col => {
+                    // Clean text (remove extra spaces/new lines)
                     let text = col.innerText.replace(/(\r\n|\n|\r)/gm, "").trim();
+                    // Escape double quotes
                     text = `"${text.replace(/"/g, '""')}"`;
                     rowData.push(text);
                 });
                 csv.push(rowData.join(","));
             });
 
+            // Create downloadable CSV
             let csvContent = "data:text/csv;charset=utf-8," + csv.join("\n");
             let link = document.createElement("a");
             link.setAttribute("href", encodeURI(csvContent));

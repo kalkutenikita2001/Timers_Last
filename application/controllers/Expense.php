@@ -8,6 +8,8 @@ class Expense extends CI_Controller
         parent::__construct();
         $this->load->model('Expense_model');
         $this->load->model('Center_model'); // optional for dropdown
+        $this->load->model('Notifications_model'); // For notifications
+        $this->load->library('session');
     }
 
     // Show Expenses Page
@@ -64,6 +66,12 @@ class Expense extends CI_Controller
             redirect('superadmin/Expenses');
         }
 
+        // Determine status: auto-approve if superadmin
+        $status = 'pending';
+        if ($this->session->userdata('role') === 'superadmin') {
+            $status = 'approved';
+        }
+
         // Prepare data array
         $expenseData = [
             'center_id'   => $center_id,
@@ -73,7 +81,7 @@ class Expense extends CI_Controller
             'category'    => $category,
             'description' => $description,
             'type'        => 'manual',
-            'status'      => 'approved', // ✅ Always approved
+            'status'      => $status,
             'added_by'    => $added_by,
             'created_at'  => date('Y-m-d H:i:s')
         ];
@@ -81,6 +89,18 @@ class Expense extends CI_Controller
         // Insert into database
         if ($this->Expense_model->insert_expense($expenseData)) {
             $this->session->set_flashdata('success', 'Expense added successfully!');
+
+            // Debug: Log added_by and notification creation
+            log_message('error', 'Expense added by user_id: ' . print_r($added_by, true));
+            $notif_id = $this->Notifications_model->create_notification([
+                'user_id' => null, // null for superadmin, or set to superadmin's user_id
+                'type'    => 'expense_request',
+                'title'   => 'New Expense Added',
+                'message' => 'A new expense has been added and needs approval.',
+                'item_id' => null
+            ]);
+            print_r($notif_id);die;
+            log_message('error', 'Notification created for superadmin, notif_id: ' . print_r($notif_id, true));
         } else {
             $this->session->set_flashdata('error', 'Failed to add expense. Please try again.');
         }
@@ -144,15 +164,46 @@ class Expense extends CI_Controller
 
     public function approve($id)
     {
-        $this->Expense_model->update_status($id, 'approved'); // ✅ Update in DB
+        // Approve expense
+        $this->Expense_model->update_status($id, 'approved');
+
+        // Get expense info to notify admin
+        $expense = $this->db->get_where('expenses', ['id' => $id])->row_array();
+        if ($expense && !empty($expense['added_by'])) {
+            log_message('error', 'Approving expense, notify user_id: ' . print_r($expense['added_by'], true));
+            $notif_id = $this->Notifications_model->create_notification([
+                'user_id' => $expense['added_by'],
+                'type'    => 'expense_status',
+                'title'   => 'Expense Approved',
+                'message' => 'Your expense \"' . $expense['title'] . '\" has been approved.',
+                'item_id' => $id
+            ]);
+            log_message('error', 'Notification created for admin, notif_id: ' . print_r($notif_id, true));
+        }
+
         $this->session->set_flashdata('success', 'Expense approved!');
-        redirect('superadmin/Expenses'); // ✅ Refresh page
+        redirect('superadmin/Expenses');
     }
 
     public function reject($id)
     {
-        $this->Expense_model->update_status($id, 'rejected'); // ✅ Update in DB
+        $this->Expense_model->update_status($id, 'rejected');
+
+        // Get expense info to notify admin
+        $expense = $this->db->get_where('expenses', ['id' => $id])->row_array();
+        if ($expense && !empty($expense['added_by'])) {
+            log_message('error', 'Rejecting expense, notify user_id: ' . print_r($expense['added_by'], true));
+            $notif_id = $this->Notifications_model->create_notification([
+                'user_id' => $expense['added_by'],
+                'type'    => 'expense_status',
+                'title'   => 'Expense Rejected',
+                'message' => 'Your expense \"' . $expense['title'] . '\" has been rejected.',
+                'item_id' => $id
+            ]);
+            log_message('error', 'Notification created for admin, notif_id: ' . print_r($notif_id, true));
+        }
+
         $this->session->set_flashdata('error', 'Expense rejected!');
-        redirect('superadmin/Expenses'); // ✅ Refresh page
+        redirect('superadmin/Expenses');
     }
 }

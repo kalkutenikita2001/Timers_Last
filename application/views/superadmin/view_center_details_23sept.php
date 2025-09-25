@@ -420,13 +420,9 @@
             <h4>Batch Details</h4>
             <div id="batchCards"></div>
             <div class="text-right mt-4">
-              <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
-                <i class="fas fa-plus"></i> Add Batch
-              </button> -->
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batchModal">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#batchModal">
                 <i class="fas fa-plus"></i> Add Batch
               </button>
-
             </div>
           </div>
 
@@ -435,7 +431,7 @@
             <h4>Facility Details</h4>
             <div id="facilityCards"></div>
             <div class="text-right mt-4">
-              <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#facilityModal">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#facilityModal">
                 <i class="fas fa-plus"></i> Add Facility
               </button>
             </div>
@@ -446,7 +442,7 @@
             <h4>Staff Details</h4>
             <div id="staffCards"></div>
             <div class="text-right mt-4">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staffModal">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staffModal">
                 <i class="fas fa-plus"></i> Add Staff
               </button>
             </div>
@@ -457,7 +453,7 @@
             <h4>Expense Details</h4>
             <div id="expenseCards"></div>
             <div class="text-right mt-4">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#expenseModal">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#expenseModal">
                 <i class="fas fa-plus"></i> Add Expense
               </button>
             </div>
@@ -1055,7 +1051,6 @@
           <p><span>Timing:</span> ${center.center_timing_from} - ${center.center_timing_to}</p>
           <p><span>Rent:</span> ₹${parseFloat(center.rent_amount).toFixed(2)}</p>
           <p><span>Rent Date:</span> ${center.rent_paid_date}</p>
-          <p><span>Password:</span> ${center.password}</p>
           <button class="btn btn-edit" data-center-id="${center.id}">
             <i class="fas fa-edit"></i> Edit
           </button>
@@ -1648,7 +1643,6 @@
           url: baseUrl + "Center/saveFacility",   // ✅ corrected controller
           method: "POST",
           data: JSON.stringify(payload),
-          dataType: "json",
           contentType: "application/json",
           success: function (response) {
             if (response.status === "success") {
@@ -1770,7 +1764,6 @@
           method: "POST",
           data: JSON.stringify(payload),
           contentType: "application/json",
-           dataType: "json",
           success: function (response) {
             if (response.status === "success") {
               Swal.fire({

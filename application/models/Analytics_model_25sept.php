@@ -1,20 +1,18 @@
 <?php
 // Updated Model: Analytics_model.php (in CI3 models folder)
+// No new table needed, reuse existing tables with optimized queries
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Analytics_model extends CI_Model {
 
     public function get_total_revenue() {
-        $this->db->select_sum('rent_amount');
-        $query = $this->db->get('facilities');
+        $query = $this->db->select_sum('rent_amount')->get('facilities');
         return (float) $query->row()->rent_amount;
     }
 
     public function get_total_expenses() {
-        $this->db->select_sum('amount');
-        $this->db->where('status', 'approved');
-        $query = $this->db->get('expenses');
+        $query = $this->db->select_sum('amount')->where('status', 'approved')->get('expenses');
         return (float) $query->row()->amount;
     }
 
@@ -40,26 +38,6 @@ class Analytics_model extends CI_Model {
 
     public function get_total_events() {
         return $this->db->count_all('events');
-    }
-
-    public function get_total_attendances() {
-        return $this->db->count_all('attendance');
-    }
-
-    public function get_present_count() {
-        return $this->db->where('status', 'present')->count_all_results('attendance');
-    }
-
-    public function get_absent_count() {
-        return $this->db->where('status', 'absent')->count_all_results('attendance');
-    }
-
-    public function get_attendance_trend() {
-        return $this->db->select("date as label, SUM(CASE WHEN status='present' THEN 1 ELSE 0 END) as present, SUM(CASE WHEN status='absent' THEN 1 ELSE 0 END) as absent")
-                        ->group_by('date')
-                        ->order_by('date')
-                        ->get('attendance')
-                        ->result_array();
     }
 
     public function get_monthly_revenue() {
@@ -109,8 +87,7 @@ class Analytics_model extends CI_Model {
     }
 
     public function get_outstanding_fees() {
-        $this->db->select_sum('remaining_amount');
-        $query = $this->db->get('students');
+        $query = $this->db->select_sum('remaining_amount')->get('students');
         return (float) $query->row()->remaining_amount;
     }
 
@@ -219,7 +196,7 @@ class Analytics_model extends CI_Model {
         if ($page && $per_page) {
             $this->db->limit($per_page, ($page - 1) * $per_page);
         }
-        return $this->db->select('id, name, center_id, batch_id, student_progress_category as level, status')
+        return $this->db->select('id, name, center_id, batch_id, student_progress_category, status')
                         ->order_by('id', 'DESC')
                         ->get('students')
                         ->result_array();
@@ -235,6 +212,10 @@ class Analytics_model extends CI_Model {
                         ->result_array();
     }
 
+    public function count_staff() {
+        return $this->db->count_all('staff');
+    }
+
     public function get_events_details($page = null, $per_page = null) {
         if ($page && $per_page) {
             $this->db->limit($per_page, ($page - 1) * $per_page);
@@ -242,16 +223,6 @@ class Analytics_model extends CI_Model {
         return $this->db->select('id, name, date, fee, max_participants, venue')
                         ->order_by('id', 'DESC')
                         ->get('events')
-                        ->result_array();
-    }
-
-    public function get_attendance_details($page = null, $per_page = null) {
-        if ($page && $per_page) {
-            $this->db->limit($per_page, ($page - 1) * $per_page);
-        }
-        return $this->db->select('id, student_id, date, time, status')
-                        ->order_by('id', 'DESC')
-                        ->get('attendance')
                         ->result_array();
     }
 }

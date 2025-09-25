@@ -184,7 +184,7 @@
             }
 
             .main-content {
-                margin-left: 0;
+                 margin-left: 0 !important;
             }
 
             .show-sidebar .sidebar {
@@ -264,7 +264,7 @@
                     class="form-control" 
                     id="latitude" 
                     name="latitude" 
-                    step="0.000001" 
+                    step="0.00000001" 
                     placeholder="Enter latitude (e.g., 19.0760)" 
                     required
                 >
@@ -277,7 +277,7 @@
                     class="form-control" 
                     id="longitude" 
                     name="longitude" 
-                    step="0.000001" 
+                    step="0.0000001" 
                     placeholder="Enter longitude (e.g., 72.8777)" 
                     required
                 >
@@ -304,7 +304,7 @@
             <div class="col-md-6">
                 <label for="password" class="form-label required-field">Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="password" required minlength="8">
+                    <input type="password" class="form-control" id="password" name="password" required minlength="8">
                     <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                         <i class="fas fa-eye"></i>
                     </button>
@@ -347,6 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(); // Revalidate after setting center number
     }*/
 
+
 // Auto-generate shorter Center Number
 function generateCenterNumber() {
     const date = new Date();
@@ -360,15 +361,21 @@ function generateCenterNumber() {
 }
 
 
-
-    // Toggle Password Visibility
+    // // Toggle Password Visibility
+    // togglePassword.addEventListener("click", function () {
+    //     const type = password.getAttribute("type") === "password" ? "text" : "password";
+    //     password.setAttribute("type", type);
+    //     this.querySelector("i").classList.toggle("fa-eye");
+    //     this.querySelector("i").classList.toggle("fa-eye-slash");
+    // });
+    
+// Toggle Password Visibility
     togglePassword.addEventListener("click", function () {
         const type = password.getAttribute("type") === "password" ? "text" : "password";
         password.setAttribute("type", type);
         this.querySelector("i").classList.toggle("fa-eye");
         this.querySelector("i").classList.toggle("fa-eye-slash");
     });
-
     // Validate form and update button state
     function validateForm() {
         let isValid = form.checkValidity();
@@ -488,8 +495,8 @@ function generateCenterNumber() {
             <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="center-details">
                 <i class="fas fa-arrow-left me-2"></i> Back to Center Details
             </button>
-            <div>
-                <button type="button" class="btn btn-info" id="addAnotherBatch">
+            <div class="">
+                <button type="button" class="btn mb-3 btn-info" id="addAnotherBatch">
                     <i class="fas fa-plus me-2"></i> Add Another Batch
                 </button>
                 <button type="button" class="btn btn-primary btn-next" data-next="staff-details">
@@ -499,12 +506,12 @@ function generateCenterNumber() {
         </div>
     </form>
 
-    <div class="text-right mt-4">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-            data-bs-target="#batchModal">
-            <i class="fas fa-plus"></i> Add Batch
-        </button>
-    </div>
+    <!--<div class="text-right mt-4">-->
+    <!--    <button type="button" class="btn btn-primary" data-bs-toggle="modal"-->
+    <!--        data-bs-target="#batchModal">-->
+    <!--        <i class="fas fa-plus"></i> Add Batch-->
+    <!--    </button>-->
+    <!--</div>-->
 
     <!-- Batch List Table -->
     <div class="batch-table mt-4">
@@ -770,13 +777,18 @@ function generateCenterNumber() {
 
                         <!-- Add Facility Button -->
                         <div class="d-flex justify-content-end mt-4">
-                            <button type="button" class="btn btn-info" id="addFacility">
+                            <button type="button" class="btn btn-info" id="addFacility" onclick="redirectToPage()>
                                 <i class="fas fa-plus me-2"></i>Save Center
                             </button>
                         </div>
                     </form>
 
                 </div>
+                <script>
+function redirectToPage() {
+    window.location.href = "<?= base_url('superadmin/CenterManagement2'); ?>";
+}
+</script>
 
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {

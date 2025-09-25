@@ -1757,11 +1757,11 @@
       const joinDate = document.getElementById("joinDate").value;
       const expiryDate = document.getElementById("expiryDate").value;
 
-       const facilitiesAmount = document.getElementById("facilitiesAmount").value;
+      const facilitiesAmount = document.getElementById("facilitiesAmount").value;
 
-      
 
-      
+
+
 
       const urlSegments = window.location.pathname.split("/");
       const studentId = urlSegments[urlSegments.length - 1];
@@ -1817,7 +1817,7 @@
         formData.append(`facilities[${index}][amount]`, fac.amount);
       });
 
-      
+
 
 
       formData.append("student_id", studentId);
@@ -1862,7 +1862,35 @@
             timer: 2000,
             showConfirmButton: false,
             willClose: () => {
-              // Reload page when the alert closes
+              // Generate PDF Receipt
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF();
+
+              doc.setFontSize(16);
+              doc.text("Receipt", 105, 15, { align: "center" });
+
+              doc.setFontSize(12);
+              doc.text(`Receipt No: ${receiptNo}`, 14, 30);
+              doc.text(`Student: ${studentName}`, 14, 40);
+              doc.text(`Parent: ${parentName}`, 14, 50);
+              doc.text(`Course Duration: ${courseDuration} months`, 14, 60);
+              doc.text(`Batch ID: ${batchId}`, 14, 70);
+              doc.text(`Total Amount: ₹${totalAmount}`, 14, 80);
+              doc.text(`Paid: ₹${paidAmounts}`, 14, 90);
+              doc.text(`Remaining: ₹${newRemaining}`, 14, 100);
+              doc.text(`Payment Mode: ${paymentMode}`, 14, 110);
+              doc.text(`Join Date: ${joinDate}`, 14, 120);
+              doc.text(`Expiry Date: ${expiryDate}`, 14, 130);
+
+              // Save file
+              doc.save(`Receipt_${receiptNo}.pdf`);
+
+              // Print immediately
+              const pdfBlob = doc.output("bloburl");
+              const printWindow = window.open(pdfBlob);
+              printWindow.print();
+
+              // Reload page
               location.reload();
             }
           });

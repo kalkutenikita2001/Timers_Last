@@ -48,29 +48,28 @@ class Auth extends CI_Controller
                 $this->show_error('Invalid Username or Password!');
             }
         } else {
-            // If not superadmin, check admin login using center_number
-            // $admin = $this->Auth_model->get_admin($username); // username is center_number here
-            $admin = $this->Auth_model->get_admin_by_name($username); // username is now center name
+        // If not superadmin, check admin login using center name
+        $admin = $this->Auth_model->get_admin_by_name($username);
 
-            if ($admin && password_verify($password, $admin->password)) {
-                // ✅ get permissions from DB
-                $this->load->model('Permission_model');
-                $permissions = $this->Permission_model->get_by_center($admin->id);
+        if ($admin && $password === $admin->password) {   // ✅ direct check
+            // ✅ get permissions from DB
+            $this->load->model('Permission_model');
+            $permissions = $this->Permission_model->get_by_center($admin->id);
 
-                $this->session->set_userdata([
-                    'id'        => $admin->id,
-                    'username'  => $admin->name,
-                    'role'      => 'admin',
-                    'center_id' => $admin->id,
-                    'permissions' => $permissions,  // <-- store here
-                    'logged_in' => TRUE
-                ]);
+            $this->session->set_userdata([
+                'id'         => $admin->id,
+                'username'   => $admin->name,
+                'role'       => 'admin',
+                'center_id'  => $admin->id,
+                'permissions'=> $permissions,
+                'logged_in'  => TRUE
+            ]);
 
-                redirect('admin/dashboard');
-            } else {
-                $this->show_error('Invalid Username or Password!');
-            }
+            redirect('admin/dashboard');
+        } else {
+            $this->show_error('Invalid Username or Password!');
         }
+    }
     }
 
 

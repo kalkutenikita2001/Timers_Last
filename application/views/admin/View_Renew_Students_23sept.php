@@ -492,7 +492,6 @@
       width: 20px;
     }
   </style>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -1738,12 +1737,9 @@
     }
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
   <script>
     document.getElementById("generateReceiptBtn").addEventListener("click", async function () {
-   
+      console.log("button clicked");
 
       const center_id = document.getElementById("centerSelect").value;
       const baseFees = document.getElementById("baseFees").value;
@@ -1867,38 +1863,10 @@
             text: result.message,
             timer: 2000,
             showConfirmButton: false,
-           willClose: () => {
-      // Generate PDF Receipt
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      doc.setFontSize(16);
-      doc.text("Receipt", 105, 15, { align: "center" });
-
-      doc.setFontSize(12);
-      doc.text(`Receipt No: ${receiptNo}`, 14, 30);
-      doc.text(`Student: ${studentName}`, 14, 40);
-      doc.text(`Parent: ${parentName}`, 14, 50);
-      doc.text(`Course Duration: ${courseDuration} months`, 14, 60);
-      doc.text(`Batch ID: ${batchId}`, 14, 70);
-      doc.text(`Total Amount: ₹${totalAmount}`, 14, 80);
-      doc.text(`Paid: ₹${paidAmounts}`, 14, 90);
-      doc.text(`Remaining: ₹${newRemaining}`, 14, 100);
-      doc.text(`Payment Mode: ${paymentMode}`, 14, 110);
-      doc.text(`Join Date: ${joinDate}`, 14, 120);
-      doc.text(`Expiry Date: ${expiryDate}`, 14, 130);
-
-      // Save file
-      doc.save(`Receipt_${receiptNo}.pdf`);
-
-      // Print immediately
-      const pdfBlob = doc.output("bloburl");
-      const printWindow = window.open(pdfBlob);
-      printWindow.print();
-
-      // Reload page
-      location.reload();
-    }
+            willClose: () => {
+              // Reload page when the alert closes
+              location.reload();
+            }
           });
         }
         else {

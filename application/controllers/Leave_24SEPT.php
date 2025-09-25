@@ -7,7 +7,6 @@ class Leave extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Leave_model');
-        $this->load->model('Notifications_model'); // Added notifications
         $this->load->library('session');
         $this->load->helper('url');
 
@@ -41,13 +40,13 @@ class Leave extends CI_Controller
         }
     }
 
-    // Add leave
+    // Add leave (same for both roles if needed)
     public function add_leave()
     {
         $data = [
             'user_id' => $this->input->post('user_id'),
-            'user_name' => $this->session->userdata('username'),
-            'applicant_name' => $this->input->post('name'),
+            'user_name' => $this->session->userdata('username'), // admin/superadmin session
+            'applicant_name' => $this->input->post('name'), // new column
             'role' => $this->input->post('designation'),
             'leave_type' => $this->input->post('leave_type') == 'Other' ? $this->input->post('leave_type_other') : $this->input->post('leave_type'),
             'from_date' => $this->input->post('from_date'),
@@ -57,19 +56,8 @@ class Leave extends CI_Controller
             'status' => 'pending'
         ];
 
+
         if ($this->Leave_model->add_leave($data)) {
-            $leave_id = $this->db->insert_id();
-
-            // Create notification
-            $notif = [
-                'user_id' => null, // null = broadcast
-                'type' => 'leave_request',
-                'title' => 'New Leave Request',
-                'message' => 'New leave from ' . $data['applicant_name'] . ' (' . $data['role'] . ')',
-                'item_id' => $leave_id
-            ];
-            $this->Notifications_model->create_notification($notif);
-
             $this->session->set_flashdata('message', 'success');
             $this->session->set_flashdata('msg_text', 'Leave applied successfully!');
         } else {
@@ -86,6 +74,12 @@ class Leave extends CI_Controller
         $user_role = $this->session->userdata('role');
         $leave = $this->Leave_model->get_leave($leave_id);
 
+        // Role-based permission
+        // if (($user_role == 'admin' && $leave->role != 'Student') || ($user_role == 'superadmin' && $leave->role != 'Staff')) {
+        //     show_error('You do not have permission to change this leave status.', 403);
+        //     return;
+        // }
+
         if ($user_role == 'admin' && $leave->role != 'Student') {
             show_error('You do not have permission', 403);
         }
@@ -96,17 +90,6 @@ class Leave extends CI_Controller
         }
 
         $this->Leave_model->update_status($leave_id, $action);
-
-        // Notification for status change
-        $notif = [
-            'user_id' => null,
-            'type' => 'leave_status',
-            'title' => 'Leave ' . ucfirst($action),
-            'message' => 'Leave #' . $leave_id . ' has been ' . $action,
-            'item_id' => $leave_id
-        ];
-        $this->Notifications_model->create_notification($notif);
-
         redirect('Leave');
     }
 }

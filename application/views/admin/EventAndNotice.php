@@ -230,9 +230,20 @@
     }
 
     .card-footer {
-      background: white;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      /* row center on desktop */
+      flex-wrap: wrap;
+      /* allow wrapping if needed */
+      gap: 10px;
+      /* spacing between buttons */
     }
+
+
+
+
+
+
 
     /* Ensure columns stretch evenly */
     .events-container {
@@ -303,6 +314,25 @@
       display: flex;
       flex-direction: column;
     }
+
+
+
+
+
+    /* Mobile (<576px): stack buttons */
+    @media (max-width: 576px) {
+      .card-footer {
+        flex-direction: column;
+        align-items: stretch;
+        /* full width */
+      }
+
+      .card-footer .btn {
+        width: 100%;
+        margin: 5px 0;
+        /* spacing between stacked buttons */
+      }
+    }
   </style>
 </head>
 
@@ -348,17 +378,7 @@
                   </select>
                 </div>
               </div> -->
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="sortEvents"><i class="fas fa-sort"></i> Sort By</label>
-                  <select class="form-control" id="sortEvents">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                  </select>
-                </div>
-              </div>
+
             </div>
           </div>
 
@@ -386,15 +406,19 @@
                     </div>
 
 
-                    <div class="card-footer d-flex justify-content-center">
-                      <button class="btn btn-primary participate-btn mx-2">Send Form</button>
-                      <button class="btn btn-primary participate-btn view-participants-btn mx-2" data-id="<?= $event->id ?>">
-                        View Participant
+                    <div class="card-footer d-flex">
+                      <button class="btn btn-primary participate-btn">
+                        <i class="fas fa-share-alt mr-1"></i> Send Form
                       </button>
-                      <button class="btn btn-danger delete-btn mx-2" data-id="<?= $event->id ?>">
-                        Delete
+                      <button class="btn btn-primary participate-btn view-participants-btn" data-id="<?= $event->id ?>">
+                        <i class="fas fa-users mr-1"></i> View Participant
+                      </button>
+                      <button class="btn btn-danger delete-btn" data-id="<?= $event->id ?>">
+                        <i class="fas fa-trash-alt mr-1"></i> Delete
                       </button>
                     </div>
+
+
 
                   </div>
                 </div>
