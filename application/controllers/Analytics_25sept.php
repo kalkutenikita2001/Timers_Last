@@ -43,11 +43,7 @@ class Analytics extends CI_Controller {
             'managers' => $this->Analytics_model->get_managers(),
             'total_participants' => $this->Analytics_model->get_total_participants(),
             'total_event_revenue' => $this->Analytics_model->get_total_event_revenue(),
-            'upcoming_events' => $this->Analytics_model->get_upcoming_events(),
-            'total_attendances' => $this->Analytics_model->get_total_attendances(),
-            'present_count' => $this->Analytics_model->get_present_count(),
-            'absent_count' => $this->Analytics_model->get_absent_count(),
-            'attendance_trend' => $this->Analytics_model->get_attendance_trend()
+            'upcoming_events' => $this->Analytics_model->get_upcoming_events()
         ];
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
@@ -70,7 +66,7 @@ class Analytics extends CI_Controller {
                 break;
             case 'student_fees':
                 $data['records'] = $this->Analytics_model->get_student_fees_details($page, $per_page);
-                $data['total_records'] = $this->Analytics_model->get_total_students();
+                $data['total_records'] = $this->Analytics_model->count_students();
                 break;
             case 'expenses':
                 $data['records'] = $this->Analytics_model->get_expenses_details($page, $per_page);
@@ -78,19 +74,15 @@ class Analytics extends CI_Controller {
                 break;
             case 'students':
                 $data['records'] = $this->Analytics_model->get_students_details($page, $per_page);
-                $data['total_records'] = $this->Analytics_model->get_total_students();
+                $data['total_records'] = $this->Analytics_model->count_students();
                 break;
             case 'staff':
                 $data['records'] = $this->Analytics_model->get_staff_details($page, $per_page);
-                $data['total_records'] = $this->Analytics_model->get_total_staff();
+                $data['total_records'] = $this->Analytics_model->count_staff();
                 break;
             case 'events':
                 $data['records'] = $this->Analytics_model->get_events_details($page, $per_page);
-                $data['total_records'] = $this->Analytics_model->get_total_events();
-                break;
-            case 'attendance':
-                $data['records'] = $this->Analytics_model->get_attendance_details($page, $per_page);
-                $data['total_records'] = $this->Analytics_model->get_total_attendances();
+                $data['total_records'] = $this->Analytics_model->count_events();
                 break;
         }
 
@@ -132,10 +124,6 @@ class Analytics extends CI_Controller {
             case 'events':
                 $header = ['ID', 'Name', 'Date', 'Fee', 'Max Participants', 'Venue'];
                 $data = $this->Analytics_model->get_events_details();
-                break;
-            case 'attendance':
-                $header = ['ID', 'Student ID', 'Date', 'Time', 'Status'];
-                $data = $this->Analytics_model->get_attendance_details();
                 break;
         }
 

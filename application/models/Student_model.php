@@ -18,7 +18,11 @@ class Student_model extends CI_Model
     // fetch single student by id
     public function get_student_by_id($id)
     {
-        $query = $this->db->get_where('students', ['id' => $id]);
+        $this->db->select('students.*, batches.duration, batches.end_date');
+        $this->db->from('students');
+        $this->db->join('batches', 'students.batch_id = batches.id', 'left');
+        $this->db->where('students.id', $id);
+        $query = $this->db->get();
         return $query->row_array();
     }
     public function get_students_by_center($center_id)
@@ -29,7 +33,15 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
+public function add_student($data) {
+    $this->db->insert('student_attendencelink', $data);
+    return $this->db->insert_id();
+}
 
+public function add_student_facility($data)
+{
+    return $this->db->insert('student_facilities', $data);
+}
 
     // count students for a given center_id
     public function count_by_center($center_id)
@@ -139,11 +151,13 @@ class Student_model extends CI_Model
         b.duration,
         b.category,
         b.created_at as batch_created_at,
-        b.updated_at as batch_updated_at
+        b.updated_at as batch_updated_at,
+         st.staff_name as coach_name
     ");
         $this->db->from("students sah");
         $this->db->join("center_details c", "c.id = sah.center_id", "left");
         $this->db->join("batches b", "b.id = sah.batch_id", "left");
+        $this->db->join("staff st", "st.assigned_batch = sah.batch_id", "left"); 
         $this->db->where("sah.id", $id);
 
         $query = $this->db->get();

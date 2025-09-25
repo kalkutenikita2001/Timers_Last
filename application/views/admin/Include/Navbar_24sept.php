@@ -212,102 +212,75 @@
             <button class="btn-close" id="closeNotification"></button>
         </div>
         <hr>
-        <div class="notification-list" id="notificationList">
-            <div class="notification-item text-muted" id="notifEmpty">No notifications</div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <div>
+                    <strong>Admin</strong>
+                    <p>Your interview has been scheduled</p>
+                </div>
+                <span class="time">2hr ago</span>
+            </div>
+            <div class="notification-item">
+                <div>
+                    <strong>HR</strong>
+                    <p>Meeting today at 4 PM</p>
+                </div>
+                <span class="time">1hr ago</span>
+            </div>
         </div>
     </div>
 
 
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Notification dropdown functionality
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationDropdown = document.getElementById('notificationDropdown');
-        const closeNotification = document.getElementById('closeNotification');
-        const notificationList = document.getElementById('notificationList');
-        const notifEmpty = document.getElementById('notifEmpty');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Notification dropdown functionality
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const closeNotification = document.getElementById('closeNotification');
 
-        // API endpoints (adjust if needed)
-        const API_LIST = '<?= base_url("notifications/list_unread") ?>';
+            if (notificationIcon && notificationDropdown && closeNotification) {
+                notificationIcon.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+                });
 
-        function escapeHtml(s) { return (s||'').replace(/[&<>"'`]/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;' }[m])); }
-        function timeAgo(date) {
-            const now = new Date();
-            const then = new Date(date.replace(' ', 'T'));
-            const diff = Math.floor((now - then) / 1000);
-            if (diff < 60) return diff + 's ago';
-            if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-            if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-            return then.toLocaleDateString();
-        }
-
-        function renderNotifications(list) {
-            notificationList.innerHTML = '';
-            if (!list || list.length === 0) {
-                notifEmpty.style.display = '';
-                notificationList.appendChild(notifEmpty);
-                return;
-            }
-            notifEmpty.style.display = 'none';
-            list.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'notification-item';
-                div.innerHTML = `<div><strong>${escapeHtml(item.title||'')}</strong><p>${escapeHtml(item.message||'')}</p></div><span class="time">${timeAgo(item.created_at)}</span>`;
-                notificationList.appendChild(div);
-            });
-        }
-
-        function fetchNotifications() {
-            fetch(API_LIST)
-                .then(res => res.json())
-                .then(list => renderNotifications(list))
-                .catch(() => renderNotifications([]));
-        }
-
-        if (notificationIcon && notificationDropdown && closeNotification) {
-            notificationIcon.addEventListener('click', (event) => {
-                event.stopPropagation();
-                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
-                if (notificationDropdown.style.display === 'block') fetchNotifications();
-            });
-
-            closeNotification.addEventListener('click', () => {
-                notificationDropdown.style.display = 'none';
-            });
-
-            window.addEventListener('click', (event) => {
-                if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                closeNotification.addEventListener('click', () => {
                     notificationDropdown.style.display = 'none';
-                }
-            });
-        }
+                });
 
-        // Sidebar toggle functionality (unchanged)
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const navbar = document.querySelector('.navbar');
-        const contentWrapper = document.getElementById('contentWrapper'); 
+                window.addEventListener('click', (event) => {
+                    if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                        notificationDropdown.style.display = 'none';
+                    }
+                });
+            }
 
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    // Mobile behavior
-                    if (sidebar) {
-                        sidebar.classList.toggle('active');
-                        navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+            // Sidebar toggle functionality
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const contentWrapper = document.getElementById('contentWrapper'); 
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        // Mobile behavior
+                        if (sidebar) {
+                            sidebar.classList.toggle('active');
+                            navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                        }
+                    } else {
+                        // Desktop behavior - minimize/maximize
+                        if (sidebar && contentWrapper) {
+                            const isMinimized = sidebar.classList.toggle('minimized');
+                            navbar.classList.toggle('sidebar-minimized', isMinimized);
+                            contentWrapper.classList.toggle('minimized', isMinimized);
+                        }
                     }
-                } else {
-                    // Desktop behavior - minimize/maximize
-                    if (sidebar && contentWrapper) {
-                        const isMinimized = sidebar.classList.toggle('minimized');
-                        navbar.classList.toggle('sidebar-minimized', isMinimized);
-                        contentWrapper.classList.toggle('minimized', isMinimized);
-                    }
-                }
-            });
-        }
-    });
+                });
+            }
+        });
     </script>
 </body>
 

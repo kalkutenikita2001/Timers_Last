@@ -10,6 +10,7 @@ class Admin extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('Student_model'); // Load the Student_model
+        $this->load->model('Notifications_model');
 
         // ✅ Block access if not logged in
         if (!$this->session->userdata('logged_in')) {
@@ -79,6 +80,7 @@ class Admin extends CI_Controller
     public function add_expense()
     {
         $this->load->model('Expense_model');
+        $this->load->model('Notifications_model');
 
         $data = [
             'center_id' => $this->session->userdata('id'), // only his center
@@ -92,7 +94,23 @@ class Admin extends CI_Controller
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        $this->Expense_model->insert($data);
+        
+         if ($this->Expense_model->insert($data)) {
+            $this->session->set_flashdata('success', 'Expense added successfully!');
+
+            // Debug: Log added_by and notification creation
+            log_message('error', 'Expense added by user_id: ' . print_r($data['added_by'], true));
+            $notif_id = $this->Notifications_model->create_notification([
+                'user_id' => null, // null for superadmin, or set to superadmin's user_id
+                'type'    => 'expense_request',
+                'title'   => 'New Expense Added',
+                'message' => 'A new expense has been added and needs approval.',
+                'item_id' => null
+            ]);
+            log_message('error', 'Notification created for superadmin, notif_id: ' . print_r($notif_id, true));
+        } else {
+            $this->session->set_flashdata('error', 'Failed to add expense. Please try again.');
+        }
 
         redirect('Admin/Expenses'); // ✅ redirect back to Admin expenses page
     }

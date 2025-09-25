@@ -229,7 +229,7 @@ $('#batchTime').text(
         ? `${data.batch_start_time} - ${data.batch_end_time}` 
         : 'N/A'
 );
-$('#AttandanceLink').text(data.attendance_link || 'N/A');
+$('#AttandanceLink').text(data.attendace_link || 'N/A');
                         $('#duration').text(data.duration ? `${data.duration} hours` : 'N/A');
                         $('#joiningDate').text(data.joining_date || 'N/A');
                         $('#courseFees').text(data.course_fees ? `₹${parseFloat(data.course_fees).toLocaleString()}` : '₹0');

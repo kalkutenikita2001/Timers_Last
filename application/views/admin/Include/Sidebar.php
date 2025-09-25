@@ -31,7 +31,7 @@
                     
                         <a class="nav-link <?php echo ($this->uri->segment(2) == 'New_admission') ? 'active' : ''; ?>"
                             href="<?php echo base_url('admin/New_admission'); ?>">
-                            <i class="bi bi-plus-circle"></i><span> New Admissionddd</span>
+                            <i class="bi bi-plus-circle"></i><span> New Admission</span>
                         </a>
 
 
