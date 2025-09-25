@@ -105,10 +105,10 @@ class Center extends CI_Controller {
             return;
         }
 
-        // ✅ Hash Password
-        if (!empty($input['password'])) {
-            $input['password'] = password_hash($input['password'], PASSWORD_BCRYPT);
-        }
+        // // ✅ Hash Password
+        // if (!empty($input['password'])) {
+        //     $input['password'] = password_hash($input['password'], PASSWORD_BCRYPT);
+        // }
 
         $id = $this->Center_model->insertData("center_details", $input);
 

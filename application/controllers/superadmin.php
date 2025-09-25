@@ -260,7 +260,7 @@ class Superadmin extends CI_Controller
 		$data['centers'] = $this->Center_model->get_all_centers();
 
 		$modules = [
-			'center_mgmt' => 'Center Management',
+			// 			'center_mgmt' => 'Center Management',
 			'admission' => 'Admission Management',
 			'students' => 'Students Management',
 			'events' => 'Event Management',
@@ -283,7 +283,7 @@ class Superadmin extends CI_Controller
 		$posted = $this->input->post('permissions') ?? [];
 
 		$modules = [
-			'center_mgmt',
+			// 			'center_mgmt',
 			'admission',
 			'students',
 			'events',
@@ -327,21 +327,21 @@ class Superadmin extends CI_Controller
 			redirect('superadmin/students');
 		}
 
-		
+
 		$data['student_get_current_batch'] = $this->Student_model->get_student_by_id_batch($id);
 
-	
+
 		$data['student_history'] = $this->Student_model->get_student_by_id_history($id);
 
-	
+
 
 		$data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
-		
+
 
 		$data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
-		
 
-		
+
+
 
 		// Load facilities
 		$this->load->model('Facility_model');
@@ -350,14 +350,14 @@ class Superadmin extends CI_Controller
 
 		$data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
 
-	
 
-		
 
-	
-	
+
+
+
+
 		$data['student_attendace'] = $this->Student_model->get_student_attendace($id);
-		
+
 		// print_r($data['student_attendace'] );
 
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Add Expenses</title>
+    <title>Expenses Management</title>
     <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
@@ -163,119 +163,14 @@
             background-color: #dc3545;
             color: white;
         }
-
-        /* 📱 Mobile First Approach */
-
-        /* Extra Small Devices (Phones, <576px) */
-        @media (max-width: 575.98px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 10px;
-            }
-
-            .card,
-            .table {
-                font-size: 0.8rem;
-            }
-
-            .table th,
-            .table td {
-                white-space: nowrap;
-            }
-
-            .modal-dialog {
-                margin: 10px;
-                max-width: 95%;
-            }
-
-            .navbar .navbar-brand {
-                font-size: 1rem;
-            }
-
-            /* Sidebar collapsed on mobile */
-            #sidebar {
-                position: fixed;
-                left: -250px;
-                width: 250px;
-                top: 0;
-                height: 100%;
-                /*background: #470000;*/
-                transition: all 0.3s ease;
-                z-index: 1050;
-            }
-
-            #sidebar.active {
-                left: 0;
-            }
-
-            #contentWrapper {
-                margin-left: 0 !important;
-            }
-
-            /* Overlay when sidebar opens */
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 1049;
-            }
-
-            .overlay.active {
-                display: block;
-            }
-        }
-
-        /* Small Devices (≥576px and <768px) */
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-            }
-        }
-
-        /* Medium Devices (≥768px and <992px) */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            .content-wrapper {
-                margin-left: 200px;
-            }
-
-            #sidebar {
-                width: 200px;
-            }
-        }
-
-        /* Large Devices (≥992px and <1200px) */
-        @media (min-width: 992px) and (max-width: 1199.98px) {
-            .content-wrapper {
-                margin-left: 220px;
-            }
-
-            /* #sidebar {
-                width: 220px;
-            } */
-        }
-
-        /* Extra Large Devices (≥1200px) */
-        @media (min-width: 1200px) {
-            .content-wrapper {
-                margin-left: 250px;
-            }
-
-            /* #sidebar {
-                width: 250px;
-            } */
-        }
     </style>
 </head>
 
 <body>
     <!-- Sidebar -->
-    <?php $this->load->view('admin/Include/Sidebar') ?>
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('admin/Include/Navbar') ?>
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
 
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid">
@@ -287,18 +182,22 @@
 
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between mb-4">
-                        <div class="center-select-container" id="centerSelectContainer">
+                        <!-- <div class="center-select-container" id="centerSelectContainer">
                             <select class="form-control form-control-sm" style="width: 200px;">
-                                <option value="">-- Center Name --</option>
+                                <option value="">-- Select Center --</option>
                                 <?php foreach ($centers as $c): ?>
                                     <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        </div> -->
+                        <div class="mb-3">
+                            <input type="text" id="globalSearch" class="form-control" placeholder="🔍 Search leaves...">
                         </div>
+
                         <div>
-                            <!-- <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
+                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#filterModal">
                                 <i class="fas fa-filter mr-1"></i> Filter
-                            </button> -->
+                            </button>
                             <button class="btn btn-primary" data-toggle="modal" data-target="#expenseModal">
                                 <i class="fas fa-plus mr-1"></i> Add Expense
                             </button>
@@ -318,7 +217,7 @@
                                     <th>Description</th>
                                     <th>Added By</th>
                                     <th>Status</th>
-                                    <!-- <th>Action</th> -->
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -341,16 +240,18 @@
                                                     <span class="badge badge-warning">Pending</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <!-- <td>
-                                                <?php if ($exp->status == 'approved'): ?>
-                                                    <span class="badge badge-success">Approved</span>
-                                                <?php elseif ($exp->status == 'rejected'): ?>
-                                                    <span class="badge badge-danger">Rejected</span>
-                                                <?php else: ?>
-                                                    <span class="badge badge-warning">Pending</span>
-                                                <?php endif; ?>
-                                            </td> -->
+                                            <td>
+                                                <?php if ($exp->status === 'approved'): ?>
+                                                    <button class="action-btn approved" disabled style="color: #28a745;">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </button>
 
+                                                    <!-- <button class="action-btn cross" disabled><i class="fas fa-times"></i></button> -->
+                                                <?php else: ?>
+                                                    <a href="<?= base_url('Expense/approve/' . $exp->id) ?>" class="action-btn thumbs-up approve-btn"><i class="fas fa-check"></i></a>
+                                                    <a href="<?= base_url('Expense/reject/' . $exp->id) ?>" class="action-btn cross reject-btn"><i class="fas fa-times"></i></a>
+                                                <?php endif; ?>
+                                            </td>
 
 
                                         </tr>
@@ -379,13 +280,12 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="<?= base_url('Admin/add_expense') ?>" id="addExpenseForm" novalidate>
-
+                <form method="post" action="<?= base_url('Expense/add') ?>" id="addExpenseForm" novalidate>
                     <div class="modal-body">
                         <div class="row">
-                            <input type="hidden" name="added_by" value="admin">
-
-                            <!-- <div class="form-group col-md-12">
+                            <input type="hidden" name="added_by" value="superadmin">
+                            <input type="hidden" name="status" id="statusField" value="approved"> <!-- ✅ Hardcoded -->
+                            <div class="form-group col-md-12">
                                 <label for="center_id">Select Center</label>
                                 <select name="center_id" class="form-control" required>
                                     <option value="">-- Select Center --</option>
@@ -394,8 +294,7 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">Please select a center.</div>
-                            </div> -->
-                            <input type="hidden" name="center_id" value="<?= $this->session->userdata('id'); ?>">
+                            </div>
 
                             <div class="col-md-6 mb-3">
                                 <label>Title</label>
@@ -471,6 +370,8 @@
                                 <label>Category</label>
                                 <input type="text" name="category" class="form-control">
                             </div>
+                            <input type="hidden" name="status" id="statusField" value="pending">
+
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -623,26 +524,93 @@
             });
         });
         $(document).ready(function() {
-            // Set date input to only allow today's date
-            let today = new Date().toISOString().split('T')[0];
-            $('input[name="date"]').attr('min', today);
-            $('input[name="date"]').attr('max', today);
+        // Set date input to only allow today's date
+        let today = new Date().toISOString().split('T')[0];
+        $('input[name="date"]').attr('min', today);
+        $('input[name="date"]').attr('max', today);
 
-            // Optional: auto-fill today's date
-            $('input[name="date"]').val(today);
+        // Optional: auto-fill today's date
+        $('input[name="date"]').val(today);
+        });
+
+
+        // Sidebar toggle functionality
+        // $('#sidebarToggle').on('click', function() {
+        //     if ($(window).width() <= 576) {
+        //         $('#sidebar').toggleClass('active');
+        //         $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        //     } else {
+        //         const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+        //         $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+        //         $('#contentWrapper').toggleClass('minimized', isMinimized);
+        //     }
+        });
+    </script>
+    <script>
+        $('#addExpenseForm').on('submit', function() {
+            let addedBy = $('input[name="added_by"]').val();
+            if (addedBy === "superadmin") {
+                $('#statusField').val("approved");
+            } else {
+                $('#statusField').val("pending");
+            }
         });
     </script>
     <script>
         $(document).ready(function() {
-            $('table tbody tr').each(function() {
-                let addedBy = $(this).find('td:nth-child(7)').text().trim().toLowerCase();
-                if (addedBy !== 'admin') {
-                    $(this).hide();
+            // Global search for table
+            $("#globalSearch").on("keyup", function() {
+                let value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const contentWrapper = document.getElementById('contentWrapper');
+            const navbar = document.querySelector('.navbar');
+
+            if (!sidebarToggle || !sidebar || !contentWrapper || !navbar) return;
+
+            sidebarToggle.addEventListener('click', () => {
+                const windowWidth = window.innerWidth;
+
+                if (windowWidth <= 768) {
+                    // Mobile: show/hide sidebar overlay
+                    sidebar.classList.toggle('active');
+                    navbar.classList.toggle('sidebar-hidden', !sidebar.classList.contains('active'));
+                } else {
+                    // Desktop: minimize/maximize sidebar
+                    const isMinimized = sidebar.classList.toggle('minimized');
+                    contentWrapper.classList.toggle('minimized', isMinimized);
+                    navbar.classList.toggle('sidebar-minimized', isMinimized);
+                }
+            });
+
+            // Close sidebar when clicking outside (mobile only)
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 &&
+                    !sidebar.contains(e.target) &&
+                    e.target !== sidebarToggle &&
+                    !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.remove('sidebar-hidden');
+                }
+            });
+
+            // Reset sidebar classes on resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                    navbar.classList.remove('sidebar-hidden');
                 }
             });
         });
     </script>
-
 
 </body>
 

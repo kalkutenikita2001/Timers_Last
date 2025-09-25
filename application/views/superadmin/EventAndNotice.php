@@ -7,7 +7,7 @@
   <title> Event Management</title>
 
   <!-- Bootstrap & Font Awesome -->
-       <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -184,6 +184,10 @@
       font-weight: 600;
     }
 
+    .card-footer button {
+      width: 80% !important;
+    }
+
     /* Mobile Responsive */
     @media (max-width: 768px) {
       .sidebar {
@@ -197,6 +201,7 @@
       .navbar {
         left: 0;
       }
+
 
       .content-wrapper {
         margin-left: 0;
@@ -232,6 +237,15 @@
     .card-footer {
       background: white;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+    }
+
+
+    .event .card-footer button {
+      font-size: 10px;
+      padding: 5px !important;
+      width: 80px;
+      height: 40px;
     }
 
     /* Ensure columns stretch evenly */
@@ -315,7 +329,7 @@
   <?php $this->load->view('superadmin/Include/Navbar') ?>
 
   <!-- Main Content Wrapper -->
-  <div class="content-wrapper" id="contentWrapper">
+  <div class="event content-wrapper" id="contentWrapper">
     <div class="content">
       <div class="container-fluid">
         <div class="container">
@@ -742,7 +756,7 @@
 
 
       // Sidebar toggle functionality
-      $('#sidebarToggle').on('click', function () {
+      $('#sidebarToggle').on('click', function() {
         if ($(window).width() <= 576) {
           $('#sidebar').toggleClass('active');
           $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
@@ -751,7 +765,7 @@
           $('.navbar').toggleClass('sidebar-minimized', isMinimized);
           $('#contentWrapper').toggleClass('minimized', isMinimized);
         }
-      });      
+      });
     </script>
 </body>
 

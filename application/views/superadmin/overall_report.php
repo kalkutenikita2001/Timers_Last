@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Badminton Academy</title>
     <!-- Favicon -->
     <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.jpg'); ?>">
@@ -20,17 +19,28 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/analytics.css'); ?>">
     <style>
+        /* Base Styles */
+        html { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: inherit; }
         body {
             font-family: 'Montserrat', sans-serif !important;
             background-color: #f4f6f8;
+            margin: 0;
             padding-top: 60px;
-            /* Space for fixed navbar */
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container-responsive {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
 
         .content-wrapper {
             margin-left: 250px;
-            padding: 20px;
-            transition: margin-left 0.3s;
+            padding: 15px;
+            transition: margin-left 0.3s ease;
         }
 
         .content-wrapper.minimized {
@@ -40,12 +50,17 @@
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            width: 100%;
+            min-height: 400px;
         }
 
         .card-header {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
             color: white;
-            border-radius: 10px 10px 0 0 !important;
+            border-radius: 10px 10px 0 0;
+            padding: 15px 20px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
         }
 
         .btn-primary,
@@ -74,6 +89,18 @@
         .overview-card {
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .kpi-card:hover,
+        .overview-card:hover {
+            transform: translateY(-2px);
         }
 
         .kpi-card__trend.positive {
@@ -84,7 +111,29 @@
             color: #dc3545;
         }
 
-        /* Updated Table Styling */
+        .kpi-card__content,
+        .overview-card__content {
+            flex: 1;
+        }
+
+        .kpi-card__title,
+        .overview-card__title {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            margin-bottom: 10px;
+        }
+
+        .kpi-card__value,
+        .overview-card__value {
+            font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+            font-weight: 600;
+        }
+
+        /* Table Styling */
+        .data-table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
         .data-table {
             width: 100%;
             border-collapse: separate;
@@ -96,17 +145,17 @@
 
         .data-table th {
             background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: white !important;
-            padding: 12px 15px;
+            color: white;
+            padding: 15px 20px;
             text-align: left;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
             border-bottom: 2px solid #dee2e6;
         }
 
         .data-table td {
-            padding: 12px 15px;
-            font-size: 0.85rem;
+            padding: 15px 20px;
+            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
             border-bottom: 1px solid #dee2e6;
             text-align: left;
         }
@@ -115,316 +164,333 @@
             background-color: #f8f9fa;
         }
 
-        /* Ensure consistent column widths */
-        .data-table th,
-        .data-table td {
-            min-width: 100px;
-            /* Minimum width for columns */
-            max-width: 200px;
-            /* Maximum width to prevent overflow */
-            white-space: normal;
-            /* Allow text wrapping for long content */
-            word-wrap: break-word;
+        /* Grid Layouts */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
-        /* Specific column width adjustments for each table */
-        #facilityRevenueDetailsTables th:nth-child(1),
-        #facilityRevenueDetailsTables td:nth-child(1) {
-            width: 10%;
+        .revenue-overview-grid,
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
-        /* Facility ID */
-        #facilityRevenueDetailsTables th:nth-child(2),
-        #facilityRevenueDetailsTables td:nth-child(2) {
-            width: 10%;
+        /* Chart Containers */
+        .chart-container {
+            width: 100%;
+            height: clamp(300px, 50vw, 450px);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Center ID */
-        #facilityRevenueDetailsTables th:nth-child(3),
-        #facilityRevenueDetailsTables td:nth-child(3) {
-            width: 20%;
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        /* Name */
-        #facilityRevenueDetailsTables th:nth-child(4),
-        #facilityRevenueDetailsTables td:nth-child(4) {
-            width: 20%;
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        /* Subtype */
-        #facilityRevenueDetailsTables th:nth-child(5),
-        #facilityRevenueDetailsTables td:nth-child(5) {
-            width: 20%;
+        .header__search input {
+            width: 100%;
+            max-width: 300px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
         }
 
-        /* Rent Amount */
-        #facilityRevenueDetailsTables th:nth-child(6),
-        #facilityRevenueDetailsTables td:nth-child(6) {
-            width: 20%;
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
         }
-
-        /* Rent Date */
-
-        #eventRevenueDetailsTables th:nth-child(1),
-        #eventRevenueDetailsTables td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* Event ID */
-        #eventRevenueDetailsTables th:nth-child(2),
-        #eventRevenueDetailsTables td:nth-child(2) {
-            width: 20%;
-        }
-
-        /* Name */
-        #eventRevenueDetailsTables th:nth-child(3),
-        #eventRevenueDetailsTables td:nth-child(3) {
-            width: 15%;
-        }
-
-        /* Date */
-        #eventRevenueDetailsTables th:nth-child(4),
-        #eventRevenueDetailsTables td:nth-child(4) {
-            width: 15%;
-        }
-
-        /* Fee */
-        #eventRevenueDetailsTables th:nth-child(5),
-        #eventRevenueDetailsTables td:nth-child(5) {
-            width: 15%;
-        }
-
-        /* Participants */
-        #eventRevenueDetailsTables th:nth-child(6),
-        #eventRevenueDetailsTables td:nth-child(6) {
-            width: 25%;
-        }
-
-        /* Total Revenue */
-
-        #studentFeeDetailsTables th:nth-child(1),
-        #studentFeeDetailsTables td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* Student ID */
-        #studentFeeDetailsTables th:nth-child(2),
-        #studentFeeDetailsTables td:nth-child(2) {
-            width: 25%;
-        }
-
-        /* Name */
-        #studentFeeDetailsTables th:nth-child(3),
-        #studentFeeDetailsTables td:nth-child(3) {
-            width: 15%;
-        }
-
-        /* Center ID */
-        #studentFeeDetailsTables th:nth-child(4),
-        #studentFeeDetailsTables td:nth-child(4) {
-            width: 15%;
-        }
-
-        /* Batch ID */
-        #studentFeeDetailsTables th:nth-child(5),
-        #studentFeeDetailsTables td:nth-child(5) {
-            width: 15%;
-        }
-
-        /* Paid Amount */
-        #studentFeeDetailsTables th:nth-child(6),
-        #studentFeeDetailsTables td:nth-child(6) {
-            width: 20%;
-        }
-
-        /* Remaining Amount */
-
-        #expensesTable1 th:nth-child(1),
-        #expensesTable1 td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* ID */
-        #expensesTable1 th:nth-child(2),
-        #expensesTable1 td:nth-child(2) {
-            width: 15%;
-        }
-
-        /* Center ID */
-        #expensesTable1 th:nth-child(3),
-        #expensesTable1 td:nth-child(3) {
-            width: 25%;
-        }
-
-        /* Title */
-        #expensesTable1 th:nth-child(4),
-        #expensesTable1 td:nth-child(4) {
-            width: 15%;
-        }
-
-        /* Date */
-        #expensesTable1 th:nth-child(5),
-        #expensesTable1 td:nth-child(5) {
-            width: 15%;
-        }
-
-        /* Amount */
-        #expensesTable1 th:nth-child(6),
-        #expensesTable1 td:nth-child(6) {
-            width: 20%;
-        }
-
-        /* Status */
-
-        #studentsTables th:nth-child(1),
-        #studentsTables td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* ID */
-        #studentsTables th:nth-child(2),
-        #studentsTables td:nth-child(2) {
-            width: 25%;
-        }
-
-        /* Name */
-        #studentsTables th:nth-child(3),
-        #studentsTables td:nth-child(3) {
-            width: 15%;
-        }
-
-        /* Center */
-        #studentsTables th:nth-child(4),
-        #studentsTables td:nth-child(4) {
-            width: 15%;
-        }
-
-        /* Batch */
-        #studentsTables th:nth-child(5),
-        #studentsTables td:nth-child(5) {
-            width: 15%;
-        }
-
-        /* Level */
-        #studentsTables th:nth-child(6),
-        #studentsTables td:nth-child(6) {
-            width: 20%;
-        }
-
-        /* Status */
-
-        #staffTables th:nth-child(1),
-        #staffTables td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* ID */
-        #staffTables th:nth-child(2),
-        #staffTables td:nth-child(2) {
-            width: 25%;
-        }
-
-        /* Name */
-        #staffTables th:nth-child(3),
-        #staffTables td:nth-child(3) {
-            width: 15%;
-        }
-
-        /* Center ID */
-        #staffTables th:nth-child(4),
-        #staffTables td:nth-child(4) {
-            width: 20%;
-        }
-
-        /* Role */
-        #staffTables th:nth-child(5),
-        #staffTables td:nth-child(5) {
-            width: 30%;
-        }
-
-        /* Joining Date */
-
-        #eventsTables th:nth-child(1),
-        #eventsTables td:nth-child(1) {
-            width: 10%;
-        }
-
-        /* ID */
-        #eventsTables th:nth-child(2),
-        #eventsTables td:nth-child(2) {
-            width: 20%;
-        }
-
-        /* Name */
-        #eventsTables th:nth-child(3),
-        #eventsTables td:nth-child(3) {
-            width: 15%;
-        }
-
-        /* Date */
-        #eventsTables th:nth-child(4),
-        #eventsTables td:nth-child(4) {
-            width: 15%;
-        }
-
-        /* Fee */
-        #eventsTables th:nth-child(5),
-        #eventsTables td:nth-child(5) {
-            width: 15%;
-        }
-
-        /* Max Participants */
-        #eventsTables th:nth-child(6),
-        #eventsTables td:nth-child(6) {
-            width: 25%;
-        }
-
-        /* Venue */
 
         .pagination-container .btn {
-            margin: 0 5px;
+            padding: 8px 15px;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 767px) {
+        /* Error Message for Charts */
+        .chart-error {
+            display: none;
+            text-align: center;
+            color: #dc3545;
+            padding: 15px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .kpi-grid,
+            .revenue-overview-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .chart-container {
+                height: clamp(250px, 45vw, 400px);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .content-wrapper {
+                margin-left: 60px;
+            }
+
+            .content-wrapper.minimized {
+                margin-left: 60px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: clamp(250px, 40vw, 350px);
+            }
+        }
+
+        @media (max-width: 768px) {
             .content-wrapper {
                 margin-left: 0 !important;
                 padding: 10px;
             }
 
             .kpi-grid,
-            .revenue-overview-grid,
+            .revenue-overview-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
             .charts-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: 1fr;
+                gap: 20px; /* Gap between graphs on mobile */
             }
 
             .chart-container {
-                height: auto !important;
+                height: clamp(300px, 100vw, 500px); /* Increased height for full graph on mobile */
+                overflow: visible;
+                padding: 15px;
+                margin-bottom: 20px; /* Gap after each graph card */
+            }
+
+            .chart-container canvas {
+                max-height: 100%;
+                max-width: 100%;
+            }
+
+            .card {
+                min-height: auto;
+            }
+
+            .card-header {
+                padding: 12px 15px;
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
+            }
+
+            .kpi-card,
+            .overview-card {
+                padding: 15px;
+                min-height: 120px;
+            }
+
+            .kpi-card__value,
+            .overview-card__value {
+                font-size: clamp(1rem, 3vw, 1.2rem);
+            }
+
+            .kpi-card__title,
+            .overview-card__title {
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
             }
 
             .data-table th,
             .data-table td {
-                font-size: 0.75rem;
-                padding: 8px 10px;
-                min-width: 80px;
-                max-width: 150px;
+                font-size: clamp(0.75rem, 2vw, 0.85rem);
+                padding: 10px 12px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .header__search input,
+            .section-actions {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .section-actions {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .pagination-container .btn {
+                padding: 6px 12px;
+                font-size: clamp(0.7rem, 2vw, 0.8rem);
             }
         }
 
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        @media (max-width: 576px) {
+            .chart-container {
+                height: clamp(250px, 100vw, 400px); /* Adjusted for smaller mobile screens */
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+
+            .card {
+                min-height: 250px;
+                margin-bottom: 20px;
+            }
+
+            .card-header {
+                padding: 10px 12px;
+                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            }
+
+            .kpi-card,
+            .overview-card {
+                padding: 12px;
+                min-height: 100px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .kpi-card__icon,
+            .overview-card__icon {
+                margin-bottom: 10px;
+                font-size: 1.5rem;
+            }
+
+            .kpi-card__value,
+            .overview-card__value {
+                font-size: clamp(0.9rem, 3vw, 1rem);
+            }
+
+            .kpi-card__title,
+            .overview-card__title {
+                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            }
+
+            .data-table {
+                border: 0;
+                display: block;
+            }
+
+            .data-table thead {
+                display: none;
+            }
+
+            .data-table tbody,
+            .data-table tr,
+            .data-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .data-table tr {
+                margin-bottom: 15px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            }
+
+            .data-table td {
+                padding: 10px 12px;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            }
+
+            .data-table td:last-child {
+                border-bottom: 0;
+            }
+
+            .data-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-weight: 600;
+                color: #555;
+                margin-bottom: 5px;
+                font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            }
+
+            .pagination-container {
+                gap: 8px;
+                margin-top: 15px;
+            }
+
+            .pagination-container .btn {
+                padding: 5px 10px;
+                font-size: clamp(0.65rem, 2vw, 0.75rem);
+            }
         }
 
-        .revenue-overview-grid,
-        .charts-grid {
+        /* Fix for Two Charts in a Single Row */
+        .card-body[style*="grid-template-columns"] {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px;
         }
 
+        .card-body[style*="grid-template-columns"] > div {
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 15px;
+        }
+
+        .card-body[style*="grid-template-columns"] > div .card-header {
+            background: none !important;
+            color: #333;
+            padding: 0 0 15px 0 !important;
+            border-bottom: 1px solid #eee;
+            border-radius: 0 !important;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        @media (max-width: 992px) {
+            .card-body[style*="grid-template-columns"] {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-body[style*="grid-template-columns"] {
+                gap: 15px;
+                padding: 10px;
+            }
+
+            .card-body[style*="grid-template-columns"] > div {
+                padding: 10px;
+            }
+
+            .card-body[style*="grid-template-columns"] > div .card-header {
+                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            }
+        }
+
+        /* Dashboard Section Visibility */
         .dashboard-section {
             display: none;
         }
@@ -432,20 +498,20 @@
         .dashboard-section.active {
             display: block;
         }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header__search input {
-            width: 200px;
-        }
+        @media (min-width: 992px) {
+    .charts-grid {
+        grid-template-columns: repeat(3, 1fr); /* Force 3 charts per row on desktop */
+    }
+}
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
     </style>
 </head>
-
 <body>
     <!-- Sidebar -->
     <?php $this->load->view('superadmin/Include/Sidebar') ?>
@@ -453,8 +519,8 @@
     <?php $this->load->view('superadmin/Include/Navbar') ?>
 
     <div class="content-wrapper" id="contentWrapper">
-        <div class="container-fluid">
-            <h3 class="text-center mb-4">Analytics And Reports </h3>
+        <div class="container-responsive">
+            <h3 class="text-center mb-4" style="font-size: clamp(1.5rem, 4vw, 1.8rem);">Analytics And Reports</h3>
 
             <!-- Dashboard Overview Section -->
             <section id="dashboard" class="dashboard-section active">
@@ -464,7 +530,7 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Dashboard Overview</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Dashboard Overview</h2>
                             <div class="header__search">
                                 <input type="text" id="globalSearch" class="form-control" placeholder="Global search...">
                             </div>
@@ -476,7 +542,7 @@
                                 <div class="kpi-card__icon">💰</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Revenue</h4>
-                                    <!-- <p class="kpi-card__value" id="kpi-total-revenue">₹17500</p> -->
+                                    <p class="kpi-card__value" id="kpi-total-revenue"></p>
                                     <span class="kpi-card__trend positive">↗ +12.5%</span>
                                 </div>
                             </div>
@@ -484,7 +550,7 @@
                                 <div class="kpi-card__icon">💸</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Expenses</h4>
-                                    <p class="kpi-card__value" id="kpi-total-expenses">₹12000</p>
+                                    <p class="kpi-card__value" id="kpi-total-expenses"></p>
                                     <span class="kpi-card__trend negative">↘ -2.3%</span>
                                 </div>
                             </div>
@@ -492,15 +558,15 @@
                                 <div class="kpi-card__icon">👥</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Students</h4>
-                                    <p class="kpi-card__value" id="kpi-total-students">11</p>
+                                    <p class="kpi-card__value" id="kpi-total-students"></p>
                                     <span class="kpi-card__trend positive">↗ +8.2%</span>
                                 </div>
                             </div>
-                            <div class="kpi-card" data-color="purple" data-navigate="active-students">
+                            <div class="kpi-card" data-color="purple" data-navigate="total-students">
                                 <div class="kpi-card__icon">✅</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Active Students</h4>
-                                    <p class="kpi-card__value" id="kpi-active-students">4</p>
+                                    <p class="kpi-card__value" id="kpi-active-students"></p>
                                     <span class="kpi-card__trend positive">↗ +5.1%</span>
                                 </div>
                             </div>
@@ -508,7 +574,7 @@
                                 <div class="kpi-card__icon">📅</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Batches</h4>
-                                    <p class="kpi-card__value" id="kpi-total-batches">4</p>
+                                    <p class="kpi-card__value" id="kpi-total-batches"></p>
                                     <span class="kpi-card__trend positive">↗ +15.7%</span>
                                 </div>
                             </div>
@@ -516,7 +582,7 @@
                                 <div class="kpi-card__icon">🏢</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Centers</h4>
-                                    <p class="kpi-card__value" id="kpi-total-centers">10</p>
+                                    <p class="kpi-card__value" id="kpi-total-centers"></p>
                                     <span class="kpi-card__trend positive">↗ +18.9%</span>
                                 </div>
                             </div>
@@ -524,7 +590,7 @@
                                 <div class="kpi-card__icon">🧑‍🏫</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Staff</h4>
-                                    <p class="kpi-card__value" id="kpi-total-staff">5</p>
+                                    <p class="kpi-card__value" id="kpi-total-staff"></p>
                                     <span class="kpi-card__trend positive">↗ +3</span>
                                 </div>
                             </div>
@@ -532,7 +598,15 @@
                                 <div class="kpi-card__icon">🎉</div>
                                 <div class="kpi-card__content">
                                     <h4 class="kpi-card__title">Total Events</h4>
-                                    <p class="kpi-card__value" id="kpi-total-events">8</p>
+                                    <p class="kpi-card__value" id="kpi-total-events"></p>
+                                </div>
+                            </div>
+                            <div class="kpi-card" data-color="indigo" data-navigate="attendance">
+                                <div class="kpi-card__icon">📊</div>
+                                <div class="kpi-card__content">
+                                    <h4 class="kpi-card__title">Total Attendances</h4>
+                                    <p class="kpi-card__value" id="kpi-total-attendances"></p>
+                                    <span class="kpi-card__trend positive">↗ +10%</span>
                                 </div>
                             </div>
                         </div>
@@ -544,8 +618,9 @@
                                     <div class="card-header">
                                         <h4>Monthly Revenue Trend</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 300px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="revenueMonthlyChart"></canvas>
+                                        <div class="chart-error" id="revenueMonthlyChartError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -554,8 +629,9 @@
                                     <div class="card-header">
                                         <h4>Student Distribution by Level</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 300px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="studentLevelDistributionChart"></canvas>
+                                        <div class="chart-error" id="studentLevelDistributionChartError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -564,28 +640,31 @@
                                     <div class="card-header">
                                         <h4>Revenue vs Expense (Month Wise)</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 300px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="revenueVsExpenseChart2"></canvas>
+                                        <div class="chart-error" id="revenueVsExpenseChart2Error">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="chart-container">
-                                <div class="card" style="display: flex; flex-direction: row; gap: 24px; align-items: stretch;">
-                                    <div style="flex: 1; display: flex; flex-direction: column;">
-                                        <div class="card-header">
-                                            <h4>Batch Distribution by Level</h4>
-                                        </div>
-                                        <div class="card-body" style="position: relative; height: 300px;">
-                                            <canvas id="batchLevelChart"></canvas>
-                                        </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Batch Distribution by Level</h4>
                                     </div>
-                                    <div style="flex: 1; display: flex; flex-direction: column;">
-                                        <div class="card-header">
-                                            <h4>Staff Distribution by Role</h4>
-                                        </div>
-                                        <div class="card-body" style="position: relative; height: 300px;">
-                                            <canvas id="staffRoleChart"></canvas>
-                                        </div>
+                                    <div class="card-body" style="position: relative;">
+                                        <canvas id="batchLevelChart"></canvas>
+                                        <div class="chart-error" id="batchLevelChartError">Failed to load chart data</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Staff Distribution by Role</h4>
+                                    </div>
+                                    <div class="card-body" style="position: relative;">
+                                        <canvas id="staffRoleChart"></canvas>
+                                        <div class="chart-error" id="staffRoleChartError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -602,10 +681,9 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Total Revenue Analytics</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Total Revenue Analytics</h2>
                             <div class="section-actions">
                                 <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
-                                <button class="btn btn--primary" id="exportRevenueCSV">Export CSV</button>
                             </div>
                         </div>
 
@@ -615,7 +693,7 @@
                                 <div class="overview-card__icon">💰</div>
                                 <div class="overview-card__content">
                                     <h4>Total Revenue</h4>
-                                    <p class="overview-card__value">₹17500</p>
+                                    <p class="overview-card__value" id="revenue-total-revenue"></p>
                                     <span class="kpi-card__trend positive">↗ +12.5%</span>
                                 </div>
                             </div>
@@ -623,7 +701,7 @@
                                 <div class="overview-card__icon">💳</div>
                                 <div class="overview-card__content">
                                     <h4>Outstanding Fees</h4>
-                                    <p class="overview-card__value">₹72100</p>
+                                    <p class="overview-card__value" id="revenue-outstanding-fees"></p>
                                     <span class="kpi-card__trend positive">↗ +17.8%</span>
                                 </div>
                             </div>
@@ -631,7 +709,7 @@
                                 <div class="overview-card__icon">📈</div>
                                 <div class="overview-card__content">
                                     <h4>Fees from Events</h4>
-                                    <p class="overview-card__value">₹950</p>
+                                    <p class="overview-card__value" id="revenue-event-fees"></p>
                                     <span class="kpi-card__trend positive">↗ +8.9%</span>
                                 </div>
                             </div>
@@ -639,7 +717,7 @@
                                 <div class="overview-card__icon">🏓</div>
                                 <div class="overview-card__content">
                                     <h4>Facility Rental Revenue</h4>
-                                    <p class="overview-card__value">₹13675</p>
+                                    <p class="overview-card__value" id="revenue-facility-revenue"></p>
                                     <span class="kpi-card__trend positive">↗ +12.4%</span>
                                 </div>
                             </div>
@@ -652,8 +730,9 @@
                                     <div class="card-header">
                                         <h4>Monthly Revenue Trends</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="revenueMonthlyChartUnder"></canvas>
+                                        <div class="chart-error" id="revenueMonthlyChartUnderError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -662,8 +741,9 @@
                                     <div class="card-header">
                                         <h4>Revenue Distribution</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="revenueDistributionChart"></canvas>
+                                        <div class="chart-error" id="revenueDistributionChartError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -674,21 +754,23 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Facility Revenue Details</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=facility_revenue') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="facilityRevenueDetailsTables">
                                         <thead>
                                             <tr>
-                                                <th>Facility ID</th>
-                                                <th>Center ID</th>
-                                                <th>Name</th>
-                                                <th>Subtype</th>
-                                                <th>Rent Amount</th>
-                                                <th>Rent Date</th>
+                                                <th data-label="Facility ID">Facility ID</th>
+                                                <th data-label="Center ID">Center ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Subtype">Subtype</th>
+                                                <th data-label="Rent Amount">Rent Amount</th>
+                                                <th data-label="Rent Date">Rent Date</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="facilityPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -698,21 +780,23 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Event Revenue Details</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=event_revenue') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="eventRevenueDetailsTables">
                                         <thead>
                                             <tr>
-                                                <th>Event ID</th>
-                                                <th>Name</th>
-                                                <th>Date</th>
-                                                <th>Fee</th>
-                                                <th>Participants</th>
-                                                <th>Total Revenue</th>
+                                                <th data-label="Event ID">Event ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Date">Date</th>
+                                                <th data-label="Fee">Fee</th>
+                                                <th data-label="Participants">Participants</th>
+                                                <th data-label="Total Revenue">Total Revenue</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="eventPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -722,21 +806,23 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Student Fee Details</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=student_fees') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="studentFeeDetailsTables">
                                         <thead>
                                             <tr>
-                                                <th>Student ID</th>
-                                                <th>Name</th>
-                                                <th>Center ID</th>
-                                                <th>Batch ID</th>
-                                                <th>Paid Amount</th>
-                                                <th>Remaining Amount</th>
+                                                <th data-label="Student ID">Student ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Center ID">Center ID</th>
+                                                <th data-label="Batch ID">Batch ID</th>
+                                                <th data-label="Paid Amount">Paid Amount</th>
+                                                <th data-label="Remaining Amount">Remaining Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="studentFeePagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -752,10 +838,9 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Total Expenses Analytics</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Total Expenses Analytics</h2>
                             <div class="section-actions">
                                 <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
-                                <button class="btn btn--primary" id="exportExpensesCSV">Export CSV</button>
                             </div>
                         </div>
 
@@ -765,7 +850,7 @@
                                 <div class="overview-card__icon">💸</div>
                                 <div class="overview-card__content">
                                     <h4>Total Expenses</h4>
-                                    <p class="overview-card__value">₹12000</p>
+                                    <p class="overview-card__value" id="expenses-total-expenses"></p>
                                     <span class="kpi-card__trend negative">↘ -2.3%</span>
                                 </div>
                             </div>
@@ -773,7 +858,7 @@
                                 <div class="overview-card__icon">🏢</div>
                                 <div class="overview-card__content">
                                     <h4>Center Expenses</h4>
-                                    <p class="overview-card__value">₹12000</p>
+                                    <p class="overview-card__value" id="expenses-center-expenses"></p>
                                     <span class="kpi-card__trend positive">↗ +5.2%</span>
                                 </div>
                             </div>
@@ -802,8 +887,9 @@
                                     <div class="card-header">
                                         <h4>Expense Categories</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="expenseCategoriesChart2"></canvas>
+                                        <div class="chart-error" id="expenseCategoriesChart2Error">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -812,8 +898,9 @@
                                     <div class="card-header">
                                         <h4>Monthly Expense Trend</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="expenseTrendChart2"></canvas>
+                                        <div class="chart-error" id="expenseTrendChart2Error">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -824,21 +911,23 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Expenses Details</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=expenses') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="expensesTable1">
                                         <thead>
                                             <tr>
-                                                <th data-sort="id">ID</th>
-                                                <th data-sort="center">Center ID</th>
-                                                <th data-sort="title">Title</th>
-                                                <th data-sort="date">Date</th>
-                                                <th data-sort="amount">Amount</th>
-                                                <th data-sort="status">Status</th>
+                                                <th data-label="ID">ID</th>
+                                                <th data-label="Center">Center ID</th>
+                                                <th data-label="Title">Title</th>
+                                                <th data-label="Date">Date</th>
+                                                <th data-label="Amount">Amount</th>
+                                                <th data-label="Status">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="expensesPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -854,10 +943,9 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Students Analytics</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Students Analytics</h2>
                             <div class="section-actions">
                                 <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
-                                <button class="btn btn--primary" id="exportStudentsCSV">Export CSV</button>
                             </div>
                         </div>
 
@@ -867,7 +955,7 @@
                                 <div class="overview-card__icon">👥</div>
                                 <div class="overview-card__content">
                                     <h4>Total Students</h4>
-                                    <p class="overview-card__value">11</p>
+                                    <p class="overview-card__value" id="students-total-students"></p>
                                     <span class="kpi-card__trend positive">↗ +8.2%</span>
                                 </div>
                             </div>
@@ -875,7 +963,7 @@
                                 <div class="overview-card__icon">✅</div>
                                 <div class="overview-card__content">
                                     <h4>Active Students</h4>
-                                    <p class="overview-card__value">4</p>
+                                    <p class="overview-card__value" id="students-active-students"></p>
                                     <span class="kpi-card__trend negative">↘ -12%</span>
                                 </div>
                             </div>
@@ -883,7 +971,7 @@
                                 <div class="overview-card__icon">📈</div>
                                 <div class="overview-card__content">
                                     <h4>Beginner Students</h4>
-                                    <p class="overview-card__value">10</p>
+                                    <p class="overview-card__value" id="students-beginner-students"></p>
                                     <span class="kpi-card__trend positive">↗ +10.5%</span>
                                 </div>
                             </div>
@@ -891,7 +979,7 @@
                                 <div class="overview-card__icon">📊</div>
                                 <div class="overview-card__content">
                                     <h4>Intermediate Students</h4>
-                                    <p class="overview-card__value">1</p>
+                                    <p class="overview-card__value" id="students-intermediate-students"></p>
                                     <span class="kpi-card__trend negative">↘ -5.2%</span>
                                 </div>
                             </div>
@@ -904,8 +992,9 @@
                                     <div class="card-header">
                                         <h4>Students by Level</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="studentsLevelChart2"></canvas>
+                                        <div class="chart-error" id="studentsLevelChart2Error">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -914,8 +1003,9 @@
                                     <div class="card-header">
                                         <h4>Attendance Trend</h4>
                                     </div>
-                                    <div class="card-body" style="position: relative; height: 350px;">
+                                    <div class="card-body" style="position: relative;">
                                         <canvas id="attendanceTrendChart"></canvas>
+                                        <div class="chart-error" id="attendanceTrendChartError">Failed to load chart data</div>
                                     </div>
                                 </div>
                             </div>
@@ -926,21 +1016,23 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Student List</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=students') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="studentsTables">
                                         <thead>
                                             <tr>
-                                                <th data-sort="id">ID</th>
-                                                <th data-sort="name">Name</th>
-                                                <th data-sort="center">Center</th>
-                                                <th data-sort="batch">Batch</th>
-                                                <th data-sort="level">Level</th>
-                                                <th data-sort="status">Status</th>
+                                                <th data-label="ID">ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Center">Center</th>
+                                                <th data-label="Batch">Batch</th>
+                                                <th data-label="Level">Level</th>
+                                                <th data-label="Status">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="studentsPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -956,10 +1048,9 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Staff Analytics</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Staff Analytics</h2>
                             <div class="section-actions">
                                 <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
-                                <button class="btn btn--primary" id="exportStaffCSV">Export CSV</button>
                             </div>
                         </div>
 
@@ -969,7 +1060,7 @@
                                 <div class="overview-card__icon">🧑‍🏫</div>
                                 <div class="overview-card__content">
                                     <h4>Total Staff</h4>
-                                    <p class="overview-card__value">5</p>
+                                    <p class="overview-card__value" id="staff-total-staff"></p>
                                     <span class="kpi-card__trend positive">↗ +5.1%</span>
                                 </div>
                             </div>
@@ -977,7 +1068,7 @@
                                 <div class="overview-card__icon">👨‍💼</div>
                                 <div class="overview-card__content">
                                     <h4>Admins</h4>
-                                    <p class="overview-card__value">3</p>
+                                    <p class="overview-card__value" id="staff-admins"></p>
                                     <span class="kpi-card__trend negative">↘ -8%</span>
                                 </div>
                             </div>
@@ -985,7 +1076,7 @@
                                 <div class="overview-card__icon">🧑‍🏫</div>
                                 <div class="overview-card__content">
                                     <h4>Coaches</h4>
-                                    <p class="overview-card__value">1</p>
+                                    <p class="overview-card__value" id="staff-coaches"></p>
                                     <span class="kpi-card__trend positive">↗ +12%</span>
                                 </div>
                             </div>
@@ -993,7 +1084,7 @@
                                 <div class="overview-card__icon">👩‍💼</div>
                                 <div class="overview-card__content">
                                     <h4>Managers</h4>
-                                    <p class="overview-card__value">1</p>
+                                    <p class="overview-card__value" id="staff-managers"></p>
                                     <span class="kpi-card__trend positive">↗ +18%</span>
                                 </div>
                             </div>
@@ -1004,20 +1095,22 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Staff List</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=staff') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="staffTables">
                                         <thead>
                                             <tr>
-                                                <th data-sort="id">ID</th>
-                                                <th data-sort="name">Name</th>
-                                                <th data-sort="center">Center ID</th>
-                                                <th data-sort="role">Role</th>
-                                                <th data-sort="joining">Joining Date</th>
+                                                <th data-label="ID">ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Center">Center ID</th>
+                                                <th data-label="Role">Role</th>
+                                                <th data-label="Joining Date">Joining Date</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="staffPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -1033,10 +1126,9 @@
                     </div>
                     <div class="card-body">
                         <div class="section-header">
-                            <h2>Events Analytics</h2>
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Events Analytics</h2>
                             <div class="section-actions">
                                 <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
-                                <button class="btn btn--primary" id="exportEventsCSV">Export CSV</button>
                             </div>
                         </div>
 
@@ -1046,7 +1138,7 @@
                                 <div class="overview-card__icon">🎉</div>
                                 <div class="overview-card__content">
                                     <h4>Total Events</h4>
-                                    <p class="overview-card__value">8</p>
+                                    <p class="overview-card__value" id="events-total-events"></p>
                                     <span class="kpi-card__trend positive">↗ +8.2%</span>
                                 </div>
                             </div>
@@ -1054,7 +1146,7 @@
                                 <div class="overview-card__icon">👥</div>
                                 <div class="overview-card__content">
                                     <h4>Total Participants</h4>
-                                    <p class="overview-card__value">8</p>
+                                    <p class="overview-card__value" id="events-total-participants"></p>
                                     <span class="kpi-card__trend negative">↘ -12%</span>
                                 </div>
                             </div>
@@ -1062,7 +1154,7 @@
                                 <div class="overview-card__icon">💰</div>
                                 <div class="overview-card__content">
                                     <h4>Total Event Revenue</h4>
-                                    <p class="overview-card__value">₹950</p>
+                                    <p class="overview-card__value" id="events-total-event-revenue"></p>
                                     <span class="kpi-card__trend positive">↗ +10.5%</span>
                                 </div>
                             </div>
@@ -1070,7 +1162,7 @@
                                 <div class="overview-card__icon">📅</div>
                                 <div class="overview-card__content">
                                     <h4>Upcoming Events</h4>
-                                    <p class="overview-card__value">2</p>
+                                    <p class="overview-card__value" id="events-upcoming-events"></p>
                                     <span class="kpi-card__trend negative">↘ -5.2%</span>
                                 </div>
                             </div>
@@ -1081,21 +1173,127 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Event List</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=events') ?>" class="btn btn--primary btn-sm">Export CSV</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="data-table" id="eventsTables">
                                         <thead>
                                             <tr>
-                                                <th data-sort="id">ID</th>
-                                                <th data-sort="name">Name</th>
-                                                <th data-sort="date">Date</th>
-                                                <th data-sort="fee">Fee</th>
-                                                <th data-sort="participants">Max Participants</th>
-                                                <th data-sort="venue">Venue</th>
+                                                <th data-label="ID">ID</th>
+                                                <th data-label="Name">Name</th>
+                                                <th data-label="Date">Date</th>
+                                                <th data-label="Fee">Fee</th>
+                                                <th data-label="Participants">Max Participants</th>
+                                                <th data-label="Venue">Venue</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="pagination-container" id="eventsPagination"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Attendance Section -->
+            <section id="attendance" class="dashboard-section">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="fas fa-calendar-check mr-2"></i>Attendance Analytics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Attendance Analytics</h2>
+                            <div class="section-actions">
+                                <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Overview Cards -->
+                        <div class="revenue-overview-grid">
+                            <div class="overview-card">
+                                <div class="overview-card__icon">📊</div>
+                                <div class="overview-card__content">
+                                    <h4>Total Attendances</h4>
+                                    <p class="overview-card__value" id="attendance-total-attendances"></p>
+                                    <span class="kpi-card__trend positive">↗ +10%</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="overview-card__icon">✅</div>
+                                <div class="overview-card__content">
+                                    <h4>Present Count</h4>
+                                    <p class="overview-card__value" id="attendance-present-count"></p>
+                                    <span class="kpi-card__trend positive">↗ +15%</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="overview-card__icon">❌</div>
+                                <div class="overview-card__content">
+                                    <h4>Absent Count</h4>
+                                    <p class="overview-card__value" id="attendance-absent-count"></p>
+                                    <span class="kpi-card__trend negative">↘ -5%</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="overview-card__icon">📈</div>
+                                <div class="overview-card__content">
+                                    <h4>Present Rate</h4>
+                                    <p class="overview-card__value" id="attendance-present-rate"></p>
+                                    <span class="kpi-card__trend positive">↗ +12%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Charts -->
+                        <div class="charts-grid">
+                            <div class="chart-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Attendance Trend</h4>
+                                    </div>
+                                    <div class="card-body" style="position: relative;">
+                                        <canvas id="attendanceTrendChart2"></canvas>
+                                        <div class="chart-error" id="attendanceTrendChart2Error">Failed to load chart data</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Present vs Absent</h4>
+                                    </div>
+                                    <div class="card-body" style="position: relative;">
+                                        <canvas id="attendancePieChart"></canvas>
+                                        <div class="chart-error" id="attendancePieChartError">Failed to load chart data</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Table -->
+                        <div class="data-table-container">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Attendance Details</h4>
+                                    <a href="<?= base_url('analytics/export_csv?type=attendance') ?>" class="btn btn--primary btn-sm">Export CSV</a>
+                                </div>
+                                <div class="card-body">
+                                    <table class="data-table" id="attendanceTables">
+                                        <thead>
+                                            <tr>
+                                                <th data-label="ID">ID</th>
+                                                <th data-label="Student ID">Student ID</th>
+                                                <th data-label="Date">Date</th>
+                                                <th data-label="Time">Time</th>
+                                                <th data-label="Status">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <div class="pagination-container" id="attendancePagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -1111,1884 +1309,743 @@
     <script>
         const BASE_URL = "<?= base_url(); ?>";
         const CHART_COLORING = ['#28a745', '#ffc107', '#007bff', '#dc3545'];
+        let dashboardData = {};
 
-        // Sidebar toggle functionality
-        $('#sidebarToggle').on('click', function() {
-            if ($(window).width() <= 576) {
-                $('#sidebar').toggleClass('active');
-                $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        // Wait for Chart.js to load
+        function waitForChartJs(callback) {
+            if (typeof Chart !== 'undefined') {
+                callback();
             } else {
-                const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-                $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-                $('#contentWrapper').toggleClass('minimized', isMinimized);
+                setTimeout(() => waitForChartJs(callback), 100);
             }
-        });
-
-        // Section navigation
-        function showSection(sectionId) {
-            document.querySelectorAll('.dashboard-section').forEach(function(sec) {
-                sec.classList.remove('active');
-            });
-            var target = document.getElementById(sectionId);
-            if (target) target.classList.add('active');
-            window.scrollTo(0, 0);
         }
 
-        // KPI card navigation
+        // Fetch dashboard data with error handling
+        function fetchDashboardData() {
+            fetch(`${BASE_URL}analytics/get_dashboard_data`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    dashboardData = data || {};
+                    updateKPIs();
+                    waitForChartJs(renderCharts);
+                })
+                .catch(error => {
+                    console.error('Error fetching dashboard data:', error);
+                    document.querySelectorAll('.chart-error').forEach(el => {
+                        el.style.display = 'block';
+                    });
+                });
+        }
+
+        fetchDashboardData();
+
+        function updateKPIs() {
+            // Fallback values if data is missing
+            const defaults = {
+                total_revenue: 0,
+                total_expenses: 0,
+                total_students: 0,
+                active_students: 0,
+                total_batches: 0,
+                total_centers: 0,
+                total_staff: 0,
+                total_events: 0,
+                total_attendances: 0,
+                outstanding_fees: 0,
+                event_fees: 0,
+                facility_revenue: 0,
+                beginner_students: 0,
+                intermediate_students: 0,
+                admins: 0,
+                coaches: 0,
+                managers: 0,
+                total_participants: 0,
+                total_event_revenue: 0,
+                upcoming_events: 0,
+                present_count: 0,
+                absent_count: 0
+            };
+
+            dashboardData = { ...defaults, ...dashboardData };
+
+            document.getElementById('kpi-total-revenue').textContent = `₹${dashboardData.total_revenue.toLocaleString()}`;
+            document.getElementById('kpi-total-expenses').textContent = `₹${dashboardData.total_expenses.toLocaleString()}`;
+            document.getElementById('kpi-total-students').textContent = dashboardData.total_students;
+            document.getElementById('kpi-active-students').textContent = dashboardData.active_students;
+            document.getElementById('kpi-total-batches').textContent = dashboardData.total_batches;
+            document.getElementById('kpi-total-centers').textContent = dashboardData.total_centers;
+            document.getElementById('kpi-total-staff').textContent = dashboardData.total_staff;
+            document.getElementById('kpi-total-events').textContent = dashboardData.total_events;
+            document.getElementById('kpi-total-attendances').textContent = dashboardData.total_attendances;
+
+            // Revenue Section KPIs
+            document.getElementById('revenue-total-revenue').textContent = `₹${dashboardData.total_revenue.toLocaleString()}`;
+            document.getElementById('revenue-outstanding-fees').textContent = `₹${dashboardData.outstanding_fees.toLocaleString()}`;
+            document.getElementById('revenue-event-fees').textContent = `₹${dashboardData.event_fees.toLocaleString()}`;
+            document.getElementById('revenue-facility-revenue').textContent = `₹${dashboardData.facility_revenue.toLocaleString()}`;
+
+            // Expenses Section
+            document.getElementById('expenses-total-expenses').textContent = `₹${dashboardData.total_expenses.toLocaleString()}`;
+            document.getElementById('expenses-center-expenses').textContent = `₹${dashboardData.total_expenses.toLocaleString()}`;
+
+            // Students Section
+            document.getElementById('students-total-students').textContent = dashboardData.total_students;
+            document.getElementById('students-active-students').textContent = dashboardData.active_students;
+            document.getElementById('students-beginner-students').textContent = dashboardData.beginner_students;
+            document.getElementById('students-intermediate-students').textContent = dashboardData.intermediate_students;
+
+            // Staff Section
+            document.getElementById('staff-total-staff').textContent = dashboardData.total_staff;
+            document.getElementById('staff-admins').textContent = dashboardData.admins;
+            document.getElementById('staff-coaches').textContent = dashboardData.coaches;
+            document.getElementById('staff-managers').textContent = dashboardData.managers;
+
+            // Events Section
+            document.getElementById('events-total-events').textContent = dashboardData.total_events;
+            document.getElementById('events-total-participants').textContent = dashboardData.total_participants;
+            document.getElementById('events-total-event-revenue').textContent = `₹${dashboardData.total_event_revenue.toLocaleString()}`;
+            document.getElementById('events-upcoming-events').textContent = dashboardData.upcoming_events;
+
+            // Attendance Section
+            document.getElementById('attendance-total-attendances').textContent = dashboardData.total_attendances;
+            document.getElementById('attendance-present-count').textContent = dashboardData.present_count;
+            document.getElementById('attendance-absent-count').textContent = dashboardData.absent_count;
+            const total = dashboardData.present_count + dashboardData.absent_count;
+            const presentRate = total > 0 ? ((dashboardData.present_count / total) * 100).toFixed(1) + '%' : '0%';
+            document.getElementById('attendance-present-rate').textContent = presentRate;
+        }
+
+        function renderCharts() {
+            // Ensure canvas elements exist and hide error messages
+            document.querySelectorAll('.chart-container canvas').forEach(canvas => {
+                const errorEl = document.getElementById(`${canvas.id}Error`);
+                if (errorEl) errorEl.style.display = 'none';
+            });
+
+            // Fallback data for charts
+            const defaultChartData = {
+                monthly_revenue: [{ label: 'Jan', value: 0 }, { label: 'Feb', value: 0 }],
+                student_distribution: [{ label: 'Beginner', value: 0 }, { label: 'Intermediate', value: 0 }],
+                revenue_vs_expense: {
+                    revenue: [{ label: 'Jan', value: 0 }, { label: 'Feb', value: 0 }],
+                    expense: [{ label: 'Jan', value: 0 }, { label: 'Feb', value: 0 }]
+                },
+                batch_distribution: [{ label: 'Beginner', value: 0 }, { label: 'Intermediate', value: 0 }],
+                staff_distribution: [{ label: 'Admin', value: 0 }, { label: 'Coach', value: 0 }],
+                attendance_trend: [{ label: 'Jan', present: 0, absent: 0 }, { label: 'Feb', present: 0, absent: 0 }]
+            };
+
+            dashboardData = {
+                ...dashboardData,
+                monthly_revenue: dashboardData.monthly_revenue || defaultChartData.monthly_revenue,
+                student_distribution: dashboardData.student_distribution || defaultChartData.student_distribution,
+                revenue_vs_expense: dashboardData.revenue_vs_expense || defaultChartData.revenue_vs_expense,
+                batch_distribution: dashboardData.batch_distribution || defaultChartData.batch_distribution,
+                staff_distribution: dashboardData.staff_distribution || defaultChartData.staff_distribution,
+                attendance_trend: dashboardData.attendance_trend || defaultChartData.attendance_trend
+            };
+
+            // Chart.js Global Defaults
+            Chart.defaults.font.size = clamp(10, window.innerWidth / 100, 14);
+            Chart.defaults.plugins.legend.labels.boxWidth = clamp(20, window.innerWidth / 50, 30);
+            Chart.defaults.plugins.legend.labels.padding = clamp(6, window.innerWidth / 100, 12);
+
+            try {
+                // Monthly Revenue (Dashboard)
+                const revenueMonthlyCtx = document.getElementById('revenueMonthlyChart')?.getContext('2d');
+                if (revenueMonthlyCtx) {
+                    new Chart(revenueMonthlyCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dashboardData.monthly_revenue.map(item => item.label),
+                            datasets: [{
+                                label: 'Revenue',
+                                data: dashboardData.monthly_revenue.map(item => item.value),
+                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: getChartOptions('Monthly Revenue Trend')
+                    });
+                }
+
+                // Student Level Distribution (Dashboard)
+                const studentLevelCtx = document.getElementById('studentLevelDistributionChart')?.getContext('2d');
+                if (studentLevelCtx) {
+                    new Chart(studentLevelCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: dashboardData.student_distribution.map(item => item.label),
+                            datasets: [{
+                                data: dashboardData.student_distribution.map(item => item.value),
+                                backgroundColor: CHART_COLORING
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Revenue vs Expense (Dashboard)
+                const revenueVsExpenseCtx = document.getElementById('revenueVsExpenseChart2')?.getContext('2d');
+                if (revenueVsExpenseCtx) {
+                    new Chart(revenueVsExpenseCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: dashboardData.revenue_vs_expense.revenue.map(item => item.label),
+                            datasets: [{
+                                label: 'Revenue',
+                                data: dashboardData.revenue_vs_expense.revenue.map(item => item.value),
+                                backgroundColor: 'rgba(40, 167, 69, 0.7)'
+                            }, {
+                                label: 'Expense',
+                                data: dashboardData.revenue_vs_expense.expense.map(item => item.value),
+                                backgroundColor: 'rgba(220, 53, 69, 0.7)'
+                            }]
+                        },
+                        options: getBarOptions('Revenue vs Expense')
+                    });
+                }
+
+                // Batch Level (Dashboard)
+                const batchLevelCtx = document.getElementById('batchLevelChart')?.getContext('2d');
+                if (batchLevelCtx) {
+                    new Chart(batchLevelCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: dashboardData.batch_distribution.map(item => item.label),
+                            datasets: [{
+                                data: dashboardData.batch_distribution.map(item => item.value),
+                                backgroundColor: CHART_COLORING
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Staff Role (Dashboard)
+                const staffRoleCtx = document.getElementById('staffRoleChart')?.getContext('2d');
+                if (staffRoleCtx) {
+                    new Chart(staffRoleCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: dashboardData.staff_distribution.map(item => item.label),
+                            datasets: [{
+                                data: dashboardData.staff_distribution.map(item => item.value),
+                                backgroundColor: CHART_COLORING
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Monthly Revenue Under (Revenue Section)
+                const revenueMonthlyUnderCtx = document.getElementById('revenueMonthlyChartUnder')?.getContext('2d');
+                if (revenueMonthlyUnderCtx) {
+                    new Chart(revenueMonthlyUnderCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: dashboardData.monthly_revenue.map(item => item.label),
+                            datasets: [{
+                                label: 'Revenue',
+                                data: dashboardData.monthly_revenue.map(item => item.value),
+                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: getChartOptions('Monthly Revenue Trends')
+                    });
+                }
+
+                // Revenue Distribution (Revenue Section)
+                const revenueDistributionCtx = document.getElementById('revenueDistributionChart')?.getContext('2d');
+                if (revenueDistributionCtx) {
+                    new Chart(revenueDistributionCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Facility Rental', 'Event Fees', 'Student Fees'],
+                            datasets: [{
+                                data: [
+                                    dashboardData.facility_revenue,
+                                    dashboardData.event_fees,
+                                    dashboardData.total_revenue - dashboardData.facility_revenue - dashboardData.event_fees
+                                ],
+                                backgroundColor: CHART_COLORING.slice(0, 3)
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Expense Categories (Expenses Section)
+                const expenseCategoriesCtx = document.getElementById('expenseCategoriesChart2')?.getContext('2d');
+                if (expenseCategoriesCtx) {
+                    new Chart(expenseCategoriesCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Center Expenses', 'Staff Salaries', 'Facility Maintenance'],
+                            datasets: [{
+                                data: [dashboardData.total_expenses, 0, 0],
+                                backgroundColor: CHART_COLORING.slice(0, 3)
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Expense Trend (Expenses Section)
+                const expenseTrendCtx = document.getElementById('expenseTrendChart2')?.getContext('2d');
+                if (expenseTrendCtx) {
+                    new Chart(expenseTrendCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dashboardData.revenue_vs_expense.expense.map(item => item.label),
+                            datasets: [{
+                                label: 'Expense',
+                                data: dashboardData.revenue_vs_expense.expense.map(item => item.value),
+                                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                                borderColor: 'rgba(220, 53, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: getChartOptions('Monthly Expense Trend')
+                    });
+                }
+
+                // Students Level (Students Section)
+                const studentsLevelCtx = document.getElementById('studentsLevelChart2')?.getContext('2d');
+                if (studentsLevelCtx) {
+                    new Chart(studentsLevelCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: dashboardData.student_distribution.map(item => item.label),
+                            datasets: [{
+                                data: dashboardData.student_distribution.map(item => item.value),
+                                backgroundColor: CHART_COLORING
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+
+                // Attendance Trend (Students Section)
+                const attendanceTrendCtx = document.getElementById('attendanceTrendChart')?.getContext('2d');
+                if (attendanceTrendCtx) {
+                    new Chart(attendanceTrendCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dashboardData.attendance_trend.map(item => item.label),
+                            datasets: [{
+                                label: 'Present',
+                                data: dashboardData.attendance_trend.map(item => item.present),
+                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }, {
+                                label: 'Absent',
+                                data: dashboardData.attendance_trend.map(item => item.absent),
+                                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                                borderColor: 'rgba(220, 53, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: getChartOptions('Attendance Trend')
+                    });
+                }
+
+                // Attendance Trend 2 (Attendance Section)
+                const attendanceTrend2Ctx = document.getElementById('attendanceTrendChart2')?.getContext('2d');
+                if (attendanceTrend2Ctx) {
+                    new Chart(attendanceTrend2Ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dashboardData.attendance_trend.map(item => item.label),
+                            datasets: [{
+                                label: 'Present',
+                                data: dashboardData.attendance_trend.map(item => item.present),
+                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }, {
+                                label: 'Absent',
+                                data: dashboardData.attendance_trend.map(item => item.absent),
+                                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                                borderColor: 'rgba(220, 53, 69, 1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: getChartOptions('Attendance Trend')
+                    });
+                }
+
+                // Present vs Absent Pie (Attendance Section)
+                const attendancePieCtx = document.getElementById('attendancePieChart')?.getContext('2d');
+                if (attendancePieCtx) {
+                    new Chart(attendancePieCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Present', 'Absent'],
+                            datasets: [{
+                                data: [dashboardData.present_count, dashboardData.absent_count],
+                                backgroundColor: ['#28a745', '#dc3545']
+                            }]
+                        },
+                        options: getDoughnutOptions()
+                    });
+                }
+            } catch (error) {
+                console.error('Error rendering charts:', error);
+                document.querySelectorAll('.chart-error').forEach(el => {
+                    el.style.display = 'block';
+                });
+            }
+        }
+
+        function clamp(min, val, max) {
+            return Math.min(Math.max(val, min), max);
+        }
+
+        function getChartOptions(titleText) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "top",
+                        labels: {
+                            font: { size: clamp(10, window.innerWidth / 100, 14) },
+                            padding: clamp(6, window.innerWidth / 100, 12)
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: titleText,
+                        font: { size: clamp(12, window.innerWidth / 80, 16) },
+                        padding: { top: 10, bottom: 10 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: clamp(9, window.innerWidth / 100, 12) },
+                            callback: function(value) {
+                                return "₹" + value.toLocaleString();
+                            }
+                        },
+                        padding: 10
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: clamp(9, window.innerWidth / 100, 12) },
+                            color: "#666",
+                            maxRotation: 45,
+                            minRotation: 0
+                        },
+                        grid: { display: false }
+                    }
+                },
+                layout: {
+                    padding: 10
+                }
+            };
+        }
+
+        function getDoughnutOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: clamp(10, window.innerWidth / 100, 14) },
+                            padding: clamp(6, window.innerWidth / 100, 12),
+                            color: '#000'
+                        }
+                    }
+                },
+                layout: {
+                    padding: 10
+                }
+            };
+        }
+
+        function getBarOptions(titleText) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { size: clamp(10, window.innerWidth / 100, 14) },
+                            padding: clamp(6, window.innerWidth / 100, 12)
+                        }
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: clamp(9, window.innerWidth / 100, 12) },
+                            callback: function(value) { return '₹' + value.toLocaleString(); }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: clamp(9, window.innerWidth / 100, 12) },
+                            maxRotation: 45,
+                            minRotation: 0
+                        }
+                    }
+                },
+                layout: {
+                    padding: 10
+                }
+            };
+        }
+
+        // Render Table with Pagination
+        function renderTable(type, tableId, paginationId, columns) {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            let currentPage = 1;
+
+            function fetchPage(page) {
+                fetch(`${BASE_URL}analytics/get_table_data?type=${type}&page=${page}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        tableBody.innerHTML = '';
+                        if (data.records.length === 0) {
+                            tableBody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 20px;">No data found</td></tr>`;
+                            return;
+                        }
+                        data.records.forEach(item => {
+                            const row = document.createElement('tr');
+                            columns.forEach(col => {
+                                let value = item[col.key] || 'N/A';
+                                if (col.format) value = col.format(value);
+                                const cell = document.createElement('td');
+                                cell.setAttribute('data-label', document.querySelector(`#${tableId} th[data-label="${col.key}"]`)?.getAttribute('data-label') || col.key);
+                                cell.innerHTML = value;
+                                row.appendChild(cell);
+                            });
+                            tableBody.appendChild(row);
+                        });
+                        renderPagination(data.total_records, page, paginationId, fetchPage);
+                    });
+            }
+            fetchPage(currentPage);
+        }
+
+        function renderPagination(totalRows, currentPage, paginationId, fetchPage) {
+            const totalPages = Math.ceil(totalRows / 10);
+            const container = document.getElementById(paginationId);
+            container.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            const prev = createButton('Previous', currentPage > 1, () => fetchPage(currentPage - 1));
+            container.appendChild(prev);
+
+            const start = Math.max(1, currentPage - 2);
+            const end = Math.min(totalPages, currentPage + 2);
+
+            if (start > 1) container.appendChild(createButton('1', true, () => fetchPage(1)));
+            if (start > 2) container.appendChild(createSpan('...'));
+
+            for (let i = start; i <= end; i++) {
+                container.appendChild(createButton(i, i !== currentPage, () => fetchPage(i), i === currentPage ? 'btn-primary' : 'btn-secondary'));
+            }
+
+            if (end < totalPages - 1) container.appendChild(createSpan('...'));
+
+            if (end < totalPages) {
+                container.appendChild(createButton(totalPages, true, () => fetchPage(totalPages)));
+            }
+
+            const next = createButton('Next', currentPage < totalPages, () => fetchPage(currentPage + 1));
+            container.appendChild(next);
+        }
+
+        function createButton(text, enabled, onClick, className = 'btn-secondary') {
+            const button = document.createElement('button');
+            button.className = `btn btn--${className}`;
+            button.textContent = text;
+            button.disabled = !enabled;
+            if (enabled) button.addEventListener('click', onClick);
+            return button;
+        }
+
+        function createSpan(text) {
+            const span = document.createElement('span');
+            span.textContent = text;
+            span.style.padding = '8px 12px';
+            span.style.color = '#666';
+            return span;
+        }
+
+        // Initialize Tables
+        function initializeTables() {
+            renderTable('facility_revenue', 'facilityRevenueDetailsTables', 'facilityPagination', [
+                { key: 'facility_id', label: 'Facility ID' },
+                { key: 'center_id', label: 'Center ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'subtype', label: 'Subtype' },
+                { key: 'rent_amount', label: 'Rent Amount', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'rent_date', label: 'Rent Date' }
+            ]);
+
+            renderTable('event_revenue', 'eventRevenueDetailsTables', 'eventPagination', [
+                { key: 'event_id', label: 'Event ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'date', label: 'Date' },
+                { key: 'fee', label: 'Fee', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'participants', label: 'Participants' },
+                { key: 'total_revenue', label: 'Total Revenue', format: v => `₹${Number(v).toLocaleString()}` }
+            ]);
+
+            renderTable('student_fees', 'studentFeeDetailsTables', 'studentFeePagination', [
+                { key: 'student_id', label: 'Student ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'center_id', label: 'Center ID' },
+                { key: 'batch_id', label: 'Batch ID' },
+                { key: 'paid_amount', label: 'Paid Amount', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'remaining_amount', label: 'Remaining Amount', format: v => `₹${Number(v).toLocaleString()}` }
+            ]);
+
+            renderTable('expenses', 'expensesTable1', 'expensesPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'center_id', label: 'Center' },
+                { key: 'title', label: 'Title' },
+                { key: 'date', label: 'Date' },
+                { key: 'amount', label: 'Amount', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'status', label: 'Status' }
+            ]);
+
+            renderTable('students', 'studentsTables', 'studentsPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'center_id', label: 'Center' },
+                { key: 'batch_id', label: 'Batch' },
+                { key: 'level', label: 'Level' },
+                { key: 'status', label: 'Status' }
+            ]);
+
+            renderTable('staff', 'staffTables', 'staffPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'center_id', label: 'Center' },
+                { key: 'role', label: 'Role' },
+                { key: 'joining_date', label: 'Joining Date' }
+            ]);
+
+            renderTable('events', 'eventsTables', 'eventsPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'date', label: 'Date' },
+                { key: 'fee', label: 'Fee', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'max_participants', label: 'Participants' },
+                { key: 'venue', label: 'Venue' }
+            ]);
+
+            renderTable('attendance', 'attendanceTables', 'attendancePagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'student_id', label: 'Student ID' },
+                { key: 'date', label: 'Date' },
+                { key: 'time', label: 'Time' },
+                { key: 'status', label: 'Status' }
+            ]);
+        }
+
+        // Show Section
+        function showSection(sectionId) {
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Global Search
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.kpi-card').forEach(card => {
+                const title = card.querySelector('.kpi-card__title').textContent.toLowerCase();
+                const value = card.querySelector('.kpi-card__value').textContent.toLowerCase();
+                card.style.display = (title.includes(query) || value.includes(query)) ? 'flex' : 'none';
+            });
+
+            document.querySelectorAll('.data-table tbody tr').forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let match = false;
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(query)) {
+                        match = true;
+                    }
+                });
+                row.style.display = match ? 'table-row' : 'none';
+            });
+        });
+
+        // KPI Card Navigation
         document.querySelectorAll('.kpi-card').forEach(card => {
             card.addEventListener('click', () => {
                 const section = card.getAttribute('data-navigate');
-                showSection(section);
+                if (section) showSection(section);
             });
         });
 
-        // Chart: Monthly Revenue Trend
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById("revenueMonthlyChart").getContext("2d");
-            const fallbackData = {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-                revenue: [50000, 90000, 110000, 100000, 100000, 120000, 125000],
-            };
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: fallbackData.labels,
-                    datasets: [{
-                        label: "Revenue",
-                        data: fallbackData.revenue,
-                        backgroundColor: "rgba(40, 167, 69, 0.2)",
-                        borderColor: "rgba(40, 167, 69, 1)",
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: "top"
-                        },
-                        title: {
-                            display: true,
-                            text: "Monthly Revenue Trend",
-                            font: {
-                                size: 16
-                            }
-                        },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return "₹" + value.toLocaleString();
-                                },
-                                stepSize: 50000,
-                                max: 130000,
-                            },
-                        },
-                        x: {
-                            ticks: {
-                                color: "#666"
-                            },
-                            grid: {
-                                display: false
-                            }
-                        },
-                    },
-                },
-            });
+        // Sidebar Toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            const contentWrapper = document.getElementById('contentWrapper');
+            sidebar.classList.toggle('minimized');
+            contentWrapper.classList.toggle('minimized');
         });
 
-        // Chart: Student Distribution by Level
-        document.addEventListener("DOMContentLoaded", function() {
-            const studentLevelData = {
-                labels: ['Beginner', 'Intermediate', 'Advanced'],
-                datasets: [{
-                    data: [10, 1, 0],
-                    backgroundColor: ['#28a745', '#ffc107', '#007bff']
-                }]
-            };
-            const studentLevelCtx = document.getElementById('studentLevelDistributionChart');
-            if (studentLevelCtx) {
-                new Chart(studentLevelCtx, {
-                    type: 'doughnut',
-                    data: studentLevelData,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#000'
-                                }
-                            }
-                        }
-                    }
+        // Resize Handler for Charts
+        window.addEventListener('resize', () => {
+            if (typeof Chart !== 'undefined') {
+                Chart.instances.forEach(chart => {
+                    chart.options.font = { size: clamp(10, window.innerWidth / 100, 14) };
+                    chart.options.plugins.legend.labels.font = { size: clamp(10, window.innerWidth / 100, 14) };
+                    chart.options.plugins.legend.labels.padding = clamp(6, window.innerWidth / 100, 12);
+                    chart.options.plugins.title.font = { size: clamp(12, window.innerWidth / 80, 16) };
+                    chart.options.scales.y.ticks.font = { size: clamp(9, window.innerWidth / 100, 12) };
+                    chart.options.scales.x.ticks.font = { size: clamp(9, window.innerWidth / 100, 12) };
+                    chart.resize();
                 });
             }
         });
 
-        // Chart: Revenue vs Expense
-        document.addEventListener("DOMContentLoaded", function() {
-            const revenueVsExpenseData = {
-                labels: ['Sep 2025'],
-                revenue: [17500],
-                expense: [12000]
-            };
-            const ctx = document.getElementById('revenueVsExpenseChart2').getContext('2d');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: revenueVsExpenseData.labels,
-                        datasets: [{
-                                label: 'Revenue',
-                                backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                                borderColor: 'rgba(40, 167, 69, 1)',
-                                borderWidth: 1,
-                                data: revenueVsExpenseData.revenue
-                            },
-                            {
-                                label: 'Expense',
-                                backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                                borderColor: 'rgba(220, 53, 69, 1)',
-                                borderWidth: 1,
-                                data: revenueVsExpenseData.expense
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top'
-                            },
-                            title: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        return '₹' + value.toLocaleString();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        // Chart: Batch Distribution by Level
-        document.addEventListener("DOMContentLoaded", function() {
-            const batchLevelData = {
-                labels: ['Beginner', 'Intermediate', 'Advanced'],
-                datasets: [{
-                    data: [3, 1, 0],
-                    backgroundColor: ['#28a745', '#ffc107', '#007bff'],
-                    borderWidth: 1
-                }]
-            };
-            const batchCtx = document.getElementById('batchLevelChart').getContext('2d');
-            new Chart(batchCtx, {
-                type: 'doughnut',
-                data: batchLevelData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#000'
-                            }
-                        },
-                        title: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        });
-
-        // Chart: Staff Distribution by Role
-        document.addEventListener("DOMContentLoaded", function() {
-            const staffRoleData = {
-                labels: ['Admin', 'Manager', 'Coach', 'Support'],
-                datasets: [{
-                    data: [3, 1, 1, 0],
-                    backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545'],
-                    borderWidth: 1
-                }]
-            };
-            const staffCtx = document.getElementById('staffRoleChart').getContext('2d');
-            new Chart(staffCtx, {
-                type: 'doughnut',
-                data: staffRoleData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#000'
-                            }
-                        },
-                        title: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        });
-
-        // Chart: Monthly Revenue Trends (Revenue Section)
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById("revenueMonthlyChartUnder").getContext("2d");
-            const fallbackData = {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-                revenue: [50000, 90000, 110000, 100000, 100000, 120000, 125000],
-            };
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: fallbackData.labels,
-                    datasets: [{
-                        label: "Revenue",
-                        data: fallbackData.revenue,
-                        backgroundColor: "rgba(40, 167, 69, 0.2)",
-                        borderColor: "rgba(40, 167, 69, 1)",
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: "top"
-                        },
-                        title: {
-                            display: true,
-                            text: "Monthly Revenue Trend",
-                            font: {
-                                size: 16
-                            }
-                        },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return "₹" + value.toLocaleString();
-                                },
-                                stepSize: 50000,
-                                max: 130000,
-                            },
-                        },
-                        x: {
-                            ticks: {
-                                color: "#666"
-                            },
-                            grid: {
-                                display: false
-                            }
-                        },
-                    },
-                },
-            });
-        });
-
-        // Chart: Expense Categories
-        document.addEventListener("DOMContentLoaded", function() {
-            const expenseCategoriesData = {
-                labels: ['Center Expenses', 'Staff Salaries', 'Facility Maintenance'],
-                datasets: [{
-                    data: [12000, 0, 0],
-                    backgroundColor: CHART_COLORING.slice(0, 3)
-                }]
-            };
-            const categoriesCtx = document.getElementById('expenseCategoriesChart2');
-            if (categoriesCtx) {
-                new Chart(categoriesCtx, {
-                    type: 'doughnut',
-                    data: expenseCategoriesData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#000'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        // Chart: Monthly Expense Trend
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById("expenseTrendChart2").getContext("2d");
-            const fallbackData = {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
-                expense: [0, 0, 0, 0, 0, 0, 36042.15, 0],
-            };
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: fallbackData.labels,
-                    datasets: [{
-                        label: "Expense",
-                        data: fallbackData.expense,
-                        backgroundColor: "rgba(255, 99, 132, 0.2)",
-                        borderColor: "rgba(255, 99, 132, 1)",
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: "top"
-                        },
-                        title: {
-                            display: true,
-                            text: "Monthly Expense Trend",
-                            font: {
-                                size: 16
-                            }
-                        },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return "₹" + value.toLocaleString();
-                                },
-                                stepSize: 50000,
-                                suggestedMax: 100000,
-                            },
-                        },
-                        x: {
-                            ticks: {
-                                color: "#666"
-                            },
-                            grid: {
-                                display: false
-                            }
-                        },
-                    },
-                },
-            });
-        });
-
-        // Chart: Students by Level
-        document.addEventListener("DOMContentLoaded", function() {
-            const studentsLevelData = {
-                labels: ["Beginner", "Intermediate", "Advanced"],
-                datasets: [{
-                    data: [10, 1, 0],
-                    backgroundColor: ['#28a745', '#ffc107', '#007bff'],
-                }]
-            };
-            const levelCtx = document.getElementById("studentsLevelChart2");
-            if (levelCtx) {
-                new Chart(levelCtx, {
-                    type: "doughnut",
-                    data: studentsLevelData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: "bottom",
-                                labels: {
-                                    color: '#000'
-                                }
-                            }
-                        },
-                    },
-                });
-            }
-        });
-
-        // Table: Facility Revenue Details
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#facilityRevenueDetailsTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#facilityRevenueDetailsTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '11',
-                    center_id: null,
-                    facility_name: 'shoes',
-                    subtype_name: null,
-                    rent_amount: '0.00',
-                    rent_date: null
-                },
-                {
-                    id: '12',
-                    center_id: null,
-                    facility_name: 'shoes',
-                    subtype_name: 'Small',
-                    rent_amount: '200.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '13',
-                    center_id: null,
-                    facility_name: 'shoes',
-                    subtype_name: 'Small',
-                    rent_amount: '200.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '14',
-                    center_id: null,
-                    facility_name: 'shoes',
-                    subtype_name: 'Small',
-                    rent_amount: '200.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '15',
-                    center_id: '19',
-                    facility_name: 'shoes',
-                    subtype_name: 'Small',
-                    rent_amount: '200.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '16',
-                    center_id: '19',
-                    facility_name: 'shoes',
-                    subtype_name: 'Small',
-                    rent_amount: '200.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '17',
-                    center_id: '19',
-                    facility_name: 'shoes',
-                    subtype_name: 'big',
-                    rent_amount: '500.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '18',
-                    center_id: '23',
-                    facility_name: 'Shoe',
-                    subtype_name: 'sports 94777757854 number',
-                    rent_amount: '5075.00',
-                    rent_date: '2025-09-02'
-                },
-                {
-                    id: '19',
-                    center_id: '25',
-                    facility_name: 'Swimming Pool',
-                    subtype_name: 'Small',
-                    rent_amount: '500.00',
-                    rent_date: '2025-09-08'
-                },
-                {
-                    id: '20',
-                    center_id: '25',
-                    facility_name: 'Swimming Pool',
-                    subtype_name: 'Medium',
-                    rent_amount: '800.00',
-                    rent_date: '2025-09-08'
-                },
-                {
-                    id: '21',
-                    center_id: '25',
-                    facility_name: 'Swimming Pool',
-                    subtype_name: 'Large',
-                    rent_amount: '1200.00',
-                    rent_date: '2025-09-08'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No facility data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.center_id || 'N/A'}</td>
-                        <td>${item.facility_name}</td>
-                        <td>${item.subtype_name || 'N/A'}</td>
-                        <td>₹${parseFloat(item.rent_amount || 0).toLocaleString()}</td>
-                        <td>${item.rent_date || 'N/A'}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Event Revenue Details
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#eventRevenueDetailsTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#eventRevenueDetailsTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '1',
-                    name: 'team',
-                    date: '2025-09-04',
-                    fee: '100.00'
-                },
-                {
-                    id: '2',
-                    name: 'Annual Marathon Run',
-                    date: '2025-09-04',
-                    fee: '150.00'
-                },
-                {
-                    id: '3',
-                    name: 'Intercollege Football Tournament',
-                    date: '2025-09-29',
-                    fee: '100.00'
-                },
-                {
-                    id: '5',
-                    name: 'xyz',
-                    date: '2025-09-15',
-                    fee: '100.00'
-                },
-                {
-                    id: '6',
-                    name: 'marathon',
-                    date: '2025-09-08',
-                    fee: '200.00'
-                },
-                {
-                    id: '7',
-                    name: 'hoi',
-                    date: '2025-09-08',
-                    fee: '100.00'
-                },
-                {
-                    id: '8',
-                    name: 'volleyball',
-                    date: '2025-09-09',
-                    fee: '100.00'
-                },
-                {
-                    id: '9',
-                    name: 'team',
-                    date: '2025-09-16',
-                    fee: '200.00'
-                }
-            ];
-            const participants = [{
-                    event_id: '3'
-                }, {
-                    event_id: '5'
-                }, {
-                    event_id: '3'
-                }, {
-                    event_id: '1'
-                },
-                {
-                    event_id: '3'
-                }, {
-                    event_id: '3'
-                }, {
-                    event_id: '5'
-                }, {
-                    event_id: '6'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No event data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const participantsCount = participants.filter(p => p.event_id === item.id).length;
-                    const totalRevenue = participantsCount * parseFloat(item.fee || 0);
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.date}</td>
-                        <td>₹${parseFloat(item.fee || 0).toLocaleString()}</td>
-                        <td>${participantsCount}</td>
-                        <td>₹${totalRevenue.toLocaleString()}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Student Fee Details
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#studentFeeDetailsTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#studentFeeDetailsTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '203',
-                    name: 'Sadashiv Mohite',
-                    center_id: '15',
-                    batch_id: '16',
-                    paid_amount: '100.00',
-                    remaining_amount: '1200.00'
-                },
-                {
-                    id: '204',
-                    name: 'Rushikesh Thomare',
-                    center_id: '9',
-                    batch_id: '10',
-                    paid_amount: '1000.00',
-                    remaining_amount: '9300.00'
-                },
-                {
-                    id: '237',
-                    name: 'Prajwal Ramdas Wakulkar',
-                    center_id: '20',
-                    batch_id: '23',
-                    paid_amount: '4000.00',
-                    remaining_amount: '5200.00'
-                },
-                {
-                    id: '266',
-                    name: 'Saurav Shahaji Nalawde',
-                    center_id: '21',
-                    batch_id: '19',
-                    paid_amount: '100.00',
-                    remaining_amount: '900.00'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No student fee data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.center_id}</td>
-                        <td>${item.batch_id}</td>
-                        <td>₹${parseFloat(item.paid_amount || 0).toLocaleString()}</td>
-                        <td>₹${parseFloat(item.remaining_amount || 0).toLocaleString()}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Expenses Details
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#expensesTable1 tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#expensesTable1').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '1',
-                    center_id: '20',
-                    title: 'tennis mat',
-                    date: '2025-09-04',
-                    amount: '2000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '2',
-                    center_id: '20',
-                    title: 'mat',
-                    date: '2025-09-08',
-                    amount: '1000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '3',
-                    center_id: '20',
-                    title: 'fghhhj',
-                    date: '2025-09-15',
-                    amount: '2000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '4',
-                    center_id: '20',
-                    title: 'tennis bat',
-                    date: '2025-09-16',
-                    amount: '2000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '5',
-                    center_id: '20',
-                    title: 'tennis bat',
-                    date: '2025-09-16',
-                    amount: '2000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '8',
-                    center_id: '20',
-                    title: 'mts',
-                    date: '2025-09-16',
-                    amount: '1000.00',
-                    status: 'approved'
-                },
-                {
-                    id: '9',
-                    center_id: '25',
-                    title: 'tennis ball',
-                    date: '2025-09-16',
-                    amount: '2000.00',
-                    status: 'approved'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No expense data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.center_id}</td>
-                        <td>${item.title}</td>
-                        <td>${item.date}</td>
-                        <td>₹${parseFloat(item.amount || 0).toLocaleString()}</td>
-                        <td>${item.status}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Students List
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#studentsTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#studentsTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '203',
-                    name: 'Sadashiv Mohite',
-                    center_id: '15',
-                    batch_id: '16',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '204',
-                    name: 'Rushikesh Thomare',
-                    center_id: '9',
-                    batch_id: '10',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '237',
-                    name: 'Prajwal Ramdas Wakulkar',
-                    center_id: '20',
-                    batch_id: '23',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '266',
-                    name: 'Saurav Shahaji Nalawde',
-                    center_id: '21',
-                    batch_id: '19',
-                    level: 'Intermediate',
-                    status: 'Active'
-                },
-                {
-                    id: '267',
-                    name: 'John Doe',
-                    center_id: '20',
-                    batch_id: '23',
-                    level: 'Beginner',
-                    status: 'Inactive'
-                },
-                {
-                    id: '268',
-                    name: 'Jane Smith',
-                    center_id: '15',
-                    batch_id: '16',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '269',
-                    name: 'Alice Johnson',
-                    center_id: '9',
-                    batch_id: '10',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '270',
-                    name: 'Bob Brown',
-                    center_id: '21',
-                    batch_id: '19',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '271',
-                    name: 'Emma Wilson',
-                    center_id: '20',
-                    batch_id: '23',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '272',
-                    name: 'Liam Davis',
-                    center_id: '15',
-                    batch_id: '16',
-                    level: 'Beginner',
-                    status: 'Active'
-                },
-                {
-                    id: '273',
-                    name: 'Olivia Martinez',
-                    center_id: '9',
-                    batch_id: '10',
-                    level: 'Beginner',
-                    status: 'Active'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No student data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.center_id}</td>
-                        <td>${item.batch_id}</td>
-                        <td>${item.level}</td>
-                        <td>${item.status}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Staff List
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#staffTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#staffTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '1',
-                    name: 'Admin User',
-                    center_id: '9',
-                    role: 'Admin',
-                    joining_date: '2025-09-01'
-                },
-                {
-                    id: '2',
-                    name: 'John Manager',
-                    center_id: '15',
-                    role: 'Manager',
-                    joining_date: '2025-09-01'
-                },
-                {
-                    id: '3',
-                    name: 'Coach Smith',
-                    center_id: '20',
-                    role: 'Coach',
-                    joining_date: '2025-09-01'
-                },
-                {
-                    id: '4',
-                    name: 'Admin Two',
-                    center_id: '21',
-                    role: 'Admin',
-                    joining_date: '2025-09-01'
-                },
-                {
-                    id: '5',
-                    name: 'Admin Three',
-                    center_id: '25',
-                    role: 'Admin',
-                    joining_date: '2025-09-01'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No staff data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.center_id}</td>
-                        <td>${item.role}</td>
-                        <td>${item.joining_date}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Table: Events List
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.querySelector('#eventsTables tbody');
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            document.querySelector('#eventsTables').after(paginationContainer);
-
-            const rowsPerPage = 10;
-            let currentPage = 1;
-            let allData = [{
-                    id: '1',
-                    name: 'team',
-                    date: '2025-09-04',
-                    fee: '100.00',
-                    max_participants: '10',
-                    venue: 'Center 15'
-                },
-                {
-                    id: '2',
-                    name: 'Annual Marathon Run',
-                    date: '2025-09-04',
-                    fee: '150.00',
-                    max_participants: '50',
-                    venue: 'Center 20'
-                },
-                {
-                    id: '3',
-                    name: 'Intercollege Football Tournament',
-                    date: '2025-09-29',
-                    fee: '100.00',
-                    max_participants: '20',
-                    venue: 'Center 21'
-                },
-                {
-                    id: '5',
-                    name: 'xyz',
-                    date: '2025-09-15',
-                    fee: '100.00',
-                    max_participants: '15',
-                    venue: 'Center 9'
-                },
-                {
-                    id: '6',
-                    name: 'marathon',
-                    date: '2025-09-08',
-                    fee: '200.00',
-                    max_participants: '30',
-                    venue: 'Center 25'
-                },
-                {
-                    id: '7',
-                    name: 'hoi',
-                    date: '2025-09-08',
-                    fee: '100.00',
-                    max_participants: '10',
-                    venue: 'Center 15'
-                },
-                {
-                    id: '8',
-                    name: 'volleyball',
-                    date: '2025-09-09',
-                    fee: '100.00',
-                    max_participants: '12',
-                    venue: 'Center 20'
-                },
-                {
-                    id: '9',
-                    name: 'team',
-                    date: '2025-09-16',
-                    fee: '200.00',
-                    max_participants: '20',
-                    venue: 'Center 21'
-                }
-            ];
-
-            function renderPagination(totalRows) {
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-                paginationContainer.innerHTML = '';
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous';
-                prevButton.className = 'btn btn-secondary';
-                prevButton.style.margin = '0 5px';
-                prevButton.disabled = currentPage === 1;
-                prevButton.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - 2);
-                const endPage = Math.min(totalPages, currentPage + 2);
-
-                if (startPage > 1) {
-                    const firstPage = document.createElement('button');
-                    firstPage.textContent = '1';
-                    firstPage.className = 'btn btn-secondary';
-                    firstPage.style.margin = '0 5px';
-                    firstPage.addEventListener('click', () => {
-                        currentPage = 1;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(firstPage);
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-secondary'}`;
-                    pageButton.style.margin = '0 5px';
-                    pageButton.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.margin = '0 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    const lastPage = document.createElement('button');
-                    lastPage.textContent = totalPages;
-                    lastPage.className = 'btn btn-secondary';
-                    lastPage.style.margin = '0 5px';
-                    lastPage.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        renderPage();
-                        renderPagination(totalRows);
-                    });
-                    paginationContainer.appendChild(lastPage);
-                }
-
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.className = 'btn btn-secondary';
-                nextButton.style.margin = '0 5px';
-                nextButton.disabled = currentPage === totalPages;
-                nextButton.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderPage();
-                        renderPagination(totalRows);
-                    }
-                });
-                paginationContainer.appendChild(nextButton);
-            }
-
-            function renderPage() {
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageData = allData.slice(start, end);
-
-                if (pageData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No event data found</td></tr>';
-                    return;
-                }
-
-                pageData.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.date}</td>
-                        <td>₹${parseFloat(item.fee || 0).toLocaleString()}</td>
-                        <td>${item.max_participants}</td>
-                        <td>${item.venue}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            renderPage();
-            renderPagination(allData.length);
-        });
-
-        // Chart: Revenue Distribution
-        document.addEventListener("DOMContentLoaded", function() {
-            const revenueDistributionData = {
-                labels: ['Facility Rental', 'Event Fees', 'Student Fees'],
-                datasets: [{
-                    data: [13675, 950, 2875],
-                    backgroundColor: ['#28a745', '#ffc107', '#007bff']
-                }]
-            };
-            const ctx = document.getElementById('revenueDistributionChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: revenueDistributionData,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#000'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        // Chart: Attendance Trend
-        document.addEventListener("DOMContentLoaded", function() {
-            const attendanceTrendData = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                datasets: [{
-                    label: 'Attendance',
-                    data: [8, 9, 7, 10, 11, 9, 8, 10],
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            };
-            const ctx = document.getElementById('attendanceTrendChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'line',
-                    data: attendanceTrendData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Attendance Trend',
-                                font: {
-                                    size: 16
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 2
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: '#666'
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        // Global Search Functionality
-        document.getElementById('globalSearch').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            document.querySelectorAll('.kpi-card, .overview-card, .data-table tbody tr').forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-        });
-
-        // Export CSV Functionality
-        function exportTableToCSV(tableId, filename) {
-            const table = document.getElementById(tableId);
-            const rows = table.querySelectorAll('tr');
-            let csv = [];
-            rows.forEach(row => {
-                const cols = row.querySelectorAll('td, th');
-                const rowData = Array.from(cols).map(col => `"${col.textContent.replace(/"/g, '""')}"`).join(',');
-                csv.push(rowData);
-            });
-            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        document.getElementById('exportRevenueCSV').addEventListener('click', () => {
-            exportTableToCSV('facilityRevenueDetailsTables', 'facility_revenue.csv');
-            exportTableToCSV('eventRevenueDetailsTables', 'event_revenue.csv');
-            exportTableToCSV('studentFeeDetailsTables', 'student_fees.csv');
-        });
-
-        document.getElementById('exportExpensesCSV').addEventListener('click', () => {
-            exportTableToCSV('expensesTable1', 'expenses.csv');
-        });
-
-        document.getElementById('exportStudentsCSV').addEventListener('click', () => {
-            exportTableToCSV('studentsTables', 'students.csv');
-        });
-
-        document.getElementById('exportStaffCSV').addEventListener('click', () => {
-            exportTableToCSV('staffTables', 'staff.csv');
-        });
-
-        document.getElementById('exportEventsCSV').addEventListener('click', () => {
-            exportTableToCSV('eventsTables', 'events.csv');
+        // Initialize on Page Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTables();
+            // Ensure charts are responsive on initial load
+            window.dispatchEvent(new Event('resize'));
         });
     </script>
 </body>
-
 </html>

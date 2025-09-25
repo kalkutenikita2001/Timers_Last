@@ -57,7 +57,7 @@
         <form id="participantForm">
             <div class="form-group">
                 <label for="participantName">Name *</label>
-                <input type="text" class="form-control" id="participantName" name="name" placeholder="Enter your name" required pattern="[A-Za-z\s]+" maxlength="50">
+                <input type="text" class="form-control" id="participantName" name="name" required>
             </div>
             <!-- 
             <div class="form-group">
@@ -96,17 +96,17 @@
 
             <div class="form-group">
                 <label for="participantEmail">Email *</label>
-                <input type="email" class="form-control" id="participantEmail" name="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" id="participantEmail" name="email" required>
             </div>
 
             <div class="form-group">
                 <label for="participantPhone">Phone *</label>
-                <input type="text" class="form-control" id="participantPhone" name="phone" placeholder="Enter your phone number" required pattern="[0-9]{10}" maxlength="10">
+                <input type="text" class="form-control" id="participantPhone" name="phone" required>
             </div>
 
             <div class="form-group">
                 <label for="participantAddress">Address *</label>
-                <textarea class="form-control" id="participantAddress" name="address" rows="3" placeholder="Enter your address" required></textarea>
+                <textarea class="form-control" id="participantAddress" name="address" rows="3" required></textarea>
             </div>
             <div class="form-group text-center">
                 <label>QR Code</label>

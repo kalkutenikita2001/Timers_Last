@@ -94,7 +94,7 @@ $route['admin/EventAndNotice/view_participants/(:num)'] = 'EventAndNotice/view_p
 | Misc / Admin / Superadmin routes (unchanged)
 | -------------------------------------------------------------------------
 */
-$route['superadmin/view_center_details'] = 'superadmin/view_center_details';
+$route['Superadmin/view_center_details'] = 'Superadmin/view_center_details';
 $route['admin/get_center_stats'] = 'admin/get_center_stats';
 
 $route['admin/Leave'] = 'Leave/index';        // Admin URL

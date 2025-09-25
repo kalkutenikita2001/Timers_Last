@@ -212,7 +212,7 @@
                                     <th>Center</th>
                                     <th>Title</th>
                                     <th>Date</th>
-                                    <th>Amount</th>
+                                    <th>Amount(₹)</th>
                                     <th>Category</th>
                                     <th>Description</th>
                                     <th>Added By</th>
@@ -227,7 +227,7 @@
                                             <td><?= $exp->center_name ?></td>
                                             <td><?= $exp->title ?></td>
                                             <td><?= date("d/m/Y", strtotime($exp->date)) ?></td>
-                                            <td>₹ <?= number_format($exp->amount, 2) ?></td>
+                                            <td><?= number_format($exp->amount, 2) ?></td>
                                             <td><?= $exp->category ?></td>
                                             <td><?= $exp->description ?></td>
                                             <td><?= $exp->added_by ?></td>
@@ -329,7 +329,7 @@
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger px-4" id="saveBtn" disabled>Save</button>
+                        <button type="submit" class="btn btn-danger px-4" id="saveBtn">Save</button>
                     </div>
                 </form>
             </div>

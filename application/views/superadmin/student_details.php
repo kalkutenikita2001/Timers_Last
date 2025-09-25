@@ -729,7 +729,7 @@
 
                                 <div class="detail-row">
                                     <div class="detail-label">
-                                        <i class="fas fa-phone-alt"></i>
+                                        <i class="fas fa-phone-volume"></i>
                                         Emergency Contact
                                     </div>
                                     <div class="detail-value"><?= $student['emergency_contact'] ?></div>
@@ -1218,7 +1218,7 @@
 
                             <?php endforeach; ?>
 
-                            
+
                         </div>
 
                         <!-- Navigation Buttons -->
@@ -1429,10 +1429,10 @@
                                     </div>
 
                                     <?php if (($index + 1) % 2 == 0): ?>
-                                    </div>
-                                    <div class="row"> <!-- close and start new row after 2 cards -->
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                            </div>
+                            <div class="row"> <!-- close and start new row after 2 cards -->
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                             </div>
                         </div>
 
@@ -1802,7 +1802,7 @@
                 paidAmount.addEventListener('input', calculateRemaining);
 
                 // Form validation on save
-                window.saveStudentChanges = function () {
+                window.saveStudentChanges = function() {
                     if (!form.checkValidity()) {
                         form.classList.add('was-validated');
                         Swal.fire('Error', 'Please fix the highlighted errors.', 'error');
@@ -2031,7 +2031,7 @@
             }
 
             // Initialize navigation buttons on page load
-            $(document).ready(function () {
+            $(document).ready(function() {
                 updateNavigationButtons();
             });
         </script>
