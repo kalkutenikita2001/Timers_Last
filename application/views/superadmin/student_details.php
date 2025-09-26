@@ -1470,7 +1470,8 @@
                         <div class="attendance-stats">
                             <div class="stat-card">
                                 <div class="stat-number">
-                                    <?php print_r($get_overrall_attendance["attendance_percentage"]) ?></div>
+                                    <?php print_r($get_overrall_attendance["attendance_percentage"]) ?>
+                                </div>
                                 <div class="stat-label">Overall Attendance</div>
                             </div>
                             <div class="stat-card">
@@ -1653,15 +1654,17 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="action-buttons">
-                        <button type="button" class="btn-edit" data-bs-toggle="modal"
+                        <!-- <button type="button" class="btn-edit" data-bs-toggle="modal"
                             data-bs-target="#editStudentModal">
                             <i class="fas fa-edit me-2"></i>
                             Edit Student
-                        </button>
+                        </button> -->
                         <button type="button" class="btn-renew" onclick="renewAdmission()">
                             <i class="fas fa-sync-alt me-2"></i>
                             Renew Admission
                         </button>
+
+
                     </div>
                 </div>
             </div>
@@ -1998,38 +2001,77 @@
             }
 
             // Renew admission
-            function renewAdmission() {
-                Swal.fire({
-                    title: 'Renew Admission',
-                    text: 'Are you sure you want to renew this student\'s admission?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Yes, Renew',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Simulate renewal process
-                        Swal.fire({
-                            title: 'Processing Renewal...',
-                            html: 'Please wait while we process the admission renewal.',
-                            timer: 2000,
-                            timerProgressBar: true,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        }).then(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Admission Renewed!',
-                                text: 'Student admission has been successfully renewed.',
-                                confirmButtonColor: '#28a745'
-                            });
-                        });
+
+
+            async function renewAdmission() {
+                try {
+                    // Get the student ID from the URL
+                    const pathParts = window.location.pathname.split('/');
+                    const studentId = pathParts[pathParts.length - 1]; // last part of the URL
+
+                    let formData = new FormData();
+                    formData.append("student_id", studentId);
+
+                    // Add today's date as joining date
+                    let today = new Date().toISOString().split("T")[0];
+                    formData.append("joining_date", today);
+
+                    // Base URL from PHP
+                    const baseUrl = "<?php echo base_url(); ?>";
+
+                    const response = await fetch(baseUrl + "Admission/renewaddmission", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    console.log("API Response:", result);
+
+                    if (response.ok && result.status === 'success') {
+                        Swal.fire("Success", result.message || "Admission renewed successfully!", "success");
+                    } else {
+                        Swal.fire("Failed", result.message || "Something went wrong.", "error");
                     }
-                });
+                } catch (error) {
+                    console.error("Error:", error);
+                    Swal.fire("Error", "Server error occurred. Please try again later.", "error");
+                }
             }
+
+
+
+            // function renewAdmission() {
+            // Swal.fire({
+            // title: 'Renew Admission',
+            // text: 'Are you sure you want to renew this student\'s admission?',
+            // icon: 'question',
+            // showCancelButton: true,
+            // confirmButtonColor: '#28a745',
+            // cancelButtonColor: '#6c757d',
+            // confirmButtonText: 'Yes, Renew',
+            // cancelButtonText: 'Cancel'
+            // }).then((result) => {
+            // if (result.isConfirmed) {
+            // // Simulate renewal process
+            // Swal.fire({
+            // title: 'Processing Renewal...',
+            // html: 'Please wait while we process the admission renewal.',
+            // timer: 2000,
+            // timerProgressBar: true,
+            // didOpen: () => {
+            // Swal.showLoading();
+            // }
+            // }).then(() => {
+            // Swal.fire({
+            // icon: 'success',
+            // title: 'Admission Renewed!',
+            // text: 'Student admission has been successfully renewed.',
+            // confirmButtonColor: '#28a745'
+            // });
+            // });
+            // }
+            // });
+            // }
 
             // Initialize navigation buttons on page load
             $(document).ready(function () {
