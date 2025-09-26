@@ -1870,7 +1870,7 @@
           
           });
 
-            window.location.href = '<?= base_url('receipt?student_id=') ?>' + studentId;
+            window.location.href = '<?= base_url('newreceipt?student_id=') ?>' + studentId;
         }
         else {
           Swal.fire({
