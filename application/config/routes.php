@@ -59,6 +59,7 @@ $route['New_admission'] = 'Superadmin/Include/New_admission';
 | -------------------------------------------------------------------------
 */
 $route['receipt'] = 'admission/receipt';
+$route['newreceipt'] = 'admission/newreceipt';
 $route['Re_admission'] = 'admission/Re_admission';
 $route['Students'] = 'admission/Students';
 $route['Renew_admission'] = 'admission/Renew_admission';

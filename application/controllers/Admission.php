@@ -25,6 +25,16 @@ class Admission extends CI_Controller
         $this->load->view('superadmin/receipt', $data);
     }
 
+     public function newreceipt()
+    {
+        $student_id = $this->input->get('student_id');
+        if (!$student_id) {
+            show_error('Invalid student ID', 400);
+        }
+        $data['student_id'] = $student_id;
+        $this->load->view('superadmin/reciptnew', $data);
+    }
+
     public function get_centers()
     {
         $this->output->set_content_type('application/json');
