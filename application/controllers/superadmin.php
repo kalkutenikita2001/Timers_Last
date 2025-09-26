@@ -362,6 +362,7 @@ class Superadmin extends CI_Controller
 
 		// print_r($data['student_attendace'] );
 
+		
 		$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
 
 

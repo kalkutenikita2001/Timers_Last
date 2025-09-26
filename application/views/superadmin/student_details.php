@@ -1091,13 +1091,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="detail-row">
+                                    <!-- <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-calendar-week"></i>
                                             Training Days
                                         </div>
                                         <div class="detail-value">Monday, Wednesday, Friday</div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="col-md-6">
@@ -1106,12 +1106,12 @@
                                             <i class="fas fa-chalkboard-teacher"></i>
                                             Coach
                                         </div>
-                                        
-                                            <div class="detail-value">
-    <?php echo $student_get_current_batch[0]["coach_name"]; ?>
-</div>
 
-                                       
+                                        <div class="detail-value">
+                                            <?php echo $student_get_current_batch[0]["coach_name"]; ?>
+                                        </div>
+
+
                                     </div>
 
                                     <div class="detail-row">
@@ -1139,7 +1139,7 @@
                                             <i class="fas fa-map-marker-alt"></i>
                                             Training Venue
                                         </div>
-                                          <?php echo $student_get_current_batch[0]["center_name"]; ?>
+                                        <?php echo $student_get_current_batch[0]["center_name"]; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1358,28 +1358,28 @@
                         <h4><i class="fas fa-building me-2"></i>Facilities</h4>
                         <p>Additional facilities and services availed by the student</p>
 
-                        
-                            <!-- Current Facilities -->
-                            <div class="facilities-section">
-                                <h5 class="section-subtitle">
-                                    <i class="fas fa-star me-2"></i>Current Facilities
-                                </h5>
-                             
-                                <div class="row">
-                                    <?php if (!empty($facilities)): ?>
-                                        <?php foreach ($facilities as $facility): ?>
-                                            <div class="col-md-6">
-                                                <div class="facility-card">
-                                                    <div class="facility-header d-flex justify-content-between">
-                                                        <div class="facility-name">
-                                                            <i class="fas fa-check me-2"></i>
-                                                            <?= ucfirst($facility['facility_name']) ?>
-                                                            <?= $facility['facility_name'] ? '(' . $facility['details'] . ')' : '' ?>
-                                                        </div>
-                                                        <div class="facility-amount">
-                                                            ₹<?= number_format($facility['amount'], 2) ?></div>
+
+                        <!-- Current Facilities -->
+                        <div class="facilities-section">
+                            <h5 class="section-subtitle">
+                                <i class="fas fa-star me-2"></i>Current Facilities
+                            </h5>
+
+                            <div class="row">
+                                <?php if (!empty($facilities)): ?>
+                                    <?php foreach ($facilities as $facility): ?>
+                                        <div class="col-md-6">
+                                            <div class="facility-card">
+                                                <div class="facility-header d-flex justify-content-between">
+                                                    <div class="facility-name">
+                                                        <i class="fas fa-check me-2"></i>
+                                                        <?= ucfirst($facility['facility_name']) ?>
+                                                        <?= $facility['facility_name'] ? '(' . $facility['details'] . ')' : '' ?>
                                                     </div>
-                                                    <!-- <div class="facility-details">
+                                                    <div class="facility-amount">
+                                                        ₹<?= number_format($facility['amount'], 2) ?></div>
+                                                </div>
+                                                <!-- <div class="facility-details">
                                                         <strong>Details:</strong>
                                                         <?= $facility['subtype_name'] ?: 'Standard' ?><br>
                                                         <strong>Duration:</strong>
@@ -1387,17 +1387,17 @@
                                                         <strong>Status:</strong> <span
                                                             class="status-badge status-active">Active</span>
                                                     </div> -->
-                                                </div>
                                             </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <div class="col-12">
-                                            <p>No facilities availed by this student.</p>
                                         </div>
-                                    <?php endif; ?>
-                                </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="col-12">
+                                        <p>No facilities availed by this student.</p>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                       
+                        </div>
+
 
 
                         <!-- Previous Facilities -->
@@ -1429,10 +1429,10 @@
                                     </div>
 
                                     <?php if (($index + 1) % 2 == 0): ?>
-                            </div>
-                            <div class="row"> <!-- close and start new row after 2 cards -->
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="row"> <!-- close and start new row after 2 cards -->
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
 
@@ -1469,18 +1469,22 @@
                         <!-- Attendance Statistics -->
                         <div class="attendance-stats">
                             <div class="stat-card">
-                                <div class="stat-number"><?php print_r($get_overrall_attendance["attendance_percentage"]) ?></div>
+                                <div class="stat-number">
+                                    <?php print_r($get_overrall_attendance["attendance_percentage"]) ?></div>
                                 <div class="stat-label">Overall Attendance</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number"><?php print_r($get_overrall_attendance["present_days"]) ?></div>
+                                <div class="stat-number"><?php print_r($get_overrall_attendance["present_days"]) ?>
+                                </div>
                                 <div class="stat-label">Sessions Attended</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number"><?php print_r($get_overrall_attendance["total_days"] - $get_overrall_attendance["present_days"]) ?></div>
+                                <div class="stat-number">
+                                    <?php echo max(0, $get_overrall_attendance["total_days"] - $get_overrall_attendance["present_days"]); ?>
+                                </div>
                                 <div class="stat-label">Sessions Missed</div>
                             </div>
-                            
+
                         </div>
 
                         <!-- Attendance Table -->
@@ -1560,8 +1564,8 @@
                                                 <th>Day</th>
                                                 <th>Time</th>
                                                 <th>Status</th>
-                                                <th>Coach</th>
-                                                <th>Remarks</th>
+                                                <!-- <th>Coach</th>
+                                                <th>Remarks</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1578,8 +1582,8 @@
                                                             <?php echo $row['status']; ?>
                                                         </span>
                                                     </td>
-                                                    <td>Mr. Vikram Singh</td>
-                                                    <td>Regular attendance</td>
+                                                    <!-- <td>Mr. Vikram Singh</td>
+                                                    <td>Regular attendance</td> -->
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -1799,7 +1803,7 @@
                 paidAmount.addEventListener('input', calculateRemaining);
 
                 // Form validation on save
-                window.saveStudentChanges = function() {
+                window.saveStudentChanges = function () {
                     if (!form.checkValidity()) {
                         form.classList.add('was-validated');
                         Swal.fire('Error', 'Please fix the highlighted errors.', 'error');
@@ -2028,7 +2032,7 @@
             }
 
             // Initialize navigation buttons on page load
-            $(document).ready(function() {
+            $(document).ready(function () {
                 updateNavigationButtons();
             });
         </script>

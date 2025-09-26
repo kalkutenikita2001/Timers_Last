@@ -384,17 +384,20 @@ class Admin extends CI_Controller
 
         // Load facilities
         $this->load->model('Facility_model');
-        $data['facilities'] = $this->Facility_model->get_facilities_by_student($id);
+        $data['facilities'] = $this->Facility_model->get_facilities_of_student($id);
 
+     
 
         $data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
 
 
 
 
+		$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
 
 
 
+       
         $data['student_attendace'] = $this->Student_model->get_student_attendace($id);
 
         // print_r($data['student_attendace'] );
