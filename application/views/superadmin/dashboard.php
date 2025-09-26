@@ -444,7 +444,7 @@
           <div class="chart-container">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="mb-0">Weekly Attendance</h6>
-              <button class="btn filter-btn" onclick="filterAttendance()">Filter</button>
+              <!-- <button class="btn filter-btn" onclick="filterAttendance()">Filter</button> -->
             </div>
             <div style="position:relative; height:220px;">
               <canvas id="attendanceChart"></canvas>
@@ -552,12 +552,12 @@
     window.studentChart = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      setupSidebarToggle();
+      // sidebar controller will auto-initialize from the script at the bottom (it wires toggles & fallback)
       setupModalBlur();
       initOrUpdateCharts();
       fetchCenterStats(null);
 
-      // wire backdrop click to close mobile sidebar
+      // wire backdrop click to close mobile sidebar (works alongside controller)
       const backdrop = document.querySelector('.sidebar-backdrop');
       if (backdrop) {
         backdrop.addEventListener('click', () => {
@@ -568,79 +568,6 @@
         });
       }
     });
-
-    function setupSidebarToggle() {
-      const toggleBtn = document.querySelector('.sidebar-toggle') || document.getElementById('sidebarToggle') || document.querySelector('[data-sidebar-toggle]');
-      const wrapper = document.getElementById('dashboardWrapper');
-
-      function isMobile() {
-        return window.matchMedia('(max-width: 575.98px)').matches;
-      }
-
-      function openMobileSidebar() {
-        document.body.classList.add('sidebar-open');
-        document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.add('active'));
-        const bd = document.querySelector('.sidebar-backdrop');
-        if (bd) bd.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMobileSidebar() {
-        document.body.classList.remove('sidebar-open');
-        document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
-        const bd = document.querySelector('.sidebar-backdrop');
-        if (bd) bd.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      function toggleHandler() {
-        if (isMobile()) {
-          if (document.body.classList.contains('sidebar-open')) closeMobileSidebar(); else openMobileSidebar();
-        } else {
-          const sidebar = document.querySelector('.sidebar, #sidebar, .main-sidebar');
-          if (!sidebar) return;
-          const isMin = sidebar.classList.toggle('minimized');
-          if (wrapper) wrapper.classList.toggle('minimized', isMin);
-          setTimeout(() => window.dispatchEvent(new Event('resize')), 220);
-        }
-      }
-
-      if (toggleBtn) toggleBtn.addEventListener('click', toggleHandler);
-      else {
-        // add fallback toggle in navbar if none found
-        const navbar = document.querySelector('.navbar, header, .main-header, .topbar');
-        if (navbar) {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'btn btn-sm btn-light sidebar-toggle ms-2';
-          btn.style.display = 'inline-flex';
-          btn.innerHTML = '<i class="bi bi-list"></i>';
-          btn.title = 'Toggle sidebar';
-          btn.addEventListener('click', toggleHandler);
-          navbar.prepend(btn);
-        }
-      }
-
-      document.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
-          document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
-          document.body.classList.remove('sidebar-open');
-          const bd = document.querySelector('.sidebar-backdrop');
-          if (bd) bd.style.display = 'none';
-          document.body.style.overflow = '';
-        }
-      });
-
-      window.addEventListener('resize', () => {
-        if (!isMobile()) {
-          const bd = document.querySelector('.sidebar-backdrop');
-          if (bd) bd.style.display = 'none';
-          document.body.classList.remove('sidebar-open');
-          document.querySelectorAll('.sidebar, #sidebar, .main-sidebar').forEach(s => s.classList.remove('active'));
-          document.body.style.overflow = '';
-        }
-      });
-    }
 
     function setupModalBlur() {
       const modals = ['addCenterModal', 'editCenterModal', 'statListModal'];
@@ -1025,6 +952,14 @@
 
 
 <script>
+/*
+  Robust sidebar controller:
+  - single-click on desktop (pointerdown wired to toggles)
+  - mobile overlay behaviour (open/close)
+  - dedupes touch -> click synthetic events
+  - fallback toggle button inserted into navbar if none exists
+  This is the same controller pattern used in the Finance.php you shared.
+*/
 (function () {
   // --- Configuration ---
   const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
@@ -1065,9 +1000,9 @@
   let lock = false;
   function lockFor(ms=320) { lock = true; clearTimeout(lock._t); lock._t = setTimeout(()=> lock=false, ms); }
 
-  // Track last touch/pointer time to avoid handling the follow-up synthetic click
-  let lastTouchAt = 0;
-  const TOUCH_CLICK_GAP = 700; // ms
+  // Track last interactive event to suppress follow-up synthetic clicks
+  let lastInteractionAt = 0;
+  const INTERACTION_GAP = 700; // ms
 
   function openMobileSidebar() {
     const s = sidebarEl(); if (!s) return;
@@ -1097,8 +1032,8 @@
   }
 
   function handleToggleEvent(e) {
-    // If this is a click that immediately follows a touch, ignore it
-    if (e && e.type === 'click' && (Date.now() - lastTouchAt) < TOUCH_CLICK_GAP) {
+    // suppress clicks immediately after a pointerdown/touch (we set lastInteractionAt)
+    if (e && e.type === 'click' && (Date.now() - lastInteractionAt) < INTERACTION_GAP) {
       return;
     }
 
@@ -1112,23 +1047,47 @@
     }
   }
 
-  // Prefer pointerdown for touch responsiveness, but dedupe with subsequent click
+  // --- Wire direct handlers to toggle elements (click + pointerdown) ---
+  function wireToggleButtons() {
+    const toggles = qsa(TOGGLE_SELECTORS);
+    toggles.forEach(el => {
+      if (el.__sidebarToggleBound) return;
+      el.__sidebarToggleBound = true;
+
+      // pointerdown catches mouse/pen/touch early — immediate reaction on press
+      el.addEventListener('pointerdown', function (ev) {
+        // mark the interaction time so the following click is ignored by handleToggleEvent
+        lastInteractionAt = Date.now();
+        // Call handler directly for instantaneous response on desktop/mouse
+        try { handleToggleEvent(ev); } catch (err) { console.warn('sidebar pointerdown handler error', err); }
+      }, { passive: true });
+
+      // Keep click handler as backup (keyboard activation or other environments)
+      el.addEventListener('click', function (ev) {
+        // mark interaction time (for safety)
+        lastInteractionAt = Date.now();
+        // Let delegated handlers decide; still call handler to be sure
+        try { handleToggleEvent(ev); } catch (err) { console.warn('sidebar click handler error', err); }
+      });
+    });
+  }
+
+  // Global pointerdown: only use for touch/pen if a toggle was pressed outside wireToggleButtons
   document.addEventListener('pointerdown', function (ev) {
-    // Only treat actual touch/pen as immediate triggers (ignore mouse pointerdown)
     if (ev.pointerType === 'touch' || ev.pointerType === 'pen') {
-      const toggle = ev.target.closest(TOGGLE_SELECTORS);
+      const toggle = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
       if (toggle) {
-        lastTouchAt = Date.now();
-        // call handler - create a synthetic event-like object to pass
+        lastInteractionAt = Date.now();
         handleToggleEvent(ev);
       }
     }
   }, { passive: true });
 
-  // Click handler for mouse/keyboard OR synthetic click (ignored when recent touch)
+  // Delegated click: covers dynamic toggles, keyboard, and acts as backup
   document.addEventListener('click', function (ev) {
-    const toggle = ev.target.closest(TOGGLE_SELECTORS);
+    const toggle = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
     if (toggle) {
+      // If a recent pointerdown already handled this, handleToggleEvent will ignore the click
       handleToggleEvent(ev);
     }
   });
@@ -1142,9 +1101,9 @@
   // Close overlay when clicking a link inside sidebar on mobile (common UX)
   document.addEventListener('click', function (e) {
     if (!isMobile()) return;
-    const inside = e.target.closest(SIDEBAR_SELECTORS);
+    const inside = e.target.closest && e.target.closest(SIDEBAR_SELECTORS);
     if (!inside) return;
-    const anchor = e.target.closest('a');
+    const anchor = e.target.closest && e.target.closest('a');
     if (anchor && anchor.getAttribute('href') && anchor.getAttribute('href') !== '#') {
       setTimeout(closeMobileSidebar, 160);
     }
@@ -1178,9 +1137,12 @@
     document.body.style.overflow = 'hidden';
   }
 
-  // Provide fallback toggle button if none exists
+  // Provide fallback toggle button if none exists, and wire toggles
   (function ensureFallbackToggle() {
-    if (qs(TOGGLE_SELECTORS)) return;
+    if (qs(TOGGLE_SELECTORS)) {
+      wireToggleButtons();
+      return;
+    }
     const navbar = qs('.navbar, header, .main-header, .topbar');
     if (!navbar) return;
     const btn = document.createElement('button');
@@ -1191,12 +1153,17 @@
     btn.style.marginRight = '8px';
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     navbar.prepend(btn);
+
+    wireToggleButtons();
   })();
+
+  // Also wire buttons on DOMContentLoaded (in case toggles are added later)
+  document.addEventListener('DOMContentLoaded', () => {
+    wireToggleButtons();
+  });
 
 })();
 </script>
-
-
 
 </body>
 
