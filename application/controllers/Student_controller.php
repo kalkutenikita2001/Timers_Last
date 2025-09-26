@@ -11,6 +11,11 @@ class Student_controller extends CI_Controller
         $this->load->library('form_validation');
     }
 
+
+
+
+    
+
     public function index()
     {
         $students = $this->Student_model->get_all_students();
