@@ -154,7 +154,7 @@ class Superadmin extends CI_Controller
 	// show students list
 	public function Students()
 	{
-		$data['students'] = $this->Student_model->get_all_students();
+		$data['students'] = $this->Student_model->get_students();
 		$this->load->view('superadmin/Students', $data);
 	}
 

@@ -487,7 +487,7 @@ function generateCenterNumber() {
             </div>
             <div class="col-md-6">
                 <label for="category" class="form-label required-field">Category</label>
-                <input type="text" class="form-control" id="category" required placeholder="Enter category">
+                <input type="text" class="form-control" id="category" name="category" required placeholder="Enter category">
                 <div class="invalid-feedback">Category is required.</div>
             </div>
         </div>
@@ -531,6 +531,8 @@ function generateCenterNumber() {
                         const startDate = document.getElementById("startDate");
                         const endDate = document.getElementById("endDate");
                         const duration = document.getElementById("duration");
+                        const category = document.getElementById("category");
+
 
                         // Calculate duration based on start and end dates
                         function calculateDuration() {
@@ -777,7 +779,7 @@ function generateCenterNumber() {
 
                         <!-- Add Facility Button -->
                         <div class="d-flex justify-content-end mt-4">
-                            <button type="button" class="btn btn-info" id="addFacility" onclick="redirectToPage()>
+                            <button type="button" class="btn btn-info" id="addFacility" onclick="redirectToPage()">
                                 <i class="fas fa-plus me-2"></i>Save Center
                             </button>
                         </div>
@@ -864,13 +866,18 @@ function redirectToPage() {
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <label for="batch_category" class="form-label">Category</label>
+                                            <!-- <label for="batch_category" class="form-label">Category</label>
                                             <select id="batch_category" name="batch_category" class="form-control">
                                                 <option value="">Select Category</option>
                                                 <option value="Beginner">Beginner</option>
                                                 <option value="Intermediate">Intermediate</option>
                                                 <option value="Advanced">Advanced</option>
-                                            </select>
+                                            </select> -->
+                                                 <label for="category" class="form-label required-field">Category</label>
+                <input type="text" class="form-control" id="category" name="category" required placeholder="Enter category">
+                <div class="invalid-feedback">Category is required.</div>
+            </div>                    
+
                                         </div>
                                     </div>
                                 </form>
@@ -1000,7 +1007,7 @@ function redirectToPage() {
                         if (batchSubmitBtn) {
                             batchSubmitBtn.addEventListener("click", function () {
                                 batchModal.hide();
-                                alert("Batch added successfully!");
+                                // alert("Batch added successfully!");
                             });
                         }
                     });
@@ -1009,13 +1016,13 @@ function redirectToPage() {
                     document.getElementById('facilitySubmitBtn').addEventListener('click', function () {
                         // Add your facility submission logic here
                         facilityModal.hide();
-                        alert('Facility added successfully!');
+                        // alert('Facility added successfully!');
                     });
 
                     document.getElementById('staffSubmitBtn').addEventListener('click', function () {
                         // Add your staff submission logic here
                         staffModal.hide();
-                        alert('Staff added successfully!');
+                        // alert('Staff added successfully!');
                     });
 
                     // Rest of your existing JavaScript code...
@@ -1634,7 +1641,7 @@ function redirectToPage() {
 
                             // Here you would typically send the data to the server
                            
-                            alert('Center details saved successfully!');
+                            // alert('Center details saved successfully!');
 
                             // Reset the form and data
                             CenterForm.reset();
@@ -1762,6 +1769,8 @@ function redirectToPage() {
                     }
                 });
             </script>
+
+        
 
             <script>
 

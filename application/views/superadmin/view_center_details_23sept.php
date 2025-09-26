@@ -550,12 +550,15 @@
               <input type="date" id="end_date" name="end_date" class="form-control" required />
             </div>
             <div class="form-group col-md-6">
-              <label for="batch_category">Category <span class="text-danger">*</span></label>
+              <!-- <label for="batch_category">Category <span class="text-danger">*</span></label>
               <select id="batch_category" name="category" class="form-control" required>
                 <option value="">Select Category</option>
                 <option value="individual">Individual</option>
                 <option value="group">Group</option>
-              </select>
+              </select> -->
+              <label for="category" class="form-label required-field">Category</label>
+                <input type="text" class="form-control" id="category" name="category" required placeholder="Enter category">
+                <div class="invalid-feedback">Category is required.</div>
             </div>
           </div>
           <div class="form-row">
@@ -616,12 +619,16 @@
               <input type="date" id="editEndDate" name="end_date" class="form-control" required />
             </div>
             <div class="form-group col-md-6">
-              <label for="editBatchCategory">Category <span class="text-danger">*</span></label>
+              <!-- <label for="editBatchCategory">Category <span class="text-danger">*</span></label>
               <select id="editBatchCategory" name="batch_category" class="form-control" required>
                 <option value="">Select Category</option>
                 <option value="individual">Individual</option>
                 <option value="group">Group</option>
-              </select>
+              </select> -->
+               <label for="category" class="form-label required-field">Category</label>
+                <input type="text" class="form-control" id="category" name="category" required placeholder="Enter category">
+                <div class="invalid-feedback">Category is required.</div>
+            </div>
             </div>
           </div>
           <div class="form-row">
@@ -1497,7 +1504,7 @@
           end_time: $('#end_time').val(),
           start_date: $('#start_date').val(),
           end_date: $('#end_date').val(),
-          category: $('#batch_category').val()
+          category: $('#category').val()
         };
         $.ajax({
           url: baseUrl + "Center/add_batch",
