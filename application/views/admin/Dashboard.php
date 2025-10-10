@@ -1,4 +1,4 @@
-<!-- application/views/admin/Dashboard.php (updated: improved sidebar close, backdrop fix, navbar sync, responsive cards) -->
+<!-- application/views/admin/Dashboard.php (updated: improved sidebar close, backdrop fix, navbar sync, responsive cards, show center/batch names) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -611,7 +611,8 @@
         $('#viewName').text(s.name || '—');
         $('#viewLevel').text((s.student_progress_category || s.level) ? ('Level: ' + (s.student_progress_category || s.level)) : 'Level: —');
         $('#viewContact').text('Contact: ' + (s.contact || '—'));
-        $('#viewCenter').text('Center: ' + (s.center_id || '—'));
+        // Note: this will be replaced by name via lookup if available (handled below in initDynamic)
+        $('#viewCenter').text('Center: ' + (s.center || s.center_id || '—'));
         $('#viewStudentSmall').text('ID: ' + (s.id || '-') + ' • Status: ' + (s.status || '-'));
 
         // General
@@ -619,7 +620,7 @@
           <p><strong>Parent:</strong> ${s.parent_name || '-' } <small class="text-muted">(${s.emergency_contact || '-'})</small></p>
           <p><strong>DOB:</strong> ${s.dob || '-'}</p>
           <p><strong>Address:</strong> ${s.address || '-'}</p>
-          <p><strong>Batch:</strong> ${s.batch_id || '-'} ${s.batch_time ? ' • ' + s.batch_time : ''}</p>
+          <p><strong>Batch:</strong> ${s.batch || s.batch_id || '-'} ${s.batch_time ? ' • ' + s.batch_time : ''}</p>
           <p><strong>Coach:</strong> ${s.coach || '-'}</p>
           <p><strong>Coordinator:</strong> ${s.coordinator || '-'} ${s.coordinator_phone ? ' • ' + s.coordinator_phone : ''}</p>
         `;
@@ -759,6 +760,34 @@
       const BASE_ATTENDANCE_URL = '<?php echo base_url("admin/get_attendance_ajax"); ?>';
       const BASE_CHART_URL = '<?php echo base_url("admin/get_students_chart"); ?>';
 
+      // --- NEW: lookup maps for center & batch names (frontend fallback) ---
+      let CENTER_MAP = {}, BATCH_MAP = {};
+      function fetchLookups() {
+        const CENTERS_URL = '<?php echo base_url("admin/get_centers_list"); ?>';
+        const BATCHES_URL = '<?php echo base_url("admin/get_batches_list"); ?>';
+
+        $.getJSON(CENTERS_URL).done(function(res){
+          if(res && res.success && Array.isArray(res.centers)){
+            res.centers.forEach(c => { CENTER_MAP[String(c.id)] = c.name || c.center_name || c.title || c.name; });
+            // Also populate add/edit select options if present
+            if($('#addStudentCenter').length){
+              $('#addStudentCenter').empty().append('<option value="">-- Select Center --</option>');
+              res.centers.forEach(c => { $('#addStudentCenter').append(`<option value="${c.id}">${$('<div/>').text(c.name||c.center_name||c.title||'').html()}</option>`); });
+            }
+          }
+        }).fail(()=> console.warn('Could not load centers lookup'));
+
+        $.getJSON(BATCHES_URL).done(function(res){
+          if(res && res.success && Array.isArray(res.batches)){
+            res.batches.forEach(b => { BATCH_MAP[String(b.id)] = b.name || b.batch_name || b.title || b.name; });
+            if($('#addStudentBatch').length){
+              $('#addStudentBatch').empty().append('<option value="">-- Select Batch --</option>');
+              res.batches.forEach(b => { $('#addStudentBatch').append(`<option value="${b.id}">${$('<div/>').text(b.name||b.batch_name||b.title||'').html()}</option>`); });
+            }
+          }
+        }).fail(()=> console.warn('Could not load batches lookup'));
+      }
+
       let currentFilter = { type: 'total', status: null, center_name: null };
       function setActiveCard(type) { $('.card-stat').removeClass('active-filter'); if (type) $('#stat-' + type).addClass('active-filter'); }
       function handleStat(type) {
@@ -787,7 +816,9 @@
           res.attendance.forEach(r=>{
             const statusText = r.status || '';
             const badgeClass = (statusText.toLowerCase()==='present') ? 'status-complete' : 'status-pending';
-            tbody.append(`<tr><td>${$('<div/>').text(r.name||'N/A').html()}</td><td>${$('<div/>').text(r.batch||'-').html()}</td><td>${$('<div/>').text(r.level||'-').html()}</td><td><span class="status-badge ${badgeClass}">${$('<div/>').text(statusText).html()}</span></td></tr>`);
+            // r.batch may already be a name; fallback to lookup
+            const batchDisplay = r.batch || BATCH_MAP[String(r.batch_id || r.batch)] || (r.batch_id ? ('#'+r.batch_id) : '-');
+            tbody.append(`<tr><td>${$('<div/>').text(r.name||'N/A').html()}</td><td>${$('<div/>').text(batchDisplay||'-').html()}</td><td>${$('<div/>').text(r.level||'-').html()}</td><td><span class="status-badge ${badgeClass}">${$('<div/>').text(statusText).html()}</span></td></tr>`);
           });
         }).fail(()=> console.error('Failed attendance'));
       }
@@ -809,17 +840,23 @@
       const $searchInp = $('#studentSearch'); const $searchBtn = $('#studentSearchBtn'); const $clearBtn = $('#studentClearBtn');
 
       function esc(t){ return $('<div/>').text(t||'').html(); }
+
+      // ---------- UPDATED renderStudents: use names (server-provided or lookup) ----------
       function renderStudents(rows, append=true){
         if(!append) $tbody.empty();
         if(rows.length===0 && !append){ $tbody.html('<tr><td colspan="7" class="loading-row">No students found</td></tr>'); return; }
         const html = rows.map(s => {
           const category = s.category || s.status || '';
           const badgeClass = category === 'Complete' ? 'status-complete' : 'status-pending';
+          // Prefer server-provided name fields, else lookup, else fallback id
+          const centerDisplay = s.center_name || s.center || CENTER_MAP[String(s.center_id || s.center)] || (s.center_id ? ('#'+s.center_id) : '-');
+          const batchDisplay  = s.batch_name  || s.batch  || BATCH_MAP[String(s.batch_id || s.batch)]  || (s.batch_id ? ('#'+s.batch_id) : '-');
+
           return `<tr>
             <td>${esc(s.name)}</td>
             <td>${esc(s.contact)}</td>
-            <td>${esc(s.center)}</td>
-            <td>${esc(s.batch)}</td>
+            <td>${esc(centerDisplay)}</td>
+            <td>${esc(batchDisplay)}</td>
             <td>${esc(s.level)}</td>
             <td><span class="status-badge ${badgeClass}">${esc(category)}</span></td>
             <td><div class="d-flex gap-1">
@@ -869,7 +906,12 @@
       $clearBtn.on('click', function(){ $searchInp.val(''); doSearch(''); });
 
       // initial fetches
-      fetchCenterStats(); resetAndLoad(); initChart(); fetchChart(); fetchAttendance();
+      fetchLookups();           // <-- ensure lookups are loaded (so names are available)
+      fetchCenterStats();
+      resetAndLoad();
+      initChart();
+      fetchChart();
+      fetchAttendance();
 
       setActiveCard('total');
 

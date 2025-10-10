@@ -89,9 +89,9 @@
       <!-- Items populated dynamically -->
       <div class="text-center text-muted small py-3" id="notifEmpty">No notifications</div>
     </div>
-    <div class="p-2 text-center small">
-      <a href="<?php echo base_url('superadmin/notifications'); ?>">View all</a>
-    </div>
+    <!--<div class="p-2 text-center small">-->
+    <!--  <a href="<?php echo base_url('superadmin/notifications'); ?>">View all</a>-->
+    <!--</div>-->
   </div>
 
   <!-- SCRIPTS -->

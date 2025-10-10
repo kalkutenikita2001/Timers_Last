@@ -97,24 +97,61 @@ class Center extends CI_Controller {
       // <-----------------------New API for center Managemnet----------------------->
 
   // ---------- Save Center ----------
-    public function saveCenter() {
-        $input = json_decode(file_get_contents("php://input"), true);
+    // public function saveCenter() {
+    //     $input = json_decode(file_get_contents("php://input"), true);
 
-        if (!$input) {
-            echo json_encode(["status" => "error", "message" => "No data received"]);
-            return;
-        }
+    //     if (!$input) {
+    //         echo json_encode(["status" => "error", "message" => "No data received"]);
+    //         return;
+    //     }
 
-        // // ✅ Hash Password
-        // if (!empty($input['password'])) {
-        //     $input['password'] = password_hash($input['password'], PASSWORD_BCRYPT);
-        // }
+    //     // // ✅ Hash Password
+    //     // if (!empty($input['password'])) {
+    //     //     $input['password'] = password_hash($input['password'], PASSWORD_BCRYPT);
+    //     // }
 
-        $id = $this->Center_model->insertData("center_details", $input);
+    //     $id = $this->Center_model->insertData("center_details", $input);
 
-        echo json_encode(["status" => "success", "center_id" => $id]);
+    //     echo json_encode(["status" => "success", "center_id" => $id]);
+    // }
+public function saveCenter() {
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    if (!$input) {
+        echo json_encode(["status" => "error", "message" => "No data received"]);
+        return;
     }
 
+    // Normalize and whitelist fields to avoid accidental columns
+    $data = [
+        'name'               => isset($input['name']) ? $input['name'] : null,
+        'address'            => isset($input['address']) ? $input['address'] : null,
+        'center_number'      => isset($input['center_number']) ? $input['center_number'] : null,
+        'rent_amount'        => isset($input['rent_amount']) ? $input['rent_amount'] : 0,
+        'rent_period'        => isset($input['rent_period']) ? $input['rent_period'] : 'monthly', // NEW
+        'rent_paid_date'     => isset($input['rent_paid_date']) ? $input['rent_paid_date'] : null,
+        'center_timing_from' => isset($input['center_timing_from']) ? $input['center_timing_from'] : null,
+        'center_timing_to'   => isset($input['center_timing_to']) ? $input['center_timing_to'] : null,
+        'latitude'           => isset($input['latitude']) ? $input['latitude'] : null,
+        'longitude'          => isset($input['longitude']) ? $input['longitude'] : null,
+        'password'           => isset($input['password']) ? $input['password'] : null,
+        'created_at'         => date('Y-m-d H:i:s')
+    ];
+
+    // Optional: hash password here if you want to store hashed password
+    // if (!empty($data['password'])) {
+    //     $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+    // }
+
+    $id = $this->Center_model->insertData("center_details", $data);
+
+    if ($id) {
+        echo json_encode(["status" => "success", "center_id" => $id]);
+    } else {
+        $this->output->set_status_header(500);
+        echo json_encode(["status" => "error", "message" => "Failed to save center"]);
+    }
+}
     // ---------- Save Batch ----------
     public function saveBatch() {
         $input = json_decode(file_get_contents("php://input"), true);
@@ -130,7 +167,7 @@ class Center extends CI_Controller {
     }
 
     // ---------- Save Staff ----------
-    public function saveStaff() {
+    public function saveStaffold() {
         $input = json_decode(file_get_contents("php://input"), true);
 
         if (empty($input['center_id'])) {
@@ -142,6 +179,39 @@ class Center extends CI_Controller {
 
         echo json_encode(["status" => "success", "staff_id" => $id]);
     }
+public function saveStaff() {
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    if (empty($input['center_id'])) {
+        echo json_encode(["status" => "error", "message" => "center_id required"]);
+        return;
+    }
+$assignedBatchIds = null;
+if (!empty($input['assigned_batch']) && is_array($input['assigned_batch'])) {
+    // extract only the IDs
+    $assignedBatchIds = implode(",", array_map(function($b) {
+        return $b['id'] ?? null;
+    }, $input['assigned_batch']));
+}
+
+$data = [
+    'center_id'      => $input['center_id'],
+    'staff_name'     => $input['staff_name'] ?? '',
+    'contact_no'     => $input['contact_no'] ?? '',
+    'role'           => $input['role'] ?? '',
+    'joining_date'   => $input['joining_date'] ?? null,
+    'assigned_batch' => $assignedBatchIds,
+    'coach_level'    => $input['coach_level'] ?? null,
+    'coach_category' => $input['coach_category'] ?? null,
+    'coach_duration' => $input['coach_duration'] ?? null,
+    'created_at'     => date('Y-m-d H:i:s')
+];
+
+
+    $id = $this->Center_model->insertData("staff", $data);
+
+    echo json_encode(["status" => "success", "staff_id" => $id]);
+}
 
     // ---------- Save Facility ----------
     // Save Facility + Subtypes into facilities table
@@ -498,16 +568,28 @@ public function add_student_facility($data)
             return;
         }
 
+        // // Update logic
+        // $update_data = [
+        //     'name' => $name,
+        //     'center_number' => $center_number,
+        //     'address' => $address,
+        //     'rent_amount' => $rent_amount,
+        //     'rent_paid_date' => $rent_paid_date,
+        //     'center_timing_from' => $center_timing_from,
+        //     'center_timing_to' => $center_timing_to
+        // ];
         // Update logic
-        $update_data = [
-            'name' => $name,
-            'center_number' => $center_number,
-            'address' => $address,
-            'rent_amount' => $rent_amount,
-            'rent_paid_date' => $rent_paid_date,
-            'center_timing_from' => $center_timing_from,
-            'center_timing_to' => $center_timing_to
-        ];
+$update_data = [
+    'name' => $name,
+    'center_number' => $center_number,
+    'address' => $address,
+    'rent_amount' => $rent_amount,
+    'rent_period' => isset($data['rent_period']) ? $data['rent_period'] : null, // NEW
+    'rent_paid_date' => $rent_paid_date,
+    'center_timing_from' => $center_timing_from,
+    'center_timing_to' => $center_timing_to,
+    'updated_at' => date('Y-m-d H:i:s')
+];
 
         $result = $this->Center_model->updateCenter($id, $update_data);
 

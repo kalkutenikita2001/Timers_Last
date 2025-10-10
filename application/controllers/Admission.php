@@ -302,17 +302,44 @@ class Admission extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'No form data received']);
             return;
         }
-
+      
         // Save admission
         $student_id = $this->Admission_model->save_admission($data);
 
         if ($student_id) {
+ 
+            $insert_notification = $this->Admission_model->insert_notification($data['center']);
+
             log_message('debug', 'Admission saved successfully with student ID: ' . $student_id);
             echo json_encode(['success' => true, 'student_id' => $student_id]);
         } else {
             $this->output->set_status_header(500);
             log_message('error', 'Failed to save admission');
             echo json_encode(['success' => false, 'message' => 'Failed to save admission']);
+        }
+    }
+
+    
+
+    public function get_deactive_students_by_center()
+    {
+        header('Content-Type: application/json');
+
+
+        $center_id = $this->session->userdata('id');
+        $students = $this->Admission_model->get_deactive_students_by_center($center_id);
+
+        if ($students) {
+            echo json_encode([
+                'status' => 'success',
+                'count' => count($students),
+                'data' => $students
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'No deactive students found'
+            ]);
         }
     }
 
@@ -501,6 +528,7 @@ class Admission extends CI_Controller
         if ($this->input->post('course_duration'))
             $updateData["course_duration"] = $this->input->post('course_duration');
 
+        if ($this->input->post('newRemaining'))
         $updateData["remaining_amount"] = $this->input->post('newRemaining');
 
 
@@ -544,6 +572,10 @@ class Admission extends CI_Controller
         $success = $this->db->update("students", $updateData);
 
         if ($success) {
+
+             $insert_notification = $this->Admission_model->insert_notification_renew();
+
+
 
             $facilities = $this->input->post('facilities');
 

@@ -362,7 +362,7 @@
                   </select>
                 </div>
               </div> -->
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <div class="form-group">
                   <label for="sortEvents"><i class="fas fa-sort"></i> Sort By</label>
                   <select class="form-control" id="sortEvents">
@@ -372,7 +372,7 @@
                     <option value="price-high">Price: High to Low</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -764,6 +764,30 @@
           const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
           $('.navbar').toggleClass('sidebar-minimized', isMinimized);
           $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });
+
+      $('#searchEvents').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        const container = $('.events-container');
+
+        // Reset: show all cards
+        $('.event-card').parent().show();
+
+        if (value.trim() !== "") {
+          const matches = [];
+          const nonMatches = [];
+
+          $('.event-card').each(function() {
+            if ($(this).text().toLowerCase().indexOf(value) > -1) {
+              matches.push($(this).closest('.col-lg-4, .col-md-6'));
+            } else {
+              nonMatches.push($(this).closest('.col-lg-4, .col-md-6'));
+            }
+          });
+
+          // Clear container and re-append with matches first
+          container.empty().append(matches).append(nonMatches);
         }
       });
     </script>

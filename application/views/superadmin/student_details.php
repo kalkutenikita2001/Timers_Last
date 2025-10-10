@@ -870,17 +870,47 @@
                                             Last Attendance
                                         </div>
                                         <div class="detail-value">
-                                            <?= $student['last_attendance'] ? date('d M Y', strtotime($student['last_attendance'])) : 'N/A'; ?>
+                                            <?php
+                                            if (!empty($get_last_attendace['date']) && !empty($get_last_attendace['time'])) {
+                                                echo $get_last_attendace['date'] . ' ' . $get_last_attendace['time'];
+                                            } else {
+                                                echo "No attendance recorded";
+                                            }
+                                            ?>
                                         </div>
+
                                     </div>
 
+                                    <?php
+                                    $start_time = $student_get_current_batch[0]["start_time"];
+                                    $end_time = $student_get_current_batch[0]["end_time"];
+
+                                    $start = new DateTime($start_time);
+                                    $end = new DateTime($end_time);
+
+                                    $interval = $start->diff($end);
+
+                                    $hours = $interval->h;
+                                    $minutes = $interval->i;
+
+                                    // Create a nice readable format
+                                    $duration_text = "";
+                                    if ($hours > 0) {
+                                        $duration_text .= $hours . " hour" . ($hours > 1 ? "s" : "");
+                                    }
+                                    if ($minutes > 0) {
+                                        if ($hours > 0)
+                                            $duration_text .= " ";
+                                        $duration_text .= $minutes . " minute" . ($minutes > 1 ? "s" : "");
+                                    }
+                                    ?>
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-clock"></i>
                                             Session Duration
                                         </div>
                                         <div class="detail-value">
-                                            <?= $student['course_duration'] ?> hours per session
+                                            <?= $duration_text ?> per session
                                         </div>
                                     </div>
                                 </div>
@@ -1114,13 +1144,32 @@
 
                                     </div>
 
+                                    <!--<div class="detail-row">-->
+                                    <!--    <div class="detail-label">-->
+                                    <!--        <i class="fas fa-user-tie"></i>-->
+                                    <!--        Coordinator-->
+                                    <!--    </div>-->
+                                    <!--    <div class="detail-value">-->
+                                    <!--        <?php print_r($student_get_current_batch[0]["name"]) ?>-->
+                                    <!--    </div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="detail-row">-->
+                                    <!--    <div class="detail-label">-->
+                                    <!--        <i class="fas fa-phone"></i>-->
+                                    <!--        Coordinator Phone-->
+                                    <!--    </div>-->
+                                    <!--    <div class="detail-value">-->
+                                    <!--        <?php print_r($student_get_current_batch[0]["contact"]) ?>-->
+                                    <!--    </div>-->
+                                    <!--</div>-->
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-user-tie"></i>
                                             Coordinator
                                         </div>
                                         <div class="detail-value">
-                                            <?php print_r($student_get_current_batch[0]["coordinator"]) ?>
+                                            <?php echo !empty($coordinator['name']) ? $coordinator['name'] : 'N/A'; ?>
                                         </div>
                                     </div>
 
@@ -1130,16 +1179,25 @@
                                             Coordinator Phone
                                         </div>
                                         <div class="detail-value">
-                                            <?php print_r($student_get_current_batch[0]["coordinator_phone"]) ?>
+                                            <?php echo !empty($coordinator['mobile']) ? $coordinator['mobile'] : 'N/A'; ?>
                                         </div>
                                     </div>
 
+                                    <!--<div class="detail-row">-->
+                                    <!--    <div class="detail-label">-->
+                                    <!--        <i class="fas fa-envelope"></i>-->
+                                    <!--        Coordinator Email-->
+                                    <!--    </div>-->
+                                    <!--    <div class="detail-value">-->
+                                    <!--        <?php echo !empty($coordinator['email']) ? $coordinator['email'] : 'N/A'; ?>-->
+                                    <!--    </div>-->
+                                    <!--</div>-->
                                     <div class="detail-row">
                                         <div class="detail-label">
                                             <i class="fas fa-map-marker-alt"></i>
                                             Training Venue
                                         </div>
-                                        <?php echo $student_get_current_batch[0]["center_name"]; ?>
+                                        <?php echo $student_get_current_batch[0]["address"]; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1199,13 +1257,13 @@
                                                     <?php print_r($student_addmission_batch_data["coach"]) ?>
                                                 </div>
                                             </div>
-                                            <div class="detail-row">
+                                            <!-- <div class="detail-row">
                                                 <div class="detail-label">
                                                     <i class="fas fa-calendar-week"></i>
                                                     Training Days
                                                 </div>
                                                 <div class="detail-value">Tuesday, Thursday, Saturday</div>
-                                            </div>
+                                            </div> -->
                                             <div class="detail-row">
                                                 <div class="detail-label">
                                                     <i class="fas fa-check-circle"></i>
@@ -1303,8 +1361,9 @@
                                         Remaining Amount
                                     </div>
                                     <div class="detail-value">
-                                        ₹<?= number_format($student['remaining_amount'], 2) ?>
+                                        ₹<?= number_format((float) ($student['remaining_amount'] ?? 0.00), 2) ?>
                                     </div>
+
                                 </div>
 
                                 <div class="detail-row">
@@ -1597,7 +1656,7 @@
 
 
                         <!-- Attendance Link -->
-                        <div class="row mt-4">
+                        <!-- <div class="row mt-4">
                             <div class="col-md-6">
                                 <div class="detail-row">
                                     <div class="detail-label">
@@ -1610,7 +1669,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="detail-row">
                                     <div class="detail-label">
                                         <i class="fas fa-qrcode"></i>
@@ -1621,8 +1680,52 @@
                                         <small class="d-block text-muted">Scan for attendance</small>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
+                        </div> -->
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="detail-row">
+                                    <div class="detail-label mb-1">
+                                        <i class="fas fa-link"></i> Attendance Link
+                                    </div>
+                                    <div
+                                        class="detail-value d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
+                                        <a href="<?php echo $student['attendace_link']; ?>" target="_blank"
+                                            class="text-primary text-truncate mb-2 mb-sm-0 me-sm-2"
+                                            style="max-width: 100%; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            <?php echo $student['attendace_link']; ?>
+                                        </a>
+                                        <button
+                                            class="btn btn-sm btn-primary d-flex align-items-center px-3 rounded-pill shadow-sm"
+                                            onclick="copyLink('<?php echo $student['attendace_link']; ?>')">
+                                            <i class="fas fa-copy me-1"></i> Copy
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <script>
+                            function copyLink(link) {
+                                navigator.clipboard.writeText(link).then(() => {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Copied!",
+                                        text: "Attendance link copied to clipboard",
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                }).catch(err => {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "Failed to copy link!"
+                                    });
+                                });
+                            }
+                        </script>
+
 
                         <!-- Navigation Buttons -->
                         <div class="nav-buttons">

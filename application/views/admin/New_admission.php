@@ -7,7 +7,8 @@
     <title> New Admission</title>
 
     <!-- Bootstrap & Font Awesome -->
-    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+    <link rel="icon" type="image/jpg" sizes="32x32"
+        href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
@@ -314,29 +315,43 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-user"></i> Name *</label>
-                                                <input type="text" class="form-control" name="studentName" placeholder="Enter student name" required>
+                                                <input type="text" class="form-control" name="studentName"
+                                                    placeholder="Enter student name" required>
                                                 <div class="invalid-feedback">Please enter a valid name.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-mobile-alt"></i> Contact (Whatsapp) *</label>
-                                                <input type="text" class="form-control" name="contact" placeholder="Enter 10-digit phone number" pattern="[6-9][0-9]{9}" maxlength="10" required>
-                                                <div class="invalid-feedback">Please enter a valid 10-digit Indian phone number starting with 6, 7, 8, or 9.</div>
+                                                <input type="text" class="form-control" name="contact"
+                                                    placeholder="Enter 10-digit phone number" pattern="[6-9][0-9]{9}"
+                                                    maxlength="10" required>
+                                                <div class="invalid-feedback">Please enter a valid 10-digit Indian phone
+                                                    number starting with 6, 7, 8, or 9.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-user-friends"></i> Parent Name *</label>
-                                                <input type="text" class="form-control" name="parentName" placeholder="Enter parent name" required>
+                                                <input type="text" class="form-control" name="parentName"
+                                                    placeholder="Enter parent name" required>
                                                 <div class="invalid-feedback">Please enter a valid parent name.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-phone-alt"></i> Emergency Contact *</label>
-                                                <input type="text" class="form-control" name="emergencyContact" placeholder="Enter 10-digit emergency contact" pattern="[6-9][0-9]{9}" maxlength="10" required>
-                                                <div class="invalid-feedback">Please enter a valid 10-digit Indian phone number starting with 6, 7, 8, or 9.</div>
+                                                <input type="text" class="form-control" name="emergencyContact"
+                                                    placeholder="Enter 10-digit emergency contact"
+                                                    pattern="[6-9][0-9]{9}" maxlength="10" required>
+                                                <div class="invalid-feedback">Please enter a valid 10-digit Indian phone
+                                                    number starting with 6, 7, 8, or 9.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-envelope"></i> Email</label>
-                                                <input type="email" class="form-control" name="email" placeholder="Enter email address">
-                                                <div class="invalid-feedback">Please enter a valid email address.</div>
-                                            </div>
+    <label><i class="fas fa-envelope"></i> Email</label>
+    <input 
+        type="email" 
+        class="form-control" 
+        name="email" 
+        placeholder="Enter email address"
+        pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+        required>
+    <div class="invalid-feedback">Please enter a valid Gmail address (must end with @gmail.com).</div>
+</div>
                                             <div class="mb-3">
                                                 <label for="studentLevel" class="form-label">Student Level</label>
                                                 <select class="form-select" id="studentLevel" name="category">
@@ -349,17 +364,21 @@
 
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-alt"></i> Date of Birth *</label>
-                                                <input type="date" class="form-control" name="dob" placeholder="Select date of birth" required max="<?php echo date('Y-m-d'); ?>">
+                                                <input type="date" class="form-control" name="dob"
+                                                    placeholder="Select date of birth" required
+                                                    max="<?php echo date('Y-m-d'); ?>">
                                                 <div class="invalid-feedback">Please select a valid date of birth.</div>
                                             </div>
                                             <div class="form-group col-md-12 col-sm-12">
                                                 <label><i class="fas fa-home"></i> Address *</label>
-                                                <textarea class="form-control" name="address" rows="2" placeholder="Enter full address" required></textarea>
+                                                <textarea class="form-control" name="address" rows="2"
+                                                    placeholder="Enter full address" required></textarea>
                                                 <div class="invalid-feedback">Please enter a valid address.</div>
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <button type="button" class="btn btn-primary next1">Next <i class="fas fa-arrow-right"></i></button>
+                                            <button type="button" class="btn btn-primary next1">Next <i
+                                                    class="fas fa-arrow-right"></i></button>
                                         </div>
                                     </div>
 
@@ -376,7 +395,8 @@
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-alt"></i> Course Duration *</label>
-                                                <select class="form-control" id="courseDuration" name="course_duration" required>
+                                                <select class="form-control" id="courseDuration" name="course_duration"
+                                                    required>
                                                     <option value="">Select Duration</option>
                                                     <option value="1">1 Month</option>
                                                     <option value="2">2 Months</option>
@@ -407,15 +427,18 @@
 
                                         </div>
                                         <div class="d-flex justify-content-between">
-                                            <button type="button" class="btn btn-secondary back1"><i class="fas fa-arrow-left"></i> Back</button>
-                                            <button type="button" class="btn btn-primary next2">Next <i class="fas fa-arrow-right"></i></button>
+                                            <button type="button" class="btn btn-secondary back1"><i
+                                                    class="fas fa-arrow-left"></i> Back</button>
+                                            <button type="button" class="btn btn-primary next2">Next <i
+                                                    class="fas fa-arrow-right"></i></button>
                                         </div>
                                     </div>
 
                                     <!-- Step 3: Facilities -->
                                     <div class="tab-pane fade" id="step3">
                                         <div class="alert alert-info">
-                                            <i class="fas fa-info-circle"></i> Select additional facilities for the student. These will be added to the total fees.
+                                            <i class="fas fa-info-circle"></i> Select additional facilities for the
+                                            student. These will be added to the total fees.
                                         </div>
                                         <div class="row" id="facilitiesContainer">
                                             <!-- Locker Facility -->
@@ -440,7 +463,8 @@
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="2" class="text-right">Additional Facilities Total:</th>
+                                                            <th colspan="2" class="text-right">Additional Facilities
+                                                                Total:</th>
                                                             <th class="text-right" id="facilitiesTotal">₹0</th>
                                                         </tr>
                                                     </tfoot>
@@ -448,13 +472,16 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between mt-4">
-                                            <button type="button" class="btn btn-secondary back2"><i class="fas fa-arrow-left"></i> Back</button>
-                                            <button type="button" class="btn btn-primary next3">Next <i class="fas fa-arrow-right"></i></button>
+                                            <button type="button" class="btn btn-secondary back2"><i
+                                                    class="fas fa-arrow-left"></i> Back</button>
+                                            <button type="button" class="btn btn-primary next3">Next <i
+                                                    class="fas fa-arrow-right"></i></button>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="step3">
                                         <div class="alert alert-info">
-                                            <i class="fas fa-info-circle"></i> Select additional facilities for the student. These will be added to the total fees.
+                                            <i class="fas fa-info-circle"></i> Select additional facilities for the
+                                            student. These will be added to the total fees.
                                         </div>
                                         <div class="row" id="facilitiesContainer">
                                             <!-- Locker Facility -->
@@ -479,7 +506,8 @@
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="2" class="text-right">Additional Facilities Total:</th>
+                                                            <th colspan="2" class="text-right">Additional Facilities
+                                                                Total:</th>
                                                             <th class="text-right" id="facilitiesTotal">₹0</th>
                                                         </tr>
                                                     </tfoot>
@@ -487,8 +515,10 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between mt-4">
-                                            <button type="button" class="btn btn-secondary back2"><i class="fas fa-arrow-left"></i> Back</button>
-                                            <button type="button" class="btn btn-primary next3">Next <i class="fas fa-arrow-right"></i></button>
+                                            <button type="button" class="btn btn-secondary back2"><i
+                                                    class="fas fa-arrow-left"></i> Back</button>
+                                            <button type="button" class="btn btn-primary next3">Next <i
+                                                    class="fas fa-arrow-right"></i></button>
                                         </div>
                                     </div>
 
@@ -497,53 +527,71 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-book"></i> Course Fees *</label>
-                                                <input type="number" id="courseFees" name="courseFees" class="form-control" value="0" min="0" placeholder="Enter course fees" required>
+                                                <input type="number" id="courseFees" name="courseFees"
+                                                    class="form-control" value="0" min="0"
+                                                    placeholder="Enter course fees" required>
                                                 <div class="invalid-feedback">Please enter a valid course fee.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
-                                                <label><i class="fas fa-plus-circle"></i> Additional Facilities Fees</label>
-                                                <input type="number" id="additionalFees" name="additionalFees" class="form-control" readonly placeholder="Calculated automatically">
+                                                <label><i class="fas fa-plus-circle"></i> Additional Facilities
+                                                    Fees</label>
+                                                <input type="number" id="additionalFees" name="additionalFees"
+                                                    class="form-control" readonly
+                                                    placeholder="Calculated automatically">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-alt"></i> Date of Admission *</label>
-                                                <input type="date" id="admissionDate" name="admissionDate" class="form-control" readonly placeholder="Today's date">
+                                                <input type="date" id="admissionDate" name="admissionDate"
+                                                    class="form-control" readonly placeholder="Today's date">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-calendar-check"></i> Date of Joining *</label>
-                                                <input type="date" id="joiningDate" name="joiningDate" class="form-control" required min="<?php echo date('Y-m-d'); ?>" placeholder="Select joining date">
+                                                <input type="date" id="joiningDate" name="joiningDate"
+                                                    class="form-control" required min="<?php echo date('Y-m-d'); ?>"
+                                                    placeholder="Select joining date">
                                                 <small class="form-text text-muted">
-                                                    <i class="fas fa-info-circle"></i> From joining date student will be active.
+                                                    <i class="fas fa-info-circle"></i> From joining date student will be
+                                                    active.
                                                 </small>
                                                 <div class="invalid-feedback">Please select a valid joining date.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-wallet"></i> Total Fees *</label>
-                                                <input type="number" id="totalFees" name="totalFees" class="form-control" readonly placeholder="Calculated automatically">
+                                                <input type="number" id="totalFees" name="totalFees"
+                                                    class="form-control" readonly
+                                                    placeholder="Calculated automatically">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-money-check-alt"></i> Amount Paid *</label>
-                                                <input type="number" id="paidAmount" name="paidAmount" class="form-control" min="0" placeholder="Enter amount paid" required>
+                                                <input type="number" id="paidAmount" name="paidAmount"
+                                                    class="form-control" min="0" placeholder="Enter amount paid"
+                                                    required>
                                                 <div class="invalid-feedback">Please enter a valid amount paid.</div>
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-balance-scale"></i> Remaining Amount *</label>
-                                                <input type="number" id="remainingAmount" name="remainingAmount" class="form-control" readonly placeholder="Calculated automatically">
+                                                <input type="number" id="remainingAmount" name="remainingAmount"
+                                                    class="form-control" readonly
+                                                    placeholder="Calculated automatically">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-12">
                                                 <label><i class="fas fa-credit-card"></i> Payment Method *</label><br>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="paymentMethod" value="Cash" required>
+                                                    <input class="form-check-input" type="radio" name="paymentMethod"
+                                                        value="Cash" required>
                                                     <label class="form-check-label">Cash</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="paymentMethod" value="Online">
+                                                    <input class="form-check-input" type="radio" name="paymentMethod"
+                                                        value="Online">
                                                     <label class="form-check-label">Online</label>
                                                 </div>
                                                 <div class="invalid-feedback">Please select a payment method.</div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between">
-                                            <button type="button" class="btn btn-secondary back3"><i class="fas fa-arrow-left"></i> Back</button>
+                                            <button type="button" class="btn btn-secondary back3"><i
+                                                    class="fas fa-arrow-left"></i> Back</button>
                                             <button type="submit" class="btn btn-success">
                                                 <i class="fas fa-receipt"></i> Generate Receipt
                                             </button>
@@ -591,20 +639,20 @@
             $(".tab-pane").removeClass("show active");
             $("#step" + step).addClass("show active");
             $(".step").removeClass("active");
-            $(".step").each(function(index) {
+            $(".step").each(function (index) {
                 if (index < step) {
                     $(this).addClass("active");
                 }
             });
         }
 
-        $(".next1").click(function() {
+        $(".next1").click(function () {
             if (validateStep(1)) setStep(2);
         });
-        $(".next2").click(function() {
+        $(".next2").click(function () {
             if (validateStep(2)) setStep(3);
         });
-        $(".next3").click(function() {
+        $(".next3").click(function () {
             if (validateStep(3)) setStep(4);
         });
         $(".back1").click(() => setStep(1));
@@ -617,7 +665,7 @@
         function validateStep(step) {
             let isValid = true;
             const fields = $(`#step${step} [required]`);
-            fields.each(function() {
+            fields.each(function () {
                 const field = $(this);
                 field.removeClass('is-invalid');
                 if (!field.val()) {
@@ -653,8 +701,8 @@
             return isValid;
         }
 
-        $(document).ready(function() {
-            $('#admissionForm input, #admissionForm select').on('input change', function() {
+        $(document).ready(function () {
+            $('#admissionForm input, #admissionForm select').on('input change', function () {
                 $(this).removeClass('is-invalid');
                 if ($(this).attr('required') && !$(this).val()) {
                     $(this).addClass('is-invalid');
@@ -669,7 +717,7 @@
 
     <!-- Date Handling -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             let today = new Date().toISOString().split('T')[0];
             let admissionDateInput = document.getElementById("admissionDate");
             let joiningDateInput = document.getElementById("joiningDate");
@@ -682,6 +730,99 @@
             fetchCategories();
         });
     </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // grab the inputs
+    const admissionDateInput = document.getElementById("admissionDate");
+    const joiningDateInput = document.getElementById("joiningDate");
+
+    // if admissionDate was set earlier, ensure joining min follows it
+    function syncJoiningMin() {
+        if (!admissionDateInput || !joiningDateInput) return;
+        const admVal = admissionDateInput.value;
+        if (admVal) {
+            joiningDateInput.setAttribute("min", admVal);
+        } else {
+            // fallback to today if admission empty
+            joiningDateInput.setAttribute("min", new Date().toISOString().split('T')[0]);
+        }
+    }
+
+    // Validate joining date against admission date
+    function validateJoiningDateShowError() {
+        // make sure elements exist
+        if (!admissionDateInput || !joiningDateInput) return true;
+        const adm = admissionDateInput.value;
+        const join = joiningDateInput.value;
+
+        // Find the invalid-feedback element that belongs to joiningDate
+        // (your markup has one directly after the input)
+        const feedback = joiningDateInput.closest('.form-group')?.querySelector('.invalid-feedback');
+
+        // If no joining value yet, let other required checks handle it
+        if (!join) {
+            joiningDateInput.classList.remove('is-invalid');
+            if (feedback) feedback.textContent = 'Please select a valid joining date.';
+            return false; // treat empty as invalid for step validation
+        }
+
+        // If joining < admission → invalid
+        if (adm && join < adm) {
+            joiningDateInput.classList.add('is-invalid');
+            if (feedback) feedback.textContent = 'Joining date cannot be before admission date.';
+            return false;
+        }
+
+        // Otherwise valid
+        joiningDateInput.classList.remove('is-invalid');
+        if (feedback) feedback.textContent = 'Please select a valid joining date.'; // restore default
+        return true;
+    }
+
+    // Keep min synced initially
+    syncJoiningMin();
+
+    // If admissionDate ever changes (in case you allow editing), update min
+    admissionDateInput?.addEventListener('change', function () {
+        syncJoiningMin();
+        // revalidate joining date after admission change
+        validateJoiningDateShowError();
+    });
+
+    // Validate while user picks joining date (live feedback)
+    joiningDateInput?.addEventListener('input', validateJoiningDateShowError);
+    joiningDateInput?.addEventListener('change', validateJoiningDateShowError);
+
+    // Integrate with your validateStep(4) flow:
+    // Override/extend the existing validateStep function (or wrap it).
+    // We'll keep the original logic but add the joining date check for step 4.
+    const originalValidateStep = window.validateStep;
+    window.validateStep = function (step) {
+        // run your existing validation first (if it exists)
+        let ok = true;
+        if (typeof originalValidateStep === 'function') {
+            ok = originalValidateStep(step);
+        } else {
+            // fallback: basic check
+            ok = true;
+        }
+
+        // Additional check for step 4:
+        if (step === 4) {
+            // ensure admission/joining dates are correct
+            const joinOk = validateJoiningDateShowError();
+            if (!joinOk) ok = false;
+
+            // If joiningDate has min constraint, make sure you update it before final check
+            syncJoiningMin();
+        }
+        return ok;
+    };
+});
+</script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Fetch Centers, Batches, Categories, and Lockers -->
@@ -694,14 +835,14 @@
                 url: baseUrl + "Admission/get_centers_in_admin_side/",
                 method: "GET",
                 dataType: "json",
-                success: function(data) {
+                success: function (data) {
                     const centerSelect = $('#centerSelect');
                     centerSelect.empty().append('<option value="">Select Center</option>');
                     data.forEach(center => {
                         centerSelect.append(`<option value="${center.id}">${center.name}</option>`);
                     });
                 },
-                error: function() {
+                error: function () {
                     alert('Failed to fetch centers');
                 }
             });
@@ -713,14 +854,14 @@
                 url: baseUrl + "Admission/get_categories",
                 method: "GET",
                 dataType: "json",
-                success: function(data) {
+                success: function (data) {
                     const categorySelect = $('#categorySelect');
                     categorySelect.empty().append('<option value="">Select Category</option>');
                     data.forEach(category => {
                         categorySelect.append(`<option value="${category}">${category}</option>`);
                     });
                 },
-                error: function() {
+                error: function () {
                     alert('Failed to fetch categories');
                 }
             });
@@ -732,7 +873,7 @@
                 url: baseUrl + "Center/getFacilities/" + centerId,
                 method: "GET",
                 dataType: "json",
-                success: function(data) {
+                success: function (data) {
                     const lockerSelect = $('.locker-number');
                     const lockerStatus = $('#lockerStatus');
                     lockerSelect.empty().append('<option value="">Select Locker Number</option>');
@@ -749,7 +890,7 @@
                     }
                     lockerSelect.prop('disabled', false);
                 },
-                error: function() {
+                error: function () {
                     $('#lockerStatus').text('Error fetching lockers');
                     $('#lockerCheckbox').prop('disabled', true).closest('.facility-card').addClass('facility-unavailable');
                 }
@@ -771,7 +912,7 @@
                     url: baseUrl + "Admission/get_batches/" + centerId,
                     method: "GET",
                     dataType: "json",
-                    success: function(data) {
+                    success: function (data) {
                         if (data.length > 0) {
                             data.forEach(batch => {
                                 // Add to dropdown
@@ -809,7 +950,7 @@
                             batchList.html("<p>No batch schedule available.</p>");
                         }
                     },
-                    error: function() {
+                    error: function () {
                         alert('Failed to fetch batches');
                     }
                 });
@@ -817,14 +958,14 @@
         }
 
         // 🔹 Event: Center select change
-        $('#centerSelect').change(function() {
+        $('#centerSelect').change(function () {
             const centerId = $(this).val();
             fetchBatches(centerId);
             loadFacilities(centerId);
         });
 
         // 🔹 Event: Batch select change
-        $('#batchSelect').change(function() {
+        $('#batchSelect').change(function () {
             const batchTimeInfo = $('#batchTimeInfo');
             const batchTimeSlots = $('#batchTimeSlots');
             const batchDays = $('#batchDays');
@@ -863,7 +1004,7 @@
         });
 
         // 🔹 Init calls
-        $(document).ready(function() {
+        $(document).ready(function () {
             fetchCenters();
             fetchCategories();
         });
@@ -875,7 +1016,7 @@
                 url: baseUrl + "center/getFacilitiesByCenterId/" + centerId,
                 method: "GET",
                 dataType: "json",
-                success: function(response) {
+                success: function (response) {
                     if (response.status === "success" && response.data.length > 0) {
                         console.log("Facilities API response:", response); // ✅ Debug
 
@@ -941,7 +1082,7 @@
 
         function bindFacilityEvents() {
             // Toggle details
-            $('.facility-toggle').off().on('click', function() {
+            $('.facility-toggle').off().on('click', function () {
                 const details = $(this).siblings('.facility-details');
                 details.slideToggle();
                 const icon = $(this).find('i');
@@ -953,7 +1094,7 @@
             });
 
             // Enable dropdown when checkbox selected
-            $('.facility-checkbox').off().on('change', function() {
+            $('.facility-checkbox').off().on('change', function () {
                 const facilityCard = $(this).closest('.facility-card');
                 const subtypeSelect = facilityCard.find('.facility-subtype');
                 if ($(this).is(':checked')) {
@@ -968,7 +1109,7 @@
             });
 
             // Update summary when subtype changes
-            $('.facility-subtype').off().on('change', function() {
+            $('.facility-subtype').off().on('change', function () {
                 const facilityCard = $(this).closest('.facility-card');
                 const rentDate = $(this).find(':selected').data('date') || '-';
                 facilityCard.find('.rent-date').val(rentDate);
@@ -982,7 +1123,7 @@
             summaryBody.empty();
             let total = 0;
 
-            $('.facility-checkbox:checked').each(function() {
+            $('.facility-checkbox:checked').each(function () {
                 const facilityCard = $(this).closest('.facility-card');
                 const facilityName = facilityCard.data('facility');
                 const subtypeSelect = facilityCard.find('.facility-subtype');
@@ -1021,7 +1162,7 @@
             $('#remainingAmount').val(remainingAmount);
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Hook up course fees & paid amount listeners
             $('#paidAmount').on('input', calculateRemainingAmount);
             $('#courseFees').on('input', calculateTotalFees);
@@ -1032,7 +1173,7 @@
     </script>
     <!-- Form Submission -->
     <script>
-        $('#admissionForm').on('submit', function(e) {
+        $('#admissionForm').on('submit', function (e) {
             e.preventDefault();
             if (!validateStep(4)) return;
 
@@ -1051,13 +1192,12 @@
             formData.append('payment_method', $('input[name="paymentMethod"]:checked').val());
 
             // Add facilities
-            $('.facility-checkbox:checked').each(function(i) {
+            $('.facility-checkbox:checked').each(function (i) {
                 const facilityCard = $(this).closest('.facility-card');
                 const facilityType = facilityCard.data('facility');
-                const amount = parseFloat($('#additionalFees').val()) || 0;
+                let amount = parseFloat($('#additionalFees').val()) || 0; // <-- changed to let
 
                 let details = '';
-                // let amount = 0;
 
                 switch (facilityType) {
                     case 'locker':
@@ -1085,7 +1225,7 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         $.ajax({
                             url: '<?= base_url('Student_controller/add_student') ?>',
@@ -1093,9 +1233,10 @@
                             data: formData,
                             processData: false,
                             contentType: false,
-                            success: function(studentResponse) {
+                            success: function (studentResponse) {
                                 if (studentResponse.status === 'success') {
-                                    window.location.href = '<?= base_url('receipt?student_id=') ?>' + response.student_id;
+                                   
+                                    window.location.href = '<?= base_url('newreceipt?student_id=') ?>' + response.student_id;
                                 } else {
                                     alert('Student API failed: ' + studentResponse.message);
                                 }

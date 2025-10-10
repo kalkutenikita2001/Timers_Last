@@ -33,15 +33,16 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
-public function add_student($data) {
-    $this->db->insert('student_attendencelink', $data);
-    return $this->db->insert_id();
-}
+    public function add_student($data)
+    {
+        $this->db->insert('student_attendencelink', $data);
+        return $this->db->insert_id();
+    }
 
-public function add_student_facility($data)
-{
-    return $this->db->insert('student_facilities', $data);
-}
+    public function add_student_facility($data)
+    {
+        return $this->db->insert('student_facilities', $data);
+    }
 
     // count students for a given center_id
     public function count_by_center($center_id)
@@ -157,7 +158,7 @@ public function add_student_facility($data)
         $this->db->from("students sah");
         $this->db->join("center_details c", "c.id = sah.center_id", "left");
         $this->db->join("batches b", "b.id = sah.batch_id", "left");
-        $this->db->join("staff st", "st.assigned_batch = sah.batch_id", "left"); 
+        $this->db->join("staff st", "st.assigned_batch = sah.batch_id", "left");
         $this->db->where("sah.id", $id);
 
         $query = $this->db->get();
@@ -231,58 +232,116 @@ public function add_student_facility($data)
     }
 
 
-   public function get_overrall_attendance_of_std($student_id)
-{
-    // ✅ Step 1: Get student's joining date
-    $this->db->select('joining_date');
-    $this->db->where('id', $student_id);
-    $student = $this->db->get('students')->row();
+    public function get_overrall_attendance_of_std($student_id)
+    {
+        // ✅ Step 1: Get student's joining date
+        $this->db->select('joining_date');
+        $this->db->where('id', $student_id);
+        $student = $this->db->get('students')->row();
 
-    if (!$student) {
-        return null; // Student not found
-    }
+        if (!$student) {
+            return null; // Student not found
+        }
 
-    $joining_date = $student->joining_date;
-    $today = date('Y-m-d');
+        $joining_date = $student->joining_date;
+        $today = date('Y-m-d');
 
-    // ✅ Step 2: Count total possible days (from joining_date to today)
-    $total_days = $this->db->query("
+        // ✅ Step 2: Count total possible days (from joining_date to today)
+        $total_days = $this->db->query("
         SELECT DATEDIFF(?, ?) + 1 AS total_days
     ", [$today, $joining_date])->row()->total_days;
 
-    // ✅ Step 3: Count present days from attendance table
-    $present_days = $this->db->where('student_id', $student_id)
-                             ->where('status', 'present')
-                             ->where('date >=', $joining_date)
-                             ->where('date <=', $today)
-                             ->count_all_results('attendance');
+        // ✅ Step 3: Count present days from attendance table
+        $present_days = $this->db->where('student_id', $student_id)
+            ->where('status', 'present')
+            ->where('date >=', $joining_date)
+            ->where('date <=', $today)
+            ->count_all_results('attendance');
 
-    // ✅ Step 4: Calculate attendance percentage
-    $attendance_percentage = 0;
-    if ($total_days > 0) {
-        $attendance_percentage = ($present_days / $total_days) * 100;
+        // ✅ Step 4: Calculate attendance percentage
+        $attendance_percentage = 0;
+        if ($total_days > 0) {
+            $attendance_percentage = ($present_days / $total_days) * 100;
+        }
+
+        return [
+            'student_id' => $student_id,
+            'joining_date' => $joining_date,
+            'total_days' => $total_days,
+            'present_days' => $present_days,
+            'attendance_percentage' => round($attendance_percentage, 2)
+        ];
+    }
+    //
+
+
+    public function get_students()
+    {
+        $this->db->select('students.*, batches.batch_name as batch_name, batches.category as category, batches.batch_level, center_details.name as center_name');
+        $this->db->from('students');
+        $this->db->join('batches', 'students.batch_id = batches.id', 'left');
+        $this->db->join('center_details', 'students.center_id = center_details.id', 'left'); // if needed
+        $query = $this->db->get();
+        //  print_r($query->result_array());die;
+        return $query->result_array();
     }
 
-    return [
-        'student_id' => $student_id,
-        'joining_date' => $joining_date,
-        'total_days' => $total_days,
-        'present_days' => $present_days,
-        'attendance_percentage' => round($attendance_percentage, 2)
-    ];
-}
-//
-public function get_students()
+    public function get_studentsbycenter($center_id)
+    {
+        $this->db->select('students.*, batches.batch_name as batch_name, batches.category as category, batches.batch_level, center_details.name as center_name');
+        $this->db->from('students');
+        $this->db->join('batches', 'students.batch_id = batches.id', 'left');
+        $this->db->join('center_details', 'students.center_id = center_details.id', 'left'); // if needed
+        $this->db->where('students.center_id', (int) $center_id);
+        $query = $this->db->get();
+        //  print_r($query->result_array());die;
+        return $query->result_array();
+    }
+    // ---------------------------------------26/9/25-------prajwal
+    public function activate_students_for_today()
+    {
+        $today = date('Y-m-d');
+
+        // build & run update
+        $this->db->where('joining_date', $today);
+        $this->db->where('status !=', 'Active');
+        $this->db->update('students', ['status' => 'Active']);
+
+        // Debug info
+        $last_query = $this->db->last_query();
+        log_message('debug', "Activation Query: $last_query");
+
+        $affected = $this->db->affected_rows();
+        log_message('debug', "Activation affected rows: $affected");
+
+        $db_error = $this->db->error(); // array('code','message')
+        if (!empty($db_error['code'])) {
+            log_message('error', "DB error activating students: ({$db_error['code']}) {$db_error['message']}");
+        }
+
+        // also return affected rows for the test route
+        return $affected;
+    }
+    public function get_coordinator()
+    {
+        return $this->db->get('coordinator')->row_array();
+    }
+
+   public function get_last_attendace($student_id)
 {
-    $this->db->select('students.*, batches.batch_name as batch_name, batches.category as category, batches.batch_level, center_details.name as center_name');
-    $this->db->from('students');
-    $this->db->join('batches', 'students.batch_id = batches.id', 'left');
-    $this->db->join('center_details', 'students.center_id = center_details.id', 'left'); // if needed
+    $this->db->select('date, time, status, created_at');
+    $this->db->from('attendance');
+    $this->db->where('student_id', $student_id);
+    $this->db->order_by('date', 'DESC');
+    $this->db->order_by('time', 'DESC');
+    $this->db->limit(1);
     $query = $this->db->get();
-    // print_r($query->result_array());die;
-    return $query->result_array();
+
+    if ($query->num_rows() > 0) {
+        return $query->row_array(); // returns last attendance record
+    } else {
+        return null; // no record found
+    }
 }
-
-
 
 }

@@ -7,12 +7,12 @@
   <title>Forget Password</title>
 
   <!-- Bootstrap + fonts + icons (CDN) -->
-       <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-  
+
 
   <!-- SweetAlert CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -335,7 +335,7 @@
 
             <div class="form-group" id="g-username">
               <label for="username">Username</label>
-              <input id="username" placeholder="e.g. superadmin or admin username" required autocomplete="username" />
+              <input id="username" placeholder="e.g. Superadmin/Admin" required autocomplete="username" />
               <div class="error">Username is required</div>
             </div>
           </div>
@@ -343,7 +343,7 @@
           <div class="form-row">
             <div class="form-group" id="g-currentPassword">
               <label for="currentPassword">Current Password</label>
-              <input id="currentPassword" type="password" placeholder="Enter current password" required autocomplete="current-password" />
+              <input id="currentPassword" type="password" placeholder=" Current password" required autocomplete="current-password" />
               <button type="button" class="pw-toggle" data-target="currentPassword" aria-label="Toggle current password"><i class="fas fa-eye"></i></button>
               <div class="error">Current password is required</div>
             </div>
@@ -352,7 +352,7 @@
           <div class="form-row">
             <div class="form-group" id="g-newPassword">
               <label for="newPassword">New Password</label>
-              <input id="newPassword" type="password" placeholder="New password (min 8 characters)" required autocomplete="new-password" />
+              <input id="newPassword" type="password" placeholder="New password(8 char)" required autocomplete="new-password" />
               <button type="button" class="pw-toggle" data-target="newPassword" aria-label="Toggle new password"><i class="fas fa-eye"></i></button>
               <div class="strength" id="pwStrength" aria-hidden="true"><i></i></div>
               <div class="error">New password must be at least 8 chars and different</div>
@@ -360,7 +360,8 @@
 
             <div class="form-group" id="g-confirmPassword">
               <label for="confirmPassword">Confirm New Password</label>
-              <input id="confirmPassword" type="password" placeholder="Re-type new password" required autocomplete="new-password" />
+              <input id="confirmPassword" type="password" placeholder="Re-type password" required autocomplete="new-password" />
+              <button type="button" class="pw-toggle" data-target="confirmPassword" aria-label="Toggle confirm password"><i class="fas fa-eye"></i></button>
               <div class="error">Passwords do not match</div>
             </div>
           </div>
@@ -699,20 +700,17 @@
     })();
 
 
-      // Sidebar toggle functionality
-      $('#sidebarToggle').on('click', function () {
-        if ($(window).width() <= 576) {
-          $('#sidebar').toggleClass('active');
-          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
-        } else {
-          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
-          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
-          $('#contentWrapper').toggleClass('minimized', isMinimized);
-        }
-      });
-
-
-
+    // Sidebar toggle functionality
+    $('#sidebarToggle').on('click', function() {
+      if ($(window).width() <= 576) {
+        $('#sidebar').toggleClass('active');
+        $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+      } else {
+        const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+        $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+        $('#contentWrapper').toggleClass('minimized', isMinimized);
+      }
+    });
   </script>
 </body>
 

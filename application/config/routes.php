@@ -104,3 +104,5 @@ $route['superadmin/Leave'] = 'Leave/index';   // Superadmin URL
 $route['superadmin/finance'] = 'finance';
 ///Report
 $route['overall_report'] = 'Superadmin/overall_report';
+
+$route['admin'] = 'admin/dashboard';

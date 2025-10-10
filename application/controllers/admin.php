@@ -23,12 +23,30 @@ class Admin extends CI_Controller
     {
 
 
+        $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
+        
+
 
         $this->load->view('admin/Dashboard');
     }
 
     public function EventAndNotice()
     {
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
         $this->load->model('Event_model');
         $data['events'] = $this->Event_model->get_all_events();
         $this->load->view('admin/EventAndNotice', $data);
@@ -64,6 +82,14 @@ class Admin extends CI_Controller
 
     public function Expenses()
     {
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
         $this->load->model('Expense_model');
         $this->load->model('Center_model');
 
@@ -94,16 +120,16 @@ class Admin extends CI_Controller
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        
-         if ($this->Expense_model->insert($data)) {
+
+        if ($this->Expense_model->insert($data)) {
             $this->session->set_flashdata('success', 'Expense added successfully!');
 
             // Debug: Log added_by and notification creation
             log_message('error', 'Expense added by user_id: ' . print_r($data['added_by'], true));
             $notif_id = $this->Notifications_model->create_notification([
                 'user_id' => null, // null for superadmin, or set to superadmin's user_id
-                'type'    => 'expense_request',
-                'title'   => 'New Expense Added',
+                'type' => 'expense_request',
+                'title' => 'New Expense Added',
                 'message' => 'A new expense has been added and needs approval.',
                 'item_id' => null
             ]);
@@ -317,31 +343,71 @@ class Admin extends CI_Controller
     }
     public function New_admission()
     {
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
+
         $this->load->view('admin/New_admission');
     }
     public function Re_admission()
     {
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
+
         $this->load->view('admin/Re_admission');
     }
+    // public function Students()
+    // {
+    //     // 🔍 Debug session first
+    //     // echo "<pre>";
+    //     // print_r($this->session->userdata());
+    //     // echo "</pre>";
+    //     // exit;
+    //     $this->load->model('Student_model');
+
+    //     $role = $this->session->userdata('role');
+    //     $center_id = $this->session->userdata('center_id');
+
+    //     if ($role === 'superadmin') {
+    //         // superadmin sees all students
+    //         $data['students'] = $this->Student_model->get_all_students();
+    //     } else {
+    //         // admin sees only their center students
+    //         $data['students'] = $this->Student_model->get_students();
+    //     }
+
+    //     $this->load->view('admin/Students', $data); // your view file name
+    // }
+
     public function Students()
     {
-        // 🔍 Debug session first
-        // echo "<pre>";
-        // print_r($this->session->userdata());
-        // echo "</pre>";
-        // exit;
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
+
         $this->load->model('Student_model');
 
-        $role = $this->session->userdata('role');
+
         $center_id = $this->session->userdata('center_id');
 
-        if ($role === 'superadmin') {
-            // superadmin sees all students
-            $data['students'] = $this->Student_model->get_all_students();
-        } else {
-            // admin sees only their center students
-            $data['students'] = $this->Student_model->get_students_by_center($center_id);
-        }
+        $data['students'] = $this->Student_model->get_studentsbycenter($center_id);
+
 
         $this->load->view('admin/Students', $data); // your view file name
     }
@@ -353,9 +419,18 @@ class Admin extends CI_Controller
 
     public function student_details($id = null)
     {
+         $center_id = $this->session->userdata('center_id');
+
+     
+        if (!$center_id) {
+            redirect('auth/logout');
+            return;
+        }
+
+
         if (!$id) {
             // if no student id is provided, redirect back to list
-            redirect('superadmin/students');
+            redirect('admin/Students');
         }
 
         $data['student'] = $this->Student_model->get_student_by_id($id);
@@ -386,19 +461,23 @@ class Admin extends CI_Controller
         $this->load->model('Facility_model');
         $data['facilities'] = $this->Facility_model->get_facilities_of_student($id);
 
-     
+
 
         $data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
 
 
 
 
-		$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
+        $data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
 
 
 
-       
+
         $data['student_attendace'] = $this->Student_model->get_student_attendace($id);
+
+        $data['get_last_attendace'] = $this->Student_model->get_last_attendace($id);
+
+        
 
         // print_r($data['student_attendace'] );
 

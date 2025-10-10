@@ -316,7 +316,11 @@
         </div>
 
         <div class="d-flex justify-content-center">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+    <i class="fas fa-times"></i>
+</button>
           <button type="button" class="btn btn-primary" id="editCenterSubmitBtn">Save Changes</button>
         </div>
       </form>
@@ -327,6 +331,22 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Cancel button click
+    document.querySelectorAll('[data-dismiss="modal"], [data-bs-dismiss="modal"]').forEach(function(btn) {
+        btn.addEventListener("click", function () {
+            const modal = btn.closest(".modal");
+            if (modal) {
+                $(modal).modal('hide'); // for Bootstrap 4 (jQuery required)
+                // For Bootstrap 5 without jQuery:
+                // const modalInstance = bootstrap.Modal.getInstance(modal);
+                // modalInstance.hide();
+            }
+        });
+    });
+});
+</script>
 
 <script>
   $(document).ready(function() {
@@ -580,6 +600,18 @@
       $('#contentWrapper').toggleClass('minimized', isMinimized);
     }
   });
+  
+  // Sidebar toggle functionality
+      $('#sidebarToggle').on('click', function () {
+        if ($(window).width() <= 576) {
+          $('#sidebar').toggleClass('active');
+          $('.navbar').toggleClass('sidebar-hidden', !$('#sidebar').hasClass('active'));
+        } else {
+          const isMinimized = $('#sidebar').toggleClass('minimized').hasClass('minimized');
+          $('.navbar').toggleClass('sidebar-minimized', isMinimized);
+          $('#contentWrapper').toggleClass('minimized', isMinimized);
+        }
+      });    
 </script>
 
 </body>

@@ -209,6 +209,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Sr.No</th>
                                     <th>Center</th>
                                     <th>Title</th>
                                     <th>Date</th>
@@ -224,6 +225,7 @@
                                 <?php if (!empty($expenses)): ?>
                                     <?php foreach ($expenses as $exp): ?>
                                         <tr>
+                                            <td></td>
                                             <td><?= $exp->center_name ?></td>
                                             <td><?= $exp->title ?></td>
                                             <td><?= date("d/m/Y", strtotime($exp->date)) ?></td>
@@ -608,6 +610,20 @@
                     sidebar.classList.remove('active');
                     navbar.classList.remove('sidebar-hidden');
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tbody = document.querySelector("table tbody");
+            const rows = tbody.querySelectorAll("tr");
+
+            rows.forEach((row, index) => {
+                // Skip row if it has "No expenses found"
+                if (row.querySelector("td[colspan]")) return;
+
+                // Set first cell to Sr.No
+                row.cells[0].textContent = index + 1;
             });
         });
     </script>

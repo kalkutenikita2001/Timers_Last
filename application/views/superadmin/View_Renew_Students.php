@@ -814,6 +814,15 @@
                   <label><i class="fas fa-calendar-plus"></i> Join Date *</label>
                   <input type="date" name="join_date" id="joinDate" class="form-control" required>
                 </div>
+
+                <script>
+                  // set today's date as the minimum
+                  document.addEventListener("DOMContentLoaded", function () {
+                    let today = new Date().toISOString().split("T")[0];
+                    document.getElementById("joinDate").setAttribute("min", today);
+                  });
+                </script>
+
                 <div class="form-group col-md-6">
                   <label><i class="fas fa-calendar-times"></i> Expiry Date *</label>
                   <input type="date" name="expiry_date" id="expiryDate" class="form-control" readonly>
@@ -948,6 +957,44 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+    const joinDateInput = document.getElementById("joinDate");
+    const durationSelect = document.getElementById("courseDuration");
+    const expiryDateInput = document.getElementById("expiryDate");
+
+
+
+    function calculateExpiryDate() {
+      let joinDateValue = joinDateInput.value;
+      let durationValue = durationSelect.value; // use last duration if none selected
+
+      if (joinDateValue && durationValue) {
+        let joinDate = new Date(joinDateValue);
+
+        // Add months based on selected duration
+        joinDate.setMonth(joinDate.getMonth() + parseInt(durationValue));
+
+        // Format date to yyyy-mm-dd
+        let year = joinDate.getFullYear();
+        let month = String(joinDate.getMonth() + 1).padStart(2, "0");
+        let day = String(joinDate.getDate()).padStart(2, "0");
+
+        expiryDateInput.value = `${year}-${month}-${day}`;
+      } else {
+        expiryDateInput.value = "";
+      }
+    }
+
+    // Save duration whenever changed
+    durationSelect.addEventListener("change", function () {
+      lastDuration = this.value;
+      calculateExpiryDate();
+    });
+
+    // Recalculate when join date changes
+    joinDateInput.addEventListener("change", calculateExpiryDate);
+  </script>
+
 
   <script>
 
@@ -969,10 +1016,10 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       let today = new Date().toISOString().split('T')[0];
-      let admissionDateInput = document.getElementById("admissionDate");
+      // let admissionDateInput = document.getElementById("admissionDate");
       let joiningDateInput = document.getElementById("joiningDate");
 
-      admissionDateInput.value = today;
+      // admissionDateInput.value = today;
       joiningDateInput.setAttribute("min", today);
 
       // Fetch centers and categories on page load
@@ -1508,6 +1555,7 @@
       });
 
       // Fees Details
+      $('#courseDuration').val(data.course_duration || '0.00');
       $('#totalFees').val(data.total_fees || '0.00');
       $('#paidAmount').val(data.paid_amount || '0.00');
       $('#remainingAmount').val(data.remaining_amount || '0.00');
@@ -1666,7 +1714,7 @@
     // =================== Facility Expiry Date ===================
     window.onload = function () {
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('facilityStartDate').value = today;
+      // document.getElementById('facilityStartDate').value = today;
       document.getElementById('renewStartDate').value = today;
       updateExpiryDate();
       updateRenewExpiryDate();
@@ -1687,14 +1735,14 @@
     }
 
     function updateExpiryDate() {
-      const startDate = new Date(document.getElementById('facilityStartDate').value);
-      const duration = parseInt(document.getElementById('selectedDuration').value);
+      // const startDate = new Date(document.getElementById('facilityStartDate').value);
+      // const duration = parseInt(document.getElementById('selectedDuration').value);
 
-      if (!isNaN(startDate.getTime()) && duration > 0) {
-        const expiryDate = new Date(startDate);
-        expiryDate.setMonth(expiryDate.getMonth() + duration);
-        document.getElementById('facilityExpiryDate').value = expiryDate.toISOString().split('T')[0];
-      }
+      // if (!isNaN(startDate.getTime()) && duration > 0) {
+      //   const expiryDate = new Date(startDate);
+      //   expiryDate.setMonth(expiryDate.getMonth() + duration);
+      //   document.getElementById('facilityExpiryDate').value = expiryDate.toISOString().split('T')[0];
+      // }
     }
 
     function updateRenewExpiryDate() {
@@ -1861,10 +1909,10 @@
             text: result.message,
             timer: 2000,
             showConfirmButton: false,
-            
-            
+
+
           });
-           window.location.href = '<?= base_url('receipt?student_id=') ?>' + studentId;
+          window.location.href = '<?= base_url('receipt?student_id=') ?>' + studentId;
         }
         else {
           Swal.fire({

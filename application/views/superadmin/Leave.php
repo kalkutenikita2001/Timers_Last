@@ -8,6 +8,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
@@ -130,6 +131,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Sr.No</th>
                                     <th>Applicant Name</th>
                                     <th>Center Name</th>
                                     <th>Role</th>
@@ -144,6 +146,7 @@
                                 <?php if (!empty($leaves)): ?>
                                     <?php foreach ($leaves as $lv): ?>
                                         <tr>
+                                            <td></td>
                                             <td><?= $lv->applicant_name ?></td>
                                             <td><?= $lv->user_name ?></td>
                                             <td><?= $lv->role ?></td>
@@ -439,6 +442,20 @@
                     sidebar.classList.remove('active');
                     navbar.classList.add('sidebar-hidden');
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tbody = document.querySelector("table tbody");
+            const rows = tbody.querySelectorAll("tr");
+
+            rows.forEach((row, index) => {
+                // Skip row if it has "No expenses found"
+                if (row.querySelector("td[colspan]")) return;
+
+                // Set first cell to Sr.No
+                row.cells[0].textContent = index + 1;
             });
         });
     </script>

@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Renew Admission</title>
 
   <!-- Bootstrap & Icons -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/jpg" sizes="32x32"
+    href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
 
 
   <style>
@@ -18,26 +22,43 @@
       font-family: 'Montserrat', serif !important;
       overflow-x: hidden;
     }
+
     .content-wrapper {
       margin-left: 250px;
       padding: 80px 20px 20px 20px;
       transition: margin-left 0.3s ease-in-out;
     }
-    .content-wrapper.minimized { margin-left: 60px; }
-    @media (max-width: 768px) {
-      .content-wrapper { margin-left: 0; padding: 80px 12px 20px 12px; }
+
+    .content-wrapper.minimized {
+      margin-left: 60px;
     }
 
-    .table thead th { white-space: nowrap; }
-    .btn-toggle-status { min-width: 110px; }
-    .form-inline .form-control { width: 240px; }
+    @media (max-width: 768px) {
+      .content-wrapper {
+        margin-left: 0;
+        padding: 80px 12px 20px 12px;
+      }
+    }
+
+    .table thead th {
+      white-space: nowrap;
+    }
+
+    .btn-toggle-status {
+      min-width: 110px;
+    }
+
+    .form-inline .form-control {
+      width: 240px;
+    }
 
     .card-header {
-      
+
       background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
     }
   </style>
 </head>
+
 <body class="bg-light">
 
   <!-- Sidebar -->
@@ -55,33 +76,34 @@
 
           <!-- Quick search (client-side filter) -->
           <form class="form-inline" onsubmit="return false;">
-            <input id="tableSearch" class="form-control form-control-sm" type="text" placeholder="Search name / batch / level"/>
+            <input id="tableSearch" class="form-control form-control-sm" type="text"
+              placeholder="Search name / batch / level" />
           </form>
         </div>
 
-   <div class="card-body p-0">
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover mb-0" id="studentsTable">
-      <thead style="background: linear-gradient(135deg, #ff4040 0%, #470000 100%); color: #fff;">
-        <tr>
-          <th>Sr. No.</th>
-          <th>Student ID</th>
-          <th>Name</th>
-          <th>Center</th>
-          <th>Contact</th>
-          <th>Email</th>
-          <th>Joining Date</th>
-          <th>Course Duration (Months)</th>
-          <th>Expiring On</th>
-          <th style="min-width: 160px;">Action</th>
-        </tr>
-      </thead>
-      <tbody id="studentsTableBody">
-        <!-- Dynamic rows will be injected here -->
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0" id="studentsTable">
+              <thead style="background: linear-gradient(135deg, #ff4040 0%, #470000 100%); color: #fff;">
+                <tr>
+                  <th>Sr. No.</th>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Center</th>
+                  <th>Contact</th>
+                  <th>Email</th>
+                  <th>Joining Date</th>
+                  <th>Course Duration (Months)</th>
+                  <th>Expiring On</th>
+                  <th style="min-width: 160px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody">
+                <!-- Dynamic rows will be injected here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
 
 
         <div class="card-footer text-muted small">
@@ -90,7 +112,7 @@
     </div>
   </div>
 
-  
+
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -134,6 +156,17 @@
       });
     });
 
+
+    $('#studentsTable').DataTable({
+      pageLength: 2,
+      lengthChange: false,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: false
+    });
+
+
     // Open Renew Modal with row data
     $('.btn-open-renew').on('click', function () {
       const $row = $(this).closest('tr');
@@ -174,20 +207,20 @@
     });
   </script>
   <script>
-$(document).ready(function () {
-  // Use base_url from CodeIgniter
-  const apiUrl = "<?= base_url('Admission/expiring_students') ?>";
+    $(document).ready(function () {
+      // Use base_url from CodeIgniter
+      const apiUrl = "<?= base_url('Admission/expiring_students') ?>";
 
-  $.getJSON(apiUrl, function (response) {
-    if (response.status === "success" && response.data.length > 0) {
-      let rows = "";
-      response.data.forEach((student, index) => {
-        rows += `
+      $.getJSON(apiUrl, function (response) {
+        if (response.status === "success" && response.data.length > 0) {
+          let rows = "";
+          response.data.forEach((student, index) => {
+            rows += `
           <tr>
             <td>${index + 1}</td>
             <td>${student.id}</td>
             <td>${student.name}</td>
-            <td>${student.center_id}</td>
+            <td>${student.center_name}</td>
             <td>${student.contact}</td>
             <td>${student.email}</td>
             <td>${student.joining_date}</td>
@@ -201,20 +234,33 @@ $(document).ready(function () {
             </td>
           </tr>
         `;
-      });
+          });
 
-      $("#studentsTableBody").html(rows);
-    } else {
-      $("#studentsTableBody").html(`
+          $("#studentsTableBody").html(rows);
+
+           $('#studentsTable').DataTable({
+        pageLength: 10,
+        lengthChange: false,
+        searching: false,
+        ordering: true,
+        info: true,
+        autoWidth: false
+      });
+        } else {
+          $("#studentsTableBody").html(`
         <tr>
           <td colspan="10" class="text-center text-muted">No students expiring soon</td>
         </tr>
       `);
-    }
-  });
-});
-</script>
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
 
 </body>
+
 </html>

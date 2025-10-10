@@ -99,7 +99,7 @@ class Expense extends CI_Controller
                 'message' => 'A new expense has been added and needs approval.',
                 'item_id' => null
             ]);
-            print_r($notif_id);die;
+            // print_r($notif_id);die;
             log_message('error', 'Notification created for superadmin, notif_id: ' . print_r($notif_id, true));
         } else {
             $this->session->set_flashdata('error', 'Failed to add expense. Please try again.');

@@ -212,10 +212,10 @@
                                         <td data-label="#">
                                             <span class="badge badge-participant"><?= $i + 1 ?></span>
                                         </td>
-                                        <td data-label="Name" class="participant-name-cell">
-                                            <div class="participant-avatar">
-                                                <?= strtoupper(substr($p->name, 0, 1)) ?>
-                                            </div>
+                                        <!--<td data-label="Name" class="participant-name-cell">-->
+                                        <!--    <div class="participant-avatar">-->
+                                        <!--        <?= strtoupper(substr($p->name, 0, 1)) ?>-->
+                                        <!--    </div>-->
                                             <?= $p->name ?>
                                         </td>
                                         <td data-label="Email">

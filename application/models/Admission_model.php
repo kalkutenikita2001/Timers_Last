@@ -234,11 +234,24 @@ class Admission_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
-   public function get_students_expiring_soon()
-{
-    $sql = "
+     public function get_deactive_students_by_center($center_id)
+    {
+        $this->db->select('id, name, contact, center_id, batch_id, total_fees, paid_amount, remaining_amount, joining_date, status');
+        $this->db->from('students');
+        $this->db->where('status', 'Deactive');
+        $this->db->order_by('id', 'DESC');
+        $this->db->where('center_id', $center_id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    
+    public function get_students_expiring_soon()
+    {
+        $sql = "
         SELECT 
             s.*,
+            cd.name AS center_name,
             DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date,
             CASE 
                 WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) < CURDATE() THEN 'Expired'
@@ -246,33 +259,34 @@ class Admission_model extends CI_Model
                 ELSE 'Active'
             END AS status
         FROM students s
+        INNER JOIN center_details cd ON s.center_id = cd.id
         WHERE DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
     ";
 
-    $query = $this->db->query($sql);
-    return $query->result_array();
-}
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 
-
-   public function get_students_expiring_soon_center($center_id)
-{
-    $sql = "
+    public function get_students_expiring_soon_center($center_id)
+    {
+        $sql = "
         SELECT 
             s.*,
+            cd.name AS center_name,
             DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) AS expiry_date,
             CASE 
                 WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) < CURDATE() THEN 'Expired'
-                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 10 DAY) THEN 'Expiring Soon'
+                WHEN DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 20 DAY) THEN 'Expiring Soon'
                 ELSE 'Active'
             END AS status
         FROM students s
-        WHERE s.center_id = ?
-          AND DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+        INNER JOIN center_details cd ON s.center_id = cd.id
+        WHERE DATE_ADD(s.joining_date, INTERVAL s.course_duration * 30 DAY) <= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
     ";
 
-    $query = $this->db->query($sql, [$center_id]);
-    return $query->result_array();
-}
+        $query = $this->db->query($sql, [$center_id]);
+        return $query->result_array();
+    }
 
     public function get_facility_by_student_id($student_id)
     {
@@ -282,5 +296,45 @@ class Admission_model extends CI_Model
             ->get('student_facilities')
             ->result_array();
     }
+
+
+
+    public function insert_notification($center_id)
+    {
+     
+        $center = $this->db->get_where('center_details', ['id' => $center_id])->row();
+
+        if ($center) {
+          
+            $message = 'A new student has been admitted to the Badminton Academy at center: ' . $center->name;
+
+            
+            return $this->db->insert('notifications', [
+                'type' => 'new_admission',
+                'title' => 'New Admission Confirmed',
+                'message' => $message,
+                'item_id' => 12,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
+
+        return false; // Center not found
+    }
+
+
+    public function insert_notification_renew()
+    {
+        return $this->db->insert('notifications', [
+
+            'type' => 'renew_admission',
+            'title' => 'Renew  Admission Confirmed',
+            'message' => 'A re_new student has been done to the Badminton Academy.',
+            'item_id' => 12
+        ]);
+    }
+
+
+
 }
 ?>

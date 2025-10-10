@@ -114,6 +114,7 @@ if (!isset($grand_alltime)) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- Use same font as Expenses module -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
     <style>
         :root {
             --bg: #f4f6f8;

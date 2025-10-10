@@ -5,11 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Renew Admission</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+
 
   <!-- Bootstrap & Icons -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link rel="icon" type="image/jpg" sizes="32x32"
+    href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
 
 
   <style>
@@ -59,10 +62,10 @@
 <body class="bg-light">
 
   <!-- Sidebar -->
- 
 
 
-   <?php $this->load->view('admin/Include/Sidebar') ?>
+
+  <?php $this->load->view('admin/Include/Sidebar') ?>
   <?php $this->load->view('admin/Include/Navbar') ?>
   <!-- Main Content -->
   <div class="content-wrapper" id="contentWrapper">
@@ -73,7 +76,8 @@
 
           <!-- Quick search (client-side filter) -->
           <form class="form-inline" onsubmit="return false;">
-            <input id="tableSearch" class="form-control form-control-sm" type="text" placeholder="Search name / batch / level" />
+            <input id="tableSearch" class="form-control form-control-sm" type="text"
+              placeholder="Search name / batch / level" />
           </form>
         </div>
 
@@ -152,8 +156,11 @@
       });
     });
 
+  
+
+
     // Open Renew Modal with row data
-    $('.btn-open-renew').on('click', function() {
+    $('.btn-open-renew').on('click', function () {
       const $row = $(this).closest('tr');
       const id = $row.data('id');
       const name = $row.data('name');
@@ -175,7 +182,7 @@
     });
 
     // Toggle Active/Deactive (visual only, static demo)
-    $('.btn-toggle-status').on('click', function() {
+    $('.btn-toggle-status').on('click', function () {
       const $row = $(this).closest('tr');
       const $badge = $row.find('.status-cell .badge');
       const isActive = $badge.hasClass('badge-success');
@@ -192,11 +199,11 @@
     });
   </script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Use base_url from CodeIgniter
       const apiUrl = "<?= base_url('Admission/expiring_students_center') ?>";
 
-      $.getJSON(apiUrl, function(response) {
+      $.getJSON(apiUrl, function (response) {
         if (response.status === "success" && response.data.length > 0) {
           let rows = "";
           response.data.forEach((student, index) => {
@@ -205,7 +212,7 @@
             <td>${index + 1}</td>
             <td>${student.id}</td>
             <td>${student.name}</td>
-            <td>${student.center_id}</td>
+           <td>${student.center_name}</td>
             <td>${student.contact}</td>
             <td>${student.email}</td>
             <td>${student.joining_date}</td>
@@ -222,6 +229,14 @@
           });
 
           $("#studentsTableBody").html(rows);
+            $('#studentsTable').DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      searching: false,
+      ordering: true,
+      info: true,
+      autoWidth: false
+    });
         } else {
           $("#studentsTableBody").html(`
         <tr>
@@ -233,6 +248,8 @@
     });
   </script>
 
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
 </body>
 

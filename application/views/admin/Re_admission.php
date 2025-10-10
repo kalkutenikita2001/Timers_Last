@@ -235,7 +235,7 @@
 
       function loadDeactiveStudents() {
         $.ajax({
-          url: "<?= base_url('Admission/get_deactive_students') ?>",
+          url: "<?= base_url('Admission/get_deactive_students_by_center') ?>",
           method: "GET",
           dataType: "json",
           success: function(res) {

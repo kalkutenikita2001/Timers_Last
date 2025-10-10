@@ -240,6 +240,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Sr.No</th>
                                     <th>Applicant Name</th>
                                     <th>Center Name</th>
                                     <th>Role</th>
@@ -254,6 +255,7 @@
                                 <?php if (!empty($leaves)): ?>
                                     <?php foreach ($leaves as $lv): ?>
                                         <tr>
+                                            <td></td>
                                             <td><?= $lv->applicant_name ?></td>
                                             <td><?= $lv->user_name ?></td>
                                             <td><?= $lv->role ?></td>
@@ -539,6 +541,20 @@
                 $("table tbody tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tbody = document.querySelector("table tbody");
+            const rows = tbody.querySelectorAll("tr");
+
+            rows.forEach((row, index) => {
+                // Skip row if it has "No expenses found"
+                if (row.querySelector("td[colspan]")) return;
+
+                // Set first cell to Sr.No
+                row.cells[0].textContent = index + 1;
             });
         });
     </script>

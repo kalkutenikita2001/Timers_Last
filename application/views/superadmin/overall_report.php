@@ -18,499 +18,510 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/analytics.css'); ?>">
-    <style>
-        /* Base Styles */
-        html { box-sizing: border-box; }
-        *, *::before, *::after { box-sizing: inherit; }
-        body {
-            font-family: 'Montserrat', sans-serif !important;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding-top: 60px;
-            -webkit-text-size-adjust: 100%;
+   <style>
+    /* Base Styles */
+    html { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: inherit; }
+    body {
+        font-family: 'Montserrat', sans-serif !important;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding-top: 60px;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .container-responsive {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .content-wrapper {
+        margin-left: 250px;
+        padding: 15px;
+        transition: margin-left 0.3s ease;
+    }
+
+    .content-wrapper.minimized {
+        margin-left: 60px;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        width: 100%;
+        min-height: 400px;
+        display: flex; /* Added to ensure consistent card sizing */
+        flex-direction: column; /* Added for vertical layout */
+        height: 100%; /* Added to make card fill entire height of chart-container */
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+        color: white;
+        border-radius: 10px 10px 0 0;
+        padding: 15px 20px;
+        font-size: clamp(1rem, 3vw, 1.2rem);
+    }
+
+    .btn-primary,
+    .btn--primary {
+        background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+        border: none;
+    }
+
+    .btn-primary:hover,
+    .btn--primary:hover {
+        opacity: 0.9;
+    }
+
+    .btn-secondary,
+    .btn--secondary {
+        background: #6c757d;
+        border: none;
+    }
+
+    .btn-secondary:hover,
+    .btn--secondary:hover {
+        opacity: 0.9;
+    }
+
+    .kpi-card,
+    .overview-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        width: 100%;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+    }
+
+    .kpi-card:hover,
+    .overview-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .kpi-card__trend.positive {
+        color: #28a745;
+    }
+
+    .kpi-card__trend.negative {
+        color: #dc3545;
+    }
+
+    .kpi-card__content,
+    .overview-card__content {
+        flex: 1;
+    }
+
+    .kpi-card__title,
+    .overview-card__title {
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        margin-bottom: 10px;
+    }
+
+    .kpi-card__value,
+    .overview-card__value {
+        font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+        font-weight: 600;
+    }
+
+    /* Table Styling */
+    .data-table-container {
+        overflow-x: auto;
+        margin-bottom: 30px;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .data-table-container::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, Opera */
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .data-table th {
+        background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+        color: white;
+        padding: 15px 20px;
+        text-align: left;
+        font-weight: 600;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .data-table td {
+        padding: 15px 20px;
+        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+        border-bottom: 1px solid #dee2e6;
+        text-align: left;
+    }
+
+    .data-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Grid Layouts */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .revenue-overview-grid,
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    /* Chart Containers */
+    .chart-container {
+        width: 100%;
+        height: clamp(300px, 50vw, 450px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .card-body {
+        flex: 1; /* Added to allow card-body to expand and fill remaining space */
+        display: flex; /* Added for flexible layout */
+        flex-direction: column; /* Added for vertical layout */
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Section Header */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .header__search input {
+        width: 100%;
+        max-width: 300px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    /* Pagination */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .pagination-container .btn {
+        padding: 8px 15px;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    }
+
+    /* Error Message for Charts */
+    .chart-error {
+        display: none;
+        text-align: center;
+        color: #dc3545;
+        padding: 15px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1200px) {
+        .kpi-grid,
+        .revenue-overview-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
 
-        .container-responsive {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 15px;
+        .chart-container {
+            height: clamp(250px, 45vw, 400px);
         }
+    }
 
+    @media (max-width: 992px) {
         .content-wrapper {
-            margin-left: 250px;
-            padding: 15px;
-            transition: margin-left 0.3s ease;
+            margin-left: 60px;
         }
 
         .content-wrapper.minimized {
             margin-left: 60px;
         }
 
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+            height: clamp(250px, 40vw, 350px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .content-wrapper {
+            margin-left: 0 !important;
+            padding: 10px;
+        }
+
+        .kpi-grid,
+        .revenue-overview-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+            gap: 20px; /* Gap between graphs on mobile */
+        }
+
+        .chart-container {
+            height: clamp(300px, 100vw, 500px); /* Increased height for full graph on mobile */
+            overflow: visible;
+            padding: 15px;
+            margin-bottom: 20px; /* Gap after each graph card */
+        }
+
+        .chart-container canvas {
+            max-height: 100%;
+            max-width: 100%;
+        }
+
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            width: 100%;
-            min-height: 400px;
+            min-height: auto;
         }
 
         .card-header {
-            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: white;
-            border-radius: 10px 10px 0 0;
-            padding: 15px 20px;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-        }
-
-        .btn-primary,
-        .btn--primary {
-            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            border: none;
-        }
-
-        .btn-primary:hover,
-        .btn--primary:hover {
-            opacity: 0.9;
-        }
-
-        .btn-secondary,
-        .btn--secondary {
-            background: #6c757d;
-            border: none;
-        }
-
-        .btn-secondary:hover,
-        .btn--secondary:hover {
-            opacity: 0.9;
+            padding: 12px 15px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
         }
 
         .kpi-card,
         .overview-card {
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-        }
-
-        .kpi-card:hover,
-        .overview-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .kpi-card__trend.positive {
-            color: #28a745;
-        }
-
-        .kpi-card__trend.negative {
-            color: #dc3545;
-        }
-
-        .kpi-card__content,
-        .overview-card__content {
-            flex: 1;
-        }
-
-        .kpi-card__title,
-        .overview-card__title {
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-            margin-bottom: 10px;
+            padding: 15px;
+            min-height: 120px;
         }
 
         .kpi-card__value,
         .overview-card__value {
-            font-size: clamp(1.2rem, 3.5vw, 1.5rem);
-            font-weight: 600;
+            font-size: clamp(1rem, 3vw, 1.2rem);
         }
 
-        /* Table Styling */
-        .data-table-container {
-            overflow-x: auto;
-            margin-bottom: 30px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .data-table th {
-            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
-            color: white;
-            padding: 15px 20px;
-            text-align: left;
-            font-weight: 600;
+        .kpi-card__title,
+        .overview-card__title {
             font-size: clamp(0.9rem, 2.5vw, 1rem);
-            border-bottom: 2px solid #dee2e6;
         }
 
+        .data-table th,
         .data-table td {
-            padding: 15px 20px;
-            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-            border-bottom: 1px solid #dee2e6;
-            text-align: left;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            padding: 10px 12px;
         }
 
-        .data-table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        /* Grid Layouts */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .revenue-overview-grid,
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        /* Chart Containers */
-        .chart-container {
-            width: 100%;
-            height: clamp(300px, 50vw, 450px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* Section Header */
         .section-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header__search input,
+        .section-actions {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .section-actions {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .header__search input {
-            width: 100%;
-            max-width: 300px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-        }
-
-        /* Pagination */
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
             gap: 10px;
-            margin-top: 20px;
         }
 
         .pagination-container .btn {
-            padding: 8px 15px;
+            padding: 6px 12px;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .chart-container {
+            height: clamp(250px, 100vw, 400px); /* Adjusted for smaller mobile screens */
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            min-height: 250px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 10px 12px;
             font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         }
 
-        /* Error Message for Charts */
-        .chart-error {
-            display: none;
+        .kpi-card,
+        .overview-card {
+            padding: 12px;
+            min-height: 100px;
+            flex-direction: column;
             text-align: center;
-            color: #dc3545;
-            padding: 15px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 1200px) {
-            .kpi-grid,
-            .revenue-overview-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
-
-            .chart-container {
-                height: clamp(250px, 45vw, 400px);
-            }
+        .kpi-card__icon,
+        .overview-card__icon {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
         }
 
-        @media (max-width: 992px) {
-            .content-wrapper {
-                margin-left: 60px;
-            }
-
-            .content-wrapper.minimized {
-                margin-left: 60px;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chart-container {
-                height: clamp(250px, 40vw, 350px);
-            }
+        .kpi-card__value,
+        .overview-card__value {
+            font-size: clamp(0.9rem, 3vw, 1rem);
         }
 
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0 !important;
-                padding: 10px;
-            }
-
-            .kpi-grid,
-            .revenue-overview-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-                gap: 20px; /* Gap between graphs on mobile */
-            }
-
-            .chart-container {
-                height: clamp(300px, 100vw, 500px); /* Increased height for full graph on mobile */
-                overflow: visible;
-                padding: 15px;
-                margin-bottom: 20px; /* Gap after each graph card */
-            }
-
-            .chart-container canvas {
-                max-height: 100%;
-                max-width: 100%;
-            }
-
-            .card {
-                min-height: auto;
-            }
-
-            .card-header {
-                padding: 12px 15px;
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-            }
-
-            .kpi-card,
-            .overview-card {
-                padding: 15px;
-                min-height: 120px;
-            }
-
-            .kpi-card__value,
-            .overview-card__value {
-                font-size: clamp(1rem, 3vw, 1.2rem);
-            }
-
-            .kpi-card__title,
-            .overview-card__title {
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-            }
-
-            .data-table th,
-            .data-table td {
-                font-size: clamp(0.75rem, 2vw, 0.85rem);
-                padding: 10px 12px;
-            }
-
-            .section-header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .header__search input,
-            .section-actions {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .section-actions {
-                display: flex;
-                justify-content: space-between;
-                gap: 10px;
-            }
-
-            .pagination-container .btn {
-                padding: 6px 12px;
-                font-size: clamp(0.7rem, 2vw, 0.8rem);
-            }
+        .kpi-card__title,
+        .overview-card__title {
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         }
 
-        @media (max-width: 576px) {
-            .chart-container {
-                height: clamp(250px, 100vw, 400px); /* Adjusted for smaller mobile screens */
-                padding: 10px;
-                margin-bottom: 15px;
-            }
-
-            .card {
-                min-height: 250px;
-                margin-bottom: 20px;
-            }
-
-            .card-header {
-                padding: 10px 12px;
-                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            }
-
-            .kpi-card,
-            .overview-card {
-                padding: 12px;
-                min-height: 100px;
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .kpi-card__icon,
-            .overview-card__icon {
-                margin-bottom: 10px;
-                font-size: 1.5rem;
-            }
-
-            .kpi-card__value,
-            .overview-card__value {
-                font-size: clamp(0.9rem, 3vw, 1rem);
-            }
-
-            .kpi-card__title,
-            .overview-card__title {
-                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            }
-
-            .data-table {
-                border: 0;
-                display: block;
-            }
-
-            .data-table thead {
-                display: none;
-            }
-
-            .data-table tbody,
-            .data-table tr,
-            .data-table td {
-                display: block;
-                width: 100%;
-            }
-
-            .data-table tr {
-                margin-bottom: 15px;
-                background: #fff;
-                border-radius: 8px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            }
-
-            .data-table td {
-                padding: 10px 12px;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                font-size: clamp(0.7rem, 2.5vw, 0.8rem);
-            }
-
-            .data-table td:last-child {
-                border-bottom: 0;
-            }
-
-            .data-table td::before {
-                content: attr(data-label);
-                display: block;
-                font-weight: 600;
-                color: #555;
-                margin-bottom: 5px;
-                font-size: clamp(0.75rem, 2.5vw, 0.85rem);
-            }
-
-            .pagination-container {
-                gap: 8px;
-                margin-top: 15px;
-            }
-
-            .pagination-container .btn {
-                padding: 5px 10px;
-                font-size: clamp(0.65rem, 2vw, 0.75rem);
-            }
+        .data-table {
+            border: 0;
+            display: block;
         }
 
-        /* Fix for Two Charts in a Single Row */
+        .data-table thead {
+            display: none;
+        }
+
+        .data-table tbody,
+        .data-table tr,
+        .data-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .data-table tr {
+            margin-bottom: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+        }
+
+        .data-table td:last-child {
+            border-bottom: 0;
+        }
+
+        .data-table td::before {
+            content: attr(data-label);
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+        }
+
+        .pagination-container {
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .pagination-container .btn {
+            padding: 5px 10px;
+            font-size: clamp(0.65rem, 2vw, 0.75rem);
+        }
+    }
+
+    /* Fix for Two Charts in a Single Row */
+    .card-body[style*="grid-template-columns"] {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .card-body[style*="grid-template-columns"] > div {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 15px;
+    }
+
+    .card-body[style*="grid-template-columns"] > div .card-header {
+        background: none !important;
+        color: #333;
+        padding: 0 0 15px 0 !important;
+        border-bottom: 1px solid #eee;
+        border-radius: 0 !important;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    @media (max-width: 992px) {
         .card-body[style*="grid-template-columns"] {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            padding: 20px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-body[style*="grid-template-columns"] {
+            gap: 15px;
+            padding: 10px;
         }
 
         .card-body[style*="grid-template-columns"] > div {
-            background: #ffffff;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 15px;
+            padding: 10px;
         }
 
         .card-body[style*="grid-template-columns"] > div .card-header {
-            background: none !important;
-            color: #333;
-            padding: 0 0 15px 0 !important;
-            border-bottom: 1px solid #eee;
-            border-radius: 0 !important;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         }
-
-        @media (max-width: 992px) {
-            .card-body[style*="grid-template-columns"] {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .card-body[style*="grid-template-columns"] {
-                gap: 15px;
-                padding: 10px;
-            }
-
-            .card-body[style*="grid-template-columns"] > div {
-                padding: 10px;
-            }
-
-            .card-body[style*="grid-template-columns"] > div .card-header {
-                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            }
-        }
-
-        /* Dashboard Section Visibility */
-        .dashboard-section {
-            display: none;
-        }
-
-        .dashboard-section.active {
-            display: block;
-        }
-        @media (min-width: 992px) {
-    .charts-grid {
-        grid-template-columns: repeat(3, 1fr); /* Force 3 charts per row on desktop */
     }
-}
-.chart-container canvas {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-    </style>
+
+    /* Dashboard Section Visibility */
+    .dashboard-section {
+        display: none;
+    }
+
+    .dashboard-section.active {
+        display: block;
+    }
+
+    @media (min-width: 992px) {
+        .charts-grid {
+            grid-template-columns: repeat(3, 1fr); /* Force 3 charts per row on desktop */
+        }
+    }
+</style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -1040,6 +1051,336 @@
                 </div>
             </section>
 
+            <!-- Total Batches Section -->
+            <section id="total-batches" class="dashboard-section">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="fas fa-calendar mr-2"></i>Batches Analytics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Batches Analytics</h2>
+                            <div class="section-actions">
+                                <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
+                            </div>
+                        </div>
+
+                        <!-- Batches Tables by Center -->
+                        <?php
+                        // Fetch all centers from center_details table
+                        $centers = [
+                            [
+                                'id' => 84,
+                                'name' => 'test center1',
+                                'center_number' => 'CTR-250925',
+                                'address' => 'Nashik',
+                                'latitude' => 60.800000,
+                                'longitude' => 12.800000,
+                                'rent_amount' => 5000.00,
+                                'rent_paid_date' => '2025-09-24',
+                                'center_timing_from' => '08:00:00',
+                                'center_timing_to' => '20:00:00'
+                            ],
+                            [
+                                'id' => 85,
+                                'name' => 'center 1',
+                                'center_number' => 'CTR-250925',
+                                'address' => 'Pune',
+                                'latitude' => 12.000000,
+                                'longitude' => 15.500000,
+                                'rent_amount' => 2000.00,
+                                'rent_paid_date' => '2025-09-25',
+                                'center_timing_from' => '08:00:00',
+                                'center_timing_to' => '21:00:00'
+                            ],
+                            [
+                                'id' => 86,
+                                'name' => 'MTS',
+                                'center_number' => 'CTR-250925',
+                                'address' => 'Pandit Colony',
+                                'latitude' => 20.003972,
+                                'longitude' => 73.776835,
+                                'rent_amount' => 3000.00,
+                                'rent_paid_date' => '2025-09-25',
+                                'center_timing_from' => '08:00:00',
+                                'center_timing_to' => '20:00:00'
+                            ]
+                        ];
+
+                        // Fetch all batches
+                        $batches = [
+                            [
+                                'id' => 85,
+                                'center_id' => 84,
+                                'batch_name' => 'b1',
+                                'batch_level' => 'beginner',
+                                'start_time' => '09:00:00',
+                                'end_time' => '10:00:00',
+                                'start_date' => '2025-09-26',
+                                'end_date' => '2025-11-26',
+                                'duration' => 2,
+                                'category' => 'corporate'
+                            ],
+                            [
+                                'id' => 86,
+                                'center_id' => 84,
+                                'batch_name' => 'b2',
+                                'batch_level' => 'intermediate',
+                                'start_time' => '11:00:00',
+                                'end_time' => '12:00:00',
+                                'start_date' => '2025-09-26',
+                                'end_date' => '2025-10-26',
+                                'duration' => 1,
+                                'category' => ''
+                            ],
+                            [
+                                'id' => 87,
+                                'center_id' => 84,
+                                'batch_name' => 'b3',
+                                'batch_level' => 'advanced',
+                                'start_time' => '12:00:00',
+                                'end_time' => '13:00:00',
+                                'start_date' => '2025-09-25',
+                                'end_date' => '2025-10-25',
+                                'duration' => 1,
+                                'category' => ''
+                            ],
+                            [
+                                'id' => 92,
+                                'center_id' => 84,
+                                'batch_name' => 'b4',
+                                'batch_level' => 'advanced',
+                                'start_time' => '12:30:00',
+                                'end_time' => '13:30:00',
+                                'start_date' => '2025-09-30',
+                                'end_date' => '2025-10-30',
+                                'duration' => 0,
+                                'category' => 'individual'
+                            ],
+                            [
+                                'id' => 93,
+                                'center_id' => 85,
+                                'batch_name' => 'batch1',
+                                'batch_level' => 'beginner',
+                                'start_time' => '09:00:00',
+                                'end_time' => '10:00:00',
+                                'start_date' => '2025-09-25',
+                                'end_date' => '2025-11-25',
+                                'duration' => 2,
+                                'category' => 'corporate'
+                            ],
+                            [
+                                'id' => 94,
+                                'center_id' => 85,
+                                'batch_name' => 'BATCH2',
+                                'batch_level' => 'intermediate',
+                                'start_time' => '11:35:00',
+                                'end_time' => '12:35:00',
+                                'start_date' => '2025-09-26',
+                                'end_date' => '2025-10-26',
+                                'duration' => 1,
+                                'category' => ''
+                            ],
+                            [
+                                'id' => 96,
+                                'center_id' => 85,
+                                'batch_name' => 'batch3',
+                                'batch_level' => 'advanced',
+                                'start_time' => '13:20:00',
+                                'end_time' => '14:20:00',
+                                'start_date' => '2025-09-30',
+                                'end_date' => '2025-10-30',
+                                'duration' => 1,
+                                'category' => ''
+                            ],
+                            [
+                                'id' => 98,
+                                'center_id' => 86,
+                                'batch_name' => 'abc',
+                                'batch_level' => 'beginner',
+                                'start_time' => '12:25:00',
+                                'end_time' => '13:25:00',
+                                'start_date' => '2025-09-27',
+                                'end_date' => '2025-10-27',
+                                'duration' => 0,
+                                'category' => 'individual'
+                            ]
+                        ];
+
+                        // Group batches by center_id
+                        $batches_by_center = [];
+                        foreach ($batches as $batch) {
+                            $batches_by_center[$batch['center_id']][] = $batch;
+                        }
+
+                        // Display center-wise tables
+                        foreach ($centers as $center) {
+                            ?>
+                            <div class="data-table-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Center: <?php echo htmlspecialchars($center['name']); ?> (ID: <?php echo $center['id']; ?>)</h4>
+                                        <a href="<?= base_url('analytics/export_csv?type=center_details&center_id=' . $center['id']) ?>" class="btn btn--primary btn-sm">Export CSV</a>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="data-table" id="centerDetailsTable_<?php echo $center['id']; ?>">
+                                            <thead>
+                                                <tr>
+                                                    <th data-label="ID">ID</th>
+                                                    <th data-label="Name">Name</th>
+                                                    <th data-label="Center Number">Center Number</th>
+                                                    <th data-label="Address">Address</th>
+                                                    <th data-label="Latitude">Latitude</th>
+                                                    <th data-label="Longitude">Longitude</th>
+                                                    <th data-label="Rent Amount">Rent Amount</th>
+                                                    <th data-label="Rent Paid Date">Rent Paid Date</th>
+                                                    <th data-label="Timing From">Timing From</th>
+                                                    <th data-label="Timing To">Timing To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td data-label="ID"><?php echo htmlspecialchars($center['id']); ?></td>
+                                                    <td data-label="Name"><?php echo htmlspecialchars($center['name']); ?></td>
+                                                    <td data-label="Center Number"><?php echo htmlspecialchars($center['center_number']); ?></td>
+                                                    <td data-label="Address"><?php echo htmlspecialchars($center['address']); ?></td>
+                                                    <td data-label="Latitude"><?php echo htmlspecialchars($center['latitude']); ?></td>
+                                                    <td data-label="Longitude"><?php echo htmlspecialchars($center['longitude']); ?></td>
+                                                    <td data-label="Rent Amount">₹<?php echo number_format($center['rent_amount'], 2); ?></td>
+                                                    <td data-label="Rent Paid Date"><?php echo htmlspecialchars($center['rent_paid_date']); ?></td>
+                                                    <td data-label="Timing From"><?php echo htmlspecialchars($center['center_timing_from']); ?></td>
+                                                    <td data-label="Timing To"><?php echo htmlspecialchars($center['center_timing_to']); ?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Batches for this center -->
+                            <div class="data-table-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Batches for Center: <?php echo htmlspecialchars($center['name']); ?> (ID: <?php echo $center['id']; ?>)</h4>
+                                        <a href="<?= base_url('analytics/export_csv?type=batches&center_id=' . $center['id']) ?>" class="btn btn--primary btn-sm">Export CSV</a>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="data-table" id="batchesTable_<?php echo $center['id']; ?>">
+                                            <thead>
+                                                <tr>
+                                                    <th data-label="ID">ID</th>
+                                                    <th data-label="Center ID">Center ID</th>
+                                                    <th data-label="Name">Name</th>
+                                                    <th data-label="Level">Level</th>
+                                                    <th data-label="Start Time">Start Time</th>
+                                                    <th data-label="End Time">End Time</th>
+                                                    <th data-label="Start Date">Start Date</th>
+                                                    <th data-label="End Date">End Date</th>
+                                                    <th data-label="Duration">Duration</th>
+                                                    <th data-label="Category">Category</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $center_batches = isset($batches_by_center[$center['id']]) ? $batches_by_center[$center['id']] : [];
+                                                if (empty($center_batches)) {
+                                                    echo '<tr><td colspan="10" style="text-align: center; padding: 20px;">No batches found for this center</td></tr>';
+                                                } else {
+                                                    foreach ($center_batches as $batch) {
+                                                        ?>
+                                                        <tr>
+                                                            <td data-label="ID"><?php echo htmlspecialchars($batch['id']); ?></td>
+                                                            <td data-label="Center ID"><?php echo htmlspecialchars($batch['center_id']); ?></td>
+                                                            <td data-label="Name"><?php echo htmlspecialchars($batch['batch_name']); ?></td>
+                                                            <td data-label="Level"><?php echo htmlspecialchars(ucfirst($batch['batch_level'])); ?></td>
+                                                            <td data-label="Start Time"><?php echo htmlspecialchars($batch['start_time']); ?></td>
+                                                            <td data-label="End Time"><?php echo htmlspecialchars($batch['end_time']); ?></td>
+                                                            <td data-label="Start Date"><?php echo htmlspecialchars($batch['start_date']); ?></td>
+                                                            <td data-label="End Date"><?php echo htmlspecialchars($batch['end_date']); ?></td>
+                                                            <td data-label="Duration"><?php echo htmlspecialchars($batch['duration']); ?> months</td>
+                                                            <td data-label="Category"><?php echo htmlspecialchars($batch['category'] ?: 'N/A'); ?></td>
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Total Centers Section -->
+            <section id="total-centers" class="dashboard-section">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="fas fa-building mr-2"></i>Centers Analytics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h2 style="font-size: clamp(1.2rem, 3.5vw, 1.5rem);">Centers Analytics</h2>
+                            <div class="section-actions">
+                                <button class="btn btn--secondary" onclick="showSection('dashboard')">← Back to Dashboard</button>
+                            </div>
+                        </div>
+
+                        <!-- Centers Tables -->
+                        <?php
+                        foreach ($centers as $center) {
+                            ?>
+                            <div class="data-table-container">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Center: <?php echo htmlspecialchars($center['name']); ?> (ID: <?php echo $center['id']; ?>)</h4>
+                                        <a href="<?= base_url('analytics/export_csv?type=center_details&center_id=' . $center['id']) ?>" class="btn btn--primary btn-sm">Export CSV</a>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="data-table" id="centerDetailsTable_<?php echo $center['id']; ?>">
+                                            <thead>
+                                                <tr>
+                                                    <th data-label="ID">ID</th>
+                                                    <th data-label="Name">Name</th>
+                                                    <th data-label="Center Number">Center Number</th>
+                                                    <th data-label="Address">Address</th>
+                                                    <th data-label="Latitude">Latitude</th>
+                                                    <th data-label="Longitude">Longitude</th>
+                                                    <th data-label="Rent Amount">Rent Amount</th>
+                                                    <th data-label="Rent Paid Date">Rent Paid Date</th>
+                                                    <th data-label="Timing From">Timing From</th>
+                                                    <th data-label="Timing To">Timing To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td data-label="ID"><?php echo htmlspecialchars($center['id']); ?></td>
+                                                    <td data-label="Name"><?php echo htmlspecialchars($center['name']); ?></td>
+                                                    <td data-label="Center Number"><?php echo htmlspecialchars($center['center_number']); ?></td>
+                                                    <td data-label="Address"><?php echo htmlspecialchars($center['address']); ?></td>
+                                                    <td data-label="Latitude"><?php echo htmlspecialchars($center['latitude']); ?></td>
+                                                    <td data-label="Longitude"><?php echo htmlspecialchars($center['longitude']); ?></td>
+                                                    <td data-label="Rent Amount">₹<?php echo number_format($center['rent_amount'], 2); ?></td>
+                                                    <td data-label="Rent Paid Date"><?php echo htmlspecialchars($center['rent_paid_date']); ?></td>
+                                                    <td data-label="Timing From"><?php echo htmlspecialchars($center['center_timing_from']); ?></td>
+                                                    <td data-label="Timing To"><?php echo htmlspecialchars($center['center_timing_to']); ?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            </section>
+
             <!-- Total Staff Section -->
             <section id="total-staff" class="dashboard-section">
                 <div class="card shadow">
@@ -1518,7 +1859,7 @@
                     new Chart(batchLevelCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: dashboardData.batch_distribution.map(item => item.label),
+                            labels: dashboardData.batch_distribution.map(item => item.label.charAt(0).toUpperCase() + item.label.slice(1)), // Capitalize first letter
                             datasets: [{
                                 data: dashboardData.batch_distribution.map(item => item.value),
                                 backgroundColor: CHART_COLORING
@@ -1534,7 +1875,7 @@
                     new Chart(staffRoleCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: dashboardData.staff_distribution.map(item => item.label),
+                            labels: dashboardData.staff_distribution.map(item => item.label.charAt(0).toUpperCase() + item.label.slice(1)), // Capitalize first letter
                             datasets: [{
                                 data: dashboardData.staff_distribution.map(item => item.value),
                                 backgroundColor: CHART_COLORING
@@ -1636,63 +1977,92 @@
                     });
                 }
 
-                // Attendance Trend (Students Section)
+                //  Attendance Trend (Students Section)
                 const attendanceTrendCtx = document.getElementById('attendanceTrendChart')?.getContext('2d');
-                if (attendanceTrendCtx) {
-                    new Chart(attendanceTrendCtx, {
-                        type: 'line',
-                        data: {
-                            labels: dashboardData.attendance_trend.map(item => item.label),
-                            datasets: [{
-                                label: 'Present',
-                                data: dashboardData.attendance_trend.map(item => item.present),
-                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                                borderColor: 'rgba(40, 167, 69, 1)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.4
-                            }, {
-                                label: 'Absent',
-                                data: dashboardData.attendance_trend.map(item => item.absent),
-                                backgroundColor: 'rgba(220, 53, 69, 0.2)',
-                                borderColor: 'rgba(220, 53, 69, 1)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.4
-                            }]
-                        },
-                        options: getChartOptions('Attendance Trend')
-                    });
+if (attendanceTrendCtx) {
+    new Chart(attendanceTrendCtx, {
+        type: 'line',
+        data: {
+            labels: dashboardData.attendance_trend.map(item => item.label),
+            datasets: [{
+                label: 'Present',
+                data: dashboardData.attendance_trend.map(item => item.present),
+                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Absent',
+                data: dashboardData.attendance_trend.map(item => item.absent),
+                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                borderColor: 'rgba(220, 53, 69, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            ...getChartOptions('Attendance Trend'),
+            scales: {
+                ...getChartOptions('Attendance Trend').scales,
+                y: {
+                    ...getChartOptions('Attendance Trend').scales.y,
+                    title: {
+                        display: true,
+                        text: 'Count', // Custom Y-axis label for Attendance Trend
+                        font: { size: clamp(10, window.innerWidth / 100, 14) ,weight: 'bold'},
+                        color: '#666'
+                    }
                 }
+            }
+        }
+    });
+}
+          
 
-                // Attendance Trend 2 (Attendance Section)
-                const attendanceTrend2Ctx = document.getElementById('attendanceTrendChart2')?.getContext('2d');
-                if (attendanceTrend2Ctx) {
-                    new Chart(attendanceTrend2Ctx, {
-                        type: 'line',
-                        data: {
-                            labels: dashboardData.attendance_trend.map(item => item.label),
-                            datasets: [{
-                                label: 'Present',
-                                data: dashboardData.attendance_trend.map(item => item.present),
-                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                                borderColor: 'rgba(40, 167, 69, 1)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.4
-                            }, {
-                                label: 'Absent',
-                                data: dashboardData.attendance_trend.map(item => item.absent),
-                                backgroundColor: 'rgba(220, 53, 69, 0.2)',
-                                borderColor: 'rgba(220, 53, 69, 1)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.4
-                            }]
-                        },
-                        options: getChartOptions('Attendance Trend')
-                    });
+         // Attendance Trend 2 (Attendance Section)
+const attendanceTrend2Ctx = document.getElementById('attendanceTrendChart2')?.getContext('2d');
+if (attendanceTrend2Ctx) {
+    new Chart(attendanceTrend2Ctx, {
+        type: 'line',
+        data: {
+            labels: dashboardData.attendance_trend.map(item => item.label),
+            datasets: [{
+                label: 'Present',
+                data: dashboardData.attendance_trend.map(item => item.present),
+                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Absent',
+                data: dashboardData.attendance_trend.map(item => item.absent),
+                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                borderColor: 'rgba(220, 53, 69, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            ...getChartOptions('Attendance Trend'),
+            scales: {
+                ...getChartOptions('Attendance Trend').scales,
+                y: {
+                    ...getChartOptions('Attendance Trend').scales.y,
+                    title: {
+                        display: true,
+                        text: 'Count', // Custom Y-axis label for Attendance Trend
+                        font: { size: clamp(10, window.innerWidth / 100, 14),weight: 'bold' },
+                        color: '#666'
+                    }
                 }
+            }
+        }
+    });
+}
 
                 // Present vs Absent Pie (Attendance Section)
                 const attendancePieCtx = document.getElementById('attendancePieChart')?.getContext('2d');
@@ -1722,50 +2092,62 @@
         }
 
         function getChartOptions(titleText) {
-            return {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: "top",
-                        labels: {
-                            font: { size: clamp(10, window.innerWidth / 100, 14) },
-                            padding: clamp(6, window.innerWidth / 100, 12)
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: titleText,
-                        font: { size: clamp(12, window.innerWidth / 80, 16) },
-                        padding: { top: 10, bottom: 10 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: { size: clamp(9, window.innerWidth / 100, 12) },
-                            callback: function(value) {
-                                return "₹" + value.toLocaleString();
-                            }
-                        },
-                        padding: 10
-                    },
-                    x: {
-                        ticks: {
-                            font: { size: clamp(9, window.innerWidth / 100, 12) },
-                            color: "#666",
-                            maxRotation: 45,
-                            minRotation: 0
-                        },
-                        grid: { display: false }
-                    }
-                },
-                layout: {
-                    padding: 10
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "top",
+                labels: {
+                    font: { size: clamp(10, window.innerWidth / 100, 14) },
+                    padding: clamp(6, window.innerWidth / 100, 12)
                 }
-            };
+            },
+            title: {
+                display: true,
+                text: titleText,
+                font: { size: clamp(12, window.innerWidth / 80, 16),weight: 'bold' },
+                padding: { top: 10, bottom: 10 }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    font: { size: clamp(9, window.innerWidth / 100, 12) },
+                    callback: function(value) {
+                        return "₹" + value.toLocaleString();
+                    }
+                },
+                padding: 10,
+                title: {
+                    display: true,
+                    text: 'Amount (₹)', // Y-axis label
+                    font: { size: clamp(10, window.innerWidth / 100, 14),weight: 'bold' },
+                    color: '#666'
+                }
+            },
+            x: {
+                ticks: {
+                    font: { size: clamp(9, window.innerWidth / 100, 12) },
+                    color: "#666",
+                    maxRotation: 45,
+                    minRotation: 0
+                },
+                grid: { display: false },
+                title: {
+                    display: true,
+                    text: 'Month', // X-axis label
+                    font: { size: clamp(10, window.innerWidth / 100, 14),weight: 'bold' },
+                    color: '#666'
+                }
+            }
+        },
+        layout: {
+            padding: 10
         }
+    };
+}
 
         function getDoughnutOptions() {
             return {
@@ -1788,42 +2170,54 @@
         }
 
         function getBarOptions(titleText) {
-            return {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: { size: clamp(10, window.innerWidth / 100, 14) },
-                            padding: clamp(6, window.innerWidth / 100, 12)
-                        }
-                    },
-                    title: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: { size: clamp(9, window.innerWidth / 100, 12) },
-                            callback: function(value) { return '₹' + value.toLocaleString(); }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: { size: clamp(9, window.innerWidth / 100, 12) },
-                            maxRotation: 45,
-                            minRotation: 0
-                        }
-                    }
-                },
-                layout: {
-                    padding: 10
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: { size: clamp(10, window.innerWidth / 100, 14) },
+                    padding: clamp(6, window.innerWidth / 100, 12)
                 }
-            };
+            },
+            title: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    font: { size: clamp(9, window.innerWidth / 100, 12) },
+                    callback: function(value) { return '₹' + value.toLocaleString(); }
+                },
+                title: {
+                    display: true,
+                    text: 'Amount (₹)', // Y-axis label
+                    font: { size: clamp(10, window.innerWidth / 100, 14) ,weight: 'bold'},
+                    color: '#666'
+                }
+            },
+            x: {
+                ticks: {
+                    font: { size: clamp(9, window.innerWidth / 100, 12) },
+                    maxRotation: 45,
+                    minRotation: 0
+                },
+                title: {
+                    display: true,
+                    text: 'Month', // X-axis label
+                    font: { size: clamp(10, window.innerWidth / 100, 14),weight: 'bold' },
+                    color: '#666'
+                }
+            }
+        },
+        layout: {
+            padding: 10
         }
+    };
+}
 
         // Render Table with Pagination
         function renderTable(type, tableId, paginationId, columns) {
@@ -1906,16 +2300,16 @@
         // Initialize Tables
         function initializeTables() {
             renderTable('facility_revenue', 'facilityRevenueDetailsTables', 'facilityPagination', [
-                { key: 'facility_id', label: 'Facility ID' },
+                { key: 'id', label: 'Facility ID' },
                 { key: 'center_id', label: 'Center ID' },
-                { key: 'name', label: 'Name' },
-                { key: 'subtype', label: 'Subtype' },
+                { key: 'facility_name', label: 'Name' },
+                { key: 'subtype_name', label: 'Subtype' },
                 { key: 'rent_amount', label: 'Rent Amount', format: v => `₹${Number(v).toLocaleString()}` },
                 { key: 'rent_date', label: 'Rent Date' }
             ]);
 
             renderTable('event_revenue', 'eventRevenueDetailsTables', 'eventPagination', [
-                { key: 'event_id', label: 'Event ID' },
+                { key: 'id', label: 'Event ID' },
                 { key: 'name', label: 'Name' },
                 { key: 'date', label: 'Date' },
                 { key: 'fee', label: 'Fee', format: v => `₹${Number(v).toLocaleString()}` },
@@ -1924,7 +2318,7 @@
             ]);
 
             renderTable('student_fees', 'studentFeeDetailsTables', 'studentFeePagination', [
-                { key: 'student_id', label: 'Student ID' },
+                { key: 'id', label: 'Student ID' },
                 { key: 'name', label: 'Name' },
                 { key: 'center_id', label: 'Center ID' },
                 { key: 'batch_id', label: 'Batch ID' },
@@ -1948,6 +2342,32 @@
                 { key: 'batch_id', label: 'Batch' },
                 { key: 'level', label: 'Level' },
                 { key: 'status', label: 'Status' }
+            ]);
+
+            renderTable('batches', 'batchesTables', 'batchesPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'center_id', label: 'Center ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'level', label: 'Level' },
+                { key: 'start_time', label: 'Start Time' },
+                { key: 'end_time', label: 'End Time' },
+                { key: 'start_date', label: 'Start Date' },
+                { key: 'end_date', label: 'End Date' },
+                { key: 'duration', label: 'Duration' },
+                { key: 'category', label: 'Category' }
+            ]);
+
+            renderTable('centers', 'centersTables', 'centersPagination', [
+                { key: 'id', label: 'ID' },
+                { key: 'name', label: 'Name' },
+                { key: 'center_number', label: 'Center Number' },
+                { key: 'address', label: 'Address' },
+                { key: 'latitude', label: 'Latitude' },
+                { key: 'longitude', label: 'Longitude' },
+                { key: 'rent_amount', label: 'Rent Amount', format: v => `₹${Number(v).toLocaleString()}` },
+                { key: 'rent_paid_date', label: 'Rent Paid Date' },
+                { key: 'timing_from', label: 'Timing From' },
+                { key: 'timing_to', label: 'Timing To' }
             ]);
 
             renderTable('staff', 'staffTables', 'staffPagination', [

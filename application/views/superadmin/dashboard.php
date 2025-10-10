@@ -313,78 +313,120 @@
     z-index: 1070;
   }
 
-  /* make the dashboard content use less padding on mobile */
   .dashboard-wrapper {
     margin-left: 0 !important;
     padding: 10px;
   }
 
-  /* compact center-box padding */
   .center-box {
     padding: 12px;
   }
 
-  /* center-list on mobile: compact, denser items */
   .center-list {
-    max-height: calc(100vh - 220px); /* leave room for header/footer */
+    max-height: calc(100vh - 220px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 6px; /* tighter padding */
-    gap: 8px; /* smaller gap */
+    padding-right: 10px;
   }
-
-  /* compact center buttons: full width, smaller padding and radius */
   .center-list .center-btn {
-    white-space: normal; /* allow wrapping if needed */
-    align-items: center;  /* vertically center icon + text */
-    padding: 8px 10px;    /* smaller vertical padding */
-    background: #fff;     /* keep but subtle */
-    border: 1px solid #eee;
-    border-radius: 8px;   /* smaller radius so not pill-like */
-    font-size: 14px;      /* slightly smaller text */
-    line-height: 1.2;
-    gap: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    height: auto;
-    min-height: 40px;     /* compact min height */
+    white-space: normal;
+    align-items: flex-start;
+    padding: 12px;
   }
 
-  /* icon alignment */
-  .center-list .center-btn .bi {
-    min-width: 20px;
-    text-align: center;
-    opacity: 0.9;
-    font-size: 16px;
-  }
-
-  /* avoid huge left indent on the name container */
-  .center-list .center-btn > div {
-    flex: 1;
-    overflow: hidden;
-    text-align: left;
-    padding: 0; /* remove internal padding if any */
-  }
-
-  /* visually indicate selection without huge visual weight */
-  .center-list .center-btn.selected-center {
-    background: linear-gradient(135deg, rgba(255,64,64,0.06), rgba(255,64,64,0.02));
-    border-color: var(--accent-1);
-    box-shadow: 0 6px 12px rgba(255,64,64,0.06);
-  }
-
-  /* slightly reduce card-stat font sizes on mobile too */
   .card-stat h4 { font-size: 20px; }
   .card-stat span { font-size: 12px; }
-  .card-stat { padding-right: 44px; }
-
-  /* Reduce chart container paddings on very small screens so charts get more space */
-  .chart-container { padding: 14px; }
-
-  /* Scrollbar adjustments (thin overlay feel) */
-  .center-list::-webkit-scrollbar { width: 8px; }
-  .center-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 6px; }
+  .card-stat { padding-right: 48px; }
 }
 
+/* -------------------------
+   NEW/OVERRIDE RULES ADDED
+   (make center-list flex-grow and scroll nicely on desktop & mobile)
+   ------------------------- */
+
+/* Make center-box a column so header/list/footer stack */
+.center-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* keep previous visual styling */
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+/* Center list: let it take available space and scroll */
+.center-list {
+  flex: 1 1 auto;
+  min-height: 80px;
+  overflow-y: auto;
+  padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Make button items flexible but constrained inside scroll area */
+.center-list .center-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+}
+
+/* Desktop: limit list height so it doesn't grow beyond viewport */
+@media (min-width: 992px) {
+  .col-lg-3 > .center-box {
+    max-height: calc(100vh - 160px);
+  }
+  .col-lg-3 > .center-box .center-list {
+    max-height: calc(100vh - 260px);
+  }
+}
+
+/* Tablet / small desktop */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .col-md-3 > .center-box, .col-lg-3 > .center-box {
+    max-height: calc(100vh - 180px);
+  }
+  .col-md-3 > .center-box .center-list {
+    max-height: calc(100vh - 280px);
+  }
+}
+
+/* Mobile: list uses larger available viewport space */
+@media (max-width: 575.98px) {
+  .center-box { padding: 12px; }
+  .center-list { max-height: calc(100vh - 220px); }
+  .center-list .center-btn {
+    white-space: normal;
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
+/* Thin, subtle scrollbar for WebKit (desktop browsers) */
+.center-list::-webkit-scrollbar { width: 8px; }
+.center-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.08);
+  border-radius: 6px;
+}
+.center-list::-webkit-scrollbar-track { background: transparent; }
 
   </style>
 </head>
@@ -396,6 +438,9 @@
   <?php $this->load->view('superadmin/Include/Navbar') ?>
   <!-- Dashboard Content -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
+    <div class="container">
+    <h4>Dashboard </h4>
+</div>
     <div class="container-fluid px-3">
       <!-- Stats Cards -->
       <div class="row g-3 mb-4 text-center">
@@ -453,14 +498,14 @@
 
           <div class="chart-container">
             <h6>Revenue Overview</h6>
-            <div style="position:relative; height:337px;">
+            <div style="position:relative; height:332px;">
               <canvas id="revenueChart"></canvas>
             </div>
           </div>
         </div>
 
         <div class="col-lg-3">
-          <div class="center-box mb-3" style="background: #f7efef;">
+          <div class="center-box mb-3" style="background: #f7efef; height:296px;">
             <h6 class="fw-bold text-start">Centers</h6>
             <div class="center-list mt-3">
               <?php if (!empty($centers)): ?>
@@ -481,7 +526,7 @@
 
           <div class="center-box">
             <h6>Student Distribution</h6>
-            <div style="position:relative; height:180px;">
+            <div style="position:relative; height:218px;">
               <canvas id="studentChart"></canvas>
             </div>
             <div class="mt-3">
@@ -607,14 +652,42 @@
       };
 
       const attOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { enabled: true } },
-        scales: {
-          x: { grid: { display: false }, ticks: { font: { size: 12 } } },
-          y: { beginAtZero: true, max: 110, grid: { display: false }, ticks: { stepSize: 25, font: { size: 12 } } }
-        }
-      };
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: { enabled: true } },
+  scales: {
+    x: {
+      grid: { display: false },
+      ticks: { font: { size: 12 } },
+      title: {
+        display: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 360) : true,
+        text: 'Week Days',
+        font: {
+          size: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 480 ? 13 : 11) : 12,
+          weight: '600'
+        },
+        padding: { top: 6 }
+      }
+    },
+    y: {
+      beginAtZero: true,
+      max: 110,
+      grid: { display: false },
+      ticks: { stepSize: 25, font: { size: 12 } },
+      title: {
+        display: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 360) : true,
+        text: 'Student Count',
+        font: {
+          size: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 480 ? 13 : 11) : 12,
+          weight: '600'
+        },
+        padding: { top: 4, bottom: 0 }
+      }
+    }
+  }
+};
+
+
 
       if (window.attendanceChart) {
         window.attendanceChart.data = attData;
@@ -651,7 +724,38 @@
         }]
       };
 
-      const revOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } };
+const revOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: true } },
+  scales: {
+    x: {
+      title: {
+        display: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 420) : true,
+        text: 'Month',
+        font: {
+          size: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 700 ? 13 : 11) : 12,
+          weight: '600'
+        },
+        padding: { top: 6 }
+      },
+      ticks: { maxRotation: 45, minRotation: 0 }
+    },
+    y: {
+      beginAtZero: true,
+      title: {
+        display: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 420) : true,
+        text: 'Revenue (₹)',
+        font: {
+          size: ctx => (ctx && ctx.chart && ctx.chart.width) ? (ctx.chart.width > 700 ? 13 : 11) : 12,
+          weight: '600'
+        },
+        padding: { top: 4, bottom: 0 }
+      }
+    }
+  }
+};
+
 
       if (window.revenueChart) {
         window.revenueChart.data = revData;
