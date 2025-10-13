@@ -62,14 +62,7 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/SignUp');
 	}
-	public function Add_NewStaff()
-	{
-		$this->load->view('superadmin/Add_NewStaff');
-	}
-	public function Salary_Management()
-	{
-		$this->load->view('superadmin/Salary_Management');
-	}
+
 	public function Superadmin_profile()
 	{
 		$this->load->view('superadmin/Superadmin_profile');
@@ -454,7 +447,14 @@ class Superadmin extends MY_Controller
 {
     $this->load->view('superadmin/attendance');
 }
-
+public function Add_NewStaff()
+	{
+		$this->load->view('superadmin/Add_NewStaff');
+	}
+	public function Salary_Management()
+	{
+		$this->load->view('superadmin/Salary_Management');
+	}
 }
 
 

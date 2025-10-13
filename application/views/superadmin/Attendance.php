@@ -109,6 +109,21 @@
       }
       #tableSearch{ width:100% !important; margin-top:8px; }
     }
+
+
+    .btn-present-toggle[data-target="Present"]{
+  border-color:#198754; color:#198754;
+}
+.btn-present-toggle[data-target="Present"].active{
+  background:#198754; border-color:#198754; color:#fff;
+}
+.btn-present-toggle[data-target="Absent"]{
+  border-color:#dc3545; color:#dc3545;
+}
+.btn-present-toggle[data-target="Absent"].active{
+  background:#dc3545; border-color:#dc3545; color:#fff;
+}
+
   </style>
 </head>
 
