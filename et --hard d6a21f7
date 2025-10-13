@@ -1,0 +1,212 @@
+[33m358837e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m staff creation
+[33m6c2a3ea[m staff creation
+[33md6a21f7[m office
+[33ma31a309[m office
+[33mcd4ed68[m Merge branch 'main' of https://github.com/kalkutenikita2001/Timers_Academy
+[33m9a2e360[m member add
+[33m082f222[m Add error handling views for various error types and improve HTML structure
+[33m53f9259[m member add
+[33mbc7544e[m Initial project upload
+[33m4322d68[m stdphp
+[33mda81668[m .htaccess
+[33m36faa59[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33m42a8a0f[m stdI
+[33m33984ad[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33ma595f16[m created chnges in students details
+[33m8ef3dd0[m students management
+[33m0e66c33[m students management
+[33meb50053[m created change in recipt module
+[33m5756117[m created changes in recipt generation
+[33mb2bef7c[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33m4dde298[m Refactor facility retrieval methods and improve attendance statistics display in admin and superadmin views
+[33mec6b8ef[m dashUI
+[33mdcf1f59[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33m22125cc[m created change in super admin
+[33m4b1c613[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33m4f610e6[m financeUI
+[33m5294a0a[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33mdcffc87[m created change in recipt.php
+[33m1bddc71[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy
+[33m17a6e30[m minimum changes
+[33mc3f20f0[m updates
+[33m9c8f9e6[m updates
+[33m4c00bd0[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33md127f18[m created change in admin and dashbord
+[33mffc3e72[m update finance
+[33mc4bf083[m update finance
+[33m0a2fa3d[m final
+[33m7b330f3[m per
+[33m69be669[m created changes in view center
+[33m25f0e6f[m Refactor code structure for improved readability and maintainability
+[33mb677619[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33m0e11f8b[m created changes in attendace
+[33m4e999a0[m save
+[33ma1d5de4[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33m9c91be9[m dashboard
+[33m1c1f856[m view center
+[33m8b693d9[m view center
+[33m3b5d754[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33m8ed333a[m dashboard
+[33m3fdd4e4[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33m05f35f8[m Add new method to fetch centers in admin side and update related views
+[33m84f43a4[m view update
+[33m0b0fa5a[m Merge branch 'main' of https://github.com/Deshmukhsne/Timersacademy-1
+[33m8730a86[m 22sept
+[33ma86b84c[m created change in function
+[33maa5e07c[m created change in locekr facility
+[33me98cf3b[m Remove unnecessary console.log statements from add_new_center.php
+[33mc9cc53d[m created changes in add new center
+[33m8a86eeb[m Enhance student admission and facility management features
+[33meb11d89[m created change in
+[33m1c88f8b[m per
+[33md5a40bb[m financechange
+[33m7c5b6a3[m ExpenseModel
+[33me5e4ee5[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33mffded22[m created chnage in admission superadin admission model create attendance
+[33m9247410[m financechange
+[33mf14e935[m admindone
+[33mf00fbb3[m admin1
+[33m8d4ed79[m update
+[33m1f11d90[m save
+[33m24f249d[m dashboard update3
+[33m59e4977[m done1
+[33m5cce6b5[m done1
+[33m5774130[m dashboard update2
+[33m7cc8f23[m dashboard update2
+[33m0f6ed4f[m done1
+[33mce8cfeb[m done1
+[33m911eef2[m save
+[33m1f8b91f[m dashboard update
+[33madf662a[m dashboard update
+[33m13ef945[m created change in renew students addmission
+[33m98aa75f[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33maa95c81[m created change in renew addmission
+[33m57a8826[m cm2
+[33m3207a1f[m cm2
+[33m0c7e1aa[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33mb406337[m created change in addmission
+[33m340033f[m save
+[33m426393b[m changes
+[33m0ec22c9[m financeh
+[33mc10029f[m financeh
+[33m6bb5f79[m done1
+[33mb6e7b3c[m save changes
+[33m080ee84[m done
+[33m2b26032[m dash
+[33m276c90e[m dash
+[33m75586d1[m leavesfinal
+[33m2f5aea4[m leave
+[33m51ce1dc[m btnremove
+[33mf24f1d7[m leave
+[33mc4a943f[m leave
+[33mc0ba72a[m dash1
+[33mf6acb16[m dash
+[33m27a453c[m leave
+[33me81ce09[m leave
+[33m04da64f[m updateddash
+[33m7094841[m save
+[33m18f19c8[m save
+[33m85f3b89[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33m4fc668d[m dashboardstudentlist
+[33m81582c7[m leave
+[33m2e4680d[m files
+[33m3d38d3f[m files
+[33m8fb1fd5[m adminevent
+[33mc0cb284[m dashboardadmin
+[33m5917ade[m dashboardadmin
+[33m80042dc[m done
+[33m8b4c021[m favicon & heading
+[33m77e7ac6[m loginpage
+[33m9947242[m eventadmin
+[33m40dfe92[m dashboard
+[33m60be371[m dashboard
+[33m5a255b5[m admin
+[33m7f1aff8[m finance ok
+[33medf85c3[m save
+[33m9f12b6e[m update center
+[33mc20b4c9[m forgot
+[33mb1e318a[m pass
+[33m3a10b4d[m center
+[33ma3616d4[m change
+[33m888191d[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33mb6081c6[m commit changes for auth model and new addmisisin
+[33md362224[m profile
+[33m90e630e[m save
+[33m1a9c0e8[m change
+[33m9b74d33[m change
+[33mfc496a4[m Merge branch 'main' of https://github.com/Deshmukhsne/timersacademy
+[33mea311f8[m change
+[33m749dcdb[m permission
+[33mbc904ac[m stud
+[33m307cea0[m student
+[33meb6f142[m permission
+[33m4a6a195[m permission
+[33m8268a5e[m Merge branch 'main' of https://github.com/gayatri-bhoi/timersacademy_new
+[33m90739e9[m admission management
+[33ma53bd3f[m save
+[33m2338f8b[m changes
+[33m9a09444[m save
+[33ma1275f1[m save
+[33mf6ac94a[m view center change
+[33m4d11a6c[m renew admission
+[33mc0ab631[m add
+[33m77d8452[m save
+[33m0994bd3[m save changes
+[33ma8c202c[m readmission
+[33m0ba33eb[m save changes
+[33m4e9f27e[m Merge branch 'main' of https://github.com/gayatri-bhoi/timersacademy_new
+[33mc8df730[m receipt generation
+[33ma040fb2[m hello
+[33m33de5fb[m staff added
+[33m3fb5e1e[m event
+[33m0ad5cca[m event
+[33m748c228[m batch updated
+[33mc54f26c[m changes
+[33mc7b2510[m event
+[33m66a5ac4[m done
+[33mdf43553[m update
+[33m68734df[m Merge branch 'main' of https://github.com/gayatri-bhoi/timersacademy_new
+[33me18c245[m Center management apis
+[33m5de6d90[m changes
+[33mf7d94f1[m update
+[33mf720b04[m updated
+[33m5da0518[m update
+[33m1a4ca75[m update
+[33m9a29459[m update
+[33m889aab2[m updated
+[33m5a06fac[m updated
+[33m75e8468[m Initial commit for Timers Academy Project
+[33m2adb199[m Added New Changes
+[33mf8ff785[m Added New changes
+[33m9d29d02[m Added New changes
+[33mf854519[m Added New Changes
+[33m40a6203[m Added New changes
+[33m86405ae[m Added new changes
+[33m5bafe4a[m Added New changes
+[33me021e93[m Added New changes
+[33m2ef9ac4[m Added New changes
+[33md9055ed[m Added New changes
+[33mc3e205e[m Added New changes
+[33mf75f008[m Added New changes
+[33m285d78f[m Added New Changes
+[33mf16834a[m Added New changes
+[33mb8bc3e7[m Added New Changes
+[33md94ceeb[m Added New changes
+[33m1d0acc0[m Added New changes inside of Attendance
+[33m32908f8[m Added New Chnages inside of Income & Expenses
+[33m57caad3[m Added New changes
+[33m629021c[m Added New changes
+[33m7151291[m Added New Changes
+[33mf49611f[m Added New changes
+[33mffd9541[m Added New Changes
+[33m3727f14[m 1 created changes for location attendance in student
+[33mc3d0a79[m Merge branch 'main' of https://github.com/Rushikesh-Thomre/timersacademy
+[33m1bc724d[m 1 .ceated changes in timers accadmy 2. worked on student model 3.  srudent controller
+[33m52c6dca[m Added new changes
+[33m0440eef[m added
+[33m94d50b1[m Added New CHANGES
+[33md6be586[m Added New changes
+[33m406aaf2[m Added new changes
+[33mf4461cd[m Added New changes
+[33mbccf4e6[m Added New changes
+[33m
