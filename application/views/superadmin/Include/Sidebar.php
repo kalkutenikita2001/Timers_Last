@@ -148,6 +148,23 @@
         <i class="bi bi-credit-card"></i><span>Center Management</span>
       </a>
 
+
+<div class="nav-item">
+        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#admissionMenu" role="button" aria-expanded="false" aria-controls="admissionMenu">
+          <span><i class="bi bi-person-lines-fill"></i> <span>Staff Management</span></span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+        <div class="collapse" id="admissionMenu">
+          <nav class="nav flex-column ms-3">
+            <a class="nav-link <?php echo ($this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/'); ?>"><i class="bi bi-plus-circle"></i><span> Add New Staff</span></a>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Re_admission'); ?>"><i class="bi bi-arrow-counterclockwise"></i><span>Attendance</span></a>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/'); ?>"><i class="bi bi-arrow-repeat"></i><span> Salary Management</span></a>
+          </nav>
+        </div>
+      </div>
+
+
+
       <div class="nav-item">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#admissionMenu" role="button" aria-expanded="false" aria-controls="admissionMenu">
           <span><i class="bi bi-person-lines-fill"></i> <span>Admission Management</span></span>
