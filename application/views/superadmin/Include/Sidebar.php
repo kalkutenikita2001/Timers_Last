@@ -149,6 +149,7 @@
       </a>
 
 
+<!-- STAFF MANAGEMENT -->
 <div class="nav-item">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#staffMenu" role="button" aria-expanded="false" aria-controls="staffMenu">
           <span><i class="bi bi-person-lines-fill"></i> <span>Staff Management</span></span>
@@ -156,7 +157,8 @@
         </a>
         <div class="collapse" id="staffMenu">
           <nav class="nav flex-column ms-3">
-            <a class="nav-link <?php echo ($this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Add_NewStaff'); ?>"><i class="bi bi-plus-circle"></i><span> Add New Staff</span></a>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Add_NewStaff'); ?>"><i class="b
+            gii bi-plus-circle"></i><span> Add New Staff</span></a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Re_admission'); ?>"><i class="bi bi-arrow-counterclockwise"></i><span>Attendance</span></a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Salary_Management'); ?>"><i class="bi bi-arrow-repeat"></i><span> Salary Management</span></a>
           </nav>
