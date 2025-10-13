@@ -440,4 +440,14 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/venue_form');
 	}
+
+
+
+	public function Attendance()
+{
+    $this->load->view('superadmin/attendance');
 }
+
+}
+
+
