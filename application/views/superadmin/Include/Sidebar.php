@@ -161,6 +161,13 @@
           </nav>
         </div>
       </div>
+      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueManagement') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueManagement'); ?>">
+        <i class="bi bi-mortarboard"></i><span> Office Management 1</span>
+      </a>
+      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueForm') ? 'active' : ''; ?>"
+        href="<?php echo base_url('superadmin/VenueForm'); ?>">
+        <i class="bi bi-mortarboard"></i><span> Office Management 2</span>
+      </a>
 
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Students'); ?>">
         <i class="bi bi-mortarboard"></i><span> Students Management</span>

@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Venue Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background-color: #f4f6f8 !important;
+            font-family: 'Montserrat', sans-serif !important;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            position: relative;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+        }
+
+        .sidebar.minimized {
+            width: 60px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            color: white;
+            padding: 10px;
+            transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+
+        .navbar.sidebar-minimized {
+            left: 60px;
+        }
+
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 80px 20px 20px 20px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .content-wrapper.minimized {
+            margin-left: 60px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
+            color: #fff !important;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .form-control.is-invalid {
+            border-color: #ff4040;
+        }
+
+        .invalid-feedback {
+            color: #ff4040;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%) !important;
+            border: none !important;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Make all Font Awesome icons red */
+        i.fas,
+        i.far,
+        i.fab {
+            color: #ff4040 !important;
+        }
+
+        /* Keep trash icons their default color */
+        .btn .fa-trash {
+            color: inherit !important;
+        }
+
+        .court-slot-block {
+            border: 2px solid #ff4040;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(255, 64, 64, 0.15);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            flex: 1 1 22%;
+            box-sizing: border-box;
+        }
+
+        .court-slot-block:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(255, 64, 64, 0.25);
+            border-color: #ff0000;
+        }
+
+        .court-slot-block h5 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ff4040;
+        }
+
+        .court-slot-block h5 small {
+            color: #555;
+            font-weight: 400;
+        }
+
+        .court-slot-block p {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        /* Container Flexbox */
+        #courtSlotsView,
+        #facilityPreview,
+        #slotPreview,
+        #planPreview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Slot boxes */
+        .slot-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .slot-box {
+            min-width: 80px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e6ffe6, #ccffcc);
+            border: 1px solid #28a745;
+            font-size: 0.85rem;
+            color: #2c3e50;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slot-box:hover {
+            background: linear-gradient(135deg, #ccffcc, #b2f2b2);
+            transform: scale(1.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Venue Cards */
+        .venue-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .venue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .venue-card-header {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            padding: 15px;
+        }
+
+        .venue-card-body {
+            padding: 15px;
+        }
+
+        .venue-card-footer {
+            background-color: #f8f9fa;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 10px 15px;
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #ff4040 0%, #470000 100%);
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-footer {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .navbar {
+                left: 0;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+
+            .court-slot-block {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <!-- Navbar -->
+    <?php $this->load->view('superadmin/Include/Navbar') ?>
+
+
+    <!-- Main Content -->
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="container-fluid mt-4">
+            <!-- Add Venue Button -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3><i class="fas fa-building mr-2"></i> Venue Management</h3>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#venueModal">
+                    <i class="fas fa-plus mr-2"></i> Add New Center
+                </button>
+            </div>
+
+            <!-- Venue Cards Display -->
+            <div id="venueCardsContainer" class="row">
+                <!-- Venue cards will be dynamically added here -->
+            </div>
+
+            <!-- Venue Modal -->
+            <div class="modal fade" id="venueModal" tabindex="-1" role="dialog" aria-labelledby="venueModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="venueModalLabel"><i class="fas fa-building mr-2"></i> Add New Center</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="venueForm">
+                                <!-- Venue Details -->
+                                <h5 class="mb-3"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Venue Details</h5>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Venue Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="venueName" placeholder="Enter Venue Name" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Location <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="venueLocation" placeholder="Enter Location" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Number of Courts <span class="text-danger">*</span></label>
+                                        <input type="number" id="numCourts" class="form-control" placeholder="e.g. 3" min="1" required>
+                                    </div>
+                                </div>
+
+                                <!-- Court Details Container -->
+                                <div id="courtDetailsContainer"></div>
+
+                                <div id="courtSlotsView" class="mt-4">
+                                    <!-- Dynamically generated court slot views will appear here -->
+                                </div>
+
+                                <hr>
+
+                                <!-- Facilities / Amenities -->
+                                <h5 class="mb-3"><i class="fas fa-dumbbell mr-2 text-primary"></i>Facilities / Amenities</h5>
+                                <div id="facilityContainer">
+                                    <div class="form-row facility-item mb-2">
+                                        <div class="form-group col-md-4">
+                                            <input type="text" class="form-control" placeholder="Facility Name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <input type="text" class="form-control" placeholder="Type">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <input type="number" class="form-control" placeholder="Rent">
+                                        </div>
+                                        <div class="form-group col-md-1 text-center">
+                                            <button type="button" class="btn btn-danger btn-sm remove-facility"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" id="addFacility" class="btn btn-outline-primary btn-sm mb-3"><i class="fas fa-plus"></i> Add Facility</button>
+
+                                <div id="facilityPreview" class="mt-3"></div>
+
+                                <hr>
+
+                                <!-- Slot Management -->
+                                <h5 class="mb-3"><i class="fas fa-clock mr-2 text-primary"></i>Add Slots</h5>
+                                <div id="slotContainer">
+                                    <div class="form-row slot-item mb-2">
+                                        <div class="form-group col-md-4">
+                                            <label>From</label>
+                                            <input type="time" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>To</label>
+                                            <input type="time" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Category/Name</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Morning Slot">
+                                        </div>
+                                        <div class="form-group col-md-1 text-center">
+                                            <button type="button" class="btn btn-danger btn-sm remove-slot mt-4"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" id="addSlot" class="btn btn-outline-primary btn-sm mb-3"><i class="fas fa-plus"></i> Add Slot</button>
+
+                                <div id="slotPreview" class="mt-3"></div>
+                                <hr>
+
+                                <h5 class="mb-3"><i class="fas fa-tags mr-2 text-primary"></i>Pricing / Membership Plans</h5>
+                                <div id="planContainer">
+                                    <div class="plan-item mb-3 p-3 border rounded bg-white shadow-sm">
+                                        <!-- Row 1: Name, Duration, Period, Slot -->
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <input type="text" class="form-control" placeholder="Membership Name">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <input type="number" class="form-control" placeholder="Duration">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <select class="form-control">
+                                                    <option selected disabled>Select Period</option>
+                                                    <option>Week</option>
+                                                    <option>Month</option>
+                                                    <option>Year</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <select class="form-control">
+                                                    <option selected disabled>Select Slot</option>
+                                                    <option>Morning Slot</option>
+                                                    <option>Evening Slot</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-2 text-center align-self-end">
+                                                <button type="button" class="btn btn-danger btn-sm remove-plan">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Row 2: Registration Fees, Coaching Fees -->
+                                        <div class="form-row mt-2">
+                                            <div class="form-group col-md-3">
+                                                <input type="number" class="form-control" placeholder="Registration Fees">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <input type="number" class="form-control" placeholder="Coaching Fees">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <input type="number" class="form-control installment-count" placeholder="Number of Installments">
+                                            </div>
+
+
+                                        </div>
+                                        <div class="installment-amount-container mt-2"></div>
+
+                                    </div>
+                                </div>
+
+                                <button type="button" id="addPlan" class="btn btn-outline-primary btn-sm mb-3">
+                                    <i class="fas fa-plus"></i> Add Plan
+                                </button>
+
+                                <div id="planPreview" class="mt-3"></div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="saveVenue">Save Center</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Venue Modal -->
+    <div class="modal fade" id="editVenueModal" tabindex="-1" role="dialog" aria-labelledby="editVenueModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVenueModalLabel"><i class="fas fa-edit mr-2"></i> Edit Center</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editVenueForm">
+                        <input type="hidden" id="editVenueId">
+                        <!-- Venue Details -->
+                        <h5 class="mb-3"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Venue Details</h5>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Venue Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editVenueName" placeholder="Enter Venue Name" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Location <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editVenueLocation" placeholder="Enter Location" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Number of Courts <span class="text-danger">*</span></label>
+                                <input type="number" id="editNumCourts" class="form-control" placeholder="e.g. 3" min="1" required>
+                            </div>
+                        </div>
+
+                        <!-- Court Details Container -->
+                        <div id="editCourtDetailsContainer"></div>
+
+                        <div id="editCourtSlotsView" class="mt-4">
+                            <!-- Dynamically generated court slot views will appear here -->
+                        </div>
+
+                        <hr>
+
+                        <!-- Facilities / Amenities -->
+                        <h5 class="mb-3"><i class="fas fa-dumbbell mr-2 text-primary"></i>Facilities / Amenities</h5>
+                        <div id="editFacilityContainer">
+                            <!-- Facilities will be dynamically added here -->
+                        </div>
+                        <button type="button" id="editAddFacility" class="btn btn-outline-primary btn-sm mb-3"><i class="fas fa-plus"></i> Add Facility</button>
+
+                        <div id="editFacilityPreview" class="mt-3"></div>
+
+                        <hr>
+
+                        <!-- Slot Management -->
+                        <h5 class="mb-3"><i class="fas fa-clock mr-2 text-primary"></i>Add Slots</h5>
+                        <div id="editSlotContainer">
+                            <!-- Slots will be dynamically added here -->
+                        </div>
+                        <button type="button" id="editAddSlot" class="btn btn-outline-primary btn-sm mb-3"><i class="fas fa-plus"></i> Add Slot</button>
+
+                        <div id="editSlotPreview" class="mt-3"></div>
+                        <hr>
+
+                        <h5 class="mb-3"><i class="fas fa-tags mr-2 text-primary"></i>Pricing / Membership Plans</h5>
+                        <div id="editPlanContainer">
+                            <!-- Plans will be dynamically added here -->
+                        </div>
+                        <button type="button" id="editAddPlan" class="btn btn-outline-primary btn-sm mb-3">
+                            <i class="fas fa-plus"></i> Add Plan
+                        </button>
+
+                        <div id="editPlanPreview" class="mt-3"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateVenue">Update Center</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Sample data for demonstration
+        let venues = [{
+                id: 1,
+                name: "ABC Sports Arena",
+                location: "Pune",
+                courts: 4,
+                facilities: ["Badminton", "Gym"],
+                slots: ["6:00 AM - 9:00 AM", "4:00 PM - 7:00 PM"],
+                plans: ["Monthly", "Yearly"]
+            },
+            {
+                id: 2,
+                name: "XYZ Fitness Center",
+                location: "Mumbai",
+                courts: 3,
+                facilities: ["Swimming Pool", "Squash"],
+                slots: ["7:00 AM - 10:00 AM", "5:00 PM - 8:00 PM"],
+                plans: ["Weekly", "Monthly"]
+            }
+        ];
+
+        // Function to display venue cards
+        function displayVenueCards() {
+            const container = $('#venueCardsContainer');
+            container.empty();
+
+            if (venues.length === 0) {
+                container.html('<div class="col-12 text-center py-5"><h5>No venues added yet. Click "Add New Center" to get started.</h5></div>');
+                return;
+            }
+
+            venues.forEach(venue => {
+                const card = $(`
+                    <div class="col-md-6 col-lg-4">
+                        <div class="venue-card">
+                            <div class="venue-card-header">
+                                <h5 class="mb-0">${venue.name}</h5>
+                                <p class="mb-0"><i class="fas fa-map-marker-alt mr-1"></i> ${venue.location}</p>
+                            </div>
+                            <div class="venue-card-body">
+                                <p><strong>Courts:</strong> ${venue.courts}</p>
+                                <p><strong>Facilities:</strong> ${venue.facilities.join(', ')}</p>
+                                <p><strong>Slots:</strong> ${venue.slots.join(', ')}</p>
+                                <p><strong>Plans:</strong> ${venue.plans.join(', ')}</p>
+                            </div>
+                            <div class="venue-card-footer d-flex justify-content-end">
+                                <button class="btn btn-info btn-sm mr-2 edit-venue" data-id="${venue.id}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-venue" data-id="${venue.id}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                container.append(card);
+            });
+        }
+
+        // Initialize venue cards display
+        displayVenueCards();
+
+        // Form functionality
+        // Add Facility
+        $('#addFacility').on('click', function() {
+            $('#facilityContainer').append(`
+                <div class="form-row facility-item mb-2">
+                    <div class="form-group col-md-4"><input type="text" class="form-control" placeholder="Facility Name"></div>
+                    <div class="form-group col-md-4"><input type="text" class="form-control" placeholder="Type"></div>
+                    <div class="form-group col-md-3"><input type="number" class="form-control" placeholder="Rent"></div>
+                    <div class="form-group col-md-1 text-center"><button type="button" class="btn btn-danger btn-sm remove-facility"><i class="fas fa-trash"></i></button></div>
+                </div>
+            `);
+            renderFacilityPreview();
+        });
+
+        // Remove Facility
+        $(document).on('click', '.remove-facility', function() {
+            let row = $(this).closest('.facility-item');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This facility will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    row.remove();
+                    renderFacilityPreview();
+                    Swal.fire('Deleted!', 'Facility has been removed.', 'success');
+                }
+            });
+        });
+
+        // Add Slot
+        $('#addSlot').on('click', function() {
+            $('#slotContainer').append(`
+                <div class="form-row slot-item mb-2">
+                    <div class="form-group col-md-4"><label>From</label><input type="time" class="form-control"></div>
+                    <div class="form-group col-md-4"><label>To</label><input type="time" class="form-control"></div>
+                    <div class="form-group col-md-3"><label>Category/Name</label><input type="text" class="form-control"></div>
+                    <div class="form-group col-md-1 text-center"><button type="button" class="btn btn-danger btn-sm remove-slot mt-4"><i class="fas fa-trash"></i></button></div>
+                </div>
+            `);
+            renderSlotPreview();
+        });
+
+        // Remove Slot
+        $(document).on('click', '.remove-slot', function() {
+            let row = $(this).closest('.slot-item');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This slot will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    row.remove();
+                    renderSlotPreview();
+                    Swal.fire('Deleted!', 'Slot has been removed.', 'success');
+                }
+            });
+        });
+
+        // Add Plan
+        $('#addPlan').on('click', function() {
+            $('#planContainer').append(`
+                <div class="plan-item mb-3 p-3 border rounded bg-white shadow-sm">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" placeholder="Membership Name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <input type="number" class="form-control" placeholder="Duration">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <select class="form-control">
+                                <option selected disabled>Select Period</option>
+                                <option>Week</option>
+                                <option>Month</option>
+                                <option>Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control">
+                                <option selected disabled>Select Slot</option>
+                                <option>Morning Slot</option>
+                                <option>Evening Slot</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 text-center align-self-end">
+                            <button type="button" class="btn btn-danger btn-sm remove-plan">
+                                <i class="fas fa-trash"></i> 
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="form-group col-md-3">
+                            <input type="number" class="form-control" placeholder="Registration Fees">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="number" class="form-control" placeholder="Coaching Fees">
+                        </div>
+                    </div>
+                </div>
+            `);
+            renderPlanPreview();
+        });
+
+        // Remove Plan
+        $(document).on('click', '.remove-plan', function() {
+            let row = $(this).closest('.plan-item');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This plan will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    row.remove();
+                    renderPlanPreview();
+                    Swal.fire('Deleted!', 'Plan has been removed.', 'success');
+                }
+            });
+        });
+
+        // Generate court details based on number of courts
+        $('#numCourts').on('input', function() {
+            let num = parseInt($(this).val()) || 0;
+            let container = $('#courtDetailsContainer');
+            container.empty(); // Clear previous inputs
+
+            for (let i = 1; i <= num; i++) {
+                container.append(`
+                    <div class="form-row mb-2 court-item">
+                        <div class="form-group col-md-6">
+                            <label>Court ${i} Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Court ${i} Name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Court ${i} Category</label>
+                            <input type="text" class="form-control" placeholder="Enter Court ${i} Category">
+                        </div>
+                    </div>
+                `);
+            }
+        });
+
+        // Save venue
+        $('#saveVenue').on('click', function() {
+            // Basic validation
+            const venueName = $('#venueName').val();
+            const venueLocation = $('#venueLocation').val();
+
+            if (!venueName || !venueLocation) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing Information',
+                    text: 'Please fill in all required fields.',
+                });
+                return;
+            }
+
+            // Collect facilities
+            const facilities = [];
+            $('#facilityContainer .facility-item').each(function() {
+                const name = $(this).find('input').eq(0).val();
+                const type = $(this).find('input').eq(1).val();
+                if (name) {
+                    facilities.push(name);
+                }
+            });
+
+            // Collect slots
+            const slots = [];
+            $('#slotContainer .slot-item').each(function() {
+                const fromTime = $(this).find('input[type="time"]').eq(0).val();
+                const toTime = $(this).find('input[type="time"]').eq(1).val();
+                if (fromTime && toTime) {
+                    slots.push(`${formatTime(fromTime)} - ${formatTime(toTime)}`);
+                }
+            });
+
+            // Collect plans
+            const plans = [];
+            $('#planContainer .plan-item').each(function() {
+                const membershipName = $(this).find('input').eq(0).val();
+                if (membershipName) {
+                    plans.push(membershipName);
+                }
+            });
+
+            // Create new venue object
+            const newVenue = {
+                id: venues.length + 1,
+                name: venueName,
+                location: venueLocation,
+                courts: parseInt($('#numCourts').val()) || 0,
+                facilities: facilities,
+                slots: slots,
+                plans: plans
+            };
+
+            // Add to venues array
+            venues.push(newVenue);
+
+            // Update display
+            displayVenueCards();
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Saved!',
+                text: 'Venue has been added successfully.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            // Reset form and close modal
+            $('#venueForm')[0].reset();
+            $('#courtDetailsContainer').empty();
+            $('#courtSlotsView').empty();
+            $('#facilityPreview').empty();
+            $('#slotPreview').empty();
+            $('#planPreview').empty();
+            $('#venueModal').modal('hide');
+        });
+
+        // Delete venue
+        $(document).on('click', '.delete-venue', function() {
+            const venueId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Remove from venues array
+                    venues = venues.filter(venue => venue.id !== venueId);
+
+                    // Update display
+                    displayVenueCards();
+
+                    Swal.fire(
+                        'Deleted!',
+                        'Venue has been deleted.',
+                        'success'
+                    );
+                }
+            });
+        });
+
+        // Helper functions
+        function formatTime(time) {
+            if (!time) return '';
+            let [h, m] = time.split(':');
+            h = parseInt(h);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${("0"+h).slice(-2)}:${m} ${ampm}`;
+        }
+
+        function renderCourtSlots() {
+            const courts = [];
+            $('#courtDetailsContainer .court-item').each(function() {
+                const courtName = $(this).find('input').eq(0).val();
+                const courtCategory = $(this).find('input').eq(1).val();
+                if (courtName) {
+                    courts.push({
+                        name: courtName,
+                        category: courtCategory
+                    });
+                }
+            });
+
+            const slots = [];
+            $('#slotContainer .slot-item').each(function() {
+                const fromTime = $(this).find('input[type="time"]').eq(0).val();
+                const toTime = $(this).find('input[type="time"]').eq(1).val();
+                const slotName = $(this).find('input[type="text"]').val();
+                if (fromTime && toTime) {
+                    slots.push({
+                        from: fromTime,
+                        to: toTime,
+                        name: slotName
+                    });
+                }
+            });
+
+            const container = $('#courtSlotsView');
+            container.empty();
+
+            courts.forEach(court => {
+                const courtDiv = $(`
+                    <div class="court-slot-block mb-3">
+                        <h5>${court.name} - <small>${court.category}</small></h5>
+                        <div class="slot-grid"></div>
+                    </div>
+                `);
+
+                slots.forEach(slot => {
+                    const slotBox = $(`
+                        <div class="slot-box">
+                            ${formatTime(slot.from)} - ${formatTime(slot.to)}<br><small>${slot.name}</small>
+                        </div>
+                    `);
+                    courtDiv.find('.slot-grid').append(slotBox);
+                });
+
+                container.append(courtDiv);
+            });
+        }
+
+        function renderFacilityPreview() {
+            const container = $('#facilityPreview');
+            container.empty();
+
+            $('#facilityContainer .facility-item').each(function() {
+                const name = $(this).find('input').eq(0).val();
+                const type = $(this).find('input').eq(1).val();
+                const rent = $(this).find('input').eq(2).val();
+
+                if (name) {
+                    const div = $(`
+                        <div class="court-slot-block mb-2">
+                            <h5>${name} - <small>${type}</small></h5>
+                            <p>Rent: ₹${rent || 0}</p>
+                        </div>
+                    `);
+                    container.append(div);
+                }
+            });
+        }
+
+        function renderSlotPreview() {
+            const container = $('#slotPreview');
+            container.empty();
+
+            $('#slotContainer .slot-item').each(function() {
+                const from = $(this).find('input[type="time"]').eq(0).val();
+                const to = $(this).find('input[type="time"]').eq(1).val();
+                const name = $(this).find('input[type="text"]').val();
+
+                if (from && to) {
+                    const div = $(`
+                        <div class="court-slot-block mb-2">
+                            <h5>${name || 'Slot'}</h5>
+                            <p>${formatTime(from)} - ${formatTime(to)}</p>
+                        </div>
+                    `);
+                    container.append(div);
+                }
+            });
+        }
+
+        function renderPlanPreview() {
+            const container = $('#planPreview');
+            container.empty();
+
+            $('#planContainer .plan-item').each(function() {
+                const membershipName = $(this).find('input').eq(0).val();
+                const duration = $(this).find('input').eq(1).val();
+                const period = $(this).find('select').eq(0).val();
+                const slot = $(this).find('select').eq(1).val();
+                const regFee = $(this).find('input').eq(2).val();
+                const coachingFee = $(this).find('input').eq(3).val();
+
+                if (membershipName && duration && period) {
+                    const div = $(`
+                        <div class="court-slot-block mb-2">
+                            <h5>${membershipName} - ${duration} ${period} <small>${slot || ''}</small></h5>
+                            <p>Registration: ₹${regFee || 0}, Coaching: ₹${coachingFee || 0}</p>
+                        </div>
+                    `);
+                    container.append(div);
+                }
+            });
+        }
+
+        // Update previews when user types in inputs
+        $(document).on('input change', '#facilityContainer input', renderFacilityPreview);
+        $(document).on('input change', '#slotContainer input', renderSlotPreview);
+        $(document).on('change', '#planContainer input, #planContainer select', renderPlanPreview);
+
+        // Update previews when adding/removing items
+        $('#addFacility, #addSlot, #addPlan').on('click', function() {
+            renderFacilityPreview();
+            renderSlotPreview();
+            renderPlanPreview();
+        });
+
+        $(document).on('click', '.remove-facility, .remove-slot, .remove-plan', function() {
+            renderFacilityPreview();
+            renderSlotPreview();
+            renderPlanPreview();
+        });
+
+        // Update court slots when court details change
+        $(document).on('input', '#courtDetailsContainer input', function() {
+            renderCourtSlots();
+        });
+    </script>
+    <script>
+        // Edit venue functionality
+        $(document).on('click', '.edit-venue', function() {
+            const venueId = $(this).data('id');
+            const venue = venues.find(v => v.id === venueId);
+
+            if (venue) {
+                // Populate basic venue info
+                $('#editVenueId').val(venue.id);
+                $('#editVenueName').val(venue.name);
+                $('#editVenueLocation').val(venue.location);
+                $('#editNumCourts').val(venue.courts);
+
+                // Generate court details
+                generateEditCourtDetails(venue.courts);
+
+                // Populate facilities
+                populateEditFacilities(venue.facilities || []);
+
+                // Populate slots
+                populateEditSlots(venue.slots || []);
+
+                // Populate plans
+                populateEditPlans(venue.plans || []);
+
+                // Show modal
+                $('#editVenueModal').modal('show');
+            }
+        });
+
+        // Generate court details for edit
+        function generateEditCourtDetails(numCourts) {
+            const container = $('#editCourtDetailsContainer');
+            container.empty();
+
+            for (let i = 1; i <= numCourts; i++) {
+                container.append(`
+            <div class="form-row mb-2 court-item">
+                <div class="form-group col-md-6">
+                    <label>Court ${i} Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Court ${i} Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Court ${i} Category</label>
+                    <input type="text" class="form-control" placeholder="Enter Court ${i} Category">
+                </div>
+            </div>
+        `);
+            }
+        }
+
+        // Populate facilities for edit
+        function populateEditFacilities(facilities) {
+            const container = $('#editFacilityContainer');
+            container.empty();
+
+            facilities.forEach((facility, index) => {
+                container.append(`
+            <div class="form-row facility-item mb-2">
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" placeholder="Facility Name" value="${facility}">
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" placeholder="Type">
+                </div>
+                <div class="form-group col-md-3">
+                    <input type="number" class="form-control" placeholder="Rent">
+                </div>
+                <div class="form-group col-md-1 text-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-edit-facility">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `);
+            });
+
+            renderEditFacilityPreview();
+        }
+
+        // Populate slots for edit
+        function populateEditSlots(slots) {
+            const container = $('#editSlotContainer');
+            container.empty();
+
+            slots.forEach(slot => {
+                const [fromTime, toTime] = slot.split(' - ');
+                container.append(`
+            <div class="form-row slot-item mb-2">
+                <div class="form-group col-md-4">
+                    <label>From</label>
+                    <input type="time" class="form-control" value="${convertTo24Hour(fromTime)}">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>To</label>
+                    <input type="time" class="form-control" value="${convertTo24Hour(toTime)}">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Category/Name</label>
+                    <input type="text" class="form-control" placeholder="e.g. Morning Slot">
+                </div>
+                <div class="form-group col-md-1 text-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-edit-slot mt-4">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `);
+            });
+
+            renderEditSlotPreview();
+        }
+
+        // Populate plans for edit
+        function populateEditPlans(plans) {
+            const container = $('#editPlanContainer');
+            container.empty();
+
+            plans.forEach(plan => {
+                container.append(`
+            <div class="plan-item mb-3 p-3 border rounded bg-white shadow-sm">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <input type="text" class="form-control" placeholder="Membership Name" value="${plan}">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="number" class="form-control" placeholder="Duration">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <select class="form-control">
+                            <option selected disabled>Select Period</option>
+                            <option>Week</option>
+                            <option>Month</option>
+                            <option>Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <select class="form-control">
+                            <option selected disabled>Select Slot</option>
+                            <option>Morning Slot</option>
+                            <option>Evening Slot</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 text-center align-self-end">
+                        <button type="button" class="btn btn-danger btn-sm remove-edit-plan">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="form-group col-md-3">
+                        <input type="number" class="form-control" placeholder="Registration Fees">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input type="number" class="form-control" placeholder="Coaching Fees">
+                    </div>
+                </div>
+            </div>
+        `);
+            });
+
+            renderEditPlanPreview();
+        }
+
+        // Helper function to convert time to 24-hour format
+        function convertTo24Hour(timeStr) {
+            if (!timeStr) return '';
+            const [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+
+            if (modifier === 'PM' && hours !== '12') {
+                hours = parseInt(hours, 10) + 12;
+            }
+            if (modifier === 'AM' && hours === '12') {
+                hours = '00';
+            }
+
+            return `${hours}:${minutes}`;
+        }
+
+        // Update venue
+        $('#updateVenue').on('click', function() {
+            const venueId = parseInt($('#editVenueId').val());
+            const venueIndex = venues.findIndex(v => v.id === venueId);
+
+            if (venueIndex === -1) return;
+
+            // Basic validation
+            const venueName = $('#editVenueName').val();
+            const venueLocation = $('#editVenueLocation').val();
+
+            if (!venueName || !venueLocation) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing Information',
+                    text: 'Please fill in all required fields.',
+                });
+                return;
+            }
+
+            // Collect facilities
+            const facilities = [];
+            $('#editFacilityContainer .facility-item').each(function() {
+                const name = $(this).find('input').eq(0).val();
+                if (name) {
+                    facilities.push(name);
+                }
+            });
+
+            // Collect slots
+            const slots = [];
+            $('#editSlotContainer .slot-item').each(function() {
+                const fromTime = $(this).find('input[type="time"]').eq(0).val();
+                const toTime = $(this).find('input[type="time"]').eq(1).val();
+                if (fromTime && toTime) {
+                    slots.push(`${formatTime(fromTime)} - ${formatTime(toTime)}`);
+                }
+            });
+
+            // Collect plans
+            const plans = [];
+            $('#editPlanContainer .plan-item').each(function() {
+                const membershipName = $(this).find('input').eq(0).val();
+                if (membershipName) {
+                    plans.push(membershipName);
+                }
+            });
+
+            // Update venue object
+            venues[venueIndex] = {
+                ...venues[venueIndex],
+                name: venueName,
+                location: venueLocation,
+                courts: parseInt($('#editNumCourts').val()) || 0,
+                facilities: facilities,
+                slots: slots,
+                plans: plans
+            };
+
+            // Update display
+            displayVenueCards();
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: 'Venue has been updated successfully.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            // Close modal
+            $('#editVenueModal').modal('hide');
+        });
+
+        // Add event listeners for edit modal
+        $('#editAddFacility').on('click', function() {
+            $('#editFacilityContainer').append(`
+        <div class="form-row facility-item mb-2">
+            <div class="form-group col-md-4"><input type="text" class="form-control" placeholder="Facility Name"></div>
+            <div class="form-group col-md-4"><input type="text" class="form-control" placeholder="Type"></div>
+            <div class="form-group col-md-3"><input type="number" class="form-control" placeholder="Rent"></div>
+            <div class="form-group col-md-1 text-center"><button type="button" class="btn btn-danger btn-sm remove-edit-facility"><i class="fas fa-trash"></i></button></div>
+        </div>
+    `);
+            renderEditFacilityPreview();
+        });
+
+        $('#editAddSlot').on('click', function() {
+            $('#editSlotContainer').append(`
+        <div class="form-row slot-item mb-2">
+            <div class="form-group col-md-4"><label>From</label><input type="time" class="form-control"></div>
+            <div class="form-group col-md-4"><label>To</label><input type="time" class="form-control"></div>
+            <div class="form-group col-md-3"><label>Category/Name</label><input type="text" class="form-control"></div>
+            <div class="form-group col-md-1 text-center"><button type="button" class="btn btn-danger btn-sm remove-edit-slot mt-4"><i class="fas fa-trash"></i></button></div>
+        </div>
+    `);
+            renderEditSlotPreview();
+        });
+
+        $('#editAddPlan').on('click', function() {
+            $('#editPlanContainer').append(`
+        <div class="plan-item mb-3 p-3 border rounded bg-white shadow-sm">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <input type="text" class="form-control" placeholder="Membership Name">
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="number" class="form-control" placeholder="Duration">
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control">
+                        <option selected disabled>Select Period</option>
+                        <option>Week</option>
+                        <option>Month</option>
+                        <option>Year</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <select class="form-control">
+                        <option selected disabled>Select Slot</option>
+                        <option>Morning Slot</option>
+                        <option>Evening Slot</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 text-center align-self-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-edit-plan">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="form-group col-md-3">
+                    <input type="number" class="form-control" placeholder="Registration Fees">
+                </div>
+                <div class="form-group col-md-3">
+                    <input type="number" class="form-control" placeholder="Coaching Fees">
+                </div>
+            </div>
+        </div>
+    `);
+            renderEditPlanPreview();
+        });
+
+        // Remove functionality for edit modal
+        $(document).on('click', '.remove-edit-facility', function() {
+            $(this).closest('.facility-item').remove();
+            renderEditFacilityPreview();
+        });
+
+        $(document).on('click', '.remove-edit-slot', function() {
+            $(this).closest('.slot-item').remove();
+            renderEditSlotPreview();
+        });
+
+        $(document).on('click', '.remove-edit-plan', function() {
+            $(this).closest('.plan-item').remove();
+            renderEditPlanPreview();
+        });
+
+        // Preview rendering functions for edit modal
+        function renderEditFacilityPreview() {
+            const container = $('#editFacilityPreview');
+            container.empty();
+
+            $('#editFacilityContainer .facility-item').each(function() {
+                const name = $(this).find('input').eq(0).val();
+                const type = $(this).find('input').eq(1).val();
+                const rent = $(this).find('input').eq(2).val();
+
+                if (name) {
+                    const div = $(`
+                <div class="court-slot-block mb-2">
+                    <h5>${name} - <small>${type}</small></h5>
+                    <p>Rent: ₹${rent || 0}</p>
+                </div>
+            `);
+                    container.append(div);
+                }
+            });
+        }
+
+        function renderEditSlotPreview() {
+            const container = $('#editSlotPreview');
+            container.empty();
+
+            $('#editSlotContainer .slot-item').each(function() {
+                const from = $(this).find('input[type="time"]').eq(0).val();
+                const to = $(this).find('input[type="time"]').eq(1).val();
+                const name = $(this).find('input[type="text"]').val();
+
+                if (from && to) {
+                    const div = $(`
+                <div class="court-slot-block mb-2">
+                    <h5>${name || 'Slot'}</h5>
+                    <p>${formatTime(from)} - ${formatTime(to)}</p>
+                </div>
+            `);
+                    container.append(div);
+                }
+            });
+        }
+
+        function renderEditPlanPreview() {
+            const container = $('#editPlanPreview');
+            container.empty();
+
+            $('#editPlanContainer .plan-item').each(function() {
+                const membershipName = $(this).find('input').eq(0).val();
+                const duration = $(this).find('input').eq(1).val();
+                const period = $(this).find('select').eq(0).val();
+                const slot = $(this).find('select').eq(1).val();
+                const regFee = $(this).find('input').eq(2).val();
+                const coachingFee = $(this).find('input').eq(3).val();
+
+                if (membershipName && duration && period) {
+                    const div = $(`
+                <div class="court-slot-block mb-2">
+                    <h5>${membershipName} - ${duration} ${period} <small>${slot || ''}</small></h5>
+                    <p>Registration: ₹${regFee || 0}, Coaching: ₹${coachingFee || 0}</p>
+                </div>
+            `);
+                    container.append(div);
+                }
+            });
+        }
+
+        // Update previews when user types in edit modal inputs
+        $(document).on('input change', '#editFacilityContainer input', renderEditFacilityPreview);
+        $(document).on('input change', '#editSlotContainer input', renderEditSlotPreview);
+        $(document).on('change', '#editPlanContainer input, #editPlanContainer select', renderEditPlanPreview);
+    </script>
+    <script>
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('installment-count')) {
+                const count = parseInt(e.target.value);
+                const container = e.target.closest('.plan-item').querySelector('.installment-amount-container');
+                container.innerHTML = ''; // clear old fields
+
+                if (!isNaN(count) && count > 0) {
+                    for (let i = 1; i <= count; i++) {
+                        const div = document.createElement('div');
+                        div.classList.add('form-group', 'col-md-3', 'mb-2');
+                        div.innerHTML = `
+            <label>Installment ${i} Amount</label>
+            <input type="number" class="form-control installment-amount" placeholder="Enter installment amount ${i}">
+          `;
+                        container.appendChild(div);
+                    }
+
+                    // make container row style
+                    container.classList.add('form-row');
+                } else {
+                    container.classList.remove('form-row');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

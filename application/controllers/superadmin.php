@@ -21,13 +21,13 @@ class Superadmin extends MY_Controller
 
 	public function dashboard()
 	{
-		  $center_id = $this->session->userdata('center_id');
+		$center_id = $this->session->userdata('center_id');
 
-     
-        if (!$center_id) {
-            redirect('auth/logout');
-            return;
-        }
+
+		if (!$center_id) {
+			redirect('auth/logout');
+			return;
+		}
 
 
 		$data['activeStudents']  = $this->DashboardModel->getActiveStudentsCount();
@@ -322,41 +322,41 @@ class Superadmin extends MY_Controller
 		$this->load->view('superadmin/adminlogin');
 	}
 	public function student_details($id = null)
-{
-    if (!$id) {
-        redirect('superadmin/students');
-    }
+	{
+		if (!$id) {
+			redirect('superadmin/students');
+		}
 
-    $data['student'] = $this->Student_model->get_student_by_id($id);
+		$data['student'] = $this->Student_model->get_student_by_id($id);
 
-    if (!$data['student']) {
-        $this->session->set_flashdata('error', 'Student not found.');
-        redirect('superadmin/students');
-    }
+		if (!$data['student']) {
+			$this->session->set_flashdata('error', 'Student not found.');
+			redirect('superadmin/students');
+		}
 
-    $data['student_get_current_batch'] = $this->Student_model->get_student_by_id_batch($id);
-    $data['student_history'] = $this->Student_model->get_student_by_id_history($id);
-    $data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
+		$data['student_get_current_batch'] = $this->Student_model->get_student_by_id_batch($id);
+		$data['student_history'] = $this->Student_model->get_student_by_id_history($id);
+		$data['student_history_batch'] = $this->Student_model->get_student_by_id_history_batch($id);
 
-    // Facilities
-    $this->load->model('Facility_model');
-    $data['facilities'] = $this->Facility_model->get_facilities_of_student($id);
-
-	
-
-    $data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
-
-    $data['student_attendace'] = $this->Student_model->get_student_attendace($id);
-
-	   $data['get_last_attendace'] = $this->Student_model->get_last_attendace($id);
-
-    // ✅ Fetch coordinator (only one entry in coordinator table)
-    $data['coordinator'] = $this->Student_model->get_coordinator();
-	$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
+		// Facilities
+		$this->load->model('Facility_model');
+		$data['facilities'] = $this->Facility_model->get_facilities_of_student($id);
 
 
-    $this->load->view('superadmin/student_details', $data);
-}
+
+		$data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
+
+		$data['student_attendace'] = $this->Student_model->get_student_attendace($id);
+
+		$data['get_last_attendace'] = $this->Student_model->get_last_attendace($id);
+
+		// ✅ Fetch coordinator (only one entry in coordinator table)
+		$data['coordinator'] = $this->Student_model->get_coordinator();
+		$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
+
+
+		$this->load->view('superadmin/student_details', $data);
+	}
 	public function student_details_269530($id = null)
 	{
 		if (!$id) {
@@ -393,7 +393,7 @@ class Superadmin extends MY_Controller
 		$data['facilities'] = $this->Facility_model->get_facilities_of_student($id);
 
 
-	
+
 
 		$data['facilities_history'] = $this->Facility_model->get_facilities_history_by_student($id);
 
@@ -407,11 +407,11 @@ class Superadmin extends MY_Controller
 
 		// print_r($data['student_attendace'] );
 
-		
+
 		$data['get_overrall_attendance'] = $this->Student_model->get_overrall_attendance_of_std($id);
 
 
-		
+
 
 		$this->load->view('superadmin/student_details', $data);
 	}
@@ -432,6 +432,12 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/overall_report');
 	}
-
-
+	public function VenueManagement()
+	{
+		$this->load->view('superadmin/venue_management');
+	}
+	public function VenueForm()
+	{
+		$this->load->view('superadmin/venue_form');
+	}
 }
