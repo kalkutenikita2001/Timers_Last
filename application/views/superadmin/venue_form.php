@@ -688,6 +688,13 @@
                         <div class="form-group col-md-3">
                             <input type="number" class="form-control" placeholder="Coaching Fees">
                         </div>
+                        <div class="form-group col-md-3">
+                                                <input type="number" class="form-control installment-count" placeholder="Number of Installments">
+                                            </div>
+
+
+                                        </div>
+                                        <div class="installment-amount-container mt-2"></div>
                     </div>
                 </div>
             `);
@@ -1151,6 +1158,11 @@
                     <div class="form-group col-md-3">
                         <input type="number" class="form-control" placeholder="Coaching Fees">
                     </div>
+                    <div class="form-group col-md-3">
+                                                <input type="number" class="form-control installment-count" placeholder="Number of Installments">
+                                            </div>
+                                        </div>
+                                        <div class="installment-amount-container mt-2"></div>
                 </div>
             </div>
         `);
@@ -1313,6 +1325,7 @@
                 <div class="form-group col-md-3">
                     <input type="number" class="form-control" placeholder="Coaching Fees">
                 </div>
+
             </div>
         </div>
     `);
