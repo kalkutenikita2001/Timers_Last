@@ -149,8 +149,8 @@
       </a>
 
 
-<!-- STAFF MANAGEMENT -->
-<div class="nav-item">
+      <!-- STAFF MANAGEMENT -->
+      <div class="nav-item">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#staffMenu" role="button" aria-expanded="false" aria-controls="staffMenu">
           <span><i class="bi bi-person-lines-fill"></i> <span>Staff Management</span></span>
           <i class="bi bi-chevron-down"></i>

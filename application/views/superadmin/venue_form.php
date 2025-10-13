@@ -290,11 +290,11 @@
                                 <h5 class="mb-3"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Venue Details</h5>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Venue Name <span class="text-danger">*</span></label>
+                                        <label>Venue Name </label>
                                         <input type="text" class="form-control" id="venueName" placeholder="Enter Venue Name" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Location <span class="text-danger">*</span></label>
+                                        <label>Location </label>
                                         <input type="text" class="form-control" id="venueLocation" placeholder="Enter Location" required>
                                     </div>
                                 </div>
@@ -385,12 +385,9 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <select class="form-control">
-                                                    <option selected disabled>Select Slot</option>
-                                                    <option>Morning Slot</option>
-                                                    <option>Evening Slot</option>
-                                                </select>
+                                                <input type="text" class="form-control" placeholder="Enter Slot">
                                             </div>
+
                                             <div class="form-group col-md-2 text-center align-self-end">
                                                 <button type="button" class="btn btn-danger btn-sm remove-plan">
                                                     <i class="fas fa-trash"></i>
@@ -404,6 +401,9 @@
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <input type="number" class="form-control" placeholder="Coaching Fees">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <input type="number" class="form-control" placeholder="Total Fees">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <input type="number" class="form-control installment-count" placeholder="Number of Installments">
@@ -449,11 +449,11 @@
                         <h5 class="mb-3"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Venue Details</h5>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label>Venue Name <span class="text-danger">*</span></label>
+                                <label>Venue Name </label>
                                 <input type="text" class="form-control" id="editVenueName" placeholder="Enter Venue Name" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Location <span class="text-danger">*</span></label>
+                                <label>Location</label>
                                 <input type="text" class="form-control" id="editVenueLocation" placeholder="Enter Location" required>
                             </div>
                         </div>
@@ -668,13 +668,10 @@
                                 <option>Year</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
-                            <select class="form-control">
-                                <option selected disabled>Select Slot</option>
-                                <option>Morning Slot</option>
-                                <option>Evening Slot</option>
-                            </select>
-                        </div>
+                       <div class="form-group col-md-3">
+    <input type="text" class="form-control" placeholder="Enter Slot">
+</div>
+
                         <div class="form-group col-md-2 text-center align-self-end">
                             <button type="button" class="btn btn-danger btn-sm remove-plan">
                                 <i class="fas fa-trash"></i> 
@@ -687,6 +684,9 @@
                         </div>
                         <div class="form-group col-md-3">
                             <input type="number" class="form-control" placeholder="Coaching Fees">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="number" class="form-control" placeholder="Total Fees">
                         </div>
                         <div class="form-group col-md-3">
                                                 <input type="number" class="form-control installment-count" placeholder="Number of Installments">
@@ -1138,13 +1138,10 @@
                             <option>Year</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
-                        <select class="form-control">
-                            <option selected disabled>Select Slot</option>
-                            <option>Morning Slot</option>
-                            <option>Evening Slot</option>
-                        </select>
-                    </div>
+                   <div class="form-group col-md-3">
+    <input type="text" class="form-control" placeholder="Enter Slot">
+</div>
+
                     <div class="form-group col-md-2 text-center align-self-end">
                         <button type="button" class="btn btn-danger btn-sm remove-edit-plan">
                             <i class="fas fa-trash"></i>
@@ -1157,6 +1154,8 @@
                     </div>
                     <div class="form-group col-md-3">
                         <input type="number" class="form-control" placeholder="Coaching Fees">
+                    </div><div class="form-group col-md-3">
+                        <input type="number" class="form-control" placeholder="Total Fees">
                     </div>
                     <div class="form-group col-md-3">
                                                 <input type="number" class="form-control installment-count" placeholder="Number of Installments">
@@ -1306,12 +1305,9 @@
                     </select>
                 </div>
                 <div class="form-group col-md-3">
-                    <select class="form-control">
-                        <option selected disabled>Select Slot</option>
-                        <option>Morning Slot</option>
-                        <option>Evening Slot</option>
-                    </select>
-                </div>
+    <input type="text" class="form-control" placeholder="Enter Slot">
+</div>
+
                 <div class="form-group col-md-2 text-center align-self-end">
                     <button type="button" class="btn btn-danger btn-sm remove-edit-plan">
                         <i class="fas fa-trash"></i>
@@ -1325,6 +1321,9 @@
                 <div class="form-group col-md-3">
                     <input type="number" class="form-control" placeholder="Coaching Fees">
                 </div>
+                <div class="form-group col-md-3">
+                        <input type="number" class="form-control" placeholder="Total Fees">
+                    </div>
 
             </div>
         </div>
@@ -1405,11 +1404,23 @@
 
                 if (membershipName && duration && period) {
                     const div = $(`
-                <div class="court-slot-block mb-2">
+                <div class="court-slot-block mb-3 p-2 border rounded bg-light">
                     <h5>${membershipName} - ${duration} ${period} <small>${slot || ''}</small></h5>
                     <p>Registration: ₹${regFee || 0}, Coaching: ₹${coachingFee || 0}</p>
+                    <div class="installments-preview"></div>
                 </div>
             `);
+
+                    // Add installment details if any
+                    $(this).find('.installment-amount').each(function(index) {
+                        const amount = $(this).val() || 0;
+                        const dueDate = $(this).closest('.form-row').find('.installment-due-date').val() || '';
+                        const installmentDiv = $(`
+                    <p>Installment ${index + 1}: ₹${amount} ${dueDate ? ' - Due: ' + dueDate : ''}</p>
+                `);
+                        div.find('.installments-preview').append(installmentDiv);
+                    });
+
                     container.append(div);
                 }
             });
@@ -1430,22 +1441,26 @@
                 if (!isNaN(count) && count > 0) {
                     for (let i = 1; i <= count; i++) {
                         const div = document.createElement('div');
-                        div.classList.add('form-group', 'col-md-3', 'mb-2');
+                        div.classList.add('form-row', 'mb-2');
+
                         div.innerHTML = `
-            <label>Installment ${i} Amount</label>
-            <input type="number" class="form-control installment-amount" placeholder="Enter installment amount ${i}">
-          `;
+                    <div class="form-group col-md-3">
+                        <label>Installment ${i} Amount</label>
+                        <input type="number" class="form-control installment-amount" placeholder="Enter installment amount ${i}">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Next Due Date ${i}</label>
+                        <input type="date" class="form-control installment-due-date">
+                    </div>
+                `;
+
                         container.appendChild(div);
                     }
-
-                    // make container row style
-                    container.classList.add('form-row');
-                } else {
-                    container.classList.remove('form-row');
                 }
             }
         });
     </script>
+
 </body>
 
 </html>
