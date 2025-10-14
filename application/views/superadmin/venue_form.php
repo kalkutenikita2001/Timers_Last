@@ -452,7 +452,7 @@
         }
 
         .modal-header {
-            background: var(--primary-gradient);
+
             color: white;
             border-top-left-radius: var(--border-radius);
             border-top-right-radius: var(--border-radius);
