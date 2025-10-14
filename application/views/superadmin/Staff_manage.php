@@ -56,6 +56,34 @@
     .btn-primary{ background:var(--grad); border:0; font-weight:700; }
     .btn-primary:hover{ filter:brightness(.96); }
 
+/* --- Sleek unified search bar --- */
+.global-search {
+  max-width: 600px;
+  margin: 0 auto;
+  transition: all 0.25s ease;
+}
+.global-search .form-control {
+  height: 42px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  padding-left: 0.5rem;
+  border-color: #e3e3e3;
+}
+.global-search .form-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,64,64,0.2);
+}
+.global-search .input-group-text {
+  border-radius: 50px 0 0 50px;
+  background: white;
+  border-color: #e3e3e3;
+}
+.global-search:hover {
+  transform: scale(1.01);
+}
+
+
+
     /* table */
     .card-lite{ background:#fff; border-radius:14px; border:1px solid #e9ecef; box-shadow:0 6px 20px rgba(0,0,0,.05); }
     .table thead th{ position:sticky; top:0; background:#fff; z-index:2; }
@@ -119,32 +147,22 @@
     </div>
 
     <!-- Toolbar -->
-    <div class="toolbar aos">
-      <div class="row g-2 align-items-center">
-        <div class="col-12 col-md-5">
-          <div class="input-group">
-            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-            <input id="searchBox" type="text" class="form-control" placeholder="Search by name, email, role, center...">
-          </div>
-        </div>
-        <div class="col-12 col-md-7">
-          <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-            <select id="filterRole" class="form-select form-select-sm" style="min-width:160px">
-              <option value="">All Roles</option>
-              <option>Coach</option><option>Admin</option><option>Coordinator</option>
-            </select>
-            <select id="filterStatus" class="form-select form-select-sm" style="min-width:140px">
-              <option value="">All Status</option>
-              <option value="Active">Active</option>
-              <option value="Deactive">Deactive</option>
-            </select>
-            <input id="filterCenter" class="form-control form-control-sm" placeholder="Center" style="min-width:160px">
-            <button class="btn btn-ghost btn-sm" id="clearFilters"><i class="bi bi-x-circle me-1"></i>Clear</button>
-            <span class="btn-ghost btn-sm disabled">Showing <b id="rowCount">0</b></span>
-          </div>
-        </div>
+<div class="toolbar aos text-center">
+  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="flex-grow-1">
+      <div class="input-group global-search">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+        <input id="searchBox" type="text" class="form-control border-start-0" 
+               placeholder="Search staff by name, email, role, center or status...">
       </div>
     </div>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-ghost btn-sm" id="clearFilters"><i class="bi bi-x-circle me-1"></i>Clear</button>
+      <span class="badge rounded-pill bg-light text-dark px-3 py-2">Showing <b id="rowCount">0</b></span>
+    </div>
+  </div>
+</div>
+
 
     <!-- Desktop table -->
     <div class="card-lite mt-3 aos">
@@ -264,21 +282,14 @@
 
     // ===== Filters
     function getFilters(){
-      return {
-        q: $('#searchBox').value.trim().toLowerCase(),
-        role: $('#filterRole').value,
-        status: $('#filterStatus').value,
-        center: $('#filterCenter').value.trim().toLowerCase()
-      };
-    }
-    function matches(s, f){
-      const hay = (s.name+' '+s.email+' '+s.role+' '+(s.centers||[]).join(',')).toLowerCase();
-      const okQ = !f.q || hay.includes(f.q);
-      const okR = !f.role || s.role===f.role;
-      const okS = !f.status || s.status===f.status;
-      const okC = !f.center || (s.centers||[]).some(c => c.toLowerCase().includes(f.center));
-      return okQ && okR && okS && okC;
-    }
+  const q = $('#searchBox').value.trim().toLowerCase();
+  return { q };
+}
+function matches(s, f){
+  const hay = (s.name + ' ' + s.email + ' ' + s.role + ' ' + s.status + ' ' + (s.centers||[]).join(',')).toLowerCase();
+  return !f.q || hay.includes(f.q);
+}
+
     function filtered(){ const f=getFilters(); return staffData.filter(s=>matches(s,f)); }
 
     // ===== Stats
