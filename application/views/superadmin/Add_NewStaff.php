@@ -120,8 +120,8 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
         <div class="page-title h5 mb-0">Add & Manage Staff</div>
         <div class="d-flex flex-wrap gap-2">
-          <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
-          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
+          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button> -->
         </div>
       </div>
     </div>
