@@ -105,6 +105,15 @@
     /* animations */
     .aos{ opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease; }
     .aos.in{ opacity:1; transform:none; }
+
+    .clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.clickable-row:hover {
+  background-color: rgba(255,64,64,0.05);
+}
+
   </style>
 </head>
 <body>
@@ -304,42 +313,55 @@ function matches(s, f){
       return (name||'').split(' ').slice(0,2).map(p=>p[0]||'').join('').toUpperCase();
     }
     function renderTable(){
-      const tb = $('#staffTable tbody'); tb.innerHTML='';
-      const rows = filtered();
-      rows.forEach((s,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${i+1}</td>
-          <td class="text-nowrap">
-            <div class="d-flex align-items-center gap-2">
-              <div class="avatar" style="width:32px;height:32px;font-size:.8rem">${initials(s.name)}</div>
-              <div>
-                <div class="fw-semibold">${s.name}</div>
-                <small class="text-muted">${s.centers.join(', ') || '-'}</small>
-              </div>
-            </div>
-          </td>
-          <td>${s.email}</td>
-          <td>${s.contact}</td>
-          <td>${s.joining_date}</td>
-          <td><span class="badge text-bg-light">${s.role}</span></td>
-          <td>${s.centers.join(', ')}</td>
-          <td>${s.role==='Coach' ? s.slots.join(', ') : '-'}</td>
-          <td class="text-end">₹ ${fmt(s.salary)}</td>
-          <td class="text-center">
-            <span class="status-badge ${s.status==='Active'?'status-active':'status-deactive'}">${s.status}</span>
-          </td>
-          <td class="text-center">
-            <div class="row-actions btn-group">
-              <button class="btn btn-ghost btn-sm" data-act="view" data-id="${s.id}" title="View"><i class="bi bi-eye"></i></button>
-              <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${s.id}" title="Edit"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-ghost btn-sm text-danger" data-act="del" data-id="${s.id}" title="Delete"><i class="bi bi-trash"></i></button>
-            </div>
-          </td>`;
-        tb.appendChild(tr);
-      });
-      $('#rowCount').textContent = rows.length;
-    }
+  const tb = $('#staffTable tbody'); 
+  tb.innerHTML = '';
+  const rows = filtered();
+  
+  rows.forEach((s,i)=>{
+    const tr = document.createElement('tr');
+    tr.classList.add('clickable-row');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td class="text-nowrap">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar" style="width:32px;height:32px;font-size:.8rem">${initials(s.name)}</div>
+          <div>
+            <div class="fw-semibold">${s.name}</div>
+            <small class="text-muted">${s.role}</small>
+          </div>
+        </div>
+      </td>
+      <td>${s.email}</td>
+      <td>${s.contact}</td>
+      <td>${s.joining_date}</td>
+      <td><span class="badge text-bg-light">${s.role}</span></td>
+      <td>${s.centers.join(', ')}</td>
+      <td>${s.role==='Coach' ? s.slots.join(', ') : '-'}</td>
+      <td class="text-end">₹ ${fmt(s.salary)}</td>
+      <td class="text-center">
+        <span class="status-badge ${s.status==='Active'?'status-active':'status-deactive'}">${s.status}</span>
+      </td>
+      <td class="text-center">
+        <div class="row-actions btn-group">
+          <button class="btn btn-ghost btn-sm" data-act="view" data-id="${s.id}" title="View"><i class="bi bi-eye"></i></button>
+          <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${s.id}" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-ghost btn-sm text-danger" data-act="del" data-id="${s.id}" title="Delete"><i class="bi bi-trash"></i></button>
+        </div>
+      </td>`;
+    
+    // 👇 Click anywhere on the row (except action buttons) opens staff detail
+    tr.addEventListener('click', (e) => {
+      if (!e.target.closest('.row-actions') && !e.target.closest('button')) {
+        goDetail(s.id);
+      }
+    });
+    
+    tb.appendChild(tr);
+  });
+  
+  $('#rowCount').textContent = rows.length;
+}
+
 
     // ===== Cards
     function renderCards(){
@@ -598,5 +620,15 @@ function matches(s, f){
     document.addEventListener('DOMContentLoaded', wireToggleButtons);
   })();
   </script>
+  <script>
+  window.addEventListener('pageshow', function (e) {
+    // Re-pull from localStorage and re-render every time the page is shown
+    staffData = loadData();
+    renderStats(); 
+    renderTable(); 
+    renderCards();
+  });
+</script>
+
 </body>
 </html>

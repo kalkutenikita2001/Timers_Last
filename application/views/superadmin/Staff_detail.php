@@ -269,7 +269,9 @@
     const urlId = (function(){ const p=location.pathname.split('/').filter(Boolean); const id=parseInt(p[p.length-1],10); return isNaN(id)?null:id; })();
 
     // Back button
-    qs('#backBtn').addEventListener('click', ()=> { if(history.length>1) history.back(); else location.href="<?php echo base_url('superadmin/Staff_manage'); ?>"; });
+qs('#backBtn').addEventListener('click', ()=>{
+  location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>";
+});
 
     // Pull data from storage (front-end only)
     const all = JSON.parse(localStorage.getItem('staffDataAll') || '[]');
