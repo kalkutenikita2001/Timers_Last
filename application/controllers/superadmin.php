@@ -455,6 +455,18 @@ public function Add_NewStaff()
 	{
 		$this->load->view('superadmin/Salary_Management');
 	}
+
+	public function Staff_manage()
+{
+    $this->load->view('superadmin/Staff_manage');
+}
+
+public function Staff_detail($id = null)
+{
+    $this->load->view('superadmin/Staff_detail');  
+}
+
+
 }
 
 
