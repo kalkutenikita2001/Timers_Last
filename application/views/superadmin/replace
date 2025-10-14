@@ -41,8 +41,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-
-
         /* Card thumbnail and headline tweaks */
         .venue-thumb {
             height: 80px;
@@ -96,7 +94,7 @@
 
         .content-wrapper {
             margin-left: 280px;
-            padding: 10px 30px 30px 30px !important;
+            padding: 100px 30px 30px 30px;
             transition: margin-left 0.3s ease-in-out;
             min-height: 100vh;
         }
@@ -357,7 +355,7 @@
         .status-badge {
             position: absolute;
             top: 15px;
-            right: 3px;
+            right: 15px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             padding: 5px 12px;
@@ -452,7 +450,7 @@
         }
 
         .modal-header {
-            background: #fff6f6;
+            background: var(--primary-gradient);
             color: white;
             border-top-left-radius: var(--border-radius);
             border-top-right-radius: var(--border-radius);
@@ -661,11 +659,6 @@
             border-radius: 50%;
             margin-right: 5px;
         }
-
-        .view-venue i,
-        .edit-venue i {
-            color: white !important;
-        }
     </style>
 </head>
 
@@ -698,12 +691,9 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="venueModalLabel" style="color: red;">
-                                <i class="fas fa-building mr-2"></i> Add New Center
-                            </h5>
-
-                            <!-- <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span> -->
+                            <h5 class="modal-title" id="venueModalLabel"><i class="fas fa-building mr-2"></i> Add New Center</h5>
+                            <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                         </div>
                         <div class="modal-body">
                             <form id="venueForm">
@@ -879,8 +869,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="viewDashboard">Dashboard</button>
-
+                    <button type="button" class="btn btn-info" id="viewDashboard">Dashboard</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -988,31 +977,7 @@
                 courts: 4,
                 facilities: ["Badminton", "Gym"],
                 slots: ["6:00 AM - 9:00 AM", "4:00 PM - 7:00 PM"],
-                plans: [{
-                        planType: "Monthly",
-                        fields: {
-                            membershipName: "",
-                            duration: "",
-                            period: "",
-                            slot: "",
-                            registrationFees: 0,
-                            coachingFees: 0,
-                            totalFees: 0
-                        }
-                    },
-                    {
-                        planType: "Yearly",
-                        fields: {
-                            membershipName: "abc",
-                            duration: "3 month",
-                            period: "2 month",
-                            slot: "3 month",
-                            registrationFees: 400,
-                            coachingFees: 1000,
-                            totalFees: 1400
-                        }
-                    }
-                ]
+                plans: ["Monthly", "Yearly"]
             },
             {
                 id: 2,
@@ -1021,31 +986,7 @@
                 courts: 3,
                 facilities: ["Swimming Pool", "Squash"],
                 slots: ["7:00 AM - 10:00 AM", "5:00 PM - 8:00 PM"],
-                plans: [{
-                        planType: "Weekly",
-                        fields: {
-                            membershipName: "",
-                            duration: "",
-                            period: "",
-                            slot: "",
-                            registrationFees: 0,
-                            coachingFees: 0,
-                            totalFees: 0
-                        }
-                    },
-                    {
-                        planType: "Monthly",
-                        fields: {
-                            membershipName: "",
-                            duration: "",
-                            period: "",
-                            slot: "",
-                            registrationFees: 0,
-                            coachingFees: 0,
-                            totalFees: 0
-                        }
-                    }
-                ]
+                plans: ["Weekly", "Monthly"]
             }
         ];
 
@@ -1087,14 +1028,14 @@
                                 </div>
                             </div>
                             <div class="venue-card-footer d-flex justify-content-end">
-                                <button class="btn btn-danger btn-sm mr-2 view-venue" data-id="${venue.id}" data-toggle="tooltip" title="View Venue Details">
-                                    <i class="fas fa-eye"></i> 
+                                <button class="btn btn-success btn-sm mr-2 view-venue" data-id="${venue.id}" data-toggle="tooltip" title="View Venue Details">
+                                    <i class="fas fa-eye"></i> View
                                 </button>
-                                <button class="btn btn-danger btn-sm mr-2 edit-venue" data-id="${venue.id}" data-toggle="tooltip" title="Edit Venue">
-                                    <i class="fas fa-edit"></i> 
+                                <button class="btn btn-info btn-sm mr-2 edit-venue" data-id="${venue.id}" data-toggle="tooltip" title="Edit Venue">
+                                    <i class="fas fa-edit"></i> Edit
                                 </button>
                                 <button class="btn btn-danger btn-sm delete-venue" data-id="${venue.id}" data-toggle="tooltip" title="Delete Venue">
-                                    <i class="fas fa-trash"></i> 
+                                    <i class="fas fa-trash"></i> Delete
                                 </button>
                             </div>
                         </div>
@@ -2165,7 +2106,7 @@
                                     currentVenue.plans.map(plan => `
                                         <div class="d-flex align-items-center mb-2">
                                             <i class="fas fa-star text-warning mr-2"></i>
-                                              <span>${plan.planType}</span>
+                                            <span>${plan}</span>
                                         </div>
                                     `).join('') :
                                     '<p class="text-muted">No plans added</p>'

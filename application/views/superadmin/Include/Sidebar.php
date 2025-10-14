@@ -144,14 +144,10 @@
     </div>
 
     <nav class="nav flex-column">
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'dashboard') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/dashboard'); ?>">
-        <i class="bi bi-speedometer2"></i><span>Dashboard</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'CenterManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/CenterManagement2'); ?>">
-        <i class="bi bi-credit-card"></i><span>Center Management</span>
+      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueForm') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueForm'); ?>">
+        <i class="bi bi-mortarboard"></i><span> Office Management </span>
       </a>
-
       <!-- STAFF MANAGEMENT -->
       <div class="nav-item">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#staffMenu" role="button" aria-expanded="false" aria-controls="staffMenu">
@@ -173,71 +169,12 @@
         </div>
       </div>
 
-      <!-- ADMISSION MANAGEMENT -->
-      <div class="nav-item">
-        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#admissionMenu" role="button" aria-expanded="false" aria-controls="admissionMenu">
-          <span><i class="bi bi-person-lines-fill"></i> <span>Admission Management</span></span>
-          <i class="bi bi-chevron-down"></i>
-        </a>
-        <div class="collapse" id="admissionMenu">
-          <nav class="nav flex-column ms-3">
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'New_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/New_admission'); ?>">
-              <i class="bi bi-plus-circle"></i><span> New Admission</span>
-            </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Re_admission'); ?>">
-              <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
-            </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Renew_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Renew_admission'); ?>">
-              <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
-            </a>
-          </nav>
-        </div>
-      </div>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueManagement') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueManagement'); ?>">
-        <i class="bi bi-mortarboard"></i><span> Office Management 1</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueForm') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueForm'); ?>">
-        <i class="bi bi-mortarboard"></i><span> Office Management 2</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Students'); ?>">
-        <i class="bi bi-mortarboard"></i><span> Students Management</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/EventAndNotice'); ?>">
-        <i class="bi bi-calendar-event"></i><span>Event Management</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Finance') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Finance'); ?>">
-        <i class="bi bi-cash-stack"></i><span>Finance Management</span>
-      </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
-        <i class="bi bi-person-circle"></i><span> Expenses Management</span>
-      </a>
-
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">
-        <i class="bi bi-calendar-x"></i><span>Leave Management</span>
-      </a>
-
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'overall_report') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/overall_report'); ?>">
-        <i class="bi bi-calendar-x"></i><span> Reports Management</span>
-      </a>
-
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Permission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Permission'); ?>">
-        <i class="bi bi-person-circle"></i><span>Permission</span>
-      </a>
-
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Superadmin_profile') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Superadmin_profile'); ?>">
-        <i class="fa-solid fa-lock"></i><span>Forget Password</span>
-      </a>
-
-      <!-- Logout -->
-      <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>" id="logout-link">
-        <i class="bi bi-box-arrow-right"></i><span>Logout</span>
-      </a>
     </nav>
   </div>
 
