@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add New Staff</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,8 +11,14 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
+    :root{
+      --brand-dark:#7b0000;
+      --brand:#d00000;
+    }
+
     body {
       background-color: #f8f9fc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
     #main-content {
@@ -22,300 +28,176 @@
       transition: all 0.3s;
     }
 
-    .nav-tabs .nav-link.active {
-      background-color: #d00000;
-      color: #fff;
+    /* Tabs */
+    .nav-tabs {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+    .nav-tabs .nav-link {
+      color: var(--brand-dark);
       font-weight: 500;
+      border-radius: 6px 6px 0 0;
+    }
+    .nav-tabs .nav-link.active {
+      background-color: var(--brand);
+      color: #fff;
     }
 
-    .nav-tabs .nav-link {
-      color: #7b0000;
-      border-radius: 6px 6px 0 0;
-      font-weight: 500;
+    /* Overview: centered card with maximum width */
+    .overview-wrap {
+      max-width: 820px;
+      margin: 24px auto;
+      padding: 28px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      transition: transform .18s ease;
+    }
+    .overview-wrap:hover { transform: translateY(-3px); }
+    .overview-title { color: var(--brand); font-weight:600; margin-bottom:10px; }
+    .overview-row { display:flex; gap:12px; flex-wrap:wrap; }
+
+    .overview-item {
+      flex:1 1 200px;
+      min-width:160px;
+      background:#fbfbfb;
+      border-radius:8px;
+      padding:12px;
+      border:1px solid rgba(0,0,0,0.04);
+    }
+    .overview-item h6 { margin:0; font-size:14px; color:var(--brand-dark); }
+    .overview-item p { margin:6px 0 0 0; font-size:14px; color:#333; }
+
+    /* Staff tab container */
+    .staff-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      margin: 20px auto 40px;
+      padding: 18px;
+      max-width: 1200px;
     }
 
     .filter-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 15px 0;
-      flex-wrap: wrap;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:12px;
     }
-
     .filter-options button {
-      border: none;
-      background: none;
-      color: #7b0000;
-      font-weight: 500;
-      margin-right: 15px;
-      transition: color 0.3s;
+      border:none;
+      background:none;
+      color:var(--brand-dark);
+      font-weight:500;
+      margin-right:12px;
     }
-
     .filter-options button.active,
-    .filter-options button:hover {
-      color: #d00000;
-      text-decoration: underline;
-    }
-
-    .staff-count {
-      font-weight: 600;
-      color: #7b0000;
-    }
+    .filter-options button:hover { color:var(--brand); text-decoration:underline; }
 
     .btn-primary {
-      background: linear-gradient(90deg, #7b0000, #d00000);
-      color: #fff;
+      background: linear-gradient(90deg, var(--brand-dark), var(--brand));
       border: none;
       font-weight: 500;
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 6px;
-      transition: 0.3s ease;
     }
 
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #600000, #a50000);
-      color: #fff;
-    }
-
-    .table-container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      background-color: #ccc;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: .4s;
-      border-radius: 24px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: #28a745;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
+    .table-container { overflow-x:auto; }
 
     .action-icons button {
-      border: none;
-      background: none;
-      padding: 5px;
-      margin: 0 2px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
+      border:none;
+      background:none;
+      padding:6px;
+      margin:0 2px;
     }
+    .view-icon { color:#0d6efd; }
+    .edit-icon { color:#ffc107; }
+    .delete-icon { color:#dc3545; }
 
-    .action-icons i {
-      font-size: 18px;
-    }
-
-    .view-icon { color: #0d6efd; }
-    .edit-icon { color: #ffc107; }
-    .delete-icon { color: #dc3545; }
-
-    .action-icons button:hover {
-      transform: scale(1.15);
-    }
-
+    /* modal tweaks */
+    .modal-header.bg-danger { background: linear-gradient(90deg,var(--brand-dark),var(--brand)); color:#fff; }
     .profile-card {
-      background: linear-gradient(145deg, #ffffff, #f1f1f1);
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 25px;
-      text-align: center;
-      transition: transform 0.3s ease;
+      padding:18px;
+      text-align:center;
+      border-radius:10px;
+      background:linear-gradient(145deg,#fff,#f6f6f6);
+      box-shadow:0 6px 16px rgba(0,0,0,0.04);
     }
 
-    .profile-card:hover { transform: translateY(-5px); }
+    /* switches */
+    .switch { position:relative; display:inline-block; width:46px; height:24px; }
+    .switch input{ display:none; }
+    .slider{ position:absolute; left:0; top:0; right:0; bottom:0; background:#dcdcdc; border-radius:24px; transition:.25s; }
+    .slider:before{ content:""; position:absolute; left:3px; top:3px; width:18px; height:18px; background:#fff; border-radius:50%; transition:.25s; }
+    .switch input:checked + .slider{ background:#28a745; }
+    .switch input:checked + .slider:before{ transform:translateX(22px); }
 
-    .profile-card h5 {
-      color: #7b0000;
-      font-weight: 600;
-      margin-bottom: 15px;
+    /* Responsive */
+    @media (max-width: 992px) {
+      #main-content { margin-left:0; padding:16px; }
+      .overview-wrap, .staff-wrap { margin-left:0; margin-right:0; }
+      .overview-item { flex-basis: 45%; }
     }
-
-    .profile-info p { margin: 4px 0; font-size: 15px; }
-
-    .salary-box { margin-top: 15px; font-weight: 600; color: #198754; }
-    .salary-box.no-salary { color: #dc3545; }
-
-
-    /* ===========================
-   📱 Mobile Responsive Styles
-   =========================== */
-@media (max-width: 992px) {
-  #main-content {
-    margin-left: 0 !important;
-    padding: 15px;
-  }
-
-  .filter-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .filter-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .filter-options button {
-    font-size: 14px;
-    padding: 4px 8px;
-  }
-
-  .staff-count {
-    font-size: 14px;
-  }
-
-  .btn-primary {
-    padding: 6px 12px;
-    font-size: 14px;
-  }
-
-  #searchInput {
-    width: 100% !important;
-  }
-
-  .table-container {
-    padding: 10px;
-    overflow-x: auto;
-  }
-
-  table {
-    font-size: 14px;
-    white-space: nowrap;
-  }
-
-  th, td {
-    padding: 8px 10px;
-  }
-
-  .action-icons i {
-    font-size: 16px;
-  }
-
-  .switch {
-    transform: scale(0.9);
-  }
-}
-
-@media (max-width: 576px) {
-  .filter-bar {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .filter-options button {
-    font-size: 13px;
-  }
-
-  .staff-count {
-    font-size: 13px;
-  }
-
-  .btn-primary {
-    font-size: 13px;
-    padding: 5px 10px;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  #main-content {
-    padding: 10px;
-  }
-}
-
-
-
-
-
+    @media (max-width: 576px) {
+      .overview-item { flex-basis: 100%; }
+      .filter-bar { gap:10px; align-items:flex-start; }
+    }
   </style>
 </head>
-
 <body>
-  <?php $this->load->view('superadmin/Include/Sidebar'); ?>
+  
+  <?php  $this->load->view('superadmin/Include/Sidebar');  ?>
   <?php $this->load->view('superadmin/Include/Navbar'); ?>
 
-  <div id="main-content">
-    <ul class="nav nav-tabs" id="staffTabs">
-      <li class="nav-item">
-        <a class="nav-link active" data-bs-toggle="tab" href="#overviewTab">Overview</a>
+  <div id="main-content" class="container-fluid">
+    <ul class="nav nav-tabs" id="staffTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overviewTab" type="button" role="tab">Overview</button>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" href="#staffTab">Staff</a>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staffTab" type="button" role="tab">Staff</button>
       </li>
     </ul>
 
-    <div class="tab-pane fade show active" id="overviewTab">
-  <div class="p-4 bg-white rounded shadow-sm">
-    <!-- <h5 class="text-danger mb-3">Staff Overview</h5> -->
-    <div id="overviewContent" class="text-start">
-      <p class="text-muted mb-0">No staff details available. Click "Send Details" from Salary Management.</p>
-    </div>
-  </div>
-</div>
-
-
-      <!-- Staff Tab -->
-      <div class="tab-pane fade" id="staffTab">
-        <div class="filter-bar">
-          <div class="filter-options">
-            <button class="active" data-filter="all">All</button>
-            <button data-filter="active">Active</button>
-            <button data-filter="deactive">Deactive</button>
+    <div class="tab-content">
+      <!-- Overview tab -->
+      <div class="tab-pane fade show active" id="overviewTab" role="tabpanel" aria-labelledby="overview-tab">
+        <div class="overview-wrap" id="overviewWrap">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="overview-title mb-0">Staff Overview</h5>
+            <small class="text-muted" id="overviewLastUpdated"></small>
           </div>
 
-          <div class="d-flex align-items-center gap-3">
-            <span class="staff-count">Total Staff: <span id="staffCount">1</span></span>
-            <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search staff...">
-            <button class="btn btn-primary btn-sm" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+          <div id="overviewContent">
+            <p class="text-center text-muted mb-0">No staff details available. Click "Send Details" from Salary Management (or add a staff record).</p>
           </div>
         </div>
-        <div class="table-container">
-          <div class="table-responsive">
+      </div>
+
+      <!-- Staff tab -->
+      <div class="tab-pane fade" id="staffTab" role="tabpanel" aria-labelledby="staff-tab">
+        <div class="staff-wrap">
+          <div class="filter-bar">
+            <div class="filter-options">
+              <button class="active" data-filter="all">All</button>
+              <button data-filter="active">Active</button>
+              <button data-filter="deactive">Deactive</button>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <div class="me-2 staff-count">Total Staff: <span id="staffCount">1</span></div>
+              <input type="text" id="searchInput" class="form-control form-control-sm me-2" style="width:220px" placeholder="Search staff...">
+              <button class="btn btn-primary btn-sm" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+            </div>
+          </div>
+
+          <div class="table-container">
             <table class="table table-bordered table-striped align-middle" id="staffTable">
               <thead class="table-light">
                 <tr>
-                  <th>Sr No</th>
+                  <th style="width:60px">Sr No</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Contact</th>
@@ -323,12 +205,13 @@
                   <th>Role</th>
                   <th>Centers</th>
                   <th>Slots</th>
-                  <th>Salary</th>
-                  <th>Actions</th>
-                  <th>Status</th>
+                  <th style="width:110px">Salary</th>
+                  <th style="width:120px">Actions</th>
+                  <th style="width:90px">Status</th>
                 </tr>
               </thead>
               <tbody>
+                <!-- initial single row -->
                 <tr data-status="active">
                   <td>1</td>
                   <td>John Doe</td>
@@ -340,11 +223,10 @@
                   <td>6-8 AM</td>
                   <td>25000</td>
                   <td class="action-icons">
-                    <button class="viewBtn"><i class="bi bi-eye-fill view-icon"></i></button>
-                    <button class="editBtn"><i class="bi bi-pencil-square edit-icon"></i></button>
-                    <button class="deleteBtn"><i class="bi bi-trash delete-icon"></i></button>
+                    <button class="btn btn-sm viewBtn" title="View"><i class="bi bi-eye-fill view-icon"></i></button>
+                    <button class="btn btn-sm editBtn" title="Edit"><i class="bi bi-pencil-square edit-icon"></i></button>
+                    <button class="btn btn-sm deleteBtn" title="Delete"><i class="bi bi-trash delete-icon"></i></button>
                   </td>
-                  
                   <td>
                     <label class="switch">
                       <input type="checkbox" class="statusToggle" checked>
@@ -356,242 +238,89 @@
             </table>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </div> <!-- /staffTab -->
+    </div> <!-- /tab-content -->
+  </div> <!-- /main-content -->
 
-  <!-- Reuse your modals from old code (Add/Edit and View) -->
   <!-- Staff Modal -->
-  <!-- 🧩 Staff Modal (Updated Layout with Checkboxes) -->
-<div class="modal fade" id="staffModal" data-backdrop="static" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="staffModalLabel">Add Staff</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="staffForm">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <input type="text" class="form-control" name="name" placeholder="Enter Staff Name" required>
+  <div class="modal fade" id="staffModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="staffModalLabel">Add Staff</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="staffForm" autocomplete="off">
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="name" placeholder="Enter Staff Name" required>
+              </div>
+              <div class="col-md-6">
+                <input type="email" class="form-control" name="email" placeholder="Staff Email" required>
+              </div>
             </div>
-            <div class="col-md-6 mt-2 mt-md-0">
-              <input type="email" class="form-control" name="email" placeholder="Staff Email" required>
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <input type="text" class="form-control" name="contact" placeholder="Staff Contact" required>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="contact" placeholder="Staff Contact" required>
+              </div>
+              <div class="col-md-6">
+                <input type="date" class="form-control" name="joining_date" required>
+              </div>
             </div>
-            <div class="col-md-6 mt-2 mt-md-0">
-              <input type="date" class="form-control" name="joining_date" required>
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <input type="number" class="form-control" name="salary" placeholder="Enter Salary" required>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="number" class="form-control" name="salary" placeholder="Enter Salary" required>
+              </div>
+              <div class="col-md-6">
+                <select class="form-select" name="role" id="roleSelect" required>
+                  <option value="">Select Role</option>
+                  <option value="Coach">Coach</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Coordinator">Coordinator</option>
+                  <option value="Manager">Manager</option>
+                </select>
+              </div>
             </div>
-            <div class="col-md-6 mt-2 mt-md-0">
-              <select class="form-select" name="role" id="roleSelect" required>
-                <option value="">Select Role</option>
-                <option value="Coach">Coach</option>
-                <option value="Admin">Admin</option>
-                <option value="Coordinator">Coordinator</option>
-                <option value="Manager">Manager</option>
-              </select>
-            </div>
-          </div>
 
-          <!-- ✅ Centers Selection as Checkboxes -->
-          <div class="mb-3">
-            <label class="fw-bold mb-2">Select Centers:</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div><input type="checkbox" class="center-check" value="Center A"> Center A</div>
-              <div><input type="checkbox" class="center-check" value="Center B"> Center B</div>
-              <div><input type="checkbox" class="center-check" value="Center C"> Center C</div>
-              <div><input type="checkbox" class="center-check" value="Center D"> Center D</div>
+            <div class="mb-3">
+              <label class="fw-bold mb-2">Select Centers:</label>
+              <div class="d-flex flex-wrap gap-3">
+                <div><input type="checkbox" class="center-check" value="Center A"> Center A</div>
+                <div><input type="checkbox" class="center-check" value="Center B"> Center B</div>
+                <div><input type="checkbox" class="center-check" value="Center C"> Center C</div>
+                <div><input type="checkbox" class="center-check" value="Center D"> Center D</div>
+              </div>
             </div>
-          </div>
 
-          <!-- ✅ Slots Selection as Checkboxes -->
-          <div class="mb-3" id="slotSection" style="display:none;">
-            <label class="fw-bold mb-2">Select Slots:</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div><input type="checkbox" class="slot-check" value="6-8 AM"> 6-8 AM</div>
-              <div><input type="checkbox" class="slot-check" value="8-10 AM"> 8-10 AM</div>
-              <div><input type="checkbox" class="slot-check" value="5-7 PM"> 5-7 PM</div>
-              <div><input type="checkbox" class="slot-check" value="7-9 PM"> 7-9 PM</div>
+            <div class="mb-3" id="slotSection" style="display:none;">
+              <label class="fw-bold mb-2">Select Slots:</label>
+              <div class="d-flex flex-wrap gap-3">
+                <div><input type="checkbox" class="slot-check" value="6-8 AM"> 6-8 AM</div>
+                <div><input type="checkbox" class="slot-check" value="8-10 AM"> 8-10 AM</div>
+                <div><input type="checkbox" class="slot-check" value="5-7 PM"> 5-7 PM</div>
+                <div><input type="checkbox" class="slot-check" value="7-9 PM"> 7-9 PM</div>
+              </div>
             </div>
-          </div>
 
-          <div class="text-end">
-            <button type="submit" class="btn btn-primary">Save Staff</button>
-          </div>
-        </form>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Save Staff</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- ✅ Updated JavaScript logic for new checkboxes -->
-<script>
-  $(function () {
-    let editRow = null;
-
-    const updateCount = () => {
-      const count = $("#staffTable tbody tr").length;
-      $("#staffCount").text(count);
-    };
-    updateCount();
-
-    $("#addStaffBtn").on("click", function () {
-      editRow = null;
-      $("#staffForm")[0].reset();
-      $("#slotSection").hide();
-      $("#staffModalLabel").text("Add Staff");
-      $("#staffModal").modal("show");
-    });
-
-    $("#staffForm").on("submit", function (e) {
-      e.preventDefault();
-      const name = $("input[name='name']").val();
-      const email = $("input[name='email']").val();
-      const contact = $("input[name='contact']").val();
-      const date = $("input[name='joining_date']").val();
-      const role = $("#roleSelect").val();
-      const salary = $("input[name='salary']").val();
-
-      // ✅ Collect checked centers and slots
-      const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
-      const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
-
-      const tbody = $("#staffTable tbody");
-
-      if (editRow) {
-        editRow.find("td:eq(1)").text(name);
-        editRow.find("td:eq(2)").text(email);
-        editRow.find("td:eq(3)").text(contact);
-        editRow.find("td:eq(4)").text(date);
-        editRow.find("td:eq(5)").text(role);
-        editRow.find("td:eq(6)").text(centers.join(", "));
-        editRow.find("td:eq(7)").text(role === "Coach" ? slots.join(", ") : '-');
-        editRow.find("td:eq(8)").text(salary);
-        Swal.fire("Updated!", "Staff details updated successfully.", "success");
-      } else {
-        const srNo = tbody.children("tr").length + 1;
-        const newRow = `
-          <tr data-status="active">
-            <td>${srNo}</td>
-            <td>${name}</td>
-            <td>${email}</td>
-            <td>${contact}</td>
-            <td>${date}</td>
-            <td>${role}</td>
-            <td>${centers.join(", ")}</td>
-            <td>${role === "Coach" ? slots.join(", ") : '-'}</td>
-            <td>${salary}</td>
-            <td class="action-icons">
-              <button class="viewBtn"><i class="bi bi-eye-fill view-icon"></i></button>
-              <button class="editBtn"><i class="bi bi-pencil-square edit-icon"></i></button>
-              <button class="deleteBtn"><i class="bi bi-trash delete-icon"></i></button>
-            </td>
-            <td>
-              <label class="switch">
-                <input type="checkbox" class="statusToggle" checked>
-                <span class="slider"></span>
-              </label>
-            </td>
-          </tr>`;
-        tbody.append(newRow);
-        Swal.fire("Added!", "New staff added successfully.", "success");
-        updateCount();
-      }
-      $("#staffModal").modal("hide");
-    });
-
-    $(document).on("click", ".viewBtn", function () {
-      const row = $(this).closest("tr");
-      $("#profileName").text(row.find("td:eq(1)").text());
-      $("#profileEmail").text(row.find("td:eq(2)").text());
-      $("#profileContact").text(row.find("td:eq(3)").text());
-      $("#profileDate").text(row.find("td:eq(4)").text());
-      $("#profileRole").text(row.find("td:eq(5)").text());
-      $("#profileCenters").text(row.find("td:eq(6)").text());
-      $("#profileSlots").text(row.find("td:eq(7)").text());
-      const salary = row.find("td:eq(8)").text().trim();
-      if (!salary || salary === "0") {
-        $("#profileSalary").text("No salary assigned").addClass("no-salary");
-      } else {
-        $("#profileSalary").text("Income: ₹" + salary).removeClass("no-salary");
-      }
-      $("#viewProfileModal").modal("show");
-    });
-
-    $(document).on("click", ".deleteBtn", function () {
-      const row = $(this).closest("tr");
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This staff record will be deleted.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d00000",
-        cancelButtonColor: "#6c757d",
-        confirmButtonText: "Delete"
-      }).then(result => {
-        if (result.isConfirmed) {
-          row.remove();
-          updateCount();
-          Swal.fire("Deleted!", "Staff record deleted successfully.", "success");
-        }
-      });
-    });
-
-    $(document).on("change", ".statusToggle", function () {
-      const row = $(this).closest("tr");
-      if ($(this).is(":checked")) {
-        row.attr("data-status", "active");
-        Swal.fire("Activated", "Status changed to Active", "success");
-      } else {
-        row.attr("data-status", "deactive");
-        Swal.fire("Deactivated", "Status changed to Inactive", "info");
-      }
-    });
-
-    $(".filter-options button").on("click", function () {
-      $(".filter-options button").removeClass("active");
-      $(this).addClass("active");
-      const filter = $(this).data("filter");
-      $("#staffTable tbody tr").each(function () {
-        const status = $(this).attr("data-status");
-        if (filter === "all" || status === filter) $(this).show();
-        else $(this).hide();
-      });
-    });
-
-    $("#searchInput").on("keyup", function () {
-      const value = $(this).val().toLowerCase();
-      $("#staffTable tbody tr").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-      });
-    });
-
-    $("#roleSelect").on("change", function () {
-      $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-    });
-  });
-</script>
-
 
   <!-- View Profile Modal -->
-  <div class="modal fade" id="viewProfileModal" tabindex="-1">
+  <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-3">
         <div class="profile-card">
-          <h5 id="profileName">Staff Name</h5>
-          <div class="profile-info">
+          <h5 id="profileName" class="text-danger fw-bold mb-2">Staff Name</h5>
+          <div class="profile-info text-start">
             <p><strong>Email:</strong> <span id="profileEmail"></span></p>
             <p><strong>Contact:</strong> <span id="profileContact"></span></p>
             <p><strong>Joining Date:</strong> <span id="profileDate"></span></p>
@@ -605,183 +334,312 @@
     </div>
   </div>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    $(function() {
+    (function($){
+      // single source of truth for edit row
       let editRow = null;
 
-      const updateCount = () => {
+      // Ensure no duplicate handlers — attach only once
+      function init() {
+        updateCount();
+        bindUI();
+        loadOverviewFromStorage();
+      }
+
+      function updateCount(){
         const count = $("#staffTable tbody tr").length;
         $("#staffCount").text(count);
-      };
+      }
 
-      updateCount();
+      function bindUI(){
+        // Open Add modal
+        $("#addStaffBtn").off('click').on("click", function(){
+          editRow = null;
+          $("#staffForm")[0].reset();
+          $("#slotSection").hide();
+          $("#staffModalLabel").text("Add Staff");
+          // uncheck all checkboxes explicitly
+          $(".center-check, .slot-check").prop('checked', false);
+          const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
+          staffModal.show();
+        });
 
-      $("#addStaffBtn").on("click", function () {
-        editRow = null;
-        $("#staffForm")[0].reset();
-        $("#slotSection").hide();
-        $("#staffModalLabel").text("Add Staff");
-        $("#staffModal").modal("show");
-      });
+        // Role -> toggle slots
+        $("#roleSelect").off('change').on("change", function(){
+          $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+        });
 
-      $("#staffForm").on("submit", function (e) {
-        e.preventDefault();
-        const name = $("input[name='name']").val();
-        const email = $("input[name='email']").val();
-        const contact = $("input[name='contact']").val();
-        const date = $("input[name='joining_date']").val();
-        const role = $("#roleSelect").val();
-        const centers = $("select[name='centers[]']").val() || [];
-        const slots = $("select[name='slots[]']").val() || [];
-        const salary = $("input[name='salary']").val();
-        const tbody = $("#staffTable tbody");
+        // Submit form: add or update
+        $("#staffForm").off('submit').on("submit", function(e){
+          e.preventDefault();
+          const form = $(this);
+          const name = form.find("input[name='name']").val().trim();
+          const email = form.find("input[name='email']").val().trim();
+          const contact = form.find("input[name='contact']").val().trim();
+          const date = form.find("input[name='joining_date']").val();
+          const role = form.find("#roleSelect").val();
+          const salary = form.find("input[name='salary']").val().trim();
+          const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
+          const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
 
-        if (editRow) {
-          editRow.find("td:eq(1)").text(name);
-          editRow.find("td:eq(2)").text(email);
-          editRow.find("td:eq(3)").text(contact);
-          editRow.find("td:eq(4)").text(date);
-          editRow.find("td:eq(5)").text(role);
-          editRow.find("td:eq(6)").text(centers.join(", "));
-          editRow.find("td:eq(7)").text(role === "Coach" ? slots.join(", ") : '-');
-          editRow.find("td:eq(8)").text(salary);
-          Swal.fire("Updated!", "Staff details updated successfully.", "success");
-        } else {
-          const srNo = tbody.children("tr").length + 1;
-          const newRow = `
-            <tr data-status="active">
-              <td>${srNo}</td>
-              <td>${name}</td>
-              <td>${email}</td>
-              <td>${contact}</td>
-              <td>${date}</td>
-              <td>${role}</td>
-              <td>${centers.join(", ")}</td>
-              <td>${role === "Coach" ? slots.join(", ") : '-'}</td>
-              <td>${salary}</td>
-              <td class="action-icons">
-                <button class="viewBtn"><i class="bi bi-eye-fill view-icon"></i></button>
-                <button class="editBtn"><i class="bi bi-pencil-square edit-icon"></i></button>
-                <button class="deleteBtn"><i class="bi bi-trash delete-icon"></i></button>
-              </td>
-              <td>
-                <label class="switch">
-                  <input type="checkbox" class="statusToggle" checked>
-                  <span class="slider"></span>
-                </label>
-              </td>
-            </tr>`;
-          tbody.append(newRow);
-          Swal.fire("Added!", "New staff added successfully.", "success");
-          updateCount();
-        }
+          // Basic validation (already required, but double-check)
+          if (!name || !email || !contact) {
+            Swal.fire("Missing info", "Please fill required fields.", "warning");
+            return;
+          }
 
-        $("#staffModal").modal("hide");
-      });
+          const tbody = $("#staffTable tbody");
 
-      $(document).on("click", ".deleteBtn", function () {
-        const row = $(this).closest("tr");
-        Swal.fire({
-          title: "Are you sure?",
-          text: "This staff record will be deleted.",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d00000",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Delete"
-        }).then(result => {
-          if (result.isConfirmed) {
-            row.remove();
+          if (editRow) {
+            // update existing row (editRow is a jQuery tr)
+            editRow.find("td:eq(1)").text(name);
+            editRow.find("td:eq(2)").text(email);
+            editRow.find("td:eq(3)").text(contact);
+            editRow.find("td:eq(4)").text(date);
+            editRow.find("td:eq(5)").text(role);
+            editRow.find("td:eq(6)").text(centers.length ? centers.join(", ") : '-');
+            editRow.find("td:eq(7)").text(role === "Coach" && slots.length ? slots.join(", ") : '-');
+            editRow.find("td:eq(8)").text(salary || '-');
+
+            Swal.fire("Updated!", "Staff details updated successfully.", "success");
+          } else {
+            // add new row (ensure single append)
+            const srNo = tbody.children("tr").length + 1;
+            const newRow = $(`
+              <tr data-status="active">
+                <td>${srNo}</td>
+                <td>${escapeHtml(name)}</td>
+                <td>${escapeHtml(email)}</td>
+                <td>${escapeHtml(contact)}</td>
+                <td>${escapeHtml(date)}</td>
+                <td>${escapeHtml(role)}</td>
+                <td>${escapeHtml(centers.length ? centers.join(", ") : '-')}</td>
+                <td>${escapeHtml(role === "Coach" && slots.length ? slots.join(", ") : '-')}</td>
+                <td>${escapeHtml(salary || '-')}</td>
+                <td class="action-icons">
+                  <button class="btn btn-sm viewBtn" title="View"><i class="bi bi-eye-fill view-icon"></i></button>
+                  <button class="btn btn-sm editBtn" title="Edit"><i class="bi bi-pencil-square edit-icon"></i></button>
+                  <button class="btn btn-sm deleteBtn" title="Delete"><i class="bi bi-trash delete-icon"></i></button>
+                </td>
+                <td>
+                  <label class="switch">
+                    <input type="checkbox" class="statusToggle" checked>
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            `);
+            tbody.append(newRow);
+            Swal.fire("Added!", "New staff added successfully.", "success");
             updateCount();
-            Swal.fire("Deleted!", "Staff record deleted successfully.", "success");
+          }
+
+          // close modal (Bootstrap API)
+          const modalEl = document.getElementById('staffModal');
+          const bsModal = bootstrap.Modal.getInstance(modalEl);
+          if (bsModal) bsModal.hide();
+
+          // reset form & editRow
+          $("#staffForm")[0].reset();
+          $("#slotSection").hide();
+          editRow = null;
+        });
+
+        // Delegated: edit button
+        $(document).off('click', '.editBtn').on('click', '.editBtn', function(){
+          const row = $(this).closest('tr');
+          editRow = row;
+
+          // Populate modal fields
+          $("#staffForm")[0].reset();
+          $("#staffForm input[name='name']").val(row.find("td:eq(1)").text());
+          $("#staffForm input[name='email']").val(row.find("td:eq(2)").text());
+          $("#staffForm input[name='contact']").val(row.find("td:eq(3)").text());
+          $("#staffForm input[name='joining_date']").val(row.find("td:eq(4)").text());
+          $("#roleSelect").val(row.find("td:eq(5)").text());
+          $("#staffForm input[name='salary']").val(row.find("td:eq(8)").text());
+
+          // centers -> check checkboxes matching values
+          const centersText = row.find("td:eq(6)").text();
+          $(".center-check").prop('checked', false);
+          if (centersText && centersText !== '-') {
+            centersText.split(',').map(s => s.trim()).forEach(val => {
+              $(`.center-check[value="${val}"]`).prop('checked', true);
+            });
+          }
+
+          // slots
+          const slotsText = row.find("td:eq(7)").text();
+          $(".slot-check").prop('checked', false);
+          if (slotsText && slotsText !== '-') {
+            slotsText.split(',').map(s => s.trim()).forEach(val => {
+              $(`.slot-check[value="${val}"]`).prop('checked', true);
+            });
+          }
+
+          // show/hide slot section depending on role
+          $("#roleSelect").val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+
+          $("#staffModalLabel").text("Edit Staff");
+          const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
+          staffModal.show();
+        });
+
+        // Delegated: view button
+        $(document).off('click', '.viewBtn').on('click', '.viewBtn', function(){
+          const row = $(this).closest('tr');
+          $("#profileName").text(row.find("td:eq(1)").text());
+          $("#profileEmail").text(row.find("td:eq(2)").text());
+          $("#profileContact").text(row.find("td:eq(3)").text());
+          $("#profileDate").text(row.find("td:eq(4)").text());
+          $("#profileRole").text(row.find("td:eq(5)").text());
+          $("#profileCenters").text(row.find("td:eq(6)").text());
+          $("#profileSlots").text(row.find("td:eq(7)").text());
+
+          const salary = row.find("td:eq(8)").text().trim();
+          if (!salary || salary === '-' || salary === '0') {
+            $("#profileSalary").text("No salary assigned").addClass("no-salary");
+          } else {
+            $("#profileSalary").text("Income: ₹" + salary).removeClass("no-salary");
+          }
+
+          const viewModal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
+          viewModal.show();
+        });
+
+        // Delegated: delete
+        $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function(){
+          const row = $(this).closest('tr');
+          Swal.fire({
+            title: "Are you sure?",
+            text: "This staff record will be deleted.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d00000",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Delete"
+          }).then(result => {
+            if (result.isConfirmed) {
+              row.remove();
+              // re-number sr no
+              $("#staffTable tbody tr").each(function(i){
+                $(this).find("td:eq(0)").text(i+1);
+              });
+              updateCount();
+              Swal.fire("Deleted!", "Staff record deleted successfully.", "success");
+            }
+          });
+        });
+
+        // Delegated: status toggle
+        $(document).off('change', '.statusToggle').on('change', '.statusToggle', function(){
+          const row = $(this).closest('tr');
+          if ($(this).is(':checked')) {
+            row.attr('data-status','active');
+            Swal.fire("Activated", "Status changed to Active", "success");
+          } else {
+            row.attr('data-status','deactive');
+            Swal.fire("Deactivated", "Status changed to Inactive", "info");
           }
         });
-      });
 
-      $(document).on("click", ".viewBtn", function () {
-        const row = $(this).closest("tr");
-        $("#profileName").text(row.find("td:eq(1)").text());
-        $("#profileEmail").text(row.find("td:eq(2)").text());
-        $("#profileContact").text(row.find("td:eq(3)").text());
-        $("#profileDate").text(row.find("td:eq(4)").text());
-        $("#profileRole").text(row.find("td:eq(5)").text());
-        $("#profileCenters").text(row.find("td:eq(6)").text());
-        $("#profileSlots").text(row.find("td:eq(7)").text());
-        const salary = row.find("td:eq(8)").text().trim();
-        if (!salary || salary === "0") {
-          $("#profileSalary").text("No salary assigned").addClass("no-salary");
-        } else {
-          $("#profileSalary").text("Income: ₹" + salary).removeClass("no-salary");
-        }
-        $("#viewProfileModal").modal("show");
-      });
-
-      $(document).on("change", ".statusToggle", function () {
-        const row = $(this).closest("tr");
-        if ($(this).is(":checked")) {
-          row.attr("data-status", "active");
-          Swal.fire("Activated", "Status changed to Active", "success");
-        } else {
-          row.attr("data-status", "deactive");
-          Swal.fire("Deactivated", "Status changed to Inactive", "info");
-        }
-      });
-
-      $(".filter-options button").on("click", function() {
-        $(".filter-options button").removeClass("active");
-        $(this).addClass("active");
-        const filter = $(this).data("filter");
-        $("#staffTable tbody tr").each(function() {
-          const status = $(this).attr("data-status");
-          if (filter === "all" || status === filter) $(this).show();
-          else $(this).hide();
+        // Filter buttons
+        $(".filter-options button").off('click').on('click', function(){
+          $(".filter-options button").removeClass('active');
+          $(this).addClass('active');
+          const filter = $(this).data('filter');
+          $("#staffTable tbody tr").each(function(){
+            const status = $(this).attr('data-status') || 'active';
+            if (filter === 'all' || status === filter) $(this).show(); else $(this).hide();
+          });
         });
-      });
 
-      $("#searchInput").on("keyup", function() {
-        const value = $(this).val().toLowerCase();
-        $("#staffTable tbody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        // Search box
+        $("#searchInput").off('keyup').on('keyup', function(){
+          const value = $(this).val().toLowerCase();
+          $("#staffTable tbody tr").filter(function(){
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          });
         });
-      });
+      } // bindUI
 
-      $("#roleSelect").on("change", function () {
-        $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-      });
-    });
+      // load overview card content from localStorage (if any)
+      function loadOverviewFromStorage(){
+        const data = localStorage.getItem('staffSalaryData');
+        if (!data) return;
+        try {
+          const staff = JSON.parse(data);
+          const html = buildOverviewHtml(staff);
+          $("#overviewContent").html(html);
+          $("#overviewLastUpdated").text("Updated: " + new Date().toLocaleString());
+        } catch(e){
+          console.warn("Invalid staff data in storage");
+        }
+      }
 
-// 🧾 Load Salary Details into Overview Tab
-$(document).ready(function() {
-  const data = localStorage.getItem('staffSalaryData');
-  if (data) {
-    const staff = JSON.parse(data);
-    const html = `
-      <div class="border rounded p-3 bg-light">
-        <h6 class="text-danger fw-bold mb-3">${staff.name}</h6>
-        <p><b>Hours Worked:</b> ${staff.hours}</p>
-        <p><b>Days Present:</b> ${staff.days}</p>
-        <p><b>Sessions:</b> ${staff.sessions}</p>
-        <p><b>Rate:</b> ${staff.rate}</p>
-        <p><b>Total Salary:</b> ${staff.salary}</p>
-        <p><b>Status:</b> ${staff.status}</p>
-      </div>
-    `;
-    $("#overviewContent").html(html);
-  }
-});
+      // helper to build overview html (responsive)
+      function buildOverviewHtml(staff){
+        // sanitize display
+        const name = escapeHtml(staff.name || '-');
+        const hours = escapeHtml(staff.hours || '-');
+        const days = escapeHtml(staff.days || '-');
+        const sessions = escapeHtml(staff.sessions || '-');
+        const rate = escapeHtml(staff.rate || '-');
+        const salary = escapeHtml(staff.salary || '-');
+        const status = escapeHtml(staff.status || '-');
 
+        return `
+          <div class="overview-row">
+            <div style="flex-basis:100%">
+              <h6 class="mb-1">${name}</h6>
+              <p class="text-muted mb-3">Latest salary snapshot from Salary Management</p>
+            </div>
 
+            <div class="overview-item">
+              <h6>Hours</h6>
+              <p>${hours}</p>
+            </div>
+            <div class="overview-item">
+              <h6>Days</h6>
+              <p>${days}</p>
+            </div>
+            <div class="overview-item">
+              <h6>Sessions</h6>
+              <p>${sessions}</p>
+            </div>
+            <div class="overview-item">
+              <h6>Rate</h6>
+              <p>${rate}</p>
+            </div>
+            <div class="overview-item">
+              <h6>Salary</h6>
+              <p>${salary}</p>
+            </div>
+            <div class="overview-item">
+              <h6>Status</h6>
+              <p>${status}</p>
+            </div>
+          </div>
+        `;
+      }
 
+      // simple escape to avoid injection when building rows
+      function escapeHtml(unsafe) {
+        if (unsafe === null || unsafe === undefined) return '';
+        return String(unsafe)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
 
-
-
-
+      // initialize once DOM is ready
+      $(function(){ init(); });
+    })(jQuery);
   </script>
-
-
-
-
 </body>
 </html>
