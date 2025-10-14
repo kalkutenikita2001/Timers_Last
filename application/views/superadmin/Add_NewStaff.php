@@ -5,128 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add New Staff</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     :root{
-      --brand-dark:#7b0000;
-      --brand:#d00000;
+      /* match Staff Management */
+      --accent:#ff4040; 
+      --accent-dark:#470000; 
+      --muted:#f4f6f8;
+      --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
+      --sidebar-width:250px; /* toggled by controller */
     }
 
-    body {
-      background-color: #f8f9fc;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    body{ 
+      background:var(--muted); 
+      color:#111; 
+      overflow-x:hidden; 
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
     }
 
-    #main-content {
-      margin-left: 260px;
-      padding: 20px;
-      min-height: 100vh;
-      transition: all 0.3s;
-    }
+    /* layout (sidebar-aware) */
+   /* Fit content to screen, sidebar-aware */
+*,
+*::before,
+*::after { box-sizing: border-box; }
 
-    /* Tabs */
-    .nav-tabs {
-      margin-bottom: 0;
-      border-bottom: 0;
-    }
-    .nav-tabs .nav-link {
-      color: var(--brand-dark);
-      font-weight: 500;
-      border-radius: 6px 6px 0 0;
-    }
-    .nav-tabs .nav-link.active {
-      background-color: var(--brand);
-      color: #fff;
-    }
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
-    /* Overview: centered card with maximum width */
-    .overview-wrap {
-      max-width: 820px;
-      margin: 24px auto;
-      padding: 28px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-      transition: transform .18s ease;
-    }
-    .overview-wrap:hover { transform: translateY(-3px); }
-    .overview-title { color: var(--brand); font-weight:600; margin-bottom:10px; }
-    .overview-row { display:flex; gap:12px; flex-wrap:wrap; }
+#main-content{
+  margin-left: var(--sidebar-width);          /* 250px when open */
+  width: calc(100vw - var(--sidebar-width));  /* keep inside the viewport */
+  padding: 20px;
+  min-height: 100vh;
+  transition: .25s;
+  overflow-x: hidden;                          /* safety belt */
+}
+#main-content.minimized{
+  margin-left: 60px;
+  width: calc(100vw - 60px);
+}
 
-    .overview-item {
-      flex:1 1 200px;
-      min-width:160px;
-      background:#fbfbfb;
-      border-radius:8px;
-      padding:12px;
-      border:1px solid rgba(0,0,0,0.04);
-    }
-    .overview-item h6 { margin:0; font-size:14px; color:var(--brand-dark); }
-    .overview-item p { margin:6px 0 0 0; font-size:14px; color:#333; }
+/* Mobile: sidebar overlays, content goes full width */
+@media (max-width: 991.98px){
+  #main-content{
+    margin-left: 0 !important;
+    width: 100vw;
+    padding: 12px;
+  }
+}
 
-    /* Staff tab container */
-    .staff-wrap {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-      margin: 20px auto 40px;
-      padding: 18px;
-      max-width: 1200px;
+    /* header-ish hero (lightweight) */
+    .page-hero{
+      border-radius:16px; border:1px solid #ffe1e1;
+      background: radial-gradient(1000px 320px at -10% -20%, rgba(255,64,64,.22), transparent),
+                  radial-gradient(800px 260px at 110% 0%, rgba(71,0,0,.18), transparent),
+                  linear-gradient(90deg, #fff, #fff6f6);
+      box-shadow:0 16px 40px rgba(255,64,64,.08);
+      padding:14px 16px;
     }
+    .page-title{ font-weight:800; letter-spacing:.2px; }
 
-    .filter-bar {
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom:12px;
+    /* toolbar */
+    .toolbar{
+      position:sticky; top:12px; z-index:5;
+      background:#fff; border:1px solid #e9ecef; border-radius:12px; padding:10px;
+      box-shadow:0 8px 24px rgba(0,0,0,.05);
     }
-    .filter-options button {
-      border:none;
-      background:none;
-      color:var(--brand-dark);
-      font-weight:500;
-      margin-right:12px;
-    }
-    .filter-options button.active,
-    .filter-options button:hover { color:var(--brand); text-decoration:underline; }
+    .btn-ghost{ border:1px solid #e9ecef; background:#fff; }
+    .btn-ghost:hover{ background:#f8f8f8; }
+    .btn-primary{ background:var(--grad); border:0; font-weight:700; }
+    .btn-primary:hover{ filter:brightness(.96); }
 
-    .btn-primary {
-      background: linear-gradient(90deg, var(--brand-dark), var(--brand));
-      border: none;
-      font-weight: 500;
-      padding: 8px 16px;
-      border-radius: 6px;
-    }
+    /* unified global search */
+    .global-search { max-width: 600px; margin: 0 auto; transition: all .25s ease; }
+    .global-search .form-control { height: 42px; border-radius: 50px; font-size:.9rem; padding-left:.5rem; border-color:#e3e3e3; }
+    .global-search .form-control:focus { border-color: var(--accent); box-shadow:0 0 0 3px rgba(255,64,64,.2); }
+    .global-search .input-group-text { border-radius: 50px 0 0 50px; background:#fff; border-color:#e3e3e3; }
+    .global-search:hover { transform: scale(1.01); }
 
-    .table-container { overflow-x:auto; }
+    /* card + table styling */
+    .card-lite{ background:#fff; border-radius:14px; border:1px solid #e9ecef; box-shadow:0 6px 20px rgba(0,0,0,.05); }
+    .table thead th{ position:sticky; top:0; background:#fff; z-index:2; }
+    .table-hover tbody tr:hover{ background:rgba(255,64,64,.035); }
+    .clickable-row { cursor:pointer; transition: background-color .2s ease; }
+    .clickable-row:hover { background-color: rgba(255,64,64,.05); }
 
-    .action-icons button {
-      border:none;
-      background:none;
-      padding:6px;
-      margin:0 2px;
-    }
-    .view-icon { color:#0d6efd; }
-    .edit-icon { color:#ffc107; }
-    .delete-icon { color:#dc3545; }
+    /* badges (reuse) */
+    .status-badge{ border-radius:999px; padding:.25rem .6rem; font-size:.75rem; font-weight:700; }
+    .status-active{ background:#d1e7dd; color:#0f5132; }
+    .status-deactive{ background:#e2e3e5; color:#41464b; }
 
-    /* modal tweaks */
-    .modal-header.bg-danger { background: linear-gradient(90deg,var(--brand-dark),var(--brand)); color:#fff; }
-    .profile-card {
-      padding:18px;
-      text-align:center;
-      border-radius:10px;
-      background:linear-gradient(145deg,#fff,#f6f6f6);
-      box-shadow:0 6px 16px rgba(0,0,0,0.04);
-    }
-
-    /* switches */
+    /* switches (kept) */
     .switch { position:relative; display:inline-block; width:46px; height:24px; }
     .switch input{ display:none; }
     .slider{ position:absolute; left:0; top:0; right:0; bottom:0; background:#dcdcdc; border-radius:24px; transition:.25s; }
@@ -134,24 +106,41 @@
     .switch input:checked + .slider{ background:#28a745; }
     .switch input:checked + .slider:before{ transform:translateX(22px); }
 
-    /* Responsive */
-    @media (max-width: 992px) {
-      #main-content { margin-left:0; padding:16px; }
-      .overview-wrap, .staff-wrap { margin-left:0; margin-right:0; }
-      .overview-item { flex-basis: 45%; }
-    }
-    @media (max-width: 576px) {
-      .overview-item { flex-basis: 100%; }
-      .filter-bar { gap:10px; align-items:flex-start; }
-    }
+    /* modal header gradient */
+    .modal-header.bg-danger { background: var(--grad) !important; color:#fff; }
   </style>
 </head>
 <body>
-  
   <?php  $this->load->view('superadmin/Include/Sidebar');  ?>
   <?php $this->load->view('superadmin/Include/Navbar'); ?>
 
   <div id="main-content" class="container-fluid">
+    <!-- lightweight hero to align visuals with list page -->
+    <div class="page-hero mb-3">
+      <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+        <div class="page-title h5 mb-0">Add & Manage Staff</div>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
+          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- toolbar with global search + count -->
+    <div class="toolbar mb-3">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="flex-grow-1">
+          <div class="input-group global-search">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+            <input id="searchInput" type="text" class="form-control border-start-0" placeholder="Search staff by name, email, role, center or status...">
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge rounded-pill bg-light text-dark px-3 py-2">Total <b id="staffCount">1</b></span>
+        </div>
+      </div>
+    </div>
+
     <ul class="nav nav-tabs" id="staffTabs" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overviewTab" type="button" role="tab">Overview</button>
@@ -164,12 +153,11 @@
     <div class="tab-content">
       <!-- Overview tab -->
       <div class="tab-pane fade show active" id="overviewTab" role="tabpanel" aria-labelledby="overview-tab">
-        <div class="overview-wrap" id="overviewWrap">
+        <div class="card-lite p-3 mt-3" id="overviewWrap">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="overview-title mb-0">Staff Overview</h5>
+            <h5 class="mb-0">Staff Overview</h5>
             <small class="text-muted" id="overviewLastUpdated"></small>
           </div>
-
           <div id="overviewContent">
             <p class="text-center text-muted mb-0">No staff details available. Click "Send Details" from Salary Management (or add a staff record).</p>
           </div>
@@ -178,24 +166,19 @@
 
       <!-- Staff tab -->
       <div class="tab-pane fade" id="staffTab" role="tabpanel" aria-labelledby="staff-tab">
-        <div class="staff-wrap">
-          <div class="filter-bar">
+        <div class="card-lite p-3 mt-3">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
             <div class="filter-options">
-              <button class="active" data-filter="all">All</button>
-              <button data-filter="active">Active</button>
-              <button data-filter="deactive">Deactive</button>
+              <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
+              <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
+              <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
             </div>
-
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-              <div class="me-2 staff-count">Total Staff: <span id="staffCount">1</span></div>
-              <input type="text" id="searchInput" class="form-control form-control-sm me-2" style="width:220px" placeholder="Search staff...">
-              <button class="btn btn-primary btn-sm" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
-            </div>
+            <button class="btn btn-primary btn-sm" id="addStaffBtn2"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
           </div>
 
-          <div class="table-container">
-            <table class="table table-bordered table-striped align-middle" id="staffTable">
-              <thead class="table-light">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="staffTable">
+              <thead>
                 <tr>
                   <th style="width:60px">Sr No</th>
                   <th>Name</th>
@@ -205,14 +188,13 @@
                   <th>Role</th>
                   <th>Centers</th>
                   <th>Slots</th>
-                  <th style="width:110px">Salary</th>
-                  <th style="width:120px">Actions</th>
-                  <th style="width:90px">Status</th>
+                  <th class="text-end" style="width:110px">Salary (₹)</th>
+                  <th class="text-center" style="width:120px">Actions</th>
+                  <th class="text-center" style="width:90px">Status</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- initial single row -->
-                <tr data-status="active">
+                <tr class="clickable-row" data-status="active">
                   <td>1</td>
                   <td>John Doe</td>
                   <td>john@example.com</td>
@@ -221,13 +203,15 @@
                   <td>Coach</td>
                   <td>Center A</td>
                   <td>6-8 AM</td>
-                  <td>25000</td>
-                  <td class="action-icons">
-                    <button class="btn btn-sm viewBtn" title="View"><i class="bi bi-eye-fill view-icon"></i></button>
-                    <button class="btn btn-sm editBtn" title="Edit"><i class="bi bi-pencil-square edit-icon"></i></button>
-                    <button class="btn btn-sm deleteBtn" title="Delete"><i class="bi bi-trash delete-icon"></i></button>
+                  <td class="text-end">25000</td>
+                  <td class="text-center">
+                    <div class="btn-group">
+                      <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
+                      <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
+                      <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
+                    </div>
                   </td>
-                  <td>
+                  <td class="text-center">
                     <label class="switch">
                       <input type="checkbox" class="statusToggle" checked>
                       <span class="slider"></span>
@@ -238,9 +222,9 @@
             </table>
           </div>
         </div>
-      </div> <!-- /staffTab -->
-    </div> <!-- /tab-content -->
-  </div> <!-- /main-content -->
+      </div>
+    </div>
+  </div>
 
   <!-- Staff Modal -->
   <div class="modal fade" id="staffModal" tabindex="-1" aria-hidden="true">
@@ -253,27 +237,15 @@
         <div class="modal-body">
           <form id="staffForm" autocomplete="off">
             <div class="row g-2 mb-3">
-              <div class="col-md-6">
-                <input type="text" class="form-control" name="name" placeholder="Enter Staff Name" required>
-              </div>
-              <div class="col-md-6">
-                <input type="email" class="form-control" name="email" placeholder="Staff Email" required>
-              </div>
+              <div class="col-md-6"><input type="text" class="form-control" name="name" placeholder="Enter Staff Name" required></div>
+              <div class="col-md-6"><input type="email" class="form-control" name="email" placeholder="Staff Email" required></div>
             </div>
-
             <div class="row g-2 mb-3">
-              <div class="col-md-6">
-                <input type="text" class="form-control" name="contact" placeholder="Staff Contact" required>
-              </div>
-              <div class="col-md-6">
-                <input type="date" class="form-control" name="joining_date" required>
-              </div>
+              <div class="col-md-6"><input type="text" class="form-control" name="contact" placeholder="Staff Contact" required></div>
+              <div class="col-md-6"><input type="date" class="form-control" name="joining_date" required></div>
             </div>
-
             <div class="row g-2 mb-3">
-              <div class="col-md-6">
-                <input type="number" class="form-control" name="salary" placeholder="Enter Salary" required>
-              </div>
+              <div class="col-md-6"><input type="number" class="form-control" name="salary" placeholder="Enter Salary" required></div>
               <div class="col-md-6">
                 <select class="form-select" name="role" id="roleSelect" required>
                   <option value="">Select Role</option>
@@ -284,7 +256,6 @@
                 </select>
               </div>
             </div>
-
             <div class="mb-3">
               <label class="fw-bold mb-2">Select Centers:</label>
               <div class="d-flex flex-wrap gap-3">
@@ -294,7 +265,6 @@
                 <div><input type="checkbox" class="center-check" value="Center D"> Center D</div>
               </div>
             </div>
-
             <div class="mb-3" id="slotSection" style="display:none;">
               <label class="fw-bold mb-2">Select Slots:</label>
               <div class="d-flex flex-wrap gap-3">
@@ -304,10 +274,7 @@
                 <div><input type="checkbox" class="slot-check" value="7-9 PM"> 7-9 PM</div>
               </div>
             </div>
-
-            <div class="text-end">
-              <button type="submit" class="btn btn-primary">Save Staff</button>
-            </div>
+            <div class="text-end"><button type="submit" class="btn btn-primary">Save Staff</button></div>
           </form>
         </div>
       </div>
@@ -318,9 +285,9 @@
   <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-3">
-        <div class="profile-card">
+        <div class="text-center p-3" style="border-radius:10px;background:linear-gradient(145deg,#fff,#f6f6f6);box-shadow:0 6px 16px rgba(0,0,0,.04)">
           <h5 id="profileName" class="text-danger fw-bold mb-2">Staff Name</h5>
-          <div class="profile-info text-start">
+          <div class="text-start">
             <p><strong>Email:</strong> <span id="profileEmail"></span></p>
             <p><strong>Contact:</strong> <span id="profileContact"></span></p>
             <p><strong>Joining Date:</strong> <span id="profileDate"></span></p>
@@ -328,21 +295,149 @@
             <p><strong>Centers:</strong> <span id="profileCenters"></span></p>
             <p><strong>Slots:</strong> <span id="profileSlots"></span></p>
           </div>
-          <div class="salary-box" id="profileSalary"></div>
+          <div id="profileSalary"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- Sidebar toggle controller (reused, with wrapper id added) -->
+  <script>
+  (function () {
+    const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
+    const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
+    const WRAPPER_IDS = ['main-content','dashboardWrapper','financeWrap']; // added main-content
+    const DESKTOP_WIDTH_CUTOFF = 576;
+    const SIDEBAR_OPEN_CLASS = 'active';
+    const SIDEBAR_MIN_CLASS = 'minimized';
+    const BODY_OVERLAY_CLASS = 'sidebar-open';
+    const CSS_VAR = '--sidebar-width';
+    const SIDEBAR_WIDTH_OPEN = '250px';
+    const SIDEBAR_WIDTH_MIN = '60px';
+
+    const qs = s => document.querySelector(s);
+    const qsa = s => Array.from(document.querySelectorAll(s));
+    const sidebarEl = () => qs('#sidebar') || qs('.sidebar') || qs('.main-sidebar');
+    const wrapperEl = () => WRAPPER_IDS.map(id => document.getElementById(id)).find(Boolean) || qs('.wrap') || qs('#main-content');
+    const isMobile = () => window.innerWidth <= DESKTOP_WIDTH_CUTOFF;
+
+    let backdrop = qs('.sidebar-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'sidebar-backdrop';
+      backdrop.style.position = 'fixed';
+      backdrop.style.inset = '0';
+      backdrop.style.background = 'rgba(0,0,0,0.42)';
+      backdrop.style.zIndex = '1070';
+      backdrop.style.display = 'none';
+      backdrop.style.opacity = '0';
+      backdrop.style.transition = 'opacity .18s ease';
+      document.body.appendChild(backdrop);
+    }
+
+    let lock = false; const lockFor = (ms=320)=>{ lock=true; clearTimeout(lock._t); lock._t=setTimeout(()=>lock=false,ms); };
+    let lastInteractionAt = 0; const INTERACTION_GAP = 700;
+
+    function openMobileSidebar(){
+      const s = sidebarEl(); if (!s) return;
+      s.classList.add(SIDEBAR_OPEN_CLASS);
+      document.body.classList.add(BODY_OVERLAY_CLASS);
+      document.body.style.overflow = 'hidden';
+      backdrop.style.display = 'block';
+      requestAnimationFrame(()=> backdrop.style.opacity = '1');
+    }
+    function closeMobileSidebar(){
+      const s = sidebarEl(); if (s) s.classList.remove(SIDEBAR_OPEN_CLASS);
+      document.body.classList.remove(BODY_OVERLAY_CLASS);
+      document.body.style.overflow = '';
+      backdrop.style.opacity = '0';
+      setTimeout(()=>{ if(!document.body.classList.contains(BODY_OVERLAY_CLASS)) backdrop.style.display='none'; },220);
+    }
+    function toggleDesktopSidebar(){
+      const s = sidebarEl(); if (!s) return;
+      const isMin = s.classList.toggle(SIDEBAR_MIN_CLASS);
+      const w = wrapperEl(); if (w) w.classList.toggle('minimized', isMin);
+      const nav = qs('.navbar'); if (nav) nav.classList.toggle('sidebar-minimized', isMin);
+      document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
+      document.dispatchEvent(new CustomEvent('sidebarToggle', { detail:{ minimized:isMin }}));
+      setTimeout(()=> window.dispatchEvent(new Event('resize')), 220);
+    }
+    function handleToggleEvent(e){
+      if (e && e.type==='click' && (Date.now()-lastInteractionAt) < INTERACTION_GAP) return;
+      if (lock) return;
+      if (isMobile()){ lockFor(260); document.body.classList.contains(BODY_OVERLAY_CLASS) ? closeMobileSidebar() : openMobileSidebar(); }
+      else { lockFor(260); toggleDesktopSidebar(); }
+    }
+    function wireToggleButtons(){
+      const toggles = qsa(TOGGLE_SELECTORS);
+      toggles.forEach(el=>{
+        if (el.__sidebarToggleBound) return;
+        el.__sidebarToggleBound = true;
+        el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true});
+        el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); });
+      });
+    }
+
+    document.addEventListener('pointerdown', function (ev) {
+      if (ev.pointerType==='touch' || ev.pointerType==='pen') {
+        const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
+        if (t){ lastInteractionAt=Date.now(); handleToggleEvent(ev); }
+      }
+    }, {passive:true});
+    document.addEventListener('click', function (ev) {
+      const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
+      if (t) handleToggleEvent(ev);
+    });
+    backdrop.addEventListener('click', function(){ if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
+    document.addEventListener('click', function(e){
+      if (!isMobile()) return;
+      const inside = e.target.closest && e.target.closest(SIDEBAR_SELECTORS);
+      if (!inside) return;
+      const a = e.target.closest && e.target.closest('a');
+      if (a && a.getAttribute('href') && a.getAttribute('href') !== '#') { setTimeout(closeMobileSidebar,160); }
+    });
+    document.addEventListener('keydown', function(ev){ if (ev.key==='Escape' && document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
+
+    let resizeTimer=null;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer=setTimeout(function(){
+        if (!isMobile()){
+          closeMobileSidebar();
+          const s = sidebarEl();
+          const isMin = s && s.classList.contains(SIDEBAR_MIN_CLASS);
+          document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
+        }
+      },120);
+    });
+
+    if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
+      backdrop.style.display='block'; backdrop.style.opacity='1'; document.body.style.overflow='hidden';
+    }
+
+    (function ensureFallbackToggle(){
+      const qsN = s=>document.querySelector(s);
+      if (qsN(TOGGLE_SELECTORS)){ wireToggleButtons(); return; }
+      const navbar = qsN('.navbar, header, .main-header, .topbar');
+      if (!navbar) return;
+      const btn = document.createElement('button');
+      btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
+      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      navbar.prepend(btn);
+      wireToggleButtons();
+    })();
+
+    document.addEventListener('DOMContentLoaded', wireToggleButtons);
+  })();
+  </script>
+
+  <!-- Page logic (kept functionality, wired to new UI) -->
   <script>
     (function($){
-      // single source of truth for edit row
       let editRow = null;
 
-      // Ensure no duplicate handlers — attach only once
       function init() {
         updateCount();
         bindUI();
@@ -355,24 +450,20 @@
       }
 
       function bindUI(){
-        // Open Add modal
-        $("#addStaffBtn").off('click').on("click", function(){
+        const openAdd = () => {
           editRow = null;
           $("#staffForm")[0].reset();
           $("#slotSection").hide();
-          $("#staffModalLabel").text("Add Staff");
-          // uncheck all checkboxes explicitly
           $(".center-check, .slot-check").prop('checked', false);
-          const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
-          staffModal.show();
-        });
+          $("#staffModalLabel").text("Add Staff");
+          new bootstrap.Modal(document.getElementById('staffModal')).show();
+        };
+        $("#addStaffBtn, #addStaffBtn2").off('click').on('click', openAdd);
 
-        // Role -> toggle slots
         $("#roleSelect").off('change').on("change", function(){
           $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
         });
 
-        // Submit form: add or update
         $("#staffForm").off('submit').on("submit", function(e){
           e.preventDefault();
           const form = $(this);
@@ -384,76 +475,57 @@
           const salary = form.find("input[name='salary']").val().trim();
           const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
           const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
-
-          // Basic validation (already required, but double-check)
-          if (!name || !email || !contact) {
-            Swal.fire("Missing info", "Please fill required fields.", "warning");
-            return;
-          }
+          if (!name || !email || !contact){ Swal.fire("Missing info","Please fill required fields.","warning"); return; }
 
           const tbody = $("#staffTable tbody");
-
           if (editRow) {
-            // update existing row (editRow is a jQuery tr)
             editRow.find("td:eq(1)").text(name);
             editRow.find("td:eq(2)").text(email);
             editRow.find("td:eq(3)").text(contact);
             editRow.find("td:eq(4)").text(date);
             editRow.find("td:eq(5)").text(role);
-            editRow.find("td:eq(6)").text(centers.length ? centers.join(", ") : '-');
-            editRow.find("td:eq(7)").text(role === "Coach" && slots.length ? slots.join(", ") : '-');
-            editRow.find("td:eq(8)").text(salary || '-');
-
-            Swal.fire("Updated!", "Staff details updated successfully.", "success");
+            editRow.find("td:eq(6)").text(centers.length?centers.join(", "):'-');
+            editRow.find("td:eq(7)").text(role==="Coach" && slots.length?slots.join(", "):'-');
+            editRow.find("td:eq(8)").text(salary||'-');
+            Swal.fire("Updated!","Staff details updated successfully.","success");
           } else {
-            // add new row (ensure single append)
             const srNo = tbody.children("tr").length + 1;
-            const newRow = $(`
-              <tr data-status="active">
+            const rowHtml = `
+              <tr class="clickable-row" data-status="active">
                 <td>${srNo}</td>
                 <td>${escapeHtml(name)}</td>
                 <td>${escapeHtml(email)}</td>
                 <td>${escapeHtml(contact)}</td>
                 <td>${escapeHtml(date)}</td>
                 <td>${escapeHtml(role)}</td>
-                <td>${escapeHtml(centers.length ? centers.join(", ") : '-')}</td>
-                <td>${escapeHtml(role === "Coach" && slots.length ? slots.join(", ") : '-')}</td>
-                <td>${escapeHtml(salary || '-')}</td>
-                <td class="action-icons">
-                  <button class="btn btn-sm viewBtn" title="View"><i class="bi bi-eye-fill view-icon"></i></button>
-                  <button class="btn btn-sm editBtn" title="Edit"><i class="bi bi-pencil-square edit-icon"></i></button>
-                  <button class="btn btn-sm deleteBtn" title="Delete"><i class="bi bi-trash delete-icon"></i></button>
+                <td>${escapeHtml(centers.length?centers.join(", "):'-')}</td>
+                <td>${escapeHtml(role==="Coach" && slots.length?slots.join(", "):'-')}</td>
+                <td class="text-end">${escapeHtml(salary||'-')}</td>
+                <td class="text-center">
+                  <div class="btn-group">
+                    <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
+                    <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
+                  </div>
                 </td>
-                <td>
+                <td class="text-center">
                   <label class="switch">
                     <input type="checkbox" class="statusToggle" checked>
                     <span class="slider"></span>
                   </label>
                 </td>
-              </tr>
-            `);
-            tbody.append(newRow);
-            Swal.fire("Added!", "New staff added successfully.", "success");
+              </tr>`;
+            tbody.append($(rowHtml));
+            Swal.fire("Added!","New staff added successfully.","success");
             updateCount();
           }
-
-          // close modal (Bootstrap API)
           const modalEl = document.getElementById('staffModal');
-          const bsModal = bootstrap.Modal.getInstance(modalEl);
-          if (bsModal) bsModal.hide();
-
-          // reset form & editRow
-          $("#staffForm")[0].reset();
-          $("#slotSection").hide();
-          editRow = null;
+          const bsModal = bootstrap.Modal.getInstance(modalEl); if (bsModal) bsModal.hide();
+          $("#staffForm")[0].reset(); $("#slotSection").hide(); editRow = null;
         });
 
-        // Delegated: edit button
         $(document).off('click', '.editBtn').on('click', '.editBtn', function(){
-          const row = $(this).closest('tr');
-          editRow = row;
-
-          // Populate modal fields
+          const row = $(this).closest('tr'); editRow = row;
           $("#staffForm")[0].reset();
           $("#staffForm input[name='name']").val(row.find("td:eq(1)").text());
           $("#staffForm input[name='email']").val(row.find("td:eq(2)").text());
@@ -461,34 +533,17 @@
           $("#staffForm input[name='joining_date']").val(row.find("td:eq(4)").text());
           $("#roleSelect").val(row.find("td:eq(5)").text());
           $("#staffForm input[name='salary']").val(row.find("td:eq(8)").text());
-
-          // centers -> check checkboxes matching values
           const centersText = row.find("td:eq(6)").text();
           $(".center-check").prop('checked', false);
-          if (centersText && centersText !== '-') {
-            centersText.split(',').map(s => s.trim()).forEach(val => {
-              $(`.center-check[value="${val}"]`).prop('checked', true);
-            });
-          }
-
-          // slots
+          if (centersText && centersText !== '-') centersText.split(',').map(s=>s.trim()).forEach(v=>{$(`.center-check[value="${v}"]`).prop('checked', true);});
           const slotsText = row.find("td:eq(7)").text();
           $(".slot-check").prop('checked', false);
-          if (slotsText && slotsText !== '-') {
-            slotsText.split(',').map(s => s.trim()).forEach(val => {
-              $(`.slot-check[value="${val}"]`).prop('checked', true);
-            });
-          }
-
-          // show/hide slot section depending on role
-          $("#roleSelect").val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-
+          if (slotsText && slotsText !== '-') slotsText.split(',').map(s=>s.trim()).forEach(v=>{$(`.slot-check[value="${v}"]`).prop('checked', true);});
+          $("#roleSelect").val()==="Coach" ? $("#slotSection").show() : $("#slotSection").hide();
           $("#staffModalLabel").text("Edit Staff");
-          const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
-          staffModal.show();
+          new bootstrap.Modal(document.getElementById('staffModal')).show();
         });
 
-        // Delegated: view button
         $(document).off('click', '.viewBtn').on('click', '.viewBtn', function(){
           const row = $(this).closest('tr');
           $("#profileName").text(row.find("td:eq(1)").text());
@@ -498,146 +553,67 @@
           $("#profileRole").text(row.find("td:eq(5)").text());
           $("#profileCenters").text(row.find("td:eq(6)").text());
           $("#profileSlots").text(row.find("td:eq(7)").text());
-
           const salary = row.find("td:eq(8)").text().trim();
-          if (!salary || salary === '-' || salary === '0') {
-            $("#profileSalary").text("No salary assigned").addClass("no-salary");
-          } else {
-            $("#profileSalary").text("Income: ₹" + salary).removeClass("no-salary");
-          }
-
-          const viewModal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
-          viewModal.show();
+          if (!salary || salary==='-' || salary==='0') $("#profileSalary").text("No salary assigned").addClass("no-salary");
+          else $("#profileSalary").text("Income: ₹"+salary).removeClass("no-salary");
+          new bootstrap.Modal(document.getElementById('viewProfileModal')).show();
         });
 
-        // Delegated: delete
         $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function(){
           const row = $(this).closest('tr');
-          Swal.fire({
-            title: "Are you sure?",
-            text: "This staff record will be deleted.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d00000",
-            cancelButtonColor: "#6c757d",
-            confirmButtonText: "Delete"
-          }).then(result => {
-            if (result.isConfirmed) {
-              row.remove();
-              // re-number sr no
-              $("#staffTable tbody tr").each(function(i){
-                $(this).find("td:eq(0)").text(i+1);
-              });
-              updateCount();
-              Swal.fire("Deleted!", "Staff record deleted successfully.", "success");
-            }
-          });
+          Swal.fire({ title:"Are you sure?", text:"This staff record will be deleted.", icon:"warning", showCancelButton:true, confirmButtonColor:"#d00000", cancelButtonColor:"#6c757d", confirmButtonText:"Delete" })
+          .then(r=>{ if(r.isConfirmed){ row.remove(); $("#staffTable tbody tr").each(function(i){ $(this).find("td:eq(0)").text(i+1); }); updateCount(); Swal.fire("Deleted!","Staff record deleted successfully.","success"); }});
         });
 
-        // Delegated: status toggle
         $(document).off('change', '.statusToggle').on('change', '.statusToggle', function(){
           const row = $(this).closest('tr');
-          if ($(this).is(':checked')) {
-            row.attr('data-status','active');
-            Swal.fire("Activated", "Status changed to Active", "success");
-          } else {
-            row.attr('data-status','deactive');
-            Swal.fire("Deactivated", "Status changed to Inactive", "info");
-          }
+          if ($(this).is(':checked')){ row.attr('data-status','active'); Swal.fire("Activated","Status changed to Active","success"); }
+          else { row.attr('data-status','deactive'); Swal.fire("Deactivated","Status changed to Inactive","info"); }
         });
 
-        // Filter buttons
-        $(".filter-options button").off('click').on('click', function(){
-          $(".filter-options button").removeClass('active');
+        $(document).off('click', '.filter-options .btn').on('click', '.filter-options .btn', function(){
+          $(".filter-options .btn").removeClass('active');
           $(this).addClass('active');
           const filter = $(this).data('filter');
           $("#staffTable tbody tr").each(function(){
-            const status = $(this).attr('data-status') || 'active';
-            if (filter === 'all' || status === filter) $(this).show(); else $(this).hide();
+            const status = $(this).attr('data-status')||'active';
+            if (filter==='all' || status===filter) $(this).show(); else $(this).hide();
           });
         });
 
-        // Search box
-        $("#searchInput").off('keyup').on('keyup', function(){
+        $("#searchInput").off('input').on('input', function(){
           const value = $(this).val().toLowerCase();
-          $("#staffTable tbody tr").filter(function(){
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          $("#staffTable tbody tr").each(function(){
+            $(this).toggle($(this).text().toLowerCase().indexOf(value)>-1);
           });
         });
-      } // bindUI
+      }
 
-      // load overview card content from localStorage (if any)
       function loadOverviewFromStorage(){
         const data = localStorage.getItem('staffSalaryData');
         if (!data) return;
-        try {
-          const staff = JSON.parse(data);
-          const html = buildOverviewHtml(staff);
-          $("#overviewContent").html(html);
-          $("#overviewLastUpdated").text("Updated: " + new Date().toLocaleString());
-        } catch(e){
-          console.warn("Invalid staff data in storage");
-        }
+        try{ const staff = JSON.parse(data); const html = buildOverviewHtml(staff); $("#overviewContent").html(html); $("#overviewLastUpdated").text("Updated: "+ new Date().toLocaleString()); }catch(e){ console.warn('Invalid staff data'); }
       }
 
-      // helper to build overview html (responsive)
       function buildOverviewHtml(staff){
-        // sanitize display
-        const name = escapeHtml(staff.name || '-');
-        const hours = escapeHtml(staff.hours || '-');
-        const days = escapeHtml(staff.days || '-');
-        const sessions = escapeHtml(staff.sessions || '-');
-        const rate = escapeHtml(staff.rate || '-');
-        const salary = escapeHtml(staff.salary || '-');
-        const status = escapeHtml(staff.status || '-');
-
+        const esc = s=>escapeHtml(s??'-');
         return `
-          <div class="overview-row">
-            <div style="flex-basis:100%">
-              <h6 class="mb-1">${name}</h6>
-              <p class="text-muted mb-3">Latest salary snapshot from Salary Management</p>
-            </div>
-
-            <div class="overview-item">
-              <h6>Hours</h6>
-              <p>${hours}</p>
-            </div>
-            <div class="overview-item">
-              <h6>Days</h6>
-              <p>${days}</p>
-            </div>
-            <div class="overview-item">
-              <h6>Sessions</h6>
-              <p>${sessions}</p>
-            </div>
-            <div class="overview-item">
-              <h6>Rate</h6>
-              <p>${rate}</p>
-            </div>
-            <div class="overview-item">
-              <h6>Salary</h6>
-              <p>${salary}</p>
-            </div>
-            <div class="overview-item">
-              <h6>Status</h6>
-              <p>${status}</p>
-            </div>
-          </div>
-        `;
+          <div class="row g-2">
+            <div class="col-12"><h6 class="mb-1">${esc(staff.name)}</h6><p class="text-muted mb-3">Latest salary snapshot from Salary Management</p></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Hours</div><div>${esc(staff.hours)}</div></div></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Days</div><div>${esc(staff.days)}</div></div></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Sessions</div><div>${esc(staff.sessions)}</div></div></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Rate</div><div>${esc(staff.rate)}</div></div></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Salary</div><div>${esc(staff.salary)}</div></div></div>
+            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Status</div><div>${esc(staff.status)}</div></div></div>
+          </div>`;
       }
 
-      // simple escape to avoid injection when building rows
-      function escapeHtml(unsafe) {
-        if (unsafe === null || unsafe === undefined) return '';
-        return String(unsafe)
-          .replaceAll('&', '&amp;')
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;')
-          .replaceAll('"', '&quot;')
-          .replaceAll("'", '&#039;');
+      function escapeHtml(unsafe){
+        if (unsafe===null || unsafe===undefined) return '';
+        return String(unsafe).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
       }
 
-      // initialize once DOM is ready
       $(function(){ init(); });
     })(jQuery);
   </script>
