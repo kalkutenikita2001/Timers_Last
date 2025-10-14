@@ -452,7 +452,7 @@
         }
 
         .modal-header {
-            background: #fff6f6;
+            background: var(--primary-gradient);
             color: white;
             border-top-left-radius: var(--border-radius);
             border-top-right-radius: var(--border-radius);
@@ -608,12 +608,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
+            background: #888;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #d63031;
+            background: #c1c1c1ff;
         }
 
         /* Loading animation */
@@ -698,10 +698,7 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="venueModalLabel" style="color: red;">
-                                <i class="fas fa-building mr-2"></i> Add New Center
-                            </h5>
-
+                            <h5 class="modal-title" id="venueModalLabel"><i class="fas fa-building mr-2"></i> Add New Center</h5>
                             <!-- <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span> -->
                         </div>
@@ -1487,6 +1484,29 @@
             });
         }
 
+        // function renderPlanPreview() {
+        //     const container = $('#planPreview');
+        //     container.empty();
+
+        //     $('#planContainer .plan-item').each(function() {
+        //         const membershipName = $(this).find('input').eq(0).val();
+        //         const duration = $(this).find('input').eq(1).val();
+        //         const period = $(this).find('select').eq(0).val();
+        //         const slot = $(this).find('select').eq(1).val();
+        //         const regFee = $(this).find('input').eq(2).val();
+        //         const coachingFee = $(this).find('input').eq(3).val();
+
+        //         if (membershipName && duration && period) {
+        //             const div = $(`
+        //                 <div class="court-slot-block mb-2">
+        //                     <h5>${membershipName} - ${duration} ${period} <small>${slot || ''}</small></h5>
+        //                     <p>Registration: ₹${regFee || 0}, Coaching: ₹${coachingFee || 0}</p>
+        //                 </div>
+        //             `);
+        //             container.append(div);
+        //         }
+        //     });
+        // }
         function renderPlanPreview() {
             const container = $('#planPreview');
             container.empty();
@@ -1495,21 +1515,28 @@
                 const membershipName = $(this).find('input').eq(0).val();
                 const duration = $(this).find('input').eq(1).val();
                 const period = $(this).find('select').eq(0).val();
-                const slot = $(this).find('select').eq(1).val();
-                const regFee = $(this).find('input').eq(2).val();
-                const coachingFee = $(this).find('input').eq(3).val();
+                const slot = $(this).find('input').eq(3).val() || ''; // Correct slot input
+                const regFee = parseFloat($(this).find('input').eq(3).val()) || 0;
+                // const coachingFee = parseFloat($(this).find('input').eq(3).val()) || 0;
+                const coachingFee = parseFloat($(this).find('input').eq(4).val()) || 0;
+                const totalFeeInput = parseFloat($(this).find('input').eq(4).val()) || 0;
+
+                // Correct totalFee calculation
+                const totalFee = (regFee + coachingFee);
 
                 if (membershipName && duration && period) {
                     const div = $(`
-                        <div class="court-slot-block mb-2">
-                            <h5>${membershipName} - ${duration} ${period} <small>${slot || ''}</small></h5>
-                            <p>Registration: ₹${regFee || 0}, Coaching: ₹${coachingFee || 0}</p>
-                        </div>
-                    `);
+                <div class="court-slot-block mb-2">
+                    <h5>${membershipName} - ${duration} ${period} <small>${slot}</small></h5>
+                    <p>Registration: ₹${regFee}, Coaching: ₹${coachingFee}, <strong>Total: ₹${totalFee}</strong></p>
+                </div>
+            `);
                     container.append(div);
                 }
             });
         }
+
+
 
         // Update previews when user types in inputs
         $(document).on('input change', '#facilityContainer input', renderFacilityPreview);
