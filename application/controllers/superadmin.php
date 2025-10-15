@@ -444,10 +444,10 @@ class Superadmin extends MY_Controller
 
 
 	public function Attendance()
-{
-    $this->load->view('superadmin/attendance');
-}
-public function Add_NewStaff()
+	{
+		$this->load->view('superadmin/attendance');
+	}
+	public function Add_NewStaff()
 	{
 		$this->load->view('superadmin/Add_NewStaff');
 	}
@@ -457,16 +457,20 @@ public function Add_NewStaff()
 	}
 
 	public function Staff_manage()
-{
-    $this->load->view('superadmin/Staff_manage');
+	{
+		$this->load->view('superadmin/Staff_manage');
+	}
+
+	public function Staff_detail($id = null)
+	{
+		$this->load->view('superadmin/Staff_detail');
+	}
+	public function FNew_Admission()
+	{
+		$this->load->view('superadmin/fNew_Admission');
+	}
+	public function FRenewNew_Admission()
+	{
+		$this->load->view('superadmin/fRenewNew_Admission');
+	}
 }
-
-public function Staff_detail($id = null)
-{
-    $this->load->view('superadmin/Staff_detail');  
-}
-
-
-}
-
-
