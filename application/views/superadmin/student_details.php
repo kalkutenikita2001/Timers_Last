@@ -137,9 +137,11 @@
       </div>
 
       <div class="d-flex align-items-center gap-2 head-actions">
-        <button id="renewBtn" class="btn d-flex align-items-center gap-1">
-          <i class="bi bi-arrow-repeat"></i> Renew Admission
-        </button>
+        <a id="renewBtn"
+   class="btn d-flex align-items-center gap-1"
+   href="<?php echo base_url('superadmin/fRenewNew_Admission/'.$s['id']); ?>">
+  <i class="bi bi-arrow-repeat"></i> Renew Admission
+</a>
         <a href="<?php echo base_url('superadmin/Students'); ?>" class="btn btn-ghost">
           <i class="bi bi-arrow-left me-1"></i>Back
         </a>
@@ -317,16 +319,16 @@
       new bootstrap.Toast(wrap, { delay: 1400 }).show();
     }
 
-    btn.addEventListener('click', function(){
-      btn.disabled = true;
-      btn.classList.add('renewed');
-      btn.innerHTML = '<i class="bi bi-check2-circle"></i> Renewed';
-      showToast('Renewal started…', true);
+    // btn.addEventListener('click', function(){
+    //   btn.disabled = true;
+    //   btn.classList.add('renewed');
+    //   btn.innerHTML = '<i class="bi bi-check2-circle"></i> Renewed';
+    //   showToast('Renewal started…', true);
 
-      setTimeout(function(){
-        location.href = "<?php echo base_url('superadmin/subscription_renew/'.$s['id']); ?>";
-      }, 900);
-    });
+    //   setTimeout(function(){
+    //     location.href = "<?php echo base_url('superadmin/subscription_renew/'.$s['id']); ?>";
+    //   }, 900);
+    // });
   })();
 
   // Tenure calc (uses end date if present)
