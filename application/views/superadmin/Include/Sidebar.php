@@ -221,13 +221,13 @@
         </a>
         <div class="collapse" id="admissionMenu">
           <nav class="nav flex-column ms-3">
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'New_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/New_admission'); ?>">
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'fNew_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/fNew_admission'); ?>">
               <i class="bi bi-plus-circle"></i><span> New Admission</span>
             </a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Re_admission'); ?>">
               <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
             </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Renew_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Renew_admission'); ?>">
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'FRenewNew_Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FRenewNew_Admission'); ?>">
               <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
             </a>
           </nav>
