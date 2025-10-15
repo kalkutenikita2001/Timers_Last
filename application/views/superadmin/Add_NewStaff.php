@@ -12,12 +12,11 @@
 
   <style>
     :root{
-      /* match Staff Management */
       --accent:#ff4040; 
       --accent-dark:#470000; 
       --muted:#f4f6f8;
       --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
-      --sidebar-width:250px; /* toggled by controller */
+      --sidebar-width:250px;
     }
 
     body{ 
@@ -27,37 +26,27 @@
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
     }
 
-    /* layout (sidebar-aware) */
-   /* Fit content to screen, sidebar-aware */
-*,
-*::before,
-*::after { box-sizing: border-box; }
+    #main-content{
+      margin-left: var(--sidebar-width);
+      width: calc(100vw - var(--sidebar-width));
+      padding: 20px;
+      min-height: 100vh;
+      transition: .25s;
+      overflow-x: hidden;
+    }
+    #main-content.minimized{
+      margin-left: 60px;
+      width: calc(100vw - 60px);
+    }
 
-html, body { width:100%; max-width:100%; overflow-x:hidden; }
+    @media (max-width: 991.98px){
+      #main-content{
+        margin-left: 0 !important;
+        width: 100vw;
+        padding: 12px;
+      }
+    }
 
-#main-content{
-  margin-left: var(--sidebar-width);          /* 250px when open */
-  width: calc(100vw - var(--sidebar-width));  /* keep inside the viewport */
-  padding: 20px;
-  min-height: 100vh;
-  transition: .25s;
-  overflow-x: hidden;                          /* safety belt */
-}
-#main-content.minimized{
-  margin-left: 60px;
-  width: calc(100vw - 60px);
-}
-
-/* Mobile: sidebar overlays, content goes full width */
-@media (max-width: 991.98px){
-  #main-content{
-    margin-left: 0 !important;
-    width: 100vw;
-    padding: 12px;
-  }
-}
-
-    /* header-ish hero (lightweight) */
     .page-hero{
       border-radius:16px; border:1px solid #ffe1e1;
       background: radial-gradient(1000px 320px at -10% -20%, rgba(255,64,64,.22), transparent),
@@ -68,7 +57,6 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
     }
     .page-title{ font-weight:800; letter-spacing:.2px; }
 
-    /* toolbar */
     .toolbar{
       position:sticky; top:12px; z-index:5;
       background:#fff; border:1px solid #e9ecef; border-radius:12px; padding:10px;
@@ -79,26 +67,17 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
     .btn-primary{ background:var(--grad); border:0; font-weight:700; }
     .btn-primary:hover{ filter:brightness(.96); }
 
-    /* unified global search */
     .global-search { max-width: 600px; margin: 0 auto; transition: all .25s ease; }
     .global-search .form-control { height: 42px; border-radius: 50px; font-size:.9rem; padding-left:.5rem; border-color:#e3e3e3; }
     .global-search .form-control:focus { border-color: var(--accent); box-shadow:0 0 0 3px rgba(255,64,64,.2); }
     .global-search .input-group-text { border-radius: 50px 0 0 50px; background:#fff; border-color:#e3e3e3; }
-    .global-search:hover { transform: scale(1.01); }
 
-    /* card + table styling */
     .card-lite{ background:#fff; border-radius:14px; border:1px solid #e9ecef; box-shadow:0 6px 20px rgba(0,0,0,.05); }
     .table thead th{ position:sticky; top:0; background:#fff; z-index:2; }
     .table-hover tbody tr:hover{ background:rgba(255,64,64,.035); }
     .clickable-row { cursor:pointer; transition: background-color .2s ease; }
     .clickable-row:hover { background-color: rgba(255,64,64,.05); }
 
-    /* badges (reuse) */
-    .status-badge{ border-radius:999px; padding:.25rem .6rem; font-size:.75rem; font-weight:700; }
-    .status-active{ background:#d1e7dd; color:#0f5132; }
-    .status-deactive{ background:#e2e3e5; color:#41464b; }
-
-    /* switches (kept) */
     .switch { position:relative; display:inline-block; width:46px; height:24px; }
     .switch input{ display:none; }
     .slider{ position:absolute; left:0; top:0; right:0; bottom:0; background:#dcdcdc; border-radius:24px; transition:.25s; }
@@ -106,122 +85,69 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
     .switch input:checked + .slider{ background:#28a745; }
     .switch input:checked + .slider:before{ transform:translateX(22px); }
 
-    /* modal header gradient */
     .modal-header.bg-danger { background: var(--grad) !important; color:#fff; }
   </style>
 </head>
 <body>
-  <?php  $this->load->view('superadmin/Include/Sidebar');  ?>
+  <?php $this->load->view('superadmin/Include/Sidebar'); ?>
   <?php $this->load->view('superadmin/Include/Navbar'); ?>
 
   <div id="main-content" class="container-fluid">
-    <!-- lightweight hero to align visuals with list page -->
     <div class="page-hero mb-3">
       <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
         <div class="page-title h5 mb-0">Add & Manage Staff</div>
         <div class="d-flex flex-wrap gap-2">
-          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
-          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button> -->
+          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
         </div>
       </div>
     </div>
 
-    <!-- toolbar with global search + count -->
     <div class="toolbar mb-3">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div class="flex-grow-1">
           <div class="input-group global-search">
             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input id="searchInput" type="text" class="form-control border-start-0" placeholder="Search staff by name, email, role, center or status...">
+            <input id="searchInput" type="text" class="form-control border-start-0" placeholder="Search staff...">
           </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <span class="badge rounded-pill bg-light text-dark px-3 py-2">Total <b id="staffCount">1</b></span>
+          <span class="badge rounded-pill bg-light text-dark px-3 py-2">Total <b id="staffCount">0</b></span>
         </div>
       </div>
     </div>
 
-    <ul class="nav nav-tabs" id="staffTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overviewTab" type="button" role="tab">Overview</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staffTab" type="button" role="tab">Staff</button>
-      </li>
-    </ul>
-
-    <div class="tab-content">
-      <!-- Overview tab -->
-      <div class="tab-pane fade show active" id="overviewTab" role="tabpanel" aria-labelledby="overview-tab">
-        <div class="card-lite p-3 mt-3" id="overviewWrap">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="mb-0">Staff Overview</h5>
-            <small class="text-muted" id="overviewLastUpdated"></small>
-          </div>
-          <div id="overviewContent">
-            <p class="text-center text-muted mb-0">No staff details available. Click "Send Details" from Salary Management (or add a staff record).</p>
-          </div>
+    <div class="card-lite p-3 mt-3">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <div class="filter-options">
+          <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
+          <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
+          <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
         </div>
       </div>
 
-      <!-- Staff tab -->
-      <div class="tab-pane fade" id="staffTab" role="tabpanel" aria-labelledby="staff-tab">
-        <div class="card-lite p-3 mt-3">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-            <div class="filter-options">
-              <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
-              <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
-              <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
-            </div>
-            <button class="btn btn-primary btn-sm" id="addStaffBtn2"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table table-hover align-middle" id="staffTable">
-              <thead>
-                <tr>
-                  <th style="width:60px">Sr No</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Contact</th>
-                  <th>Joining Date</th>
-                  <th>Role</th>
-                  <th>Centers</th>
-                  <th>Slots</th>
-                  <th class="text-end" style="width:110px">Salary (₹)</th>
-                  <th class="text-center" style="width:120px">Actions</th>
-                  <th class="text-center" style="width:90px">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="clickable-row" data-status="active">
-                  <td>1</td>
-                  <td>John Doe</td>
-                  <td>john@example.com</td>
-                  <td>9876543210</td>
-                  <td>2023-01-10</td>
-                  <td>Coach</td>
-                  <td>Center A</td>
-                  <td>6-8 AM</td>
-                  <td class="text-end">25000</td>
-                  <td class="text-center">
-                    <div class="btn-group">
-                      <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
-                      <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
-                    </div>
-                  </td>
-                  <td class="text-center">
-                    <label class="switch">
-                      <input type="checkbox" class="statusToggle" checked>
-                      <span class="slider"></span>
-                    </label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle" id="staffTable">
+          <thead>
+            <tr>
+              <th style="width:60px">Sr No</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Joining Date</th>
+              <th>Role</th>
+              <th>Centers</th>
+              <th>Slots</th>
+              <th class="text-end" style="width:110px">Salary (₹)</th>
+              <th class="text-center" style="width:120px">Actions</th>
+              <th class="text-center" style="width:90px">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="11" class="text-center text-muted py-4">Loading staff data...</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -294,8 +220,9 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
             <p><strong>Role:</strong> <span id="profileRole"></span></p>
             <p><strong>Centers:</strong> <span id="profileCenters"></span></p>
             <p><strong>Slots:</strong> <span id="profileSlots"></span></p>
+            <p><strong>Salary:</strong> <span id="profileSalary"></span></p>
           </div>
-          <div id="profileSalary"></div>
+          <button type="button" class="btn btn-primary mt-3" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -303,13 +230,370 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Sidebar toggle controller (reused, with wrapper id added) -->
+  <script>
+  (function($) {
+    let editRow = null;
+    let staffData = [];
+
+    // Helper function to escape HTML
+    function escapeHtml(unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    // Load staff data from localStorage
+    function loadStaffData() {
+      console.log('Loading staff data from localStorage...');
+      const records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
+      staffData = records.map(record => ({
+        ...record,
+        contact: record.contact || '',
+        joiningDate: record.joiningDate || '',
+        centers: record.centers ? record.centers.split(', ') : [],
+        slots: record.slots ? record.slots.split(', ') : [],
+        active: record.active !== false // Default to active if not specified
+      }));
+      
+      console.log('Loaded staff data:', staffData);
+      renderStaffTable();
+      updateCount();
+    }
+
+    // Render staff table
+    function renderStaffTable() {
+      const tbody = $("#staffTable tbody");
+      if (staffData.length === 0) {
+        tbody.html(`
+          <tr>
+            <td colspan="11" class="text-center text-muted py-4">
+              No staff found. 
+              </button>
+            </td>
+          </tr>
+        `);
+        return;
+      }
+
+      tbody.empty();
+      staffData.forEach((staff, index) => {
+        const srNo = index + 1;
+        const isActive = staff.active !== false; // Active by default
+        const rowHtml = `
+          <tr class="clickable-row" data-status="${isActive ? 'active' : 'deactive'}" 
+              data-staff-id="${staff.staffId}" data-email="${staff.email}">
+            <td>${srNo}</td>
+            <td>${escapeHtml(staff.name)}</td>
+            <td>${escapeHtml(staff.email)}</td>
+            <td>${escapeHtml(staff.contact)}</td>
+            <td>${escapeHtml(staff.joiningDate)}</td>
+            <td>${escapeHtml(staff.role)}</td>
+            <td>${escapeHtml(staff.centers.join(', ') || '-')}</td>
+            <td>${escapeHtml(staff.role === 'Coach' && staff.slots.length ? staff.slots.join(', ') : '-')}</td>
+            <td class="text-end">${staff.salary || '₹0'}</td>
+            <td class="text-center">
+              <div class="btn-group">
+                <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
+              </div>
+            </td>
+            <td class="text-center">
+              <label class="switch">
+                <input type="checkbox" class="statusToggle" ${isActive ? 'checked' : ''}>
+                <span class="slider"></span>
+              </label>
+            </td>
+          </tr>`;
+        tbody.append(rowHtml);
+      });
+    }
+
+    // Create salary record
+    function createSalaryRecord(staffData) {
+      const salaryRecord = {
+        staffId: staffData.staffId,
+        name: staffData.name,
+        email: staffData.email,
+        role: staffData.role,
+        contact: staffData.contact,
+        joiningDate: staffData.joiningDate,
+        centers: staffData.centers.join(', '),
+        slots: staffData.slots.join(', '),
+        hours: '0',
+        days: '0',
+        sessions: '0',
+        rate: staffData.salary ? `₹${parseInt(staffData.salary).toLocaleString()}` : '₹0',
+        salary: staffData.salary ? `₹${parseInt(staffData.salary).toLocaleString()}` : '₹0',
+        status: 'Pending',
+        active: true, // Always active by default
+        createdAt: new Date().toISOString()
+      };
+
+      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
+      records.push(salaryRecord);
+      localStorage.setItem('salaryRecords', JSON.stringify(records));
+      
+      // Trigger storage event
+      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
+      console.log('Created salary record:', salaryRecord);
+    }
+
+    // Update salary record
+    function updateSalaryRecord(oldEmail, newData) {
+      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
+      records = records.map(record => {
+        if (record.email === oldEmail) {
+          return {
+            ...record,
+            ...newData,
+            name: newData.name,
+            email: newData.email,
+            role: newData.role,
+            contact: newData.contact,
+            joiningDate: newData.joiningDate,
+            centers: newData.centers.join(', '),
+            slots: newData.slots.join(', '),
+            rate: newData.salary ? `₹${parseInt(newData.salary).toLocaleString()}` : '₹0',
+            salary: newData.salary ? `₹${parseInt(newData.salary).toLocaleString()}` : '₹0',
+            active: newData.active !== false, // Preserve active status
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return record;
+      });
+      localStorage.setItem('salaryRecords', JSON.stringify(records));
+      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
+    }
+
+    // Delete salary record
+    function deleteSalaryRecord(staffId, email) {
+      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
+      records = records.filter(record => record.staffId !== staffId && record.email !== email);
+      localStorage.setItem('salaryRecords', JSON.stringify(records));
+      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
+    }
+
+    function updateCount() {
+      $("#staffCount").text(staffData.length);
+    }
+
+    function init() {
+      console.log('Initializing Staff Management...');
+      loadStaffData();
+      
+      // Listen for storage changes from other tabs
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'salaryRecords') {
+          console.log('Storage changed, reloading staff data');
+          loadStaffData();
+        }
+      });
+
+      bindUI();
+    }
+
+    function bindUI() {
+      // Add staff button
+      $(document).off('click', '#addStaffBtn, #addStaffBtn3').on('click', '#addStaffBtn, #addStaffBtn3', function() {
+        editRow = null;
+        $("#staffForm")[0].reset();
+        $("#slotSection").hide();
+        $(".center-check, .slot-check").prop('checked', false);
+        $("#staffModalLabel").text("Add Staff");
+        new bootstrap.Modal(document.getElementById('staffModal')).show();
+      });
+
+      // Role change handler
+      $("#roleSelect").off('change').on('change', function() {
+        $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+      });
+
+      // Form submission
+      $("#staffForm").off('submit').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const name = form.find("input[name='name']").val().trim();
+        const email = form.find("input[name='email']").val().trim();
+        const contact = form.find("input[name='contact']").val().trim();
+        const date = form.find("input[name='joining_date']").val();
+        const role = form.find("#roleSelect").val();
+        const salary = form.find("input[name='salary']").val().trim();
+        const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
+        const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
+        
+        if (!name || !email || !contact || !salary) {
+          Swal.fire("Missing info", "Please fill all required fields.", "warning");
+          return;
+        }
+
+        const staffId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const staffDataToSave = {
+          staffId,
+          name,
+          email,
+          contact,
+          joiningDate: date,
+          role,
+          salary,
+          centers,
+          slots,
+          active: true // Always active when creating new staff
+        };
+
+        if (editRow) {
+          // Update existing staff
+          const oldEmail = editRow.data('email');
+          updateSalaryRecord(oldEmail, staffDataToSave);
+          loadStaffData(); // Reload to reflect changes
+          Swal.fire("Updated!", "Staff details updated successfully.", "success");
+        } else {
+          // Add new staff
+          createSalaryRecord(staffDataToSave);
+          loadStaffData(); // Reload to show new staff
+          Swal.fire("Added!", "New staff added successfully ", "success");
+          
+          // Dispatch custom event
+          window.dispatchEvent(new CustomEvent('staffAdded', { 
+            detail: { staffId, name, email, salary, role } 
+          }));
+        }
+
+        // Close modal
+        const modalEl = document.getElementById('staffModal');
+        const bsModal = bootstrap.Modal.getInstance(modalEl);
+        if (bsModal) bsModal.hide();
+        $("#staffForm")[0].reset();
+        $("#slotSection").hide();
+        editRow = null;
+      });
+
+      // Edit button
+      $(document).off('click', '.editBtn').on('click', '.editBtn', function() {
+        editRow = $(this).closest('tr');
+        const staff = staffData.find(s => s.staffId === editRow.data('staff-id'));
+        if (!staff) return;
+
+        $("#staffForm")[0].reset();
+        $("#staffForm input[name='name']").val(staff.name);
+        $("#staffForm input[name='email']").val(staff.email);
+        $("#staffForm input[name='contact']").val(staff.contact);
+        $("#staffForm input[name='joining_date']").val(staff.joiningDate);
+        $("#roleSelect").val(staff.role);
+        $("#staffForm input[name='salary']").val(staff.salary?.replace(/[₹,]/g, '') || '');
+        
+        // Restore checkboxes
+        $(".center-check").prop('checked', false);
+        staff.centers.forEach(center => $(`.center-check[value="${center}"]`).prop('checked', true));
+        $(".slot-check").prop('checked', false);
+        staff.slots.forEach(slot => $(`.slot-check[value="${slot}"]`).prop('checked', true));
+        
+        $("#roleSelect").val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+        $("#staffModalLabel").text("Edit Staff");
+        new bootstrap.Modal(document.getElementById('staffModal')).show();
+      });
+
+      // View button
+      $(document).off('click', '.viewBtn').on('click', '.viewBtn', function() {
+        const row = $(this).closest('tr');
+        const staff = staffData.find(s => s.staffId === row.data('staff-id'));
+        if (!staff) return;
+
+        $("#profileName").text(staff.name);
+        $("#profileEmail").text(staff.email);
+        $("#profileContact").text(staff.contact);
+        $("#profileDate").text(staff.joiningDate);
+        $("#profileRole").text(staff.role);
+        $("#profileCenters").text(staff.centers.join(', ') || '-');
+        $("#profileSlots").text(staff.slots.join(', ') || '-');
+        $("#profileSalary").text(staff.salary || '₹0');
+        new bootstrap.Modal(document.getElementById('viewProfileModal')).show();
+      });
+
+      // Delete button
+      $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function() {
+        const row = $(this).closest('tr');
+        const staffId = row.data('staff-id');
+        const email = row.data('email');
+        const name = row.find("td:eq(1)").text();
+
+        Swal.fire({
+          title: "Are you sure?",
+          text: `This will delete ${name} and their salary record.`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d00000",
+          confirmButtonText: "Delete"
+        }).then(result => {
+          if (result.isConfirmed) {
+            deleteSalaryRecord(staffId, email);
+            loadStaffData();
+            Swal.fire("Deleted!", "Staff and salary records deleted.", "success");
+            
+            window.dispatchEvent(new CustomEvent('staffDeleted', { 
+              detail: { staffId, email } 
+            }));
+          }
+        });
+      });
+
+      // Status toggle
+      $(document).off('change', '.statusToggle').on('change', '.statusToggle', function() {
+        const row = $(this).closest('tr');
+        const staffId = row.data('staff-id');
+        const isActive = $(this).is(':checked');
+        const staff = staffData.find(s => s.staffId === staffId);
+        
+        if (staff) {
+          staff.active = isActive;
+          updateSalaryRecord(staff.email, { ...staff, active: isActive });
+          row.attr('data-status', isActive ? 'active' : 'deactive');
+          loadStaffData(); // Reload to update status display
+          Swal.fire(isActive ? "Activated" : "Deactivated", 
+                   `Status changed to ${isActive ? 'Active' : 'Inactive'}`, 
+                   isActive ? "success" : "info");
+        }
+      });
+
+      // Filters
+      $(document).off('click', '.filter-options .btn').on('click', '.filter-options .btn', function() {
+        $(".filter-options .btn").removeClass('active');
+        $(this).addClass('active');
+        const filter = $(this).data('filter');
+        $("#staffTable tbody tr").each(function() {
+          const status = $(this).attr('data-status') || 'active';
+          if (filter === 'all' || status === filter) $(this).show(); else $(this).hide();
+        });
+      });
+
+      // Search
+      $("#searchInput").off('input').on('input', function() {
+        const value = $(this).val().toLowerCase();
+        $("#staffTable tbody tr").each(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+    }
+
+    // Initialize when DOM is ready
+    $(function() {
+      init();
+    });
+
+  })(jQuery);
+  </script>
+
+  <!-- Sidebar toggle script -->
   <script>
   (function () {
     const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
     const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
-    const WRAPPER_IDS = ['main-content','dashboardWrapper','financeWrap']; // added main-content
-    const DESKTOP_WIDTH_CUTOFF = 576;
+    const WRAPPER_IDS = ['main-content'];
+    const DESKTOP_WIDTH_CUTOFF = 991.98;
     const SIDEBAR_OPEN_CLASS = 'active';
     const SIDEBAR_MIN_CLASS = 'minimized';
     const BODY_OVERLAY_CLASS = 'sidebar-open';
@@ -320,302 +604,113 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
     const qs = s => document.querySelector(s);
     const qsa = s => Array.from(document.querySelectorAll(s));
     const sidebarEl = () => qs('#sidebar') || qs('.sidebar') || qs('.main-sidebar');
-    const wrapperEl = () => WRAPPER_IDS.map(id => document.getElementById(id)).find(Boolean) || qs('.wrap') || qs('#main-content');
+    const wrapperEl = () => WRAPPER_IDS.map(id => document.getElementById(id)).find(Boolean);
     const isMobile = () => window.innerWidth <= DESKTOP_WIDTH_CUTOFF;
 
     let backdrop = qs('.sidebar-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div');
       backdrop.className = 'sidebar-backdrop';
-      backdrop.style.position = 'fixed';
-      backdrop.style.inset = '0';
-      backdrop.style.background = 'rgba(0,0,0,0.42)';
-      backdrop.style.zIndex = '1070';
-      backdrop.style.display = 'none';
-      backdrop.style.opacity = '0';
-      backdrop.style.transition = 'opacity .18s ease';
+      Object.assign(backdrop.style, {
+        position: 'fixed',
+        inset: '0',
+        background: 'rgba(0,0,0,0.42)',
+        zIndex: '1070',
+        display: 'none',
+        opacity: '0',
+        transition: 'opacity .18s ease'
+      });
       document.body.appendChild(backdrop);
     }
 
-    let lock = false; const lockFor = (ms=320)=>{ lock=true; clearTimeout(lock._t); lock._t=setTimeout(()=>lock=false,ms); };
-    let lastInteractionAt = 0; const INTERACTION_GAP = 700;
+    let lock = false;
+    const lockFor = (ms = 320) => {
+      lock = true;
+      clearTimeout(lock._t);
+      lock._t = setTimeout(() => lock = false, ms);
+    };
+    let lastInteractionAt = 0;
+    const INTERACTION_GAP = 700;
 
-    function openMobileSidebar(){
-      const s = sidebarEl(); if (!s) return;
+    function openMobileSidebar() {
+      const s = sidebarEl();
+      if (!s) return;
       s.classList.add(SIDEBAR_OPEN_CLASS);
       document.body.classList.add(BODY_OVERLAY_CLASS);
       document.body.style.overflow = 'hidden';
       backdrop.style.display = 'block';
-      requestAnimationFrame(()=> backdrop.style.opacity = '1');
+      requestAnimationFrame(() => backdrop.style.opacity = '1');
     }
-    function closeMobileSidebar(){
-      const s = sidebarEl(); if (s) s.classList.remove(SIDEBAR_OPEN_CLASS);
+
+    function closeMobileSidebar() {
+      const s = sidebarEl();
+      if (s) s.classList.remove(SIDEBAR_OPEN_CLASS);
       document.body.classList.remove(BODY_OVERLAY_CLASS);
       document.body.style.overflow = '';
       backdrop.style.opacity = '0';
-      setTimeout(()=>{ if(!document.body.classList.contains(BODY_OVERLAY_CLASS)) backdrop.style.display='none'; },220);
+      setTimeout(() => {
+        if (!document.body.classList.contains(BODY_OVERLAY_CLASS)) 
+          backdrop.style.display = 'none';
+      }, 220);
     }
-    function toggleDesktopSidebar(){
-      const s = sidebarEl(); if (!s) return;
+
+    function toggleDesktopSidebar() {
+      const s = sidebarEl();
+      if (!s) return;
       const isMin = s.classList.toggle(SIDEBAR_MIN_CLASS);
-      const w = wrapperEl(); if (w) w.classList.toggle('minimized', isMin);
-      const nav = qs('.navbar'); if (nav) nav.classList.toggle('sidebar-minimized', isMin);
+      const w = wrapperEl();
+      if (w) w.classList.toggle('minimized', isMin);
       document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
-      document.dispatchEvent(new CustomEvent('sidebarToggle', { detail:{ minimized:isMin }}));
-      setTimeout(()=> window.dispatchEvent(new Event('resize')), 220);
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 220);
     }
-    function handleToggleEvent(e){
-      if (e && e.type==='click' && (Date.now()-lastInteractionAt) < INTERACTION_GAP) return;
+
+    function handleToggleEvent(e) {
+      if ((Date.now() - lastInteractionAt) < INTERACTION_GAP) return;
       if (lock) return;
-      if (isMobile()){ lockFor(260); document.body.classList.contains(BODY_OVERLAY_CLASS) ? closeMobileSidebar() : openMobileSidebar(); }
-      else { lockFor(260); toggleDesktopSidebar(); }
+      lastInteractionAt = Date.now();
+      lockFor(260);
+      isMobile() ? 
+        document.body.classList.contains(BODY_OVERLAY_CLASS) ? 
+          closeMobileSidebar() : openMobileSidebar() :
+        toggleDesktopSidebar();
     }
-    function wireToggleButtons(){
-      const toggles = qsa(TOGGLE_SELECTORS);
-      toggles.forEach(el=>{
+
+    function wireToggleButtons() {
+      qsa(TOGGLE_SELECTORS).forEach(el => {
         if (el.__sidebarToggleBound) return;
         el.__sidebarToggleBound = true;
-        el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true});
-        el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); });
+        el.addEventListener('click', handleToggleEvent);
       });
     }
 
-    document.addEventListener('pointerdown', function (ev) {
-      if (ev.pointerType==='touch' || ev.pointerType==='pen') {
-        const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-        if (t){ lastInteractionAt=Date.now(); handleToggleEvent(ev); }
-      }
-    }, {passive:true});
-    document.addEventListener('click', function (ev) {
-      const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-      if (t) handleToggleEvent(ev);
-    });
-    backdrop.addEventListener('click', function(){ if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
-    document.addEventListener('click', function(e){
-      if (!isMobile()) return;
-      const inside = e.target.closest && e.target.closest(SIDEBAR_SELECTORS);
-      if (!inside) return;
-      const a = e.target.closest && e.target.closest('a');
-      if (a && a.getAttribute('href') && a.getAttribute('href') !== '#') { setTimeout(closeMobileSidebar,160); }
-    });
-    document.addEventListener('keydown', function(ev){ if (ev.key==='Escape' && document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
-
-    let resizeTimer=null;
-    window.addEventListener('resize', function(){
-      clearTimeout(resizeTimer);
-      resizeTimer=setTimeout(function(){
-        if (!isMobile()){
-          closeMobileSidebar();
-          const s = sidebarEl();
-          const isMin = s && s.classList.contains(SIDEBAR_MIN_CLASS);
-          document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
-        }
-      },120);
+    // Event listeners
+    document.addEventListener('click', e => {
+      const target = e.target.closest(TOGGLE_SELECTORS);
+      if (target) handleToggleEvent(e);
     });
 
-    if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
-      backdrop.style.display='block'; backdrop.style.opacity='1'; document.body.style.overflow='hidden';
-    }
+    backdrop.addEventListener('click', () => {
+      if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar();
+    });
 
-    (function ensureFallbackToggle(){
-      const qsN = s=>document.querySelector(s);
-      if (qsN(TOGGLE_SELECTORS)){ wireToggleButtons(); return; }
-      const navbar = qsN('.navbar, header, .main-header, .topbar');
-      if (!navbar) return;
+    window.addEventListener('resize', () => {
+      if (!isMobile()) closeMobileSidebar();
+    });
+
+    // Auto-create toggle button if navbar exists
+    const navbar = qs('.navbar, header, .main-header');
+    if (navbar && !qs(TOGGLE_SELECTORS)) {
       const btn = document.createElement('button');
-      btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
-      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      btn.id = 'sidebarToggle';
+      btn.className = 'btn btn-sm btn-light me-2';
+      btn.innerHTML = '<i class="bi bi-list"></i>';
+      btn.setAttribute('aria-label', 'Toggle sidebar');
       navbar.prepend(btn);
       wireToggleButtons();
-    })();
+    }
 
     document.addEventListener('DOMContentLoaded', wireToggleButtons);
   })();
-  </script>
-
-  <!-- Page logic (kept functionality, wired to new UI) -->
-  <script>
-    (function($){
-      let editRow = null;
-
-      function init() {
-        updateCount();
-        bindUI();
-        loadOverviewFromStorage();
-      }
-
-      function updateCount(){
-        const count = $("#staffTable tbody tr").length;
-        $("#staffCount").text(count);
-      }
-
-      function bindUI(){
-        const openAdd = () => {
-          editRow = null;
-          $("#staffForm")[0].reset();
-          $("#slotSection").hide();
-          $(".center-check, .slot-check").prop('checked', false);
-          $("#staffModalLabel").text("Add Staff");
-          new bootstrap.Modal(document.getElementById('staffModal')).show();
-        };
-        $("#addStaffBtn, #addStaffBtn2").off('click').on('click', openAdd);
-
-        $("#roleSelect").off('change').on("change", function(){
-          $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-        });
-
-        $("#staffForm").off('submit').on("submit", function(e){
-          e.preventDefault();
-          const form = $(this);
-          const name = form.find("input[name='name']").val().trim();
-          const email = form.find("input[name='email']").val().trim();
-          const contact = form.find("input[name='contact']").val().trim();
-          const date = form.find("input[name='joining_date']").val();
-          const role = form.find("#roleSelect").val();
-          const salary = form.find("input[name='salary']").val().trim();
-          const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
-          const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
-          if (!name || !email || !contact){ Swal.fire("Missing info","Please fill required fields.","warning"); return; }
-
-          const tbody = $("#staffTable tbody");
-          if (editRow) {
-            editRow.find("td:eq(1)").text(name);
-            editRow.find("td:eq(2)").text(email);
-            editRow.find("td:eq(3)").text(contact);
-            editRow.find("td:eq(4)").text(date);
-            editRow.find("td:eq(5)").text(role);
-            editRow.find("td:eq(6)").text(centers.length?centers.join(", "):'-');
-            editRow.find("td:eq(7)").text(role==="Coach" && slots.length?slots.join(", "):'-');
-            editRow.find("td:eq(8)").text(salary||'-');
-            Swal.fire("Updated!","Staff details updated successfully.","success");
-          } else {
-            const srNo = tbody.children("tr").length + 1;
-            const rowHtml = `
-              <tr class="clickable-row" data-status="active">
-                <td>${srNo}</td>
-                <td>${escapeHtml(name)}</td>
-                <td>${escapeHtml(email)}</td>
-                <td>${escapeHtml(contact)}</td>
-                <td>${escapeHtml(date)}</td>
-                <td>${escapeHtml(role)}</td>
-                <td>${escapeHtml(centers.length?centers.join(", "):'-')}</td>
-                <td>${escapeHtml(role==="Coach" && slots.length?slots.join(", "):'-')}</td>
-                <td class="text-end">${escapeHtml(salary||'-')}</td>
-                <td class="text-center">
-                  <div class="btn-group">
-                    <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
-                    <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <label class="switch">
-                    <input type="checkbox" class="statusToggle" checked>
-                    <span class="slider"></span>
-                  </label>
-                </td>
-              </tr>`;
-            tbody.append($(rowHtml));
-            Swal.fire("Added!","New staff added successfully.","success");
-            updateCount();
-          }
-          const modalEl = document.getElementById('staffModal');
-          const bsModal = bootstrap.Modal.getInstance(modalEl); if (bsModal) bsModal.hide();
-          $("#staffForm")[0].reset(); $("#slotSection").hide(); editRow = null;
-        });
-
-        $(document).off('click', '.editBtn').on('click', '.editBtn', function(){
-          const row = $(this).closest('tr'); editRow = row;
-          $("#staffForm")[0].reset();
-          $("#staffForm input[name='name']").val(row.find("td:eq(1)").text());
-          $("#staffForm input[name='email']").val(row.find("td:eq(2)").text());
-          $("#staffForm input[name='contact']").val(row.find("td:eq(3)").text());
-          $("#staffForm input[name='joining_date']").val(row.find("td:eq(4)").text());
-          $("#roleSelect").val(row.find("td:eq(5)").text());
-          $("#staffForm input[name='salary']").val(row.find("td:eq(8)").text());
-          const centersText = row.find("td:eq(6)").text();
-          $(".center-check").prop('checked', false);
-          if (centersText && centersText !== '-') centersText.split(',').map(s=>s.trim()).forEach(v=>{$(`.center-check[value="${v}"]`).prop('checked', true);});
-          const slotsText = row.find("td:eq(7)").text();
-          $(".slot-check").prop('checked', false);
-          if (slotsText && slotsText !== '-') slotsText.split(',').map(s=>s.trim()).forEach(v=>{$(`.slot-check[value="${v}"]`).prop('checked', true);});
-          $("#roleSelect").val()==="Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-          $("#staffModalLabel").text("Edit Staff");
-          new bootstrap.Modal(document.getElementById('staffModal')).show();
-        });
-
-        $(document).off('click', '.viewBtn').on('click', '.viewBtn', function(){
-          const row = $(this).closest('tr');
-          $("#profileName").text(row.find("td:eq(1)").text());
-          $("#profileEmail").text(row.find("td:eq(2)").text());
-          $("#profileContact").text(row.find("td:eq(3)").text());
-          $("#profileDate").text(row.find("td:eq(4)").text());
-          $("#profileRole").text(row.find("td:eq(5)").text());
-          $("#profileCenters").text(row.find("td:eq(6)").text());
-          $("#profileSlots").text(row.find("td:eq(7)").text());
-          const salary = row.find("td:eq(8)").text().trim();
-          if (!salary || salary==='-' || salary==='0') $("#profileSalary").text("No salary assigned").addClass("no-salary");
-          else $("#profileSalary").text("Income: ₹"+salary).removeClass("no-salary");
-          new bootstrap.Modal(document.getElementById('viewProfileModal')).show();
-        });
-
-        $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function(){
-          const row = $(this).closest('tr');
-          Swal.fire({ title:"Are you sure?", text:"This staff record will be deleted.", icon:"warning", showCancelButton:true, confirmButtonColor:"#d00000", cancelButtonColor:"#6c757d", confirmButtonText:"Delete" })
-          .then(r=>{ if(r.isConfirmed){ row.remove(); $("#staffTable tbody tr").each(function(i){ $(this).find("td:eq(0)").text(i+1); }); updateCount(); Swal.fire("Deleted!","Staff record deleted successfully.","success"); }});
-        });
-
-        $(document).off('change', '.statusToggle').on('change', '.statusToggle', function(){
-          const row = $(this).closest('tr');
-          if ($(this).is(':checked')){ row.attr('data-status','active'); Swal.fire("Activated","Status changed to Active","success"); }
-          else { row.attr('data-status','deactive'); Swal.fire("Deactivated","Status changed to Inactive","info"); }
-        });
-
-        $(document).off('click', '.filter-options .btn').on('click', '.filter-options .btn', function(){
-          $(".filter-options .btn").removeClass('active');
-          $(this).addClass('active');
-          const filter = $(this).data('filter');
-          $("#staffTable tbody tr").each(function(){
-            const status = $(this).attr('data-status')||'active';
-            if (filter==='all' || status===filter) $(this).show(); else $(this).hide();
-          });
-        });
-
-        $("#searchInput").off('input').on('input', function(){
-          const value = $(this).val().toLowerCase();
-          $("#staffTable tbody tr").each(function(){
-            $(this).toggle($(this).text().toLowerCase().indexOf(value)>-1);
-          });
-        });
-      }
-
-      function loadOverviewFromStorage(){
-        const data = localStorage.getItem('staffSalaryData');
-        if (!data) return;
-        try{ const staff = JSON.parse(data); const html = buildOverviewHtml(staff); $("#overviewContent").html(html); $("#overviewLastUpdated").text("Updated: "+ new Date().toLocaleString()); }catch(e){ console.warn('Invalid staff data'); }
-      }
-
-      function buildOverviewHtml(staff){
-        const esc = s=>escapeHtml(s??'-');
-        return `
-          <div class="row g-2">
-            <div class="col-12"><h6 class="mb-1">${esc(staff.name)}</h6><p class="text-muted mb-3">Latest salary snapshot from Salary Management</p></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Hours</div><div>${esc(staff.hours)}</div></div></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Days</div><div>${esc(staff.days)}</div></div></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Sessions</div><div>${esc(staff.sessions)}</div></div></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Rate</div><div>${esc(staff.rate)}</div></div></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Salary</div><div>${esc(staff.salary)}</div></div></div>
-            <div class="col-sm-6 col-md-4 col-lg-3"><div class="card-lite p-2"><div class="small text-muted">Status</div><div>${esc(staff.status)}</div></div></div>
-          </div>`;
-      }
-
-      function escapeHtml(unsafe){
-        if (unsafe===null || unsafe===undefined) return '';
-        return String(unsafe).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
-      }
-
-      $(function(){ init(); });
-    })(jQuery);
   </script>
 </body>
 </html>
