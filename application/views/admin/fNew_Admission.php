@@ -303,9 +303,9 @@
 
 <body>
     <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <?php $this->load->view('admin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <?php $this->load->view('admin/Include/Navbar') ?>
     <!-- Main Content -->
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid mt-4">

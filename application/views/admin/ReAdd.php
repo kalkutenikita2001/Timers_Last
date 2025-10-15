@@ -15,15 +15,10 @@
     <style>
         :root {
             --accent: #ff4040;
-            /* Primary brand red */
             --accent-dark: #470000;
-            /* Deep maroon for depth and contrast */
             --muted: #f4f6f8;
-            /* Soft background gray */
             --text-dark: #111111;
-            /* Default text color */
             --text-light: #ffffff;
-            /* Light text for dark backgrounds */
         }
 
         body {
@@ -124,7 +119,6 @@
         .nav-tabs .nav-link {
             color: var(--text-dark);
             font-weight: 500;
-
         }
 
         .nav-tabs .nav-link.active {
@@ -275,6 +269,75 @@
             border-bottom: 1px solid #eee;
         }
 
+        .member-type-toggle {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-type-toggle button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .member-type-toggle button.active {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+        }
+
+        .member-type-toggle button:first-child {
+            border-right: 1px solid #ddd;
+        }
+
+        .group-member-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .group-member-row {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--accent);
+        }
+
+        .group-member-row h6 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-member {
+            background-color: white;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .add-member-btn {
+            margin-top: 10px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 left: -250px;
@@ -303,9 +366,9 @@
 
 <body>
     <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <?php $this->load->view('admin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <?php $this->load->view('admin/Include/Navbar') ?>
     <!-- Main Content -->
     <div class="content-wrapper" id="contentWrapper">
         <div class="container-fluid mt-4">
@@ -314,87 +377,109 @@
                     <h4 class="mb-0"><i class="fas fa-user-plus mr-2"></i> Member Registration</h4>
                 </div>
                 <div class="card-body">
+                    <!-- Member Type Selection -->
+                    <div class="member-type-toggle">
+                        <button type="button" class="active" id="individualBtn">Individual Registration</button>
+                        <button type="button" id="groupBtn">Group Registration</button>
+                    </div>
+
                     <!-- Personal Details -->
                     <h5 class="mb-3"><i class="fas fa-user mr-2 text-primary"></i>Personal Details</h5>
                     <form id="memberForm">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="memberName" placeholder="Enter Full Name" required>
-                                <div class="invalid-feedback">Please enter member name.</div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Gender <span class="text-danger">*</span></label>
-                                <select class="form-control" id="memberGender" required>
-                                    <option value="" selected disabled>Select Gender</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </select>
-                                <div class="invalid-feedback">Please select gender.</div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="memberEmail" placeholder="Enter Email Address" required>
-                                <div class="invalid-feedback">Please enter a valid email address.</div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Phone Number <span class="text-danger">*</span></label>
-                                <input type="tel" class="form-control" id="memberPhone" placeholder="Enter Phone Number" required>
-                                <div class="invalid-feedback">Please enter a valid phone number.</div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Date of Birth <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="memberDOB" required>
-                                <div class="invalid-feedback">Please select date of birth.</div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Blood Group</label>
-                                <select class="form-control" id="memberBloodGroup">
-                                    <option value="" selected disabled>Select Blood Group</option>
-                                    <option>A+</option>
-                                    <option>A-</option>
-                                    <option>B+</option>
-                                    <option>B-</option>
-                                    <option>AB+</option>
-                                    <option>AB-</option>
-                                    <option>O+</option>
-                                    <option>O-</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Address <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="memberAddress" rows="3" placeholder="Enter Full Address" required></textarea>
-                                <div class="invalid-feedback">Please enter address.</div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Alternate Mobile Number</label>
-                                <input type="tel" class="form-control" id="memberAltPhone" placeholder="Enter Alternate Phone Number">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Joining Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="memberJoiningDate" required>
-                                <div class="invalid-feedback">Please select joining date.</div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Upload Document</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="documentUpload">
-                                    <label class="custom-file-label" for="documentUpload">Choose file</label>
+                        <!-- Individual Member Form -->
+                        <div id="individualForm">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="memberName" placeholder="Enter Full Name" required>
+                                    <div class="invalid-feedback">Please enter member name.</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Gender <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="memberGender" required>
+                                        <option value="" selected disabled>Select Gender</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Other</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select gender.</div>
                                 </div>
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Email <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="memberEmail" placeholder="Enter Email Address" required>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="memberPhone" placeholder="Enter Phone Number" required>
+                                    <div class="invalid-feedback">Please enter a valid phone number.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Date of Birth <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="memberDOB" required>
+                                    <div class="invalid-feedback">Please select date of birth.</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Blood Group</label>
+                                    <select class="form-control" id="memberBloodGroup">
+                                        <option value="" selected disabled>Select Blood Group</option>
+                                        <option>A+</option>
+                                        <option>A-</option>
+                                        <option>B+</option>
+                                        <option>B-</option>
+                                        <option>AB+</option>
+                                        <option>AB-</option>
+                                        <option>O+</option>
+                                        <option>O-</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Address <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="memberAddress" rows="3" placeholder="Enter Full Address" required></textarea>
+                                    <div class="invalid-feedback">Please enter address.</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Alternate Mobile Number</label>
+                                    <input type="tel" class="form-control" id="memberAltPhone" placeholder="Enter Alternate Phone Number">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Joining Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="memberJoiningDate" required>
+                                    <div class="invalid-feedback">Please select joining date.</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Upload Document</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="documentUpload">
+                                        <label class="custom-file-label" for="documentUpload">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group Members Section -->
+                        <div id="groupForm" class="group-member-section">
+                            <h5 class="mb-3"><i class="fas fa-users mr-2 text-primary"></i>Group Members</h5>
+
+                            <div id="groupMembersContainer">
+                                <!-- Group member rows will be added here dynamically -->
+                            </div>
+
+                            <button type="button" class="btn btn-outline-primary add-member-btn" id="addMemberBtn">
+                                <i class="fas fa-plus mr-2"></i> Add Another Member
+                            </button>
                         </div>
 
                         <hr>
@@ -539,7 +624,6 @@
                                                 <th>Installment</th>
                                                 <th>Amount</th>
                                                 <th>Due Date</th>
-                                                <!-- <th>Status</th> -->
                                             </tr>
                                         </thead>
                                         <tbody id="installmentTableBody">
@@ -600,6 +684,119 @@
                 $('.sidebar').toggleClass('minimized');
                 $('.navbar').toggleClass('sidebar-minimized');
                 $('#contentWrapper').toggleClass('minimized');
+            });
+
+            // Member type toggle
+            $('#individualBtn').on('click', function() {
+                $(this).addClass('active');
+                $('#groupBtn').removeClass('active');
+                $('#individualForm').show();
+                $('#groupForm').hide();
+            });
+
+            $('#groupBtn').on('click', function() {
+                $(this).addClass('active');
+                $('#individualBtn').removeClass('active');
+                $('#individualForm').hide();
+                $('#groupForm').show();
+            });
+
+            // Add group member functionality
+            let memberCount = 0;
+
+            function addGroupMember() {
+                memberCount++;
+                const memberRow = `
+                    <div class="group-member-row" id="memberRow${memberCount}">
+                        <h6>Member ${memberCount} <button type="button" class="remove-member" data-id="${memberCount}"><i class="fas fa-trash"></i>
+</i></button></h6>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="groupMemberName${memberCount}" placeholder="Enter Full Name" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Gender <span class="text-danger">*</span></label>
+                                <select class="form-control" name="groupMemberGender${memberCount}" required>
+                                    <option value="" selected disabled>Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="groupMemberEmail${memberCount}" placeholder="Enter Email Address" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" name="groupMemberPhone${memberCount}" placeholder="Enter Phone Number" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Date of Birth <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="groupMemberDOB${memberCount}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Blood Group</label>
+                                <select class="form-control" name="groupMemberBloodGroup${memberCount}">
+                                    <option value="" selected disabled>Select Blood Group</option>
+                                    <option>A+</option>
+                                    <option>A-</option>
+                                    <option>B+</option>
+                                    <option>B-</option>
+                                    <option>AB+</option>
+                                    <option>AB-</option>
+                                    <option>O+</option>
+                                    <option>O-</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="groupMemberAddress${memberCount}" rows="2" placeholder="Enter Full Address" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                $('#groupMembersContainer').append(memberRow);
+
+                // Add event listener to the remove button
+                $(`#memberRow${memberCount} .remove-member`).on('click', function() {
+                    const id = $(this).data('id');
+                    $(`#memberRow${id}`).remove();
+                    // Reorder remaining members
+                    reorderMembers();
+                });
+            }
+
+            function reorderMembers() {
+                const memberRows = $('.group-member-row');
+                memberCount = 0;
+
+                memberRows.each(function(index) {
+                    memberCount++;
+                    $(this).find('h6').html(`Member ${memberCount} <button type="button" class="remove-member" data-id="${memberCount}"><i class="fas fa-times"></i></button>`);
+                    $(this).attr('id', `memberRow${memberCount}`);
+                    $(this).find('.remove-member').data('id', memberCount);
+                });
+            }
+
+            // Add first member when group registration is selected
+            $('#groupBtn').on('click', function() {
+                if (memberCount === 0) {
+                    addGroupMember();
+                }
+            });
+
+            // Add member button
+            $('#addMemberBtn').on('click', function() {
+                addGroupMember();
             });
 
             // Set current date for invoice
@@ -677,7 +874,6 @@
                 updatePaymentSummary(); // ADD THIS LINE
             });
 
-            // Generate installment plan
             // Generate installment plan
             function generateInstallmentPlan() {
                 const totalAmount = parseInt($('#totalAmount').text()) || 0;
@@ -1026,33 +1222,82 @@
 
                 let isValid = true;
 
-                // Validate personal details
-                const requiredFields = [
-                    '#memberName', '#memberGender', '#memberEmail', '#memberPhone',
-                    '#memberDOB', '#memberAddress', '#memberJoiningDate'
-                ];
+                // Validate based on member type
+                if ($('#individualBtn').hasClass('active')) {
+                    // Validate individual member form
+                    const requiredFields = [
+                        '#memberName', '#memberGender', '#memberEmail', '#memberPhone',
+                        '#memberDOB', '#memberAddress', '#memberJoiningDate'
+                    ];
 
-                requiredFields.forEach(field => {
-                    if (!$(field).val()) {
-                        $(field).addClass('is-invalid');
+                    requiredFields.forEach(field => {
+                        if (!$(field).val()) {
+                            $(field).addClass('is-invalid');
+                            isValid = false;
+                        }
+                    });
+
+                    // Validate email format
+                    const email = $('#memberEmail').val();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (email && !emailRegex.test(email)) {
+                        $('#memberEmail').addClass('is-invalid');
                         isValid = false;
                     }
-                });
 
-                // Validate email format
-                const email = $('#memberEmail').val();
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (email && !emailRegex.test(email)) {
-                    $('#memberEmail').addClass('is-invalid');
-                    isValid = false;
-                }
+                    // Validate phone number (basic validation)
+                    const phone = $('#memberPhone').val();
+                    const phoneRegex = /^\d{10}$/;
+                    if (phone && !phoneRegex.test(phone)) {
+                        $('#memberPhone').addClass('is-invalid');
+                        isValid = false;
+                    }
+                } else {
+                    // Validate group members
+                    const memberRows = $('.group-member-row');
+                    if (memberRows.length === 0) {
+                        isValid = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No Members Added',
+                            text: 'Please add at least one group member.',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    }
 
-                // Validate phone number (basic validation)
-                const phone = $('#memberPhone').val();
-                const phoneRegex = /^\d{10}$/;
-                if (phone && !phoneRegex.test(phone)) {
-                    $('#memberPhone').addClass('is-invalid');
-                    isValid = false;
+                    // Validate each group member
+                    memberRows.each(function() {
+                        const name = $(this).find('input[name^="groupMemberName"]').val();
+                        const gender = $(this).find('select[name^="groupMemberGender"]').val();
+                        const email = $(this).find('input[name^="groupMemberEmail"]').val();
+                        const phone = $(this).find('input[name^="groupMemberPhone"]').val();
+                        const dob = $(this).find('input[name^="groupMemberDOB"]').val();
+                        const address = $(this).find('textarea[name^="groupMemberAddress"]').val();
+
+                        if (!name || !gender || !email || !phone || !dob || !address) {
+                            isValid = false;
+                            $(this).find('input, select, textarea').each(function() {
+                                if (!$(this).val()) {
+                                    $(this).addClass('is-invalid');
+                                }
+                            });
+                        }
+
+                        // Validate email format
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (email && !emailRegex.test(email)) {
+                            $(this).find('input[name^="groupMemberEmail"]').addClass('is-invalid');
+                            isValid = false;
+                        }
+
+                        // Validate phone number
+                        const phoneRegex = /^\d{10}$/;
+                        if (phone && !phoneRegex.test(phone)) {
+                            $(this).find('input[name^="groupMemberPhone"]').addClass('is-invalid');
+                            isValid = false;
+                        }
+                    });
                 }
 
                 // Validate subscription tab if active
@@ -1156,6 +1401,15 @@
                     $(this).removeClass('is-invalid');
                 }
             });
+        });
+        // Assuming you have a save button with id="saveMemberBtn"
+        document.getElementById('saveMemberBtn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default form submission if needed
+
+            // Your save logic here...
+
+            // After successful save, redirect to receipt
+            window.location.href = "<?php echo base_url('superadmin/receipt'); ?>";
         });
     </script>
 </body>

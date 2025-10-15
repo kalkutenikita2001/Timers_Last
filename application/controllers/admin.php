@@ -25,13 +25,13 @@ class Admin extends CI_Controller
 
         $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
         }
 
-        
+
 
 
         $this->load->view('admin/Dashboard');
@@ -39,9 +39,9 @@ class Admin extends CI_Controller
 
     public function EventAndNotice()
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -82,9 +82,9 @@ class Admin extends CI_Controller
 
     public function Expenses()
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -343,9 +343,9 @@ class Admin extends CI_Controller
     }
     public function New_admission()
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -356,9 +356,9 @@ class Admin extends CI_Controller
     }
     public function Re_admission()
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -392,9 +392,9 @@ class Admin extends CI_Controller
 
     public function Students()
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -419,9 +419,9 @@ class Admin extends CI_Controller
 
     public function student_details($id = null)
     {
-         $center_id = $this->session->userdata('center_id');
+        $center_id = $this->session->userdata('center_id');
 
-     
+
         if (!$center_id) {
             redirect('auth/logout');
             return;
@@ -477,7 +477,7 @@ class Admin extends CI_Controller
 
         $data['get_last_attendace'] = $this->Student_model->get_last_attendace($id);
 
-        
+
 
         // print_r($data['student_attendace'] );
 
@@ -693,5 +693,16 @@ class Admin extends CI_Controller
         return $this->output->set_content_type('application/json')
             ->set_output(json_encode(['success' => false, 'message' => 'Delete failed']));
     }
-
+    public function FNew_Admission()
+    {
+        $this->load->view('admin/fNew_Admission');
+    }
+    public function FRenewNew_Admission()
+    {
+        $this->load->view('admin/fRenewNew_Admission');
+    }
+    public function ReAdd()
+    {
+        $this->load->view('admin/ReAdd');
+    }
 }
