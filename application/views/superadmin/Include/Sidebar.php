@@ -307,11 +307,11 @@
       </a>
   -->
 
-      <!--
+      
 <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
     <i class="bi bi-person-circle"></i><span> Expenses Management</span>
 </a>
--->
+
 
 
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">

@@ -135,8 +135,11 @@
           </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
-          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button> -->
+<a class="btn btn-primary" id="addStaffBtn"
+   href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
+  <i class="bi bi-plus-circle me-1"></i>Add Staff
+</a>
         </div>
       </div>
 
