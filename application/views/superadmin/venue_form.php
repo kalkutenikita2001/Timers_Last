@@ -978,6 +978,10 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+    var base_url = "<?php echo base_url(); ?>";
+</script>
+
+    <script>
         // Sample data for demonstration
         let venues = [{
                 id: 1,
@@ -1260,100 +1264,160 @@
             for (let i = 1; i <= num; i++) {
                 container.append(`
                     <div class="form-row mb-2 court-item">
-                        <div class="form-group col-md-6">
-                            <label>Court ${i} Name</label>
-                            <input type="text" class="form-control" placeholder="Enter Court ${i} Name">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Court ${i} Category</label>
-                            <input type="text" class="form-control" placeholder="Enter Court ${i} Category">
-                        </div>
-                    </div>
+    <div class="form-group col-md-6">
+        <label>Court ${i} Name</label>
+        <input type="text" name="court_name[]" class="form-control" placeholder="Enter Court ${i} Name">
+    </div>
+    <div class="form-group col-md-6">
+        <label>Court ${i} Category</label>
+        <input type="text" name="court_type[]" class="form-control" placeholder="Enter Court ${i} Category">
+    </div>
+</div>
+
                 `);
             }
         });
 
         // Save venue
-        $('#saveVenue').on('click', function() {
-            // Basic validation
-            const venueName = $('#venueName').val();
-            const venueLocation = $('#venueLocation').val();
+$('#saveVenue').on('click', function() {
+    const venueName = $('#venueName').val();
+    const venueLocation = $('#venueLocation').val();
+    const numCourts = $('#numCourts').val();
 
-            if (!venueName || !venueLocation) {
+    if (!venueName || !venueLocation || !numCourts) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Missing Information',
+            text: 'Please fill in all required fields.',
+        });
+        return;
+    }
+
+    // ✅ Collect court details
+    const courts = [];
+    $('#courtDetailsContainer .court-item').each(function(index) {
+        const courtName = $(this).find('input[name="court_name[]"]').val();
+        const courtType = $(this).find('input[name="court_type[]"]').val();
+      
+
+        if (courtName) {
+            courts.push({
+                court_name: courtName,
+                court_type: courtType,
+              
+            });
+        }
+    });
+
+    // ✅ Collect facilities
+    const facilities = [];
+    $('#facilityContainer .facility-item').each(function() {
+        const name = $(this).find('input').eq(0).val();
+        const type = $(this).find('input').eq(1).val();
+        const rent = $(this).find('input').eq(2).val();
+        if (name) {
+            facilities.push({
+                facility_name: name,
+                facility_type: type,
+                rent: rent
+            });
+        }
+    });
+
+    // ✅ Collect slots
+    const slots = [];
+    $('#slotContainer .slot-item').each(function() {
+        const fromTime = $(this).find('input[type="time"]').eq(0).val();
+        const toTime = $(this).find('input[type="time"]').eq(1).val();
+        const slotName = $(this).find('input[type="text"]').eq(0).val();
+        if (fromTime && toTime) {
+            slots.push({
+                from_time: fromTime,
+                to_time: toTime,
+                slot_name: slotName
+            });
+        }
+    });
+
+    // ✅ Collect plans
+    const plans = [];
+    $('#planContainer .plan-item').each(function() {
+        const membershipName = $(this).find('input').eq(0).val();
+        const duration = $(this).find('input').eq(1).val();
+        const period = $(this).find('select').val();
+        const slot = $(this).find('input').eq(3).val();
+        const registration = $(this).find('input').eq(4).val();
+        const coaching = $(this).find('input').eq(5).val();
+        const total = $(this).find('input').eq(6).val();
+        const installments = $(this).find('input').eq(7).val();
+
+        if (membershipName) {
+            plans.push({
+                membership_name: membershipName,
+                duration: duration,
+                period: period,
+                slot: slot,
+                registration_fees: registration,
+                coaching_fees: coaching,
+                total_fees: total,
+                installments: installments
+            });
+        }
+    });
+
+    // ✅ Prepare data to send
+    const venueData = {
+        venue_name: venueName,
+        location: venueLocation,
+        num_courts: numCourts,
+        courts: courts, // Added this line 👈
+        facilities: facilities,
+        slots: slots,
+        plans: plans
+    };
+
+    // ✅ AJAX request
+    $.ajax({
+        url: base_url + 'venue/save',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(venueData),
+        success: function(response) {
+            const res = JSON.parse(response);
+            if (res.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Saved!',
+                    text: 'Venue has been added successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $('#venueForm')[0].reset();
+                $('#venueModal').modal('hide');
+                $('#courtDetailsContainer').empty();
+                $('#facilityContainer').empty();
+                $('#slotContainer').empty();
+                $('#planContainer').empty();
+                displayVenueCards();
+            } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Missing Information',
-                    text: 'Please fill in all required fields.',
+                    title: 'Error!',
+                    text: res.message || 'Failed to save venue.'
                 });
-                return;
             }
-
-            // Collect facilities
-            const facilities = [];
-            $('#facilityContainer .facility-item').each(function() {
-                const name = $(this).find('input').eq(0).val();
-                const type = $(this).find('input').eq(1).val();
-                if (name) {
-                    facilities.push(name);
-                }
-            });
-
-            // Collect slots
-            const slots = [];
-            $('#slotContainer .slot-item').each(function() {
-                const fromTime = $(this).find('input[type="time"]').eq(0).val();
-                const toTime = $(this).find('input[type="time"]').eq(1).val();
-                if (fromTime && toTime) {
-                    slots.push(`${formatTime(fromTime)} - ${formatTime(toTime)}`);
-                }
-            });
-
-            // Collect plans
-            const plans = [];
-            $('#planContainer .plan-item').each(function() {
-                const membershipName = $(this).find('input').eq(0).val();
-                if (membershipName) {
-                    plans.push(membershipName);
-                }
-            });
-
-            // Create new venue object
-            const newVenue = {
-                id: venues.length + 1,
-                name: venueName,
-                location: venueLocation,
-                courts: parseInt($('#numCourts').val()) || 0,
-                facilities: facilities,
-                slots: slots,
-                plans: plans
-            };
-
-            // Add to venues array
-            venues.push(newVenue);
-
-            // Update display
-            displayVenueCards();
-
-            // Show success message
+        },
+        error: function() {
             Swal.fire({
-                icon: 'success',
-                title: 'Saved!',
-                text: 'Venue has been added successfully.',
-                timer: 2000,
-                showConfirmButton: false
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Could not connect to backend.'
             });
-
-            // Reset form and close modal
-            $('#venueForm')[0].reset();
-            $('#courtDetailsContainer').empty();
-            $('#courtSlotsView').empty();
-            $('#facilityPreview').empty();
-            $('#slotPreview').empty();
-            $('#planPreview').empty();
-            $('#venueModal').modal('hide');
-        });
-
-        // Delete venue
+        }
+    });
+});
+ // Delete venue
         $(document).on('click', '.delete-venue', function() {
             const venueId = $(this).data('id');
 

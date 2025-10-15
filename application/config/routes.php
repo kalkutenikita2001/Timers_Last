@@ -106,3 +106,9 @@ $route['superadmin/finance'] = 'finance';
 $route['overall_report'] = 'Superadmin/overall_report';
 
 $route['admin'] = 'admin/dashboard';
+
+
+
+// Second Redevelopment Venue/Center Management Routes
+$route['venue/save'] = 'VenueController/save_venue';
+$route['venues'] = 'VenueController/index';
