@@ -69,6 +69,9 @@
                     href="<?php echo base_url('admin/FRenewNew_Admission'); ?>">
                     <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
                 </a>
+                <a class="nav-link <?php echo ($this->uri->segment(2) == 'NAttendance') ? 'active' : ''; ?>" href="<?php echo base_url('admin/NAttendance'); ?>">
+              <i class="bi bi-arrow-counterclockwise"></i><span> Attendance</span>
+            </a>
             </nav>
         </div>
     </div>

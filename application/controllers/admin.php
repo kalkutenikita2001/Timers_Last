@@ -705,4 +705,9 @@ class Admin extends CI_Controller
     {
         $this->load->view('admin/ReAdd');
     }
+
+    public function NAttendance()
+	{
+		$this->load->view('admin/NAttendance');
+	}
 }
