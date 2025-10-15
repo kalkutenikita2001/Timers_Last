@@ -150,6 +150,27 @@
       justify-content: center;
       padding: 10px 0;
     }
+    /* Keep sidebar links black in all states */
+.sidebar a {
+  color: #000;
+}
+.sidebar a:hover,
+.sidebar a:focus,
+.sidebar a:active,
+.sidebar a:visited {
+  color: #000;
+}
+
+/* Give the inner <a> the same selected look when it has .active */
+.sidebar .nav-item > .nav-link > a.active {
+  background: #e9ecef;
+  font-weight: 700;
+  border-radius: 30px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
   </style>
 </head>
 
@@ -213,26 +234,53 @@
       </a>
 
 
-      <!-- ADMISSION MANAGEMENT -->
-      <div class="nav-item">
-        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#admissionMenu" role="button" aria-expanded="false" aria-controls="admissionMenu">
-          <span><i class="bi bi-person-lines-fill"></i> <span>Admission Management</span></span>
-          <i class="bi bi-chevron-down"></i>
-        </a>
-        <div class="collapse" id="admissionMenu">
-          <nav class="nav flex-column ms-3">
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'fNew_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/fNew_admission'); ?>">
-              <i class="bi bi-plus-circle"></i><span> New Admission</span>
-            </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Re_admission'); ?>">
-              <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
-            </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'FRenewNew_Admission') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FRenewNew_Admission'); ?>">
-              <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+     <!-- ADMISSION MANAGEMENT -->
+ <div class="nav-item">
+ <!-- Row wrapper styled like a nav-link -->
+ <div class="nav-link d-flex justify-content-between align-items-center">
+ <!-- Left side: click to open Students -->
+ <a
+ class="d-flex align-items-center flex-grow-1 text-decoration-none <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>"
+ href="<?php echo base_url('superadmin/Students'); ?>">
+ <i class="bi bi-mortarboard"></i>
+ <span>Admission Management</span>
+ </a>
+ 
+ <!-- Right side: chevron only toggles the submenu -->
+ <?php
+ $isAdmissionActive = in_array($this->uri->segment(2), [
+ 'fNew_admission','Re_admission','FRenewNew_Admission'
+ ]);
+ ?>
+ <button
+ class="btn btn-sm p-0 border-0 bg-transparent ms-2"
+ type="button"
+ data-bs-toggle="collapse"
+ data-bs-target="#admissionMenu"
+ aria-expanded="<?php echo $isAdmissionActive ? 'true' : 'false'; ?>"
+ aria-controls="admissionMenu"
+ aria-label="Toggle Admission submenu">
+ <i class="bi bi-chevron-down"></i>
+ </button>
+ </div>
+ 
+ <div class="collapse <?php echo $isAdmissionActive ? 'show' : ''; ?>" id="admissionMenu">
+ <nav class="nav flex-column ms-3">
+ <a class="nav-link <?php echo ($this->uri->segment(2) == 'fNew_admission') ? 'active' : ''; ?>"
+ href="<?php echo base_url('superadmin/fNew_admission'); ?>">
+ <i class="bi bi-plus-circle"></i><span> New Admission</span>
+ </a>
+ <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>"
+ href="<?php echo base_url('superadmin/Re_admission'); ?>">
+ <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
+ </a>
+ <a class="nav-link <?php echo ($this->uri->segment(2) == 'FRenewNew_Admission') ? 'active' : ''; ?>"
+ href="<?php echo base_url('superadmin/FRenewNew_Admission'); ?>">
+ <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
+ </a>
+ </nav>
+ </div>
+ </div>
 
       <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueManagement') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueManagement'); ?>">
         <i class="bi bi-mortarboard"></i><span> Office Management 1</span>
@@ -242,9 +290,7 @@
         <i class="bi bi-mortarboard"></i><span> Office Management </span>
       </a>
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Students'); ?>">
-        <i class="bi bi-mortarboard"></i><span> Students Management</span>
-      </a>
+      
 
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/EventAndNotice'); ?>">
         <i class="bi bi-calendar-event"></i><span>Event Management</span>

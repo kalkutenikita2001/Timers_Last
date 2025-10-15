@@ -455,7 +455,7 @@
           // Add new staff
           createSalaryRecord(staffDataToSave);
           loadStaffData(); // Reload to show new staff
-          Swal.fire("Added!", "New staff added successfully with salary record.", "success");
+          Swal.fire("Added!", "New staff added successfully ", "success");
           
           // Dispatch custom event
           window.dispatchEvent(new CustomEvent('staffAdded', { 
