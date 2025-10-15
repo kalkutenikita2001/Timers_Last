@@ -266,21 +266,93 @@ if (!isset($grand_alltime)) {
             color: #68707a;
         }
 
+        /* Tabs styling */
+        .tabs-container {
+            display: flex;
+            border-bottom: 1px solid #e6e6e6;
+            background: #fff;
+            padding: 0 18px;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: var(--accent1);
+            border-bottom-color: var(--accent1);
+        }
+
+        .tab:hover:not(.active) {
+            color: #333;
+            border-bottom-color: #ccc;
+        }
+
+        /* Monthly summary styling */
+        .monthly-summary {
+            padding: 18px;
+            background: #fff;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .summary-item {
+            padding: 16px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            border-left: 4px solid var(--accent1);
+        }
+
+        .summary-item .label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .summary-item .value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
         /* Responsive tweaks (kept similar to Expenses view) */
         @media (max-width:980px) {
             .wrap { padding-left:12px }
             .content { padding:6px }
             .card { padding:16px }
             table { min-width:640px }
+            .tabs-container { flex-wrap: wrap; }
+            .tab { flex: 1; text-align: center; }
         }
 
         @media (max-width:640px) {
             .card { padding:14px }
             thead th { font-size:13px }
             tbody td { font-size:13px; padding:8px }
+            .summary-grid { grid-template-columns: 1fr; }
         }
 
-        @media (max-width:480px) { table { min-width:540px } }
+        @media (max-width:480px) { 
+            table { min-width:540px } 
+            .tabs-container { flex-direction: column; }
+            .tab { text-align: left; }
+        }
     </style>
 </head>
 
@@ -300,6 +372,37 @@ if (!isset($grand_alltime)) {
                         <div style="max-width:250px">
                             <!-- Updated placeholder to indicate ID search also works -->
                             <input type="text" id="globalSearch" class="form-control" placeholder="🔍 Search Centers or enter Center ID..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #e6e6e6; font-family:inherit">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tab active">Overview</div>
+                    <div class="tab">Income</div>
+                    <div class="tab">Expenses</div>
+                  
+                </div>
+
+                <!-- Monthly Summary -->
+                <div class="monthly-summary">
+                    <div class="summary-title">Monthly Summary</div>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="label">Paid</div>
+                            <div class="value">₹ 0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Pending</div>
+                            <div class="value">₹ 0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Expenses</div>
+                            <div class="value">₹ 0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Cash in Hand</div>
+                            <div class="value">₹ 0</div>
                         </div>
                     </div>
                 </div>
@@ -400,6 +503,29 @@ if (!isset($grand_alltime)) {
             </div>
         </div>
     </div>
+
+    <script>
+
+      // Tab switching functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Here you can add logic to show/hide different content
+            // based on which tab is active
+            const tabName = this.textContent.trim();
+            console.log('Tab clicked:', tabName);
+            // You would typically show/hide different content sections here
+        });
+    });
+});
+    </script>
 
     <!-- Details modal + helper logic (kept unchanged) -->
     <script>
@@ -652,80 +778,4 @@ if (!isset($grand_alltime)) {
         closeMobileSidebar();
         const s = sidebarEl();
         const isMin = s && s.classList.contains(SIDEBAR_MIN_CLASS);
-        document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
-      }
-    }, 120);
-  });
-
-  // If page initially had sidebar-open, ensure backdrop visible
-  if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
-    backdrop.style.display = 'block';
-    backdrop.style.opacity = '1';
-    document.body.style.overflow = 'hidden';
-  }
-
-  // Provide fallback toggle button if none exists, and wire toggles
-  (function ensureFallbackToggle() {
-    if (qs(TOGGLE_SELECTORS)) {
-      wireToggleButtons();
-      return;
-    }
-    const navbar = qs('.navbar, header, .main-header, .topbar');
-    if (!navbar) return;
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.id = 'sidebarToggle';
-    btn.className = 'btn btn-sm btn-light sidebar-toggle';
-    btn.setAttribute('aria-label', 'Toggle sidebar');
-    btn.style.marginRight = '8px';
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    navbar.prepend(btn);
-
-    wireToggleButtons();
-  })();
-
-  // Also wire buttons on DOMContentLoaded (in case toggles are added later)
-  document.addEventListener('DOMContentLoaded', () => {
-    wireToggleButtons();
-  });
-
-})();
-</script>
-
-
-    <script>
-    // Enhanced Global search for table:
-    // - If value is pure digits, match center ID exactly.
-    // - Otherwise, text search.
-    (function () {
-        const input = document.getElementById('globalSearch');
-        if (!input) return;
-        input.addEventListener('keyup', function () {
-            let raw = this.value.trim();
-            if (raw === "") {
-                document.querySelectorAll("table tbody tr").forEach(tr => tr.style.display = '');
-                return;
-            }
-
-            if (/^\d+$/.test(raw)) {
-                const id = raw.replace(/^0+/, '') || '0';
-                document.querySelectorAll("table tbody tr").forEach(tr => {
-                    const rowId = String(tr.getAttribute('data-center-id') || '');
-                    tr.style.display = (rowId === id) ? '' : 'none';
-                });
-                return;
-            }
-
-            let value = raw.toLowerCase();
-            document.querySelectorAll("table tbody tr").forEach(tr => {
-                tr.style.display = (tr.innerText.toLowerCase().indexOf(value) > -1) ? '' : 'none';
-            });
-        });
-    })();
-    </script>
-
-    <!-- bootstrap (kept same as original) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+        document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN

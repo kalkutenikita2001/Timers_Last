@@ -67,6 +67,14 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/Superadmin_profile');
 	}
+	public function FinanceManagement2()
+	{
+		$this->load->view('superadmin/FinanceManagement2');
+	}
+
+
+
+
 	public function change_password()
 	{
 		header('Content-Type: application/json');
