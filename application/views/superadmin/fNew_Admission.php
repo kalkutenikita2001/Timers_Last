@@ -1122,8 +1122,8 @@
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Member Registered!',
-                    text: 'Member details have been saved successfully.',
+                    title: 'Member Renewed!',
+                    text: 'Member details have been renewed successfully.',
                     timer: 2000,
                     showConfirmButton: false
                 });
