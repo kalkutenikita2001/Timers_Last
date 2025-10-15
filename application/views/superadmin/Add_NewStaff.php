@@ -108,6 +108,11 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     /* modal header gradient */
     .modal-header.bg-danger { background: var(--grad) !important; color:#fff; }
+.btn-danger{
+  
+}
+
+    
   </style>
 </head>
 <body>
@@ -143,7 +148,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     <ul class="nav nav-tabs" id="staffTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overviewTab" type="button" role="tab">Overview</button>
+        <button class="nav-link active btn-danger" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overviewTab" type="button" role="tab">Overview</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staffTab" type="button" role="tab">Staff</button>
@@ -304,6 +309,200 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Sidebar toggle controller (reused, with wrapper id added) -->
+<script>
+(function($){
+  let editRow = null;
+
+  function init() {
+    updateCount();
+    bindUI();
+  }
+
+  function updateCount(){
+    const count = $("#staffTable tbody tr").length;
+    $("#staffCount").text(count);
+  }
+
+  function bindUI(){
+    const openAdd = () => {
+      editRow = null;
+      $("#staffForm")[0].reset();
+      $("#slotSection").hide();
+      $(".center-check, .slot-check").prop('checked', false);
+      $("#staffModalLabel").text("Add Staff");
+      new bootstrap.Modal(document.getElementById('staffModal')).show();
+    };
+    $("#addStaffBtn, #addStaffBtn2").off('click').on('click', openAdd);
+
+    $("#roleSelect").off('change').on("change", function(){
+      $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+    });
+
+    $("#staffForm").off('submit').on("submit", function(e){
+      e.preventDefault();
+      const form = $(this);
+      const name = form.find("input[name='name']").val().trim();
+      const email = form.find("input[name='email']").val().trim();
+      const contact = form.find("input[name='contact']").val().trim();
+      const date = form.find("input[name='joining_date']").val();
+      const role = form.find("#roleSelect").val();
+      const salary = form.find("input[name='salary']").val().trim();
+      const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
+      const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
+      if (!name || !email || !contact){ Swal.fire("Missing info","Please fill required fields.","warning"); return; }
+
+      const tbody = $("#staffTable tbody");
+      if (editRow) {
+        editRow.find("td:eq(1)").text(name);
+        editRow.find("td:eq(2)").text(email);
+        editRow.find("td:eq(3)").text(contact);
+        editRow.find("td:eq(4)").text(date);
+        editRow.find("td:eq(5)").text(role);
+        editRow.find("td:eq(6)").text(centers.length?centers.join(", "):'-');
+        editRow.find("td:eq(7)").text(role==="Coach" && slots.length?slots.join(", "):'-');
+        editRow.find("td:eq(8)").text(salary||'-');
+        Swal.fire("Updated!","Staff details updated successfully.","success");
+      } else {
+        const srNo = tbody.children("tr").length + 1;
+        const rowHtml = `
+          <tr class="clickable-row" data-status="active">
+            <td>${srNo}</td>
+            <td>${escapeHtml(name)}</td>
+            <td>${escapeHtml(email)}</td>
+            <td>${escapeHtml(contact)}</td>
+            <td>${escapeHtml(date)}</td>
+            <td>${escapeHtml(role)}</td>
+            <td>${escapeHtml(centers.length?centers.join(", "):'-')}</td>
+            <td>${escapeHtml(role==="Coach" && slots.length?slots.join(", "):'-')}</td>
+            <td class="text-end">${escapeHtml(salary||'-')}</td>
+            <td class="text-center">
+              <div class="btn-group">
+                <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
+              </div>
+            </td>
+            <td class="text-center">
+              <label class="switch">
+                <input type="checkbox" class="statusToggle" checked>
+                <span class="slider"></span>
+              </label>
+            </td>
+          </tr>`;
+        tbody.append($(rowHtml));
+        Swal.fire("Added!","New staff added successfully.","success");
+        updateCount();
+      }
+
+      // Hide modal and reset form
+      const modalEl = document.getElementById('staffModal');
+      const bsModal = bootstrap.Modal.getInstance(modalEl); 
+      if (bsModal) bsModal.hide();
+      $("#staffForm")[0].reset(); $("#slotSection").hide(); editRow = null;
+    });
+
+    // Edit button
+    $(document).off('click', '.editBtn').on('click', '.editBtn', function(){
+      const row = $(this).closest('tr'); editRow = row;
+      $("#staffForm")[0].reset();
+      $("#staffForm input[name='name']").val(row.find("td:eq(1)").text());
+      $("#staffForm input[name='email']").val(row.find("td:eq(2)").text());
+      $("#staffForm input[name='contact']").val(row.find("td:eq(3)").text());
+      $("#staffForm input[name='joining_date']").val(row.find("td:eq(4)").text());
+      $("#roleSelect").val(row.find("td:eq(5)").text());
+      $("#staffForm input[name='salary']").val(row.find("td:eq(8)").text());
+      const centersText = row.find("td:eq(6)").text();
+      $(".center-check").prop('checked', false);
+      if (centersText && centersText !== '-') centersText.split(',').map(s=>s.trim()).forEach(v=>{$(`.center-check[value="${v}"]`).prop('checked', true);});
+      const slotsText = row.find("td:eq(7)").text();
+      $(".slot-check").prop('checked', false);
+      if (slotsText && slotsText !== '-') slotsText.split(',').map(s=>s.trim()).forEach(v=>{$(`.slot-check[value="${v}"]`).prop('checked', true);});
+      $("#roleSelect").val()==="Coach" ? $("#slotSection").show() : $("#slotSection").hide();
+      $("#staffModalLabel").text("Edit Staff");
+      new bootstrap.Modal(document.getElementById('staffModal')).show();
+    });
+
+    // View button
+    $(document).off('click', '.viewBtn').on('click', '.viewBtn', function(){
+      const row = $(this).closest('tr');
+      $("#profileName").text(row.find("td:eq(1)").text());
+      $("#profileEmail").text(row.find("td:eq(2)").text());
+      $("#profileContact").text(row.find("td:eq(3)").text());
+      $("#profileDate").text(row.find("td:eq(4)").text());
+      $("#profileRole").text(row.find("td:eq(5)").text());
+      $("#profileCenters").text(row.find("td:eq(6)").text());
+      $("#profileSlots").text(row.find("td:eq(7)").text());
+      const salary = row.find("td:eq(8)").text().trim();
+      if (!salary || salary==='-' || salary==='0') $("#profileSalary").text("No salary assigned").addClass("no-salary");
+      else $("#profileSalary").text("Income: ₹"+salary).removeClass("no-salary");
+      new bootstrap.Modal(document.getElementById('viewProfileModal')).show();
+    });
+
+    // Delete button
+    $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function(){
+      const row = $(this).closest('tr');
+      Swal.fire({
+        title:"Are you sure?", text:"This staff record will be deleted.", icon:"warning",
+        showCancelButton:true, confirmButtonColor:"#d00000", cancelButtonColor:"#6c757d", confirmButtonText:"Delete"
+      }).then(r=>{ 
+        if(r.isConfirmed){ 
+          row.remove(); 
+          $("#staffTable tbody tr").each(function(i){ $(this).find("td:eq(0)").text(i+1); }); 
+          updateCount(); 
+          Swal.fire("Deleted!","Staff record deleted successfully.","success"); 
+        }
+      });
+    });
+
+    // Status toggle
+    $(document).off('change', '.statusToggle').on('change', '.statusToggle', function(){
+      const row = $(this).closest('tr');
+      if ($(this).is(':checked')){ row.attr('data-status','active'); Swal.fire("Activated","Status changed to Active","success"); }
+      else { row.attr('data-status','deactive'); Swal.fire("Deactivated","Status changed to Inactive","info"); }
+    });
+
+    // Filter
+    $(document).off('click', '.filter-options .btn').on('click', '.filter-options .btn', function(){
+      $(".filter-options .btn").removeClass('active');
+      $(this).addClass('active');
+      const filter = $(this).data('filter');
+      $("#staffTable tbody tr").each(function(){
+        const status = $(this).attr('data-status')||'active';
+        if (filter==='all' || status===filter) $(this).show(); else $(this).hide();
+      });
+    });
+
+    // Search
+    $("#searchInput").off('input').on('input', function(){
+      const value = $(this).val().toLowerCase();
+      $("#staffTable tbody tr").each(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value)>-1);
+      });
+    });
+  }
+
+  function escapeHtml(unsafe){
+    if (unsafe===null || unsafe===undefined) return '';
+    return String(unsafe).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
+  }
+
+  $(function(){ init(); });
+
+})(jQuery);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script>
   (function () {
     const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
@@ -616,6 +815,28 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
       $(function(){ init(); });
     })(jQuery);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
   </script>
 </body>
 </html>

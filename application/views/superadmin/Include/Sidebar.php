@@ -208,6 +208,10 @@
         </div>
       </div>
 
+       <a class="nav-link <?php echo ($this->uri->segment(2) == 'FinanceManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FinanceManagement2'); ?>">
+        <i class="bi bi-calendar-event"></i><span>Finance Management2</span>
+      </a>
+
 
       <!-- ADMISSION MANAGEMENT -->
       <div class="nav-item">
