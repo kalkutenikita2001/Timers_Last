@@ -206,7 +206,7 @@
     <div class="card-list mt-3 aos" id="staffCards"><!-- JS inject --></div>
   </div>
 
-  <!-- Add/Edit Modal -->
+  <!-- Add/Edit Modal
   <div class="modal fade" id="staffModal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -267,7 +267,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
