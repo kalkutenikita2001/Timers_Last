@@ -199,7 +199,7 @@
           <a
             class="d-flex align-items-center flex-grow-1 text-decoration-none <?php echo ($this->uri->segment(2) == 'Staff_manage') ? 'active' : ''; ?>"
             href="<?php echo base_url('superadmin/Staff_manage'); ?>">
-            <i class="bi bi-person-lines-fill"></i>
+           <i class="bi bi-people-fill"></i>
             <span>Staff Management</span>
           </a>
 
@@ -219,13 +219,16 @@
         <div class="collapse" id="staffMenu">
           <nav class="nav flex-column ms-3">
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Add_NewStaff') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
-              <i class="bi bi-plus-circle"></i><span> Add New Staff</span>
+              <i class="bi-person-plus"></i>
+
+<span> Add New Staff</span>
             </a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Attendance'); ?>">
-              <i class="bi bi-arrow-counterclockwise"></i><span> Attendance</span>
+              <i class="fa-solid fa-book-open-reader"></i><span> Attendance</span>
             </a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Salary_Management') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Salary_Management'); ?>">
-              <i class="bi bi-arrow-repeat"></i><span> Salary Management</span>
+              <i class="bi bi-currency-dollar"></i>
+<span> Salary Management</span>
             </a>
           </nav>
         </div>
@@ -241,7 +244,7 @@
           <a
             class="d-flex align-items-center flex-grow-1 text-decoration-none <?php echo ($this->uri->segment(2) == 'Students') ? 'active' : ''; ?>"
             href="<?php echo base_url('superadmin/Students'); ?>">
-            <i class="bi bi-mortarboard"></i>
+            <i class="fa-solid fa-chalkboard-user"></i>
             <span>Admission Management</span>
           </a>
 
@@ -297,7 +300,8 @@
         <i class="bi bi-calendar-event"></i><span>Event Management</span>
       </a>
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'FinanceManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FinanceManagement2'); ?>">
-        <i class="bi bi-calendar-event"></i><span>Finance Management</span>
+                      <i class="fa-solid fa-file-invoice-dollar"></i>
+<span>Finance Management</span>
       </a>
 
 
@@ -309,7 +313,8 @@
 
       
 <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
-    <i class="bi bi-person-circle"></i><span> Expenses Management</span>
+    <i class="fa-solid fa-arrow-trend-up"></i>
+<span> Expenses Management</span>
 </a>
 
 

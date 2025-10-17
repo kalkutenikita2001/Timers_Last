@@ -282,7 +282,8 @@ class Superadmin extends MY_Controller
 			'students' => 'Students Management',
 			'events' => 'Event Management',
 			'leave' => 'Leave Management',
-			'expenses' => 'Expense Management'
+			'expenses' => 'Expense Management',
+			// 'finance' => 'Finance Management'
 		];
 
 		foreach ($data['centers'] as &$center) {
@@ -305,7 +306,8 @@ class Superadmin extends MY_Controller
 			'students',
 			'events',
 			'leave',
-			'expenses'
+			'expenses',
+			// 'finance'
 
 		];
 

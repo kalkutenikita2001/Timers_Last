@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Badminton Academy Finance Management</title>
+  <title>Finance Management</title>
+      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+
 
   <!-- libs -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
 
   <style>
     :root{
@@ -95,9 +98,17 @@
         <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
           <div class="page-title h5 mb-0">Finance Management</div>
           <div class="nav-tabs-lite">
-            <button class="tab-link active" onclick="showTab('overview')">📊 Overview</button>
-            <button class="tab-link" onclick="showTab('income')">💰 Income</button>
-            <button class="tab-link" onclick="showTab('expense')">💸 Expenses</button>
+            <button class="tab-link active" onclick="showTab('overview')">
+                            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+
+               Overview</button>
+            <button class="tab-link" onclick="showTab('income')">
+               <i class="fa-solid fa-comment-dollar"></i>
+
+             Income</button>
+            <button class="tab-link" onclick="showTab('expense')">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+ Expenses</button>
           </div>
         </div>
       </div>
