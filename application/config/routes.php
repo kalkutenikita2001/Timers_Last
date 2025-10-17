@@ -115,9 +115,10 @@ $route['venues'] = 'VenueController/index';
 $route['venue/getAll'] = 'VenueController/getAllVenues';
 $route['venue/delete/(:num)'] = 'VenueController/deleteVenue/$1';
 
-// If controller file is application/controllers/api/Staff.php
-// existing…
-$route['api/staff']                = 'staff/all';
-$route['api/staff/(:num)']         = 'staff/one/$1';
-$route['api/staff/(:num)/active']  = 'staff/set_active/$1';   // POST
 
+//
+$route['StaffsalaryController/salary_manage'] = 'StaffsalaryController/salary_manage';
+$route['StaffsalaryController/get_salary_records'] = 'StaffsalaryController/get_salary_records';
+$route['StaffsalaryController/add_salary_record'] = 'StaffsalaryController/add_salary_record';
+$route['StaffsalaryController/update_salary_record'] = 'StaffsalaryController/update_salary_record';
+$route['StaffsalaryController/delete_salary_record/(:num)'] = 'StaffsalaryController/delete_salary_record/$1';

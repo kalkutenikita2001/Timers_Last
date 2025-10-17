@@ -290,7 +290,7 @@
             margin-bottom: 25px;
             overflow: hidden;
             position: relative;
-            border:2px solid red;
+            border: 2px solid red;
         }
 
         .venue-card:hover {
@@ -318,7 +318,7 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
-            border:1px solid red;
+            border: 1px solid red;
         }
 
         .venue-card-header::after {
@@ -702,8 +702,10 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="venueModalLabel"><i class="fas fa-building mr-2"></i> Add New Center</h5>
-                            <!-- <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span> -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+                            <span aria-hidden="true">&times;</span>
                         </div>
                         <div class="modal-body">
                             <form id="venueForm">
@@ -718,10 +720,10 @@
                                         <label>Location </label>
                                         <input type="text" class="form-control" id="venueLocation" placeholder="Enter Location" required>
                                     </div>
-                                      <div class="form-group col-md-4">
-    <label>Password</label>
-    <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
-  </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Password</label>
+                                        <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
+                                    </div>
                                 </div>
 
                                 <div class="form-row">
@@ -812,10 +814,10 @@
                                                     <option>Year</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-3">
+                                            <!-- <div class="form-group col-md-3">
                                                 <label>Slot</label>
                                                 <input type="text" class="form-control" placeholder="Enter Slot">
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-group col-md-2 text-center align-self-end">
                                                 <button type="button" class="btn btn-danger btn-sm remove-plan">
@@ -873,7 +875,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="viewVenueModalLabel"><i class="fas fa-eye mr-2"></i> View Venue Details</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-red" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -897,7 +899,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editVenueModalLabel"><i class="fas fa-edit mr-2"></i> Edit Center</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-red" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
 
@@ -916,11 +918,11 @@
                                 <label>Location</label>
                                 <input type="text" class="form-control" id="editVenueLocation" placeholder="Enter Location" required>
                             </div>
-                             <div class="form-group col-md-4">
-    <label>Password</label>
-    <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
-  </div>
-                           
+                            <div class="form-group col-md-4">
+                                <label>Password</label>
+                                <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
+                            </div>
+
                         </div>
 
                         <div class="form-row">
@@ -989,8 +991,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    var base_url = "<?php echo base_url(); ?>";
-</script>
+        var base_url = "<?php echo base_url(); ?>";
+    </script>
 
     <script>
         // Sample data for demonstration
@@ -1063,29 +1065,29 @@
         ];
 
         // Function to display venue cards
-   function displayVenueCards() {
-    const container = $('#venueCardsContainer');
-    container.html('<div class="col-12 text-center py-5"><h5>Loading venues...</h5></div>');
+        function displayVenueCards() {
+            const container = $('#venueCardsContainer');
+            container.html('<div class="col-12 text-center py-5"><h5>Loading venues...</h5></div>');
 
-    $.ajax({
-        url: base_url + 'venue/getAll',
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            container.empty();
+            $.ajax({
+                url: base_url + 'venue/getAll',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    container.empty();
 
-            if (response.status !== 'success' || !response.data || response.data.length === 0) {
-                container.html('<div class="col-12 text-center py-5"><h5>No venues added yet. Click "Add New Center" to get started.</h5></div>');
-                return;
-            }
+                    if (response.status !== 'success' || !response.data || response.data.length === 0) {
+                        container.html('<div class="col-12 text-center py-5"><h5>No venues added yet. Click "Add New Center" to get started.</h5></div>');
+                        return;
+                    }
 
-            response.data.forEach(venue => {
-                const facilitiesCount = venue.facilities ? venue.facilities.length : 0;
-                const slotsCount = venue.slots ? venue.slots.length : 0;
-                const plansCount = venue.plans ? venue.plans.length : 0;
-                const courtsCount = venue.courts ? venue.courts.length : 0;
+                    response.data.forEach(venue => {
+                        const facilitiesCount = venue.facilities ? venue.facilities.length : 0;
+                        const slotsCount = venue.slots ? venue.slots.length : 0;
+                        const plansCount = venue.plans ? venue.plans.length : 0;
+                        const courtsCount = venue.courts ? venue.courts.length : 0;
 
-                const card = $(`
+                        const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="venue-card">
                             <div class="venue-card-header">
@@ -1113,61 +1115,61 @@
                         </div>
                     </div>
                 `);
-                container.append(card);
-            });
-        },
-        error: function() {
-            container.html('<div class="col-12 text-center py-5"><h5>Error loading venues. Please try again later.</h5></div>');
-        }
-    });
-}
-// Handle Delete Venue
-$(document).on('click', '.delete-venue', function() {
-    const venueId = $(this).data('id');
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This will permanently delete the venue and all its related data (courts, facilities, slots, and plans).",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: base_url + 'venue/delete/' + venueId,
-                method: 'POST',
-                success: function(response) {
-                    const res = JSON.parse(response);
-                    if (res.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: 'Venue deleted successfully.',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        displayVenueCards(); // Refresh the venue list dynamically
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: res.message || 'Failed to delete venue.'
-                        });
-                    }
+                        container.append(card);
+                    });
                 },
                 error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server Error',
-                        text: 'Unable to delete venue. Please try again.'
-                    });
+                    container.html('<div class="col-12 text-center py-5"><h5>Error loading venues. Please try again later.</h5></div>');
                 }
             });
         }
-    });
-});
+        // Handle Delete Venue
+        $(document).on('click', '.delete-venue', function() {
+            const venueId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will permanently delete the venue and all its related data (courts, facilities, slots, and plans).",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: base_url + 'venue/delete/' + venueId,
+                        method: 'POST',
+                        success: function(response) {
+                            const res = JSON.parse(response);
+                            if (res.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Venue deleted successfully.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                                displayVenueCards(); // Refresh the venue list dynamically
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: res.message || 'Failed to delete venue.'
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Server Error',
+                                text: 'Unable to delete venue. Please try again.'
+                            });
+                        }
+                    });
+                }
+            });
+        });
 
 
         // Initialize venue cards display
@@ -1343,146 +1345,190 @@ $(document).on('click', '.delete-venue', function() {
         });
 
         // Save venue
-$('#saveVenue').on('click', function() {
-    const venueName = $('#venueName').val();
-    const venueLocation = $('#venueLocation').val();
-    const numCourts = $('#numCourts').val();
+        // Save venue - Fixed version
+        $('#saveVenue').on('click', function() {
+            const venueName = $('#venueName').val();
+            const venueLocation = $('#venueLocation').val();
+            const password = $('#password').val();
+            const numCourts = $('#numCourts').val();
 
-    if (!venueName || !venueLocation || !numCourts) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Missing Information',
-            text: 'Please fill in all required fields.',
-        });
-        return;
-    }
-
-    // ✅ Collect court details
-    const courts = [];
-    $('#courtDetailsContainer .court-item').each(function(index) {
-        const courtName = $(this).find('input[name="court_name[]"]').val();
-        const courtType = $(this).find('input[name="court_type[]"]').val();
-      
-
-        if (courtName) {
-            courts.push({
-                court_name: courtName,
-                court_type: courtType,
-              
-            });
-        }
-    });
-
-    // ✅ Collect facilities
-    const facilities = [];
-    $('#facilityContainer .facility-item').each(function() {
-        const name = $(this).find('input').eq(0).val();
-        const type = $(this).find('input').eq(1).val();
-        const rent = $(this).find('input').eq(2).val();
-        if (name) {
-            facilities.push({
-                facility_name: name,
-                facility_type: type,
-                rent: rent
-            });
-        }
-    });
-
-    // ✅ Collect slots
-    const slots = [];
-    $('#slotContainer .slot-item').each(function() {
-        const fromTime = $(this).find('input[type="time"]').eq(0).val();
-        const toTime = $(this).find('input[type="time"]').eq(1).val();
-        const slotName = $(this).find('input[type="text"]').eq(0).val();
-        if (fromTime && toTime) {
-            slots.push({
-                from_time: fromTime,
-                to_time: toTime,
-                slot_name: slotName
-            });
-        }
-    });
-
-    // ✅ Collect plans
-    const plans = [];
-    $('#planContainer .plan-item').each(function() {
-        const membershipName = $(this).find('input').eq(0).val();
-        const duration = $(this).find('input').eq(1).val();
-        const period = $(this).find('select').val();
-        const slot = $(this).find('input').eq(3).val();
-        const registration = $(this).find('input').eq(4).val();
-        const coaching = $(this).find('input').eq(5).val();
-        const total = $(this).find('input').eq(6).val();
-        const installments = $(this).find('input').eq(7).val();
-
-        if (membershipName) {
-            plans.push({
-                membership_name: membershipName,
-                duration: duration,
-                period: period,
-                slot: slot,
-                registration_fees: registration,
-                coaching_fees: coaching,
-                total_fees: total,
-                installments: installments
-            });
-        }
-    });
-
-    // ✅ Prepare data to send
-    const venueData = {
-        venue_name: venueName,
-        location: venueLocation,
-        num_courts: numCourts,
-        courts: courts, // Added this line 👈
-        facilities: facilities,
-        slots: slots,
-        plans: plans
-    };
-
-    // ✅ AJAX request
-    $.ajax({
-        url: base_url + 'venue/save',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(venueData),
-        success: function(response) {
-            const res = JSON.parse(response);
-            if (res.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Saved!',
-                    text: 'Venue has been added successfully.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                $('#venueForm')[0].reset();
-                $('#venueModal').modal('hide');
-                $('#courtDetailsContainer').empty();
-                $('#facilityContainer').empty();
-                $('#slotContainer').empty();
-                $('#planContainer').empty();
-                displayVenueCards();
-            } else {
+            if (!venueName || !venueLocation || !password || !numCourts) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error!',
-                    text: res.message || 'Failed to save venue.'
+                    title: 'Missing Information',
+                    text: 'Please fill in all required fields.',
+                    confirmButtonColor: '#ff4040'
                 });
+                return;
             }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Server Error',
-                text: 'Could not connect to backend.'
+
+            // ✅ Collect court details
+            const courts = [];
+            $('#courtDetailsContainer .court-item').each(function(index) {
+                const courtName = $(this).find('input[name="court_name[]"]').val();
+                const courtType = $(this).find('input[name="court_type[]"]').val();
+
+                if (courtName) {
+                    courts.push({
+                        court_name: courtName,
+                        court_type: courtType,
+                    });
+                }
             });
-        }
-    });
-});
- // Delete venue
-      // Helper functions
+
+            // ✅ Collect facilities
+            const facilities = [];
+            $('#facilityContainer .facility-item').each(function() {
+                const name = $(this).find('input').eq(0).val();
+                const type = $(this).find('input').eq(1).val();
+                const rent = $(this).find('input').eq(2).val();
+                if (name) {
+                    facilities.push({
+                        facility_name: name,
+                        facility_type: type,
+                        rent: rent
+                    });
+                }
+            });
+
+            // ✅ Collect slots
+            const slots = [];
+            $('#slotContainer .slot-item').each(function() {
+                const fromTime = $(this).find('input[type="time"]').eq(0).val();
+                const toTime = $(this).find('input[type="time"]').eq(1).val();
+                const slotName = $(this).find('input[type="text"]').eq(0).val();
+                if (fromTime && toTime) {
+                    slots.push({
+                        from_time: fromTime,
+                        to_time: toTime,
+                        slot_name: slotName
+                    });
+                }
+            });
+
+            // ✅ Collect plans
+            const plans = [];
+            $('#planContainer .plan-item').each(function() {
+                const membershipName = $(this).find('input').eq(0).val();
+                const duration = $(this).find('input').eq(1).val();
+                const period = $(this).find('select').val();
+                const slot = $(this).find('input').eq(3).val();
+                const registration = $(this).find('input').eq(4).val();
+                const coaching = $(this).find('input').eq(5).val();
+                const total = $(this).find('input').eq(6).val();
+                const installments = $(this).find('input').eq(7).val();
+
+                if (membershipName) {
+                    plans.push({
+                        membership_name: membershipName,
+                        duration: duration,
+                        period: period,
+                        slot: slot,
+                        registration_fees: registration,
+                        coaching_fees: coaching,
+                        total_fees: total,
+                        installments: installments
+                    });
+                }
+            });
+
+            // ✅ Prepare data to send
+            const venueData = {
+                venue_name: venueName,
+                location: venueLocation,
+                password: password,
+                num_courts: numCourts,
+                courts: courts,
+                facilities: facilities,
+                slots: slots,
+                plans: plans
+            };
+
+            // Show loading state
+            const saveButton = $('#saveVenue');
+            const originalText = saveButton.html();
+            saveButton.html('<i class="fas fa-spinner fa-spin mr-2"></i> Saving...').prop('disabled', true);
+
+            console.log('Sending data:', venueData); // Debug log
+
+            // ✅ AJAX request - Fixed version
+            $.ajax({
+                url: base_url + 'venue/save',
+                method: 'POST',
+                data: venueData, // Changed from JSON.stringify to regular form data
+                dataType: 'json', // Expect JSON response
+                success: function(response) {
+                    // Restore button state
+                    saveButton.html(originalText).prop('disabled', false);
+
+                    console.log('Response received:', response); // Debug log
+
+                    // No need to parse response since dataType: 'json' handles it
+                    if (response.status === 'success') {
+                        // SweetAlert Success Notification
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Center Added Successfully!',
+                            text: 'The new center has been added to the system.',
+                            confirmButtonText: 'Great!',
+                            confirmButtonColor: '#ff4040',
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then((result) => {
+                            // Reset form and close modal
+                            $('#venueForm')[0].reset();
+                            $('#venueModal').modal('hide');
+                            $('#courtDetailsContainer').empty();
+                            $('#facilityContainer').empty();
+                            $('#slotContainer').empty();
+                            $('#planContainer').empty();
+
+                            // Refresh venue cards display
+                            displayVenueCards();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message || 'Failed to save venue.',
+                            confirmButtonColor: '#ff4040'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Restore button state
+                    saveButton.html(originalText).prop('disabled', false);
+
+                    console.error('AJAX Error:', status, error); // Debug log
+
+                    let errorMessage = 'Could not connect to backend. Please try again.';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    } else if (xhr.responseText) {
+                        try {
+                            const parsedResponse = JSON.parse(xhr.responseText);
+                            errorMessage = parsedResponse.message || errorMessage;
+                        } catch (e) {
+                            errorMessage = xhr.responseText || errorMessage;
+                        }
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error',
+                        text: errorMessage,
+                        confirmButtonColor: '#ff4040'
+                    });
+                }
+            });
+        });
+        // Delete venue
+        // Helper functions
         function formatTime(time) {
             if (!time) return '';
             let [h, m] = time.split(':');
@@ -2198,40 +2244,40 @@ $('#saveVenue').on('click', function() {
         // View venue functionality
         let currentVenue = null; // Store current venue data
 
-     $(document).on('click', '.view-venue', function() {
-    const venueId = $(this).data('id');
+        $(document).on('click', '.view-venue', function() {
+            const venueId = $(this).data('id');
 
-    $.ajax({
-        url: base_url + 'VenueController/get/' + venueId,
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                const venue = response.data;
-                showVenueDetails(venue);
-                $('#viewVenueModal').modal('show');
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Not Found',
-                    text: response.message || 'Could not load venue details.'
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Server Error',
-                text: 'Failed to fetch venue details.'
+            $.ajax({
+                url: base_url + 'VenueController/get/' + venueId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        const venue = response.data;
+                        showVenueDetails(venue);
+                        $('#viewVenueModal').modal('show');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Not Found',
+                            text: response.message || 'Could not load venue details.'
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error',
+                        text: 'Failed to fetch venue details.'
+                    });
+                }
             });
-        }
-    });
-});
- // Function to show venue details
-     function showVenueDetails(venue) {
-    const viewContent = $('#viewVenueContent');
+        });
+        // Function to show venue details
+        function showVenueDetails(venue) {
+            const viewContent = $('#viewVenueContent');
 
-    viewContent.html(`
+            viewContent.html(`
         <div class="row">
             <!-- Venue Info -->
             <div class="col-md-12 mb-4">
@@ -2326,8 +2372,8 @@ $('#saveVenue').on('click', function() {
             </div>
         </div>
     `);
-}
-  // Function to show venue dashboard
+        }
+        // Function to show venue dashboard
         function showVenueDashboard() {
             const viewContent = $('#viewVenueContent');
             const facilitiesCount = currentVenue.facilities ? currentVenue.facilities.length : 0;
@@ -2391,100 +2437,112 @@ $('#saveVenue').on('click', function() {
         });
     </script>
     <script>
-(function($) {
-    // Use SweetAlert to confirm modal close when there are unsaved changes.
-    // Keep snapshots of form state when a modal is shown.
-    const modalSnapshots = new Map();
+        (function($) {
+            // Use SweetAlert to confirm modal close when there are unsaved changes.
+            // Keep snapshots of form state when a modal is shown.
+            const modalSnapshots = new Map();
 
-    // Snapshot first form inside a modal when it opens
-    $(document).on('shown.bs.modal shown.bs.modal', '.modal', function() {
-      const $m = $(this);
-      const $form = $m.find('form').first();
-      if ($form.length) modalSnapshots.set($m.attr('id') || '', $form.serialize());
-    });
+            // Snapshot first form inside a modal when it opens
+            $(document).on('shown.bs.modal shown.bs.modal', '.modal', function() {
+                const $m = $(this);
+                const $form = $m.find('form').first();
+                if ($form.length) modalSnapshots.set($m.attr('id') || '', $form.serialize());
+            });
 
-    // Enhanced close handler: if form changed, ask via SweetAlert; otherwise close normally
-    $(document).on('click', '[data-dismiss], [data-bs-dismiss], .close', function(e) {
-      const $btn = $(this);
-      let $modal = $btn.closest('.modal');
+            // Enhanced close handler: if form changed, ask via SweetAlert; otherwise close normally
+            $(document).on('click', '[data-dismiss], [data-bs-dismiss], .close', function(e) {
+                const $btn = $(this);
+                let $modal = $btn.closest('.modal');
 
-      // fallback to target selector if the button isn't inside the modal
-      if (!$modal.length) {
-        const target = $btn.attr('data-target') || $btn.attr('data-bs-target');
-        if (target) $modal = $(target);
-      }
-      if (!$modal.length) return;
+                // fallback to target selector if the button isn't inside the modal
+                if (!$modal.length) {
+                    const target = $btn.attr('data-target') || $btn.attr('data-bs-target');
+                    if (target) $modal = $(target);
+                }
+                if (!$modal.length) return;
 
-      const id = $modal.attr('id') || '';
-      const $form = $modal.find('form').first();
-      const initial = modalSnapshots.get(id) || '';
-      const current = $form.length ? $form.serialize() : '';
+                const id = $modal.attr('id') || '';
+                const $form = $modal.find('form').first();
+                const initial = modalSnapshots.get(id) || '';
+                const current = $form.length ? $form.serialize() : '';
 
-      // If form exists and changed -> confirm
-      if ($form.length && initial !== current) {
-        e.preventDefault();
-        Swal.fire({
-          title: 'Discard changes?',
-          text: 'You have unsaved changes. Do you want to discard them?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Discard',
-          cancelButtonText: 'Keep editing'
-        }).then(result => {
-          if (result.isConfirmed) {
-            modalSnapshots.delete(id);
-            // Try Bootstrap jQuery hide, then BS5 API, then fallback DOM removal
-            try { if (typeof $modal.modal === 'function') { $modal.modal('hide'); return; } } catch(err){}
-            try {
-              if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                const instance = bootstrap.Modal.getInstance($modal.get(0)) || new bootstrap.Modal($modal.get(0));
-                instance.hide();
-                return;
-              }
-            } catch(err){}
-            // Fallback
-            $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
-          }
-        });
-        return;
-      }
+                // If form exists and changed -> confirm
+                if ($form.length && initial !== current) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Discard changes?',
+                        text: 'You have unsaved changes. Do you want to discard them?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Discard',
+                        cancelButtonText: 'Keep editing'
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            modalSnapshots.delete(id);
+                            // Try Bootstrap jQuery hide, then BS5 API, then fallback DOM removal
+                            try {
+                                if (typeof $modal.modal === 'function') {
+                                    $modal.modal('hide');
+                                    return;
+                                }
+                            } catch (err) {}
+                            try {
+                                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                                    const instance = bootstrap.Modal.getInstance($modal.get(0)) || new bootstrap.Modal($modal.get(0));
+                                    instance.hide();
+                                    return;
+                                }
+                            } catch (err) {}
+                            // Fallback
+                            $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
+                            $('.modal-backdrop').remove();
+                            $('body').removeClass('modal-open');
+                        }
+                    });
+                    return;
+                }
 
-      // No changes — proceed to close as before
-      try { e.preventDefault(); if (typeof $modal.modal === 'function') { $modal.modal('hide'); return; } } catch(err){}
-      try {
-        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-          const modalEl = $modal.get(0);
-          const instance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-          instance.hide();
-          return;
-        }
-      } catch(err){}
-      try {
-        $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
-        $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open');
-      } catch(err){}
-    });
+                // No changes — proceed to close as before
+                try {
+                    e.preventDefault();
+                    if (typeof $modal.modal === 'function') {
+                        $modal.modal('hide');
+                        return;
+                    }
+                } catch (err) {}
+                try {
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                        const modalEl = $modal.get(0);
+                        const instance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                        instance.hide();
+                        return;
+                    }
+                } catch (err) {}
+                try {
+                    $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open');
+                } catch (err) {}
+            });
 
-    // Clear snapshot when modal fully hidden
-    $(document).on('hidden.bs.modal', '.modal', function() {
-      const id = $(this).attr('id') || '';
-      modalSnapshots.delete(id);
-    });
+            // Clear snapshot when modal fully hidden
+            $(document).on('hidden.bs.modal', '.modal', function() {
+                const id = $(this).attr('id') || '';
+                modalSnapshots.delete(id);
+            });
 
-    // Small SweetAlert toast helper
-    window.SwalToast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true
-    });
+            // Small SweetAlert toast helper
+            window.SwalToast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true
+            });
 
-})(jQuery);
+        })(jQuery);
     </script>
+
 
 </body>
 

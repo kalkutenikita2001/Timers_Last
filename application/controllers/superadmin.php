@@ -11,6 +11,7 @@ class Superadmin extends MY_Controller
 		$this->load->model('Student_model'); // Load the Student_model
 		$this->load->model('Center_model');
 		$this->load->model('Permission_model');
+		$this->load->model('StaffModel');
 		$this->load->database();
 
 		// ✅ Block access if not logged in
@@ -457,10 +458,93 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/attendance');
 	}
+	// public function Add_NewStaff()
+	// {
+	// 	$this->load->view('superadmin/Add_NewStaff');
+
+	// }
+	// public function Add_NewStaff()
+	// {
+	// 	$data['venues'] = $this->StaffModel->getAllVenues();
+	// 	$data['slots']  = $this->StaffModel->getAllSlots();
+	// 	$this->load->view('superadmin/Add_NewStaff', $data);
+	// }
+
+	// public function saveStaff()
+	// {
+	// 	// Debug: check if POST is received
+	// 	$name         = $this->input->post('name');
+	// 	$email        = $this->input->post('email');
+	// 	$contact      = $this->input->post('contact');
+	// 	$joining_date = $this->input->post('joining_date');
+	// 	$salary       = $this->input->post('salary');
+	// 	$role         = $this->input->post('role');
+
+	// 	$centers      = $this->input->post('centers');
+	// 	$slots        = $this->input->post('slots');
+
+	// 	$data = array(
+	// 		'name'         => $name,
+	// 		'email'        => $email,
+	// 		'contact'      => $contact,
+	// 		'joining_date' => $joining_date,
+	// 		'salary'       => $salary,
+	// 		'role'         => $role,
+	// 		'centers'      => !empty($centers) ? implode(',', $centers) : '',
+	// 		'slots'        => !empty($slots) ? implode(',', $slots) : ''
+	// 	);
+
+	// 	$insert = $this->StaffModel->insertStaff($data);
+
+	// 	if ($insert) {
+	// 		$this->session->set_flashdata('success', 'Staff added successfully!');
+	// 	} else {
+	// 		$this->session->set_flashdata('error', 'Failed to add staff.');
+	// 	}
+
+	// 	redirect('superadmin/Add_NewStaff');
+	// }
 	public function Add_NewStaff()
 	{
-		$this->load->view('superadmin/Add_NewStaff');
+		$data['venues'] = $this->StaffModel->getAllVenues();
+		$data['slots'] = $this->StaffModel->getAllSlots();
+		$data['staff'] = $this->StaffModel->getAllStaff(); // Get staff data
+		$this->load->view('superadmin/Add_NewStaff', $data);
 	}
+
+	public function saveStaff()
+	{
+		$name = $this->input->post('name');
+		$email = $this->input->post('email');
+		$contact = $this->input->post('contact');
+		$joining_date = $this->input->post('joining_date');
+		$salary = $this->input->post('salary');
+		$role = $this->input->post('role');
+		$centers = $this->input->post('centers');
+		$slots = $this->input->post('slots');
+
+		$data = array(
+			'name' => $name,
+			'email' => $email,
+			'contact' => $contact,
+			'joining_date' => $joining_date,
+			'salary' => $salary,
+			'role' => $role,
+			'centers' => !empty($centers) ? implode(',', $centers) : '',
+			'slots' => !empty($slots) ? implode(',', $slots) : ''
+		);
+
+		$insert = $this->StaffModel->insertStaff($data);
+
+		if ($insert) {
+			$this->session->set_flashdata('success', 'Staff added successfully!');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add staff.');
+		}
+
+		redirect('superadmin/Add_NewStaff');
+	}
+
 	public function Salary_Management()
 	{
 		$this->load->view('superadmin/Salary_Management');
