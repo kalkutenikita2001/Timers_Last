@@ -290,6 +290,7 @@
             margin-bottom: 25px;
             overflow: hidden;
             position: relative;
+            border:2px solid red;
         }
 
         .venue-card:hover {
@@ -310,13 +311,14 @@
         }
 
         .venue-card-header {
-            background: var(--primary-gradient);
-            color: white;
+            background: white;
+            color: red;
             border-top-left-radius: var(--border-radius);
             border-top-right-radius: var(--border-radius);
             padding: 20px;
             position: relative;
             overflow: hidden;
+            border:1px solid red;
         }
 
         .venue-card-header::after {
@@ -708,14 +710,18 @@
                                 <!-- Venue Details -->
                                 <h5 class="mb-3"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Venue Details</h5>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label>Venue Name </label>
                                         <input type="text" class="form-control" id="venueName" placeholder="Enter Venue Name" required>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label>Location </label>
                                         <input type="text" class="form-control" id="venueLocation" placeholder="Enter Location" required>
                                     </div>
+                                      <div class="form-group col-md-4">
+    <label>Password</label>
+    <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
+  </div>
                                 </div>
 
                                 <div class="form-row">
@@ -910,6 +916,11 @@
                                 <label>Location</label>
                                 <input type="text" class="form-control" id="editVenueLocation" placeholder="Enter Location" required>
                             </div>
+                             <div class="form-group col-md-4">
+    <label>Password</label>
+    <input type="text" class="form-control" id="password" placeholder="Enter Password" required>
+  </div>
+                           
                         </div>
 
                         <div class="form-row">
@@ -2230,12 +2241,17 @@ $('#saveVenue').on('click', function() {
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <h6><i class="fas fa-tag text-primary mr-2"></i>Venue Name</h6>
                                 <p class="text-muted">${venue.venue_name}</p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <h6><i class="fas fa-map-marker-alt text-primary mr-2"></i>Location</h6>
+                                <p class="text-muted">${venue.location}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="bi bi-eye" id="toggleIcon" style="color: red;"></i>
+</i>Password</h6>
                                 <p class="text-muted">${venue.location}</p>
                             </div>
                         </div>
@@ -2373,6 +2389,101 @@ $('#saveVenue').on('click', function() {
                 showVenueDashboard();
             }
         });
+    </script>
+    <script>
+(function($) {
+    // Use SweetAlert to confirm modal close when there are unsaved changes.
+    // Keep snapshots of form state when a modal is shown.
+    const modalSnapshots = new Map();
+
+    // Snapshot first form inside a modal when it opens
+    $(document).on('shown.bs.modal shown.bs.modal', '.modal', function() {
+      const $m = $(this);
+      const $form = $m.find('form').first();
+      if ($form.length) modalSnapshots.set($m.attr('id') || '', $form.serialize());
+    });
+
+    // Enhanced close handler: if form changed, ask via SweetAlert; otherwise close normally
+    $(document).on('click', '[data-dismiss], [data-bs-dismiss], .close', function(e) {
+      const $btn = $(this);
+      let $modal = $btn.closest('.modal');
+
+      // fallback to target selector if the button isn't inside the modal
+      if (!$modal.length) {
+        const target = $btn.attr('data-target') || $btn.attr('data-bs-target');
+        if (target) $modal = $(target);
+      }
+      if (!$modal.length) return;
+
+      const id = $modal.attr('id') || '';
+      const $form = $modal.find('form').first();
+      const initial = modalSnapshots.get(id) || '';
+      const current = $form.length ? $form.serialize() : '';
+
+      // If form exists and changed -> confirm
+      if ($form.length && initial !== current) {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Discard changes?',
+          text: 'You have unsaved changes. Do you want to discard them?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Discard',
+          cancelButtonText: 'Keep editing'
+        }).then(result => {
+          if (result.isConfirmed) {
+            modalSnapshots.delete(id);
+            // Try Bootstrap jQuery hide, then BS5 API, then fallback DOM removal
+            try { if (typeof $modal.modal === 'function') { $modal.modal('hide'); return; } } catch(err){}
+            try {
+              if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const instance = bootstrap.Modal.getInstance($modal.get(0)) || new bootstrap.Modal($modal.get(0));
+                instance.hide();
+                return;
+              }
+            } catch(err){}
+            // Fallback
+            $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+          }
+        });
+        return;
+      }
+
+      // No changes — proceed to close as before
+      try { e.preventDefault(); if (typeof $modal.modal === 'function') { $modal.modal('hide'); return; } } catch(err){}
+      try {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+          const modalEl = $modal.get(0);
+          const instance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          instance.hide();
+          return;
+        }
+      } catch(err){}
+      try {
+        $modal.removeClass('show').css('display', 'none').attr('aria-hidden', 'true').attr('aria-modal', 'false');
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+      } catch(err){}
+    });
+
+    // Clear snapshot when modal fully hidden
+    $(document).on('hidden.bs.modal', '.modal', function() {
+      const id = $(this).attr('id') || '';
+      modalSnapshots.delete(id);
+    });
+
+    // Small SweetAlert toast helper
+    window.SwalToast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true
+    });
+
+})(jQuery);
     </script>
 
 </body>

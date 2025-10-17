@@ -185,6 +185,10 @@
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'dashboard') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/dashboard'); ?>">
         <i class="bi bi-speedometer2"></i><span>Dashboard</span>
       </a>
+      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueForm') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueForm'); ?>">
+        <i class="bi bi-mortarboard"></i><span> Office Management </span>
+      </a>
+
 
       <!---
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'CenterManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/CenterManagement2'); ?>">
@@ -272,7 +276,8 @@
           <nav class="nav flex-column ms-3">
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'ReAdd') ? 'active' : ''; ?>"
               href="<?php echo base_url('superadmin/ReAdd'); ?>">
-              <i class="bi bi-plus-circle"></i><span> New Admission</span>
+              <i class="bi-clipboard-check"></i>
+<span> New Admission</span>
             </a>
             <!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>"
               href="<?php echo base_url('superadmin/Re_admission'); ?>">
@@ -290,19 +295,16 @@
         <i class="bi bi-mortarboard"></i><span> Office Management 1</span>
       </a> -->
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'VenueForm') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/VenueForm'); ?>">
-        <i class="bi bi-mortarboard"></i><span> Office Management </span>
+      
+ <a class="nav-link <?php echo ($this->uri->segment(2) == 'FinanceManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FinanceManagement2'); ?>">
+                      <i class="fa-solid fa-file-invoice-dollar"></i>
+<span>Finance Management</span>
       </a>
-
-
 
       <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/EventAndNotice'); ?>">
         <i class="bi bi-calendar-event"></i><span>Event Management</span>
       </a>
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'FinanceManagement2') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/FinanceManagement2'); ?>">
-                      <i class="fa-solid fa-file-invoice-dollar"></i>
-<span>Finance Management</span>
-      </a>
+     
 
 
       <!--
@@ -312,10 +314,10 @@
   -->
 
       
-<a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
+<!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
     <i class="fa-solid fa-arrow-trend-up"></i>
 <span> Expenses Management</span>
-</a>
+</a> -->
 
 
 
@@ -340,6 +342,15 @@
       <a class="nav-link" href="<?php echo base_url('auth/logout'); ?>" id="logout-link">
         <i class="bi bi-box-arrow-right"></i><span>Logout</span>
       </a>
+
+      <!-- Logout -->
+      <a class="nav-link" href="<?php echo base_url('g'); ?>" id="logout-link">
+        <i class=""></i><span></span>
+      </a>
+       <a class="nav-link" href="<?php echo base_url(''); ?>" id="logout-link">
+        <i class=""></i><span></span>
+      </a>
+     
     </nav>
   </div>
 
