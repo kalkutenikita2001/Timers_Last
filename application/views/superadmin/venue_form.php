@@ -1347,8 +1347,8 @@ $('#saveVenue').on('click', function() {
     const venueName = $('#venueName').val();
     const venueLocation = $('#venueLocation').val();
     const numCourts = $('#numCourts').val();
-
-    if (!venueName || !venueLocation || !numCourts) {
+const password= $('#password').val();
+    if (!venueName || !venueLocation || !numCourts || !password) {
         Swal.fire({
             icon: 'error',
             title: 'Missing Information',
@@ -1433,6 +1433,7 @@ $('#saveVenue').on('click', function() {
     const venueData = {
         venue_name: venueName,
         location: venueLocation,
+        password: password,
         num_courts: numCourts,
         courts: courts, // Added this line 👈
         facilities: facilities,
@@ -2252,7 +2253,7 @@ $('#saveVenue').on('click', function() {
                             <div class="col-md-6">
                                 <h6><i class="bi bi-eye" id="toggleIcon" style="color: red;"></i>
 </i>Password</h6>
-                                <p class="text-muted">${venue.location}</p>
+                                <p class="text-muted">${venue.password}</p>
                             </div>
                         </div>
                         <div class="row mt-3">

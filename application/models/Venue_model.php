@@ -7,6 +7,7 @@ class Venue_model extends CI_Model {
         // Save venue
         $venueData = [
             'venue_name' => $data['venue_name'],
+            'password'   => $data['password'],
             'location'   => $data['location'],
             'num_courts' => $data['num_courts']
         ];
