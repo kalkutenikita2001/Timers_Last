@@ -1052,51 +1052,51 @@
         ];
 
         // Function to display venue cards
-        function displayVenueCards() {
-            const container = $('#venueCardsContainer');
+   function displayVenueCards() {
+    const container = $('#venueCardsContainer');
+    container.html('<div class="col-12 text-center py-5"><h5>Loading venues...</h5></div>');
+
+    $.ajax({
+        url: base_url + 'venue/getAll',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
             container.empty();
 
-            if (venues.length === 0) {
+            if (response.status !== 'success' || !response.data || response.data.length === 0) {
                 container.html('<div class="col-12 text-center py-5"><h5>No venues added yet. Click "Add New Center" to get started.</h5></div>');
                 return;
             }
 
-            venues.forEach(venue => {
+            response.data.forEach(venue => {
                 const facilitiesCount = venue.facilities ? venue.facilities.length : 0;
                 const slotsCount = venue.slots ? venue.slots.length : 0;
                 const plansCount = venue.plans ? venue.plans.length : 0;
+                const courtsCount = venue.courts ? venue.courts.length : 0;
 
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="venue-card">
                             <div class="venue-card-header">
                                 <div class="status-badge">Active</div>
-                                <h5 class="mb-0">${venue.name}</h5>
+                                <h5 class="mb-0">${venue.venue_name}</h5>
                                 <p class="mb-0"><i class="fas fa-map-marker-alt mr-1"></i> ${venue.location}</p>
                             </div>
                             <div class="venue-card-body">
-                                <div class="venue-stat">
-                                    <i class="fas fa-gavel"></i> ${venue.courts} Courts
-                                </div>
-                                <div class="venue-stat">
-                                    <i class="fas fa-dumbbell"></i> ${facilitiesCount} Facilities
-                                </div>
-                                <div class="venue-stat">
-                                    <i class="fas fa-clock"></i> ${slotsCount} Slots
-                                </div>
-                                <div class="venue-stat">
-                                    <i class="fas fa-tags"></i> ${plansCount} Plans
-                                </div>
+                                <div class="venue-stat"><i class="fas fa-gavel"></i> ${courtsCount} Courts</div>
+                                <div class="venue-stat"><i class="fas fa-dumbbell"></i> ${facilitiesCount} Facilities</div>
+                                <div class="venue-stat"><i class="fas fa-clock"></i> ${slotsCount} Slots</div>
+                                <div class="venue-stat"><i class="fas fa-tags"></i> ${plansCount} Plans</div>
                             </div>
                             <div class="venue-card-footer d-flex justify-content-end">
-                                <button class="btn btn-danger btn-sm mr-2 view-venue" data-id="${venue.id}" data-toggle="tooltip" title="View Venue Details">
-                                    <i class="fas fa-eye"></i> 
+                                <button class="btn btn-danger btn-sm mr-2 view-venue" data-id="${venue.id}">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm mr-2 edit-venue" data-id="${venue.id}" data-toggle="tooltip" title="Edit Venue">
-                                    <i class="fas fa-edit"></i> 
+                                <button class="btn btn-danger btn-sm mr-2 edit-venue" data-id="${venue.id}">
+                                    <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm delete-venue" data-id="${venue.id}" data-toggle="tooltip" title="Delete Venue">
-                                    <i class="fas fa-trash"></i> 
+                                <button class="btn btn-danger btn-sm delete-venue" data-id="${venue.id}">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
@@ -1104,7 +1104,60 @@
                 `);
                 container.append(card);
             });
+        },
+        error: function() {
+            container.html('<div class="col-12 text-center py-5"><h5>Error loading venues. Please try again later.</h5></div>');
         }
+    });
+}
+// Handle Delete Venue
+$(document).on('click', '.delete-venue', function() {
+    const venueId = $(this).data('id');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This will permanently delete the venue and all its related data (courts, facilities, slots, and plans).",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: base_url + 'venue/delete/' + venueId,
+                method: 'POST',
+                success: function(response) {
+                    const res = JSON.parse(response);
+                    if (res.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Venue deleted successfully.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        displayVenueCards(); // Refresh the venue list dynamically
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: res.message || 'Failed to delete venue.'
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error',
+                        text: 'Unable to delete venue. Please try again.'
+                    });
+                }
+            });
+        }
+    });
+});
+
 
         // Initialize venue cards display
         displayVenueCards();
@@ -1418,35 +1471,7 @@ $('#saveVenue').on('click', function() {
     });
 });
  // Delete venue
-        $(document).on('click', '.delete-venue', function() {
-            const venueId = $(this).data('id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Remove from venues array
-                    venues = venues.filter(venue => venue.id !== venueId);
-
-                    // Update display
-                    displayVenueCards();
-
-                    Swal.fire(
-                        'Deleted!',
-                        'Venue has been deleted.',
-                        'success'
-                    );
-                }
-            });
-        });
-
-        // Helper functions
+      // Helper functions
         function formatTime(time) {
             if (!time) return '';
             let [h, m] = time.split(':');
@@ -2162,114 +2187,131 @@ $('#saveVenue').on('click', function() {
         // View venue functionality
         let currentVenue = null; // Store current venue data
 
-        $(document).on('click', '.view-venue', function() {
-            const venueId = $(this).data('id');
-            currentVenue = venues.find(v => v.id === venueId);
+     $(document).on('click', '.view-venue', function() {
+    const venueId = $(this).data('id');
 
-            if (currentVenue) {
-                // Populate view modal with venue details
-                showVenueDetails();
-                // Show modal
+    $.ajax({
+        url: base_url + 'VenueController/get/' + venueId,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                const venue = response.data;
+                showVenueDetails(venue);
                 $('#viewVenueModal').modal('show');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Not Found',
+                    text: response.message || 'Could not load venue details.'
+                });
             }
-        });
+        },
+        error: function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Failed to fetch venue details.'
+            });
+        }
+    });
+});
+ // Function to show venue details
+     function showVenueDetails(venue) {
+    const viewContent = $('#viewVenueContent');
 
-        // Function to show venue details
-        function showVenueDetails() {
-            const viewContent = $('#viewVenueContent');
-            viewContent.html(`
-                <div class="row">
-                    <!-- Venue Basic Info -->
-                    <div class="col-md-12 mb-4">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0"><i class="fas fa-building mr-2"></i>Venue Information</h5>
+    viewContent.html(`
+        <div class="row">
+            <!-- Venue Info -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-building mr-2"></i>Venue Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-tag text-primary mr-2"></i>Venue Name</h6>
+                                <p class="text-muted">${venue.venue_name}</p>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h6><i class="fas fa-tag text-primary mr-2"></i>Venue Name</h6>
-                                        <p class="text-muted">${currentVenue.name}</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6><i class="fas fa-map-marker-alt text-primary mr-2"></i>Location</h6>
-                                        <p class="text-muted">${currentVenue.location}</p>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <h6><i class="fas fa-gavel text-primary mr-2"></i>Number of Courts</h6>
-                                        <p class="text-muted">${currentVenue.courts}</p>
-                                    </div>
-                                </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-map-marker-alt text-primary mr-2"></i>Location</h6>
+                                <p class="text-muted">${venue.location}</p>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Facilities -->
-                    <div class="col-md-6 mb-4">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="mb-0"><i class="fas fa-dumbbell mr-2"></i>Facilities / Amenities</h5>
-                            </div>
-                            <div class="card-body">
-                                ${currentVenue.facilities && currentVenue.facilities.length > 0 ?
-                                    currentVenue.facilities.map(facility => `
-                                        <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-check-circle text-success mr-2"></i>
-                                            <span>${facility}</span>
-                                        </div>
-                                    `).join('') :
-                                    '<p class="text-muted">No facilities added</p>'
-                                }
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slots -->
-                    <div class="col-md-6 mb-4">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-info text-white">
-                                <h5 class="mb-0"><i class="fas fa-clock mr-2"></i>Available Slots</h5>
-                            </div>
-                            <div class="card-body">
-                                ${currentVenue.slots && currentVenue.slots.length > 0 ?
-                                    currentVenue.slots.map(slot => `
-                                        <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-calendar-alt text-info mr-2"></i>
-                                            <span>${slot}</span>
-                                        </div>
-                                    `).join('') :
-                                    '<p class="text-muted">No slots added</p>'
-                                }
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Plans -->
-                    <div class="col-md-12 mb-4">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-warning text-white">
-                                <h5 class="mb-0"><i class="fas fa-tags mr-2"></i>Membership Plans</h5>
-                            </div>
-                            <div class="card-body">
-                                ${currentVenue.plans && currentVenue.plans.length > 0 ?
-                                    currentVenue.plans.map(plan => `
-                                        <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-star text-warning mr-2"></i>
-                                              <span>${plan.planType}</span>
-                                        </div>
-                                    `).join('') :
-                                    '<p class="text-muted">No plans added</p>'
-                                }
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-gavel text-primary mr-2"></i>Courts</h6>
+                                <p class="text-muted">${venue.courts.length}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            `);
-        }
+            </div>
 
-        // Function to show venue dashboard
+            <!-- Facilities -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-dumbbell mr-2"></i>Facilities</h5>
+                    </div>
+                    <div class="card-body">
+                        ${venue.facilities && venue.facilities.length > 0 ?
+                            venue.facilities.map(f => `
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>${f.facility_name} (${f.facility_type}) - ₹${f.rent}</span>
+                                </div>
+                            `).join('') :
+                            '<p class="text-muted">No facilities added</p>'
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slots -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-clock mr-2"></i>Available Slots</h5>
+                    </div>
+                    <div class="card-body">
+                        ${venue.slots && venue.slots.length > 0 ?
+                            venue.slots.map(s => `
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-alt text-info mr-2"></i>
+                                    <span>${s.slot_name} (${s.from_time} - ${s.to_time})</span>
+                                </div>
+                            `).join('') :
+                            '<p class="text-muted">No slots added</p>'
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plans -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-tags mr-2"></i>Membership Plans</h5>
+                    </div>
+                    <div class="card-body">
+                        ${venue.plans && venue.plans.length > 0 ?
+                            venue.plans.map(p => `
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-star text-warning mr-2"></i>
+                                    <span>${p.membership_name} - ₹${p.total_fees} (${p.installments} installments)</span>
+                                </div>
+                            `).join('') :
+                            '<p class="text-muted">No plans added</p>'
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+}
+  // Function to show venue dashboard
         function showVenueDashboard() {
             const viewContent = $('#viewVenueContent');
             const facilitiesCount = currentVenue.facilities ? currentVenue.facilities.length : 0;

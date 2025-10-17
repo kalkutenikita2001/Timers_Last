@@ -29,4 +29,39 @@ class VenueController extends CI_Controller {
             echo json_encode(['status' => 'error', 'message' => 'Failed to save venue']);
         }
     }
+    public function getAllVenues()
+{
+    $this->load->model('Venue_model');
+    $venues = $this->Venue_model->getAllVenues();
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => $venues
+    ]);
+}
+public function deleteVenue($id)
+{
+    $this->load->model('Venue_model');
+    
+    // Try deleting
+    $deleted = $this->Venue_model->deleteVenue($id);
+
+    if ($deleted) {
+        echo json_encode(['status' => 'success', 'message' => 'Venue deleted successfully.']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to delete venue.']);
+    }
+}
+public function get($id)
+{
+    $this->load->model('Venue_model');
+    $venue = $this->Venue_model->getVenueById($id);
+
+    if ($venue) {
+        echo json_encode(['status' => 'success', 'data' => $venue]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Venue not found']);
+    }
+}
+
 }

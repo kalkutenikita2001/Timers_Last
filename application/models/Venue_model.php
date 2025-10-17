@@ -69,7 +69,60 @@ class Venue_model extends CI_Model {
         return $venue_id;
     }
 
-    public function get_all_venues() {
-        return $this->db->get('venues')->result_array();
+ public function getAllVenues()
+{
+    $this->db->select('*');
+    $this->db->from('venues');
+    $query = $this->db->get();
+    $venues = $query->result_array();
+
+    foreach ($venues as &$venue) {
+        $venue_id = $venue['id'];
+
+        // Get courts
+        $venue['courts'] = $this->db->get_where('venue_courts', ['venue_id' => $venue_id])->result_array();
+
+        // Get facilities
+        $venue['facilities'] = $this->db->get_where('venue_facilities', ['venue_id' => $venue_id])->result_array();
+
+        // Get slots
+        $venue['slots'] = $this->db->get_where('venue_slots', ['venue_id' => $venue_id])->result_array();
+
+        // Get plans
+        $venue['plans'] = $this->db->get_where('membership_plans', ['venue_id' => $venue_id])->result_array();
     }
+
+    return $venues;
+}
+public function deleteVenue($id)
+{
+    // Begin transaction to ensure consistency
+    $this->db->trans_start();
+
+    // Delete related records first to maintain referential integrity
+    $this->db->delete('venue_courts', ['venue_id' => $id]);
+    $this->db->delete('venue_facilities', ['venue_id' => $id]);
+    $this->db->delete('venue_slots', ['venue_id' => $id]);
+    $this->db->delete('membership_plans', ['venue_id' => $id]);
+
+    // Delete main venue
+    $this->db->delete('venues', ['id' => $id]);
+
+    $this->db->trans_complete();
+
+    return $this->db->trans_status(); // returns TRUE if all queries succeeded
+}
+public function getVenueById($id)
+{
+    $venue = $this->db->get_where('venues', ['id' => $id])->row_array();
+    if (!$venue) return null;
+
+    $venue['courts'] = $this->db->get_where('venue_courts', ['venue_id' => $id])->result_array();
+    $venue['facilities'] = $this->db->get_where('venue_facilities', ['venue_id' => $id])->result_array();
+    $venue['slots'] = $this->db->get_where('venue_slots', ['venue_id' => $id])->result_array();
+    $venue['plans'] = $this->db->get_where('membership_plans', ['venue_id' => $id])->result_array();
+
+    return $venue;
+}
+
 }
