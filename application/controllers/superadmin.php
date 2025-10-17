@@ -609,6 +609,19 @@ class Superadmin extends MY_Controller
 		}
 		redirect('superadmin/Add_NewStaff');
 	}
+	public function deleteStaff()
+	{
+		$this->load->model('StaffModel');
+
+		$staff_id = $this->input->post('id');
+
+		if ($this->StaffModel->deleteStaff($staff_id)) {
+			echo json_encode(['success' => true, 'message' => 'Staff member deleted successfully']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Failed to delete staff member']);
+		}
+	}
+
 
 	public function Salary_Management()
 	{

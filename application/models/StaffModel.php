@@ -46,4 +46,9 @@ class StaffModel extends CI_Model
     {
         return $this->db->get('staff')->result_array();
     }
+    public function deleteStaff($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->delete('staff');
+    }
 }

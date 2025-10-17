@@ -679,6 +679,126 @@
         }
       });
     });
+    // Delete Staff Functionality
+    $(document).on('click', '.deleteBtn', function(e) {
+      e.stopPropagation();
+      const staffId = $(this).data('id');
+      const staffName = $(this).closest('tr').find('td:eq(1)').text().trim();
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to delete staff member: ${staffName}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff4040',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show loading
+          Swal.fire({
+            title: 'Deleting...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+
+          // AJAX call to delete staff
+          $.ajax({
+            url: '<?php echo base_url('superadmin/deleteStaff'); ?>',
+            type: 'POST',
+            data: {
+              id: staffId
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                Swal.fire({
+                  title: 'Deleted!',
+                  text: response.message,
+                  icon: 'success',
+                  confirmButtonColor: '#ff4040'
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: 'Error!',
+                  text: response.message || 'Failed to delete staff',
+                  icon: 'error',
+                  confirmButtonColor: '#ff4040'
+                });
+              }
+            },
+            error: function() {
+              Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while deleting staff',
+                icon: 'error',
+                confirmButtonColor: '#ff4040'
+              });
+            }
+          });
+        }
+      });
+    });
+
+    // Edit Form Submission with SweetAlert
+    document.getElementById('editStaffForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = this;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Updating...';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Update Staff';
+
+        if (result.success) {
+          Swal.fire({
+            title: 'Success!',
+            text: result.message,
+            icon: 'success',
+            confirmButtonColor: '#ff4040'
+          }).then(() => {
+            const editModal = bootstrap.Modal.getInstance(document.getElementById('editStaffModal'));
+            editModal.hide();
+            location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: result.message || 'Failed to update staff',
+            icon: 'error',
+            confirmButtonColor: '#ff4040'
+          });
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Update Staff';
+        Swal.fire({
+          title: 'Error!',
+          text: 'An error occurred while updating staff',
+          icon: 'error',
+          confirmButtonColor: '#ff4040'
+        });
+      }
+    });
   </script>
 </body>
 
