@@ -512,6 +512,46 @@ class Superadmin extends MY_Controller
 		$this->load->view('superadmin/Add_NewStaff', $data);
 	}
 
+	// public function saveStaff()
+	// {
+
+	// 	$name = $this->input->post('name');
+	// 	$email = $this->input->post('email');
+	// 	$contact = $this->input->post('contact');
+	// 	$joining_date = $this->input->post('joining_date');
+	// 	$salary = $this->input->post('salary');
+	// 	$role = $this->input->post('role');
+	// 	$centers = $this->input->post('centers');
+	// 	$slots = $this->input->post('slots');
+
+	// 	$data = array(
+	// 		'name' => $name,
+	// 		'email' => $email,
+	// 		'contact' => $contact,
+	// 		'joining_date' => $joining_date,
+	// 		'salary' => $salary,
+	// 		'role' => $role,
+	// 		'centers' => !empty($centers) ? implode(',', $centers) : '',
+	// 		'slots' => !empty($slots) ? implode(',', $slots) : ''
+	// 	);
+
+	// 	$insert = $this->StaffModel->insertStaff($data);
+
+
+	// 	// if ($insert) {
+	// 	// 	$this->session->set_flashdata('success', 'Staff added successfully!');
+	// 	// } else {
+	// 	// 	$this->session->set_flashdata('error', 'Failed to add staff.');
+	// 	// }
+
+	// 	// redirect('superadmin/Add_NewStaff');
+
+	// 	if ($insert) {
+	// 		$response = array('status' => 'success', 'message' => 'Staff added successfully!');
+	// 	} else {
+	// 		$response = array('status' => 'error', 'message' => 'Failed to add staff.');
+	// 	}
+	// }
 	public function saveStaff()
 	{
 		$name = $this->input->post('name');
@@ -537,13 +577,17 @@ class Superadmin extends MY_Controller
 		$insert = $this->StaffModel->insertStaff($data);
 
 		if ($insert) {
-			$this->session->set_flashdata('success', 'Staff added successfully!');
+			$response = array('success' => true, 'message' => 'Staff added successfully!');
 		} else {
-			$this->session->set_flashdata('error', 'Failed to add staff.');
+			$response = array('success' => false, 'message' => 'Failed to add staff.');
 		}
 
-		redirect('superadmin/Add_NewStaff');
+		// Return JSON response
+		header('Content-Type: application/json');
+		echo json_encode($response);
+		exit; // Important to stop further output
 	}
+
 
 	public function Salary_Management()
 	{
