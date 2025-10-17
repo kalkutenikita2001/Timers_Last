@@ -1,3 +1,6 @@
+<?php
+// application/views/superadmin/Staff_details.php
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,23 +15,16 @@
 
   <style>
     :root{
-      /* Project theme */
-      --accent:#ff4040;
-      --accent-dark:#470000;
-      --muted:#f4f6f8;
+      --accent:#ff4040; --accent-dark:#470000; --muted:#f4f6f8;
       --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
-      --card-bg:#ffffff;
-      --text:#111;
-      --subtle:#6c757d;
+      --card-bg:#ffffff; --text:#111; --subtle:#6c757d;
     }
     body{ background:var(--muted); color:var(--text); overflow-x:hidden; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
 
-    /* Wrapper follows your attendance module behavior */
     .dashboard-wrapper{ margin-left:250px; padding:20px; min-height:100vh; transition:margin-left .25s ease, padding .25s ease; }
     .dashboard-wrapper.minimized{ margin-left:60px; }
     @media (max-width:991.98px){ .dashboard-wrapper{ margin-left:0 !important; padding:12px; } }
 
-    /* Hero */
     .hero{
       position:relative; border-radius:18px; overflow:hidden;
       background: radial-gradient(1200px 400px at -10% -20%, rgba(255,64,64,.25), transparent),
@@ -38,7 +34,6 @@
       box-shadow:0 18px 50px rgba(255,64,64,.10);
     }
     .hero::after{
-      /* gentle parallax glow */
       content:""; position:absolute; inset:-40px; pointer-events:none;
       background: radial-gradient(700px 240px at 15% 0%, rgba(255,64,64,.18), transparent),
                   radial-gradient(600px 220px at 85% 0%, rgba(71,0,0,.16), transparent);
@@ -54,70 +49,43 @@
       box-shadow:0 14px 34px rgba(255,64,64,.35);
     }
 
-    /* Cards */
-    .card-lite{
-      background:var(--card-bg); border-radius:16px; border:1px solid #ececec;
-      box-shadow:0 10px 28px rgba(0,0,0,.06);
-    }
+    .card-lite{ background:var(--card-bg); border-radius:16px; border:1px solid #ececec; box-shadow:0 10px 28px rgba(0,0,0,.06); }
 
-    /* Buttons */
     .btn-ghost{ border:1px solid #e9ecef; background:#fff; }
     .btn-ghost:hover{ background:#f8f8f8; }
     .btn-primary{ background:var(--grad); border:0; font-weight:600; }
     .btn-primary:hover{ filter:brightness(.96); }
 
-    /* Chips */
-    .chip{
-      border:1px solid #eee; background:#fff; border-radius:999px; padding:.38rem .72rem;
-      display:inline-flex; align-items:center; gap:.45rem; box-shadow:0 6px 16px rgba(0,0,0,.05);
-    }
+    .chip{ border:1px solid #eee; background:#fff; border-radius:999px; padding:.38rem .72rem; display:inline-flex; align-items:center; gap:.45rem; box-shadow:0 6px 16px rgba(0,0,0,.05); }
 
-    /* KPI tiles */
     .stat{ border:1px dashed #e7e7e7; border-radius:14px; padding:14px; background:#fff; height:100%; }
     .stat .label{ color:#666; font-size:.85rem; }
-    .status-badge{
-      border-radius:999px; padding:.25rem .6rem; font-size:.8rem; font-weight:700;
-    }
+    .status-badge{ border-radius:999px; padding:.25rem .6rem; font-size:.8rem; font-weight:700; }
     .status-active{ background:#d1e7dd; color:#0f5132; }
     .status-deactive{ background:#e2e3e5; color:#41464b; }
 
-    /* Circular progress (attendance rate) */
-    .ring{
-      width:78px; height:78px; position:relative;
-    }
+    .ring{ width:78px; height:78px; position:relative; }
     .ring svg{ transform:rotate(-90deg); }
-    .ring .val{
-      position:absolute; inset:0; display:grid; place-items:center; font-weight:700; font-size:.9rem;
-    }
+    .ring .val{ position:absolute; inset:0; display:grid; place-items:center; font-weight:700; font-size:.9rem; }
 
-    /* Attendance calendar */
     .att-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-    .att-day{
-      border-radius:10px; border:1px solid #ececec; background:#fff; text-align:center;
-      padding:8px 0; font-size:.85rem; user-select:none; transition:.2s;
-    }
+    .att-day{ border-radius:10px; border:1px solid #ececec; background:#fff; text-align:center; padding:8px 0; font-size:.85rem; user-select:none; transition:.2s; }
     .att-day.present{ background:#d1e7dd; border-color:#badbcc; }
     .att-day.absent{ background:#f8d7da; border-color:#f5c2c7; }
     .att-legend span{ display:inline-flex; align-items:center; gap:6px; margin-right:12px; font-size:.85rem; }
 
-    /* Chart area fix to prevent height creep */
     .chart-box{ position:relative; height:260px; width:100%; }
-
-    /* Payout list cap */
     #salaryList{ max-height:240px; overflow:auto; }
 
-    /* Animations on scroll */
     .aos{ opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease; }
     .aos.in{ opacity:1; transform:none; }
 
-    /* Utilities */
     .section-title{ font-weight:800; letter-spacing:.2px; }
     .text-subtle{ color:var(--subtle); }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar & Navbar -->
   <?php $this->load->view('superadmin/Include/Sidebar'); ?>
   <?php $this->load->view('superadmin/Include/Navbar'); ?>
 
@@ -253,69 +221,145 @@
     </div>
   </div> <!-- /dashboard-wrapper -->
 
-  <!-- scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ========= Animate-on-scroll =========
+    // ===== Animate-on-scroll
     const inView = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
     }, {threshold: .08});
     document.querySelectorAll('.aos').forEach(el=> inView.observe(el));
 
-    // ========= Helpers =========
+    // ===== Helpers
     const qs = s => document.querySelector(s);
     const INR = n => new Intl.NumberFormat('en-IN').format(n);
-    const urlId = (function(){ const p=location.pathname.split('/').filter(Boolean); const id=parseInt(p[p.length-1],10); return isNaN(id)?null:id; })();
-
-    // Back button
-qs('#backBtn').addEventListener('click', ()=>{
-  location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>";
-});
-
-    // Pull data from storage (front-end only)
-    const all = JSON.parse(localStorage.getItem('staffDataAll') || '[]');
-    const staff = all.find(s=>s.id===urlId) || all[0];
-    if(!staff){ location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>"; }
-
-    // ---------- Fill hero ----------
-    qs('#nameHd').textContent = staff.name;
-    qs('#emailHd').textContent = staff.email;
-
-    const chipRow = qs('#chipRow');
-    function addChip(text, icon){ const el=document.createElement('span'); el.className='chip'; el.innerHTML=`<i class="${icon}"></i>${text}`; chipRow.appendChild(el); }
-    addChip(staff.role, 'bi bi-person-badge');
-    (staff.centers||[]).forEach(c=> addChip(c, 'bi bi-geo-alt'));
-    if(staff.role==='Coach' && staff.slots?.length) staff.slots.forEach(s=> addChip(s,'bi bi-clock'));
-
-    // ---------- KPI ----------
-    const statusEl = qs('#statusBadge');
-    statusEl.textContent = staff.status;
-    statusEl.className = 'status-badge ' + (staff.status==='Active'?'status-active':'status-deactive');
-
-    qs('#salaryVal').textContent = '₹ ' + INR(staff.salary);
-    qs('#joinDateSmall').textContent = staff.joining_date;
-    qs('#roleTxt').textContent = staff.role;
-    qs('#joinTxt').textContent = staff.joining_date;
-    qs('#contactTxt').textContent = staff.contact;
-    qs('#emailTxt').textContent = staff.email;
-
-    function nextPayout(){
-      const now=new Date(); const end=new Date(now.getFullYear(), now.getMonth()+1, 0);
-      return end.toISOString().slice(0,10);
-    }
-    qs('#nextPayout').textContent = nextPayout();
-
-    // Tenure
-    (function(){
-      const j=new Date(staff.joining_date), n=new Date();
-      const months=(n.getFullYear()-j.getFullYear())*12 + (n.getMonth()-j.getMonth());
-      qs('#tenureVal').textContent = months + (months===1?' month':' months');
+    const urlId = (function(){
+      const parts = location.pathname.split('/').filter(Boolean);
+      const last = parts[parts.length-1];
+      const id = parseInt(last, 10);
+      return isNaN(id) ? null : id;
     })();
 
-    // ---------- Attendance (grid + selectors + circular progress) ----------
+    // Back
+    qs('#backBtn').addEventListener('click', ()=>{
+      location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>";
+    });
+
+    // ===== API
+    async function fetchStaffById(id){
+      const res = await fetch("<?php echo base_url('api/staff/'); ?>" + id + "?t=" + Date.now(), {
+        headers:{ 'Accept':'application/json', 'Cache-Control':'no-cache' },
+        cache:'no-store'
+      });
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      return await res.json();
+    }
+    async function postActive(id, active){
+      const res = await fetch("<?php echo base_url('api/staff/'); ?>" + id + "/active", {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+        body: JSON.stringify({ active: active ? 1 : 0 })
+      });
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || 'Failed');
+      return json.staff; // updated row
+    }
+
+    // ===== Init (DB-first)
+    let staff = null;
+    (async function init(){
+      if (!urlId){ location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>"; return; }
+
+      try{
+        staff = await fetchStaffById(urlId);
+      }catch(err){
+        console.error(err);
+        alert('Could not load staff. Going back.');
+        location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>";
+        return;
+      }
+
+      // Normalize centers/slots to arrays
+      if (!Array.isArray(staff.centers) && staff.centers) {
+        staff.centers = String(staff.centers).split(',').map(x=>x.trim()).filter(Boolean);
+      } else { staff.centers = staff.centers || []; }
+      if (!Array.isArray(staff.slots) && staff.slots) {
+        staff.slots = String(staff.slots).split(',').map(x=>x.trim()).filter(Boolean);
+      } else { staff.slots = staff.slots || []; }
+
+      staff.status = staff.status || ((staff.active ?? 1) ? 'Active':'Deactive');
+      staff.attendance = staff.attendance || {};
+      staff.payouts = staff.payouts || [];
+
+      renderAll();
+      wireActions();
+    })();
+
+    // ===== Renderers
+    function renderAll(){
+      // Hero
+      qs('#nameHd').textContent = staff.name || '-';
+      qs('#emailHd').textContent = staff.email || '-';
+
+      const chipRow = qs('#chipRow'); chipRow.innerHTML = '';
+      addChip(staff.role || '-', 'bi bi-person-badge');
+      (staff.centers||[]).forEach(c=> addChip(c, 'bi bi-geo-alt'));
+      if (staff.role === 'Coach' && (staff.slots||[]).length) {
+        staff.slots.forEach(s=> addChip(s,'bi bi-clock'));
+      }
+
+      // KPI
+      setStatusBadge(staff.status);
+      qs('#salaryVal').textContent   = '₹ ' + INR(Number(staff.salary||0));
+      qs('#joinDateSmall').textContent = staff.joining_date || '—';
+      qs('#roleTxt').textContent     = staff.role || '—';
+      qs('#joinTxt').textContent     = staff.joining_date || '—';
+      qs('#contactTxt').textContent  = staff.contact || '—';
+      qs('#emailTxt').textContent    = staff.email || '—';
+
+      // Next payout = end of current month
+      const now=new Date(); const end=new Date(now.getFullYear(), now.getMonth()+1, 0);
+      qs('#nextPayout').textContent = end.toISOString().slice(0,10);
+
+      // Tenure
+      if (staff.joining_date){
+        const j=new Date(staff.joining_date), n=new Date();
+        const months = isNaN(j) ? null : ((n.getFullYear()-j.getFullYear())*12 + (n.getMonth()-j.getMonth()));
+        qs('#tenureVal').textContent = months==null ? '—' : (months + (months===1?' month':' months'));
+      } else {
+        qs('#tenureVal').textContent = '—';
+      }
+
+      // Attendance
+      fillMonthYearSelectors(); renderGrid();
+
+      // Salary graph + list
+      renderSalary();
+
+      // Centers & Slots
+      renderCentersAndSlots();
+
+      // Activity (sample)
+      renderActivity();
+    }
+
+    function addChip(text, icon){
+      const el=document.createElement('span');
+      el.className='chip';
+      el.innerHTML=`<i class="${icon}"></i>${text}`;
+      qs('#chipRow').appendChild(el);
+    }
+    function setStatusBadge(status){
+      const el = qs('#statusBadge');
+      el.textContent = status;
+      el.className = 'status-badge ' + (status==='Active'?'status-active':'status-deactive');
+    }
+
+    // Attendance
     function fillMonthYearSelectors(){
       const mSel=qs('#attMonth'), ySel=qs('#attYear');
+      mSel.innerHTML=''; ySel.innerHTML='';
       const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       months.forEach((m,i)=> mSel.append(new Option(m, i)));
       const n=new Date();
@@ -324,7 +368,7 @@ qs('#backBtn').addEventListener('click', ()=>{
       mSel.onchange=renderGrid; ySel.onchange=renderGrid;
     }
     function setRing(percent){
-      const circ = 2*Math.PI*44; // r=44
+      const circ = 2*Math.PI*44;
       const off = circ * (1 - percent/100);
       const ring = document.getElementById('ringProg');
       ring.style.strokeDashoffset = off;
@@ -336,6 +380,7 @@ qs('#backBtn').addEventListener('click', ()=>{
       const present = new Set((staff.attendance && staff.attendance[key]) || []);
       const grid=qs('#attGrid'); grid.innerHTML='';
       const last=new Date(y,m+1,0).getDate();
+
       const days=["S","M","T","W","T","F","S"];
       days.forEach(d=>{ const h=document.createElement('div'); h.className='text-center text-subtle small'; h.textContent=d; grid.appendChild(h); });
       for(let i=1;i<=last;i++){
@@ -344,88 +389,98 @@ qs('#backBtn').addEventListener('click', ()=>{
         cell.textContent=i; grid.appendChild(cell);
       }
       qs('#presentDays').textContent = present.size;
-      const pct = (present.size/last)*100;
-      setRing(pct);
+      setRing((present.size/last)*100);
     }
-    fillMonthYearSelectors(); renderGrid();
 
-    // ---------- Salary chart + list (fixed height + destroy guard) ----------
-    const salaryList = document.getElementById('salaryList'); salaryList.innerHTML='';
-    (staff.payouts||[]).forEach(d=>{
-      const li=document.createElement('li');
-      li.className='list-group-item d-flex justify-content-between align-items-center';
-      li.innerHTML=`<span><i class="bi bi-receipt me-2"></i>${d}</span><strong>₹ ${INR(staff.salary)}</strong>`;
-      salaryList.appendChild(li);
-    });
-
-    const ctx = document.getElementById('salaryChart');
-    const payoutMonths = (staff.payouts||[]).slice().reverse();
-    const payoutValues = payoutMonths.map(()=> staff.salary);
-
-    if (window.__salaryChart) window.__salaryChart.destroy();
-    window.__salaryChart = new Chart(ctx, {
-      type:'line',
-      data:{ labels:payoutMonths, datasets:[{ label:'Payout (₹)', data:payoutValues, tension:.35, fill:false }] },
-      options:{
-        responsive:true,
-        maintainAspectRatio:true,
-        resizeDelay:120,
-        plugins:{ legend:{ display:false } },
-        scales:{ y:{ ticks:{ callback:v=>'₹ '+INR(v) } } }
-      }
-    });
-
-    // ---------- Centers / Slots ----------
-    const centersWrap = document.getElementById('centersWrap');
-    (staff.centers||[]).forEach(c=>{
-      const b=document.createElement('span');
-      b.className='badge rounded-pill text-bg-light'; b.textContent=c;
-      centersWrap.appendChild(b);
-    });
-    const slotsWrap = document.getElementById('slotsWrap');
-    if(staff.role==='Coach' && staff.slots?.length){
-      staff.slots.forEach(s=>{
-        const b=document.createElement('span');
-        b.className='badge rounded-pill text-bg-light'; b.textContent=s;
-        slotsWrap.appendChild(b);
+    // Salary chart + list
+    function renderSalary(){
+      const list = document.getElementById('salaryList'); list.innerHTML='';
+      (staff.payouts||[]).forEach(d=>{
+        const li=document.createElement('li');
+        li.className='list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML=`<span><i class="bi bi-receipt me-2"></i>${d}</span><strong>₹ ${INR(Number(staff.salary||0))}</strong>`;
+        list.appendChild(li);
       });
-    }else{ slotsWrap.innerHTML='<span class="text-subtle small">No slot assignment.</span>'; }
 
-    // ---------- Activity (flavor) ----------
-    const act=document.getElementById('activityList');
-    [{ icon:'bi-calendar2-check', text:'Marked present', date:'Today' },
-     { icon:'bi-cash-coin', text:'Salary processed', date:(staff.payouts?.[0]||'—') },
-     { icon:'bi-geo-alt', text:`Center sync: ${staff.centers?.[0]||'-'}`, date:'This week' },
-    ].forEach(a=>{
-      const col=document.createElement('div'); col.className='col';
-      col.innerHTML=`<div class="card-lite p-3 h-100">
-        <div class="d-flex align-items-center gap-2">
-          <i class="bi ${a.icon}" style="color:var(--accent)"></i>
-          <div class="fw-semibold">${a.text}</div>
-          <span class="ms-auto text-subtle small">${a.date}</span>
-        </div>
-      </div>`;
-      act.appendChild(col);
-    });
+      const ctx = document.getElementById('salaryChart');
+      const payoutMonths = (staff.payouts||[]).slice().reverse();
+      const payoutValues = payoutMonths.map(()=> Number(staff.salary||0));
+      if (window.__salaryChart) window.__salaryChart.destroy();
+      window.__salaryChart = new Chart(ctx, {
+        type:'line',
+        data:{ labels:payoutMonths, datasets:[{ label:'Payout (₹)', data:payoutValues, tension:.35, fill:false }] },
+        options:{
+          responsive:true, maintainAspectRatio:true, resizeDelay:120,
+          plugins:{ legend:{ display:false } },
+          scales:{ y:{ ticks:{ callback:v=>'₹ '+INR(v) } } }
+        }
+      });
+    }
 
-    // ---------- Quick actions ----------
-    document.getElementById('editBtn').addEventListener('click', ()=>{
-      localStorage.setItem('intentEditId', staff.id);
-      location.href = "<?php echo base_url('superadmin/Staff_manage'); ?>";
-    });
-    document.getElementById('toggleStatusBtn').addEventListener('click', ()=>{
-      staff.status = (staff.status==='Active'?'Deactive':'Active');
-      statusEl.textContent = staff.status;
-      statusEl.className = 'status-badge ' + (staff.status==='Active'?'status-active':'status-deactive');
-      const idx = all.findIndex(x=>x.id===staff.id);
-      if(idx>-1){ all[idx]=staff; localStorage.setItem('staffDataAll', JSON.stringify(all)); }
-    });
+    function renderCentersAndSlots(){
+      const cw = document.getElementById('centersWrap'); cw.innerHTML='';
+      (staff.centers||[]).forEach(c=>{
+        const b=document.createElement('span');
+        b.className='badge rounded-pill text-bg-light'; b.textContent=c;
+        cw.appendChild(b);
+      });
+      const sw = document.getElementById('slotsWrap'); sw.innerHTML='';
+      if (staff.role==='Coach' && (staff.slots||[]).length){
+        staff.slots.forEach(s=>{
+          const b=document.createElement('span');
+          b.className='badge rounded-pill text-bg-light'; b.textContent=s;
+          sw.appendChild(b);
+        });
+      } else {
+        sw.innerHTML='<span class="text-subtle small">No slot assignment.</span>';
+      }
+    }
+
+    function renderActivity(){
+      const act=document.getElementById('activityList'); act.innerHTML='';
+      [
+        { icon:'bi-calendar2-check', text:'Marked present', date:'Today' },
+        { icon:'bi-cash-coin', text:'Salary processed', date:(staff.payouts?.[0]||'—') },
+        { icon:'bi-geo-alt', text:`Center sync: ${staff.centers?.[0]||'-'}`, date:'This week' },
+      ].forEach(a=>{
+        const col=document.createElement('div'); col.className='col';
+        col.innerHTML=`<div class="card-lite p-3 h-100">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi ${a.icon}" style="color:var(--accent)"></i>
+            <div class="fw-semibold">${a.text}</div>
+            <span class="ms-auto text-subtle small">${a.date}</span>
+          </div>
+        </div>`;
+        act.appendChild(col);
+      });
+    }
+
+    // ===== Actions (Edit / Toggle)
+    function wireActions(){
+      document.getElementById('editBtn').addEventListener('click', ()=>{
+        location.href = "<?php echo base_url('superadmin/Add_NewStaff'); ?>" + "?id=" + encodeURIComponent(staff.id);
+      });
+
+      document.getElementById('toggleStatusBtn').addEventListener('click', async ()=>{
+        const willBeActive = (staff.active ?? (staff.status==='Active'?1:0)) ? 0 : 1;
+        try{
+          const updated = await postActive(staff.id, willBeActive);
+          // Sync local object & badge
+          staff = updated;
+          setStatusBadge(staff.status);
+          // Ping list page to refresh (if open)
+          try { localStorage.setItem('staff:changed', String(Date.now())); } catch(e){}
+        }catch(err){
+          console.error(err);
+          alert('Could not update status. Please try again.');
+        }
+      });
+    }
   </script>
 
-  <!-- === Sidebar toggle controller (same behavior as your attendance module) === -->
+  <!-- Sidebar toggle controller -->
   <script>
   (function () {
-    const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
     const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
     const WRAPPER_IDS = ['dashboardWrapper','financeWrap'];
     const DESKTOP_WIDTH_CUTOFF = 576;
@@ -449,7 +504,7 @@ qs('#backBtn').addEventListener('click', ()=>{
       backdrop.style.position = 'fixed';
       backdrop.style.inset = '0';
       backdrop.style.background = 'rgba(0,0,0,0.42)';
-      backdrop.style.zIndex = '1070';
+      backdrop.style.zIndex = '10';
       backdrop.style.display = 'none';
       backdrop.style.opacity = '0';
       backdrop.style.transition = 'opacity .18s ease';
@@ -457,7 +512,6 @@ qs('#backBtn').addEventListener('click', ()=>{
     }
 
     let lock = false; const lockFor = (ms=320)=>{ lock=true; clearTimeout(lock._t); lock._t=setTimeout(()=>lock=false,ms); };
-    let lastInteractionAt = 0; const INTERACTION_GAP = 700;
 
     function openMobileSidebar(){
       const s = sidebarEl(); if (!s) return;
@@ -483,8 +537,7 @@ qs('#backBtn').addEventListener('click', ()=>{
       document.dispatchEvent(new CustomEvent('sidebarToggle', { detail:{ minimized:isMin }}));
       setTimeout(()=> window.dispatchEvent(new Event('resize')), 220);
     }
-    function handleToggleEvent(e){
-      if (e && e.type==='click' && (Date.now()-lastInteractionAt) < INTERACTION_GAP) return;
+    function handleToggleEvent(){
       if (lock) return;
       if (isMobile()){ lockFor(260); document.body.classList.contains(BODY_OVERLAY_CLASS) ? closeMobileSidebar() : openMobileSidebar(); }
       else { lockFor(260); toggleDesktopSidebar(); }
@@ -494,61 +547,21 @@ qs('#backBtn').addEventListener('click', ()=>{
       toggles.forEach(el=>{
         if (el.__sidebarToggleBound) return;
         el.__sidebarToggleBound = true;
-        el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true});
-        el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); });
+        el.addEventListener('click', handleToggleEvent);
       });
     }
-
-    document.addEventListener('pointerdown', function (ev) {
-      if (ev.pointerType==='touch' || ev.pointerType==='pen') {
-        const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-        if (t){ lastInteractionAt=Date.now(); handleToggleEvent(ev); }
-      }
-    }, {passive:true});
-    document.addEventListener('click', function (ev) {
-      const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-      if (t) handleToggleEvent(ev);
-    });
     backdrop.addEventListener('click', function(){ if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
-    document.addEventListener('click', function(e){
-      if (!isMobile()) return;
-      const inside = e.target.closest && e.target.closest(SIDEBAR_SELECTORS);
-      if (!inside) return;
-      const a = e.target.closest && e.target.closest('a');
-      if (a && a.getAttribute('href') && a.getAttribute('href') !== '#') { setTimeout(closeMobileSidebar,160); }
-    });
-    document.addEventListener('keydown', function(ev){ if (ev.key==='Escape' && document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
-
-    let resizeTimer=null;
-    window.addEventListener('resize', function(){
-      clearTimeout(resizeTimer);
-      resizeTimer=setTimeout(function(){
-        if (!isMobile()){
-          closeMobileSidebar();
-          const s = sidebarEl();
-          const isMin = s && s.classList.contains(SIDEBAR_MIN_CLASS);
-          document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
-        }
-      },120);
-    });
-
-    if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
-      backdrop.style.display='block'; backdrop.style.opacity='1'; document.body.style.overflow='hidden';
-    }
 
     (function ensureFallbackToggle(){
-      const qsN = s=>document.querySelector(s);
-      if (qsN(TOGGLE_SELECTORS)){ wireToggleButtons(); return; }
-      const navbar = qsN('.navbar, header, .main-header, .topbar');
-      if (!navbar) return;
-      const btn = document.createElement('button');
-      btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
-      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      navbar.prepend(btn);
+      const navbar = qs('.navbar, header, .main-header, .topbar');
+      if (!qs(TOGGLE_SELECTORS) && navbar){
+        const btn = document.createElement('button');
+        btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
+        btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        navbar.prepend(btn);
+      }
       wireToggleButtons();
     })();
-
-    document.addEventListener('DOMContentLoaded', wireToggleButtons);
   })();
   </script>
 </body>

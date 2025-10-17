@@ -7,8 +7,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Staff Management</title>
-    <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
-
+  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.jpg'); ?>">
 
   <!-- UI libs -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -16,18 +15,13 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 
   <style>
-    :root{
-      --accent:#ff4040; --accent-dark:#470000; --muted:#f4f6f8;
-      --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
-    }
+    :root{ --accent:#ff4040; --accent-dark:#470000; --muted:#f4f6f8; --grad:linear-gradient(135deg, var(--accent), var(--accent-dark)); }
     body{ background:var(--muted); color:#111; overflow-x:hidden; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
 
-    /* layout (sidebar-aware) */
     .dashboard-wrapper{ margin-left:250px; padding:20px; min-height:100vh; transition:.25s; }
     .dashboard-wrapper.minimized{ margin-left:60px; }
     @media (max-width:991.98px){ .dashboard-wrapper{ margin-left:0 !important; padding:12px; } }
 
-    /* header */
     .page-hero{
       border-radius:16px; border:1px solid #ffe1e1;
       background: radial-gradient(1000px 320px at -10% -20%, rgba(255,64,64,.22), transparent),
@@ -47,7 +41,6 @@
     }
     .stat-chip .lbl{ color:#6c757d; font-size:.85rem; }
 
-    /* toolbar */
     .toolbar{
       position:sticky; top:12px; z-index:5;
       background:#fff; border:1px solid #e9ecef; border-radius:12px; padding:10px;
@@ -58,35 +51,12 @@
     .btn-primary{ background:var(--grad); border:0; font-weight:700; }
     .btn-primary:hover{ filter:brightness(.96); }
 
-/* --- Sleek unified search bar --- */
-.global-search {
-  max-width: 600px;
-  margin: 0 auto;
-  transition: all 0.25s ease;
-}
-.global-search .form-control {
-  height: 42px;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  padding-left: 0.5rem;
-  border-color: #e3e3e3;
-}
-.global-search .form-control:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255,64,64,0.2);
-}
-.global-search .input-group-text {
-  border-radius: 50px 0 0 50px;
-  background: white;
-  border-color: #e3e3e3;
-}
-.global-search:hover {
-  transform: scale(1.01);
-}
+    .global-search { max-width: 600px; margin: 0 auto; transition: all .25s ease; }
+    .global-search .form-control { height: 42px; border-radius: 50px; font-size: .9rem; padding-left: .5rem; border-color: #e3e3e3; }
+    .global-search .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,64,64,.2); }
+    .global-search .input-group-text { border-radius: 50px 0 0 50px; background: #fff; border-color:#e3e3e3; }
+    .global-search:hover { transform: scale(1.01); }
 
-
-
-    /* table */
     .card-lite{ background:#fff; border-radius:14px; border:1px solid #e9ecef; box-shadow:0 6px 20px rgba(0,0,0,.05); }
     .table thead th{ position:sticky; top:0; background:#fff; z-index:2; }
     .table-hover tbody tr:hover{ background:rgba(255,64,64,.035); }
@@ -95,27 +65,14 @@
     .status-active{ background:#d1e7dd; color:#0f5132; }
     .status-deactive{ background:#e2e3e5; color:#41464b; }
 
-    /* mobile cards */
-    @media (max-width: 768px){
-      .table-wrap{ display:none; }
-      .card-list{ display:grid; grid-template-columns:1fr; gap:12px; }
-    }
-    @media (min-width: 769px){
-      .card-list{ display:none; }
-    }
+    @media (max-width: 768px){ .table-wrap{ display:none; } .card-list{ display:grid; grid-template-columns:1fr; gap:12px; } }
+    @media (min-width: 769px){ .card-list{ display:none; } }
 
-    /* animations */
     .aos{ opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease; }
     .aos.in{ opacity:1; transform:none; }
 
-    .clickable-row {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.clickable-row:hover {
-  background-color: rgba(255,64,64,0.05);
-}
-
+    .clickable-row{ cursor:pointer; transition: background-color .2s ease; }
+    .clickable-row:hover{ background-color: rgba(255,64,64,.05); }
   </style>
 </head>
 <body>
@@ -135,48 +92,34 @@
           </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button> -->
-<a class="btn btn-primary" id="addStaffBtn"
-   href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
-  <i class="bi bi-plus-circle me-1"></i>Add Staff
-</a>
+          <a class="btn btn-primary" id="addStaffBtn" href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
+            <i class="bi bi-plus-circle me-1"></i>Add Staff
+          </a>
         </div>
       </div>
 
-      <!-- stats -->
       <div class="d-flex flex-wrap gap-2 mt-3">
-        <div class="stat-chip">
-          <div class="lbl">Total Staff</div>
-          <div class="h5 mb-0" id="stTotal">0</div>
-        </div>
-        <div class="stat-chip">
-          <div class="lbl">Active</div>
-          <div class="h5 mb-0" id="stActive">0</div>
-        </div>
-        <div class="stat-chip">
-          <div class="lbl">Coaches</div>
-          <div class="h5 mb-0" id="stCoaches">0</div>
-        </div>
+        <div class="stat-chip"><div class="lbl">Total Staff</div><div class="h5 mb-0" id="stTotal">0</div></div>
+        <div class="stat-chip"><div class="lbl">Active</div><div class="h5 mb-0" id="stActive">0</div></div>
+        <div class="stat-chip"><div class="lbl">Coaches</div><div class="h5 mb-0" id="stCoaches">0</div></div>
       </div>
     </div>
 
     <!-- Toolbar -->
-<div class="toolbar aos text-center">
-  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-    <div class="flex-grow-1">
-      <div class="input-group global-search">
-        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-        <input id="searchBox" type="text" class="form-control border-start-0" 
-               placeholder="Search staff by name, email, role, center or status...">
+    <div class="toolbar aos text-center">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="flex-grow-1">
+          <div class="input-group global-search">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+            <input id="searchBox" type="text" class="form-control border-start-0" placeholder="Search staff by name, email, role, center or status...">
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-ghost btn-sm" id="clearFilters"><i class="bi bi-x-circle me-1"></i>Clear</button>
+          <span class="badge rounded-pill bg-light text-dark px-3 py-2">Showing <b id="rowCount">0</b></span>
+        </div>
       </div>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <button class="btn btn-ghost btn-sm" id="clearFilters"><i class="bi bi-x-circle me-1"></i>Clear</button>
-      <span class="badge rounded-pill bg-light text-dark px-3 py-2">Showing <b id="rowCount">0</b></span>
-    </div>
-  </div>
-</div>
-
 
     <!-- Desktop table -->
     <div class="card-lite mt-3 aos">
@@ -206,172 +149,116 @@
     <div class="card-list mt-3 aos" id="staffCards"><!-- JS inject --></div>
   </div>
 
-  <!-- Add/Edit Modal
-  <div class="modal fade" id="staffModal" data-bs-backdrop="static" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header text-white" style="background:var(--grad)">
-          <h5 class="modal-title" id="staffModalLabel">Add Staff</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="staffForm">
-            <input type="hidden" name="id"/>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Name</label>
-                <input class="form-control" name="name" required placeholder="Full name">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" required placeholder="name@example.com">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Contact</label>
-                <input class="form-control" name="contact" required placeholder="10-digit number">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Joining Date</label>
-                <input type="date" class="form-control" name="joining_date" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Role</label>
-                <select class="form-select" name="role" id="roleSelect" required>
-                  <option value="">Select role</option>
-                  <option>Coach</option><option>Admin</option><option>Coordinator</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Centers</label>
-                <select class="form-select" name="centers" multiple required>
-                  <option>Center A</option><option>Center B</option><option>Center C</option>
-                </select>
-                <small class="text-muted">Hold CTRL to select multiple</small>
-              </div>
-              <div class="col-md-6" id="slotSection" style="display:none;">
-                <label class="form-label">Slots (Coach only)</label>
-                <select class="form-select" name="slots" multiple>
-                  <option>6-8 AM</option><option>8-10 AM</option><option>5-7 PM</option>
-                </select>
-                <small class="text-muted">Hold CTRL to select multiple</small>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Salary (₹)</label>
-                <input class="form-control" name="salary" required placeholder="e.g., 30000">
-              </div>
-            </div>
-            <div class="text-end mt-3">
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   <script>
-    // ===== Animate on scroll
-    const io = new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }),{threshold:.07});
-    document.querySelectorAll('.aos').forEach(el=> io.observe(el));
+    // Animate-on-scroll
+    const inObs = new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }),{threshold:.07});
+    document.querySelectorAll('.aos').forEach(el=> inObs.observe(el));
 
-    // ===== Demo storage
-    const STORAGE_KEY = 'staffDataAll';
-    const seed = [
-      {id:1,name:"John Doe",email:"john@example.com",contact:"9876543210",joining_date:"2023-01-10",role:"Coach",centers:["Center A","Center B"],slots:["6-8 AM","5-7 PM"],salary:25000,status:"Active",attendance:{"2025-10":[1,2,3,4,7,8,9,10,11,14,15,16,17,18]},payouts:["2025-09-30","2025-08-31","2025-07-31"]},
-      {id:2,name:"Priya Singh",email:"priya@academy.com",contact:"9123456789",joining_date:"2024-03-15",role:"Admin",centers:["Center C"],slots:[],salary:30000,status:"Active",attendance:{"2025-10":[1,2,3,6,7,8,10,13,14,15,16,17,20]},payouts:["2025-09-30","2025-08-31","2025-07-31"]},
-      {id:3,name:"Aman Verma",email:"aman@academy.com",contact:"9000012345",joining_date:"2024-11-01",role:"Coordinator",centers:["Center B"],slots:[],salary:22000,status:"Deactive",attendance:{"2025-10":[1,2,5,6,7,9,10,11,12,14,16,17,18]},payouts:["2025-09-30","2025-08-31"]}
-    ];
-    function loadData(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ return []; } }
-    function saveData(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
-    let staffData = loadData(); if (!staffData.length){ staffData = seed; saveData(staffData); }
+    // Helpers
+    const qs  = s => document.querySelector(s);
+    const INR = n => new Intl.NumberFormat('en-IN').format(n);
+    let staffData = [];
 
-    // ===== Utilities
-    const $ = (s)=>document.querySelector(s);
-    const $$ = (s)=>Array.from(document.querySelectorAll(s));
-    const fmt = n => new Intl.NumberFormat('en-IN').format(n);
+    // Fetch strictly from DB (no fallback)
+    async function fetchFromDb(){
+      const url = "<?php echo base_url('api/staff'); ?>?t=" + Date.now();
+      const res = await fetch(url, {
+        headers:{ 'Accept':'application/json', 'Cache-Control':'no-cache' },
+        cache: 'no-store'
+      });
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    }
 
-    // ===== Filters
+    // Filters
     function getFilters(){
-  const q = $('#searchBox').value.trim().toLowerCase();
-  return { q };
-}
-function matches(s, f){
-  const hay = (s.name + ' ' + s.email + ' ' + s.role + ' ' + s.status + ' ' + (s.centers||[]).join(',')).toLowerCase();
-  return !f.q || hay.includes(f.q);
-}
-
+      return { q: (qs('#searchBox').value || '').trim().toLowerCase() };
+    }
+    function matches(row, f){
+      const centersStr = Array.isArray(row.centers) ? row.centers.join(',') : (row.centers || '');
+      const hay = `${row.name||''} ${row.email||''} ${row.role||''} ${(row.status||'') } ${centersStr}`.toLowerCase();
+      return !f.q || hay.includes(f.q);
+    }
     function filtered(){ const f=getFilters(); return staffData.filter(s=>matches(s,f)); }
 
-    // ===== Stats
+    // Stats
     function renderStats(){
-      $('#stTotal').textContent = staffData.length;
-      $('#stActive').textContent = staffData.filter(s=>s.status==='Active').length;
-      $('#stCoaches').textContent = staffData.filter(s=>s.role==='Coach').length;
+      qs('#stTotal').textContent   = staffData.length;
+      qs('#stActive').textContent  = staffData.filter(s => (s.status||'Active') === 'Active').length;
+      qs('#stCoaches').textContent = staffData.filter(s => s.role === 'Coach').length;
     }
 
-    // ===== Table
-    function initials(name){
-      return (name||'').split(' ').slice(0,2).map(p=>p[0]||'').join('').toUpperCase();
-    }
+    // UI helpers
+    function initials(name){ return (name||'').split(' ').slice(0,2).map(p=>p[0]||'').join('').toUpperCase(); }
+
     function renderTable(){
-  const tb = $('#staffTable tbody'); 
-  tb.innerHTML = '';
-  const rows = filtered();
-  
-  rows.forEach((s,i)=>{
-    const tr = document.createElement('tr');
-    tr.classList.add('clickable-row');
-    tr.innerHTML = `
-      <td>${i+1}</td>
-      <td class="text-nowrap">
-        <div class="d-flex align-items-center gap-2">
-          <div class="avatar" style="width:32px;height:32px;font-size:.8rem">${initials(s.name)}</div>
-          <div>
-            <div class="fw-semibold">${s.name}</div>
-            <small class="text-muted">${s.role}</small>
-          </div>
-        </div>
-      </td>
-      <td>${s.email}</td>
-      <td>${s.contact}</td>
-      <td>${s.joining_date}</td>
-      <td><span class="badge text-bg-light">${s.role}</span></td>
-      <td>${s.centers.join(', ')}</td>
-      <td>${s.role==='Coach' ? s.slots.join(', ') : '-'}</td>
-      <td class="text-end">₹ ${fmt(s.salary)}</td>
-      <td class="text-center">
-        <span class="status-badge ${s.status==='Active'?'status-active':'status-deactive'}">${s.status}</span>
-      </td>
-      <td class="text-center">
-        <div class="row-actions btn-group">
-          <button class="btn btn-ghost btn-sm" data-act="view" data-id="${s.id}" title="View"><i class="bi bi-eye"></i></button>
-          <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${s.id}" title="Edit"><i class="bi bi-pencil"></i></button>
-          <button class="btn btn-ghost btn-sm text-danger" data-act="del" data-id="${s.id}" title="Delete"><i class="bi bi-trash"></i></button>
-        </div>
-      </td>`;
-    
-    // 👇 Click anywhere on the row (except action buttons) opens staff detail
-    tr.addEventListener('click', (e) => {
-      if (!e.target.closest('.row-actions') && !e.target.closest('button')) {
-        goDetail(s.id);
+      const tb = qs('#staffTable tbody');
+      tb.innerHTML = '';
+      const rows = filtered();
+
+      if (!rows.length){
+        tb.innerHTML = `<tr><td colspan="11" class="text-center text-muted py-4">No staff found.</td></tr>`;
+        qs('#rowCount').textContent = 0;
+        return;
       }
-    });
-    
-    tb.appendChild(tr);
-  });
-  
-  $('#rowCount').textContent = rows.length;
-}
 
+      rows.forEach((s,i)=>{
+        const centers = Array.isArray(s.centers) ? s.centers : (s.centers ? String(s.centers).split(',').map(x=>x.trim()).filter(Boolean) : []);
+        const slots   = Array.isArray(s.slots)   ? s.slots   : (s.slots   ? String(s.slots).split(',').map(x=>x.trim()).filter(Boolean)   : []);
+        const status  = s.status || 'Active';
 
-    // ===== Cards
+        const tr = document.createElement('tr');
+        tr.classList.add('clickable-row');
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td class="text-nowrap">
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar" style="width:32px;height:32px;font-size:.8rem">${initials(s.name)}</div>
+              <div>
+                <div class="fw-semibold">${s.name||'-'}</div>
+                <small class="text-muted">${s.role||'-'}</small>
+              </div>
+            </div>
+          </td>
+          <td>${s.email||'-'}</td>
+          <td>${s.contact||'-'}</td>
+          <td>${s.joining_date||'-'}</td>
+          <td><span class="badge text-bg-light">${s.role||'-'}</span></td>
+          <td>${centers.join(', ')||'-'}</td>
+          <td>${(s.role==='Coach' && slots.length) ? slots.join(', ') : '-'}</td>
+          <td class="text-end">₹ ${INR(Number(s.salary||0))}</td>
+          <td class="text-center">
+            <span class="status-badge ${status==='Active'?'status-active':'status-deactive'}">${status}</span>
+          </td>
+          <td class="text-center">
+            <div class="row-actions btn-group">
+              <button class="btn btn-ghost btn-sm" data-act="view" data-id="${s.id}" title="View"><i class="bi bi-eye"></i></button>
+              <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${s.id}" title="Edit"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-ghost btn-sm text-danger" data-act="del" data-id="${s.id}" title="Delete"><i class="bi bi-trash"></i></button>
+            </div>
+          </td>`;
+        tr.addEventListener('click', (e)=>{ if (!e.target.closest('.row-actions') && !e.target.closest('button')) goDetail(s.id); });
+        tb.appendChild(tr);
+      });
+
+      qs('#rowCount').textContent = rows.length;
+    }
+
     function renderCards(){
-      const list = $('#staffCards'); list.innerHTML='';
-      filtered().forEach(s=>{
+      const list = qs('#staffCards'); list.innerHTML='';
+      const rows = filtered();
+      if (!rows.length) return;
+
+      rows.forEach(s=>{
+        const centers = Array.isArray(s.centers) ? s.centers : (s.centers ? String(s.centers).split(',').map(x=>x.trim()).filter(Boolean) : []);
+        const slots   = Array.isArray(s.slots)   ? s.slots   : (s.slots   ? String(s.slots).split(',').map(x=>x.trim()).filter(Boolean)   : []);
+        const status  = s.status || 'Active';
+
         const card = document.createElement('div');
         card.className='card-lite p-3';
         card.innerHTML = `
@@ -379,17 +266,17 @@ function matches(s, f){
             <div class="d-flex align-items-center gap-2">
               <div class="avatar" style="width:36px;height:36px">${initials(s.name)}</div>
               <div>
-                <div class="fw-bold">${s.name}</div>
-                <div class="text-muted small">${s.email}</div>
+                <div class="fw-bold">${s.name||'-'}</div>
+                <div class="text-muted small">${s.email||'-'}</div>
               </div>
             </div>
-            <span class="status-badge ${s.status==='Active'?'status-active':'status-deactive'}">${s.status}</span>
+            <span class="status-badge ${status==='Active'?'status-active':'status-deactive'}">${status}</span>
           </div>
           <div class="mt-2 small">
-            <div><i class="bi bi-person-badge me-1"></i>${s.role}</div>
-            <div><i class="bi bi-geo-alt me-1"></i>${s.centers.join(', ')||'-'}</div>
-            <div><i class="bi bi-clock me-1"></i>${s.role==='Coach'?s.slots.join(', '):'-'}</div>
-            <div><i class="bi bi-cash me-1"></i>₹ ${fmt(s.salary)}</div>
+            <div><i class="bi bi-person-badge me-1"></i>${s.role||'-'}</div>
+            <div><i class="bi bi-geo-alt me-1"></i>${centers.join(', ')||'-'}</div>
+            <div><i class="bi bi-clock me-1"></i>${s.role==='Coach' && slots.length ? slots.join(', ') : '-'}</div>
+            <div><i class="bi bi-cash me-1"></i>₹ ${INR(Number(s.salary||0))}</div>
           </div>
           <div class="d-flex gap-2 mt-3">
             <button class="btn btn-ghost w-100" data-act="view" data-id="${s.id}"><i class="bi bi-eye me-1"></i>View</button>
@@ -400,106 +287,45 @@ function matches(s, f){
       });
     }
 
-    // ===== Modal handling
-    let editingId = null;
-    function openAdd(){
-      editingId = null;
-      $('#staffModalLabel').textContent='Add Staff';
-      $('#staffForm').reset();
-      $('#slotSection').style.display='none';
-      new bootstrap.Modal('#staffModal').show();
-    }
-    function openEdit(id){
-      const s = staffData.find(x=>x.id===id); if(!s) return;
-      editingId = id;
-      const f = $('#staffForm');
-      $('#staffModalLabel').textContent='Edit Staff';
-      f.name.value=s.name; f.email.value=s.email; f.contact.value=s.contact; f.joining_date.value=s.joining_date;
-      f.role.value=s.role; f.salary.value=s.salary;
-      [...f.centers.options].forEach(o=> o.selected = s.centers.includes(o.value));
-      if(s.role==='Coach'){
-        $('#slotSection').style.display='';
-        [...f.slots.options].forEach(o=> o.selected = s.slots.includes(o.value));
-      }else{
-        $('#slotSection').style.display='none';
-        [...f.slots.options].forEach(o=> o.selected=false);
-      }
-      new bootstrap.Modal('#staffModal').show();
-    }
-    function saveForm(e){
-      e.preventDefault();
-      const f = e.target;
-      const payload = {
-        id: editingId ?? (Math.max(0,...staffData.map(s=>s.id))+1),
-        name: f.name.value.trim(),
-        email: f.email.value.trim(),
-        contact: f.contact.value.trim(),
-        joining_date: f.joining_date.value,
-        role: f.role.value,
-        centers: [...f.centers.selectedOptions].map(o=>o.value),
-        slots: f.role.value==='Coach' ? [...f.slots.selectedOptions].map(o=>o.value) : [],
-        salary: Number(f.salary.value),
-        status: editingId ? (staffData.find(s=>s.id===editingId)?.status ?? 'Active') : 'Active',
-        attendance: editingId ? (staffData.find(s=>s.id===editingId)?.attendance ?? {}) : {},
-        payouts: editingId ? (staffData.find(s=>s.id===editingId)?.payouts ?? []) : []
-      };
-      if(!payload.name || !payload.email){ return; }
-      if (editingId){
-        const idx = staffData.findIndex(s=>s.id===editingId); staffData[idx] = payload;
-      }else{
-        staffData.push(payload);
-      }
-      saveData(staffData);
-      bootstrap.Modal.getInstance('#staffModal')?.hide();
-      renderStats(); renderTable(); renderCards();
-    }
-    function deleteStaff(id){
-      if(!confirm('Delete this staff?')) return;
-      const idx = staffData.findIndex(s=>s.id===id);
-      if(idx>-1){ staffData.splice(idx,1); saveData(staffData); renderStats(); renderTable(); renderCards(); }
-    }
-    function toggleSlotsVisibility(){
-      $('#slotSection').style.display = ($('#roleSelect').value==='Coach') ? '' : 'none';
-    }
-
-    // ===== Navigation to detail (eye)
+    // Navigation
     function goDetail(id){
-      localStorage.setItem('staffDataAll', JSON.stringify(staffData));
-      window.location.href = '<?php echo base_url('superadmin/Staff_detail'); ?>/' + id;
+      try { localStorage.setItem('staffDataAll', JSON.stringify(staffData)); } catch(e){}
+      window.location.href = "<?php echo base_url('superadmin/Staff_detail'); ?>/" + id;
     }
 
-    // ===== Wire up
-    document.addEventListener('DOMContentLoaded', ()=>{
-      // inputs
-      $('#roleSelect').addEventListener('change', toggleSlotsVisibility);
-      $('#addStaffBtn').addEventListener('click', openAdd);
-      $('#staffForm').addEventListener('submit', saveForm);
-      $('#searchBox').addEventListener('input', ()=>{ renderTable(); renderCards(); });
-      $('#clearFilters').addEventListener('click', ()=>{
-        $('#searchBox').value=''; $('#filterRole').value=''; $('#filterStatus').value=''; $('#filterCenter').value='';
-        renderTable(); renderCards();
-      });
-      // quick filters open focus
-      $('#openFilters').addEventListener('click', ()=> $('#filterRole').focus());
+    // Wire up
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      // search + clear
+      qs('#searchBox').addEventListener('input', ()=>{ renderTable(); renderCards(); });
+      qs('#clearFilters').addEventListener('click', ()=>{ qs('#searchBox').value=''; renderTable(); renderCards(); });
 
-      // delegate actions
+      // actions
       document.body.addEventListener('click', (e)=>{
         const btn = e.target.closest('[data-act]'); if(!btn) return;
         const id = Number(btn.dataset.id);
         const act = btn.dataset.act;
         if (act==='view') goDetail(id);
-        else if (act==='edit') openEdit(id);
-        else if (act==='del') deleteStaff(id);
+        else if (act==='edit') window.location.href = "<?php echo base_url('superadmin/Add_NewStaff'); ?>?id="+id;
+        else if (act==='del') alert('Hook your backend delete endpoint here.');
       });
+
+      // load strictly from DB
+      try{
+        staffData = await fetchFromDb();
+      }catch(err){
+        console.error(err);
+        staffData = [];
+      }
 
       renderStats(); renderTable(); renderCards();
     });
+
+    // keep layout script below
   </script>
 
-  <!-- Sidebar toggle controller (matches attendance module) -->
+  <!-- Sidebar toggle controller (same behavior as attendance module) -->
   <script>
   (function () {
-    const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
     const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
     const WRAPPER_IDS = ['dashboardWrapper','financeWrap'];
     const DESKTOP_WIDTH_CUTOFF = 576;
@@ -557,8 +383,7 @@ function matches(s, f){
       document.dispatchEvent(new CustomEvent('sidebarToggle', { detail:{ minimized:isMin }}));
       setTimeout(()=> window.dispatchEvent(new Event('resize')), 220);
     }
-    function handleToggleEvent(e){
-      if (e && e.type==='click' && (Date.now()-lastInteractionAt) < INTERACTION_GAP) return;
+    function handleToggleEvent(){
       if (lock) return;
       if (isMobile()){ lockFor(260); document.body.classList.contains(BODY_OVERLAY_CLASS) ? closeMobileSidebar() : openMobileSidebar(); }
       else { lockFor(260); toggleDesktopSidebar(); }
@@ -568,30 +393,11 @@ function matches(s, f){
       toggles.forEach(el=>{
         if (el.__sidebarToggleBound) return;
         el.__sidebarToggleBound = true;
-        el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true});
-        el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); });
+        el.addEventListener('click', handleToggleEvent);
       });
     }
 
-    document.addEventListener('pointerdown', function (ev) {
-      if (ev.pointerType==='touch' || ev.pointerType==='pen') {
-        const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-        if (t){ lastInteractionAt=Date.now(); handleToggleEvent(ev); }
-      }
-    }, {passive:true});
-    document.addEventListener('click', function (ev) {
-      const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS);
-      if (t) handleToggleEvent(ev);
-    });
     backdrop.addEventListener('click', function(){ if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
-    document.addEventListener('click', function(e){
-      if (!isMobile()) return;
-      const inside = e.target.closest && e.target.closest(SIDEBAR_SELECTORS);
-      if (!inside) return;
-      const a = e.target.closest && e.target.closest('a');
-      if (a && a.getAttribute('href') && a.getAttribute('href') !== '#') { setTimeout(closeMobileSidebar,160); }
-    });
-    document.addEventListener('keydown', function(ev){ if (ev.key==='Escape' && document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar(); });
 
     let resizeTimer=null;
     window.addEventListener('resize', function(){
@@ -606,32 +412,28 @@ function matches(s, f){
       },120);
     });
 
-    if (document.body.classList.contains(BODY_OVERLAY_CLASS)) {
-      backdrop.style.display='block'; backdrop.style.opacity='1'; document.body.style.overflow='hidden';
-    }
-
     (function ensureFallbackToggle(){
-      const qsN = s=>document.querySelector(s);
-      if (qsN(TOGGLE_SELECTORS)){ wireToggleButtons(); return; }
-      const navbar = qsN('.navbar, header, .main-header, .topbar');
-      if (!navbar) return;
-      const btn = document.createElement('button');
-      btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
-      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      navbar.prepend(btn);
+      const navbar = qs('.navbar, header, .main-header, .topbar');
+      if (!qs(TOGGLE_SELECTORS) && navbar){
+        const btn = document.createElement('button');
+        btn.type='button'; btn.id='sidebarToggle'; btn.className='btn btn-sm btn-light sidebar-toggle'; btn.setAttribute('aria-label','Toggle sidebar'); btn.style.marginRight='8px';
+        btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20M4 12H20M4 18H20" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        navbar.prepend(btn);
+      }
       wireToggleButtons();
     })();
-
-    document.addEventListener('DOMContentLoaded', wireToggleButtons);
   })();
   </script>
   <script>
-  window.addEventListener('pageshow', function (e) {
-    // Re-pull from localStorage and re-render every time the page is shown
-    staffData = loadData();
-    renderStats(); 
-    renderTable(); 
-    renderCards();
+  // after your existing code that defines fetchFromDb() and renders:
+  window.addEventListener('storage', async (e)=>{
+    if (e.key === 'staff:changed') {
+      try{
+        const rows = await fetchFromDb();
+        staffData = rows;
+        renderStats(); renderTable(); renderCards();
+      }catch(err){ console.error(err); }
+    }
   });
 </script>
 

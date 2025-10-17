@@ -114,3 +114,10 @@ $route['venue/save'] = 'VenueController/save_venue';
 $route['venues'] = 'VenueController/index';
 $route['venue/getAll'] = 'VenueController/getAllVenues';
 $route['venue/delete/(:num)'] = 'VenueController/deleteVenue/$1';
+
+// If controller file is application/controllers/api/Staff.php
+// existing…
+$route['api/staff']                = 'staff/all';
+$route['api/staff/(:num)']         = 'staff/one/$1';
+$route['api/staff/(:num)/active']  = 'staff/set_active/$1';   // POST
+
