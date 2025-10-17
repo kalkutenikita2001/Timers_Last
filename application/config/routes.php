@@ -112,3 +112,5 @@ $route['admin'] = 'admin/dashboard';
 // Second Redevelopment Venue/Center Management Routes
 $route['venue/save'] = 'VenueController/save_venue';
 $route['venues'] = 'VenueController/index';
+$route['venue/getAll'] = 'VenueController/getAllVenues';
+$route['venue/delete/(:num)'] = 'VenueController/deleteVenue/$1';
