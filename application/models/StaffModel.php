@@ -29,9 +29,16 @@ class StaffModel extends CI_Model
         return $this->db->get('venues')->result_array();
     }
 
+    // public function getAllSlots()
+    // {
+    //     return $this->db->get('venue_slots')->result_array();
+    // }
     public function getAllSlots()
     {
-        return $this->db->get('venue_slots')->result_array();
+        $this->db->select('venue_slots.*, venues.venue_name');
+        $this->db->from('venue_slots');
+        $this->db->join('venues', 'venue_slots.venue_id = venues.id', 'left');
+        return $this->db->get()->result_array();
     }
 
     // Add this method to get all staff

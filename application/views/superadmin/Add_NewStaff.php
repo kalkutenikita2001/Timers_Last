@@ -197,7 +197,7 @@
               <th>Slots</th>
               <th class="text-end" style="width:110px">Salary (₹)</th>
               <th class="text-center" style="width:120px">Actions</th>
-              <th class="text-center" style="width:90px">Status</th>
+              <!-- <th class="text-center" style="width:90px">Status</th> -->
             </tr>
           </thead>
           <tbody>
@@ -240,12 +240,12 @@
                       <button class="btn btn-outline-danger deleteBtn" data-id="<?= $staffMember['id'] ?>"><i class="bi bi-trash"></i></button>
                     </div>
                   </td>
-                  <td class="text-center">
+                  <!-- <td class="text-center">
                     <label class="switch">
                       <input type="checkbox" class="statusToggle" <?= $staffMember['active'] == 1 ? 'checked' : '' ?> data-id="<?= $staffMember['id'] ?>">
                       <span class="slider"></span>
                     </label>
-                  </td>
+                  </td> -->
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
@@ -310,7 +310,8 @@
               <div class="d-flex flex-wrap gap-3">
                 <?php if (!empty($slots)): foreach ($slots as $slot): ?>
                     <div>
-                      <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>" class="slot-check">
+                      <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>"
+                        class="slot-check" data-center="<?= $slot['venue_name']; ?>">
                       <?= $slot['slot_name']; ?>
                     </div>
                   <?php endforeach;
@@ -343,6 +344,90 @@
             <p><strong>Salary:</strong> <span id="profileSalary"></span></p>
           </div>
           <button type="button" class="btn btn-primary mt-3" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Staff Modal -->
+  <div class="modal fade" id="editStaffModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="editStaffModalLabel">Edit Staff</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editStaffForm" method="post" action="<?php echo base_url('superadmin/updateStaff'); ?>">
+            <input type="hidden" name="id" id="editStaffId">
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="name" id="editStaffName" placeholder="Enter Staff Name" required>
+              </div>
+              <div class="col-md-6">
+                <input type="email" class="form-control" name="email" id="editStaffEmail" placeholder="Staff Email" required>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="contact" id="editStaffContact" placeholder="Staff Contact" required>
+              </div>
+              <div class="col-md-6">
+                <input type="date" class="form-control" name="joining_date" id="editStaffJoining" required>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="number" class="form-control" name="salary" id="editStaffSalary" placeholder="Enter Salary" required>
+              </div>
+              <div class="col-md-6">
+                <select class="form-select" name="role" id="editRoleSelect" required>
+                  <option value="">Select Role</option>
+                  <option value="Coach">Coach</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Coordinator">Coordinator</option>
+                  <option value="Manager">Manager</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="fw-bold mb-2">Select Centers:</label>
+              <div class="d-flex flex-wrap gap-3" id="editCenterList">
+                <?php if (!empty($venues)): foreach ($venues as $venue): ?>
+                    <div>
+                      <input type="checkbox" name="centers[]" value="<?= $venue['venue_name']; ?>" class="center-check">
+                      <?= $venue['venue_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No centers available.</p>
+                <?php endif; ?>
+              </div>
+            </div>
+
+            <div class="mb-3" id="editSlotSection">
+              <label class="fw-bold mb-2">Select Slots:</label>
+              <div class="d-flex flex-wrap gap-3" id="editSlotList">
+                <?php if (!empty($slots)): foreach ($slots as $slot): ?>
+                    <div>
+                      <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>"
+                        class="slot-check" data-center="<?= $slot['venue_name']; ?>">
+                      <?= $slot['slot_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No slots available.</p>
+                <?php endif; ?>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Update Staff</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -446,6 +531,152 @@
           const isActive = $(this).find('.statusToggle').is(':checked');
           $(this).toggle(filter === 'all' || (filter === 'active' && isActive) || (filter === 'deactive' && !isActive));
         });
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.editBtn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const row = this.closest('tr');
+
+          // Basic fields
+          document.getElementById('editStaffId').value = this.dataset.id;
+          document.getElementById('editStaffName').value = row.cells[1].textContent.trim();
+          document.getElementById('editStaffEmail').value = row.cells[2].textContent.trim();
+          document.getElementById('editStaffContact').value = row.cells[3].textContent.trim();
+
+          // Convert "d M Y" to Y-m-d
+          const joining = row.cells[4].textContent.trim();
+          if (joining !== 'N/A') {
+            const d = new Date(joining);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            document.getElementById('editStaffJoining').value = `${yyyy}-${mm}-${dd}`;
+          } else {
+            document.getElementById('editStaffJoining').value = '';
+          }
+
+          document.getElementById('editStaffSalary').value = row.cells[8].textContent.replace('₹', '').replace(',', '').trim();
+          document.getElementById('editRoleSelect').value = row.cells[5].textContent.trim();
+
+          // Reset all checkboxes
+          document.querySelectorAll('#editCenterList input').forEach(chk => chk.checked = false);
+          document.querySelectorAll('#editSlotList input').forEach(chk => chk.checked = false);
+
+          // Preselect centers
+          const centers = [];
+          row.cells[6].querySelectorAll('span').forEach(span => centers.push(span.textContent.trim()));
+          centers.forEach(c => {
+            const input = document.querySelector(`#editCenterList input[value="${c}"]`);
+            if (input) input.checked = true;
+          });
+
+          // Preselect slots
+          const slots = [];
+          row.cells[7].querySelectorAll('span').forEach(span => slots.push(span.textContent.trim()));
+          slots.forEach(s => {
+            const input = document.querySelector(`#editSlotList input[value="${s}"]`);
+            if (input) input.checked = true;
+          });
+
+          // Show/hide slot section
+          const slotSection = document.getElementById('editSlotSection');
+          slotSection.style.display = (row.cells[5].textContent.trim() === 'Coach') ? 'block' : 'none';
+
+          // Show modal
+          new bootstrap.Modal(document.getElementById('editStaffModal')).show();
+        });
+      });
+
+      // Show/hide slots on role change
+      document.getElementById('editRoleSelect').addEventListener('change', function() {
+        const slotSection = document.getElementById('editSlotSection');
+        if (this.value === 'Coach') {
+          slotSection.style.display = 'block';
+        } else {
+          slotSection.style.display = 'none';
+          document.querySelectorAll('#editSlotList input').forEach(chk => chk.checked = false);
+        }
+      });
+    });
+  </script>
+  <script>
+    // Function to update available slots based on selected centers
+    function updateAvailableSlots() {
+      const selectedCenters = Array.from(document.querySelectorAll('.center-check:checked'))
+        .map(cb => cb.value);
+
+      // Reset all slots first
+      document.querySelectorAll('.slot-check').forEach(slot => {
+        slot.style.display = 'block';
+        slot.parentElement.style.display = 'block';
+      });
+
+      // If no centers selected or role is not Coach, show all slots
+      if (selectedCenters.length === 0 || document.getElementById('roleSelect').value !== 'Coach') {
+        return;
+      }
+
+      // Hide slots that don't belong to selected centers
+      // You'll need to add data-center attribute to your slot checkboxes
+      document.querySelectorAll('.slot-check').forEach(slot => {
+        const slotCenter = slot.getAttribute('data-center');
+        if (slotCenter && !selectedCenters.includes(slotCenter)) {
+          slot.style.display = 'none';
+          slot.parentElement.style.display = 'none';
+        }
+      });
+    }
+
+    // Update your existing slot checkboxes to include data-center attribute
+    // Modify your PHP slot generation to look like this:
+    /*
+    <?php if (!empty($slots)): foreach ($slots as $slot): ?>
+        <div>
+            <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>" 
+                   class="slot-check" data-center="<?= $slot['venue_name']; ?>">
+            <?= $slot['slot_name']; ?>
+        </div>
+    <?php endforeach;
+    endif; ?>
+    */
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update slots when centers are selected/deselected
+      document.querySelectorAll('.center-check').forEach(checkbox => {
+        checkbox.addEventListener('change', updateAvailableSlots);
+      });
+
+      // Update slots when role changes
+      document.getElementById('roleSelect').addEventListener('change', function() {
+        if (this.value === 'Coach') {
+          $("#slotSection").show();
+          updateAvailableSlots();
+        } else {
+          $("#slotSection").hide();
+        }
+      });
+
+      // For edit modal
+      document.querySelectorAll('.center-check').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          if (document.getElementById('editRoleSelect').value === 'Coach') {
+            updateAvailableSlots();
+          }
+        });
+      });
+
+      document.getElementById('editRoleSelect').addEventListener('change', function() {
+        if (this.value === 'Coach') {
+          document.getElementById('editSlotSection').style.display = 'block';
+          updateAvailableSlots();
+        } else {
+          document.getElementById('editSlotSection').style.display = 'none';
+        }
       });
     });
   </script>
