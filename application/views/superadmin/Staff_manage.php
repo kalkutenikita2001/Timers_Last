@@ -135,8 +135,11 @@
           </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button>
-          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
+          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button> -->
+<a class="btn btn-primary" id="addStaffBtn"
+   href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
+  <i class="bi bi-plus-circle me-1"></i>Add Staff
+</a>
         </div>
       </div>
 
@@ -203,7 +206,7 @@
     <div class="card-list mt-3 aos" id="staffCards"><!-- JS inject --></div>
   </div>
 
-  <!-- Add/Edit Modal -->
+  <!-- Add/Edit Modal
   <div class="modal fade" id="staffModal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -264,7 +267,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

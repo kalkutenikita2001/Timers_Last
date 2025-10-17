@@ -129,7 +129,7 @@ if (!empty($students)) {
           </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <a href="<?php echo base_url('superadmin/student_add'); ?>" class="btn btn-primary">
+          <a href="<?php echo base_url('superadmin/fNew_Admission'); ?>" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i>Add Student
           </a>
         </div>

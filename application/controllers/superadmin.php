@@ -481,4 +481,8 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/fRenewNew_Admission');
 	}
+	public function ReAdd()
+	{
+		$this->load->view('superadmin/ReAdd');
+	}
 }

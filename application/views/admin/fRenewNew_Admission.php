@@ -189,9 +189,9 @@
 
 <body>
     <!-- Sidebar -->
-    <?php $this->load->view('superadmin/Include/Sidebar') ?>
+    <?php $this->load->view('admin/Include/Sidebar') ?>
     <!-- Navbar -->
-    <?php $this->load->view('superadmin/Include/Navbar') ?>
+    <?php $this->load->view('admin/Include/Navbar') ?>
 
     <!-- Main Content -->
     <div class="content-wrapper" id="contentWrapper">
@@ -569,7 +569,7 @@
                 setTimeout(function() {
                     // window.location.href = 'http://localhost/Timers_Academy/superadmin/fNew_Admission';
                     const base_url = "<?= base_url(); ?>"; // for CodeIgniter
-                    window.location.href = base_url + "superadmin/fNew_Admission";
+                    window.location.href = base_url + "admin/fNew_Admission";
                 }, 1000);
             });
 
