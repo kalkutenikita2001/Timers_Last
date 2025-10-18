@@ -423,7 +423,7 @@
     const isMobile = () => window.innerWidth <= DESKTOP_WIDTH_CUTOFF;
 
     let backdrop = qs('.sidebar-backdrop'); if (!backdrop) { backdrop = document.createElement('div'); backdrop.className = 'sidebar-backdrop';
-      backdrop.style.position='fixed'; backdrop.style.inset='0'; backdrop.style.background='rgba(0,0,0,0.42)'; backdrop.style.zIndex='1070';
+      backdrop.style.position='fixed'; backdrop.style.inset='0'; backdrop.style.background='rgba(0,0,0,0.42)'; backdrop.style.zIndex='10';
       backdrop.style.display='none'; backdrop.style.opacity='0'; backdrop.style.transition='opacity .18s ease'; document.body.appendChild(backdrop); }
 
     function openMobileSidebar(){ const s = sidebarEl(); if (!s) return; s.classList.add('active'); document.body.classList.add(BODY_OVERLAY_CLASS);

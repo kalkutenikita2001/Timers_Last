@@ -239,7 +239,6 @@
             <div class="row-actions btn-group">
               <button class="btn btn-ghost btn-sm" data-act="view" data-id="${s.id}" title="View"><i class="bi bi-eye"></i></button>
               <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${s.id}" title="Edit"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-ghost btn-sm text-danger" data-act="del" data-id="${s.id}" title="Delete"><i class="bi bi-trash"></i></button>
             </div>
           </td>`;
         tr.addEventListener('click', (e)=>{ if (!e.target.closest('.row-actions') && !e.target.closest('button')) goDetail(s.id); });
@@ -281,7 +280,6 @@
           <div class="d-flex gap-2 mt-3">
             <button class="btn btn-ghost w-100" data-act="view" data-id="${s.id}"><i class="bi bi-eye me-1"></i>View</button>
             <button class="btn btn-ghost w-100" data-act="edit" data-id="${s.id}"><i class="bi bi-pencil me-1"></i>Edit</button>
-            <button class="btn btn-ghost w-100 text-danger" data-act="del" data-id="${s.id}"><i class="bi bi-trash me-1"></i>Delete</button>
           </div>`;
         list.appendChild(card);
       });
@@ -306,7 +304,6 @@
         const act = btn.dataset.act;
         if (act==='view') goDetail(id);
         else if (act==='edit') window.location.href = "<?php echo base_url('superadmin/Add_NewStaff'); ?>?id="+id;
-        else if (act==='del') alert('Hook your backend delete endpoint here.');
       });
 
       // load strictly from DB
@@ -349,7 +346,7 @@
       backdrop.style.position = 'fixed';
       backdrop.style.inset = '0';
       backdrop.style.background = 'rgba(0,0,0,0.42)';
-      backdrop.style.zIndex = '1070';
+      backdrop.style.zIndex = '10';
       backdrop.style.display = 'none';
       backdrop.style.opacity = '0';
       backdrop.style.transition = 'opacity .18s ease';

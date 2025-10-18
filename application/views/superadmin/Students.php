@@ -437,7 +437,7 @@ if (!empty($students)) {
       if (!backdrop) {
         backdrop = document.createElement('div');
         backdrop.className = 'sidebar-backdrop';
-        Object.assign(backdrop.style, {position:'fixed', inset:'0', background:'rgba(0,0,0,0.42)', zIndex:'1070', display:'none', opacity:'0', transition:'opacity .18s ease'});
+        Object.assign(backdrop.style, {position:'fixed', inset:'0', background:'rgba(0,0,0,0.42)', zIndex:'10', display:'none', opacity:'0', transition:'opacity .18s ease'});
         document.body.appendChild(backdrop);
       }
 

@@ -372,7 +372,7 @@
     const isMobile = () => window.innerWidth <= DESKTOP_WIDTH_CUTOFF;
 
     let backdrop = qs('.sidebar-backdrop');
-    if (!backdrop) { backdrop = document.createElement('div'); backdrop.className = 'sidebar-backdrop'; Object.assign(backdrop.style,{position:'fixed',inset:'0',background:'rgba(0,0,0,0.42)',zIndex:'1070',display:'none',opacity:'0',transition:'opacity .18s ease'}); document.body.appendChild(backdrop); }
+    if (!backdrop) { backdrop = document.createElement('div'); backdrop.className = 'sidebar-backdrop'; Object.assign(backdrop.style,{position:'fixed',inset:'0',background:'rgba(0,0,0,0.42)',zIndex:'10',display:'none',opacity:'0',transition:'opacity .18s ease'}); document.body.appendChild(backdrop); }
 
     let lock = false; const lockFor = (ms=320)=>{ lock=true; clearTimeout(lock._t); lock._t=setTimeout(()=>lock=false,ms); };
     let lastInteractionAt = 0; const INTERACTION_GAP = 700;
