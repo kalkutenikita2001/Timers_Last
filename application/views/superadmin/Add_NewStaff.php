@@ -800,6 +800,21 @@
       }
     });
   </script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const p = new URLSearchParams(location.search);
+  if (p.get('autopopup') === '1') {
+    // same prep as your existing click handler
+    $('#staffForm')[0].reset();
+    $(".center-check, .slot-check").prop('checked', false);
+    $("#slotSection").hide();
+    $("#staffModalLabel").text("Add Staff");
+    new bootstrap.Modal(document.getElementById('staffModal')).show();
+  }
+});
+</script>
+
 </body>
 
 </html>
