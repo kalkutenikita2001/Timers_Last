@@ -1,108 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add New Staff</title>
-      <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets\Images\timeersbadmintonacademy_logo.jpg'); ?>">
+  <link rel="icon" type="image/jpg" sizes="32x32" href="<?php echo base_url('assets/Images/timeersbadmintonacademy_logo.jpg'); ?>">
 
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- jQuery & SweetAlert -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    :root{
-      --accent:#ff4040; 
-      --accent-dark:#470000; 
-      --muted:#f4f6f8;
-      --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
-      --sidebar-width:250px;
+    :root {
+      --accent: #ff4040;
+      --accent-dark: #470000;
+      --muted: #f4f6f8;
+      --grad: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      --sidebar-width: 250px;
     }
 
-    body{ 
-      background:var(--muted); 
-      color:#111; 
-      overflow-x:hidden; 
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    body {
+      background: var(--muted);
+      color: #111;
+      overflow-x: hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
-    #main-content{
+    #main-content {
       margin-left: var(--sidebar-width);
       width: calc(100vw - var(--sidebar-width));
       padding: 20px;
       min-height: 100vh;
       transition: .25s;
-      overflow-x: hidden;
     }
-    #main-content.minimized{
+
+    #main-content.minimized {
       margin-left: 60px;
       width: calc(100vw - 60px);
     }
 
-    @media (max-width: 991.98px){
-      #main-content{
-        margin-left: 0 !important;
-        width: 100vw;
-        padding: 12px;
-      }
+    .page-hero {
+      border-radius: 16px;
+      border: 1px solid #ffe1e1;
+      background: radial-gradient(1000px 320px at -10% -20%, rgba(255, 64, 64, .22), transparent),
+        radial-gradient(800px 260px at 110% 0%, rgba(71, 0, 0, .18), transparent),
+        linear-gradient(90deg, #fff, #fff6f6);
+      box-shadow: 0 16px 40px rgba(255, 64, 64, .08);
+      padding: 14px 16px;
     }
 
-    .page-hero{
-      border-radius:16px; border:1px solid #ffe1e1;
-      background: radial-gradient(1000px 320px at -10% -20%, rgba(255,64,64,.22), transparent),
-                  radial-gradient(800px 260px at 110% 0%, rgba(71,0,0,.18), transparent),
-                  linear-gradient(90deg, #fff, #fff6f6);
-      box-shadow:0 16px 40px rgba(255,64,64,.08);
-      padding:14px 16px;
+    .page-title {
+      font-weight: 800;
+      letter-spacing: .2px;
     }
-    .page-title{ font-weight:800; letter-spacing:.2px; }
 
-    .toolbar{
-      position:sticky; top:12px; z-index:5;
-      background:#fff; border:1px solid #e9ecef; border-radius:12px; padding:10px;
-      box-shadow:0 8px 24px rgba(0,0,0,.05);
+    .toolbar {
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+      background: #fff;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
     }
-    .btn-ghost{ border:1px solid #e9ecef; background:#fff; }
-    .btn-ghost:hover{ background:#f8f8f8; }
-    .btn-primary{ background:var(--grad); border:0; font-weight:700; }
-    .btn-primary:hover{ filter:brightness(.96); }
 
-    .global-search { max-width: 600px; margin: 0 auto; transition: all .25s ease; }
-    .global-search .form-control { height: 42px; border-radius: 50px; font-size:.9rem; padding-left:.5rem; border-color:#e3e3e3; }
-    .global-search .form-control:focus { border-color: var(--accent); box-shadow:0 0 0 3px rgba(255,64,64,.2); }
-    .global-search .input-group-text { border-radius: 50px 0 0 50px; background:#fff; border-color:#e3e3e3; }
+    .btn-primary {
+      background: var(--grad);
+      border: 0;
+      font-weight: 700;
+    }
 
-    .card-lite{ background:#fff; border-radius:14px; border:1px solid #e9ecef; box-shadow:0 6px 20px rgba(0,0,0,.05); }
-    .table thead th{ position:sticky; top:0; background:#fff; z-index:2; }
-    .table-hover tbody tr:hover{ background:rgba(255,64,64,.035); }
-    .clickable-row { cursor:pointer; transition: background-color .2s ease; }
-    .clickable-row:hover { background-color: rgba(255,64,64,.05); }
+    .btn-primary:hover {
+      filter: brightness(.96);
+    }
 
-    .switch { position:relative; display:inline-block; width:46px; height:24px; }
-    .switch input{ display:none; }
-    .slider{ position:absolute; left:0; top:0; right:0; bottom:0; background:#dcdcdc; border-radius:24px; transition:.25s; }
-    .slider:before{ content:""; position:absolute; left:3px; top:3px; width:18px; height:18px; background:#fff; border-radius:50%; transition:.25s; }
-    .switch input:checked + .slider{ background:#28a745; }
-    .switch input:checked + .slider:before{ transform:translateX(22px); }
+    .table thead th {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 2;
+    }
 
-    .modal-header.bg-danger { background: var(--grad) !important; color:#fff; }
+    .clickable-row {
+      cursor: pointer;
+      transition: background-color .2s ease;
+    }
+
+    .clickable-row:hover {
+      background-color: rgba(255, 64, 64, .05);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: #dcdcdc;
+      border-radius: 24px;
+      transition: .25s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .25s;
+    }
+
+    .switch input:checked+.slider {
+      background: #28a745;
+    }
+
+    .switch input:checked+.slider:before {
+      transform: translateX(22px);
+    }
+
+    .modal-header.bg-danger {
+      background: var(--grad) !important;
+      color: #fff;
+    }
+
+    #slotSection {
+      display: none;
+    }
   </style>
 </head>
+
 <body>
   <?php $this->load->view('superadmin/Include/Sidebar'); ?>
   <?php $this->load->view('superadmin/Include/Navbar'); ?>
 
   <div id="main-content" class="container-fluid">
+    <!-- Page Hero -->
     <div class="page-hero mb-3">
       <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
         <div class="page-title h5 mb-0">Add & Manage Staff</div>
-        <div class="d-flex flex-wrap gap-2">
-          <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
-        </div>
+        <button class="btn btn-primary" id="addStaffBtn"><i class="bi bi-plus-circle me-1"></i>Add Staff</button>
       </div>
     </div>
 
+    <!-- Toolbar -->
     <div class="toolbar mb-3">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div class="flex-grow-1">
@@ -111,19 +171,16 @@
             <input id="searchInput" type="text" class="form-control border-start-0" placeholder="Search staff...">
           </div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-          <span class="badge rounded-pill bg-light text-dark px-3 py-2">Total <b id="staffCount">0</b></span>
-        </div>
+        <span class="badge rounded-pill bg-light text-dark px-3 py-2">Total <b id="staffCount">0</b></span>
       </div>
     </div>
 
+    <!-- Staff Table -->
     <div class="card-lite p-3 mt-3">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-        <div class="filter-options">
-          <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
-          <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
-          <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
-        </div>
+      <div class="filter-options mb-2">
+        <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
+        <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
+        <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
       </div>
 
       <div class="table-responsive">
@@ -140,29 +197,78 @@
               <th>Slots</th>
               <th class="text-end" style="width:110px">Salary (₹)</th>
               <th class="text-center" style="width:120px">Actions</th>
-              <th class="text-center" style="width:90px">Status</th>
+              <!-- <th class="text-center" style="width:90px">Status</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colspan="11" class="text-center text-muted py-4">Loading staff data...</td>
-            </tr>
+            <?php if (!empty($staff)): ?>
+              <?php foreach ($staff as $index => $staffMember): ?>
+                <tr class="clickable-row" data-id="<?= $staffMember['id'] ?>">
+                  <td><?= $index + 1 ?></td>
+                  <td><?= htmlspecialchars($staffMember['name']) ?></td>
+                  <td><?= htmlspecialchars($staffMember['email']) ?></td>
+                  <td><?= htmlspecialchars($staffMember['contact']) ?></td>
+                  <td><?= !empty($staffMember['joining_date']) && $staffMember['joining_date'] != '0000-00-00' ? date('d M Y', strtotime($staffMember['joining_date'])) : 'N/A' ?></td>
+                  <td><?= htmlspecialchars($staffMember['role']) ?></td>
+                  <td>
+                    <?php
+                    if (!empty($staffMember['centers'])) {
+                      foreach (explode(',', $staffMember['centers']) as $center) {
+                        echo '<span class="badge bg-light text-dark mb-1">' . htmlspecialchars(trim($center)) . '</span><br>';
+                      }
+                    } else {
+                      echo '<span class="text-muted">No centers</span>';
+                    }
+                    ?>
+                  </td>
+                  <td>
+                    <?php
+                    if (!empty($staffMember['slots'])) {
+                      foreach (explode(',', $staffMember['slots']) as $slot) {
+                        echo '<span class="badge bg-light text-dark mb-1">' . htmlspecialchars(trim($slot)) . '</span><br>';
+                      }
+                    } else {
+                      echo '<span class="text-muted">No slots</span>';
+                    }
+                    ?>
+                  </td>
+                  <td class="text-end">₹<?= number_format($staffMember['salary'], 2) ?></td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-primary viewBtn" data-id="<?= $staffMember['id'] ?>"><i class="bi bi-eye"></i></button>
+                      <button class="btn btn-outline-secondary editBtn" data-id="<?= $staffMember['id'] ?>"><i class="bi bi-pencil"></i></button>
+                      <button class="btn btn-outline-danger deleteBtn" data-id="<?= $staffMember['id'] ?>"><i class="bi bi-trash"></i></button>
+                    </div>
+                  </td>
+                  <!-- <td class="text-center">
+                    <label class="switch">
+                      <input type="checkbox" class="statusToggle" <?= $staffMember['active'] == 1 ? 'checked' : '' ?> data-id="<?= $staffMember['id'] ?>">
+                      <span class="slider"></span>
+                    </label>
+                  </td> -->
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="11" class="text-center text-muted py-4">No staff members found.</td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Staff Modal -->
+  <!-- Add/Edit Staff Modal -->
   <div class="modal fade" id="staffModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title" id="staffModalLabel">Add Staff</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <form id="staffForm" autocomplete="off">
+          <form id="staffForm" action="<?php echo base_url('superadmin/saveStaff'); ?>" method="post">
             <div class="row g-2 mb-3">
               <div class="col-md-6"><input type="text" class="form-control" name="name" placeholder="Enter Staff Name" required></div>
               <div class="col-md-6"><input type="email" class="form-control" name="email" placeholder="Staff Email" required></div>
@@ -183,24 +289,38 @@
                 </select>
               </div>
             </div>
+
             <div class="mb-3">
               <label class="fw-bold mb-2">Select Centers:</label>
               <div class="d-flex flex-wrap gap-3">
-                <div><input type="checkbox" class="center-check" value="Center A"> Center A</div>
-                <div><input type="checkbox" class="center-check" value="Center B"> Center B</div>
-                <div><input type="checkbox" class="center-check" value="Center C"> Center C</div>
-                <div><input type="checkbox" class="center-check" value="Center D"> Center D</div>
+                <?php if (!empty($venues)): foreach ($venues as $venue): ?>
+                    <div>
+                      <input type="checkbox" name="centers[]" value="<?= $venue['venue_name']; ?>" class="center-check">
+                      <?= $venue['venue_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No centers available.</p>
+                <?php endif; ?>
               </div>
             </div>
-            <div class="mb-3" id="slotSection" style="display:none;">
+
+            <div class="mb-3" id="slotSection">
               <label class="fw-bold mb-2">Select Slots:</label>
               <div class="d-flex flex-wrap gap-3">
-                <div><input type="checkbox" class="slot-check" value="6-8 AM"> 6-8 AM</div>
-                <div><input type="checkbox" class="slot-check" value="8-10 AM"> 8-10 AM</div>
-                <div><input type="checkbox" class="slot-check" value="5-7 PM"> 5-7 PM</div>
-                <div><input type="checkbox" class="slot-check" value="7-9 PM"> 7-9 PM</div>
+                <?php if (!empty($slots)): foreach ($slots as $slot): ?>
+                    <div>
+                      <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>"
+                        class="slot-check" data-center="<?= $slot['venue_name']; ?>">
+                      <?= $slot['slot_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No slots available.</p>
+                <?php endif; ?>
               </div>
             </div>
+
             <div class="text-end"><button type="submit" class="btn btn-primary">Save Staff</button></div>
           </form>
         </div>
@@ -228,490 +348,458 @@
       </div>
     </div>
   </div>
+  <!-- Edit Staff Modal -->
+  <div class="modal fade" id="editStaffModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="editStaffModalLabel">Edit Staff</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editStaffForm" method="post" action="<?php echo base_url('superadmin/updateStaff'); ?>">
+            <input type="hidden" name="id" id="editStaffId">
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="name" id="editStaffName" placeholder="Enter Staff Name" required>
+              </div>
+              <div class="col-md-6">
+                <input type="email" class="form-control" name="email" id="editStaffEmail" placeholder="Staff Email" required>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="contact" id="editStaffContact" placeholder="Staff Contact" required>
+              </div>
+              <div class="col-md-6">
+                <input type="date" class="form-control" name="joining_date" id="editStaffJoining" required>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <input type="number" class="form-control" name="salary" id="editStaffSalary" placeholder="Enter Salary" required>
+              </div>
+              <div class="col-md-6">
+                <select class="form-select" name="role" id="editRoleSelect" required>
+                  <option value="">Select Role</option>
+                  <option value="Coach">Coach</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Coordinator">Coordinator</option>
+                  <option value="Manager">Manager</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="fw-bold mb-2">Select Centers:</label>
+              <div class="d-flex flex-wrap gap-3" id="editCenterList">
+                <?php if (!empty($venues)): foreach ($venues as $venue): ?>
+                    <div>
+                      <input type="checkbox" name="centers[]" value="<?= $venue['venue_name']; ?>" class="center-check">
+                      <?= $venue['venue_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No centers available.</p>
+                <?php endif; ?>
+              </div>
+            </div>
+
+            <div class="mb-3" id="editSlotSection">
+              <label class="fw-bold mb-2">Select Slots:</label>
+              <div class="d-flex flex-wrap gap-3" id="editSlotList">
+                <?php if (!empty($slots)): foreach ($slots as $slot): ?>
+                    <div>
+                      <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>"
+                        class="slot-check" data-center="<?= $slot['venue_name']; ?>">
+                      <?= $slot['slot_name']; ?>
+                    </div>
+                  <?php endforeach;
+                else: ?>
+                  <p>No slots available.</p>
+                <?php endif; ?>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Update Staff</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
-  (function($) {
-    let editRow = null;
-    let staffData = [];
+    $(document).ready(function() {
+      // Initialize staff count
+      $("#staffCount").text(<?= !empty($staff) ? count($staff) : 0 ?>);
 
-    // Helper function to escape HTML
-    function escapeHtml(unsafe) {
-      if (unsafe === null || unsafe === undefined) return '';
-      return String(unsafe)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    // Load staff data from localStorage
-    function loadStaffData() {
-      console.log('Loading staff data from localStorage...');
-      const records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
-      staffData = records.map(record => ({
-        ...record,
-        contact: record.contact || '',
-        joiningDate: record.joiningDate || '',
-        centers: record.centers ? record.centers.split(', ') : [],
-        slots: record.slots ? record.slots.split(', ') : [],
-        active: record.active !== false // Default to active if not specified
-      }));
-      
-      console.log('Loaded staff data:', staffData);
-      renderStaffTable();
-      updateCount();
-    }
-
-    // Render staff table
-    function renderStaffTable() {
-      const tbody = $("#staffTable tbody");
-      if (staffData.length === 0) {
-        tbody.html(`
-          <tr>
-            <td colspan="11" class="text-center text-muted py-4">
-              No staff found. 
-              </button>
-            </td>
-          </tr>
-        `);
-        return;
-      }
-
-      tbody.empty();
-      staffData.forEach((staff, index) => {
-        const srNo = index + 1;
-        const isActive = staff.active !== false; // Active by default
-        const rowHtml = `
-          <tr class="clickable-row" data-status="${isActive ? 'active' : 'deactive'}" 
-              data-staff-id="${staff.staffId}" data-email="${staff.email}">
-            <td>${srNo}</td>
-            <td>${escapeHtml(staff.name)}</td>
-            <td>${escapeHtml(staff.email)}</td>
-            <td>${escapeHtml(staff.contact)}</td>
-            <td>${escapeHtml(staff.joiningDate)}</td>
-            <td>${escapeHtml(staff.role)}</td>
-            <td>${escapeHtml(staff.centers.join(', ') || '-')}</td>
-            <td>${escapeHtml(staff.role === 'Coach' && staff.slots.length ? staff.slots.join(', ') : '-')}</td>
-            <td class="text-end">${staff.salary || '₹0'}</td>
-            <td class="text-center">
-              <div class="btn-group">
-                <button class="btn btn-ghost btn-sm viewBtn" title="View"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-ghost btn-sm editBtn" title="Edit"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-ghost btn-sm deleteBtn" title="Delete"><i class="bi bi-trash text-danger"></i></button>
-              </div>
-            </td>
-            <td class="text-center">
-              <label class="switch">
-                <input type="checkbox" class="statusToggle" ${isActive ? 'checked' : ''}>
-                <span class="slider"></span>
-              </label>
-            </td>
-          </tr>`;
-        tbody.append(rowHtml);
-      });
-    }
-
-    // Create salary record
-    function createSalaryRecord(staffData) {
-      const salaryRecord = {
-        staffId: staffData.staffId,
-        name: staffData.name,
-        email: staffData.email,
-        role: staffData.role,
-        contact: staffData.contact,
-        joiningDate: staffData.joiningDate,
-        centers: staffData.centers.join(', '),
-        slots: staffData.slots.join(', '),
-        hours: '0',
-        days: '0',
-        sessions: '0',
-        rate: staffData.salary ? `₹${parseInt(staffData.salary).toLocaleString()}` : '₹0',
-        salary: staffData.salary ? `₹${parseInt(staffData.salary).toLocaleString()}` : '₹0',
-        status: 'Pending',
-        active: true, // Always active by default
-        createdAt: new Date().toISOString()
-      };
-
-      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
-      records.push(salaryRecord);
-      localStorage.setItem('salaryRecords', JSON.stringify(records));
-      
-      // Trigger storage event
-      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
-      console.log('Created salary record:', salaryRecord);
-    }
-
-    // Update salary record
-    function updateSalaryRecord(oldEmail, newData) {
-      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
-      records = records.map(record => {
-        if (record.email === oldEmail) {
-          return {
-            ...record,
-            ...newData,
-            name: newData.name,
-            email: newData.email,
-            role: newData.role,
-            contact: newData.contact,
-            joiningDate: newData.joiningDate,
-            centers: newData.centers.join(', '),
-            slots: newData.slots.join(', '),
-            rate: newData.salary ? `₹${parseInt(newData.salary).toLocaleString()}` : '₹0',
-            salary: newData.salary ? `₹${parseInt(newData.salary).toLocaleString()}` : '₹0',
-            active: newData.active !== false, // Preserve active status
-            updatedAt: new Date().toISOString()
-          };
-        }
-        return record;
-      });
-      localStorage.setItem('salaryRecords', JSON.stringify(records));
-      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
-    }
-
-    // Delete salary record
-    function deleteSalaryRecord(staffId, email) {
-      let records = JSON.parse(localStorage.getItem('salaryRecords') || '[]');
-      records = records.filter(record => record.staffId !== staffId && record.email !== email);
-      localStorage.setItem('salaryRecords', JSON.stringify(records));
-      window.localStorage.setItem('salaryRecords', JSON.stringify(records));
-    }
-
-    function updateCount() {
-      $("#staffCount").text(staffData.length);
-    }
-
-    function init() {
-      console.log('Initializing Staff Management...');
-      loadStaffData();
-      
-      // Listen for storage changes from other tabs
-      window.addEventListener('storage', function(e) {
-        if (e.key === 'salaryRecords') {
-          console.log('Storage changed, reloading staff data');
-          loadStaffData();
-        }
-      });
-
-      bindUI();
-    }
-
-    function bindUI() {
-      // Add staff button
-      $(document).off('click', '#addStaffBtn, #addStaffBtn3').on('click', '#addStaffBtn, #addStaffBtn3', function() {
-        editRow = null;
-        $("#staffForm")[0].reset();
-        $("#slotSection").hide();
+      // Add Staff Button
+      $('#addStaffBtn').on('click', function() {
+        $('#staffForm')[0].reset();
         $(".center-check, .slot-check").prop('checked', false);
+        $("#slotSection").hide();
         $("#staffModalLabel").text("Add Staff");
         new bootstrap.Modal(document.getElementById('staffModal')).show();
       });
 
-      // Role change handler
-      $("#roleSelect").off('change').on('change', function() {
-        $(this).val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-      });
-
-      // Form submission
-      $("#staffForm").off('submit').on('submit', function(e) {
-        e.preventDefault();
-        const form = $(this);
-        const name = form.find("input[name='name']").val().trim();
-        const email = form.find("input[name='email']").val().trim();
-        const contact = form.find("input[name='contact']").val().trim();
-        const date = form.find("input[name='joining_date']").val();
-        const role = form.find("#roleSelect").val();
-        const salary = form.find("input[name='salary']").val().trim();
-        const centers = $(".center-check:checked").map(function(){ return $(this).val(); }).get();
-        const slots = $(".slot-check:checked").map(function(){ return $(this).val(); }).get();
-        
-        if (!name || !email || !contact || !salary) {
-          Swal.fire("Missing info", "Please fill all required fields.", "warning");
-          return;
-        }
-
-        const staffId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        const staffDataToSave = {
-          staffId,
-          name,
-          email,
-          contact,
-          joiningDate: date,
-          role,
-          salary,
-          centers,
-          slots,
-          active: true // Always active when creating new staff
-        };
-
-        if (editRow) {
-          // Update existing staff
-          const oldEmail = editRow.data('email');
-          updateSalaryRecord(oldEmail, staffDataToSave);
-          loadStaffData(); // Reload to reflect changes
-          Swal.fire("Updated!", "Staff details updated successfully.", "success");
+      // Role selection
+      $("#roleSelect").on('change', function() {
+        if ($(this).val() === "Coach") {
+          $("#slotSection").show();
         } else {
-          // Add new staff
-          createSalaryRecord(staffDataToSave);
-          loadStaffData(); // Reload to show new staff
-          Swal.fire("Added!", "New staff added successfully ", "success");
-          
-          // Dispatch custom event
-          window.dispatchEvent(new CustomEvent('staffAdded', { 
-            detail: { staffId, name, email, salary, role } 
-          }));
+          $("#slotSection").hide();
+          $(".slot-check").prop('checked', false);
         }
-
-        // Close modal
-        const modalEl = document.getElementById('staffModal');
-        const bsModal = bootstrap.Modal.getInstance(modalEl);
-        if (bsModal) bsModal.hide();
-        $("#staffForm")[0].reset();
-        $("#slotSection").hide();
-        editRow = null;
       });
 
-      // Edit button
-      $(document).off('click', '.editBtn').on('click', '.editBtn', function() {
-        editRow = $(this).closest('tr');
-        const staff = staffData.find(s => s.staffId === editRow.data('staff-id'));
-        if (!staff) return;
+      // Form submission via AJAX
+      document.getElementById('staffForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-        $("#staffForm")[0].reset();
-        $("#staffForm input[name='name']").val(staff.name);
-        $("#staffForm input[name='email']").val(staff.email);
-        $("#staffForm input[name='contact']").val(staff.contact);
-        $("#staffForm input[name='joining_date']").val(staff.joiningDate);
-        $("#roleSelect").val(staff.role);
-        $("#staffForm input[name='salary']").val(staff.salary?.replace(/[₹,]/g, '') || '');
-        
-        // Restore checkboxes
-        $(".center-check").prop('checked', false);
-        staff.centers.forEach(center => $(`.center-check[value="${center}"]`).prop('checked', true));
-        $(".slot-check").prop('checked', false);
-        staff.slots.forEach(slot => $(`.slot-check[value="${slot}"]`).prop('checked', true));
-        
-        $("#roleSelect").val() === "Coach" ? $("#slotSection").show() : $("#slotSection").hide();
-        $("#staffModalLabel").text("Edit Staff");
-        new bootstrap.Modal(document.getElementById('staffModal')).show();
+        const form = this;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Saving...';
+
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+          });
+
+          // Parse JSON response
+          const result = await response.json();
+
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Save Staff';
+
+          if (result.success) {
+            Swal.fire("Success", result.message, "success").then(() => {
+              const staffModal = bootstrap.Modal.getInstance(document.getElementById('staffModal'));
+              staffModal.hide();
+              location.reload();
+            });
+          } else {
+            Swal.fire("Error", result.message || "Failed to save staff", "error");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Save Staff';
+          Swal.fire("Error", "An error occurred while saving staff", "error");
+        }
       });
 
-      // View button
-      $(document).off('click', '.viewBtn').on('click', '.viewBtn', function() {
-        const row = $(this).closest('tr');
-        const staff = staffData.find(s => s.staffId === row.data('staff-id'));
-        if (!staff) return;
 
-        $("#profileName").text(staff.name);
-        $("#profileEmail").text(staff.email);
-        $("#profileContact").text(staff.contact);
-        $("#profileDate").text(staff.joiningDate);
-        $("#profileRole").text(staff.role);
-        $("#profileCenters").text(staff.centers.join(', ') || '-');
-        $("#profileSlots").text(staff.slots.join(', ') || '-');
-        $("#profileSalary").text(staff.salary || '₹0');
+      // View profile modal
+      $(document).on('click', '.viewBtn', function(e) {
+        e.stopPropagation();
+        const $row = $(this).closest('tr');
+        $('#profileName').text($row.find('td:eq(1)').text());
+        $('#profileEmail').text($row.find('td:eq(2)').text());
+        $('#profileContact').text($row.find('td:eq(3)').text());
+        $('#profileDate').text($row.find('td:eq(4)').text());
+        $('#profileRole').text($row.find('td:eq(5)').text());
+        $('#profileCenters').html($row.find('td:eq(6)').html());
+        $('#profileSlots').html($row.find('td:eq(7)').html());
+        $('#profileSalary').text($row.find('td:eq(8)').text());
         new bootstrap.Modal(document.getElementById('viewProfileModal')).show();
       });
 
-      // Delete button
-      $(document).off('click', '.deleteBtn').on('click', '.deleteBtn', function() {
-        const row = $(this).closest('tr');
-        const staffId = row.data('staff-id');
-        const email = row.data('email');
-        const name = row.find("td:eq(1)").text();
+      // Search functionality
+      $('#searchInput').on('keyup', function() {
+        const text = $(this).val().toLowerCase();
+        $('#staffTable tbody tr').filter(function() {
+          $(this).toggle($(this).text().toLowerCase().includes(text));
+        });
+      });
 
-        Swal.fire({
-          title: "Are you sure?",
-          text: `This will delete ${name} and their salary record.`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d00000",
-          confirmButtonText: "Delete"
-        }).then(result => {
-          if (result.isConfirmed) {
-            deleteSalaryRecord(staffId, email);
-            loadStaffData();
-            Swal.fire("Deleted!", "Staff and salary records deleted.", "success");
-            
-            window.dispatchEvent(new CustomEvent('staffDeleted', { 
-              detail: { staffId, email } 
-            }));
+      // Filter functionality
+      $('[data-filter]').on('click', function() {
+        const filter = $(this).data('filter');
+        $('[data-filter]').removeClass('active');
+        $(this).addClass('active');
+        $('#staffTable tbody tr').each(function() {
+          const isActive = $(this).find('.statusToggle').is(':checked');
+          $(this).toggle(filter === 'all' || (filter === 'active' && isActive) || (filter === 'deactive' && !isActive));
+        });
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.editBtn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const row = this.closest('tr');
+
+          // Basic fields
+          document.getElementById('editStaffId').value = this.dataset.id;
+          document.getElementById('editStaffName').value = row.cells[1].textContent.trim();
+          document.getElementById('editStaffEmail').value = row.cells[2].textContent.trim();
+          document.getElementById('editStaffContact').value = row.cells[3].textContent.trim();
+
+          // Convert "d M Y" to Y-m-d
+          const joining = row.cells[4].textContent.trim();
+          if (joining !== 'N/A') {
+            const d = new Date(joining);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            document.getElementById('editStaffJoining').value = `${yyyy}-${mm}-${dd}`;
+          } else {
+            document.getElementById('editStaffJoining').value = '';
+          }
+
+          document.getElementById('editStaffSalary').value = row.cells[8].textContent.replace('₹', '').replace(',', '').trim();
+          document.getElementById('editRoleSelect').value = row.cells[5].textContent.trim();
+
+          // Reset all checkboxes
+          document.querySelectorAll('#editCenterList input').forEach(chk => chk.checked = false);
+          document.querySelectorAll('#editSlotList input').forEach(chk => chk.checked = false);
+
+          // Preselect centers
+          const centers = [];
+          row.cells[6].querySelectorAll('span').forEach(span => centers.push(span.textContent.trim()));
+          centers.forEach(c => {
+            const input = document.querySelector(`#editCenterList input[value="${c}"]`);
+            if (input) input.checked = true;
+          });
+
+          // Preselect slots
+          const slots = [];
+          row.cells[7].querySelectorAll('span').forEach(span => slots.push(span.textContent.trim()));
+          slots.forEach(s => {
+            const input = document.querySelector(`#editSlotList input[value="${s}"]`);
+            if (input) input.checked = true;
+          });
+
+          // Show/hide slot section
+          const slotSection = document.getElementById('editSlotSection');
+          slotSection.style.display = (row.cells[5].textContent.trim() === 'Coach') ? 'block' : 'none';
+
+          // Show modal
+          new bootstrap.Modal(document.getElementById('editStaffModal')).show();
+        });
+      });
+
+      // Show/hide slots on role change
+      document.getElementById('editRoleSelect').addEventListener('change', function() {
+        const slotSection = document.getElementById('editSlotSection');
+        if (this.value === 'Coach') {
+          slotSection.style.display = 'block';
+        } else {
+          slotSection.style.display = 'none';
+          document.querySelectorAll('#editSlotList input').forEach(chk => chk.checked = false);
+        }
+      });
+    });
+  </script>
+  <script>
+    // Function to update available slots based on selected centers
+    function updateAvailableSlots() {
+      const selectedCenters = Array.from(document.querySelectorAll('.center-check:checked'))
+        .map(cb => cb.value);
+
+      // Reset all slots first
+      document.querySelectorAll('.slot-check').forEach(slot => {
+        slot.style.display = 'block';
+        slot.parentElement.style.display = 'block';
+      });
+
+      // If no centers selected or role is not Coach, show all slots
+      if (selectedCenters.length === 0 || document.getElementById('roleSelect').value !== 'Coach') {
+        return;
+      }
+
+      // Hide slots that don't belong to selected centers
+      // You'll need to add data-center attribute to your slot checkboxes
+      document.querySelectorAll('.slot-check').forEach(slot => {
+        const slotCenter = slot.getAttribute('data-center');
+        if (slotCenter && !selectedCenters.includes(slotCenter)) {
+          slot.style.display = 'none';
+          slot.parentElement.style.display = 'none';
+        }
+      });
+    }
+
+    // Update your existing slot checkboxes to include data-center attribute
+    // Modify your PHP slot generation to look like this:
+    /*
+    <?php if (!empty($slots)): foreach ($slots as $slot): ?>
+        <div>
+            <input type="checkbox" name="slots[]" value="<?= $slot['slot_name']; ?>" 
+                   class="slot-check" data-center="<?= $slot['venue_name']; ?>">
+            <?= $slot['slot_name']; ?>
+        </div>
+    <?php endforeach;
+    endif; ?>
+    */
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update slots when centers are selected/deselected
+      document.querySelectorAll('.center-check').forEach(checkbox => {
+        checkbox.addEventListener('change', updateAvailableSlots);
+      });
+
+      // Update slots when role changes
+      document.getElementById('roleSelect').addEventListener('change', function() {
+        if (this.value === 'Coach') {
+          $("#slotSection").show();
+          updateAvailableSlots();
+        } else {
+          $("#slotSection").hide();
+        }
+      });
+
+      // For edit modal
+      document.querySelectorAll('.center-check').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          if (document.getElementById('editRoleSelect').value === 'Coach') {
+            updateAvailableSlots();
           }
         });
       });
 
-      // Status toggle
-      $(document).off('change', '.statusToggle').on('change', '.statusToggle', function() {
-        const row = $(this).closest('tr');
-        const staffId = row.data('staff-id');
-        const isActive = $(this).is(':checked');
-        const staff = staffData.find(s => s.staffId === staffId);
-        
-        if (staff) {
-          staff.active = isActive;
-          updateSalaryRecord(staff.email, { ...staff, active: isActive });
-          row.attr('data-status', isActive ? 'active' : 'deactive');
-          loadStaffData(); // Reload to update status display
-          Swal.fire(isActive ? "Activated" : "Deactivated", 
-                   `Status changed to ${isActive ? 'Active' : 'Inactive'}`, 
-                   isActive ? "success" : "info");
+      document.getElementById('editRoleSelect').addEventListener('change', function() {
+        if (this.value === 'Coach') {
+          document.getElementById('editSlotSection').style.display = 'block';
+          updateAvailableSlots();
+        } else {
+          document.getElementById('editSlotSection').style.display = 'none';
         }
       });
+    });
+    // Delete Staff Functionality
+    $(document).on('click', '.deleteBtn', function(e) {
+      e.stopPropagation();
+      const staffId = $(this).data('id');
+      const staffName = $(this).closest('tr').find('td:eq(1)').text().trim();
 
-      // Filters
-      $(document).off('click', '.filter-options .btn').on('click', '.filter-options .btn', function() {
-        $(".filter-options .btn").removeClass('active');
-        $(this).addClass('active');
-        const filter = $(this).data('filter');
-        $("#staffTable tbody tr").each(function() {
-          const status = $(this).attr('data-status') || 'active';
-          if (filter === 'all' || status === filter) $(this).show(); else $(this).hide();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to delete staff member: ${staffName}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff4040',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show loading
+          Swal.fire({
+            title: 'Deleting...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+
+          // AJAX call to delete staff
+          $.ajax({
+            url: '<?php echo base_url('superadmin/deleteStaff'); ?>',
+            type: 'POST',
+            data: {
+              id: staffId
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                Swal.fire({
+                  title: 'Deleted!',
+                  text: response.message,
+                  icon: 'success',
+                  confirmButtonColor: '#ff4040'
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: 'Error!',
+                  text: response.message || 'Failed to delete staff',
+                  icon: 'error',
+                  confirmButtonColor: '#ff4040'
+                });
+              }
+            },
+            error: function() {
+              Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while deleting staff',
+                icon: 'error',
+                confirmButtonColor: '#ff4040'
+              });
+            }
+          });
+        }
+      });
+    });
+
+    // Edit Form Submission with SweetAlert
+    document.getElementById('editStaffForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = this;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Updating...';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
         });
-      });
 
-      // Search
-      $("#searchInput").off('input').on('input', function() {
-        const value = $(this).val().toLowerCase();
-        $("#staffTable tbody tr").each(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        const result = await response.json();
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Update Staff';
+
+        if (result.success) {
+          Swal.fire({
+            title: 'Success!',
+            text: result.message,
+            icon: 'success',
+            confirmButtonColor: '#ff4040'
+          }).then(() => {
+            const editModal = bootstrap.Modal.getInstance(document.getElementById('editStaffModal'));
+            editModal.hide();
+            location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: result.message || 'Failed to update staff',
+            icon: 'error',
+            confirmButtonColor: '#ff4040'
+          });
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Update Staff';
+        Swal.fire({
+          title: 'Error!',
+          text: 'An error occurred while updating staff',
+          icon: 'error',
+          confirmButtonColor: '#ff4040'
         });
-      });
-    }
-
-    // Initialize when DOM is ready
-    $(function() {
-      init();
+      }
     });
-
-  })(jQuery);
-  </script>
-
-  <!-- Sidebar toggle script -->
-  <script>
-  (function () {
-    const SIDEBAR_SELECTORS = '.sidebar, #sidebar, .main-sidebar';
-    const TOGGLE_SELECTORS = '#sidebarToggle, .sidebar-toggle, [data-sidebar-toggle]';
-    const WRAPPER_IDS = ['main-content'];
-    const DESKTOP_WIDTH_CUTOFF = 991.98;
-    const SIDEBAR_OPEN_CLASS = 'active';
-    const SIDEBAR_MIN_CLASS = 'minimized';
-    const BODY_OVERLAY_CLASS = 'sidebar-open';
-    const CSS_VAR = '--sidebar-width';
-    const SIDEBAR_WIDTH_OPEN = '250px';
-    const SIDEBAR_WIDTH_MIN = '60px';
-
-    const qs = s => document.querySelector(s);
-    const qsa = s => Array.from(document.querySelectorAll(s));
-    const sidebarEl = () => qs('#sidebar') || qs('.sidebar') || qs('.main-sidebar');
-    const wrapperEl = () => WRAPPER_IDS.map(id => document.getElementById(id)).find(Boolean);
-    const isMobile = () => window.innerWidth <= DESKTOP_WIDTH_CUTOFF;
-
-    let backdrop = qs('.sidebar-backdrop');
-    if (!backdrop) {
-      backdrop = document.createElement('div');
-      backdrop.className = 'sidebar-backdrop';
-      Object.assign(backdrop.style, {
-        position: 'fixed',
-        inset: '0',
-        background: 'rgba(0,0,0,0.42)',
-        zIndex: '1070',
-        display: 'none',
-        opacity: '0',
-        transition: 'opacity .18s ease'
-      });
-      document.body.appendChild(backdrop);
-    }
-
-    let lock = false;
-    const lockFor = (ms = 320) => {
-      lock = true;
-      clearTimeout(lock._t);
-      lock._t = setTimeout(() => lock = false, ms);
-    };
-    let lastInteractionAt = 0;
-    const INTERACTION_GAP = 700;
-
-    function openMobileSidebar() {
-      const s = sidebarEl();
-      if (!s) return;
-      s.classList.add(SIDEBAR_OPEN_CLASS);
-      document.body.classList.add(BODY_OVERLAY_CLASS);
-      document.body.style.overflow = 'hidden';
-      backdrop.style.display = 'block';
-      requestAnimationFrame(() => backdrop.style.opacity = '1');
-    }
-
-    function closeMobileSidebar() {
-      const s = sidebarEl();
-      if (s) s.classList.remove(SIDEBAR_OPEN_CLASS);
-      document.body.classList.remove(BODY_OVERLAY_CLASS);
-      document.body.style.overflow = '';
-      backdrop.style.opacity = '0';
-      setTimeout(() => {
-        if (!document.body.classList.contains(BODY_OVERLAY_CLASS)) 
-          backdrop.style.display = 'none';
-      }, 220);
-    }
-
-    function toggleDesktopSidebar() {
-      const s = sidebarEl();
-      if (!s) return;
-      const isMin = s.classList.toggle(SIDEBAR_MIN_CLASS);
-      const w = wrapperEl();
-      if (w) w.classList.toggle('minimized', isMin);
-      document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN);
-      setTimeout(() => window.dispatchEvent(new Event('resize')), 220);
-    }
-
-    function handleToggleEvent(e) {
-      if ((Date.now() - lastInteractionAt) < INTERACTION_GAP) return;
-      if (lock) return;
-      lastInteractionAt = Date.now();
-      lockFor(260);
-      isMobile() ? 
-        document.body.classList.contains(BODY_OVERLAY_CLASS) ? 
-          closeMobileSidebar() : openMobileSidebar() :
-        toggleDesktopSidebar();
-    }
-
-    function wireToggleButtons() {
-      qsa(TOGGLE_SELECTORS).forEach(el => {
-        if (el.__sidebarToggleBound) return;
-        el.__sidebarToggleBound = true;
-        el.addEventListener('click', handleToggleEvent);
-      });
-    }
-
-    // Event listeners
-    document.addEventListener('click', e => {
-      const target = e.target.closest(TOGGLE_SELECTORS);
-      if (target) handleToggleEvent(e);
-    });
-
-    backdrop.addEventListener('click', () => {
-      if (document.body.classList.contains(BODY_OVERLAY_CLASS)) closeMobileSidebar();
-    });
-
-    window.addEventListener('resize', () => {
-      if (!isMobile()) closeMobileSidebar();
-    });
-
-    // Auto-create toggle button if navbar exists
-    const navbar = qs('.navbar, header, .main-header');
-    if (navbar && !qs(TOGGLE_SELECTORS)) {
-      const btn = document.createElement('button');
-      btn.id = 'sidebarToggle';
-      btn.className = 'btn btn-sm btn-light me-2';
-      btn.innerHTML = '<i class="bi bi-list"></i>';
-      btn.setAttribute('aria-label', 'Toggle sidebar');
-      navbar.prepend(btn);
-      wireToggleButtons();
-    }
-
-    document.addEventListener('DOMContentLoaded', wireToggleButtons);
-  })();
   </script>
 </body>
+
 </html>
