@@ -123,7 +123,6 @@ $route['StaffsalaryController/add_salary_record'] = 'StaffsalaryController/add_s
 $route['StaffsalaryController/update_salary_record'] = 'StaffsalaryController/update_salary_record';
 $route['StaffsalaryController/delete_salary_record/(:num)'] = 'StaffsalaryController/delete_salary_record/$1';
 
-
 // If controller file is application/controllers/api/Staff.php
 // existing…
 $route['api/staff']                = 'staff/all';

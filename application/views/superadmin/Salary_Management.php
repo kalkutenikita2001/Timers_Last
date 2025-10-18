@@ -79,12 +79,15 @@
       color:#dc3545; 
       transition: all 0.2s ease;
       border-radius: 4px;
+      cursor: pointer;
     }
     .action-icons .btn-icon:hover{ 
       transform:scale(1.12); 
       color:#b71c1c; 
       background: rgba(255,64,64,0.1);
     }
+    /* make disabled look not clickable */
+    .action-icons .btn-icon[disabled] { cursor: not-allowed; pointer-events: none; opacity: .6; }
 
     .mark-paid.disabled {
       opacity: 0.5;
@@ -236,7 +239,7 @@
       $('#salaryTable tbody').html('<tr><td colspan="9" class="text-center">Loading...</td></tr>');
       
       $.ajax({
-        url: '<?php echo base_url("staffsalary/get_salary_records"); ?>',
+        url: '<?php echo site_url("StaffsalaryController/get_salary_records"); ?>',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -279,16 +282,16 @@
                     ${isPaid && paidAt ? `<br><small class="text-muted">${paidAt}</small>` : ''}
                   </td>
                   <td class="text-center action-icons">
-                    <button class="btn-icon delete-salary" title="Delete Salary" data-staff-id="${record.staff_id}">
+                    <button type="button" class="btn-icon delete-salary" title="Delete Salary" data-staff-id="${record.staff_id}" aria-label="Delete salary for ${escapeHtml(record.name || '')}">
                       <i class="fa-solid fa-trash text-danger"></i>
                     </button>
-                    <button class="btn-icon view-salary" title="View Details" data-staff-id="${record.staff_id}">
+                    <button type="button" class="btn-icon view-salary" title="View Details" data-staff-id="${record.staff_id}" aria-label="View salary details for ${escapeHtml(record.name || '')}">
                       <i class="fa-solid fa-eye"></i>
                     </button>
-                    <button class="btn-icon ${markPaidClass}" 
+                    <button type="button" class="btn-icon mark-paid ${isPaid ? 'disabled' : ''}" 
                             title="${isPaid ? 'Already Paid' : 'Mark as Paid'}" 
                             data-staff-id="${record.staff_id}" 
-                            ${isPaid ? 'disabled' : ''}>
+                            ${isPaid ? 'disabled' : ''} aria-label="${isPaid ? 'Already paid' : 'Mark as paid'}">
                       <i class="fa-solid fa-sack-dollar"></i>
                     </button>
                   </td>
@@ -372,7 +375,7 @@
       }).then((result) => {
         if(result.isConfirmed){
           $.ajax({
-            url: '<?php echo base_url("staffsalary/delete_salary_record"); ?>',
+            url: '<?php echo site_url("StaffsalaryController/delete_salary_record"); ?>',
             type: 'POST',
             data: { staff_id: staffId },
             dataType: 'json',
@@ -468,7 +471,7 @@
       }).then((result) => {
         if(result.isConfirmed){
           $.ajax({
-            url: '<?php echo base_url("staffsalary/update_salary_record"); ?>',
+            url: '<?php echo site_url("StaffsalaryController/update_salary_record"); ?>',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(result.value),
@@ -490,7 +493,7 @@
               }
             },
             error: function(xhr) {
-              Swal.fire('Error', 'Failed to update record: ' + xhr.responseText, 'error');
+              Swal.fire('Error', 'Failed to update record: ' + (xhr.responseText || 'Server error'), 'error');
             }
           });
         }
@@ -556,7 +559,7 @@
       loadSalaryRecords();
       setTimeout(() => {
         $.ajax({
-          url: '<?php echo base_url("staffsalary/get_salary_records"); ?>',
+          url: '<?php echo site_url("StaffsalaryController/get_salary_records"); ?>',
           type: 'GET',
           dataType: 'json',
           success: function(response) {
