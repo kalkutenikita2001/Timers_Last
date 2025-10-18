@@ -92,17 +92,9 @@
           </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-<<<<<<< HEAD
           <a class="btn btn-primary" id="addStaffBtn" href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
             <i class="bi bi-plus-circle me-1"></i>Add Staff
           </a>
-=======
-          <!-- <button class="btn btn-ghost" id="openFilters"><i class="bi bi-funnel me-1"></i>Filters</button> -->
-<a class="btn btn-primary" id="addStaffBtn"
-   href="<?php echo base_url('superadmin/Add_NewStaff'); ?>">
- Next  <i class="bi bi-arrow-right-circle"></i>
-</a>
->>>>>>> a2c5cc983291ea7ebce8f4a1244f59e917cb3975
         </div>
       </div>
 
