@@ -475,26 +475,45 @@
             body: formData,
           });
 
-          // Parse JSON response
-          const result = await response.json();
+          const raw = await response.text();
+          let result = null;
+          try {
+            result = JSON.parse(raw);
+          } catch (parseErr) {
+            console.error('Non-JSON response from server:', raw);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Save Staff';
+            Swal.fire("Error", "Invalid server response: " + raw, "error");
+            return;
+          }
+
+          console.log('Server response:', response.status, result);
 
           submitBtn.disabled = false;
           submitBtn.innerHTML = 'Save Staff';
 
+          if (!response.ok) {
+            // server returned non-2xx
+            Swal.fire("Error", result.message || ("Server error: " + response.status), "error");
+            return;
+          }
+
           if (result.success) {
             Swal.fire("Success", result.message, "success").then(() => {
               const staffModal = bootstrap.Modal.getInstance(document.getElementById('staffModal'));
-              staffModal.hide();
-              location.reload();
+              if (staffModal) staffModal.hide();
+              const u = new URL(location.href);
+              u.searchParams.delete('autopopup');
+              location.href = u.toString();
             });
           } else {
             Swal.fire("Error", result.message || "Failed to save staff", "error");
           }
         } catch (error) {
-          console.error('Error:', error);
+          console.error('Fetch error:', error);
           submitBtn.disabled = false;
           submitBtn.innerHTML = 'Save Staff';
-          Swal.fire("Error", "An error occurred while saving staff", "error");
+          Swal.fire("Error", "An error occurred while saving staff: " + (error.message || error), "error");
         }
       });
 
@@ -776,8 +795,11 @@
             confirmButtonColor: '#ff4040'
           }).then(() => {
             const editModal = bootstrap.Modal.getInstance(document.getElementById('editStaffModal'));
-            editModal.hide();
-            location.reload();
+            if (editModal) editModal.hide();
+            // remove autopopup query param so modal won't reopen after reload
+            const u = new URL(location.href);
+            u.searchParams.delete('autopopup');
+            location.href = u.toString();
           });
         } else {
           Swal.fire({
