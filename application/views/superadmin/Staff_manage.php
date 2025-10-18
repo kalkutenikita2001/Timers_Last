@@ -113,7 +113,7 @@
         <div class="flex-grow-1">
           <div class="input-group global-search">
             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input id="searchBox" type="text" class="form-control border-start-0" placeholder="Search staff by name, email, role, center or status...">
+            <input id="searchBox" type="text" class="form-control border-start-0" placeholder="Search staff by name, role, center or status...">
           </div>
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -131,7 +131,6 @@
             <tr>
               <th style="width:56px">#</th>
               <th>Name</th>
-              <th>Email</th>
               <th>Contact</th>
               <th>Join Date</th>
               <th>Role</th>
@@ -227,13 +226,12 @@
               </div>
             </div>
           </td>
-          <td>${s.email||'-'}</td>
           <td>${s.contact||'-'}</td>
           <td>${s.joining_date||'-'}</td>
           <td><span class="badge text-bg-light">${s.role||'-'}</span></td>
           <td>${centers.join(', ')||'-'}</td>
           <td>${(s.role==='Coach' && slots.length) ? slots.join(', ') : '-'}</td>
-          <td class="text-end">₹ ${INR(Number(s.salary||0))}</td>
+<td class="text-end"><span style="font-family: inherit;">₹</span>&nbsp;${INR(Number(s.salary||0))}</td>
           <td class="text-center">
             <span class="status-badge ${status==='Active'?'status-active':'status-deactive'}">${status}</span>
           </td>
