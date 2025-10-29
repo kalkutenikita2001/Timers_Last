@@ -13,6 +13,7 @@ class Superadmin extends MY_Controller
 		$this->load->model('Permission_model');
 		$this->load->model('StaffModel');
 		$this->load->database();
+		$this->load->model('FinanceModel');
 
 		// ✅ Block access if not logged in
 		if (!$this->session->userdata('logged_in')) {
@@ -68,12 +69,28 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/Superadmin_profile');
 	}
-	public function FinanceManagement2()
+// 	public function FinanceManagement2()
+// 	{
+// 		$this->load->view('superadmin/FinanceManagement2');
+// 	}
+
+public function FinanceManagement2()
 	{
-		$this->load->view('superadmin/FinanceManagement2');
+
+		$center = $this->FinanceModel->getcenter();
+
+		$data['centerdata'] = $center;
+
+		$centerincomedata = $this->FinanceModel->getstudents();
+
+		$data['incomedata'] = $centerincomedata;
+
+		$centerexpensesdata = $this->FinanceModel->getExpensesWithCenter();
+
+		$data['expenses'] = $centerexpensesdata;
+
+		$this->load->view('superadmin/FinanceManagement2', $data);
 	}
-
-
 
 
 	public function change_password()
@@ -455,9 +472,16 @@ class Superadmin extends MY_Controller
 
 
 	public function Attendance()
-	{
-		$this->load->view('superadmin/attendance');
-	}
+{
+    // Ensure model is loaded (you already load StaffModel in __construct)
+    // Fetch staff rows (returns array via your StaffModel->getAllStaff())
+    $data['staff_list']  = $this->StaffModel->getAllStaff();
+    $data['staff_count'] = count($data['staff_list']); // optional debug/useful in view
+
+    // Load the view and pass the staff data
+    $this->load->view('superadmin/attendance', $data);
+}
+
 	// public function Add_NewStaff()
 	// {
 	// 	$this->load->view('superadmin/Add_NewStaff');
@@ -587,7 +611,31 @@ class Superadmin extends MY_Controller
 		echo json_encode($response);
 		exit; // Important to stop further output
 	}
-	public function updateStaff()
+// 	public function updateStaff()
+// 	{
+// 		$id = $this->input->post('id');
+// 		$data = [
+// 			'name' => $this->input->post('name'),
+// 			'email' => $this->input->post('email'),
+// 			'contact' => $this->input->post('contact'),
+// 			'joining_date' => $this->input->post('joining_date'),
+// 			'salary' => $this->input->post('salary'),
+// 			'role' => $this->input->post('role'),
+// 			'centers' => $this->input->post('centers') ? implode(',', $this->input->post('centers')) : '',
+// 			'slots' => $this->input->post('slots') ? implode(',', $this->input->post('slots')) : '',
+// 		];
+
+// 		$this->db->where('id', $id);
+// 		if ($this->db->update('staff', $data)) {
+// 			$this->session->set_flashdata('success', 'Staff updated successfully.');
+// 		} else {
+// 			$this->session->set_flashdata('error', 'Failed to update staff.');
+// 		}
+// 		redirect('superadmin/Add_NewStaff');
+// 	}
+
+
+public function updateStaff()
 	{
 		$id = $this->input->post('id');
 		$data = [
@@ -603,11 +651,13 @@ class Superadmin extends MY_Controller
 
 		$this->db->where('id', $id);
 		if ($this->db->update('staff', $data)) {
-			$this->session->set_flashdata('success', 'Staff updated successfully.');
+			// Return JSON response for AJAX
+			echo json_encode(['success' => true, 'message' => 'Staff updated successfully.']);
 		} else {
-			$this->session->set_flashdata('error', 'Failed to update staff.');
+			// Return JSON response for AJAX
+			echo json_encode(['success' => false, 'message' => 'Failed to update staff.']);
 		}
-		redirect('superadmin/Add_NewStaff');
+		exit; // Important: Stop execution after JSON response
 	}
 	public function deleteStaff()
 	{

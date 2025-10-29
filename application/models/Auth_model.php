@@ -16,8 +16,15 @@ class Auth_model extends CI_Model
 
 
     // Get admin by center name
-    public function get_admin_by_name($name)
+    // public function get_admin_by_name($name)
+    // {
+    //     return $this->db->where('name', $name)->get('center_details')->row();
+    // }
+    // Get admin by venue_name from venues table
+    public function get_admin_by_name($venueName)
     {
-        return $this->db->where('name', $name)->get('center_details')->row();
+        // trim and search exact match
+        $venueName = trim($venueName);
+        return $this->db->where('venue_name', $venueName)->get('venues')->row();
     }
 }

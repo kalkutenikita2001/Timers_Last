@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |
 */
  $config['base_url'] = 'http://localhost/Timers_Academy/';
-// $config['base_url'] = 'https://hpclsparesportal.in/Timersacademy/';
+// $config['base_url'] = 'https://hpclsparesportal.in/Timers_Academy/';
 // $config['base_url'] = 'https://hpclsparesportal.in/timersacademy-1/';
 $config['index_page'] = '';
 $config['uri_protocol']    = 'REQUEST_URI';   // make sure it's REQUEST_URI

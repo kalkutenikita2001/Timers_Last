@@ -48,28 +48,28 @@ class Auth extends CI_Controller
                 $this->show_error('Invalid Username or Password!');
             }
         } else {
-        // If not superadmin, check admin login using center name
-        $admin = $this->Auth_model->get_admin_by_name($username);
+            // If not superadmin, check admin login using center name
+            $admin = $this->Auth_model->get_admin_by_name($username);
 
-        if ($admin && $password === $admin->password) {   // ✅ direct check
-            // ✅ get permissions from DB
-            $this->load->model('Permission_model');
-            $permissions = $this->Permission_model->get_by_center($admin->id);
+            // If passwords are plain-text in DB (temporary):
+            if ($admin && $password === $admin->password) {
+                $this->load->model('Permission_model');
+                $permissions = $this->Permission_model->get_by_center($admin->id);
 
-            $this->session->set_userdata([
-                'id'         => $admin->id,
-                'username'   => $admin->name,
-                'role'       => 'admin',
-                'center_id'  => $admin->id,
-                'permissions'=> $permissions,
-                'logged_in'  => TRUE
-            ]);
+                $this->session->set_userdata([
+                    'id'          => $admin->id,
+                    'username'    => $admin->venue_name, // use venue_name
+                    'role'        => 'admin',
+                    'center_id'   => $admin->id,
+                    'permissions' => $permissions,
+                    'logged_in'   => TRUE
+                ]);
 
-            redirect('admin/dashboard');
-        } else {
-            $this->show_error('Invalid Username or Password!');
+                redirect('admin/dashboard');
+            } else {
+                $this->show_error('Invalid Username or Password!');
+            }
         }
-    }
     }
 
 

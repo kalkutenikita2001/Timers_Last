@@ -13,7 +13,7 @@ class VenueController extends CI_Controller {
         $this->load->view('venue/index', $data);
     }
 
-    public function save_venue_old() {
+    public function save_venue() {
         $postData = json_decode($this->input->raw_input_stream, true);
 
         if (!$postData) {
@@ -29,23 +29,6 @@ class VenueController extends CI_Controller {
             echo json_encode(['status' => 'error', 'message' => 'Failed to save venue']);
         }
     }
-    public function save_venue() {
-    $postData = $this->input->post();
-
-    if (!$postData) {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid data received']);
-        return;
-    }
-
-    $venue_id = $this->Venue_model->saveVenue($postData);
-
-    if ($venue_id) {
-        echo json_encode(['status' => 'success', 'message' => 'Venue saved successfully', 'venue_id' => $venue_id]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to save venue']);
-    }
-}
-
     public function getAllVenues()
 {
     $this->load->model('Venue_model');

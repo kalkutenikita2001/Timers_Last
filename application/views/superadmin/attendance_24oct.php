@@ -1,4 +1,4 @@
-<!-- application/views/superadmin/attendance.php (themed + single search + server sync) -->
+<!-- application/views/superadmin/attendance.php (themed + single search) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,7 +73,6 @@
   </style>
 </head>
 <body>
-
   <!-- Sidebar & Navbar like Dashboard -->
   <?php $this->load->view('superadmin/Include/Sidebar') ?>
   <?php $this->load->view('superadmin/Include/Navbar') ?>
@@ -122,45 +121,88 @@
               </tr>
             </thead>
             <tbody>
-              <?php if (!empty($staff_list) && is_array($staff_list)): ?>
-                <?php foreach ($staff_list as $index => $s): ?>
-                  <?php
-                    $id    = isset($s['id']) ? $s['id'] : '';
-                    $name  = isset($s['name']) ? htmlspecialchars($s['name'], ENT_QUOTES, 'UTF-8') : '-';
-                    $role  = isset($s['role']) ? htmlspecialchars($s['role'], ENT_QUOTES, 'UTF-8') : '-';
-                    $slots = isset($s['slots']) && $s['slots'] !== '' ? htmlspecialchars($s['slots'], ENT_QUOTES, 'UTF-8') : '—';
-                  ?>
-                  <tr data-id="<?= $id ?>" data-role="<?= $role ?>">
-                    <td data-label="ID" class="staff-id"><?= ($index + 1) ?></td>
-                    <td data-label="Name"><?= $name ?></td>
-                    <td data-label="Role"><?= $role ?></td>
-                    <td data-label="Shift"><?= $slots ?></td>
-                    <td data-label="Status" class="status-cell"><span class="badge bg-danger badge-status">Absent</span></td>
-                    <td data-label="Check-In" class="checkin-cell">—</td>
-                    <td data-label="Check-Out" class="checkout-cell">—</td>
-                    <td data-label="Actions">
-                      <div class="d-flex flex-wrap align-items-center gap-2">
-                        <div class="form-check form-switch m-0">
-                          <input class="form-check-input present-switch" type="checkbox" id="present<?= $id ?>">
-                          <label class="form-check-label small" for="present<?= $id ?>">Present</label>
-                        </div>
-                        <button class="btn btn-primary btn-compact btn-action" disabled>Check-In</button>
-                        <button class="btn btn-compact btn-reset btn-clear" title="Clear times"><i class="fa-solid fa-rotate-left"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else: ?>
-                <tr>
-                  <td colspan="8" class="text-center text-muted">No staff found in the database.</td>
-                </tr>
-              <?php endif; ?>
+              <tr data-id="1" data-role="Coach">
+                <td data-label="ID" class="staff-id">1</td>
+                <td data-label="Name">Anita Sharma</td>
+                <td data-label="Role">Coach</td>
+                <td data-label="Shift">06:00–08:00 AM</td>
+                <td data-label="Status" class="status-cell"><span class="badge bg-danger badge-status">Absent</span></td>
+                <td data-label="Check-In" class="checkin-cell">—</td>
+                <td data-label="Check-Out" class="checkout-cell">—</td>
+                <td data-label="Actions">
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-check form-switch m-0">
+                      <input class="form-check-input present-switch" type="checkbox" id="present1">
+                      <label class="form-check-label small" for="present1">Present</label>
+                    </div>
+                    <button class="btn btn-primary btn-compact btn-action" disabled>Check-In</button>
+                    <button class="btn btn-compact btn-reset btn-clear" title="Clear times"><i class="fa-solid fa-rotate-left"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="2" data-role="Manager">
+                <td class="staff-id">2</td>
+                <td>Rohit Verma</td>
+                <td>Manager</td>
+                <td>09:00 AM – 05:00 PM</td>
+                <td class="status-cell"><span class="badge bg-danger badge-status">Absent</span></td>
+                <td class="checkin-cell">—</td>
+                <td class="checkout-cell">—</td>
+                <td>
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-check form-switch m-0">
+                      <input class="form-check-input present-switch" type="checkbox" id="present2">
+                      <label class="form-check-label small" for="present2">Present</label>
+                    </div>
+                    <button class="btn btn-primary btn-compact btn-action" disabled>Check-In</button>
+                    <button class="btn btn-compact btn-reset btn-clear" title="Clear times"><i class="fa-solid fa-rotate-left"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="3" data-role="Physio">
+                <td class="staff-id">3</td>
+                <td>Kavya Iyer</td>
+                <td>Student</td>
+                <td>12:00 PM – 08:00 PM</td>
+                <td class="status-cell"><span class="badge bg-danger badge-status">Absent</span></td>
+                <td class="checkin-cell">—</td>
+                <td class="checkout-cell">—</td>
+                <td>
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-check form-switch m-0">
+                      <input class="form-check-input present-switch" type="checkbox" id="present3">
+                      <label class="form-check-label small" for="present3">Present</label>
+                    </div>
+                    <button class="btn btn-primary btn-compact btn-action" disabled>Check-In</button>
+                    <button class="btn btn-compact btn-reset btn-clear" title="Clear times"><i class="fa-solid fa-rotate-left"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="4" data-role="Support">
+                <td class="staff-id">4</td>
+                <td>Vikas Rao</td>
+                <td>Support</td>
+                <td>02:00 PM – 10:00 PM</td>
+                <td class="status-cell"><span class="badge bg-danger badge-status">Absent</span></td>
+                <td class="checkin-cell">—</td>
+                <td class="checkout-cell">—</td>
+                <td>
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-check form-switch m-0">
+                      <input class="form-check-input present-switch" type="checkbox" id="present4">
+                      <label class="form-check-label small" for="present4">Present</label>
+                    </div>
+                    <button class="btn btn-primary btn-compact btn-action" disabled>Check-In</button>
+                    <button class="btn btn-compact btn-reset btn-clear" title="Clear times"><i class="fa-solid fa-rotate-left"></i></button>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
         <div class="small text-muted d-flex justify-content-between flex-wrap p-2 border-top bg-white">
-          <span>* Attendance is saved per date to the server.</span>
-          <span id="recordsMeta">—</span>
+          <span>* Demo only. Saves to this browser (per date).</span>
+          <span id="recordsMeta">Showing 4 of 4 staff</span>
         </div>
       </div>
     </div>
@@ -173,38 +215,15 @@
 
   <script>
     $(function(){
-      // ------- Endpoints (CI3 site_url embeds your base URL nicely)
-      const URL_GET  = '<?= site_url('attendance/get_by_date') ?>';
-      const URL_SAVE = '<?= site_url('attendance/save') ?>';
-
       // -------- Helpers --------
       const pad2 = n => (n<10? "0"+n : ""+n);
       const now12 = () => { const d=new Date(); let h=d.getHours(); const m=pad2(d.getMinutes()); const am=h>=12?"PM":"AM"; h=h%12||12; return `${pad2(h)}:${m} ${am}`; };
-      const todayISO = ()=> new Date().toISOString().slice(0,10);
-      const curDate = ()=> $('#attDate').val() || todayISO();
-      const dateKey = () => `attendanceSimple_v1_${curDate()}`;
+      const dateKey = () => `attendanceSimple_v1_${$('#attDate').val() || new Date().toISOString().slice(0,10)}`;
 
       const shownCount = ()=> $('#shownCount').text($('#staffTable tbody tr:visible').length);
 
       function getState(){ try{ return JSON.parse(localStorage.getItem(dateKey())||'{}'); }catch(e){ return {}; } }
       function setState(st){ localStorage.setItem(dateKey(), JSON.stringify(st)); }
-
-      // ---- Server I/O
-      function serverFetchForDate(date, cb){
-        $.post(URL_GET, { date: date })
-          .done(function(res){
-            if(res && res.status){ cb(null, res.data || {}); }
-            else { cb(new Error('Bad response')); }
-          })
-          .fail(function(xhr){ cb(new Error(xhr.statusText || 'Network error')); });
-      }
-      function serverSaveRow(payload, cb){
-        $.post(URL_SAVE, payload)
-          .done(function(res){ cb(null, res); })
-          .fail(function(xhr){ cb(new Error(xhr.statusText || 'Network error')); });
-      }
-
-      // ---- UI state save (also triggers server save)
       function saveRow($row){
         const st = getState(); const id = String($row.data('id'));
         st[id] = {
@@ -213,20 +232,16 @@
           checkout: $row.find('.checkout-cell').text().trim()
         };
         setState(st);
-
-        const payload = {
-          staff_id: id,
-          date: curDate(),
-          present: st[id].present ? 1 : 0,
-          check_in_time: st[id].checkin === '—' ? '' : st[id].checkin,
-          check_out_time: st[id].checkout === '—' ? '' : st[id].checkout,
-          notes: ''
-        };
-        serverSaveRow(payload, function(err, res){
-          if(err || !res || !res.status){
-            console.warn('Attendance save failed for staff', id, err || res);
-            Swal.fire({icon:'warning',title:'Could not save to server',timer:1100,showConfirmButton:false});
-          }
+      }
+      function loadAll(){
+        const st = getState();
+        $("#staffTable tbody tr").each(function(){
+          const id = String($(this).data('id')); const r = st[id]; if(!r) return;
+          $(this).find('.present-switch').prop('checked', !!r.present);
+          setBadge($(this), r.present ? 'Present' : 'Absent');
+          $(this).find('.checkin-cell').text(r.checkin || '—');
+          $(this).find('.checkout-cell').text(r.checkout || '—');
+          refreshAction($(this));
         });
       }
 
@@ -253,69 +268,16 @@
       }
       function clearTimes($row){ $row.find('.checkin-cell').text('—'); $row.find('.checkout-cell').text('—'); }
 
-      // ---- Load local then overwrite with server (per date)
-      function loadAll(){
-        // Local first (fast paint)
-        const st = getState();
-        $("#staffTable tbody tr").each(function(){
-          const id = String($(this).data('id'));
-          const r = st[id];
-          if(r){
-            $(this).find('.present-switch').prop('checked', !!r.present);
-            setBadge($(this), r.present ? 'Present' : 'Absent');
-            $(this).find('.checkin-cell').text(r.checkin || '—');
-            $(this).find('.checkout-cell').text(r.checkout || '—');
-          } else {
-            $(this).find('.present-switch').prop('checked', false);
-            setBadge($(this), 'Absent');
-            $(this).find('.checkin-cell').text('—');
-            $(this).find('.checkout-cell').text('—');
-          }
-          refreshAction($(this));
-        });
-
-        // Server second (truth)
-        const d = curDate();
-        serverFetchForDate(d, function(err, serverData){
-          if(err){
-            console.warn('Server fetch failed', err);
-            renumber();
-            return;
-          }
-          $("#staffTable tbody tr").each(function(){
-            const id = String($(this).data('id'));
-            if(serverData[id]){
-              const r = serverData[id];
-              const present = parseInt(r.present) ? true : false;
-              $(this).find('.present-switch').prop('checked', present);
-              setBadge($(this), present ? 'Present' : 'Absent');
-
-              const server_ci = r.check_in_time || '';
-              const server_co = r.check_out_time || '';
-              if(server_ci) $(this).find('.checkin-cell').text(server_ci);
-              if(server_co) $(this).find('.checkout-cell').text(server_co);
-
-              refreshAction($(this));
-              // mirror server to localStorage for this date
-              saveRow($(this));
-            }
-          });
-          renumber();
-        });
-      }
-
       // -------- Init --------
-      $('#attDate').val(todayISO());
+      $('#attDate').val(new Date().toISOString().slice(0,10));
       loadAll(); renumber();
 
       // change date
       $('#attDate').on('change', function(){
-        // reset UI to defaults first
         $("#staffTable tbody tr").each(function(){
           $(this).find('.present-switch').prop('checked', false);
           setBadge($(this), 'Absent'); clearTimes($(this)); refreshAction($(this));
         });
-        // load for new date
         loadAll(); renumber();
       });
 
@@ -419,7 +381,7 @@
     function closeMobileSidebar(){ const s = sidebarEl(); if (s) s.classList.remove(SIDEBAR_OPEN_CLASS); document.body.classList.remove(BODY_OVERLAY_CLASS); document.body.style.overflow = ''; backdrop.style.opacity = '0'; setTimeout(()=>{ if(!document.body.classList.contains(BODY_OVERLAY_CLASS)) backdrop.style.display='none'; },220); }
     function toggleDesktopSidebar(){ const s = sidebarEl(); if (!s) return; const isMin = s.classList.toggle(SIDEBAR_MIN_CLASS); const w = wrapperEl(); if (w) w.classList.toggle('minimized', isMin); const nav = qs('.navbar'); if (nav) nav.classList.toggle('sidebar-minimized', isMin); document.documentElement.style.setProperty(CSS_VAR, isMin ? SIDEBAR_WIDTH_MIN : SIDEBAR_WIDTH_OPEN); document.dispatchEvent(new CustomEvent('sidebarToggle', { detail:{ minimized:isMin }})); setTimeout(()=> window.dispatchEvent(new Event('resize')), 220); }
     function handleToggleEvent(e){ if (e && e.type==='click' && (Date.now()-lastInteractionAt) < INTERACTION_GAP) return; if (lock) return; if (isMobile()){ lockFor(260); document.body.classList.contains(BODY_OVERLAY_CLASS) ? closeMobileSidebar() : openMobileSidebar(); } else { lockFor(260); toggleDesktopSidebar(); } }
-    function wireToggleButtons(){ const toggles = qsa(TOGGLE_SELECTORS); toggles.forEach(el=>{ if (el.__sidebarToggleBound) return; el.__sidebarToggleBound = true; el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true}); el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }); });
+    function wireToggleButtons(){ const toggles = qsa(TOGGLE_SELECTORS); toggles.forEach(el=>{ if (el.__sidebarToggleBound) return; el.__sidebarToggleBound = true; el.addEventListener('pointerdown', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }, {passive:true}); el.addEventListener('click', ev=>{ lastInteractionAt=Date.now(); handleToggleEvent(ev); }); }); }
 
     document.addEventListener('pointerdown', function (ev) { if (ev.pointerType==='touch' || ev.pointerType==='pen') { const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS); if (t){ lastInteractionAt=Date.now(); handleToggleEvent(ev); } } }, {passive:true});
     document.addEventListener('click', function (ev) { const t = ev.target.closest && ev.target.closest(TOGGLE_SELECTORS); if (t) handleToggleEvent(ev); });

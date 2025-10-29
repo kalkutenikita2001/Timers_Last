@@ -15,114 +15,165 @@ class StaffsalaryController extends CI_Controller {
         $this->load->view('superadmin/Salary_management', $data);
     }
 
-    public function get_salary_records() {
-        // Pull salary rows and enrich with staff fields.
-        $records = $this->db
-            ->select('ss.*, s.name AS staff_name, s.email, s.role, s.contact')
-            ->from('staff_salary ss')
-            ->join('staff s', 'ss.id = s.id', 'left')  // <-- ss.id is FK to staff.id in YOUR schema
-            ->order_by('ss.sr_no', 'ASC')
+    /* ==============================================================
+       1. GET ALL RECORDS – SHOW EVERY STAFF (even without salary row)
+       ============================================================== */
+    public function get_salary_records()
+    {
+        $staff_list = $this->db
+            ->select('s.id AS staff_id, s.name, s.salary AS staff_base_salary')
+            ->from('staff s')
+            ->where('s.active', 1) // only active staff
+            ->order_by('s.name', 'ASC')
             ->get()
             ->result_array();
 
-        foreach ($records as &$r) {
-            // expose staff_id for the front-end (maps from ss.id)
-            $r['staff_id'] = (int)($r['id'] ?? 0);
+        $data = [];
 
-            // prefer salary values from staff_salary (ss.*)
-            $r['total_salary'] = (float)($r['total_salary'] ?? 0);
-            $r['hourly_rate']  = (float)($r['hourly_rate'] ?? 0);
+        foreach ($staff_list as $s) {
+            $staff_id = (int)$s['staff_id'];
+            $base_salary = (float)($s['staff_base_salary'] ?? 0);
 
-            // formatted fields
-            $r['total_salary_formatted'] = '₹' . number_format($r['total_salary'], 2);
-            $r['hourly_rate_formatted']  = '₹' . number_format($r['hourly_rate'], 2);
-            $r['paid_at_formatted']      = !empty($r['paid_at']) ? date('d-m-Y', strtotime($r['paid_at'])) : '';
+            $ss = $this->Staff_salary_model->get_salary_by_staff_id($staff_id);
 
-            // name fallback
-            $r['name'] = $r['staff_name'] ?? ($r['name'] ?? 'Unknown');
+            if ($ss) {
+                $original = (float)($ss['original_salary'] ?? $ss['total_salary'] ?? $base_salary);
+                $paid     = (strtolower($ss['status'] ?? '') === 'paid')
+                            ? (float)($ss['paid_salary'] ?? $original)
+                            : 0;
+                $paid_at_formatted = $ss['paid_at'] ? date('d M Y g:i A', strtotime($ss['paid_at'])) : '';
+            } else {
+                $original = $base_salary;
+                $paid = 0;
+                $paid_at_formatted = '';
+
+                // Auto-create pending salary record
+                $this->Staff_salary_model->add_salary_record([
+                    'id'              => $staff_id,
+                    'original_salary' => $original,
+                    'status'          => 'Pending',
+                    'created_at'      => date('Y-m-d H:i:s'),
+                    'updated_at'      => date('Y-m-d H:i:s')
+                ]);
+            }
+
+            $data[] = [
+                'staff_id'               => $staff_id,
+                'name'                   => $s['name'] ?? 'N/A',
+                'hours_worked'           => $ss['hours_worked'] ?? 0,
+                'days_present'           => $ss['days_present'] ?? 0,
+                'sessions'               => $ss['sessions'] ?? 0,
+                'hourly_rate'            => (float)($ss['hourly_rate'] ?? 0),
+                'hourly_rate_formatted'  => '₹' . number_format((float)($ss['hourly_rate'] ?? 0), 2),
+
+                'original_salary'        => $original,
+                'original_salary_formatted' => '₹' . number_format($original, 2),
+                'paid_salary'            => $paid,
+                'paid_salary_formatted'  => $paid > 0 ? '₹' . number_format($paid, 2) : '',
+
+                'total_salary'           => $original,
+                'total_salary_formatted' => '₹' . number_format($original, 2),
+
+                'status'                 => $ss['status'] ?? 'Pending',
+                'paid_at_formatted'      => $paid_at_formatted,
+                'sr_no'                  => $ss['sr_no'] ?? ''
+            ];
         }
 
-        echo json_encode(['success' => true, 'data' => $records]);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'data' => $data]));
     }
 
-    public function add_salary_record() {
-        $input = json_decode(file_get_contents('php://input'), true);
+    /* ==============================================================
+       2. UPDATE / MARK AS PAID
+       ============================================================== */
+    public function update_salary_record()
+    {
+        $input = json_decode(file_get_contents('php://input'), true) ?: [];
 
-        // DB column is `id` (FK), front-end may send staff_id
+        $staff_id = (int)($input['staff_id'] ?? 0);
+        if ($staff_id <= 0) {
+            $this->_json_error('Invalid staff_id');
+            return;
+        }
+
+        $hours    = (int)($input['hours_worked'] ?? 0);
+        $days     = (int)($input['days_present'] ?? 0);
+        $sessions = (int)($input['sessions'] ?? 0);
+        $rate     = (float)($input['hourly_rate'] ?? 0);
+        $original = (float)($input['original_salary'] ?? 0);
+        $paid     = (float)($input['paid_salary'] ?? 0);
+        $status   = $input['status'] ?? 'Pending';
+
         $data = [
-            'id'            => (int)($input['staff_id'] ?? $input['id'] ?? 0),
-            'hours_worked'  => (int)($input['hours_worked'] ?? 0),
-            'days_present'  => (int)($input['days_present'] ?? 0),
-            'sessions'      => (int)($input['sessions'] ?? 0),
-            'hourly_rate'   => (float)($input['hourly_rate'] ?? 0),
-            'total_salary'  => (float)($input['total_salary'] ?? 0),
-            'status'        => 'Pending',
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
+            'hours_worked'    => $hours,
+            'days_present'    => $days,
+            'sessions'        => $sessions,
+            'hourly_rate'     => $rate,
+            'original_salary' => $original,
+            'updated_at'      => date('Y-m-d H:i:s')
         ];
 
-        if ($this->Staff_salary_model->add_salary_record($data)) {
-            echo json_encode(['success' => true, 'message' => 'Salary record added', 'sr_no' => $this->db->insert_id()]);
+        if ($status === 'Paid') {
+            if ($paid <= 0) {
+                $this->_json_error('Paid salary must be greater than 0');
+                return;
+            }
+            $data['paid_salary'] = $paid;
+            $data['status']      = 'Paid';
+            $data['paid_at']     = date('Y-m-d H:i:s');
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed: ' . $this->db->error()['message']]);
-        }
-    }
-
-    public function update_salary_record() {
-        $input = json_decode(file_get_contents('php://input'), true);
-        $staff_id = (int)($input['staff_id'] ?? $input['id'] ?? 0); // accept both keys
-
-        $data = [
-            'hours_worked' => (int)($input['hours_worked'] ?? 0),
-            'days_present' => (int)($input['days_present'] ?? 0),
-            'sessions'     => (int)($input['sessions'] ?? 0),
-            'hourly_rate'  => (float)($input['hourly_rate'] ?? 0),
-            'total_salary' => (float)($input['total_salary'] ?? 0),
-            'updated_at'   => date('Y-m-d H:i:s'),
-        ];
-
-        if (isset($input['status']) && $input['status'] === 'Paid') {
-            $data['status']  = 'Paid';
-            $data['paid_at'] = date('Y-m-d H:i:s');
+            $data['status'] = 'Pending';
         }
 
-        if ($this->Staff_salary_model->update_salary_record($staff_id, $data)) {
-            echo json_encode(['success' => true, 'message' => 'Updated']);
+        $existing = $this->Staff_salary_model->get_salary_by_staff_id($staff_id);
+
+        if ($existing) {
+            $ok = $this->Staff_salary_model->update_salary_record($staff_id, $data);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed: ' . $this->db->error()['message']]);
+            $data['id'] = $staff_id;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $ok = $php->Staff_salary_model->add_salary_record($data);
         }
+
+        $resp = $ok
+            ? ['success' => true, 'message' => 'Salary updated']
+            : ['success' => false, 'message' => 'Update failed'];
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($resp));
     }
 
-   public function delete_salary_record()
-{
-    $staff_id = (int) $this->input->post('staff_id');
-    if ($staff_id <= 0) {
-        echo json_encode(['success' => false, 'message' => 'Invalid staff_id']);
-        return;
+    /* ==============================================================
+       3. DELETE – HARD DELETE SPECIFIC RECORD
+       ============================================================== */
+    public function delete_salary_record()
+    {
+        $input = json_decode(file_get_contents('php://input'), true) ?: [];
+        $staff_id = (int)($input['staff_id'] ?? 0);
+
+        if ($staff_id <= 0) {
+            $this->_json_error('Invalid staff id');
+            return;
+        }
+
+        $ok = $this->Staff_salary_model->delete_salary_record($staff_id);
+
+        $resp = $ok
+            ? ['success' => true, 'message' => 'Record deleted']
+            : ['success' => false, 'message' => 'Delete failed'];
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($resp));
     }
 
-    if ($this->Staff_salary_model->delete_salary_record($staff_id)) {
-        echo json_encode(['success' => true, 'message' => 'Deleted']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed: '.$this->db->error()['message']]);
-    }
-}
-
-
-    public function mark_salary_paid() {
-        $input = json_decode(file_get_contents('php://input'), true);
-        $staff_id = (int)($input['staff_id'] ?? $input['id'] ?? 0);
-
-        $ok = $this->Staff_salary_model->mark_as_paid(
-            $staff_id,
-            (int)($input['hours_worked'] ?? 0),
-            (int)($input['days_present'] ?? 0),
-            (int)($input['sessions'] ?? 0),
-            (float)($input['hourly_rate'] ?? 0),
-            (float)($input['total_salary'] ?? 0)
-        );
-
-        echo json_encode($ok ? ['success'=>true,'message'=>'Marked paid'] :
-                               ['success'=>false,'message'=>'Failed: '.$this->db->error()['message']]);
+    private function _json_error($msg)
+    {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => false, 'message' => $msg]));
     }
 }

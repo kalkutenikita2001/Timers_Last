@@ -2,51 +2,117 @@
 
 class DashboardModel extends CI_Model
 {
+    /**
+     * Central table & column mappings.
+     * Edit ONLY this section when your DB changes.
+     *
+     * Logical names used by methods:
+     *  - students
+     *  - attendance
+     *  - centers
+     *
+     * NOTE: In your DB snapshot I saw "venues" (id, venue_name).
+     * The mapping below maps logical "centers" -> actual table "venues".
+     */
+    protected $T = [
+        'students'   => 'students',
+        'attendance' => 'attendance',
+        'centers'    => 'venues'   // change to 'center_details' if you actually have that table
+    ];
+
+    protected $C = [
+        'students' => [
+            'id'                        => 'id',
+            'name'                      => 'name',
+            'contact'                   => 'contact',
+            'parent_name'               => 'parent_name',
+            'batch_id'                  => 'batch_id',
+            'student_progress_category' => 'student_progress_category',
+            'paid_amount'               => 'paid_amount',
+            'remaining_amount'          => 'remaining_amount',
+            'status'                    => 'status',
+            'last_attendance'           => 'last_attendance',
+            'center_id'                 => 'center_id',
+            'created_at'                => 'created_at',
+            'admission_date'            => 'admission_date',
+            'joining_date'              => 'joining_date'
+        ],
+        'attendance' => [
+            'id'            => 'id',
+            'student_id'    => 'staff_id', // your attendance sample uses staff_id; but controller expects student_id - we will support mapping here
+            // NOTE: In your attendance dump I see staff_id — if that column actually stores student id, keep it.
+            // If attendance.student_id is named differently, change this mapping to the correct column (e.g. 'student_id' => 'student_id').
+            'date'          => 'date',
+            'time'          => 'check_in_time', // use check_in_time as attendance time
+            'created_at'    => 'check_in_at',   // fallback created_at-like field
+            'present'       => 'present'        // numeric 1/0 for present
+        ],
+        'centers' => [
+            'id'   => 'id',
+            'name' => 'venue_name' // venues.venue_name -> aliased to name in getCenters()
+        ]
+    ];
+
     public function __construct()
     {
         parent::__construct();
     }
 
+       // helpers to get table/column names (public so controller can use them)
+    public function t($logical) {
+        return isset($this->T[$logical]) ? $this->T[$logical] : $logical;
+    }
+
+    public function c($logical_table, $col_key) {
+        return $this->C[$logical_table][$col_key] ?? $col_key;
+    }
+
+
     // Get Active Students Count
     public function getActiveStudentsCount()
     {
-        return $this->db
-            ->where('status', 'Active')
-            ->count_all_results('students');
+        $tbl = $this->t('students');
+        $statusCol = $this->c('students', 'status');
+        return (int) $this->db
+            ->where($statusCol, 'Active')
+            ->count_all_results($tbl);
     }
 
     public function getTotalStudentsCount()
     {
-        return $this->db->count_all('students');
+        return (int) $this->db->count_all($this->t('students'));
     }
 
     public function getTotalIncome()
     {
-        return $this->db
-            ->select_sum('paid_amount')
-            ->get('students')
-            ->row()
-            ->paid_amount ?? 0;
+        $tbl = $this->t('students');
+        $col = $this->c('students','paid_amount');
+
+        $query = $this->db->select_sum($col)->get($tbl);
+        $row = $query->row();
+        return isset($row->{$col}) ? floatval($row->{$col}) : 0.0;
     }
 
     public function getTotalDueAmount()
     {
-        return $this->db
-            ->select_sum('remaining_amount')
-            ->get('students')
-            ->row()
-            ->remaining_amount ?? 0;
+        $tbl = $this->t('students');
+        $col = $this->c('students','remaining_amount');
+
+        $query = $this->db->select_sum($col)->get($tbl);
+        $row = $query->row();
+        return isset($row->{$col}) ? floatval($row->{$col}) : 0.0;
     }
 
     public function getStudentDistribution()
     {
-        $query = $this->db
-            ->select('student_progress_category, COUNT(*) as count')
-            ->from('students')
-            ->group_by('student_progress_category')
-            ->get();
+        $tbl = $this->t('students');
+        $catCol = $this->c('students','student_progress_category');
 
-        $result = $query->result_array();
+        $query = $this->db
+            ->select("$catCol as cat, COUNT(*) as count", false)
+            ->from($tbl)
+            ->group_by($catCol)
+            ->get();
 
         $distribution = [
             'Beginner'     => 0,
@@ -54,21 +120,28 @@ class DashboardModel extends CI_Model
             'Advanced'     => 0
         ];
 
-        foreach ($result as $row) {
-            if (!empty($row['student_progress_category']) && isset($distribution[$row['student_progress_category']])) {
-                $distribution[$row['student_progress_category']] = (int)$row['count'];
+        foreach ($query->result_array() as $row) {
+            $cat = $row['cat'] ?? null;
+            if ($cat && isset($distribution[$cat])) {
+                $distribution[$cat] = (int)$row['count'];
             }
         }
-
         return $distribution;
     }
 
-    // sum of paid_amount grouped by month
+    // sum of paid_amount grouped by month (YYYY-MM)
     public function getMonthlyRevenue()
     {
-        $query = $this->db->select("DATE_FORMAT(admission_date, '%Y-%m') as month, SUM(paid_amount) as revenue")
-            ->from('students')
-            ->group_by("DATE_FORMAT(admission_date, '%Y-%m')")
+        $tbl = $this->t('students');
+        // choose a date column that exists in your students table
+        $dateCol = $this->c('students', 'admission_date');
+        $paidCol = $this->c('students', 'paid_amount');
+
+        // If admission_date can be NULL, the SQL will group by NULL-months -> ok but will produce fewer rows.
+        $query = $this->db
+            ->select("DATE_FORMAT($dateCol, '%Y-%m') as month, SUM($paidCol) as revenue", false)
+            ->from($tbl)
+            ->group_by("DATE_FORMAT($dateCol, '%Y-%m')")
             ->order_by("month", "ASC")
             ->get();
 
@@ -76,160 +149,67 @@ class DashboardModel extends CI_Model
     }
 
     /**
-     * Returns all centers from center_details table.
-     * Each center row is returned as an object (to match how view used $c->id / $c->name).
+     * Returns centers list as objects with id & name (so view keeps $c->id / $c->name)
      */
     public function getCenters()
     {
-        $query = $this->db
-            ->select('id, name')
-            ->from('center_details')
-            ->order_by('name', 'ASC')
+        $tbl = $this->t('centers');
+        $idCol = $this->c('centers','id');
+        $nameCol = $this->c('centers','name');
+
+        $query = $this->db->select("$idCol as id, $nameCol as name", false)
+            ->from($tbl)
+            ->order_by($nameCol, 'ASC')
             ->get();
 
-        return $query->result(); // returns array of objects -> $c->id, $c->name in view
+        return $query->result();
     }
 
     /**
-     * Get aggregated stats for a center (or all centers when $center_id is null).
-     * Returns:
-     *  - total_students
-     *  - active_students
-     *  - attendance_rate (percentage, fallback using students.last_attendance within last 7 days)
-     *  - total_due (sum of remaining_amount)
-     *  - total_paid (sum of paid_amount)
-     */
-    public function getCenterStats($center_id = null)
-    {
-        // Build base SQL
-        $sql = "SELECT
-                    COUNT(*) AS total_students,
-                    SUM(CASE WHEN status = 'Active' THEN 1 ELSE 0 END) AS active_students,
-                    SUM(CASE WHEN remaining_amount IS NOT NULL THEN remaining_amount ELSE 0 END) AS total_due,
-                    SUM(CASE WHEN paid_amount IS NOT NULL THEN paid_amount ELSE 0 END) AS total_paid,
-                    SUM(CASE WHEN last_attendance IS NOT NULL AND last_attendance != '' AND DATE(last_attendance) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 ELSE 0 END) AS recent_attendance_count
-                FROM students
-                WHERE 1=1";
-
-        $params = array();
-        if (!empty($center_id)) {
-            $sql .= " AND center_id = ?";
-            $params[] = $center_id;
-        }
-
-        $query = $this->db->query($sql, $params);
-        $row = $query->row_array();
-
-        // Normalize values
-        $total_students = isset($row['total_students']) ? (int)$row['total_students'] : 0;
-        $active_students = isset($row['active_students']) ? (int)$row['active_students'] : 0;
-        $total_due = isset($row['total_due']) ? (float)$row['total_due'] : 0.0;
-        $total_paid = isset($row['total_paid']) ? (float)$row['total_paid'] : 0.0;
-        $recent_attendance_count = isset($row['recent_attendance_count']) ? (int)$row['recent_attendance_count'] : 0;
-
-        // Attendance rate fallback calculation:
-        $attendance_rate = 0.0;
-        if ($active_students > 0) {
-            $attendance_rate = round(($recent_attendance_count / $active_students) * 100, 2);
-            if ($attendance_rate > 100) $attendance_rate = 100;
-        }
-
-        return array(
-            'total_students'  => $total_students,
-            'active_students' => $active_students,
-            'attendance_rate' => $attendance_rate, // like 45.67
-            'total_due'       => $total_due,
-            'total_paid'      => $total_paid,
-        );
-    }
-
-    /**
-     * Fetch students matching a given filter and optional center.
-     * $filter: 'active' | 'attendance' | 'due' | 'paid' | 'all'
-     * $center_id: center id or null for all centers
-     *
-     * Returns array of rows with fields:
-     * id, name, contact, parent_name, remaining_amount, paid_amount, status, last_attendance, batch_id, student_progress_category
-     */
-    public function getStudentsByFilter($filter = 'all', $center_id = null)
-    {
-        $this->db->select('id, name, contact, parent_name, remaining_amount, paid_amount, status, last_attendance, batch_id, student_progress_category, admission_date');
-        $this->db->from('students');
-
-        // apply center filter if provided
-        if (!empty($center_id)) {
-            $this->db->where('center_id', $center_id);
-        }
-
-        // apply filter conditions
-        switch ($filter) {
-            case 'active':
-                $this->db->where('status', 'Active');
-                break;
-
-            case 'attendance':
-                // students whose last_attendance falls within last 7 days
-                $this->db->where("DATE(last_attendance) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)");
-                break;
-
-            case 'due':
-                // remaining_amount > 0 (or not null and > 0)
-                $this->db->where('remaining_amount >', 0);
-                break;
-
-            case 'paid':
-                // paid_amount > 0
-                $this->db->where('paid_amount >', 0);
-                break;
-
-            case 'all':
-            default:
-                // no extra where
-                break;
-        }
-
-        $this->db->order_by('name', 'ASC');
-
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    /**
-     * NEW: Get weekly attendance counts for the last 7 days.
-     * Returns a 7-element numeric array ordered Mon..Sun.
+     * Get weekly attendance counts for the last 7 days (Mon..Sun)
+     * Returns numeric array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
      *
      * @param int|null $center_id
-     * @return array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+     * @return array
      */
     public function getWeeklyAttendance($center_id = null)
     {
-        // Build date window: from 6 days ago to today (inclusive)
+        $attTbl = $this->t('attendance');
+        $attDateCol = $this->c('attendance','date');
+        $attCreated = $this->c('attendance','created_at');
+        $attStudentId = $this->c('attendance','student_id'); // mapping currently set to 'staff_id' - adjust if necessary
+        $attTimeCol = $this->c('attendance','time');
+        $attPresent = $this->c('attendance','present');
+
+        // Build date window: from 6 days ago to today inclusive
         $days = [];
         for ($i = 6; $i >= 0; $i--) {
             $days[] = date('Y-m-d', strtotime("-{$i} days"));
         }
         $startDate = $days[0];
 
-        // Prepare query: count DISTINCT students present per date
         $this->db->reset_query();
-        $this->db->select("DATE(COALESCE(attendance.date, attendance.created_at)) as att_date, COUNT(DISTINCT attendance.student_id) as cnt", false);
-        $this->db->from('attendance');
-        $this->db->where("DATE(COALESCE(attendance.date, attendance.created_at)) >= ", $startDate);
-        $this->db->where("attendance.status", "present");
+        $this->db->select("DATE(COALESCE($attTbl.$attDateCol, $attTbl.$attCreated)) as att_date, COUNT(DISTINCT $attTbl.$attStudentId) as cnt", false);
+        $this->db->from($attTbl);
+        $this->db->where("DATE(COALESCE($attTbl.$attDateCol, $attTbl.$attCreated)) >= ", $startDate);
+        // treat present=1 as present
+        $this->db->where("$attTbl.$attPresent", 1);
 
         if (!empty($center_id) && is_numeric($center_id)) {
+            $stuTbl = $this->t('students');
+            $stuIdCol = $this->c('students','id');
+            $stuCenterCol = $this->c('students','center_id');
             // join students to filter by center
-            $this->db->join('students', 'students.id = attendance.student_id', 'inner');
-            $this->db->where('students.center_id', (int)$center_id);
+            $this->db->join("$stuTbl", "$stuTbl.$stuIdCol = $attTbl.$attStudentId", 'inner');
+            $this->db->where("$stuTbl.$stuCenterCol", (int)$center_id);
         }
 
         $this->db->group_by('att_date');
-        $this->db->order_by('att_date', 'ASC');
+        $this->db->order_by('att_date','ASC');
 
         $q = $this->db->get();
         if ($q === false) {
-            // On DB error, return zeroed week (so front-end continues to work)
-            return array_fill(0, 7, 0);
+            return array_fill(0,7,0);
         }
 
         $rows = $q->result_array();
@@ -238,16 +218,84 @@ class DashboardModel extends CI_Model
             $map[$r['att_date']] = (int)$r['cnt'];
         }
 
-        // Build Mon..Sun array (index 0 = Monday)
-        $weekOrdered = array_fill(0, 7, 0);
+        // Build Mon..Sun array
+        $weekOrdered = array_fill(0,7,0);
         foreach ($days as $d) {
-            $ts = strtotime($d);
-            // PHP date('N'): 1 (Mon) .. 7 (Sun)
-            $weekdayN = (int)date('N', $ts);
+            $weekdayN = (int)date('N', strtotime($d)); // 1..7
             $idx = $weekdayN - 1; // 0..6
             $weekOrdered[$idx] = isset($map[$d]) ? $map[$d] : 0;
         }
 
         return $weekOrdered;
+    }
+
+    /**
+     * Get students matching a filter and optional center.
+     * Returns same fields as original code expected.
+     */
+    public function getStudentsByFilter($filter = 'all', $center_id = null)
+    {
+        $tbl = $this->t('students');
+
+        $selectCols = [
+            $this->c('students','id') . ' AS id',
+            $this->c('students','name') . ' AS name',
+            $this->c('students','contact') . ' AS contact',
+            $this->c('students','parent_name') . ' AS parent_name',
+            $this->c('students','batch_id') . ' AS batch_id',
+            $this->c('students','student_progress_category') . ' AS student_progress_category',
+            $this->c('students','paid_amount') . ' AS paid_amount',
+            $this->c('students','remaining_amount') . ' AS remaining_amount',
+            $this->c('students','status') . ' AS status',
+            $this->c('students','last_attendance') . ' AS last_attendance',
+            $this->c('students','admission_date') . ' AS admission_date'
+        ];
+
+        $this->db->reset_query();
+        $this->db->select(implode(', ', $selectCols), false);
+        $this->db->from($tbl);
+
+        if (!empty($center_id)) {
+            $this->db->where($this->c('students','center_id'), (int)$center_id);
+        }
+
+        switch ($filter) {
+            case 'active':
+                $this->db->where($this->c('students','status'), 'Active');
+                break;
+
+            case 'attendance':
+                // join attendance and filter last 7 days presence
+                $attTbl = $this->t('attendance');
+                $attDateCol = $this->c('attendance','date');
+                $attCreated = $this->c('attendance','created_at');
+                $attStudentId = $this->c('attendance','student_id');
+                $attPresent = $this->c('attendance','present');
+
+                $this->db->join($attTbl, "{$attTbl}.{$attStudentId} = {$tbl}.{$this->c('students','id')}", 'inner');
+                $seven_days_ago = date('Y-m-d', strtotime('-6 days'));
+                $this->db->where("DATE(COALESCE($attTbl.$attDateCol, $attTbl.$attCreated)) >= ", $seven_days_ago);
+                $this->db->where("$attTbl.$attPresent", 1);
+                $this->db->group_by($tbl . '.' . $this->c('students','id'));
+                break;
+
+            case 'due':
+                $this->db->where($this->c('students','remaining_amount') . ' >', 0);
+                break;
+
+            case 'paid':
+                $this->db->where($this->c('students','paid_amount') . ' >', 0);
+                break;
+
+            case 'all':
+            default:
+                // no extra where
+                break;
+        }
+
+        $this->db->order_by($this->c('students','name'), 'ASC');
+
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

@@ -177,11 +177,11 @@
 
     <!-- Staff Table -->
     <div class="card-lite p-3 mt-3">
-      <div class="filter-options mb-2">
-        <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>
-        <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>
-        <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>
-      </div>
+      <!--<div class="filter-options mb-2">-->
+      <!--  <button class="btn btn-ghost btn-sm active" data-filter="all">All</button>-->
+      <!--  <button class="btn btn-ghost btn-sm" data-filter="active">Active</button>-->
+      <!--  <button class="btn btn-ghost btn-sm" data-filter="deactive">Deactive</button>-->
+      <!--</div>-->
 
       <div class="table-responsive">
         <table class="table table-hover align-middle" id="staffTable">

@@ -1,9 +1,5 @@
 <?php
 // application/views/superadmin/Staff_details.php
-// This view is identical to the one you provided but adds a small PHP block that
-// loads attendance rows from `attendance` table for the staff id found in the URL
-// and exposes them as a JS object `window.SERVER_ATTENDANCE` so the client-side
-// script can use DB attendance when rendering the grid.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,66 +223,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <?php
-  // -----------------------------
-  // Small server-side attendance loader
-  // -----------------------------
-  // We detect the staff id from the URL and query `attendance` table for rows
-  // belonging to that staff. The result is transformed into a JS-friendly
-  // structure:
-  //   window.SERVER_ATTENDANCE = {
-  //     "<staff_id>": { "YYYY-MM": [1,2,3], "YYYY-MM": [..] }
-  //   }
-  // This keeps the rest of the client code unchanged and uses DB data.
-  try {
-    $uriSegments = $this->uri->segment_array() ?: [];
-    $staffId = (int) end($uriSegments);
-    $serverAttendance = [];
-    if ($staffId > 0) {
-      $this->load->database();
-      $rows = $this->db
-        ->select('date, present')
-        ->from('attendance')
-        ->where('staff_id', $staffId)
-        ->get()
-        ->result_array();
-
-      foreach ($rows as $r) {
-        // Expected date format: YYYY-MM-DD
-        $d = $r['date'] ?? null;
-        if (!$d) continue;
-        $ts = strtotime($d);
-        if ($ts === false) continue;
-        $ym = date('Y-m', $ts); // e.g. 2025-10
-        $day = (int) date('j', $ts);
-        if (!isset($serverAttendance[$staffId])) $serverAttendance[$staffId] = [];
-        if (!isset($serverAttendance[$staffId][$ym])) $serverAttendance[$staffId][$ym] = [];
-        // Only push if present==1 (treat truthy values). If present is 0 we'll skip so
-        // absent cells will be rendered by default.
-        if (!empty($r['present'])) {
-          $serverAttendance[$staffId][$ym][] = $day;
-        }
-      }
-      // Remove duplicates & sort
-      if (isset($serverAttendance[$staffId])) {
-        foreach ($serverAttendance[$staffId] as $k => $arr) {
-          $arr = array_unique($arr);
-          sort($arr, SORT_NUMERIC);
-          $serverAttendance[$staffId][$k] = array_values($arr);
-        }
-      }
-    }
-  } catch (Exception $e) {
-    $serverAttendance = [];
-  }
-  ?>
-
-  <script>
-    // Expose server attendance to client code. The client script will automatically
-    // use this data (if present) to populate the attendance grid.
-    window.SERVER_ATTENDANCE = <?php echo json_encode($serverAttendance ?: new stdClass(), JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;
-  </script>
-
   <script>
     // ===== Animate-on-scroll
     const inView = new IntersectionObserver((entries)=>{
@@ -355,14 +291,6 @@
       staff.status = staff.status || ((staff.active ?? 1) ? 'Active':'Deactive');
       staff.attendance = staff.attendance || {};
       staff.payouts = staff.payouts || [];
-
-      // --- Merge/override with server-provided attendance (if available)
-      try {
-        if (window.SERVER_ATTENDANCE && window.SERVER_ATTENDANCE[urlId]) {
-          // SERVER_ATTENDANCE[urlId] is an object like { '2025-10': [1,2,3], ... }
-          staff.attendance = window.SERVER_ATTENDANCE[urlId];
-        }
-      } catch(e){ /* ignore */ }
 
       renderAll();
       wireActions();
@@ -449,7 +377,6 @@
     function renderGrid(){
       const m=Number(qs('#attMonth').value), y=Number(qs('#attYear').value);
       const key=`${y}-${String(m+1).padStart(2,'0')}`;
-      // staff.attendance expected like { '2025-10': [1,2,3] }
       const present = new Set((staff.attendance && staff.attendance[key]) || []);
       const grid=qs('#attGrid'); grid.innerHTML='';
       const last=new Date(y,m+1,0).getDate();

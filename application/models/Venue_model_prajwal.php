@@ -52,33 +52,19 @@ class Venue_model extends CI_Model {
 
         // Save membership plans
         if (!empty($data['plans'])) {
-            // foreach ($data['plans'] as $plan) {
-            //     $this->db->insert('membership_plans', [
-            //         'venue_id' => $venue_id,
-            //         'membership_name' => $plan['membership_name'],
-            //         'duration' => $plan['duration'],
-            //         'period' => $plan['period'],
-            //         'slot' => $plan['slot'],
-            //         'registration_fees' => $plan['registration_fees'],
-            //         'coaching_fees' => $plan['coaching_fees'],
-            //         'total_fees' => $plan['total_fees'],
-            //         'installments' => $plan['installments']
-            //     ]);
-            // }
-            
             foreach ($data['plans'] as $plan) {
-    $this->db->insert('membership_plans', [
-        'venue_id' => $venue_id,
-        'membership_name' => $plan['membership_name'] ?? '',
-        'duration' => $plan['duration'] ?? '',
-        'period' => $plan['period'] ?? '',
-        'slot' => $plan['slot'] ?? '',
-        'registration_fees' => $plan['registration_fees'] ?? 0,
-        'coaching_fees' => $plan['coaching_fees'] ?? 0,
-        'total_fees' => $plan['total_fees'] ?? 0,
-        'installments' => $plan['installments'] ?? ''
-    ]);
-}
+                $this->db->insert('membership_plans', [
+                    'venue_id' => $venue_id,
+                    'membership_name' => $plan['membership_name'],
+                    'duration' => $plan['duration'],
+                    'period' => $plan['period'],
+                    'slot' => $plan['slot'],
+                    'registration_fees' => $plan['registration_fees'],
+                    'coaching_fees' => $plan['coaching_fees'],
+                    'total_fees' => $plan['total_fees'],
+                    'installments' => $plan['installments']
+                ]);
+            }
         }
 
         return $venue_id;
