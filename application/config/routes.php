@@ -115,6 +115,7 @@ $route['venues'] = 'VenueController/index';
 $route['venue/getAll'] = 'VenueController/getAllVenues';
 $route['venue/delete/(:num)'] = 'VenueController/deleteVenue/$1';
 
+$route['api/member/register'] = 'MemberController/registerMember';
 
 //
 $route['StaffsalaryController/salary_manage'] = 'StaffsalaryController/salary_manage';
@@ -128,3 +129,6 @@ $route['StaffsalaryController/delete_salary_record/(:num)'] = 'StaffsalaryContro
 $route['api/staff']                = 'staff/all';
 $route['api/staff/(:num)']         = 'staff/one/$1';
 $route['api/staff/(:num)/active']  = 'staff/set_active/$1';   // POST
+
+
+

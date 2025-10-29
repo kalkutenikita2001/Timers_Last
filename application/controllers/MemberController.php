@@ -5,103 +5,68 @@ class MemberController extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['MemberModel', 'GroupModel', 'SubscriptionModel', 'FacilityModel', 'PaymentModel']);
-        $this->load->helper(['url', 'form']);
-        $this->load->library('form_validation');
+        $this->load->database();
     }
 
-    public function saveMember() {
-        $post = $this->input->post();
+    public function registerMember() {
+        $post = json_decode(file_get_contents('php://input'), true);
+        if (!$post) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid data']);
+            return;
+        }
 
-        // --- 1️⃣ SAVE MEMBER ---
+        // ✅ Step 1: Insert personal details
         $memberData = [
-            'name' => $post['memberName'],
-            'gender' => $post['memberGender'],
-            'email' => $post['memberEmail'],
-            'phone' => $post['memberPhone'],
-            'alt_phone' => $post['memberAltPhone'],
-            'dob' => $post['memberDOB'],
-            'blood_group' => $post['memberBloodGroup'],
-            'address' => $post['memberAddress'],
-            'joining_date' => $post['memberJoiningDate'],
-            'member_type' => $post['memberType'], // 'individual' or 'group_leader'
-            'created_at' => date('Y-m-d H:i:s')
+            'name' => $post['name'],
+            'gender' => $post['gender'],
+            'email' => $post['email'],
+            'phone' => $post['phone'],
+            'dob' => $post['dob'],
+            'blood_group' => $post['blood_group'],
+            'address' => $post['address'],
+            'alt_phone' => $post['alt_phone'],
+            'joining_date' => $post['joining_date'],
+            'document_path' => $post['document_path']
         ];
+        $this->db->insert('members', $memberData);
+        $memberId = $this->db->insert_id();
 
-        // File upload
-        if (!empty($_FILES['documentUpload']['name'])) {
-            $config['upload_path'] = './uploads/documents/';
-            $config['allowed_types'] = 'jpg|png|pdf|docx';
-            $config['max_size'] = 2048;
-            $this->load->library('upload', $config);
-
-            if ($this->upload->do_upload('documentUpload')) {
-                $uploadData = $this->upload->data();
-                $memberData['document_path'] = 'uploads/documents/' . $uploadData['file_name'];
-            }
-        }
-
-        $member_id = $this->MemberModel->insert($memberData);
-
-        // --- 2️⃣ SAVE GROUP MEMBERS (if applicable) ---
-        if ($post['memberType'] == 'group_leader' && !empty($post['groupMembers'])) {
-            foreach ($post['groupMembers'] as $gm) {
-                $this->GroupModel->insert([
-                    'leader_id' => $member_id,
-                    'name' => $gm['name'],
-                    'gender' => $gm['gender'],
-                    'email' => $gm['email'],
-                    'phone' => $gm['phone'],
-                    'dob' => $gm['dob'],
-                    'address' => $gm['address'],
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
-            }
-        }
-
-        // --- 3️⃣ SAVE SUBSCRIPTION ---
+        // ✅ Step 2: Subscription (court/slot/plan)
         $subscription = [
-            'student_id' => $member_id,
-            'center_id' => $post['centerSelect'],
-            'slot_id' => $post['slotSelect'],
-            'category' => $post['categorySelect'],
-            'plan_id' => $post['planSelect'],
-            'plan_start' => $post['planStartDate'],
-            'plan_end' => $post['planEndDate']
+            'member_id' => $memberId,
+            'venue_id' => $post['venue_id'],
+            'court_id' => $post['court_id'],
+            'slot_id' => $post['slot_id'],
+            'plan_start_date' => $post['plan_start_date'],
+            'plan_end_date' => $post['plan_end_date']
         ];
-        $this->SubscriptionModel->insert($subscription);
+        $this->db->insert('member_subscription', $subscription);
 
-        // --- 4️⃣ SAVE FACILITIES ---
+        // ✅ Step 3: Facilities (multiple)
         if (!empty($post['facilities'])) {
             foreach ($post['facilities'] as $facility) {
-                $this->FacilityModel->assignFacility([
-                    'student_id' => $member_id,
+                $facilityData = [
+                    'member_id' => $memberId,
                     'facility_id' => $facility['id'],
-                    'facility_start' => $facility['start'],
-                    'facility_end' => $facility['end'],
+                    'facility_start_date' => $facility['start_date'],
+                    'facility_end_date' => $facility['end_date'],
                     'rent' => $facility['rent']
-                ]);
+                ];
+                $this->db->insert('member_facilities', $facilityData);
             }
         }
 
-        // --- 5️⃣ SAVE PAYMENT ---
+        // ✅ Step 4: Payment info
         $paymentData = [
-            'student_id' => $member_id,
-            'invoice_id' => $post['invoiceId'],
-            'invoice_date' => $post['invoiceDate'],
-            'discount_percent' => $post['discountPercent'],
-            'discount_amount' => $post['discountAmount'],
-            'total_amount' => $post['totalAmount'],
-            'payment_type' => strtolower($post['paymentType']),
-            'created_at' => date('Y-m-d H:i:s')
+            'member_id' => $memberId,
+            'invoice_id' => $post['invoice_id'],
+            'invoice_date' => $post['invoice_date'],
+            'discount_percent' => $post['discount_percent'],
+            'payment_type' => $post['payment_type'],
+            'total_amount' => $post['total_amount']
         ];
+        $this->db->insert('member_payments', $paymentData);
 
-        $payment_id = $this->PaymentModel->insert($paymentData);
-
-        if ($post['paymentType'] == 'Installment' && !empty($post['installments'])) {
-            $this->PaymentModel->insertInstallments($payment_id, $post['installments']);
-        }
-
-        echo json_encode(['status' => 'success', 'message' => 'Member registered successfully!']);
+        echo json_encode(['status' => 'success', 'member_id' => $memberId]);
     }
 }
