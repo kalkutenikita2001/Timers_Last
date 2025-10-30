@@ -79,4 +79,57 @@ class StaffModel extends CI_Model
         $this->db->where('id', (int)$id);
         return $this->db->delete('staff');
     }
+
+   
+public function get_salary_history($staff_id, $limit = 0)
+{
+    $staff_id = (int)$staff_id;
+    if ($staff_id <= 0) return [];
+
+    $linkCol = $this->db->field_exists('staff_id', 'staff_salary') ? 'staff_id' : (
+               $this->db->field_exists('sr_no', 'staff_salary') ? 'sr_no' : null);
+
+    if ($linkCol === null) {
+        // No obvious link column — return empty so we don't accidentally return all rows
+        log_message('warning', 'StaffModel::get_salary_history() - staff_salary link column not found');
+        return [];
+    }
+
+    $this->db->from('staff_salary');
+    $this->db->where($linkCol, $staff_id);
+    $this->db->select('id, total_salary, paid_salary, paid_at, created_at, status');
+    $this->db->order_by('paid_at', 'DESC');
+
+    if ((int)$limit > 0) {
+        $this->db->limit((int)$limit);
+    }
+
+    $rows = $this->db->get()->result_array();
+    $out = [];
+
+    foreach ($rows as $r) {
+        // choose numeric amount: prefer paid_salary then total_salary then 0
+        $amount = 0.0;
+        if (isset($r['paid_salary']) && $r['paid_salary'] !== null && $r['paid_salary'] !== '') {
+            $amount = (float)$r['paid_salary'];
+        } elseif (isset($r['total_salary']) && $r['total_salary'] !== null && $r['total_salary'] !== '') {
+            $amount = (float)$r['total_salary'];
+        }
+
+        // label for UI: prefer paid_at date else created_at
+        $dt = !empty($r['paid_at']) ? $r['paid_at'] : (!empty($r['created_at']) ? $r['created_at'] : null);
+        $label = $dt ? date('M Y', strtotime($dt)) : '(unknown)';
+
+        $out[] = [
+            'id'    => isset($r['id']) ? (int)$r['id'] : null,
+            'label' => $label,
+            'amount'=> $amount,
+            'status'=> $r['status'] ?? null,
+            'paid_at'=> $r['paid_at'] ?? null,
+            'raw'   => $r,
+        ];
+    }
+
+    return $out;
+}
 }
