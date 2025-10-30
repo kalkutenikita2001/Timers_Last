@@ -47,9 +47,10 @@ class StaffsalaryController extends CI_Controller {
                 $paid = 0;
                 $paid_at_formatted = '';
 
-                // Auto-create pending salary record
+                // ✅ Auto-create pending salary record
                 $this->Staff_salary_model->add_salary_record([
-                    'id'              => $staff_id,
+                    'staff_id'        => $staff_id,
+                    'sr_no'           => $staff_id, // optional but keeps it in sync
                     'original_salary' => $original,
                     'status'          => 'Pending',
                     'created_at'      => date('Y-m-d H:i:s'),
@@ -107,6 +108,8 @@ class StaffsalaryController extends CI_Controller {
         $status   = $input['status'] ?? 'Pending';
 
         $data = [
+            'staff_id'        => $staff_id,
+            'sr_no'           => $staff_id, // optional sync
             'hours_worked'    => $hours,
             'days_present'    => $days,
             'sessions'        => $sessions,
@@ -132,9 +135,11 @@ class StaffsalaryController extends CI_Controller {
         if ($existing) {
             $ok = $this->Staff_salary_model->update_salary_record($staff_id, $data);
         } else {
-            $data['id'] = $staff_id;
+            // ✅ Fix: correctly add staff_id instead of id
+            $data['staff_id']  = $staff_id;
+            $data['sr_no']     = $staff_id;
             $data['created_at'] = date('Y-m-d H:i:s');
-            $ok = $php->Staff_salary_model->add_salary_record($data);
+            $ok = $this->Staff_salary_model->add_salary_record($data);
         }
 
         $resp = $ok
