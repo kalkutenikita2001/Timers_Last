@@ -291,26 +291,106 @@ public function FinanceManagement2()
 
 
 	public function Permission()
+{
+    $data['centers'] = $this->Center_model->get_all_centers();
+
+    $modules = [
+        'admission' => 'Admission Management',
+        'students'  => 'Students Management',
+        'events'    => 'Event Management',
+        'leave'     => 'Leave Management',
+        'expenses'  => 'Expense Management',
+    ];
+
+    foreach ($data['centers'] as &$center) {
+        $center['permissions'] = $this->Permission_model->get_by_center($center['id']);
+    }
+
+    $data['modules'] = $modules;
+
+    // Fetch venues using the Permission model
+    $data['venues'] = $this->Permission_model->get_all_venues();
+    
+    // Debug line - remove after testing
+    error_log('Venues data: ' . print_r($data['venues'], true));
+
+    $this->load->view('superadmin/Permission', $data);
+}
+
+	// AJAX: return permissions for a single venue as JSON
+	public function get_venue_permissions($venue_id = null)
 	{
-		$data['centers'] = $this->Center_model->get_all_centers();
-
-		$modules = [
-			// 			'center_mgmt' => 'Center Management',
-			'admission' => 'Admission Management',
-			'students' => 'Students Management',
-			'events' => 'Event Management',
-			'leave' => 'Leave Management',
-			'expenses' => 'Expense Management',
-			// 'finance' => 'Finance Management'
-		];
-
-		foreach ($data['centers'] as &$center) {
-			$center['permissions'] = $this->Permission_model->get_by_center($center['id']);
+		if ($venue_id === null) {
+			echo json_encode(['success' => false, 'message' => 'Missing venue id']);
+			return;
 		}
 
+		$permissions = $this->Permission_model->get_venue_permissions($venue_id);
+		header('Content-Type: application/json');
+		echo json_encode($permissions);
+	}
 
-		$data['modules'] = $modules;
-		$this->load->view('superadmin/Permission', $data);
+	// AJAX: save permissions for a single venue (accepts JSON body or form data)
+	public function save_venue_permissions($venue_id = null)
+	{
+		header('Content-Type: application/json');
+
+		if ($venue_id === null) {
+			echo json_encode(['success' => false, 'message' => 'Missing venue id']);
+			return;
+		}
+
+		// Try to decode JSON from request body first
+		$raw = file_get_contents('php://input');
+		$data = json_decode($raw, true);
+
+		// If JSON not present, fall back to POST data
+		if (!is_array($data) || empty($data)) {
+			$data = $this->input->post();
+		}
+
+		// Normalize expected keys
+		$permissions = [];
+		$permissions['admission'] = isset($data['admission']) ? filter_var($data['admission'], FILTER_VALIDATE_BOOLEAN) : false;
+		$permissions['attendance'] = isset($data['attendance']) ? filter_var($data['attendance'], FILTER_VALIDATE_BOOLEAN) : false;
+		$permissions['leave'] = isset($data['leave']) ? filter_var($data['leave'], FILTER_VALIDATE_BOOLEAN) : false;
+		$permissions['expense'] = isset($data['expense']) ? filter_var($data['expense'], FILTER_VALIDATE_BOOLEAN) : false;
+
+		$saved = $this->Permission_model->save_venue_permissions($venue_id, $permissions);
+
+		if ($saved) {
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false]);
+		}
+	}
+
+	// AJAX: save permissions for multiple venues in one request
+	public function save_all_venue_permissions()
+	{
+		header('Content-Type: application/json');
+		$raw = file_get_contents('php://input');
+		$data = json_decode($raw, true);
+		if (!is_array($data) || empty($data)) {
+			echo json_encode(['success' => false, 'message' => 'No data provided']);
+			return;
+		}
+
+		$saved = 0;
+		foreach ($data as $item) {
+			if (!isset($item['venue_id'])) continue;
+			$venue_id = (int)$item['venue_id'];
+			$permissions = [];
+			$permissions['admission'] = isset($item['admission']) ? (bool)$item['admission'] : false;
+			$permissions['attendance'] = isset($item['attendance']) ? (bool)$item['attendance'] : false;
+			$permissions['leave'] = isset($item['leave']) ? (bool)$item['leave'] : false;
+			$permissions['expense'] = isset($item['expense']) ? (bool)$item['expense'] : false;
+
+			$res = $this->Permission_model->save_venue_permissions($venue_id, $permissions);
+			if ($res) $saved++;
+		}
+
+		echo json_encode(['success' => true, 'saved' => $saved]);
 	}
 
 	// Save permissions from form
@@ -699,4 +779,10 @@ public function updateStaff()
 	{
 		$this->load->view('superadmin/ReAdd');
 	}
+
+	protected function check_venue_access($venue_id, $module)
+{
+    $this->load->model('Permission_model');
+    return $this->Permission_model->check_venue_permission($venue_id, $module);
+}
 }

@@ -2,7 +2,19 @@
     rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-<?php $perms = $this->session->userdata('permissions'); ?>
+<?php 
+// Always fetch current permissions for the admin's center so sidebar reflects latest changes
+// Use CI instance inside view to access models/libraries safely
+$CI = &get_instance();
+$center_id = $CI->session->userdata('center_id') ?: $CI->session->userdata('id');
+$perms = [];
+if ($center_id) {
+    $CI->load->model('Permission_model');
+    $perms = $CI->Permission_model->get_by_center($center_id);
+    // update session copy (optional)
+    $CI->session->set_userdata('permissions', $perms);
+}
+?>
 
 <div class="sidebar" id="sidebar">
     <div class="logo">
@@ -24,20 +36,15 @@
         <div class="nav-link d-flex justify-content-between align-items-center">
             
             <!-- Left side: click redirects to students -->
-            <a class="d-flex align-items-center flex-grow-1 text-decoration-none 
-                <?php echo ($this->uri->segment(2) == 'students') ? 'active' : ''; ?>"
-                href="<?php echo base_url('admin/students'); ?>">
+            <?php $isAdmissionActive = in_array($this->uri->segment(2), ['Students','ReAdd','FRenewNew_Admission','New_admission','Renew_admission']); ?>
+            <a class="d-flex align-items-center flex-grow-1 text-decoration-none <?php echo $isAdmissionActive ? 'active' : ''; ?>"
+                href="<?php echo base_url('admin/Students'); ?>">
                 <i class="bi bi-person-lines-fill"></i>
                 <span>Admission Management</span>
             </a>
 
             <!-- Right side: chevron only toggles the submenu -->
-            <?php
-            $isAdmissionActive = in_array($this->uri->segment(2), [
-                'ReAdd',
-                'FRenewNew_Admission'
-            ]);
-            ?>
+            <!-- $isAdmissionActive computed above -->
             <button class="btn btn-sm p-0 border-0 bg-transparent ms-2"
                 type="button"
                 data-bs-toggle="collapse"
@@ -70,8 +77,8 @@
                     <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
                 </a>
                 <a class="nav-link <?php echo ($this->uri->segment(2) == 'NAttendance') ? 'active' : ''; ?>" href="<?php echo base_url('admin/NAttendance'); ?>">
-              <i class="bi bi-arrow-counterclockwise"></i><span> Attendance</span>
-            </a>
+                    <i class="bi bi-clock-history"></i><span> Attendance</span>
+                </a>
             </nav>
         </div>
     </div>
@@ -100,16 +107,16 @@
         <!-- Leave Management -->
         <?php if (!empty($perms['leave'])): ?>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>"
-                href="<?php echo base_url() . 'admin/Leave'; ?>">
-                <i class="bi bi-person-circle"></i><span>Leave</span>
+                href="<?php echo base_url('admin/Leave'); ?>">
+                <i class="bi bi-calendar-x"></i><span>Leave</span>
             </a>
         <?php endif; ?>
 
-        <!-- Events -->
+        <!-- Expenses -->
         <?php if (!empty($perms['expenses'])): ?>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>"
-                href="<?php echo base_url() . 'admin/Expenses'; ?>">
-                <i class="bi bi-calendar-event"></i><span>Expense Management</span>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>"
+                href="<?php echo base_url('admin/Expenses'); ?>">
+                <i class="bi bi-currency-dollar"></i><span>Expense Management</span>
             </a>
         <?php endif; ?>
 

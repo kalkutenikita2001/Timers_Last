@@ -227,7 +227,8 @@
 
 <span> Add New Staff</span>
             </a>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Attendance') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Attendance'); ?>">
+            <?php $isAttendance = ($this->uri->segment(1) == 'Attendance' || $this->uri->segment(2) == 'Attendance'); ?>
+            <a class="nav-link <?php echo $isAttendance ? 'active' : ''; ?>" href="<?php echo base_url('Attendance'); ?>">
               <i class="fa-solid fa-book-open-reader"></i><span> Attendance</span>
             </a>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Salary_Management') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Salary_Management'); ?>">
@@ -314,14 +315,16 @@
   -->
 
       
-<!-- <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Expenses'); ?>">
-    <i class="fa-solid fa-arrow-trend-up"></i>
-<span> Expenses Management</span>
-</a> -->
+      <?php $isExpenses = ($this->uri->segment(1) == 'Expense' || $this->uri->segment(2) == 'Expense' || $this->uri->segment(2) == 'Expenses'); ?>
+      <a class="nav-link <?php echo $isExpenses ? 'active' : ''; ?>" href="<?php echo base_url('Expense'); ?>">
+        <i class="fa-solid fa-arrow-trend-up"></i>
+        <span> Expenses Management</span>
+      </a>
 
 
 
-      <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>" href="<?php echo base_url('superadmin/Leave'); ?>">
+      <?php $isLeave = ($this->uri->segment(1) == 'Leave' || $this->uri->segment(2) == 'Leave'); ?>
+      <a class="nav-link <?php echo $isLeave ? 'active' : ''; ?>" href="<?php echo base_url('Leave'); ?>">
         <i class="bi bi-calendar-x"></i><span>Leave Management</span>
       </a>
 

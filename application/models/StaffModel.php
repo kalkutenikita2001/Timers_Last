@@ -51,4 +51,9 @@ class StaffModel extends CI_Model
         $this->db->where('id', $id);
         return $this->db->delete('staff');
     }
+    public function get_all_staff()
+  {
+    $query = $this->db->get('staff'); // SELECT * FROM staff
+    return $query->result_array();
+  } 
 }
