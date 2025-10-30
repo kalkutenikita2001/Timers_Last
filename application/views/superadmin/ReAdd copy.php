@@ -48,7 +48,7 @@
             top: 0;
             left: 250px;
             right: 0;
-            /* color: white; */
+            color: white;
             padding: 10px;
             transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
             background: white;
@@ -430,15 +430,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Phone Number <span class="text-danger">*</span></label>
-                                    <input type="tel"
-                                        class="form-control"
-                                        id="memberPhone"
-                                        placeholder="Enter 10-digit Phone Number"
-                                        pattern="[0-9]{10}"
-                                        maxlength="10"
-                                        minlength="10"
-                                        required
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);"> Phone Number
+                                    <input type="tel" class="form-control" id="memberPhone" placeholder="Enter Phone Number" required>
                                     <div class="invalid-feedback">Please enter a valid phone number.</div>
                                 </div>
                             </div>
@@ -473,7 +465,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Alternate Mobile Number</label>
-                                    <input type="tel" class="form-control" id="memberAltPhone" placeholder="Enter Alternate Phone Number" oninput="this.value=this.value.replace(/[^0-9]/g, '' ).slice(0,10);">
+                                    <input type="tel" class="form-control" id="memberAltPhone" placeholder="Enter Alternate Phone Number">
                                 </div>
                             </div>
 
@@ -2161,29 +2153,12 @@
 
                         const idx = container.find('.member-facility-row').length;
                         const row = $(
-                            `<div class="member-facility-row mb-3 p-3 border rounded">
-                            <div class="row align-items-center">
-                                <div class="col-md-3">
-                                    <label class="font-weight-bold">Facility</label>
-                                    <select class="form-control" name="member_${memberId}_facility[]">${getFacilitiesOptionsHtml()}</select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="font-weight-bold">Start Date</label>
-                                    <input type="date" class="form-control" name="member_${memberId}_facility_start[]" placeholder="Start Date" />
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="font-weight-bold">End Date</label>
-                                    <input type="date" class="form-control" name="member_${memberId}_facility_end[]" placeholder="End Date" />
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="font-weight-bold">Usage</label>
-                                    <span class="badge badge-info d-block">${window.facilityUsage[facilityId]} member(s)</span>
-                                </div>
-                                <div class="col-md-1">
-                                    <label class="font-weight-bold text-white">Remove</label>
-                                    <button type="button" class="btn btn-danger btn-sm remove-member-facility btn-block"><i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
+                            `<div class="member-facility-row d-flex align-items-center mb-2">
+                            <select class="form-control mr-2" name="member_${memberId}_facility[]">${getFacilitiesOptionsHtml()}</select>
+                            <input type="date" class="form-control mr-2" name="member_${memberId}_facility_start[]" placeholder="Start Date" />
+                            <input type="date" class="form-control mr-2" name="member_${memberId}_facility_end[]" placeholder="End Date" />
+                            <span class="badge badge-info ml-2">Usage: ${window.facilityUsage[facilityId]}</span>
+                            <button type="button" class="btn btn-danger btn-sm remove-member-facility ml-2"><i class="fas fa-times"></i></button>
                         </div>`
                         );
 
@@ -2361,8 +2336,8 @@
                     if (assignContainer.length) {
                         assignContainer.find(`select[name='member_${rid}_facility[]']`).each(function(i) {
                             const fid = $(this).val();
-                            const start = $(this).closest('.member-facility-row').find(`input[name='member_${rid}_facility_start[]']`).eq(i).val();
-                            const end = $(this).closest('.member-facility-row').find(`input[name='member_${rid}_facility_end[]']`).eq(i).val();
+                            const start = assignContainer.find(`input[name='member_${rid}_facility_start[]']`).eq(i).val();
+                            const end = assignContainer.find(`input[name='member_${rid}_facility_end[]']`).eq(i).val();
                             if (fid) {
                                 member.facilities.push({
                                     id: fid,
@@ -2448,9 +2423,6 @@
                     }
                 });
             });
-
-            // Remove the global facility date inputs since we now have per-member dates
-            $('#facilityStartDate').closest('.form-row').remove();
         });
     </script>
 </body>

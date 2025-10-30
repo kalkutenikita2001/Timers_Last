@@ -837,7 +837,7 @@
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label>Total Fees</label>
-                                                <input type="number" class="form-control" placeholder="Total Fees">
+                                                <input type="number" class="form-control" placeholder="Total Fees" readonly>
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label>Number of Installments</label>
@@ -2542,7 +2542,60 @@
 
         })(jQuery);
     </script>
+    <script>
+        // Function to calculate total fees for a specific plan item
+        function calculateTotal(planItem) {
+            const regInput = planItem.querySelector('input[placeholder="Registration Fees"]');
+            const coachInput = planItem.querySelector('input[placeholder="Coaching Fees"]');
+            const totalInput = planItem.querySelector('input[placeholder="Total Fees"]');
 
+            if (regInput && coachInput && totalInput) {
+                const reg = parseFloat(regInput.value) || 0;
+                const coach = parseFloat(coachInput.value) || 0;
+                const total = reg + coach;
+                totalInput.value = total.toFixed(2);
+            }
+        }
+
+        // Event delegation for dynamically created plan items
+        document.addEventListener('input', function(e) {
+            // Check if the input is a registration fee or coaching fee field
+            const target = e.target;
+            const placeholder = target.getAttribute('placeholder');
+
+            if (placeholder === 'Registration Fees' || placeholder === 'Coaching Fees') {
+                // Find the parent plan item
+                const planItem = target.closest('.plan-item');
+                if (planItem) {
+                    calculateTotal(planItem);
+                }
+            }
+        });
+
+        // Also calculate totals when new plans are added
+        $(document).on('click', '#addPlan, #editAddPlan', function() {
+            // Small delay to ensure the new plan is rendered
+            setTimeout(() => {
+                $('.plan-item').each(function() {
+                    calculateTotal(this);
+                });
+            }, 100);
+        });
+
+        // Calculate totals when the modal opens (for edit modal)
+        $(document).on('shown.bs.modal', '#venueModal, #editVenueModal', function() {
+            $('.plan-item').each(function() {
+                calculateTotal(this);
+            });
+        });
+
+        // Initialize totals for existing plan items on page load
+        $(document).ready(function() {
+            $('.plan-item').each(function() {
+                calculateTotal(this);
+            });
+        });
+    </script>
 
 </body>
 
