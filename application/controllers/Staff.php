@@ -31,8 +31,8 @@ class Staff extends CI_Controller {
     $this->output->set_output(json_encode($mapped));
   }
 
-  // GET /api/staff/{id}
-  public function one($id) {
+ // GET /api/staff/{id}
+public function one($id) {
     $this->output->set_content_type('application/json');
     $id = (int)$id;
     if ($id <= 0) {
@@ -53,8 +53,26 @@ class Staff extends CI_Controller {
       return;
     }
 
-    $this->output->set_output(json_encode($this->map_row($row)));
-  }
+    // Map DB row -> UI shape
+    $mapped = $this->map_row($row);
+
+    // Fetch salary history and attach it
+    try {
+      $history = $this->StaffModel->get_salary_history($id);
+    } catch (Exception $e) {
+      log_message('error', 'Staff::one() salary history error: '.$e->getMessage());
+      $history = [];
+    }
+
+    // Supply three helpful arrays for the front-end:
+    //  - payouts: labels (what your existing UI expects)
+    //  - payout_amounts: numeric amounts (for charting)
+    //  - salary_history_full: detailed rows
+    $mapped['salary_history_full'] = $history;
+    $mapped['payouts'] = array_map(function($r){ return $r['label']; }, $history);
+    $mapped['payout_amounts'] = array_map(function($r){ return $r['amount']; }, $history);
+
+$this->output->set_output(json_encode($mapped));}
 
   // POST /api/staff/{id}/active  with JSON: { "active": 1|0 }
   public function set_active($id) {
