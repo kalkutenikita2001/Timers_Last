@@ -312,7 +312,19 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--accent);
         }
-
+.facility-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.facility-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.facility-card.selected {
+    border: 2px solid #007bff !important;
+    background-color: #f8f9ff;
+}
         .group-member-row h6 {
             color: var(--accent);
             margin-bottom: 15px;
@@ -499,71 +511,84 @@
 
                         <div class="tab-content p-3 border border-top-0" id="memberTabsContent">
                             <!-- Subscription Tab -->
-                            <div class="tab-pane fade show active" id="subscription" role="tabpanel">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Select Center <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="centerSelect" required>
-                                            <option value="" selected disabled>Select Center</option>
-                                            <option>ABC Sports Arena - Pune</option>
-                                            <option>XYZ Fitness Center - Mumbai</option>
-                                            <option>PQR Gym - Delhi</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select a center.</div>
-                                    </div>
-                                </div>
+                       <div class="tab-pane fade show active" id="subscription" role="tabpanel">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Select Center <span class="text-danger">*</span></label>
+            <select class="form-control" id="centerSelect" required>
+                <option value="" selected disabled>Select Center</option>
+            </select>
+            <div class="invalid-feedback">Please select a center.</div>
+        </div>
+    </div>
 
-                                <div id="slotSelection" class="mt-4" style="display: none;">
-                                    <h6>Available Slots</h6>
-                                    <div id="courtSlotsView" class="mt-3">
-                                        <!-- Dynamic slot content will appear here -->
-                                    </div>
-                                    <div class="invalid-feedback" id="slotError" style="display: none;">Please select a time slot.</div>
+    <!-- COURT & SLOT SELECTION -->
+    <div id="slotSelection" class="mt-4" style="display: none;">
+        <div class="form-row">
+            <!-- Choose Court -->
+            <div class="form-group col-md-6">
+                <label>Choose Court <span class="text-danger">*</span></label>
+                <select class="form-control" id="courtSelect" required>
+                    <option value="" selected disabled>Select Court</option>
+                </select>
+                <div class="invalid-feedback">Please select a court.</div>
+            </div>
 
-                                    <div class="form-row mt-4">
-                                        <div class="form-group col-md-6">
-                                            <label>Select Category <span class="text-danger">*</span></label>
-                                            <select class="form-control" id="categorySelect" required>
-                                                <option value="" selected disabled>Select Category</option>
-                                                <option>Regular</option>
-                                                <option>Premium</option>
-                                                <option>VIP</option>
-                                            </select>
-                                            <div class="invalid-feedback">Please select a category.</div>
-                                        </div>
-                                    </div>
+            <!-- Choose Slot -->
+            <div class="form-group col-md-6">
+                <label>Choose Slot <span class="text-danger">*</span></label>
+                <select class="form-control" id="slotSelect" required>
+                    <option value="" selected disabled>Select Slot</option>
+                </select>
+                <div class="invalid-feedback">Please select a slot.</div>
+            </div>
+        </div>
 
-                                    <div id="planSelection" class="mt-4" style="display: none;">
-                                        <h6>Available Plans</h6>
-                                        <div id="planPreview" class="mt-3">
-                                            <!-- Dynamic plan content will appear here -->
-                                        </div>
-                                        <div class="invalid-feedback" id="planError" style="display: none;">Please select a plan.</div>
+        <!-- Category Selection -->
+      
 
-                                        <div class="form-row mt-4">
-                                            <div class="form-group col-md-4">
-                                                <label>Plan Start Date <span class="text-danger">*</span></label>
-                                                <input type="date" class="form-control" id="planStartDate" required>
-                                                <div class="invalid-feedback">Please select plan start date.</div>
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label>Plan End Date <span class="text-danger">*</span></label>
-                                                <input type="date" class="form-control" id="planEndDate" readonly required>
-                                                <div class="invalid-feedback">Please select plan start date first.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Plan Section -->
+        <div id="planSelection" class="mt-4" style="display: none;">
+            <h6>Available Plans</h6>
+            <div id="planPreview" class="mt-3">
+                <!-- Dynamic plan content will appear here -->
+            </div>
+            <div class="invalid-feedback" id="planError" style="display: none;">Please select a plan.</div>
+
+            <div class="form-row mt-4">
+                <div class="form-group col-md-4">
+                    <label>Plan Start Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="planStartDate" required>
+                    <div class="invalid-feedback">Please select plan start date.</div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Plan End Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="planEndDate" readonly required>
+                    <div class="invalid-feedback">Please select plan start date first.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                             <!-- Facility Details Tab -->
                             <div class="tab-pane fade" id="facility" role="tabpanel">
                                 <div id="facilitySelection">
                                     <h6>Available Facilities</h6>
-                                    <div id="facilityPreview" class="mt-3">
-                                        <!-- Dynamic facility content will appear here -->
-                                    </div>
-                                    <div class="invalid-feedback" id="facilityError" style="display: none;">Please select a facility.</div>
+                                    <div id="facilityLoader" class="text-center mt-3" style="display: none;">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Loading facilities...</p>
+        </div>
+
+        <!-- Dynamic Facility Content -->
+        <div id="facilityPreview" class="mt-3 row">
+            <!-- Facilities from API will appear here -->
+        </div>
+
+        <div class="invalid-feedback" id="facilityError" style="display: none;">
+            Please select a facility.
+        </div>
                                 </div>
 
                                 <div class="form-row mt-4">
@@ -577,10 +602,7 @@
                                         <input type="date" class="form-control" id="facilityEndDate" required>
                                         <div class="invalid-feedback">Please select facility end date.</div>
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Rent</label>
-                                        <input type="text" class="form-control" id="facilityRent" readonly>
-                                    </div>
+                                  
                                 </div>
                             </div>
 
@@ -671,6 +693,268 @@
             </div>
         </div>
     </div>
+<script>
+$(document).ready(function() {
+    let allVenues = [];
+    let selectedFacility = null;
+
+    // 🔹 1️⃣ Fetch all venues from API
+    $.ajax({
+        url: "<?php echo base_url('VenueController/getAllVenues'); ?>",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            if (response.status === "success") {
+                allVenues = response.data;
+
+                // Populate centers dynamically
+                let options = `<option value="" selected disabled>Select Center</option>`;
+                allVenues.forEach(venue => {
+                    options += `<option value="${venue.id}">${venue.venue_name} - ${venue.location}</option>`;
+                });
+                $("#centerSelect").html(options);
+            }
+        },
+        error: function(err) {
+            console.error("Error loading venues:", err);
+        }
+    });
+
+    // 🔹 2️⃣ When center selected → show court, slot, and facility dropdowns
+    $("#centerSelect").on("change", function() {
+        const venueId = $(this).val();
+        const venue = allVenues.find(v => v.id == venueId);
+        if (!venue) return;
+
+        $("#slotSelection").show();
+        $("#facilityPreview").empty();
+        $("#facilityLoader").show();
+
+        // ✅ Populate courts dropdown
+        let courtOptions = `<option value="" selected disabled>Select Court</option>`;
+        if (venue.courts.length > 0) {
+            venue.courts.forEach(court => {
+                courtOptions += `<option value="${court.id}">${court.court_name} (${court.court_type || 'N/A'})</option>`;
+            });
+        } else {
+            courtOptions = `<option disabled>No courts available</option>`;
+        }
+        $("#courtSelect").html(courtOptions);
+
+        // ✅ Populate slots dropdown
+        let slotOptions = `<option value="" selected disabled>Select Slot</option>`;
+        if (venue.slots.length > 0) {
+            venue.slots.forEach(slot => {
+                slotOptions += `<option value="${slot.id}">${slot.slot_name} (${slot.from_time} - ${slot.to_time})</option>`;
+            });
+        } else {
+            slotOptions = `<option disabled>No slots available</option>`;
+        }
+        $("#slotSelect").html(slotOptions);
+
+        // ✅ Store venue for later
+        $("#slotSelection").data("venue", venue);
+
+        // ✅ Populate facilities (Facility tab)
+        loadFacilitiesForVenue(venue);
+    });
+
+    // 🔹 3️⃣ Load facilities dynamically
+  // 🔹 3️⃣ Load facilities dynamically (supports multiple selection + rent calculation)
+function loadFacilitiesForVenue(venue) {
+    const facilityPreview = $("#facilityPreview");
+    const facilityLoader = $("#facilityLoader");
+    const totalRentDisplay = $("#totalRent"); // optional display element
+    let selectedFacilities = new Set();
+    let totalRent = 0;
+
+    facilityPreview.empty();
+
+    if (!venue.facilities || venue.facilities.length === 0) {
+        facilityLoader.hide();
+        facilityPreview.html(`<p class="text-muted">No facilities available for this center.</p>`);
+        return;
+    }
+
+    facilityLoader.hide();
+    let facilitiesHTML = "";
+
+    venue.facilities.forEach(facility => {
+        facilitiesHTML += `
+            <div class="col-md-4 mb-3" style="width: 100%;">
+                <div class="card h-100 shadow-sm facility-card" 
+                    data-id="${facility.id}" 
+                    data-rent="${facility.rent}">
+                    <div class="card-body text-center">
+                        <h6 class="card-title mb-1">${facility.facility_name}</h6>
+                        <p class="text-muted small mb-1">Type: ${facility.facility_type || 'N/A'}</p>
+                        <p class="text-primary mb-2">Rent: ₹${facility.rent}</p>
+                        <button type="button" class="btn btn-outline-primary btn-sm select-facility-btn">
+                            Select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    facilityPreview.html(facilitiesHTML);
+
+    // Add total rent section dynamically (if not present)
+    if ($("#totalRentContainer").length === 0) {
+        facilityPreview.after(`
+            <div id="totalRentContainer" class="mt-3">
+                <h6>Total Rent: ₹<span id="totalRent">0</span></h6>
+            </div>
+            <input type="hidden" id="selectedFacilities" name="selectedFacilities">
+            <input type="hidden" id="facilityRent" name="facilityRent">
+        `);
+    }
+
+    // ✅ Multiple Facility Selection Logic
+    $(".select-facility-btn").on("click", function() {
+        const card = $(this).closest(".facility-card");
+        const facilityId = card.data("id");
+        const rent = parseFloat(card.data("rent"));
+
+        if (selectedFacilities.has(facilityId)) {
+            // Deselect
+            selectedFacilities.delete(facilityId);
+            totalRent -= rent;
+            card.removeClass("selected").css({"border": "", "box-shadow": ""});
+            $(this).text("Select").removeClass("btn-primary").addClass("btn-outline-primary");
+        } else {
+            // Select
+            selectedFacilities.add(facilityId);
+            totalRent += rent;
+            card.addClass("selected").css({
+                "border": "2px solid #007bff",
+                "box-shadow": "0 0 8px rgba(0, 123, 255, 0.5)"
+            });
+            $(this).text("Selected").removeClass("btn-outline-primary").addClass("btn-primary");
+        }
+
+        // Update total rent and store selections
+        $("#totalRent").text(totalRent.toFixed(2));
+        $("#facilityRent").val(totalRent);
+        $("#selectedFacilities").val(Array.from(selectedFacilities).join(","));
+
+        $("#facilityError").toggle(selectedFacilities.size === 0);
+    });
+}
+
+
+    // 🔹 4️⃣ Slot selection → show plans
+    $("#slotSelect").on("change", function() {
+        const venue = $("#slotSelection").data("venue");
+        if (!venue) return;
+        $("#planSelection").show();
+
+        let plansHTML = "";
+        if (venue.plans.length > 0) {
+            venue.plans.forEach(plan => {
+                plansHTML += `
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="planRadio" id="plan_${plan.id}" 
+                            data-fees="${plan.total_fees}" data-duration="${plan.duration}" 
+                            data-period="${plan.period}" value="${plan.id}">
+                        <label class="form-check-label" for="plan_${plan.id}">
+                            <strong>${plan.membership_name}</strong> - ${plan.duration} ${plan.period}<br>
+                            Reg: ₹${plan.registration_fees}, Coaching: ₹${plan.coaching_fees}, Total: ₹${plan.total_fees}
+                        </label>
+                    </div>
+                `;
+            });
+        } else {
+            plansHTML = `<p class="text-muted">No plans available for this center.</p>`;
+        }
+
+        $("#planPreview").html(plansHTML);
+    });
+
+    // 🔹 5️⃣ Plan selection → auto-calculate end date
+    $(document).on("change", "input[name='planRadio']", function() {
+        const fees = $(this).data("fees");
+        const duration = $(this).data("duration");
+        const period = $(this).data("period");
+
+        $("#planFees").text(fees || 0);
+        $("#planStartDate").val("");
+        $("#planEndDate").val("");
+
+        $("#planStartDate").off("change").on("change", function() {
+            let startDate = new Date($(this).val());
+            if (startDate && duration && period) {
+                let endDate = new Date(startDate);
+                if (period === "Month") endDate.setMonth(endDate.getMonth() + parseInt(duration));
+                if (period === "Year") endDate.setFullYear(endDate.getFullYear() + parseInt(duration));
+                if (period === "Day") endDate.setDate(endDate.getDate() + parseInt(duration));
+                $("#planEndDate").val(endDate.toISOString().split("T")[0]);
+            }
+        });
+    });
+});
+$("#memberForm").on("submit", function(e) {
+    e.preventDefault();
+
+    const selectedFacilities = $("#selectedFacilities").val()
+        ? $("#selectedFacilities").val().split(",").map(id => ({
+            id: id,
+            rent: parseFloat($("#facilityRent").val()) / $("#selectedFacilities").val().split(",").length,
+            start_date: $("#facilityStartDate").val(),
+            end_date: $("#facilityEndDate").val()
+        }))
+        : [];
+
+    const payload = {
+        name: $("#memberName").val(),
+        gender: $("#memberGender").val(),
+        email: $("#memberEmail").val(),
+        phone: $("#memberPhone").val(),
+        dob: $("#memberDOB").val(),
+        blood_group: $("#memberBloodGroup").val(),
+        address: $("#memberAddress").val(),
+        alt_phone: $("#memberAltPhone").val(),
+        joining_date: $("#memberJoiningDate").val(),
+        document_path: $("#documentUpload").val(),
+        venue_id: $("#centerSelect").val(),
+        court_id: $("#courtSelect").val(),
+        slot_id: $("#slotSelect").val(),
+        plan_id: $("input[name='planRadio']:checked").val(),
+        plan_start_date: $("#planStartDate").val(),
+        plan_end_date: $("#planEndDate").val(),
+        facilities: selectedFacilities,
+        invoice_id: $("#invoiceId").val(),
+        invoice_date: $("#invoiceDate").val(),
+        discount_percent: $("#discountPercent").val(),
+        payment_type: $("#paymentType").val(),
+        total_amount: $("#totalAmount").text()
+    };
+
+    $.ajax({
+        url: "<?php echo base_url('api/member/register'); ?>",
+        type: "POST",
+        data: JSON.stringify(payload),
+        contentType: "application/json",
+        success: function(res) {
+            if (res.status === "success") {
+                alert("Member Registered Successfully! ID: " + res.member_id);
+                $("#memberForm")[0].reset();
+            } else {
+                alert("Error: " + res.message);
+            }
+        },
+        error: function(err) {
+            console.error("API Error:", err);
+            alert("Failed to register member.");
+        }
+    });
+});
+
+</script>
+
+
+
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
