@@ -69,12 +69,12 @@ class Superadmin extends MY_Controller
 	{
 		$this->load->view('superadmin/Superadmin_profile');
 	}
-// 	public function FinanceManagement2()
-// 	{
-// 		$this->load->view('superadmin/FinanceManagement2');
-// 	}
+	// 	public function FinanceManagement2()
+	// 	{
+	// 		$this->load->view('superadmin/FinanceManagement2');
+	// 	}
 
-public function FinanceManagement2()
+	public function FinanceManagement2()
 	{
 
 		$center = $this->FinanceModel->getcenter();
@@ -291,31 +291,50 @@ public function FinanceManagement2()
 
 
 	public function Permission()
-{
-    $data['centers'] = $this->Center_model->get_all_centers();
+	{
+		// Get venues instead of centers
+		$data['centers'] = $this->db->get('venues')->result_array();
 
-    $modules = [
-        'admission' => 'Admission Management',
-        'students'  => 'Students Management',
-        'events'    => 'Event Management',
-        'leave'     => 'Leave Management',
-        'expenses'  => 'Expense Management',
-    ];
+		$modules = [
+			'admission' => 'Admission Management',
+			// 'students' => 'Students Management',
+			'events' => 'Event Management',
+			'leave' => 'Leave Management',
+			'expenses' => 'Expense Management',
+		];
 
-    foreach ($data['centers'] as &$center) {
-        $center['permissions'] = $this->Permission_model->get_by_center($center['id']);
-    }
+		foreach ($data['centers'] as &$center) {
+			$center['permissions'] = $this->Permission_model->get_by_center($center['id']);
+		}
 
-    $data['modules'] = $modules;
+		$data['modules'] = $modules;
+		$this->load->view('superadmin/Permission', $data);
+	}
 
-    // Fetch venues using the Permission model
-    $data['venues'] = $this->Permission_model->get_all_venues();
-    
-    // Debug line - remove after testing
-    error_log('Venues data: ' . print_r($data['venues'], true));
+	// Save permissions from form
+	public function save_permissions($venue_id)
+	{
+		$posted = $this->input->post('permissions') ?? [];
 
-    $this->load->view('superadmin/Permission', $data);
-}
+		$modules = [
+			'admission',
+			// 'students',
+			'events',
+			'leave',
+			'expenses',
+		];
+
+		$final = [];
+		foreach ($modules as $key) {
+			$final[$key] = isset($posted[$key]) ? 1 : 0;
+		}
+
+		$this->Permission_model->save_permissions($venue_id, $final);
+
+		$this->session->set_flashdata('success', 'Permissions updated.');
+		redirect('superadmin/Permission');
+	}
+
 
 	// AJAX: return permissions for a single venue as JSON
 	public function get_venue_permissions($venue_id = null)
@@ -394,31 +413,6 @@ public function FinanceManagement2()
 	}
 
 	// Save permissions from form
-	public function save_permissions($center_id)
-	{
-		$posted = $this->input->post('permissions') ?? [];
-
-		$modules = [
-			// 			'center_mgmt',
-			'admission',
-			'students',
-			'events',
-			'leave',
-			'expenses',
-			// 'finance'
-
-		];
-
-		$final = [];
-		foreach ($modules as $key) {
-			$final[$key] = isset($posted[$key]) ? 1 : 0;
-		}
-
-		$this->Permission_model->save_permissions($center_id, $final);
-
-		$this->session->set_flashdata('success', 'Permissions updated.');
-		redirect('superadmin/Permission');
-	}
 
 	public function add_new_center()
 	{
@@ -552,15 +546,15 @@ public function FinanceManagement2()
 
 
 	public function Attendance()
-{
-    // Ensure model is loaded (you already load StaffModel in __construct)
-    // Fetch staff rows (returns array via your StaffModel->getAllStaff())
-    $data['staff_list']  = $this->StaffModel->getAllStaff();
-    $data['staff_count'] = count($data['staff_list']); // optional debug/useful in view
+	{
+		// Ensure model is loaded (you already load StaffModel in __construct)
+		// Fetch staff rows (returns array via your StaffModel->getAllStaff())
+		$data['staff_list']  = $this->StaffModel->getAllStaff();
+		$data['staff_count'] = count($data['staff_list']); // optional debug/useful in view
 
-    // Load the view and pass the staff data
-    $this->load->view('superadmin/attendance', $data);
-}
+		// Load the view and pass the staff data
+		$this->load->view('superadmin/attendance', $data);
+	}
 
 	// public function Add_NewStaff()
 	// {
@@ -691,31 +685,31 @@ public function FinanceManagement2()
 		echo json_encode($response);
 		exit; // Important to stop further output
 	}
-// 	public function updateStaff()
-// 	{
-// 		$id = $this->input->post('id');
-// 		$data = [
-// 			'name' => $this->input->post('name'),
-// 			'email' => $this->input->post('email'),
-// 			'contact' => $this->input->post('contact'),
-// 			'joining_date' => $this->input->post('joining_date'),
-// 			'salary' => $this->input->post('salary'),
-// 			'role' => $this->input->post('role'),
-// 			'centers' => $this->input->post('centers') ? implode(',', $this->input->post('centers')) : '',
-// 			'slots' => $this->input->post('slots') ? implode(',', $this->input->post('slots')) : '',
-// 		];
+	// 	public function updateStaff()
+	// 	{
+	// 		$id = $this->input->post('id');
+	// 		$data = [
+	// 			'name' => $this->input->post('name'),
+	// 			'email' => $this->input->post('email'),
+	// 			'contact' => $this->input->post('contact'),
+	// 			'joining_date' => $this->input->post('joining_date'),
+	// 			'salary' => $this->input->post('salary'),
+	// 			'role' => $this->input->post('role'),
+	// 			'centers' => $this->input->post('centers') ? implode(',', $this->input->post('centers')) : '',
+	// 			'slots' => $this->input->post('slots') ? implode(',', $this->input->post('slots')) : '',
+	// 		];
 
-// 		$this->db->where('id', $id);
-// 		if ($this->db->update('staff', $data)) {
-// 			$this->session->set_flashdata('success', 'Staff updated successfully.');
-// 		} else {
-// 			$this->session->set_flashdata('error', 'Failed to update staff.');
-// 		}
-// 		redirect('superadmin/Add_NewStaff');
-// 	}
+	// 		$this->db->where('id', $id);
+	// 		if ($this->db->update('staff', $data)) {
+	// 			$this->session->set_flashdata('success', 'Staff updated successfully.');
+	// 		} else {
+	// 			$this->session->set_flashdata('error', 'Failed to update staff.');
+	// 		}
+	// 		redirect('superadmin/Add_NewStaff');
+	// 	}
 
 
-public function updateStaff()
+	public function updateStaff()
 	{
 		$id = $this->input->post('id');
 		$data = [
@@ -781,8 +775,8 @@ public function updateStaff()
 	}
 
 	protected function check_venue_access($venue_id, $module)
-{
-    $this->load->model('Permission_model');
-    return $this->Permission_model->check_venue_permission($venue_id, $module);
-}
+	{
+		$this->load->model('Permission_model');
+		return $this->Permission_model->check_venue_permission($venue_id, $module);
+	}
 }
