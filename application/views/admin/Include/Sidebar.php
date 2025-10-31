@@ -2,19 +2,7 @@
     rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-<?php 
-// Always fetch current permissions for the admin's center so sidebar reflects latest changes
-// Use CI instance inside view to access models/libraries safely
-$CI = &get_instance();
-$center_id = $CI->session->userdata('center_id') ?: $CI->session->userdata('id');
-$perms = [];
-if ($center_id) {
-    $CI->load->model('Permission_model');
-    $perms = $CI->Permission_model->get_by_center($center_id);
-    // update session copy (optional)
-    $CI->session->set_userdata('permissions', $perms);
-}
-?>
+<?php $perms = $this->session->userdata('permissions'); ?>
 
 <div class="sidebar" id="sidebar">
     <div class="logo">
@@ -29,60 +17,65 @@ if ($center_id) {
 
 
 
-       <!-- Admission Management -->
-<?php if (!empty($perms['admission'])): ?>
-    <div class="nav-item">
-        <!-- Header Row -->
-        <div class="nav-link d-flex justify-content-between align-items-center">
-            
-            <!-- Left side: click redirects to students -->
-            <?php $isAdmissionActive = in_array($this->uri->segment(2), ['Students','ReAdd','FRenewNew_Admission','New_admission','Renew_admission']); ?>
-            <a class="d-flex align-items-center flex-grow-1 text-decoration-none <?php echo $isAdmissionActive ? 'active' : ''; ?>"
-                href="<?php echo base_url('admin/Students'); ?>">
-                <i class="bi bi-person-lines-fill"></i>
-                <span>Admission Management</span>
-            </a>
+        <!-- Admission Management -->
+        <?php if (!empty($perms['admission'])): ?>
+            <div class="nav-item">
+                <!-- Header Row -->
+                <div class="nav-link d-flex justify-content-between align-items-center">
 
-            <!-- Right side: chevron only toggles the submenu -->
-            <!-- $isAdmissionActive computed above -->
-            <button class="btn btn-sm p-0 border-0 bg-transparent ms-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#admissionMenu"
-                aria-expanded="<?php echo $isAdmissionActive ? 'true' : 'false'; ?>"
-                aria-controls="admissionMenu"
-                aria-label="Toggle Admission submenu">
-                <i class="bi bi-chevron-down"></i>
-            </button>
-        </div>
+                    <!-- Left side: click redirects to students -->
+                    <a class="d-flex align-items-center flex-grow-1 text-decoration-none 
+                <?php echo ($this->uri->segment(2) == 'students') ? 'active' : ''; ?>"
+                        href="<?php echo base_url('admin/students'); ?>">
+                        <i class="bi bi-person-lines-fill"></i>
+                        <span>Admission Management</span>
+                    </a>
 
-        <!-- Dropdown Submenu -->
-        <div class="collapse <?php echo $isAdmissionActive ? 'show' : ''; ?>" id="admissionMenu">
-            <nav class="nav flex-column ms-3">
-                <a class="nav-link <?php echo ($this->uri->segment(2) == 'ReAdd') ? 'active' : ''; ?>"
-                    href="<?php echo base_url('admin/ReAdd'); ?>">
-                    <i class="bi bi-plus-circle"></i><span> New Admission</span>
-                </a>
+                    <!-- Right side: chevron only toggles the submenu -->
+                    <?php
+                    $isAdmissionActive = in_array($this->uri->segment(2), [
+                        'ReAdd',
+                        'FRenewNew_Admission'
+                    ]);
+                    ?>
+                    <button class="btn btn-sm p-0 border-0 bg-transparent ms-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#admissionMenu"
+                        aria-expanded="<?php echo $isAdmissionActive ? 'true' : 'false'; ?>"
+                        aria-controls="admissionMenu"
+                        aria-label="Toggle Admission submenu">
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                </div>
 
-                <!-- Uncomment if needed -->
-                <!--
+                <!-- Dropdown Submenu -->
+                <div class="collapse <?php echo $isAdmissionActive ? 'show' : ''; ?>" id="admissionMenu">
+                    <nav class="nav flex-column ms-3">
+                        <a class="nav-link <?php echo ($this->uri->segment(2) == 'ReAdd') ? 'active' : ''; ?>"
+                            href="<?php echo base_url('admin/ReAdd'); ?>">
+                            <i class="bi bi-plus-circle"></i><span> New Admission</span>
+                        </a>
+
+                        <!-- Uncomment if needed -->
+                        <!--
                 <a class="nav-link <?php echo ($this->uri->segment(2) == 'Re_admission') ? 'active' : ''; ?>"
                     href="<?php echo base_url('admin/Re_admission'); ?>">
                     <i class="bi bi-arrow-counterclockwise"></i><span> Re-Admission</span>
                 </a>
                 -->
 
-                <a class="nav-link <?php echo ($this->uri->segment(2) == 'FRenewNew_Admission') ? 'active' : ''; ?>"
-                    href="<?php echo base_url('admin/FRenewNew_Admission'); ?>">
-                    <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
-                </a>
-                <a class="nav-link <?php echo ($this->uri->segment(2) == 'NAttendance') ? 'active' : ''; ?>" href="<?php echo base_url('admin/NAttendance'); ?>">
-                    <i class="bi bi-clock-history"></i><span> Attendance</span>
-                </a>
-            </nav>
-        </div>
-    </div>
-<?php endif; ?>
+                        <a class="nav-link <?php echo ($this->uri->segment(2) == 'FRenewNew_Admission') ? 'active' : ''; ?>"
+                            href="<?php echo base_url('admin/FRenewNew_Admission'); ?>">
+                            <i class="bi bi-arrow-repeat"></i><span> Renew Admission</span>
+                        </a>
+                        <a class="nav-link <?php echo ($this->uri->segment(2) == 'NAttendance') ? 'active' : ''; ?>" href="<?php echo base_url('admin/NAttendance'); ?>">
+                            <i class="bi bi-arrow-counterclockwise"></i><span> Attendance</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Students -->
         <!-- <?php if (!empty($perms['students'])): ?>
@@ -107,16 +100,16 @@ if ($center_id) {
         <!-- Leave Management -->
         <?php if (!empty($perms['leave'])): ?>
             <a class="nav-link <?php echo ($this->uri->segment(2) == 'Leave') ? 'active' : ''; ?>"
-                href="<?php echo base_url('admin/Leave'); ?>">
-                <i class="bi bi-calendar-x"></i><span>Leave</span>
+                href="<?php echo base_url() . 'admin/Leave'; ?>">
+                <i class="bi bi-person-circle"></i><span>Leave</span>
             </a>
         <?php endif; ?>
 
-        <!-- Expenses -->
+        <!-- Events -->
         <?php if (!empty($perms['expenses'])): ?>
-            <a class="nav-link <?php echo ($this->uri->segment(2) == 'Expenses') ? 'active' : ''; ?>"
-                href="<?php echo base_url('admin/Expenses'); ?>">
-                <i class="bi bi-currency-dollar"></i><span>Expense Management</span>
+            <a class="nav-link <?php echo ($this->uri->segment(2) == 'EventAndNotice') ? 'active' : ''; ?>"
+                href="<?php echo base_url() . 'admin/Expenses'; ?>">
+                <i class="bi bi-calendar-event"></i><span>Expense Management</span>
             </a>
         <?php endif; ?>
 
@@ -240,42 +233,42 @@ if ($center_id) {
         }
     }
 
-     /* Rotate the chevron when submenu is expanded (button controls collapse now) */
+    /* Rotate the chevron when submenu is expanded (button controls collapse now) */
     button[aria-expanded="true"] .bi-chevron-down {
-      transform: rotate(180deg);
-      transition: transform .35s;
+        transform: rotate(180deg);
+        transition: transform .35s;
     }
 
     /* Keep current hide-on-minimize behavior working for the inner label */
     .sidebar.minimized .nav-link a span {
-      display: none;
+        display: none;
     }
 
     .sidebar.minimized .nav-link a {
-      justify-content: center;
-      padding: 10px 0;
+        justify-content: center;
+        padding: 10px 0;
     }
 
     /* Keep sidebar links black in all states */
     .sidebar a {
-      color: #000;
+        color: #000;
     }
 
     .sidebar a:hover,
     .sidebar a:focus,
     .sidebar a:active,
     .sidebar a:visited {
-      color: #000;
+        color: #000;
     }
 
     /* Give the inner <a> the same selected look when it has .active */
     .sidebar .nav-item>.nav-link>a.active {
-      background: #e9ecef;
-      font-weight: 700;
-      border-radius: 30px;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
+        background: #e9ecef;
+        font-weight: 700;
+        border-radius: 30px;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
     }
 </style>
 
