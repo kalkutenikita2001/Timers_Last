@@ -1449,31 +1449,72 @@
             }
 
             // Append a facility select + start/end inputs to a member's assignment container
+            // Enhanced function to add facility with per-member dates
             function addFacilityToMember(memberId, selectedFacilityId) {
                 const container = $(`#assignMemberFacilities_${memberId}`);
                 if (!container.length) return;
 
                 const idx = container.find('.member-facility-row').length;
+
+                // Calculate default dates
+                const today = new Date().toISOString().split('T')[0];
+                const oneMonthLater = new Date();
+                oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+                const defaultEndDate = oneMonthLater.toISOString().split('T')[0];
+
                 const row = $(
-                    `<div class="member-facility-row d-flex align-items-center mb-2">
-                        <select class="form-control mr-2" name="member_${memberId}_facility[]">${getFacilitiesOptionsHtml()}</select>
-                        <input type="date" class="form-control mr-2" name="member_${memberId}_facility_start[]" />
-                        <input type="date" class="form-control mr-2" name="member_${memberId}_facility_end[]" />
-                        <button type="button" class="btn btn-danger btn-sm remove-member-facility"><i class="fas fa-times"></i></button>
-                    </div>`
+                    `<div class="member-facility-row border p-3 mb-3 rounded">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <label class="font-weight-bold">Facility</label>
+                    <select class="form-control" name="member_${memberId}_facility[]" required>${getFacilitiesOptionsHtml()}</select>
+                </div>
+                <div class="col-md-3">
+                    <label class="font-weight-bold">Start Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control facility-start-date" name="member_${memberId}_facility_start[]" value="${today}" required />
+                </div>
+                <div class="col-md-3">
+                    <label class="font-weight-bold">End Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control facility-end-date" name="member_${memberId}_facility_end[]" value="${defaultEndDate}" required />
+                </div>
+                <div class="col-md-2">
+                    <label class="font-weight-bold">Actions</label>
+                    <button type="button" class="btn btn-danger btn-sm remove-member-facility btn-block">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </div>
+            </div>
+        </div>`
                 );
 
                 row.find('.remove-member-facility').on('click', function() {
+                    // Remove from facility usage count
+                    const facilityId = row.find('select').val();
+                    if (facilityId && window.facilityUsage[facilityId]) {
+                        window.facilityUsage[facilityId]--;
+                    }
                     row.remove();
+
+                    // Update any active facility display
+                    if (currentMemberSelectingFacilities) {
+                        loadFacilitiesForMember(currentMemberSelectingFacilities);
+                    }
                 });
 
                 container.append(row);
 
-                // if a specific facility id was provided, set it on the new select
+                // If a specific facility was provided, set it
                 if (selectedFacilityId) {
                     row.find('select').val(selectedFacilityId);
+
+                    // Update facility usage count
+                    if (!window.facilityUsage[selectedFacilityId]) {
+                        window.facilityUsage[selectedFacilityId] = 0;
+                    }
+                    window.facilityUsage[selectedFacilityId]++;
                 }
-                // exit assignment mode visuals
+
+                // Exit assignment mode
                 window.activeAssignMemberId = null;
                 $('.facility-card').css({
                     'outline': ''
@@ -2450,7 +2491,7 @@
             });
 
             // Remove the global facility date inputs since we now have per-member dates
-            $('#facilityStartDate').closest('.form-row').remove();
+            // $('#facilityStartDate').closest('.form-row').remove();
         });
     </script>
 </body>
