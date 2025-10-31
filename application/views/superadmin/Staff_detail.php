@@ -1,9 +1,5 @@
 <?php
 // application/views/superadmin/Staff_details.php
-// This view is identical to the one you provided but adds a small PHP block that
-// loads attendance rows from `attendance` table for the staff id found in the URL
-// and exposes them as a JS object `window.SERVER_ATTENDANCE` so the client-side
-// script can use DB attendance when rendering the grid.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +18,7 @@
       --accent:#ff4040; --accent-dark:#470000; --muted:#f4f6f8;
       --grad:linear-gradient(135deg, var(--accent), var(--accent-dark));
       --card-bg:#ffffff; --text:#111; --subtle:#6c757d;
+      --card-fixed-h: 460px; /* equal card height for attendance & salary */
     }
     body{ background:var(--muted); color:var(--text); overflow-x:hidden; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
 
@@ -72,6 +69,7 @@
     .ring svg{ transform:rotate(-90deg); }
     .ring .val{ position:absolute; inset:0; display:grid; place-items:center; font-weight:700; font-size:.9rem; }
 
+    /* attendance grid day */
     .att-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
     .att-day{ border-radius:10px; border:1px solid #ececec; background:#fff; text-align:center; padding:8px 0; font-size:.85rem; user-select:none; transition:.2s; }
     .att-day.present{ background:#d1e7dd; border-color:#badbcc; }
@@ -86,6 +84,55 @@
 
     .section-title{ font-weight:800; letter-spacing:.2px; }
     .text-subtle{ color:var(--subtle); }
+
+    /* === layout fixes so Attendance & Salary cards are same height and internal content scrolls === */
+    .row.g-3 { align-items: stretch; }
+
+    .col-lg-7 > .card-lite,
+    .col-lg-5 > .card-lite {
+      display: flex;
+      flex-direction: column;
+      height: var(--card-fixed-h);
+      min-height: var(--card-fixed-h);
+      max-height: var(--card-fixed-h);
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    /* Attendance grid should scroll inside card */
+    .col-lg-7 > .card-lite .att-grid {
+      flex: 1 1 auto;
+      overflow: auto;
+      padding: 12px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 6px;
+    }
+
+    .att-day { min-height: 44px; display:flex; align-items:center; justify-content:center; }
+
+    /* Chart area should use remaining space but not grow card */
+    .col-lg-5 > .card-lite .chart-box {
+      flex: 1 1 auto;
+      min-height: 180px;
+      max-height: calc(var(--card-fixed-h) - 120px);
+      height: 100%;
+      position: relative;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .col-lg-5 .chart-box canvas { width:100% !important; height:100% !important; display:block; }
+
+    /* Salary list (scrollable) */
+    #salaryList {
+      max-height: 120px;
+      overflow-y: auto;
+      margin-top: 12px;
+    }
+
+    .card-lite > .d-flex:first-child,
+    .card-lite > h5 { flex: 0 0 auto; }
   </style>
 </head>
 <body>
@@ -126,7 +173,6 @@
         <div class="stat">
           <div class="label">Current Salary</div>
           <div class="h5 mb-0" id="salaryVal">₹ 0</div>
-          <small class="text-subtle">Next payout: <span id="nextPayout">—</span></small>
         </div>
       </div>
       <div class="col-6 col-lg-3 aos">
@@ -228,16 +274,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <?php
-  // -----------------------------
-  // Small server-side attendance loader
-  // -----------------------------
-  // We detect the staff id from the URL and query `attendance` table for rows
-  // belonging to that staff. The result is transformed into a JS-friendly
-  // structure:
-  //   window.SERVER_ATTENDANCE = {
-  //     "<staff_id>": { "YYYY-MM": [1,2,3], "YYYY-MM": [..] }
-  //   }
-  // This keeps the rest of the client code unchanged and uses DB data.
+  // Server-side attendance loader
   try {
     $uriSegments = $this->uri->segment_array() ?: [];
     $staffId = (int) end($uriSegments);
@@ -252,22 +289,18 @@
         ->result_array();
 
       foreach ($rows as $r) {
-        // Expected date format: YYYY-MM-DD
         $d = $r['date'] ?? null;
         if (!$d) continue;
         $ts = strtotime($d);
         if ($ts === false) continue;
-        $ym = date('Y-m', $ts); // e.g. 2025-10
+        $ym = date('Y-m', $ts);
         $day = (int) date('j', $ts);
         if (!isset($serverAttendance[$staffId])) $serverAttendance[$staffId] = [];
         if (!isset($serverAttendance[$staffId][$ym])) $serverAttendance[$staffId][$ym] = [];
-        // Only push if present==1 (treat truthy values). If present is 0 we'll skip so
-        // absent cells will be rendered by default.
         if (!empty($r['present'])) {
           $serverAttendance[$staffId][$ym][] = $day;
         }
       }
-      // Remove duplicates & sort
       if (isset($serverAttendance[$staffId])) {
         foreach ($serverAttendance[$staffId] as $k => $arr) {
           $arr = array_unique($arr);
@@ -282,8 +315,6 @@
   ?>
 
   <script>
-    // Expose server attendance to client code. The client script will automatically
-    // use this data (if present) to populate the attendance grid.
     window.SERVER_ATTENDANCE = <?php echo json_encode($serverAttendance ?: new stdClass(), JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;
   </script>
 
@@ -316,7 +347,10 @@
         cache:'no-store'
       });
       if (!res.ok) throw new Error('HTTP '+res.status);
-      return await res.json();
+      const json = await res.json();
+      if (json && json.ok === false) throw new Error(json.error || 'API error');
+      // unwrap so frontend can use staff.* directly
+      return (json && json.staff) ? json.staff : json;
     }
     async function postActive(id, active){
       const res = await fetch("<?php echo base_url('api/staff/'); ?>" + id + "/active", {
@@ -327,7 +361,7 @@
       if (!res.ok) throw new Error('HTTP '+res.status);
       const json = await res.json();
       if (!json.ok) throw new Error(json.error || 'Failed');
-      return json.staff; // updated row
+      return json.staff;
     }
 
     // ===== Init (DB-first)
@@ -355,11 +389,10 @@
       staff.status = staff.status || ((staff.active ?? 1) ? 'Active':'Deactive');
       staff.attendance = staff.attendance || {};
       staff.payouts = staff.payouts || [];
+      staff.payout_amounts = staff.payout_amounts || [];
 
-      // --- Merge/override with server-provided attendance (if available)
       try {
         if (window.SERVER_ATTENDANCE && window.SERVER_ATTENDANCE[urlId]) {
-          // SERVER_ATTENDANCE[urlId] is an object like { '2025-10': [1,2,3], ... }
           staff.attendance = window.SERVER_ATTENDANCE[urlId];
         }
       } catch(e){ /* ignore */ }
@@ -370,7 +403,6 @@
 
     // ===== Renderers
     function renderAll(){
-      // Hero
       qs('#nameHd').textContent = staff.name || '-';
       qs('#emailHd').textContent = staff.email || '-';
 
@@ -381,7 +413,6 @@
         staff.slots.forEach(s=> addChip(s,'bi bi-clock'));
       }
 
-      // KPI
       setStatusBadge(staff.status);
       qs('#salaryVal').textContent   = '₹ ' + INR(Number(staff.salary||0));
       qs('#joinDateSmall').textContent = staff.joining_date || '—';
@@ -390,11 +421,6 @@
       qs('#contactTxt').textContent  = staff.contact || '—';
       qs('#emailTxt').textContent    = staff.email || '—';
 
-      // Next payout = end of current month
-      const now=new Date(); const end=new Date(now.getFullYear(), now.getMonth()+1, 0);
-      qs('#nextPayout').textContent = end.toISOString().slice(0,10);
-
-      // Tenure
       if (staff.joining_date){
         const j=new Date(staff.joining_date), n=new Date();
         const months = isNaN(j) ? null : ((n.getFullYear()-j.getFullYear())*12 + (n.getMonth()-j.getMonth()));
@@ -403,16 +429,9 @@
         qs('#tenureVal').textContent = '—';
       }
 
-      // Attendance
       fillMonthYearSelectors(); renderGrid();
-
-      // Salary graph + list
       renderSalary();
-
-      // Centers & Slots
       renderCentersAndSlots();
-
-      // Activity (sample)
       renderActivity();
     }
 
@@ -449,7 +468,6 @@
     function renderGrid(){
       const m=Number(qs('#attMonth').value), y=Number(qs('#attYear').value);
       const key=`${y}-${String(m+1).padStart(2,'0')}`;
-      // staff.attendance expected like { '2025-10': [1,2,3] }
       const present = new Set((staff.attendance && staff.attendance[key]) || []);
       const grid=qs('#attGrid'); grid.innerHTML='';
       const last=new Date(y,m+1,0).getDate();
@@ -465,26 +483,35 @@
       setRing((present.size/last)*100);
     }
 
-    // Salary chart + list
+    // Salary chart + list (uses payout_amounts if available)
     function renderSalary(){
       const list = document.getElementById('salaryList'); list.innerHTML='';
-      (staff.payouts||[]).forEach(d=>{
+
+      const labels = staff.payouts || [];
+      const amounts = staff.payout_amounts || [];
+
+      labels.forEach((label, idx)=>{
+        const amount = (amounts[idx] != null ? amounts[idx] : Number(staff.salary || 0));
         const li=document.createElement('li');
         li.className='list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML=`<span><i class="bi bi-receipt me-2"></i>${d}</span><strong>₹ ${INR(Number(staff.salary||0))}</strong>`;
+        li.innerHTML=`<span><i class="bi bi-receipt me-2"></i>${label}</span><strong>₹ ${INR(Number(amount))}</strong>`;
         list.appendChild(li);
       });
 
       const ctx = document.getElementById('salaryChart');
-      const payoutMonths = (staff.payouts||[]).slice().reverse();
-      const payoutValues = payoutMonths.map(()=> Number(staff.salary||0));
+
+      const payoutMonths = labels.slice().reverse();
+      const payoutValues = (amounts.length ? amounts.slice().reverse() : payoutMonths.map(()=> Number(staff.salary||0)));
+
       if (window.__salaryChart) window.__salaryChart.destroy();
       window.__salaryChart = new Chart(ctx, {
         type:'line',
         data:{ labels:payoutMonths, datasets:[{ label:'Payout (₹)', data:payoutValues, tension:.35, fill:false }] },
         options:{
-          responsive:true, maintainAspectRatio:true, resizeDelay:120,
+          responsive:true,
+          maintainAspectRatio:false,
           plugins:{ legend:{ display:false } },
+          layout: { padding: { top: 8, bottom: 8 } },
           scales:{ y:{ ticks:{ callback:v=>'₹ '+INR(v) } } }
         }
       });
@@ -538,10 +565,8 @@
         const willBeActive = (staff.active ?? (staff.status==='Active'?1:0)) ? 0 : 1;
         try{
           const updated = await postActive(staff.id, willBeActive);
-          // Sync local object & badge
           staff = updated;
           setStatusBadge(staff.status);
-          // Ping list page to refresh (if open)
           try { localStorage.setItem('staff:changed', String(Date.now())); } catch(e){}
         }catch(err){
           console.error(err);
