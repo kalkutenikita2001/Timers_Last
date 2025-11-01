@@ -13,6 +13,7 @@ class Attendance extends CI_Controller
         // models
         $this->load->model('StaffModel');
         $this->load->model('Attendance_model');
+        $this->load->model('Notifications_model');
 
         // helpers
         $this->load->helper('url');
@@ -118,6 +119,36 @@ class Attendance extends CI_Controller
                     $minutes = (int)floor(($co - $ci) / 60);
                     $this->Attendance_model->update($id, ['worked_minutes' => $minutes]);
                 }
+            }
+
+            // Get staff details for notification
+            $staff_details = $this->StaffModel->getStaffById($staff_id);
+            if ($staff_details) {
+                // Create notification message
+                $notification_message = "Attendance updated for " . $staff_details['name'] . " on " . date('d M Y', strtotime($date)) . ". ";
+                $notification_message .= $present ? "Status: Present" : "Status: Absent";
+                if ($ci_time) {
+                    $notification_message .= ", Check-in: " . $ci_time;
+                }
+                if ($co_time) {
+                    $notification_message .= ", Check-out: " . $co_time;
+                }
+
+                // Prepare notification data
+                $notification_data = array(
+                    'type' => 'attendance_update',
+                    'title' => 'Staff Attendance Update',
+                    'message' => $notification_message,
+                    'for_role' => 'admin', // Specify that this is for admin
+                    'created_by' => $this->session->userdata('user_id'),
+                    'reference_id' => $id,
+                    'reference_type' => 'attendance',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'is_read' => 0
+                );
+
+                // Save notification
+                $this->Notifications_model->create($notification_data);
             }
         }
 
