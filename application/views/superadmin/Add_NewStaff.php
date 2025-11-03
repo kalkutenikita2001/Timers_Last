@@ -448,6 +448,35 @@
         new bootstrap.Modal(document.getElementById('staffModal')).show();
       });
 
+      // Input field validations for Add Staff form
+      $('input[name="name"]').on('input', function() {
+        this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+      });
+
+      $('input[name="contact"]').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+          this.value = this.value.slice(0, 10);
+        }
+      });
+
+      $('input[name="salary"]').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      $('input[name="email"]').on('blur', function() {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(this.value)) {
+          $(this).addClass('is-invalid');
+          if (!$(this).next('.invalid-feedback').length) {
+            $(this).after('<div class="invalid-feedback">Please enter a valid email address</div>');
+          }
+        } else {
+          $(this).removeClass('is-invalid');
+          $(this).next('.invalid-feedback').remove();
+        }
+      });
+
       // Role selection
       $("#roleSelect").on('change', function() {
         if ($(this).val() === "Coach") {
@@ -823,19 +852,107 @@
     });
   </script>
 
+  <!-- Add Staff Form Validation Script -->
   <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const p = new URLSearchParams(location.search);
-  if (p.get('autopopup') === '1') {
-    // same prep as your existing click handler
-    $('#staffForm')[0].reset();
-    $(".center-check, .slot-check").prop('checked', false);
-    $("#slotSection").hide();
-    $("#staffModalLabel").text("Add Staff");
-    new bootstrap.Modal(document.getElementById('staffModal')).show();
-  }
-});
-</script>
+    $(document).ready(function() {
+      // Staff Name Validation - Only letters and spaces allowed
+      $('input[name="name"]').on('input', function() {
+        this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+      });
+
+      // Contact Number Validation - Only numbers, max 10 digits
+      $('input[name="contact"]').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+          this.value = this.value.slice(0, 10);
+        }
+      });
+
+      // Salary Validation - Only numbers allowed
+      $('input[name="salary"]').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      // Email Validation - Email format validation
+      $('input[name="email"]').on('blur', function() {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(this.value)) {
+          $(this).addClass('is-invalid');
+          if (!$(this).next('.invalid-feedback').length) {
+            $(this).after('<div class="invalid-feedback">Please enter a valid email address</div>');
+          }
+        } else {
+          $(this).removeClass('is-invalid');
+          $(this).next('.invalid-feedback').remove();
+        }
+      });
+
+      // Form Validation before Submit
+      $('#staffForm').on('submit', function(e) {
+        let isValid = true;
+        const form = $(this);
+
+        // Validate Name
+        const name = form.find('input[name="name"]').val().trim();
+        if (name === '' || !/^[A-Za-z\s]+$/.test(name)) {
+          isValid = false;
+          form.find('input[name="name"]').addClass('is-invalid');
+        }
+
+        // Validate Contact
+        const contact = form.find('input[name="contact"]').val().trim();
+        if (contact.length !== 10 || !/^\d{10}$/.test(contact)) {
+          isValid = false;
+          form.find('input[name="contact"]').addClass('is-invalid');
+        }
+
+        // Validate Email
+        const email = form.find('input[name="email"]').val().trim();
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+          isValid = false;
+          form.find('input[name="email"]').addClass('is-invalid');
+        }
+
+        // Validate Salary
+        const salary = form.find('input[name="salary"]').val().trim();
+        if (salary === '' || !/^\d+$/.test(salary)) {
+          isValid = false;
+          form.find('input[name="salary"]').addClass('is-invalid');
+        }
+
+        if (!isValid) {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Validation Error',
+            text: 'Please check all fields and try again',
+            icon: 'error',
+            confirmButtonColor: '#ff4040'
+          });
+        }
+      });
+
+      // Clear validation on input focus
+      $('#staffForm input').on('focus', function() {
+        $(this).removeClass('is-invalid');
+        $(this).next('.invalid-feedback').remove();
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const p = new URLSearchParams(location.search);
+      if (p.get('autopopup') === '1') {
+        // same prep as your existing click handler
+        $('#staffForm')[0].reset();
+        $(".center-check, .slot-check").prop('checked', false);
+        $("#slotSection").hide();
+        $("#staffModalLabel").text("Add Staff");
+        new bootstrap.Modal(document.getElementById('staffModal')).show();
+      }
+    });
+  </script>
 
 </body>
 

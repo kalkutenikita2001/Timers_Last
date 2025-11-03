@@ -15,14 +15,28 @@ class Staff_salary_model extends CI_Model
      * Get the latest salary record for a staff member
      */
     public function get_salary_by_staff_id($staff_id)
-    {
-        return $this->db
+{
+    // Try to fetch the most recent non-pending record first
+    $row = $this->db
+        ->where('staff_id', $staff_id)
+        ->where_in('status', ['Paid', 'Partially Paid'])
+        ->order_by('created_at', 'DESC')
+        ->limit(1)
+        ->get($this->table)
+        ->row_array();
+
+    // If no Paid record exists, fallback to latest Pending
+    if (!$row) {
+        $row = $this->db
             ->where('staff_id', $staff_id)
             ->order_by('created_at', 'DESC')
             ->limit(1)
             ->get($this->table)
             ->row_array();
     }
+
+    return $row;
+}
 
     /**
      * Add new salary record
@@ -37,17 +51,29 @@ class Staff_salary_model extends CI_Model
     /**
      * Update an existing salary record — only the latest Pending one
      */
-    public function update_salary_record($staff_id, $data)
-    {
-        $data['updated_at'] = date('Y-m-d H:i:s');
+   public function update_salary_record($staff_id, $data)
+{
+    $data['updated_at'] = date('Y-m-d H:i:s');
 
-        return $this->db
+    // Try updating the pending record first
+    $this->db
+        ->where('staff_id', $staff_id)
+        ->where('status', 'Pending')
+        ->order_by('created_at', 'DESC')
+        ->limit(1)
+        ->update($this->table, $data);
+
+    if ($this->db->affected_rows() === 0) {
+        // If no pending found, update the latest record instead
+        $this->db
             ->where('staff_id', $staff_id)
-            ->where('status', 'Pending') // ✅ only update pending salary
             ->order_by('created_at', 'DESC')
             ->limit(1)
             ->update($this->table, $data);
     }
+
+    return true;
+}
 
     /**
      * Delete all salary records for a given staff (HARD DELETE)
