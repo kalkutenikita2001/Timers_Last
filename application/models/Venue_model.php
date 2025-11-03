@@ -72,7 +72,6 @@ class Venue_model extends CI_Model {
         'membership_name' => $plan['membership_name'] ?? '',
         'duration' => $plan['duration'] ?? '',
         'period' => $plan['period'] ?? '',
-        'slot' => $plan['slot'] ?? '',
         'registration_fees' => $plan['registration_fees'] ?? 0,
         'coaching_fees' => $plan['coaching_fees'] ?? 0,
         'total_fees' => $plan['total_fees'] ?? 0,

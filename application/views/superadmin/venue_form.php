@@ -1407,32 +1407,42 @@
             });
 
             // ✅ Collect plans
-            const plans = [];
-            $('#planContainer .plan-item').each(function() {
-                const membershipName = $(this).find('input').eq(0).val();
-                const duration = $(this).find('input').eq(1).val();
-                const period = $(this).find('select').val();
-                const slot = $(this).find('input').eq(3).val();
-                const registration = $(this).find('input').eq(4).val();
-                const coaching = $(this).find('input').eq(5).val();
-                const total = $(this).find('input').eq(6).val();
-                const installments = $(this).find('input').eq(7).val();
+    const plans = [];
+$('#planContainer .plan-item').each(function() {
+    const membershipName = $(this).find('input').eq(0).val();
+    const duration = $(this).find('input').eq(1).val();
+    const period = $(this).find('select').val();
+    const registration = $(this).find('input').eq(2).val();
+    const coaching = $(this).find('input').eq(3).val();
+    const total = $(this).find('input').eq(4).val();
+    const installments = $(this).find('input').eq(5).val();
 
-                if (membershipName) {
-                    plans.push({
-                        membership_name: membershipName,
-                        duration: duration,
-                        period: period,
-                        slot: slot,
-                        registration_fees: registration,
-                        coaching_fees: coaching,
-                        total_fees: total,
-                        installments: installments
-                    });
-                }
+    const installmentDetails = [];
+    $(this).find('.installment-amount-container .form-row').each(function(index) {
+        const dueAmount = $(this).find('.installment-amount').val();
+        const dueDate = $(this).find('.installment-date').val();
+        if (dueAmount && dueDate) {
+            installmentDetails.push({
+                installment_no: index + 1,
+                due_amount: dueAmount,
+                due_date: dueDate
             });
+        }
+    });
 
-            // ✅ Prepare data to send
+    plans.push({
+        membership_name: membershipName,
+        duration: duration,
+        period: period,
+        registration_fees: registration,
+        coaching_fees: coaching,
+        total_fees: total,
+        installments: installments,
+        installment_details: installmentDetails
+    });
+});
+
+  // ✅ Prepare data to send
             const venueData = {
                 venue_name: venueName,
                 location: venueLocation,
